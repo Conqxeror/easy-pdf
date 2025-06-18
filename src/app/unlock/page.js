@@ -40,7 +40,9 @@ export default function UnlockPdfPage() {
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       setUnlockedUrl(URL.createObjectURL(blob));
     } catch (e) {
-      setError("Failed to unlock PDF. The password may be incorrect or the PDF is not supported.");
+      setError(
+        "Failed to unlock PDF. The password may be incorrect or the PDF is not supported."
+      );
     }
     setIsProcessing(false);
   };
@@ -75,21 +77,31 @@ export default function UnlockPdfPage() {
           />
         </div>
         {fileName && (
-          <div className="mb-4 text-center text-gray-400">Selected: {fileName}</div>
+          <div className="mb-4 text-center text-gray-400">
+            Selected: {fileName}
+          </div>
         )}
         <input
           type="password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Enter password"
           className="mb-4 w-full max-w-md px-3 py-2 rounded border border-gray-300 text-black"
           aria-label="Password"
         />
-        <Button onClick={unlockPDF} disabled={isProcessing || !file || !password} className="mb-4 w-full max-w-xs">
+        <Button
+          onClick={unlockPDF}
+          disabled={isProcessing || !file || !password}
+          className="mb-4 w-full max-w-xs"
+        >
           {isProcessing ? "Unlocking..." : "Unlock PDF"}
         </Button>
         {isProcessing && <Loader label="Unlocking PDF..." className="mb-4" />}
-        {error && <Alert variant="destructive" className="mb-4">{error}</Alert>}
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            {error}
+          </Alert>
+        )}
         {unlockedUrl && (
           <a
             href={unlockedUrl}

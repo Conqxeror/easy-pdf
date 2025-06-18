@@ -16,7 +16,7 @@ export default function PageRangeInput({
         max={totalPages || undefined}
         placeholder="Start Page"
         value={startPage}
-        onChange={e => setStartPage(e.target.value)}
+        onChange={(e) => setStartPage(e.target.value)}
         className="w-28 px-2 py-1 rounded text-black"
         aria-label="Start Page"
       />
@@ -26,12 +26,14 @@ export default function PageRangeInput({
         max={totalPages || undefined}
         placeholder="End Page"
         value={endPage}
-        onChange={e => setEndPage(e.target.value)}
+        onChange={(e) => setEndPage(e.target.value)}
         className="w-28 px-2 py-1 rounded text-black"
         aria-label="End Page"
       />
       {totalPages && (
-        <span className="text-xs text-gray-400 self-center">/ {totalPages} pages</span>
+        <span className="text-xs text-gray-400 self-center">
+          / {totalPages} pages
+        </span>
       )}
     </div>
   );

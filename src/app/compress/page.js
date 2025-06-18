@@ -138,7 +138,9 @@ export default function CompressPDFs() {
         >
           {isCompressing ? "Compressing..." : "Compress PDF"}
         </Button>
-        {isCompressing && <Loader label="Compressing PDF..." className="mb-4" />}
+        {isCompressing && (
+          <Loader label="Compressing PDF..." className="mb-4" />
+        )}
         {compressedPdfUrl && (
           <div className="mt-8 text-center">
             <h2 className="text-2xl font-semibold">Compressed PDF:</h2>

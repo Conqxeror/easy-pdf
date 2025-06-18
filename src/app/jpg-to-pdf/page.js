@@ -110,7 +110,9 @@ export default function JpgToPdfPage() {
         >
           {loading ? "Converting..." : "Convert to PDF"}
         </Button>
-        {loading && <Loader label="Converting images to PDF..." className="mb-4" />}
+        {loading && (
+          <Loader label="Converting images to PDF..." className="mb-4" />
+        )}
         {error && (
           <Alert variant="destructive" className="mb-4">
             {error}

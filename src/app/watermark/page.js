@@ -150,7 +150,9 @@ export default function WatermarkPdfPage() {
         >
           {isProcessing ? "Adding Watermark..." : "Add Watermark"}
         </Button>
-        {isProcessing && <Loader label="Adding watermark..." className="mb-4" />}
+        {isProcessing && (
+          <Loader label="Adding watermark..." className="mb-4" />
+        )}
         {error && (
           <Alert variant="destructive" className="mb-4">
             {error}

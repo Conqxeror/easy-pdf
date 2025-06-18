@@ -51,7 +51,9 @@ export default function RotatePdfPage() {
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const total = pdfDoc.getPageCount();
       const start = startPage ? Math.max(0, parseInt(startPage, 10) - 1) : 0;
-      const end = endPage ? Math.min(total - 1, parseInt(endPage, 10) - 1) : total - 1;
+      const end = endPage
+        ? Math.min(total - 1, parseInt(endPage, 10) - 1)
+        : total - 1;
       if (start > end || start < 0 || end >= total) {
         setError("Invalid page range.");
         setIsRotating(false);
@@ -59,7 +61,9 @@ export default function RotatePdfPage() {
       }
       for (let i = start; i <= end; i++) {
         const page = pdfDoc.getPage(i);
-        page.setRotation((page.getRotation().angle + parseInt(angle, 10)) % 360);
+        page.setRotation(
+          (page.getRotation().angle + parseInt(angle, 10)) % 360
+        );
       }
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -114,11 +118,13 @@ export default function RotatePdfPage() {
           />
         )}
         <div className="mb-4 flex gap-2 items-center">
-          <label htmlFor="angle" className="font-medium">Rotate by:</label>
+          <label htmlFor="angle" className="font-medium">
+            Rotate by:
+          </label>
           <select
             id="angle"
             value={angle}
-            onChange={e => setAngle(e.target.value)}
+            onChange={(e) => setAngle(e.target.value)}
             className="text-black rounded px-2 py-1"
           >
             <option value={90}>90°</option>
@@ -126,11 +132,19 @@ export default function RotatePdfPage() {
             <option value={270}>270°</option>
           </select>
         </div>
-        <Button onClick={rotatePDF} disabled={isRotating || !file} className="mb-4 w-full max-w-xs">
+        <Button
+          onClick={rotatePDF}
+          disabled={isRotating || !file}
+          className="mb-4 w-full max-w-xs"
+        >
           {isRotating ? "Rotating..." : "Rotate PDF"}
         </Button>
         {isRotating && <Loader label="Rotating PDF..." className="mb-4" />}
-        {error && <Alert variant="destructive" className="mb-4">{error}</Alert>}
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            {error}
+          </Alert>
+        )}
         {rotatedUrl && (
           <a
             href={rotatedUrl}
