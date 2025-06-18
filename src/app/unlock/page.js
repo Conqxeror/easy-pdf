@@ -1,0 +1,106 @@
+"use client";
+import { useState } from "react";
+import MetaHead from "@/components/ui/MetaHead";
+import FileDropzone from "@/components/ui/FileDropzone";
+import { PDFDocument } from "pdf-lib";
+import { Button } from "@/components/ui/button";
+import { Alert } from "@/components/ui/alert";
+import Loader from "@/components/ui/Loader";
+
+export default function UnlockPdfPage() {
+  const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const [error, setError] = useState("");
+  const [password, setPassword] = useState("");
+  const [unlockedUrl, setUnlockedUrl] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleFiles = (files) => {
+    const selectedFile = files[0];
+    setFile(selectedFile);
+    setFileName(selectedFile.name);
+    setError("");
+    setUnlockedUrl(null);
+  };
+
+  const unlockPDF = async () => {
+    setError("");
+    setUnlockedUrl(null);
+    if (!file || !password) {
+      setError("Please upload a PDF and enter the password.");
+      return;
+    }
+    setIsProcessing(true);
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer, { password });
+      // Remove password by saving without encryption
+      await pdfDoc.encrypt({});
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      setUnlockedUrl(URL.createObjectURL(blob));
+    } catch (e) {
+      setError("Failed to unlock PDF. The password may be incorrect or the PDF is not supported.");
+    }
+    setIsProcessing(false);
+  };
+
+  return (
+    <>
+      <MetaHead
+        title="Unlock PDF – Remove Password Online | PDF Toolkit"
+        description="Remove password from PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
+        url="https://yourdomain.com/unlock"
+        ogImage="/public/og-image.png"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Unlock PDF",
+          description:
+            "Remove password from PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
+          url: "https://yourdomain.com/unlock",
+        }}
+      />
+      <main className="flex flex-col items-center justify-center min-h-screen p-4">
+        <h1 className="text-2xl font-bold mb-4">Unlock PDF</h1>
+        <div className="w-full max-w-md mx-auto mb-4">
+          <FileDropzone
+            accept="application/pdf"
+            multiple={false}
+            onFiles={handleFiles}
+            error={error}
+            setError={setError}
+            label="Choose a PDF File"
+            description="Drag & drop or click to select a PDF file."
+          />
+        </div>
+        {fileName && (
+          <div className="mb-4 text-center text-gray-400">Selected: {fileName}</div>
+        )}
+        <input
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder="Enter password"
+          className="mb-4 w-full max-w-md px-3 py-2 rounded border border-gray-300 text-black"
+          aria-label="Password"
+        />
+        <Button onClick={unlockPDF} disabled={isProcessing || !file || !password} className="mb-4 w-full max-w-xs">
+          {isProcessing ? "Unlocking..." : "Unlock PDF"}
+        </Button>
+        {isProcessing && <Loader label="Unlocking PDF..." className="mb-4" />}
+        {error && <Alert variant="destructive" className="mb-4">{error}</Alert>}
+        {unlockedUrl && (
+          <a
+            href={unlockedUrl}
+            download="unlocked.pdf"
+            className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
+            aria-label="Download unlocked PDF"
+          >
+            Download Unlocked PDF
+          </a>
+        )}
+      </main>
+    </>
+  );
+}

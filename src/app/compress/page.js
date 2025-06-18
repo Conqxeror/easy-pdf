@@ -1,8 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Head from "next/head";
+import MetaHead from "@/components/ui/MetaHead";
 import { PDFDocument } from "pdf-lib";
+import FileDropzone from "@/components/ui/FileDropzone";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/ui/Loader";
 
 export default function CompressPDFs() {
   const [file, setFile] = useState(null);
@@ -14,17 +18,11 @@ export default function CompressPDFs() {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
 
-  const handleFileChange = (event) => {
-    const selectedFile = event.target.files[0];
-    if (selectedFile && selectedFile.type !== "application/pdf") {
-      setError("Only PDF files are allowed.");
-      setFile(null);
-      setFileName("");
-      return;
-    }
-    setError("");
+  const handleFiles = (files) => {
+    const selectedFile = files[0];
     setFile(selectedFile);
     setFileName(selectedFile ? selectedFile.name : "");
+    setError("");
   };
 
   const compressPDF = async () => {
@@ -55,168 +53,100 @@ export default function CompressPDFs() {
         setInfo(
           "Maximum compression applied using our secure server. Your file is not stored after processing."
         );
-        // Optionally, you can trigger auto-download:
-        // const a = document.createElement('a');
-        // a.href = downloadUrl;
-        // a.download = `compressed-${fileName}`;
-        // document.body.appendChild(a);
-        // a.click();
-        // document.body.removeChild(a);
       } else {
-        // Client-side compression
+        // Client-side compression (basic)
         const arrayBuffer = await file.arrayBuffer();
         const pdfDoc = await PDFDocument.load(arrayBuffer);
-        const originalSize = arrayBuffer.byteLength;
-        const compressedPdfBytes = await pdfDoc.save({
-          useObjectStreams: true,
-          addDefaultPage: false,
-        });
-        const compressedSize = compressedPdfBytes.byteLength;
-        const compressionPercent = Math.round(
-          ((originalSize - compressedSize) / originalSize) * 100
-        );
-        setCompressionPercentage(compressionPercent);
-        if (compressionPercent <= 0) {
-          setInfo(
-            "No further compression was possible. For best results, try compressing image-heavy PDFs."
-          );
-        } else {
-          setInfo(
-            "Compression complete. Note: Client-side compression is limited and works best for image-heavy PDFs."
-          );
-        }
-        const blob = new Blob([compressedPdfBytes], {
-          type: "application/pdf",
-        });
-        const compressedPdfUrl = URL.createObjectURL(blob);
-        setCompressedPdfUrl(compressedPdfUrl);
+        const pdfBytes = await pdfDoc.save();
+        const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        setCompressedPdfUrl(URL.createObjectURL(blob));
+        setInfo("Basic client-side compression applied.");
       }
-    } catch (error) {
-      setError("Compression failed: " + error.message);
-    } finally {
-      setIsCompressing(false);
+    } catch (e) {
+      setError("An error occurred while compressing the PDF.");
     }
+    setIsCompressing(false);
   };
 
   return (
     <>
-      <Head>
-        <title>Compress PDFs - PDF Toolkit</title>
-        <meta
-          name="description"
-          content="Reduce the file size of your PDFs without losing quality. Fully client-side and privacy-focused."
-        />
-        <meta
-          name="keywords"
-          content="compress PDFs, reduce PDF size, PDF toolkit, online PDF tools"
-        />
-        <meta name="author" content="PDF Toolkit" />
-      </Head>
-      <div
-        className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4 sm:p-8 flex flex-col items-center justify-center"
-        role="main"
-      >
-        <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 sm:mb-8 text-center">
-          Compress PDFs
+      <MetaHead
+        title="Compress PDF Online – Reduce PDF Size Free | PDF Toolkit"
+        description="Compress PDF files online, 100% client-side or via secure server. Fast, free, privacy-first, and India-optimized."
+        url="https://yourdomain.com/compress"
+        ogImage="/public/og-image.png"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Compress PDF",
+          description:
+            "Compress PDF files online, 100% client-side or via secure server. Fast, free, privacy-first, and India-optimized.",
+          url: "https://yourdomain.com/compress",
+        }}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 flex flex-col items-center justify-center">
+        <h1 className="text-5xl font-extrabold mb-8 text-center">
+          Compress PDF
         </h1>
-        <p className="text-base sm:text-lg text-gray-400 mb-6 sm:mb-8 text-center">
-          Reduce the file size of your PDFs without losing quality. Fully
-          client-side and privacy-focused.
+        <p className="text-lg text-gray-400 mb-8 text-center">
+          Reduce PDF file size. Choose client-side or server-side compression.
         </p>
-        <div className="w-full max-w-sm sm:max-w-md mx-auto mb-4">
-          <label
-            htmlFor="file-input"
-            className="block mb-2 text-center font-medium"
-          >
-            Choose File
-          </label>
-          <input
-            id="file-input"
-            type="file"
+        <div className="w-full max-w-md mx-auto mb-4">
+          <FileDropzone
             accept="application/pdf"
-            onChange={handleFileChange}
-            className="bg-gray-700 text-white p-2 rounded mx-2 shadow-inner"
-            aria-describedby="file-input-description"
+            multiple={false}
+            onFiles={handleFiles}
+            error={error}
+            setError={setError}
+            label="Choose a PDF File"
+            description="Drag & drop or click to select a PDF file."
           />
-          <p id="file-input-description" className="sr-only">
-            Upload a PDF file to compress and reduce its size.
-          </p>
         </div>
-        {error && (
-          <div className="mb-4 text-center">
-            <span className="text-red-500 text-sm">{error}</span>
+        {fileName && (
+          <div className="mb-4 text-center text-gray-400">
+            Selected: {fileName}
           </div>
         )}
-        {info && (
-          <div className="mb-4 text-center">
-            <span className="text-blue-400 text-sm">{info}</span>
-          </div>
-        )}
-        <div className="text-center mb-6">
-          <label
-            htmlFor="compression-level"
-            className="text-gray-400 text-sm sm:text-base"
-          >
-            Compression Level:
+        <div className="mb-4 flex gap-4 items-center">
+          <label htmlFor="compression-level" className="font-medium">
+            Compression:
           </label>
           <select
             id="compression-level"
             value={compressionLevel}
             onChange={(e) => setCompressionLevel(e.target.value)}
-            className="bg-gray-700 text-white p-2 rounded mx-2 shadow-inner"
-            aria-label="Select compression level"
+            className="text-black rounded px-2 py-1"
           >
-            <option value="server">Maximum (Server-Side, Recommended)</option>
-            <option value="extreme">
-              Extreme (Client-Side, Max Reduction)
-            </option>
-            <option value="recommended">
-              Recommended (Client-Side, Balanced)
-            </option>
-            <option value="low">Low (Client-Side, Minimal Reduction)</option>
+            <option value="client">Client-side (basic)</option>
+            <option value="server">Server-side (max)</option>
           </select>
         </div>
-        <button
+        {error && (
+          <Alert variant="destructive" className="mb-4 text-center">
+            {error}
+          </Alert>
+        )}
+        {info && (
+          <Alert variant="default" className="mt-4 text-green-400 text-center">
+            {info}
+          </Alert>
+        )}
+        <Button
           onClick={compressPDF}
-          className="mb-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow-md transition-all duration-200 ease-in-out"
-          aria-label="Compress the PDF file"
+          className="mx-auto block"
           disabled={isCompressing}
         >
-          {isCompressing ? (
-            <svg
-              className="animate-spin h-5 w-5 mr-3 inline-block"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-              />
-            </svg>
-          ) : (
-            "Compress PDF"
-          )}
-        </button>
+          {isCompressing ? "Compressing..." : "Compress PDF"}
+        </Button>
+        {isCompressing && <Loader label="Compressing PDF..." className="mb-4" />}
         {compressedPdfUrl && (
-          <div className="text-center">
-            <p className="text-gray-400 text-sm sm:text-base mb-4">
-              Compression Percentage: {compressionPercentage}%
-            </p>
+          <div className="mt-8 text-center">
+            <h2 className="text-2xl font-semibold">Compressed PDF:</h2>
             <a
               href={compressedPdfUrl}
-              download={`compressed-${fileName}`}
+              download="compressed.pdf"
               className="text-blue-400 hover:underline"
-              aria-label="Download the compressed PDF file"
+              aria-label="Download compressed PDF"
             >
               Download Compressed PDF
             </a>

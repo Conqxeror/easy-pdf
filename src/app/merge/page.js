@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
-import Head from "next/head";
+import MetaHead from "@/components/ui/MetaHead";
+import FileDropzone from "@/components/ui/FileDropzone";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/ui/Loader";
 
 export default function MergePDFs() {
   const [files, setFiles] = useState([]);
@@ -10,29 +14,8 @@ export default function MergePDFs() {
   const [error, setError] = useState("");
   const [isMerging, setIsMerging] = useState(false);
 
-  const handleFileChange = (event) => {
-    const newFiles = Array.from(event.target.files).filter(
-      (file) => file.type === "application/pdf"
-    );
-    if (newFiles.length !== event.target.files.length) {
-      setError("Only PDF files are allowed.");
-    } else {
-      setError("");
-    }
+  const handleFiles = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
-  };
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const droppedFiles = Array.from(event.dataTransfer.files).filter(
-      (file) => file.type === "application/pdf"
-    );
-    if (droppedFiles.length !== event.dataTransfer.files.length) {
-      setError("Only PDF files are allowed.");
-    } else {
-      setError("");
-    }
-    setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
   };
 
   const mergePDFs = async () => {
@@ -71,101 +54,41 @@ export default function MergePDFs() {
 
   return (
     <>
-      <Head>
-        <title>Merge PDFs - PDF Toolkit</title>
-        <meta
-          name="description"
-          content="Merge multiple PDF files into one seamlessly with our easy-to-use tool. Fully client-side and privacy-focused."
-        />
-        <meta
-          name="keywords"
-          content="merge PDFs, combine PDFs, PDF toolkit, online PDF tools"
-        />
-        <meta name="author" content="PDF Toolkit" />
-        {/* Open Graph tags */}
-        <meta property="og:title" content="Merge PDFs - PDF Toolkit" />
-        <meta
-          property="og:description"
-          content="Merge multiple PDF files into one seamlessly with our easy-to-use tool. Fully client-side and privacy-focused."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://yourdomain.com/merge" />
-        <meta
-          property="og:image"
-          content="https://yourdomain.com/og-image.png"
-        />
-        {/* Twitter Card tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Merge PDFs - PDF Toolkit" />
-        <meta
-          name="twitter:description"
-          content="Merge multiple PDF files into one seamlessly with our easy-to-use tool. Fully client-side and privacy-focused."
-        />
-        <meta
-          name="twitter:image"
-          content="https://yourdomain.com/og-image.png"
-        />
-        {/* Schema.org JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebApplication",
-              name: "Merge PDFs - PDF Toolkit",
-              url: "https://yourdomain.com/merge",
-              description:
-                "Merge multiple PDF files into one seamlessly with our easy-to-use tool. Fully client-side and privacy-focused.",
-              applicationCategory: "PDFTool",
-              operatingSystem: "All",
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "INR",
-                availability: "https://schema.org/InStock",
-              },
-              author: {
-                "@type": "Organization",
-                name: "PDF Toolkit",
-              },
-              inLanguage: "en",
-            }),
-          }}
-        />
-      </Head>
-      <div
-        className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 flex flex-col items-center justify-center"
-        onDragOver={(event) => event.preventDefault()}
-        onDrop={handleDrop}
-      >
+      <MetaHead
+        title="Merge PDF Files Online – Free, Fast & Secure | PDF Toolkit"
+        description="Merge multiple PDF files into one, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
+        url="https://yourdomain.com/merge"
+        ogImage="/public/og-image.png"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Merge PDF Files",
+          description:
+            "Merge multiple PDF files into one, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
+          url: "https://yourdomain.com/merge",
+        }}
+      />
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 flex flex-col items-center justify-center">
         <h1 className="text-5xl font-extrabold mb-8 text-center">Merge PDFs</h1>
         <p className="text-lg text-gray-400 mb-8 text-center">
           Combine multiple PDF files into one seamlessly. Fully client-side and
           privacy-focused.
         </p>
         <div className="w-full max-w-md mx-auto mb-4">
-          <label
-            htmlFor="file-input"
-            className="block mb-2 text-center font-medium"
-          >
-            Choose Files
-          </label>
-          <input
-            id="file-input"
-            type="file"
-            multiple
+          <FileDropzone
             accept="application/pdf"
-            onChange={handleFileChange}
-            className="mb-2"
+            multiple
+            onFiles={handleFiles}
+            error={error}
+            setError={setError}
+            label="Choose PDF Files"
+            description="Drag & drop or click to select PDF files."
           />
-          <div className="mt-4 p-4 border-2 border-dashed border-gray-600 rounded text-center text-gray-400">
-            Drag and drop your PDF files here
-          </div>
         </div>
         {error && (
-          <div className="mb-4 text-center">
-            <span className="text-red-400">{error}</span>
-          </div>
+          <Alert variant="destructive" className="mb-4 text-center">
+            {error}
+          </Alert>
         )}
         <ul className="mb-4 text-center">
           {files.map((file, index) => (
@@ -174,24 +97,27 @@ export default function MergePDFs() {
               className="text-gray-400 flex items-center justify-center gap-2"
             >
               {file.name}
-              <button
+              <Button
                 type="button"
-                className="ml-2 text-red-400 hover:text-red-600 text-xs border border-red-400 rounded px-2 py-0.5"
+                variant="destructive"
+                size="sm"
+                className="ml-2 text-xs px-2 py-0.5"
                 onClick={() => setFiles(files.filter((_, i) => i !== index))}
                 aria-label={`Remove ${file.name}`}
               >
                 Remove
-              </button>
+              </Button>
             </li>
           ))}
         </ul>
-        <button
+        <Button
           onClick={mergePDFs}
-          className="mx-auto block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+          className="mx-auto block"
           disabled={isMerging}
         >
           {isMerging ? "Merging..." : "Merge PDFs"}
-        </button>
+        </Button>
+        {isMerging && <Loader label="Merging PDFs..." className="mb-4" />}
         {mergedPDF && (
           <div className="mt-8 text-center">
             <h2 className="text-2xl font-semibold">Merged PDF:</h2>
@@ -199,6 +125,7 @@ export default function MergePDFs() {
               href={mergedPDF}
               download="merged.pdf"
               className="text-blue-400 hover:underline"
+              aria-label="Download merged PDF"
             >
               Download Merged PDF
             </a>

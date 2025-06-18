@@ -11,46 +11,50 @@ This is a **Next.js (JavaScript)** project using:
 - ESLint (`next/core-web-vitals`)
 - Optional API (`/api/compress`) for advanced compression
 
+---
+
+## 🚦 Status & Roadmap
+
+### ✅ Fully Client-Side & Complete
+
+- Merge PDFs
+- Split PDF
+
+### 🟡 Partial/Client-Side with Optional Server
+
+- Compress PDF (client-side basic, advanced via optional API)
+- JPG to PDF (check full implementation)
+- PDF to JPG (check full implementation)
+
+### 🔜 Planned / Not Yet Implemented
+
+- Rotate PDF
+- Watermark PDF
+- Protect PDF (basic password)
+- Unlock PDF (limited)
+- PDF Form Filler (add text/forms)
+- Reorder PDF Pages (drag-drop UI)
+- Delete PDF Pages
+- Organize PDF (UI + logic)
+- Add Page Numbers, Header/Footer
+- HTML to PDF (partial)
+- OCR (Tesseract.js)
+- Sign/Annotate PDF (canvas overlay)
+- Advanced: Word/Excel to PDF, PDF to Word/Excel (server required, low priority)
+
+### ⚠️ Known Limitations
+
+- Some advanced features (compression, Word/Excel) require server-side processing
+- Not all planned tools are fully implemented—some pages are placeholders
+- Hindi/Marathi localization and low-bandwidth optimizations are not fully complete
+- Ensure JSON-LD, OG, and Twitter meta tags on every route
+- Analytics, ads, and pro unlock are not yet implemented
+
+---
+
 ## 🎯 Mission
 
-> Build a **100% client-side**, blazing-fast, privacy-first web app that replicates and outperforms [iLovePDF.com](https://www.ilovepdf.com/) — with zero server cost, open-source readiness, and SEO-first Indian market optimization.
-
----
-
-## 🛠️ Active PDF Tools (Core Implemented)
-
-| Tool            | Status      | Client-Side Feasible  | Libraries Used                 |
-| --------------- | ----------- | --------------------- | ------------------------------ |
-| ✅ Merge PDFs   | Implemented | Yes                   | `pdf-lib`                      |
-| ✅ Split PDF    | Implemented | Yes                   | `pdf-lib`                      |
-| ✅ Compress PDF | Partial     | Yes + optional server | `pdf-lib`, `canvas`, `pikepdf` |
-| ✅ Rotate PDF   | Planned     | Yes                   | `pdf-lib`                      |
-| ✅ Watermark    | Planned     | Yes                   | `pdf-lib`                      |
-| ✅ Protect PDF  | Planned     | Yes (basic password)  | `pdf-lib`                      |
-| ✅ Unlock PDF   | Planned     | Partial (limited)     | `pdf-lib`                      |
-| ✅ JPG to PDF   | Planned     | Yes                   | `canvas`, `pdf-lib`            |
-| ✅ PDF to JPG   | Planned     | Yes                   | `pdfjs-dist`, `canvas`         |
-
----
-
-## 🔮 Additional iLovePDF Feature Parity (Planned / Optional)
-
-| Feature                             | Feasibility                | Priority | Notes                                |
-| ----------------------------------- | -------------------------- | -------- | ------------------------------------ |
-| ❌ Word to PDF                      | Server required            | Later    | Needs MS API                         |
-| ❌ PDF to Word                      | Server required            | Later    | Needs Google Cloud / MS              |
-| ❌ Excel to PDF                     | Server required            | Later    | Complex formatting                   |
-| ❌ PDF to Excel                     | Server required            | Later    |                                      |
-| 🧠 OCR (PDF to Text)                | Client-side (Tesseract.js) | Medium   | Use `tesseract.js`                   |
-| ✅ PDF Form Filler (Add text/forms) | Planned                    | Medium   | Add editable text inputs             |
-| ✅ Reorder PDF Pages                | Planned                    | Medium   | Drag-drop UI with `react-dnd`        |
-| ✅ Delete PDF Pages                 | Planned                    | Medium   | Combine with reorder                 |
-| ✅ Organize PDF                     | Planned                    | Medium   | UI + `pdf-lib` logic                 |
-| ✅ Sign PDF                         | Client-only                | Later    | Allow drawing or uploading signature |
-| ✅ Annotate PDF                     | Partial                    | Later    | Needs canvas + text overlay          |
-| ✅ Add Page Numbers                 | Planned                    | Medium   | Footer text overlay                  |
-| ✅ Add Header/Footer                | Planned                    | Medium   | Text placement                       |
-| ✅ HTML to PDF                      | Partial                    | Medium   | `html2canvas`, `jsPDF`               |
+> Build a **100% client-side** (where feasible), blazing-fast, privacy-first web app that replicates and outperforms [iLovePDF.com](https://www.ilovepdf.com/) — with zero server cost, open-source readiness, and SEO-first Indian market optimization.
 
 ---
 
@@ -64,6 +68,7 @@ This is a **Next.js (JavaScript)** project using:
 - Follow `src/app/[tool]/page.js` structure for tools
 - Use `<Head>` with SEO-rich meta, OG, and Twitter tags
 - Wrap in layout from `src/app/layout.js`
+- Ensure JSON-LD, OG, and Twitter meta tags on every route
 
 ### 🔹 UI
 
@@ -75,17 +80,18 @@ This is a **Next.js (JavaScript)** project using:
 
 - Use `pdf-lib` for PDF processing
 - Convert outputs to `Blob` → `URL.createObjectURL` for downloads
-- Avoid server calls unless compression requires it
+- Avoid server calls unless compression or advanced features require it
 
 ---
 
-## 🌐 SEO & PWA Goals
+## 🌐 SEO, PWA & Localization Goals
 
 - Add meta tags on every route
 - Include Open Graph, Twitter Card, JSON-LD schema
 - Use Lighthouse-optimized practices for speed and accessibility
 - Make PWA-ready (manifest, offline support)
 - Target **Google India SEO** (localized content, low bandwidth, Hindi/Marathi-ready)
+- Review every tool/page for SEO, PWA, and localization best practices
 
 ---
 
@@ -114,6 +120,6 @@ This is a **Next.js (JavaScript)** project using:
 
 ## 📌 GitHub Summary (One-liner)
 
-> A blazing-fast, privacy-first iLovePDF alternative built with Next.js, Tailwind & pdf-lib — 100% client-side, open-source, and India-optimized.
+> A blazing-fast, privacy-first iLovePDF alternative built with Next.js, Tailwind & pdf-lib — 100% client-side (where feasible), open-source, and India-optimized.
 
 ---
