@@ -98,8 +98,13 @@ function Navbar() {
         {/* Logo/App Name */}
         <Link
           href="/"
-          className="text-2xl font-bold text-white hover:text-blue-400 transition-colors duration-300"
+          className="text-2xl font-bold text-white hover:text-blue-400 transition-colors duration-300 flex"
         >
+          <img
+            src="/icon.png"
+            alt="Logo"
+            style={{ width: "10%", height: "auto", paddingRight: "5px", borderRadius: "50px" }}
+          />
           PDF Toolkit
         </Link>
 
