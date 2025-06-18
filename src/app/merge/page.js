@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import Head from "next/head";
-import { Button, Input, Chip, Spinner } from "@nextui-org/react";
 
 export default function MergePDFs() {
   const [files, setFiles] = useState([]);
@@ -151,7 +150,7 @@ export default function MergePDFs() {
           >
             Choose Files
           </label>
-          <Input
+          <input
             id="file-input"
             type="file"
             multiple
@@ -164,9 +163,9 @@ export default function MergePDFs() {
           </div>
         </div>
         {error && (
-          <Chip color="danger" className="mb-4 text-center">
-            {error}
-          </Chip>
+          <div className="mb-4 text-center">
+            <span className="text-red-400">{error}</span>
+          </div>
         )}
         <ul className="mb-4 text-center">
           {files.map((file, index) => (
@@ -186,16 +185,13 @@ export default function MergePDFs() {
             </li>
           ))}
         </ul>
-        <Button
+        <button
           onClick={mergePDFs}
-          className="mx-auto block"
-          color="primary"
-          isLoading={isMerging}
-          spinner={<Spinner color="white" size="sm" />}
+          className="mx-auto block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
           disabled={isMerging}
         >
-          Merge PDFs
-        </Button>
+          {isMerging ? "Merging..." : "Merge PDFs"}
+        </button>
         {mergedPDF && (
           <div className="mt-8 text-center">
             <h2 className="text-2xl font-semibold">Merged PDF:</h2>

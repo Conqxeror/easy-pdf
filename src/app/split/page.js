@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import Head from "next/head";
-import { Button, Input, Chip } from "@nextui-org/react";
 
 export default function SplitPDFs() {
   const [file, setFile] = useState(null);
@@ -86,21 +85,22 @@ export default function SplitPDFs() {
           >
             Choose File
           </label>
-          <Input
+          <input
             id="file-input"
             type="file"
             accept="application/pdf"
             onChange={handleFileChange}
             aria-describedby="file-input-description"
+            className="hidden"
           />
           <p id="file-input-description" className="sr-only">
             Upload a PDF file to split into specific pages or ranges.
           </p>
         </div>
         {fileName && (
-          <Chip color="primary" className="text-center mb-4">
+          <div className="bg-blue-500 text-white text-center py-2 px-4 rounded mb-4">
             Selected File: {fileName}
-          </Chip>
+          </div>
         )}
         {pdfUrl && (
           <div className="w-full max-w-3xl mx-auto mb-6 sm:mb-8">
@@ -119,12 +119,12 @@ export default function SplitPDFs() {
           >
             Start Page:
           </label>
-          <Input
+          <input
             id="start-page"
             type="number"
             value={startPage}
             onChange={(e) => setStartPage(e.target.value)}
-            className="w-24 sm:w-32 mx-2"
+            className="w-24 sm:w-32 mx-2 bg-gray-700 text-white rounded px-3 py-2"
             aria-label="Enter the start page number"
           />
           <label
@@ -133,22 +133,21 @@ export default function SplitPDFs() {
           >
             End Page:
           </label>
-          <Input
+          <input
             id="end-page"
             type="number"
             value={endPage}
             onChange={(e) => setEndPage(e.target.value)}
-            className="w-24 sm:w-32 mx-2"
+            className="w-24 sm:w-32 mx-2 bg-gray-700 text-white rounded px-3 py-2"
             aria-label="Enter the end page number"
           />
-          <Button
+          <button
             onClick={splitPDF}
-            color="primary"
-            className="ml-2"
+            className="ml-2 bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600 transition duration-300"
             aria-label="Split the PDF file"
           >
             Split PDF
-          </Button>
+          </button>
         </div>
       </div>
     </>

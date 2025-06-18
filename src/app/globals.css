@@ -1,5 +1,4 @@
-@import "tailwindcss/preflight";
-@tailwind utilities;
+@import "tailwindcss";
 @import "tw-animate-css";
 
 /* Removed unsupported @custom-variant and @theme rules for Tailwind 4+ compatibility */

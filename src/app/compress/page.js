@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Head from "next/head";
 import { PDFDocument } from "pdf-lib";
-import { Button, Input, Chip, Spinner } from "@nextui-org/react";
 
 export default function CompressPDFs() {
   const [file, setFile] = useState(null);
@@ -131,11 +130,12 @@ export default function CompressPDFs() {
           >
             Choose File
           </label>
-          <Input
+          <input
             id="file-input"
             type="file"
             accept="application/pdf"
             onChange={handleFileChange}
+            className="bg-gray-700 text-white p-2 rounded mx-2 shadow-inner"
             aria-describedby="file-input-description"
           />
           <p id="file-input-description" className="sr-only">
@@ -143,14 +143,14 @@ export default function CompressPDFs() {
           </p>
         </div>
         {error && (
-          <Chip color="danger" className="mb-4 text-center">
-            {error}
-          </Chip>
+          <div className="mb-4 text-center">
+            <span className="text-red-500 text-sm">{error}</span>
+          </div>
         )}
         {info && (
-          <Chip color="primary" className="mb-4 text-center">
-            {info}
-          </Chip>
+          <div className="mb-4 text-center">
+            <span className="text-blue-400 text-sm">{info}</span>
+          </div>
         )}
         <div className="text-center mb-6">
           <label
@@ -176,17 +176,37 @@ export default function CompressPDFs() {
             <option value="low">Low (Client-Side, Minimal Reduction)</option>
           </select>
         </div>
-        <Button
+        <button
           onClick={compressPDF}
-          className="mb-6"
+          className="mb-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded shadow-md transition-all duration-200 ease-in-out"
           aria-label="Compress the PDF file"
-          color="primary"
-          isLoading={isCompressing}
-          spinner={<Spinner color="white" size="sm" />}
           disabled={isCompressing}
         >
-          Compress PDF
-        </Button>
+          {isCompressing ? (
+            <svg
+              className="animate-spin h-5 w-5 mr-3 inline-block"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              />
+            </svg>
+          ) : (
+            "Compress PDF"
+          )}
+        </button>
         {compressedPdfUrl && (
           <div className="text-center">
             <p className="text-gray-400 text-sm sm:text-base mb-4">
