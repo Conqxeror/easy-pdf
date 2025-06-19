@@ -40,11 +40,11 @@ export const metadata = {
     title: "easy-pdf - Free Online PDF Tools for India",
     description:
       "100% client-side PDF tools. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
-    url: "https://easy-pdf.com",
+    url: "https://easy-pdf-murex.vercel.app",
     type: "website",
     images: [
       {
-        url: "https://easy-pdf.com/og-image.jpg",
+        url: "https://easy-pdf-murex.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "easy-pdf - Free Online PDF Tools",
@@ -58,10 +58,10 @@ export const metadata = {
     description:
       "100% client-side PDF tools. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
     creator: "@easy_pdf",
-    images: ["https://easy-pdf.com/twitter-image.jpg"],
+    images: ["https://easy-pdf-murex.vercel.app/twitter-image.jpg"],
   },
   alternates: {
-    canonical: "https://easy-pdf.com",
+    canonical: "https://easy-pdf-murex.vercel.app",
     languages: {
       "en-US": "/en-US",
       "hi-IN": "/hi-IN",

@@ -7,7 +7,7 @@ import Head from "next/head";
 export default function MetaHead({
   title = "easy-pdf – Blazing-fast, Privacy-first PDF Toolkit",
   description = "100% client-side PDF tools: merge, split, compress, convert, protect, and more. Open-source, privacy-first, India-optimized.",
-  url = "https://easy-pdf.com",
+  url = "https://easy-pdf-murex.vercel.app",
   ogImage = "/og-image.png",
   jsonLd = {
     "@context": "https://schema.org",
@@ -15,7 +15,7 @@ export default function MetaHead({
     name: "easy-pdf",
     description:
       "Client-side PDF tools for merging, splitting, compressing and converting PDF files",
-    url: "https://easy-pdf.com",
+    url: "https://easy-pdf-murex.vercel.app",
     applicationCategory: "DocumentEditor",
     operatingSystem: "Web Browser",
     offers: {
@@ -32,10 +32,10 @@ export default function MetaHead({
 }) {
   const fullUrl = url.startsWith("http")
     ? url
-    : `https://easy-pdf.com${url}`;
+    : `https://easy-pdf-murex.vercel.app${url}`;
   const fullOgImage = ogImage.startsWith("http")
     ? ogImage
-    : `https://easy-pdf.com${ogImage}`;
+    : `https://easy-pdf-murex.vercel.app${ogImage}`;
   const canonical = canonicalUrl || fullUrl;
 
   // Enhanced JSON-LD with tool-specific data

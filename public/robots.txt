@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://easy-pdf-murex.vercel.app/sitemap.xml
