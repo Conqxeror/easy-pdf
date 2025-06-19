@@ -5,7 +5,7 @@ import Head from "next/head";
  * Supports all major SEO tags, Open Graph, Twitter Cards, and JSON-LD
  */
 export default function MetaHead({
-  title = "easy-pdf – Blazing-fast, Privacy-first PDF Toolkit",
+  title = "easy-pdf – Blazing-fast, Privacy-first PDF Tools",
   description = "100% client-side PDF tools: merge, split, compress, convert, protect, and more. Open-source, privacy-first, India-optimized.",
   url = "https://easy-pdf-murex.vercel.app",
   ogImage = "/og-image.png",

@@ -93,13 +93,13 @@ function Navbar() {
             >
               <img
                 src="/icon.png"
-                alt="PDF Toolkit Logo"
+                alt="easy-pdf Logo"
                 className="h-8 w-8"
                 width={32}
                 height={32}
               />
               <span className="text-xl font-bold text-white hidden sm:block">
-                PDF Toolkit
+                easy-pdf
               </span>
             </Link>
           </div>

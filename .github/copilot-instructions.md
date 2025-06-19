@@ -147,4 +147,4 @@ Ads / Pro Unlock (client-only gating)
 🔍 SEO: Head tags & JSON-LD in every page (via MetaHead)
 
 📌 GitHub Summary (One-liner)
-A blazing-fast, privacy-first PDF toolkit built with Next.js, Tailwind & pdf-lib — 100% client-side (where feasible), open-source, and India-optimized.
+A blazing-fast, privacy-first easy-pdf built with Next.js, Tailwind & pdf-lib — 100% client-side (where feasible), open-source, and India-optimized.
