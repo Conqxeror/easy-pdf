@@ -166,9 +166,9 @@ export default function SplitPdfPage() {
   return (
     <>
       <MetaHead
-        title="Split PDF – Free, Fast & Secure | PDF Toolkit"
+        title="Split PDF – Free, Fast & Secure | easy-pdf"
         description="Split PDF documents into multiple files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/split"
+        url="https://easy-pdf.com/split"
         ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",
@@ -176,7 +176,7 @@ export default function SplitPdfPage() {
           name: "Split PDF",
           description:
             "Split PDF documents into multiple files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://yourdomain.com/split",
+          url: "https://easy-pdf.com/split",
         }}
       />
 

@@ -22,7 +22,7 @@ import {Skeleton} from "@/components/ui/skeleton.jsx";
 
 export const metadata = {
   title:
-    "PDF Toolkit - Free Online PDF Tools for India | Merge, Split, Compress PDFs",
+    "easy-pdf - Free Online PDF Tools for India | Merge, Split, Compress PDFs",
   description:
     "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser. No file uploads, complete privacy.",
   keywords: [
@@ -37,31 +37,31 @@ export const metadata = {
     "client-side PDF processing",
   ],
   openGraph: {
-    title: "PDF Toolkit - Free Online PDF Tools for India",
+    title: "easy-pdf - Free Online PDF Tools for India",
     description:
       "100% client-side PDF tools. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
-    url: "https://yourpdftoolkit.com",
+    url: "https://easy-pdf.com",
     type: "website",
     images: [
       {
-        url: "https://yourpdftoolkit.com/og-image.jpg",
+        url: "https://easy-pdf.com/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "PDF Toolkit - Free Online PDF Tools",
+        alt: "easy-pdf - Free Online PDF Tools",
       },
     ],
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PDF Toolkit - Free Online PDF Tools for India",
+    title: "easy-pdf - Free Online PDF Tools for India",
     description:
       "100% client-side PDF tools. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
-    creator: "@yourhandle",
-    images: ["https://yourpdftoolkit.com/twitter-image.jpg"],
+    creator: "@easy_pdf",
+    images: ["https://easy-pdf.com/twitter-image.jpg"],
   },
   alternates: {
-    canonical: "https://yourpdftoolkit.com",
+    canonical: "https://easy-pdf.com",
     languages: {
       "en-US": "/en-US",
       "hi-IN": "/hi-IN",

@@ -77,9 +77,9 @@ export default function RotatePdfPage() {
   return (
     <>
       <MetaHead
-        title="Rotate PDF Pages – Free, Fast & Secure | PDF Toolkit"
+        title="Rotate PDF Pages – Free, Fast & Secure | easy-pdf"
         description="Rotate pages in your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/rotate"
+        url="https://easy-pdf.com/rotate"
         ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",
@@ -87,7 +87,7 @@ export default function RotatePdfPage() {
           name: "Rotate PDF",
           description:
             "Rotate pages in your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://yourdomain.com/rotate",
+          url: "https://easy-pdf.com/rotate",
         }}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">

@@ -138,15 +138,15 @@ export default function PdfToJpgPage() {
   return (
     <>
       <MetaHead
-        title="PDF to JPG Converter – Free Online Tool | PDF Toolkit"
+        title="PDF to JPG Converter – Free Online Tool | easy-pdf"
         description="Convert PDF pages to high-quality JPG images, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/pdf-to-jpg"
+        url="https://easy-pdf.com/pdf-to-jpg"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "PDF to JPG Converter",
           description: "Convert PDF pages to JPG images in your browser",
-          url: "https://yourdomain.com/pdf-to-jpg",
+          url: "https://easy-pdf.com/pdf-to-jpg",
         }}
       />
 

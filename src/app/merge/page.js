@@ -55,17 +55,17 @@ export default function MergePDFs() {
   return (
     <>
       <MetaHead
-        title="Merge PDF Files Online – Free, Fast & Secure | PDF Toolkit"
+        title="Merge PDF – Free, Fast & Secure | easy-pdf"
         description="Merge multiple PDF files into one, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/merge"
+        url="https://easy-pdf.com/merge"
         ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Merge PDF Files",
+          name: "Merge PDF",
           description:
             "Merge multiple PDF files into one, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://yourdomain.com/merge",
+          url: "https://easy-pdf.com/merge",
         }}
       />
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-8 flex flex-col items-center justify-center">

@@ -50,9 +50,9 @@ export default function UnlockPdfPage() {
   return (
     <>
       <MetaHead
-        title="Unlock PDF – Remove Password Online | PDF Toolkit"
+        title="Unlock PDF – Remove Password Online | easy-pdf"
         description="Remove password from PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/unlock"
+        url="https://easy-pdf.com/unlock"
         ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",
@@ -60,7 +60,7 @@ export default function UnlockPdfPage() {
           name: "Unlock PDF",
           description:
             "Remove password from PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://yourdomain.com/unlock",
+          url: "https://easy-pdf.com/unlock",
         }}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">

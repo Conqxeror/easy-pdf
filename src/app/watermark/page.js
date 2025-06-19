@@ -194,15 +194,15 @@ export default function WatermarkPdfPage() {
   return (
     <>
       <MetaHead
-        title="Add Watermark to PDF – Free Online Tool | PDF Toolkit"
+        title="Add Watermark to PDF – Free Online Tool | easy-pdf"
         description="Add text or image watermarks to PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/watermark"
+        url="https://easy-pdf.com/watermark"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "PDF Watermark Tool",
           description: "Add watermarks to PDF documents in your browser",
-          url: "https://yourdomain.com/watermark",
+          url: "https://easy-pdf.com/watermark",
         }}
       />
 

@@ -163,15 +163,17 @@ export default function CompressPDFs() {
   return (
     <>
       <MetaHead
-        title="Compress PDF Online – Reduce PDF Size Free | PDF Toolkit"
-        description="Compress PDF files online, 100% client-side. Fast, free, privacy-first, and India-optimized."
-        url="https://yourdomain.com/compress"
+        title="Compress PDF – Free, Fast & Secure | easy-pdf"
+        description="Compress PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
+        url="https://easy-pdf.com/compress"
+        ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "Compress PDF",
-          description: "Reduce PDF file size while preserving quality",
-          url: "https://yourdomain.com/compress",
+          description:
+            "Compress PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
+          url: "https://easy-pdf.com/compress",
         }}
       />
 

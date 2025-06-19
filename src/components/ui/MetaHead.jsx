@@ -5,17 +5,17 @@ import Head from "next/head";
  * Supports all major SEO tags, Open Graph, Twitter Cards, and JSON-LD
  */
 export default function MetaHead({
-  title = "PDF Toolkit – Blazing-fast, Privacy-first iLovePDF Alternative",
+  title = "easy-pdf – Blazing-fast, Privacy-first PDF Toolkit",
   description = "100% client-side PDF tools: merge, split, compress, convert, protect, and more. Open-source, privacy-first, India-optimized.",
-  url = "https://pdf-toolkit.example.com",
+  url = "https://easy-pdf.com",
   ogImage = "/og-image.png",
   jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "PDF Toolkit",
+    name: "easy-pdf",
     description:
       "Client-side PDF tools for merging, splitting, compressing and converting PDF files",
-    url: "https://pdf-toolkit.example.com",
+    url: "https://easy-pdf.com",
     applicationCategory: "DocumentEditor",
     operatingSystem: "Web Browser",
     offers: {
@@ -26,23 +26,23 @@ export default function MetaHead({
   },
   keywords = "PDF, Merge PDF, Split PDF, Compress PDF, JPG to PDF, PDF to JPG, Free PDF Tools, India",
   locale = "en_IN",
-  twitterHandle = "@pdftoolkit",
+  twitterHandle = "@easy_pdf",
   noIndex = false,
   canonicalUrl = "",
 }) {
   const fullUrl = url.startsWith("http")
     ? url
-    : `https://pdf-toolkit.example.com${url}`;
+    : `https://easy-pdf.com${url}`;
   const fullOgImage = ogImage.startsWith("http")
     ? ogImage
-    : `https://pdf-toolkit.example.com${ogImage}`;
+    : `https://easy-pdf.com${ogImage}`;
   const canonical = canonicalUrl || fullUrl;
 
   // Enhanced JSON-LD with tool-specific data
   const defaultJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: title,
+    name: "easy-pdf",
     description: description,
     url: fullUrl,
     applicationCategory: "DocumentEditor",
@@ -53,7 +53,6 @@ export default function MetaHead({
       priceCurrency: "USD",
     },
   };
-
   const mergedJsonLd = jsonLd ? { ...defaultJsonLd, ...jsonLd } : defaultJsonLd;
 
   return (
@@ -76,7 +75,7 @@ export default function MetaHead({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={fullOgImage} />
       <meta property="og:locale" content={locale} />
-      <meta property="og:site_name" content="PDF Toolkit" />
+      <meta property="og:site_name" content="easy-pdf" />
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -114,8 +113,8 @@ export default function MetaHead({
       />
 
       {/* PWA Tags */}
-      <meta name="application-name" content="PDF Toolkit" />
-      <meta name="apple-mobile-web-app-title" content="PDF Toolkit" />
+      <meta name="application-name" content="easy-pdf" />
+      <meta name="apple-mobile-web-app-title" content="easy-pdf" />
       <meta name="theme-color" content="#1e40af" />
       <meta name="msapplication-TileColor" content="#1e40af" />
     </Head>

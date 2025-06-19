@@ -1,125 +1,150 @@
-<!-- Copilot Workspace Instructions for PDF Toolkit -->
-<!-- Docs: https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
+🧠 Workspace Context
+This is a Next.js (JavaScript) project using:
 
-## 🧠 Workspace Context
+TailwindCSS (globals.css, tailwind.config.js)
 
-This is a **Next.js (JavaScript)** project using:
+ShadCN UI (@shadcn/ui)
 
-- TailwindCSS (`globals.css`, `tailwind.config.js`)
-- ShadCN UI (`@shadcn/ui`)
-- `pdf-lib`, `canvas`, `pdfjs-dist` for client-side PDF processing
-- ESLint (`next/core-web-vitals`)
-- Optional API (`/api/compress`) for advanced compression
+pdf-lib, canvas, pdfjs-dist for client-side PDF processing
 
----
+ESLint (next/core-web-vitals)
 
-## 🚦 Status & Roadmap
+Optional API (/api/compress) for advanced compression (currently unused, client-side compression implemented)
 
-### ✅ Fully Client-Side & Complete
+🚦 Status & Roadmap
+✅ Fully Client-Side & Complete
+Merge PDFs
 
-- Merge PDFs
-- Split PDF
+Split PDF
 
-### 🟡 Partial/Client-Side with Optional Server
+Compress PDF (fully client-side via image re-encoding)
 
-- Compress PDF (client-side basic, advanced via optional API)
-- JPG to PDF (check full implementation)
-- PDF to JPG (check full implementation)
+JPG to PDF
 
-### 🔜 Planned / Not Yet Implemented
+PDF to JPG
 
-- Rotate PDF
-- Watermark PDF
-- Protect PDF (basic password)
-- Unlock PDF (limited)
-- PDF Form Filler (add text/forms)
-- Reorder PDF Pages (drag-drop UI)
-- Delete PDF Pages
-- Organize PDF (UI + logic)
-- Add Page Numbers, Header/Footer
-- HTML to PDF (partial)
-- OCR (Tesseract.js)
-- Sign/Annotate PDF (canvas overlay)
-- Advanced: Word/Excel to PDF, PDF to Word/Excel (server required, low priority)
+Protect PDF
 
-### ⚠️ Known Limitations
+Unlock PDF
 
-- Some advanced features (compression, Word/Excel) require server-side processing
-- Not all planned tools are fully implemented—some pages are placeholders
-- Hindi/Marathi localization and low-bandwidth optimizations are not fully complete
-- Ensure JSON-LD, OG, and Twitter meta tags on every route
-- Analytics, ads, and pro unlock are not yet implemented
+Rotate PDF
 
----
+🟡 Partial/Client-Side with Optional Server
+Watermark PDF (Text watermarking is complete, Image watermarking is a placeholder)
 
-## 🎯 Mission
+🔜 Planned / Not Yet Implemented
+PDF Form Filler (add text/forms)
 
-> Build a **100% client-side** (where feasible), blazing-fast, privacy-first web app that replicates and outperforms [iLovePDF.com](https://www.ilovepdf.com/) — with zero server cost, open-source readiness, and SEO-first Indian market optimization.
+Reorder PDF Pages (drag-drop UI)
 
----
+Delete PDF Pages
 
-## ⚙️ Copilot Coding Guidelines
+Organize PDF (UI + logic)
 
-> When generating code, follow these enforced styles:
+Add Page Numbers, Header/Footer
 
-### 🔹 Pages & Layout
+HTML to PDF (partial)
 
-- Always use `use client` directive for interactive pages
-- Follow `src/app/[tool]/page.js` structure for tools
-- Use `<Head>` with SEO-rich meta, OG, and Twitter tags
-- Wrap in layout from `src/app/layout.js`
-- Ensure JSON-LD, OG, and Twitter meta tags on every route
+OCR (Tesseract.js)
 
-### 🔹 UI
+Sign/Annotate PDF (canvas overlay)
 
-- Use TailwindCSS and ShadCN components (`Button`, `Input`, `Chip`, `Alert`)
-- Mobile-first layout with flex/grid
-- Use accessible components (`aria-label`, `aria-describedby`, etc.)
+Advanced: Word/Excel to PDF, PDF to Word/Excel (server required, low priority)
 
-### 🔹 Logic & Utilities
+⚠️ Known Limitations
+Image watermarking is not fully implemented for the Watermark PDF tool.
 
-- Use `pdf-lib` for PDF processing
-- Convert outputs to `Blob` → `URL.createObjectURL` for downloads
-- Avoid server calls unless compression or advanced features require it
+Not all planned tools are fully implemented—some pages are placeholders.
 
----
+Hindi/Marathi localization and low-bandwidth optimizations are not fully complete.
 
-## 🌐 SEO, PWA & Localization Goals
+Ensure JSON-LD, OG, and Twitter meta tags on every route are correctly implemented and consistent.
 
-- Add meta tags on every route
-- Include Open Graph, Twitter Card, JSON-LD schema
-- Use Lighthouse-optimized practices for speed and accessibility
-- Make PWA-ready (manifest, offline support)
-- Target **Google India SEO** (localized content, low bandwidth, Hindi/Marathi-ready)
-- Review every tool/page for SEO, PWA, and localization best practices
+Analytics, ads, and pro unlock are not yet implemented.
 
----
+🎯 Mission
+Build a 100% client-side (where feasible), blazing-fast, privacy-first web app that replicates and outperforms other PDF tools — with zero server cost, open-source readiness, and SEO-first Indian market optimization.
 
-## 🧪 Hosting & Infra
+⚙️ Copilot Coding Guidelines
+When generating code, follow these enforced styles:
 
-| Layer        | Plan                                  |
-| ------------ | ------------------------------------- |
-| Hosting      | Vercel (Free)                         |
-| Backend/API  | Avoid unless needed                   |
-| Auth         | None or Local only                    |
-| Analytics    | Umami / Plausible                     |
-| Monetization | Ads / Pro Unlock (client-only gating) |
+🔹 Pages & Layout
+Always use use client directive for interactive pages
 
----
+Follow src/app/[tool]/page.js structure for tools
 
-## 💡 Code Structure Summary
+Use <MetaHead> (our custom SEO component) with SEO-rich meta, OG, and Twitter tags
 
-- 🗂️ Each tool in: `src/app/[tool]/page.js`
-- 🎨 UI components: `src/components/ui/`
-- 🧩 Utils: `src/lib/utils.js`
-- 🎨 Styling: `globals.css`, `tailwind.config.js`
-- 🚀 Navigation: `layout.js` provides nav for all tools
-- 🔍 SEO: Head tags & JSON-LD in every page
+Wrap in layout from src/app/layout.js
 
----
+Ensure JSON-LD, OG, and Twitter meta tags on every route
 
-## 📌 GitHub Summary (One-liner)
+🔹 UI
+Use TailwindCSS and ShadCN components (Button, Input, Chip, Alert, Card, Slider, RadioGroup, Select, Tabs, Loader, FileDropzone, PageRangeInput)
 
-> A blazing-fast, privacy-first iLovePDF alternative built with Next.js, Tailwind & pdf-lib — 100% client-side (where feasible), open-source, and India-optimized.
+Mobile-first layout with flex/grid
 
----
+Use accessible components (aria-label, aria-describedby, etc.)
+
+🔹 Logic & Utilities
+Use pdf-lib for PDF processing
+
+Use pdfjs-dist for PDF rendering/analysis (e.g., for PDF to JPG, page count)
+
+Convert outputs to Blob → URL.createObjectURL for downloads
+
+Avoid server calls unless compression or advanced features absolutely require it (current compression is client-side)
+
+🌐 SEO, PWA & Localization Goals
+Add meta tags on every route (using <MetaHead>)
+
+Include Open Graph, Twitter Card, JSON-LD schema
+
+Use Lighthouse-optimized practices for speed and accessibility
+
+Make PWA-ready (manifest, offline support)
+
+Target Google India SEO (localized content, low bandwidth, Hindi/Marathi-ready)
+
+Review every tool/page for SEO, PWA, and localization best practices
+
+🧪 Hosting & Infra
+Layer
+
+Plan
+
+Hosting
+
+Vercel (Free)
+
+Backend/API
+
+Avoid unless needed (currently unused)
+
+Auth
+
+None or Local only
+
+Analytics
+
+Umami / Plausible
+
+Monetization
+
+Ads / Pro Unlock (client-only gating)
+
+💡 Code Structure Summary
+🗂️ Each tool in: src/app/[tool]/page.js
+
+🎨 UI components: src/components/ui/
+
+🧩 Utils: src/lib/utils.js
+
+🎨 Styling: globals.css, tailwind.config.js
+
+🚀 Navigation: layout.js provides nav for all tools
+
+🔍 SEO: Head tags & JSON-LD in every page (via MetaHead)
+
+📌 GitHub Summary (One-liner)
+A blazing-fast, privacy-first PDF toolkit built with Next.js, Tailwind & pdf-lib — 100% client-side (where feasible), open-source, and India-optimized.

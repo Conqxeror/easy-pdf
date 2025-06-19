@@ -63,17 +63,15 @@ export default function JpgToPdfPage() {
   return (
     <>
       <MetaHead
-        title="JPG to PDF Converter – Free, Fast & Secure | PDF Toolkit"
-        description="Convert JPG and PNG images to PDF, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/jpg-to-pdf"
-        ogImage="/public/og-image.png"
+        title="JPG to PDF Converter – Free Online Tool | easy-pdf"
+        description="Convert JPG images to PDF, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
+        url="https://easy-pdf.com/jpg-to-pdf"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "JPG to PDF Converter",
-          description:
-            "Convert JPG and PNG images to PDF, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://yourdomain.com/jpg-to-pdf",
+          description: "Convert JPG images to PDF in your browser",
+          url: "https://easy-pdf.com/jpg-to-pdf",
         }}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">

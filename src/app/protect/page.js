@@ -59,9 +59,9 @@ export default function ProtectPdfPage() {
   return (
     <>
       <MetaHead
-        title="Protect PDF with Password – Free, Fast & Secure | PDF Toolkit"
+        title="Protect PDF with Password – Free, Fast & Secure | easy-pdf"
         description="Add password protection to your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://yourdomain.com/protect"
+        url="https://easy-pdf.com/protect"
         ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",
@@ -69,7 +69,7 @@ export default function ProtectPdfPage() {
           name: "Protect PDF",
           description:
             "Add password protection to your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://yourdomain.com/protect",
+          url: "https://easy-pdf.com/protect",
         }}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">
