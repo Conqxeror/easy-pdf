@@ -1,7 +1,7 @@
 import React, { useRef, useState, useCallback } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Loader } from "@/components/ui/Loader";
+import Loader from "@/components/ui/Loader";
 import { FileText, UploadCloud, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
