@@ -117,6 +117,11 @@ export default function MetaHead({
       <meta name="apple-mobile-web-app-title" content="easy-pdf" />
       <meta name="theme-color" content="#1e40af" />
       <meta name="msapplication-TileColor" content="#1e40af" />
+
+      <meta
+        name="google-site-verification"
+        content="sVdN8Q1bz1KwTehC2WzKpxZCSttbZ3yjKeD1lTwCIck"
+      />
     </Head>
   );
 }
