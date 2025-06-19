@@ -9,8 +9,20 @@ import { Button } from "@/components/ui/button";
 import Loader from "@/components/ui/Loader";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import JSZip from "jszip";
 
 // Configure pdfjs worker
@@ -61,10 +73,11 @@ export default function PdfToJpgPage() {
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-      
-      const pagesToConvert = selectedPages === "all" 
-        ? Array.from({ length: pdf.numPages }, (_, i) => i + 1)
-        : [parseInt(selectedPages)];
+
+      const pagesToConvert =
+        selectedPages === "all"
+          ? Array.from({ length: pdf.numPages }, (_, i) => i + 1)
+          : [parseInt(selectedPages)];
 
       const zip = new JSZip();
       const convertedImages = [];
@@ -72,67 +85,75 @@ export default function PdfToJpgPage() {
       for (const pageNumber of pagesToConvert) {
         const page = await pdf.getPage(pageNumber);
         const viewport = page.getViewport({ scale: 2.0 });
-        
+
         // Create canvas for rendering
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
         // Render PDF page to canvas
         await page.render({
           canvasContext: context,
-          viewport: viewport
+          viewport: viewport,
         }).promise;
 
         // Convert canvas to JPG
-        const imageData = canvas.toDataURL('image/jpeg', quality / 100);
-        const base64Data = imageData.split(',')[1];
-        const blob = await fetch(imageData).then(res => res.blob());
-        
+        const imageData = canvas.toDataURL("image/jpeg", quality / 100);
+        const base64Data = imageData.split(",")[1];
+        const blob = await fetch(imageData).then((res) => res.blob());
+
         const fileName = `page_${pageNumber}.jpg`;
         zip.file(fileName, base64Data, { base64: true });
-        
+
         convertedImages.push({
           pageNumber,
           url: URL.createObjectURL(blob),
           fileName,
-          size: blob.size
+          size: blob.size,
         });
-        
+
         // Update progress
         const progress = Math.round((pageNumber / pagesToConvert.length) * 100);
         setIsProcessing({
           loading: true,
           progress,
           currentPage: pageNumber,
-          totalPages: pagesToConvert.length
+          totalPages: pagesToConvert.length,
         });
       }
 
       // Create zip file if converting multiple pages
       if (pagesToConvert.length > 1) {
-        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const zipBlob = await zip.generateAsync({ type: "blob" });
         const zipUrl = URL.createObjectURL(zipBlob);
-        setImages([...convertedImages, { isZip: true, url: zipUrl, fileName: `${file.name.replace('.pdf', '')}_images.zip` }]);
+        setImages([
+          ...convertedImages,
+          {
+            isZip: true,
+            url: zipUrl,
+            fileName: `${file.name.replace(".pdf", "")}_images.zip`,
+          },
+        ]);
       } else {
         setImages(convertedImages);
       }
-
     } catch (err) {
       console.error("Conversion error:", err);
-      setError("Failed to convert PDF to JPG. The file may be corrupted or password protected.");
+      setError(
+        "Failed to convert PDF to JPG. The file may be corrupted or password protected."
+      );
     } finally {
       setIsProcessing(false);
     }
   };
 
   const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]);
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2) + " " + sizes[i]);
   };
 
   return (
@@ -157,7 +178,7 @@ export default function PdfToJpgPage() {
               PDF to JPG Converter
             </CardTitle>
           </CardHeader>
-          
+
           <CardContent className="space-y-6">
             <FileDropzone
               accept="application/pdf"
@@ -180,7 +201,7 @@ export default function PdfToJpgPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Pages to Convert</Label>
-                      <Select 
+                      <Select
                         value={selectedPages}
                         onValueChange={setSelectedPages}
                       >
@@ -190,7 +211,9 @@ export default function PdfToJpgPage() {
                         <SelectContent>
                           <SelectItem value="all">All Pages</SelectItem>
                           {Array.from({ length: totalPages }, (_, i) => (
-                            <SelectItem key={i+1} value={`${i+1}`}>Page {i+1}</SelectItem>
+                            <SelectItem key={i + 1} value={`${i + 1}`}>
+                              Page {i + 1}
+                            </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -214,16 +237,17 @@ export default function PdfToJpgPage() {
             {isProcessing && (
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">Converting page {isProcessing.currentPage} of {isProcessing.totalPages}</span>
+                  <span className="text-gray-300">
+                    Converting page {isProcessing.currentPage} of{" "}
+                    {isProcessing.totalPages}
+                  </span>
                   <span className="font-medium">{isProcessing.progress}%</span>
                 </div>
                 <Progress value={isProcessing.progress} className="h-2" />
               </div>
             )}
 
-            {error && (
-              <Alert variant="destructive">{error}</Alert>
-            )}
+            {error && <Alert variant="destructive">{error}</Alert>}
 
             <Button
               onClick={convertToJpg}
@@ -240,36 +264,43 @@ export default function PdfToJpgPage() {
               <h3 className="text-xl font-semibold text-center">
                 {images.length > 1 ? "Download Images" : "Download Image"}
               </h3>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                {images.filter(img => !img.isZip).map((image, index) => (
-                  <div key={index} className="border border-gray-600 rounded-md p-3">
-                    <div className="flex items-center gap-3 mb-2">
-                      <img 
-                        src={image.url} 
-                        alt={`Page ${image.pageNumber}`}
-                        className="h-16 w-16 object-cover rounded"
-                      />
-                      <div>
-                        <p className="font-medium">{image.fileName}</p>
-                        <p className="text-sm text-gray-400">{formatFileSize(image.size)}</p>
+                {images
+                  .filter((img) => !img.isZip)
+                  .map((image, index) => (
+                    <div
+                      key={index}
+                      className="border border-gray-600 rounded-md p-3"
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <img
+                          src={image.url}
+                          alt={`Page ${image.pageNumber}`}
+                          className="h-16 w-16 object-cover rounded"
+                        />
+                        <div>
+                          <p className="font-medium">{image.fileName}</p>
+                          <p className="text-sm text-gray-400">
+                            {formatFileSize(image.size)}
+                          </p>
+                        </div>
                       </div>
+                      <Button asChild variant="outline" className="w-full">
+                        <a href={image.url} download={image.fileName}>
+                          Download
+                        </a>
+                      </Button>
                     </div>
-                    <Button asChild variant="outline" className="w-full">
-                      <a href={image.url} download={image.fileName}>
-                        Download
-                      </a>
-                    </Button>
-                  </div>
-                ))}
+                  ))}
               </div>
 
-              {images.find(img => img.isZip) && (
+              {images.find((img) => img.isZip) && (
                 <div className="w-full text-center">
                   <Button asChild variant="success" className="w-full max-w-md">
-                    <a 
-                      href={images.find(img => img.isZip).url}
-                      download={images.find(img => img.isZip).fileName}
+                    <a
+                      href={images.find((img) => img.isZip).url}
+                      download={images.find((img) => img.isZip).fileName}
                     >
                       Download All as ZIP
                     </a>

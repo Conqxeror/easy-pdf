@@ -18,7 +18,7 @@ import {
   FileBadge2,
 } from "lucide-react";
 import { Suspense } from "react";
-import {Skeleton} from "@/components/ui/skeleton.jsx";
+import { Skeleton } from "@/components/ui/skeleton.jsx";
 
 export const metadata = {
   title:
