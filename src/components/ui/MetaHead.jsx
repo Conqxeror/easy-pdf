@@ -57,6 +57,27 @@ export default function MetaHead({
       price: "0",
       priceCurrency: "USD",
     },
+    featureList: [
+      "Merge PDF",
+      "Split PDF",
+      "Compress PDF",
+      "JPG to PDF",
+      "PDF to JPG",
+      "Rotate PDF",
+      "Watermark PDF",
+      "Protect PDF",
+      "Unlock PDF",
+      "Delete PDF Pages",
+      "Reorder PDF Pages",
+      "Organize PDF",
+      "Add Page Numbers",
+      "HTML to PDF",
+      "OCR",
+      "Sign/Annotate PDF",
+      "PDF Form Filler",
+      "Word to PDF",
+      "PDF to Word",
+    ],
   };
   const mergedJsonLd = jsonLd ? { ...defaultJsonLd, ...jsonLd } : defaultJsonLd;
 

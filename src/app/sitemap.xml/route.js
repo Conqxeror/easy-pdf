@@ -21,6 +21,8 @@ export async function GET() {
     "/sign",
     "/word-to-pdf",
     "/pdf-to-word",
+    "/add-page-numbers",
+    "/sign-pdf",
   ];
 
   const pages = routes.map((route) => ({

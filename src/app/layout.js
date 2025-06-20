@@ -2,7 +2,33 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import { Menu, X, FileText, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  X,
+  FileText,
+  ChevronDown,
+  Combine,
+  Spline,
+  Shrink,
+  Image,
+  FileImage,
+  RotateCw,
+  Stamp,
+  Lock,
+  Unlock,
+  Eraser,
+  ListOrdered,
+  PlusCircle,
+  FileCode,
+  Search,
+  Signature,
+  FileBadge,
+  FileType,
+  FileTextIcon,
+  Text,
+  Minimize2,
+  FileBadge2,
+} from "lucide-react"; // Import all necessary icons
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -10,38 +36,121 @@ import Footer from "@/components/ui/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const tools = [
+// Categorized tools for better dropdown organization
+const toolCategories = [
   {
-    name: "Merge PDF",
-    href: "/merge",
-    icon: <FileText className="w-4 h-4" />,
-  },
-  {
-    name: "Split PDF",
-    href: "/split",
-    icon: <FileText className="w-4 h-4" />,
-  },
-  {
-    name: "Compress PDF",
-    href: "/compress",
-    icon: <FileText className="w-4 h-4" />,
-  },
-  {
-    name: "Convert",
-    icon: <FileText className="w-4 h-4" />,
+    name: "Convert & Create",
+    icon: <FileTextIcon className="w-4 h-4" />,
     submenu: [
-      { name: "JPG to PDF", href: "/jpg-to-pdf" },
-      { name: "PDF to JPG", href: "/pdf-to-jpg" },
+      {
+        name: "JPG to PDF",
+        href: "/jpg-to-pdf",
+        icon: <Image className="w-4 h-4" />,
+      },
+      {
+        name: "PDF to JPG",
+        href: "/pdf-to-jpg",
+        icon: <FileImage className="w-4 h-4" />,
+      },
+      {
+        name: "HTML to PDF",
+        href: "/html-to-pdf",
+        icon: <FileCode className="w-4 h-4" />,
+      },
+      {
+        name: "Word to PDF",
+        href: "/word-to-pdf",
+        icon: <FileType className="w-4 h-4" />,
+      },
+      {
+        name: "PDF to Word",
+        href: "/pdf-to-word",
+        icon: <FileTextIcon className="w-4 h-4" />,
+      },
     ],
   },
   {
-    name: "Edit",
-    icon: <FileText className="w-4 h-4" />,
+    name: "Organize & Edit",
+    icon: <ListOrdered className="w-4 h-4" />,
     submenu: [
-      { name: "Rotate PDF", href: "/rotate" },
-      { name: "Watermark PDF", href: "/watermark" },
-      { name: "Protect PDF", href: "/protect" },
-      { name: "Unlock PDF", href: "/unlock" },
+      {
+        name: "Merge PDF",
+        href: "/merge",
+        icon: <Combine className="w-4 h-4" />,
+      },
+      {
+        name: "Split PDF",
+        href: "/split",
+        icon: <Spline className="w-4 h-4" />,
+      },
+      {
+        name: "Reorder PDF Pages",
+        href: "/reorder",
+        icon: <ListOrdered className="w-4 h-4" />,
+      },
+      {
+        name: "Delete PDF Pages",
+        href: "/delete-pages",
+        icon: <Eraser className="w-4 h-4" />,
+      },
+      {
+        name: "Rotate PDF",
+        href: "/rotate",
+        icon: <RotateCw className="w-4 h-4" />,
+      },
+      {
+        name: "Organize PDF",
+        href: "/organize",
+        icon: <ListOrdered className="w-4 h-4" />,
+      }, // Keeping this as a separate tool for its distinct UI
+    ],
+  },
+  {
+    name: "Optimize & Secure",
+    icon: <Shrink className="w-4 h-4" />,
+    submenu: [
+      {
+        name: "Compress PDF",
+        href: "/compress",
+        icon: <Minimize2 className="w-4 h-4" />,
+      },
+      {
+        name: "Protect PDF",
+        href: "/protect",
+        icon: <Lock className="w-4 h-4" />,
+      },
+      {
+        name: "Unlock PDF",
+        href: "/unlock",
+        icon: <Unlock className="w-4 h-4" />,
+      },
+      {
+        name: "Watermark PDF",
+        href: "/watermark",
+        icon: <Stamp className="w-4 h-4" />,
+      },
+      {
+        name: "Add Page Numbers",
+        href: "/page-numbers",
+        icon: <PlusCircle className="w-4 h-4" />,
+      },
+    ],
+  },
+  {
+    name: "Advanced Tools",
+    icon: <FileBadge2 className="w-4 h-4" />, // Example icon for advanced tools
+    submenu: [
+      { name: "OCR", href: "/ocr", icon: <Search className="w-4 h-4" /> },
+      {
+        name: "Sign/Annotate PDF",
+        href: "/sign",
+        icon: <Signature className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Form Filler",
+        href: "/form-filler",
+        icon: <Text className="w-4 h-4" />,
+      },
     ],
   },
 ];
@@ -108,71 +217,56 @@ function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:block h-full">
             <div className="ml-10 flex items-center space-x-4 h-full">
-              {tools.map((item) => (
+              {toolCategories.map((category) => (
                 <div
-                  key={item.name}
-                  className="relative h-full flex items-center"
+                  key={category.name}
+                  className="relative h-full flex items-center group" // Added group for hover effect
+                  onMouseEnter={() => setDesktopSubmenuOpen(category.name)}
+                  onMouseLeave={() => setDesktopSubmenuOpen(null)}
                 >
-                  {item.href ? (
-                    <Link
-                      href={item.href}
+                  <button
+                    className={clsx(
+                      "px-3 py-2 rounded-md text-sm font-medium flex items-center h-full",
+                      desktopSubmenuOpen === category.name ||
+                        category.submenu.some((i) => pathname === i.href)
+                        ? "bg-gray-800 text-white"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white",
+                      "transition-colors duration-200"
+                    )}
+                  >
+                    {category.icon}
+                    <span className="ml-2">{category.name}</span>
+                    <ChevronDown
                       className={clsx(
-                        "px-3 py-2 rounded-md text-sm font-medium flex items-center h-full",
-                        pathname === item.href
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                        "ml-1 h-4 w-4 transition-transform duration-200",
+                        desktopSubmenuOpen === category.name && "rotate-180"
                       )}
-                    >
-                      {item.icon}
-                      <span className="ml-2">{item.name}</span>
-                    </Link>
-                  ) : (
-                    <div className="relative h-full flex items-center">
-                      <button
-                        onClick={() =>
-                          setDesktopSubmenuOpen(
-                            desktopSubmenuOpen === item.name ? null : item.name
-                          )
-                        }
-                        className={clsx(
-                          "px-3 py-2 rounded-md text-sm font-medium flex items-center h-full",
-                          desktopSubmenuOpen === item.name ||
-                            item.submenu?.some((i) => pathname === i.href)
-                            ? "bg-gray-800 text-white"
-                            : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                        )}
-                      >
-                        {item.icon}
-                        <span className="ml-2">{item.name}</span>
-                        <ChevronDown
-                          className={clsx(
-                            "ml-1 h-4 w-4 transition-transform",
-                            desktopSubmenuOpen === item.name && "rotate-180"
-                          )}
-                        />
-                      </button>
+                    />
+                  </button>
 
-                      {desktopSubmenuOpen === item.name && (
-                        <div className="absolute z-10 left-0 top-full mt-0 w-48 rounded-md shadow-lg bg-gray-800 border border-gray-700">
-                          <div className="py-1">
-                            {item.submenu?.map((subItem) => (
-                              <Link
-                                key={subItem.name}
-                                href={subItem.href}
-                                onClick={() => setDesktopSubmenuOpen(null)}
-                                className={clsx(
-                                  "block px-4 py-2 text-sm flex items-center",
-                                  pathname === subItem.href
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
-                                )}
-                              >
-                                {subItem.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                  {desktopSubmenuOpen === category.name && (
+                    <div className="absolute z-10 left-0 top-full mt-0 w-56 rounded-md shadow-lg bg-gray-800 border border-gray-700 animate-fade-in-up">
+                      {" "}
+                      {/* Increased width */}
+                      <div className="py-1">
+                        {category.submenu.map((subItem) => (
+                          <Link
+                            key={subItem.name}
+                            href={subItem.href}
+                            onClick={closeAllMenus} // Close all menus on submenu item click
+                            className={clsx(
+                              "px-4 py-2 text-sm flex items-center gap-2", // Added gap-2 for icon
+                              pathname === subItem.href
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                              "transition-colors duration-200"
+                            )}
+                          >
+                            {subItem.icon} {/* Display icon */}
+                            {subItem.name}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -200,73 +294,73 @@ function Navbar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-gray-900 border-t border-gray-800">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {tools.map((item) => (
-              <div key={item.name}>
-                {item.href ? (
-                  <Link
-                    href={item.href}
-                    onClick={closeAllMenus}
+        <div className="md:hidden bg-gray-900 border-t border-gray-800 pb-2">
+          {" "}
+          {/* Added pb-2 */}
+          <div className="px-2 pt-2 space-y-1 sm:px-3">
+            {toolCategories.map((category) => (
+              <div
+                key={category.name}
+                className="border-b border-gray-700 last:border-b-0"
+              >
+                {" "}
+                {/* Separator */}
+                <div>
+                  <button
+                    onClick={() =>
+                      setMobileSubmenuOpen(
+                        mobileSubmenuOpen === category.name
+                          ? null
+                          : category.name
+                      )
+                    }
                     className={clsx(
-                      "group flex items-center px-3 py-2 rounded-md text-base font-medium",
-                      pathname === item.href
-                        ? "bg-blue-600 text-white"
-                        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                      "group w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium",
+                      mobileSubmenuOpen === category.name ||
+                        category.submenu.some((i) => pathname === i.href)
+                        ? "bg-gray-800 text-white"
+                        : "text-gray-300 hover:bg-gray-800 hover:text-white",
+                      "transition-colors duration-200"
                     )}
                   >
-                    {item.icon}
-                    <span className="ml-3">{item.name}</span>
-                  </Link>
-                ) : (
-                  <div>
-                    <button
-                      onClick={() =>
-                        setMobileSubmenuOpen(
-                          mobileSubmenuOpen === item.name ? null : item.name
-                        )
-                      }
+                    <div className="flex items-center gap-3">
+                      {" "}
+                      {/* Increased gap for mobile icons */}
+                      {category.icon}
+                      <span>{category.name}</span>
+                    </div>
+                    <ChevronDown
                       className={clsx(
-                        "group w-full flex items-center justify-between px-3 py-2 rounded-md text-base font-medium",
-                        mobileSubmenuOpen === item.name ||
-                          item.submenu?.some((i) => pathname === i.href)
-                          ? "bg-gray-800 text-white"
-                          : "text-gray-300 hover:bg-gray-800 hover:text-white"
+                        "h-5 w-5 transform transition-transform duration-200",
+                        mobileSubmenuOpen === category.name && "rotate-180"
                       )}
-                    >
-                      <div className="flex items-center">
-                        {item.icon}
-                        <span className="ml-3">{item.name}</span>
-                      </div>
-                      <ChevronDown
-                        className={clsx(
-                          "h-5 w-5 transform transition-transform",
-                          mobileSubmenuOpen === item.name && "rotate-180"
-                        )}
-                      />
-                    </button>
+                    />
+                  </button>
 
-                    {mobileSubmenuOpen === item.name && (
-                      <div className="pl-8 pt-1 pb-2 space-y-1">
-                        {item.submenu?.map((subItem) => (
-                          <Link
-                            key={subItem.name}
-                            href={subItem.href}
-                            onClick={closeAllMenus}
-                            className={clsx(
-                              "block px-3 py-2 rounded-md text-base font-medium",
-                              pathname === subItem.href
-                                ? "bg-blue-600 text-white"
-                                : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                            )}
-                          >
-                            {subItem.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                  {mobileSubmenuOpen === category.name && (
+                    <div className="pl-6 pt-1 pb-2 space-y-1 bg-gray-800 rounded-b-md">
+                      {" "}
+                      {/* Increased padding and added background */}
+                      {category.submenu.map((subItem) => (
+                        <Link
+                          key={subItem.name}
+                          href={subItem.href}
+                          onClick={closeAllMenus}
+                          className={clsx(
+                            "block px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2", // Added gap for icon
+                            pathname === subItem.href
+                              ? "bg-blue-600 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "transition-colors duration-200"
+                          )}
+                        >
+                          {subItem.icon} {/* Display icon */}
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
