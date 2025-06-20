@@ -159,16 +159,23 @@ export default function PdfToJpgPage() {
   return (
     <>
       <MetaHead
-        title="PDF to JPG Converter – Free Online Tool | easy-pdf"
-        description="Convert PDF pages to high-quality JPG images, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/pdf-to-jpg"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "PDF to JPG Converter",
-          description: "Convert PDF pages to JPG images in your browser",
-          url: "https://easy-pdf.com/pdf-to-jpg",
-        }}
+        title="PDF to JPG – Free, Fast & Secure | easy-pdf"
+        description="Convert PDF pages to JPG images, 100% client-side. No uploads, no privacy risk."
+        url="/pdf-to-jpg"
+        alternates={[
+          {
+            hrefLang: "en",
+            href: "https://easy-pdf-murex.vercel.app/pdf-to-jpg",
+          },
+          {
+            hrefLang: "hi",
+            href: "https://easy-pdf-murex.vercel.app/hi/pdf-to-jpg",
+          },
+          {
+            hrefLang: "mr",
+            href: "https://easy-pdf-murex.vercel.app/mr/pdf-to-jpg",
+          },
+        ]}
       />
 
       <main className="container max-w-4xl py-8">
@@ -286,7 +293,12 @@ export default function PdfToJpgPage() {
                           </p>
                         </div>
                       </div>
-                      <Button asChild variant="outline" className="w-full">
+                      <Button
+                        aria-label="Download JPG images from PDF"
+                        asChild
+                        variant="outline"
+                        className="w-full"
+                      >
                         <a href={image.url} download={image.fileName}>
                           Download
                         </a>

@@ -59,18 +59,20 @@ export default function ProtectPdfPage() {
   return (
     <>
       <MetaHead
-        title="Protect PDF with Password – Free, Fast & Secure | easy-pdf"
-        description="Add password protection to your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/protect"
-        ogImage="/public/og-image.png"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Protect PDF",
-          description:
-            "Add password protection to your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://easy-pdf.com/protect",
-        }}
+        title="Protect PDF – Free, Fast & Secure | easy-pdf"
+        description="Password-protect your PDF files, 100% client-side. No uploads, no privacy risk."
+        url="/protect"
+        alternates={[
+          { hrefLang: "en", href: "https://easy-pdf-murex.vercel.app/protect" },
+          {
+            hrefLang: "hi",
+            href: "https://easy-pdf-murex.vercel.app/hi/protect",
+          },
+          {
+            hrefLang: "mr",
+            href: "https://easy-pdf-murex.vercel.app/mr/protect",
+          },
+        ]}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-2xl font-bold mb-4">Protect PDF</h1>
@@ -118,7 +120,12 @@ export default function ProtectPdfPage() {
             className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
             aria-label="Download protected PDF"
           >
-            Download Protected PDF
+            <Button
+              aria-label="Download protected PDF"
+              className="w-full max-w-xs"
+            >
+              Download
+            </Button>
           </a>
         )}
       </main>

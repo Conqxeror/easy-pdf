@@ -11,6 +11,16 @@ export async function GET() {
     "/unlock",
     "/rotate",
     "/watermark",
+    "/form-filler",
+    "/reorder",
+    "/delete-pages",
+    "/organize",
+    "/page-numbers",
+    "/html-to-pdf",
+    "/ocr",
+    "/sign",
+    "/word-to-pdf",
+    "/pdf-to-word",
   ];
 
   const pages = routes.map((route) => ({

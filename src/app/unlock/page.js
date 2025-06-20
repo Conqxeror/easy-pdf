@@ -50,18 +50,20 @@ export default function UnlockPdfPage() {
   return (
     <>
       <MetaHead
-        title="Unlock PDF – Remove Password Online | easy-pdf"
-        description="Remove password from PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/unlock"
-        ogImage="/public/og-image.png"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Unlock PDF",
-          description:
-            "Remove password from PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://easy-pdf.com/unlock",
-        }}
+        title="Unlock PDF – Free, Fast & Secure | easy-pdf"
+        description="Remove password from PDF files, 100% client-side. No uploads, no privacy risk."
+        url="/unlock"
+        alternates={[
+          { hrefLang: "en", href: "https://easy-pdf-murex.vercel.app/unlock" },
+          {
+            hrefLang: "hi",
+            href: "https://easy-pdf-murex.vercel.app/hi/unlock",
+          },
+          {
+            hrefLang: "mr",
+            href: "https://easy-pdf-murex.vercel.app/mr/unlock",
+          },
+        ]}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-2xl font-bold mb-4">Unlock PDF</h1>
@@ -109,7 +111,12 @@ export default function UnlockPdfPage() {
             className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
             aria-label="Download unlocked PDF"
           >
-            Download Unlocked PDF
+            <Button
+              aria-label="Download unlocked PDF"
+              className="w-full max-w-xs"
+            >
+              Download
+            </Button>
           </a>
         )}
       </main>

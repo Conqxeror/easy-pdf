@@ -275,13 +275,38 @@ function Navbar() {
   );
 }
 
+function LanguageSwitcher() {
+  return (
+    <div className="flex gap-2 items-center ml-auto">
+      <span className="text-xs text-gray-400">Language:</span>
+      <button
+        className="text-blue-500 underline"
+        aria-label="Switch to English"
+      >
+        EN
+      </button>
+      <button className="text-blue-500 underline" aria-label="Switch to Hindi">
+        हिंदी
+      </button>
+      <button
+        className="text-blue-500 underline"
+        aria-label="Switch to Marathi"
+      >
+        मराठी
+      </button>
+    </div>
+  );
+}
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} bg-gray-900 text-gray-100`}>
         <Navbar />
         {/* Add pt-16 (same as navbar height) to main content */}
-        <main className="min-h-screen pt-16">{children}</main>
+        <main className="min-h-screen pt-16" aria-label="Main content">
+          {children}
+        </main>
       </body>
     </html>
   );

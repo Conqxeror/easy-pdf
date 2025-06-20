@@ -77,18 +77,20 @@ export default function RotatePdfPage() {
   return (
     <>
       <MetaHead
-        title="Rotate PDF Pages – Free, Fast & Secure | easy-pdf"
-        description="Rotate pages in your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/rotate"
-        ogImage="/public/og-image.png"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Rotate PDF",
-          description:
-            "Rotate pages in your PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://easy-pdf.com/rotate",
-        }}
+        title="Rotate PDF – Free, Fast & Secure | easy-pdf"
+        description="Rotate PDF pages by any angle, 100% client-side. No uploads, no privacy risk."
+        url="/rotate"
+        alternates={[
+          { hrefLang: "en", href: "https://easy-pdf-murex.vercel.app/rotate" },
+          {
+            hrefLang: "hi",
+            href: "https://easy-pdf-murex.vercel.app/hi/rotate",
+          },
+          {
+            hrefLang: "mr",
+            href: "https://easy-pdf-murex.vercel.app/mr/rotate",
+          },
+        ]}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-2xl font-bold mb-4">Rotate PDF</h1>
@@ -152,7 +154,12 @@ export default function RotatePdfPage() {
             className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
             aria-label="Download rotated PDF"
           >
-            Download Rotated PDF
+            <Button
+              aria-label="Download rotated PDF"
+              className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
+            >
+              Download
+            </Button>
           </a>
         )}
       </main>

@@ -63,16 +63,23 @@ export default function JpgToPdfPage() {
   return (
     <>
       <MetaHead
-        title="JPG to PDF Converter – Free Online Tool | easy-pdf"
-        description="Convert JPG images to PDF, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/jpg-to-pdf"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "JPG to PDF Converter",
-          description: "Convert JPG images to PDF in your browser",
-          url: "https://easy-pdf.com/jpg-to-pdf",
-        }}
+        title="JPG to PDF – Free, Fast & Secure | easy-pdf"
+        description="Convert JPG or PNG images to PDF, 100% client-side. No uploads, no privacy risk."
+        url="/jpg-to-pdf"
+        alternates={[
+          {
+            hrefLang: "en",
+            href: "https://easy-pdf-murex.vercel.app/jpg-to-pdf",
+          },
+          {
+            hrefLang: "hi",
+            href: "https://easy-pdf-murex.vercel.app/hi/jpg-to-pdf",
+          },
+          {
+            hrefLang: "mr",
+            href: "https://easy-pdf-murex.vercel.app/mr/jpg-to-pdf",
+          },
+        ]}
       />
       <main className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-4xl font-bold mb-6 text-center">
@@ -123,7 +130,12 @@ export default function JpgToPdfPage() {
             className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
             aria-label="Download converted PDF"
           >
-            Download PDF
+            <Button
+              aria-label="Download PDF from images"
+              className="mb-4 w-full max-w-xs"
+            >
+              Download
+            </Button>
           </a>
         )}
       </main>

@@ -29,6 +29,11 @@ export default function MetaHead({
   twitterHandle = "@easy_pdf",
   noIndex = false,
   canonicalUrl = "",
+  alternates = [
+    { hrefLang: "en", href: "https://easy-pdf-murex.vercel.app" },
+    { hrefLang: "hi", href: "https://easy-pdf-murex.vercel.app/hi" },
+    { hrefLang: "mr", href: "https://easy-pdf-murex.vercel.app/mr" },
+  ],
 }) {
   const fullUrl = url.startsWith("http")
     ? url
@@ -67,7 +72,15 @@ export default function MetaHead({
         content={noIndex ? "noindex,nofollow" : "index,follow"}
       />
       <link rel="canonical" href={canonical} />
-
+      {/* Alternate language links for SEO */}
+      {alternates.map((alt) => (
+        <link
+          key={alt.hrefLang}
+          rel="alternate"
+          hrefLang={alt.hrefLang}
+          href={alt.href}
+        />
+      ))}
       {/* Open Graph / Facebook */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content={fullUrl} />
@@ -76,7 +89,6 @@ export default function MetaHead({
       <meta property="og:image" content={fullOgImage} />
       <meta property="og:locale" content={locale} />
       <meta property="og:site_name" content="easy-pdf" />
-
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content={twitterHandle} />
@@ -84,7 +96,6 @@ export default function MetaHead({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullOgImage} />
-
       {/* Favicons */}
       <link rel="icon" href="/favicon.ico" />
       <link
@@ -105,19 +116,16 @@ export default function MetaHead({
         href="/favicon-16x16.png"
       />
       <link rel="manifest" href="/site.webmanifest" />
-
       {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(mergedJsonLd) }}
       />
-
       {/* PWA Tags */}
       <meta name="application-name" content="easy-pdf" />
       <meta name="apple-mobile-web-app-title" content="easy-pdf" />
       <meta name="theme-color" content="#1e40af" />
       <meta name="msapplication-TileColor" content="#1e40af" />
-
       <meta
         name="google-site-verification"
         content="sVdN8Q1bz1KwTehC2WzKpxZCSttbZ3yjKeD1lTwCIck"

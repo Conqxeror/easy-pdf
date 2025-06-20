@@ -194,16 +194,23 @@ export default function WatermarkPdfPage() {
   return (
     <>
       <MetaHead
-        title="Add Watermark to PDF – Free Online Tool | easy-pdf"
-        description="Add text or image watermarks to PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/watermark"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "PDF Watermark Tool",
-          description: "Add watermarks to PDF documents in your browser",
-          url: "https://easy-pdf.com/watermark",
-        }}
+        title="Watermark PDF – Free, Fast & Secure | easy-pdf"
+        description="Add text or image watermarks to your PDF, 100% client-side. No uploads, no privacy risk."
+        url="/watermark"
+        alternates={[
+          {
+            hrefLang: "en",
+            href: "https://easy-pdf-murex.vercel.app/watermark",
+          },
+          {
+            hrefLang: "hi",
+            href: "https://easy-pdf-murex.vercel.app/hi/watermark",
+          },
+          {
+            hrefLang: "mr",
+            href: "https://easy-pdf-murex.vercel.app/mr/watermark",
+          },
+        ]}
       />
 
       <main className="container max-w-4xl py-8">
@@ -487,7 +494,12 @@ export default function WatermarkPdfPage() {
                 className="border border-gray-600 rounded-md"
                 title="PDF Preview"
               />
-              <Button asChild variant="success" className="w-full">
+              <Button
+                asChild
+                variant="success"
+                className="w-full"
+                aria-label="Download watermarked PDF"
+              >
                 <a href={watermarkedUrl} download={`watermarked_${fileName}`}>
                   Download Watermarked PDF
                 </a>
