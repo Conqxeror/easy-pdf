@@ -1,0 +1,21 @@
+name: All‑In‑One AI Coding Assistant
+version: v1
+schema: v1
+models:
+  - name: DeepSeek‑Chat‑V3‑0324 (OpenRouter)
+    provider: openrouter
+    model: deepseek/deepseek-chat-v3-0324:free
+    apiKey: "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"
+    roles: [chat, edit, apply, summarize]
+
+  - name: DeepSeek‑R1‑0528 (OpenRouter)
+    provider: openrouter
+    model: deepseek/deepseek-r1-0528:free
+    apiKey: "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"
+    roles: [chat, edit, apply, summarize]
+
+  - name: Gemini 2.0 Flash Experimental (OpenRouter)
+    provider: openrouter
+    model: google/gemini-2.0-flash-exp:free
+    apiKey: "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"
+    roles: [chat, edit, apply, summarize]
