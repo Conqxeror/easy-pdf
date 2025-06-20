@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
-import Alert from "@/components/ui/alert";
+import { Alert } from "@/components/ui/alert";
 import MetaHead from "@/components/ui/MetaHead";
 import { Input } from "@/components/ui/input"; // Import Input component
 import { Label } from "@/components/ui/label"; // Import Label component
@@ -342,4 +342,3 @@ export default function DeletePagesPage() {
     </>
   );
 }
- 

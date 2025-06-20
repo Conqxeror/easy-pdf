@@ -1,7 +1,7 @@
 "use client";
 
 import MetaHead from "@/components/ui/MetaHead";
-import Alert from "@/components/ui/alert";
+import { Alert } from "@/components/ui/alert";
 
 export default function WordToPdfPage() {
   return (

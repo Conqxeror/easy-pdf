@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
-import Alert from "@/components/ui/alert";
+import { Alert } from "@/components/ui/alert";
 import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
