@@ -6,6 +6,7 @@ import { Menu, X, FileText, ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import Footer from "@/components/ui/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -307,6 +308,7 @@ export default function RootLayout({ children }) {
         <main className="min-h-screen pt-16" aria-label="Main content">
           {children}
         </main>
+        <Footer />
       </body>
     </html>
   );

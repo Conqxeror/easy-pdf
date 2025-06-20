@@ -1,11 +1,21 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import Loader from "@/components/ui/Loader";
+// import Loader from "@/components/ui/Loader"; // Removed Loader as it's not used directly
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  CardDescription, // Import CardDescription
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label"; // Import Label
+import { Input } from "@/components/ui/input"; // Import Input
 
 export default function ProtectPdfPage() {
   const [file, setFile] = useState(null);
@@ -15,12 +25,21 @@ export default function ProtectPdfPage() {
   const [protectedUrl, setProtectedUrl] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Cleanup function for object URLs
+  useEffect(() => {
+    return () => {
+      if (protectedUrl) {
+        URL.revokeObjectURL(protectedUrl);
+      }
+    };
+  }, [protectedUrl]); // Run when protectedUrl changes or component unmounts
+
   const handleFiles = (files) => {
     const selectedFile = files[0];
     setFile(selectedFile);
-    setFileName(selectedFile.name);
+    setFileName(selectedFile ? selectedFile.name : "");
     setError("");
-    setProtectedUrl(null);
+    setProtectedUrl(null); // Clear previous URL on new file selection
   };
 
   const protectPDF = async () => {
@@ -51,9 +70,13 @@ export default function ProtectPdfPage() {
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       setProtectedUrl(URL.createObjectURL(blob));
     } catch (e) {
-      setError("Failed to protect PDF. Please try again.");
+      setError(
+        "Failed to protect PDF. The file might be corrupted or already encrypted."
+      );
+      console.error("Protect PDF error:", e);
+    } finally {
+      setIsProcessing(false);
     }
-    setIsProcessing(false);
   };
 
   return (
@@ -74,60 +97,103 @@ export default function ProtectPdfPage() {
           },
         ]}
       />
-      <main className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-2xl font-bold mb-4">Protect PDF</h1>
-        <div className="w-full max-w-md mx-auto mb-4">
-          <FileDropzone
-            accept="application/pdf"
-            multiple={false}
-            onFiles={handleFiles}
-            error={error}
-            setError={setError}
-            label="Choose a PDF File"
-            description="Drag & drop or click to select a PDF file."
-          />
-        </div>
-        {fileName && (
-          <div className="mb-4 text-center text-gray-400">
-            Selected: {fileName}
-          </div>
-        )}
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter password"
-          className="mb-4 w-full max-w-md px-3 py-2 rounded border border-gray-300 text-black"
-          aria-label="Password"
-        />
-        <Button
-          onClick={protectPDF}
-          disabled={isProcessing || !file || !password}
-          className="mb-4 w-full max-w-xs"
-        >
-          {isProcessing ? "Protecting..." : "Protect PDF"}
-        </Button>
-        {isProcessing && <Loader label="Protecting PDF..." className="mb-4" />}
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            {error}
-          </Alert>
-        )}
-        {protectedUrl && (
-          <a
-            href={protectedUrl}
-            download="protected.pdf"
-            className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
-            aria-label="Download protected PDF"
-          >
+      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
+        {" "}
+        {/* Centering the main content */}
+        <Card className="bg-gray-800 border-gray-700 w-full">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-center text-gray-100">
+              Protect PDF
+            </CardTitle>
+            <CardDescription className="text-lg text-gray-300 text-center mt-2">
+              Add password protection to your PDF documents. Keep your files
+              secure and private.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <FileDropzone
+              accept="application/pdf"
+              multiple={false}
+              onFiles={handleFiles}
+              error={error}
+              setError={setError}
+              label="Choose a PDF File"
+              description="Drag & drop or click to select a PDF file (Max 50MB)"
+              maxSize={50 * 1024 * 1024}
+              isLoading={isProcessing}
+            />
+
+            {fileName && (
+              <div className="text-center text-gray-300 text-sm">
+                Selected:{" "}
+                <span className="font-medium text-gray-100">{fileName}</span>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="password"
+                className="text-sm font-medium text-gray-200"
+              >
+                Enter Password
+              </Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter a strong password"
+                className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                aria-label="Password for PDF protection"
+              />
+              <p className="text-xs text-gray-400 mt-1">
+                This password will be required to open the protected PDF.
+              </p>
+            </div>
+
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                {error}
+              </Alert>
+            )}
+
             <Button
-              aria-label="Download protected PDF"
-              className="w-full max-w-xs"
+              onClick={protectPDF}
+              disabled={isProcessing || !file || password.length === 0} // Disable if password is empty
+              className="w-full max-w-xs mx-auto block bg-blue-700 text-white"
+              variant="default" // Consistent styling
+              size="lg"
+              aria-label="Protect PDF with password"
             >
-              Download
+              {isProcessing ? "Protecting..." : "Protect PDF"}
             </Button>
-          </a>
-        )}
+          </CardContent>
+
+          {protectedUrl && !isProcessing && (
+            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
+              <div className="w-full text-center space-y-2 text-gray-100">
+                <h3 className="text-xl font-semibold">PDF Protected!</h3>
+                <p className="text-sm text-gray-400">
+                  Your PDF has been successfully encrypted.
+                </p>
+              </div>
+              <Button
+                asChild
+                variant="success"
+                className="w-full max-w-xs mx-auto block"
+              >
+                <a
+                  href={protectedUrl}
+                  download={`protected_${fileName || "document"}.pdf`}
+                  className="text-center"
+                >
+                  Download Protected PDF
+                </a>
+              </Button>
+            </CardFooter>
+          )}
+        </Card>
       </main>
     </>
   );

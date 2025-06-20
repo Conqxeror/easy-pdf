@@ -138,14 +138,14 @@ const tools = [
     title: "Reorder PDF",
     description: "Rearrange PDF pages",
     icon: <ListOrdered className="w-8 h-8 text-cyan-500" />,
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     href: "/delete-pages",
     title: "Delete Pages",
     description: "Remove unwanted pages from PDF",
     icon: <Eraser className="w-8 h-8 text-indigo-500" />,
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     href: "/add-text",
@@ -159,14 +159,14 @@ const tools = [
     title: "Page Numbers",
     description: "Add page numbers to PDF",
     icon: <PlusCircle className="w-8 h-8 text-amber-500" />,
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     href: "/sign-pdf",
     title: "Sign PDF",
     description: "Add digital signatures",
     icon: <Signature className="w-8 h-8 text-rose-500" />,
-    comingSoon: true,
+    comingSoon: false,
   },
   {
     href: "/pdf-info",

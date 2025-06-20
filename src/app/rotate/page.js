@@ -1,12 +1,30 @@
+//Not Working
+
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, Rotation } from "pdf-lib"; // Import Rotation enum
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import Loader from "@/components/ui/Loader";
-import PageRangeInput from "@/components/ui/PageRangeInput";
+// import Loader from "@/components/ui/Loader"; // Removed Loader for consistency
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  CardDescription, // Import CardDescription
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label"; // Import Label
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // Import Select components
+import PageRangeInput from "@/components/ui/PageRangeInput"; // Assuming this component is themed correctly
 
 export default function RotatePdfPage() {
   const [file, setFile] = useState(null);
@@ -14,30 +32,56 @@ export default function RotatePdfPage() {
   const [error, setError] = useState("");
   const [rotatedUrl, setRotatedUrl] = useState(null);
   const [isRotating, setIsRotating] = useState(false);
-  const [startPage, setStartPage] = useState("");
-  const [endPage, setEndPage] = useState("");
-  const [angle, setAngle] = useState(90);
+  const [startPage, setStartPage] = useState(""); // 1-based string
+  const [endPage, setEndPage] = useState(""); // 1-based string
+  const [angle, setAngle] = useState("90"); // Store as string to match Select value
   const [totalPages, setTotalPages] = useState(null);
 
+  // Cleanup function for object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (rotatedUrl) {
+        URL.revokeObjectURL(rotatedUrl);
+      }
+    };
+  }, [rotatedUrl]); // Run when rotatedUrl changes or component unmounts
+
+  /**
+   * Handles file selection from the dropzone.
+   * Loads the PDF to get total pages for the range input.
+   * @param {File[]} files - An array of selected files.
+   */
   const handleFiles = async (files) => {
     const selectedFile = files[0];
     setFile(selectedFile);
-    setFileName(selectedFile.name);
+    setFileName(selectedFile ? selectedFile.name : "");
     setError("");
     setRotatedUrl(null);
-    setStartPage("");
-    setEndPage("");
-    setTotalPages(null);
-    // Get total pages for range input
+    setStartPage(""); // Reset page range
+    setEndPage(""); // Reset page range
+    setTotalPages(null); // Reset total pages
+
+    if (!selectedFile) return;
+
     try {
       const arrayBuffer = await selectedFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       setTotalPages(pdfDoc.getPageCount());
-    } catch {
+      // Set default range to all pages if a file is loaded
+      setStartPage("1");
+      setEndPage(String(pdfDoc.getPageCount()));
+    } catch (e) {
+      setError("Failed to load PDF. Please ensure it's a valid PDF file.");
+      console.error("PDF load error:", e);
       setTotalPages(null);
+      setFile(null); // Clear file on error
+      setFileName("");
     }
   };
 
+  /**
+   * Rotates pages of the PDF based on the selected range and angle.
+   */
   const rotatePDF = async () => {
     setError("");
     setRotatedUrl(null);
@@ -46,32 +90,48 @@ export default function RotatePdfPage() {
       return;
     }
     setIsRotating(true);
+
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const total = pdfDoc.getPageCount();
-      const start = startPage ? Math.max(0, parseInt(startPage, 10) - 1) : 0;
-      const end = endPage
-        ? Math.min(total - 1, parseInt(endPage, 10) - 1)
-        : total - 1;
-      if (start > end || start < 0 || end >= total) {
-        setError("Invalid page range.");
+
+      // Parse and validate page range
+      const start = startPage ? Math.max(1, parseInt(startPage, 10)) : 1; // 1-based start
+      const end = endPage ? Math.min(total, parseInt(endPage, 10)) : total; // 1-based end
+
+      if (start > end || start < 1 || end > total) {
+        setError(
+          "Invalid page range. Please ensure start page is less than or equal to end page, and within total pages."
+        );
         setIsRotating(false);
         return;
       }
-      for (let i = start; i <= end; i++) {
+
+      const rotationAngle = parseInt(angle, 10);
+
+      // Loop through the selected pages (0-based for pdf-lib)
+      for (let i = start - 1; i < end; i++) {
         const page = pdfDoc.getPage(i);
+        // Add the new rotation angle to the existing rotation angle
+        // pdf-lib's setRotation takes a Rotation object.
+        // Rotation.of() is used directly as it's the most robust way to set rotation.
         page.setRotation(
-          (page.getRotation().angle + parseInt(angle, 10)) % 360
+          Rotation.of((page.getRotation().angle + rotationAngle) % 360)
         );
       }
+
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       setRotatedUrl(URL.createObjectURL(blob));
     } catch (e) {
-      setError("Failed to rotate PDF. Please try again.");
+      setError(
+        "Failed to rotate PDF. The file might be corrupted or cannot be processed."
+      );
+      console.error("Rotate PDF error:", e);
+    } finally {
+      setIsRotating(false);
     }
-    setIsRotating(false);
   };
 
   return (
@@ -92,76 +152,116 @@ export default function RotatePdfPage() {
           },
         ]}
       />
-      <main className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-2xl font-bold mb-4">Rotate PDF</h1>
-        <div className="w-full max-w-md mx-auto mb-4">
-          <FileDropzone
-            accept="application/pdf"
-            multiple={false}
-            onFiles={handleFiles}
-            error={error}
-            setError={setError}
-            label="Choose a PDF File"
-            description="Drag & drop or click to select a PDF file."
-          />
-        </div>
-        {fileName && (
-          <div className="mb-4 text-center text-gray-400">
-            Selected: {fileName}
-          </div>
-        )}
-        {totalPages && (
-          <PageRangeInput
-            startPage={startPage}
-            endPage={endPage}
-            setStartPage={setStartPage}
-            setEndPage={setEndPage}
-            totalPages={totalPages}
-          />
-        )}
-        <div className="mb-4 flex gap-2 items-center">
-          <label htmlFor="angle" className="font-medium">
-            Rotate by:
-          </label>
-          <select
-            id="angle"
-            value={angle}
-            onChange={(e) => setAngle(e.target.value)}
-            className="text-black rounded px-2 py-1"
-          >
-            <option value={90}>90°</option>
-            <option value={180}>180°</option>
-            <option value={270}>270°</option>
-          </select>
-        </div>
-        <Button
-          onClick={rotatePDF}
-          disabled={isRotating || !file}
-          className="mb-4 w-full max-w-xs"
-        >
-          {isRotating ? "Rotating..." : "Rotate PDF"}
-        </Button>
-        {isRotating && <Loader label="Rotating PDF..." className="mb-4" />}
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            {error}
-          </Alert>
-        )}
-        {rotatedUrl && (
-          <a
-            href={rotatedUrl}
-            download="rotated.pdf"
-            className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
-            aria-label="Download rotated PDF"
-          >
+      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
+        {" "}
+        {/* Centering the main content */}
+        <Card className="bg-gray-800 border-gray-700 w-full">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-center text-gray-100">
+              Rotate PDF
+            </CardTitle>
+            <CardDescription className="text-lg text-gray-300 text-center mt-2">
+              Rotate specific pages or the entire PDF document by 90, 180, or
+              270 degrees.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <FileDropzone
+              accept="application/pdf"
+              multiple={false}
+              onFiles={handleFiles}
+              error={error}
+              setError={setError}
+              label="Choose a PDF File"
+              description="Drag & drop or click to select a PDF file (Max 50MB)"
+              maxSize={50 * 1024 * 1024}
+              isLoading={isRotating} // Use isRotating for FileDropzone isLoading state
+            />
+
+            {fileName && (
+              <div className="text-center text-gray-300 text-sm">
+                Selected:{" "}
+                <span className="font-medium text-gray-100">{fileName}</span>
+              </div>
+            )}
+
+            {totalPages !== null && (
+              <PageRangeInput
+                startPage={startPage}
+                endPage={endPage}
+                setStartPage={setStartPage}
+                setEndPage={setEndPage}
+                totalPages={totalPages}
+              />
+            )}
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="angle"
+                className="text-sm font-medium text-gray-200"
+              >
+                Rotate by:
+              </Label>
+              <Select value={angle} onValueChange={setAngle}>
+                <SelectTrigger
+                  id="angle"
+                  className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                >
+                  <SelectValue placeholder="Select angle" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
+                  <SelectItem value="90">90° Clockwise</SelectItem>
+                  <SelectItem value="180">180°</SelectItem>
+                  <SelectItem value="270">
+                    270° Clockwise (90° Counter-Clockwise)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                {error}
+              </Alert>
+            )}
+
             <Button
-              aria-label="Download rotated PDF"
-              className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
+              onClick={rotatePDF}
+              disabled={isRotating || !file || totalPages === null} // Disable if file not loaded
+              className="w-full max-w-xs mx-auto block"
+              variant="default" // Consistent styling for action button
+              size="lg"
+              aria-label="Rotate PDF"
             >
-              Download
+              {isRotating ? "Rotating..." : "Rotate PDF"}
             </Button>
-          </a>
-        )}
+          </CardContent>
+
+          {rotatedUrl && !isRotating && (
+            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
+              <div className="w-full text-center space-y-2 text-gray-100">
+                <h3 className="text-xl font-semibold">PDF Rotated!</h3>
+                <p className="text-sm text-gray-400">
+                  Your PDF has been successfully rotated.
+                </p>
+              </div>
+              <Button
+                asChild
+                variant="success"
+                className="w-full max-w-xs mx-auto block"
+              >
+                <a
+                  href={rotatedUrl}
+                  download={`rotated_${fileName || "document"}.pdf`}
+                  className="text-center"
+                >
+                  Download Rotated PDF
+                </a>
+              </Button>
+            </CardFooter>
+          )}
+        </Card>
       </main>
     </>
   );

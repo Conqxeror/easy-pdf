@@ -1,11 +1,13 @@
+//not working
+
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MetaHead from "@/components/ui/MetaHead";
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import Loader from "@/components/ui/Loader";
+// import Loader from "@/components/ui/Loader"; // Replaced with progress bar
 import PageRangeInput from "@/components/ui/PageRangeInput";
 import {
   Card,
@@ -15,20 +17,38 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
+import { Label } from "@/components/ui/label"; // Import Label
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup components
+import { Progress } from "@/components/ui/progress"; // Import Progress
 import JSZip from "jszip"; // Assuming JSZip is installed (npm install jszip)
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
-  const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfUrl, setPdfUrl] = useState(null); // URL for the resulting PDF or ZIP
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [startPage, setStartPage] = useState("");
-  const [endPage, setEndPage] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false); // Renamed from 'loading' for consistency
+  const [startPage, setStartPage] = useState(""); // 1-based string
+  const [endPage, setEndPage] = useState(""); // 1-based string
   const [totalPages, setTotalPages] = useState(0);
   const [splitMode, setSplitMode] = useState("range"); // "range" or "all-pages"
   const [downloadFileName, setDownloadFileName] = useState("");
+  const [progress, setProgress] = useState(0); // For conversion progress
 
+  // Cleanup function for object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    };
+  }, [pdfUrl]); // Run when pdfUrl changes or component unmounts
+
+  /**
+   * Handles file selection from the dropzone.
+   * Loads the PDF to get total pages.
+   * @param {File[]} selectedFiles - An array containing the selected PDF file.
+   */
   const handleFile = async (selectedFiles) => {
     if (selectedFiles.length === 0) {
       setError("Please select a PDF file.");
@@ -37,6 +57,7 @@ export default function SplitPdfPage() {
       setPdfUrl(null);
       setTotalPages(0);
       setDownloadFileName("");
+      setProgress(0); // Reset progress
       return;
     }
 
@@ -48,35 +69,44 @@ export default function SplitPdfPage() {
     setStartPage("");
     setEndPage("");
     setTotalPages(0);
-    setLoading(true);
+    setIsProcessing(true); // Indicate loading of PDF, not yet splitting
 
     try {
       const arrayBuffer = await selectedFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
-      setTotalPages(pdfDoc.getPageCount());
-      // Future: Automatically set a default range like all pages or the first page if desired.
-      // setStartPage("1");
-      // setEndPage(pdfDoc.getPageCount().toString());
+      const num = pdfDoc.getPageCount();
+      setTotalPages(num);
+      // Automatically set default range to all pages when PDF is loaded
+      setStartPage("1");
+      setEndPage(String(num));
     } catch (err) {
-      setError("Failed to load PDF. Please ensure it's a valid PDF file.");
+      setError(
+        "Failed to load PDF. Please ensure it's a valid PDF file. " +
+          err.message
+      );
+      console.error("PDF load error:", err);
       setFile(null);
       setFileName("");
       setTotalPages(0);
     } finally {
-      setLoading(false);
+      setIsProcessing(false); // Done loading PDF
     }
   };
 
+  /**
+   * Splits the uploaded PDF based on the selected mode (range or all pages).
+   */
   const splitPDF = async () => {
     if (!file) {
       setError("Please upload a PDF first.");
       return;
     }
 
-    setLoading(true);
-    setPdfUrl(null);
+    setIsProcessing(true);
+    setPdfUrl(null); // Clear previous output URL
     setError("");
     setDownloadFileName("");
+    setProgress(0); // Reset progress for splitting operation
 
     try {
       const arrayBuffer = await file.arrayBuffer();
@@ -84,12 +114,14 @@ export default function SplitPdfPage() {
 
       if (splitMode === "range") {
         if (!startPage || !endPage) {
-          setError("Please enter both start and end page numbers.");
-          setLoading(false);
+          setError(
+            "Please enter both start and end page numbers for range splitting."
+          );
+          setIsProcessing(false);
           return;
         }
-        const start = parseInt(startPage);
-        const end = parseInt(endPage);
+        const start = parseInt(startPage); // 1-based
+        const end = parseInt(endPage); // 1-based
 
         if (
           isNaN(start) ||
@@ -100,13 +132,14 @@ export default function SplitPdfPage() {
           end > totalPages
         ) {
           setError(
-            "Invalid page range. Please enter valid page numbers within the document."
+            `Invalid page range. Please enter valid page numbers between 1 and ${totalPages}.`
           );
-          setLoading(false);
+          setIsProcessing(false);
           return;
         }
 
         const newPdfDoc = await PDFDocument.create();
+        // Convert to 0-based indices for pdf-lib
         const pageIndicesToCopy = Array.from(
           { length: end - start + 1 },
           (_, i) => start - 1 + i
@@ -120,40 +153,58 @@ export default function SplitPdfPage() {
         const pdfBytes = await newPdfDoc.save();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         setPdfUrl(URL.createObjectURL(blob));
-        setDownloadFileName(`split-pages-${start}-to-${end}.pdf`);
+        setDownloadFileName(
+          `${file.name.replace(/\.pdf$/, "")}_pages_${start}-to-${end}.pdf`
+        );
+        setProgress(100); // Complete progress for range split
       } else if (splitMode === "all-pages") {
         const zip = new JSZip();
         const pageCount = pdfDoc.getPageCount();
+        let pagesProcessed = 0;
 
         for (let i = 0; i < pageCount; i++) {
           const newPdfDoc = await PDFDocument.create();
-          const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [i]);
+          const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [i]); // Copy page by 0-based index
           newPdfDoc.addPage(copiedPage);
           const pdfBytes = await newPdfDoc.save();
+
           zip.file(
-            `${fileName.replace(/\.pdf$/, "")}_page-${i + 1}.pdf`,
+            `${file.name.replace(/\.pdf$/, "")}_page-${i + 1}.pdf`, // File name for each PDF
             pdfBytes
           );
+
+          pagesProcessed++;
+          setProgress(Math.round((pagesProcessed / pageCount) * 100)); // Update progress
         }
 
-        const zipBlob = await zip.generateAsync({ type: "blob" });
+        const zipBlob = await zip.generateAsync({
+          type: "blob",
+          compression: "DEFLATE",
+          compressionOptions: { level: 9 },
+        });
         setPdfUrl(URL.createObjectURL(zipBlob));
         setDownloadFileName(
-          `${fileName.replace(/\.pdf$/, "")}_split_pages.zip`
+          `${file.name.replace(/\.pdf$/, "")}_split_pages.zip`
         );
+        setProgress(100); // Complete progress for all-pages split
       }
     } catch (err) {
       console.error("Error splitting PDF:", err);
       setError("Failed to split PDF. Please try again.");
+      setPdfUrl(null);
     } finally {
-      setLoading(false);
+      setIsProcessing(false);
+      // Reset progress after a short delay
+      setTimeout(() => setProgress(0), 1000);
     }
   };
 
+  // Determine if the split button should be disabled
   const isSplitButtonDisabled =
-    loading ||
-    !file ||
-    (splitMode === "range" &&
+    isProcessing || // If overall processing (loading or splitting)
+    !file || // No file uploaded
+    totalPages === 0 || // PDF not loaded or has no pages
+    (splitMode === "range" && // If range mode, check page inputs
       (!startPage ||
         !endPage ||
         isNaN(parseInt(startPage)) ||
@@ -180,84 +231,111 @@ export default function SplitPdfPage() {
         }}
       />
 
-      <main className="flex flex-col items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md bg-gray-800 text-white shadow-lg rounded-xl">
+      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
+        {" "}
+        {/* Centering the main card */}
+        <Card className="w-full bg-gray-800 border-gray-700 shadow-lg rounded-xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-4xl font-extrabold text-blue-400">
+            <CardTitle className="text-3xl font-bold text-gray-100">
               Split PDF
             </CardTitle>
             <CardDescription className="text-lg text-gray-300 mt-2">
-              Extract specific pages or ranges, or separate all pages. 100%
-              client-side.
+              Extract specific pages or ranges, or separate all pages. All
+              processing is 100% client-side.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col items-center p-6">
+          <CardContent className="flex flex-col items-center p-6 space-y-6">
             <FileDropzone
               accept="application/pdf"
               onFiles={handleFile}
               error={error}
               setError={setError}
               label="Upload PDF"
-              description="Drag & drop or click to select a PDF file."
+              description="Drag & drop or click to select a PDF file (Max 50MB)"
+              maxSize={50 * 1024 * 1024}
+              isLoading={isProcessing && !file} // Show loading for file upload (initial processing)
             />
 
-            {loading && !file && (
-              <Loader label="Loading PDF..." className="mt-6" />
-            )}
-
             {fileName && (
-              <div className="mt-4 text-center text-gray-300">
+              <div className="text-center text-gray-300 text-sm">
                 Selected file:{" "}
-                <span className="font-semibold text-blue-300">{fileName}</span>
+                <span className="font-semibold text-gray-100">{fileName}</span>
               </div>
             )}
 
             {totalPages > 0 && (
               <>
-                <div className="mt-6 w-full flex flex-col items-center">
-                  <label className="text-lg font-semibold mb-3">
+                <div className="w-full flex flex-col items-center space-y-4">
+                  <Label className="text-lg font-semibold text-gray-100">
                     Split Options:
-                  </label>
-                  <div className="flex gap-4">
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
+                  </Label>
+                  <RadioGroup
+                    value={splitMode}
+                    onValueChange={setSplitMode}
+                    className="flex gap-4 p-2 rounded-md bg-gray-700 border border-gray-600"
+                  >
+                    <Label
+                      htmlFor="split-range"
+                      className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-gray-600 has-[input:checked]:bg-blue-600 has-[input:checked]:text-white transition-colors"
+                    >
+                      <RadioGroupItem
                         value="range"
-                        checked={splitMode === "range"}
-                        onChange={() => setSplitMode("range")}
-                        className="form-radio text-blue-600"
+                        id="split-range"
+                        className="peer sr-only" // Hidden radio button
                       />
-                      <span className="ml-2 text-gray-300">By Page Range</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
+                      <div className="w-4 h-4 rounded-full border-2 border-gray-400 peer-data-[state=checked]:bg-white peer-data-[state=checked]:border-blue-600 flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full bg-blue-600 peer-data-[state=checked]:bg-white"></div>
+                      </div>
+                      <span className="ml-2 text-gray-300 peer-data-[state=checked]:text-white">
+                        By Page Range
+                      </span>
+                    </Label>
+                    <Label
+                      htmlFor="split-all-pages"
+                      className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-gray-600 has-[input:checked]:bg-blue-600 has-[input:checked]:text-white transition-colors"
+                    >
+                      <RadioGroupItem
                         value="all-pages"
-                        checked={splitMode === "all-pages"}
-                        onChange={() => setSplitMode("all-pages")}
-                        className="form-radio text-blue-600"
+                        id="split-all-pages"
+                        className="peer sr-only" // Hidden radio button
                       />
-                      <span className="ml-2 text-gray-300">
+                      <div className="w-4 h-4 rounded-full border-2 border-gray-400 peer-data-[state=checked]:bg-white peer-data-[state=checked]:border-blue-600 flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full bg-blue-600 peer-data-[state=checked]:bg-white"></div>
+                      </div>
+                      <span className="ml-2 text-gray-300 peer-data-[state=checked]:text-white">
                         Extract All Pages
                       </span>
-                    </label>
-                  </div>
+                    </Label>
+                  </RadioGroup>
                 </div>
 
                 {splitMode === "range" && (
-                  <div className="mt-6 w-full flex justify-center">
+                  <div className="mt-4 w-full flex justify-center">
                     <PageRangeInput
                       startPage={startPage}
                       endPage={endPage}
                       setStartPage={setStartPage}
                       setEndPage={setEndPage}
                       totalPages={totalPages}
-                      className="w-full max-w-xs"
+                      className="w-full max-w-xs" // Apply consistent width
                     />
                   </div>
                 )}
               </>
             )}
+
+            {isProcessing &&
+              file && ( // Show progress only when splitting (file is loaded)
+                <div className="space-y-2 w-full max-w-xs text-center">
+                  <Progress
+                    value={progress}
+                    className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
+                  />
+                  <p className="text-sm text-gray-400">
+                    Splitting PDF... {progress}%
+                  </p>
+                </div>
+              )}
 
             {error && (
               <Alert variant="destructive" className="mt-4 text-center">
@@ -267,16 +345,19 @@ export default function SplitPdfPage() {
 
             <Button
               onClick={splitPDF}
-              className="mt-6 w-full max-w-xs"
+              className="mt-6 w-full max-w-xs mx-auto block bg-blue-700 text-white" // Consistent styling
+              variant="default" // Using default variant
+              size="lg"
               disabled={isSplitButtonDisabled}
+              aria-label="Split PDF"
             >
-              {loading && file ? "Splitting..." : "Split PDF"}
+              {isProcessing && file ? "Splitting..." : "Split PDF"}
             </Button>
           </CardContent>
 
-          {pdfUrl && (
+          {pdfUrl && !isProcessing && (
             <CardFooter className="flex flex-col items-center mt-6 border-t border-gray-700 pt-6">
-              <h2 className="text-2xl font-semibold mb-4 text-blue-400">
+              <h2 className="text-xl font-semibold mb-4 text-gray-100">
                 Result:
               </h2>
               {splitMode === "range" && (
@@ -294,22 +375,24 @@ export default function SplitPdfPage() {
                   into a ZIP file.
                 </p>
               )}
-              <Button asChild className="bg-green-600 hover:bg-green-700">
+              <Button asChild variant="success" className="w-full max-w-xs">
+                {" "}
+                {/* Consistent styling */}
                 <a
                   href={pdfUrl}
                   download={downloadFileName}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Download{" "}
-                  {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
+                  <span>
+                    {" "}
+                    {/* Added span to wrap children */}
+                    Download{" "}
+                    {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
+                  </span>
                 </a>
               </Button>
             </CardFooter>
-          )}
-
-          {loading && file && !pdfUrl && (
-            <Loader label="Splitting PDF..." className="mt-4" />
           )}
         </Card>
       </main>

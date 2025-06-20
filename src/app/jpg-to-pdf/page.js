@@ -1,46 +1,150 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import MetaHead from "@/components/ui/MetaHead";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, rgb } from "pdf-lib";
+import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import Loader from "@/components/ui/Loader";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  CardDescription, // Import CardDescription
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress"; // Assuming Progress is used for conversion feedback
+
+// Configure pdfjs worker to run from CDN
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function JpgToPdfPage() {
   const [files, setFiles] = useState([]);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false); // Renamed from 'loading' for consistency
+  const [progress, setProgress] = useState(0); // Progress state for conversion
+  const pdfPreviewCanvasRef = useRef(null); // Ref for the PDF preview canvas
+  const [pdfDocProxy, setPdfDocProxy] = useState(null); // pdf.js document proxy for preview
+  const renderTaskRef = useRef(null); // To manage pdf.js render tasks
 
-  const handleFiles = (selected) => {
-    if (!selected.length) {
-      setError("Please select valid JPG or PNG images.");
-      setFiles([]);
+  // Cleanup function for pdfDocProxy and pdfUrl
+  useEffect(() => {
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+      if (pdfDocProxy) {
+        pdfDocProxy.destroy();
+      }
+      if (renderTaskRef.current) {
+        renderTaskRef.current.cancel();
+      }
+    };
+  }, [pdfUrl, pdfDocProxy]);
+
+  // Function to render the first page of the generated PDF to the preview canvas
+  const renderPdfPreview = useCallback(async () => {
+    const canvas = pdfPreviewCanvasRef.current;
+    if (!canvas || !pdfDocProxy) {
+      if (canvas) {
+        // Clear canvas if no PDF or invalid proxy
+        const context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.height = 0; // Collapse canvas height
+      }
       return;
     }
-    setFiles(selected);
+
+    // Cancel any ongoing render task
+    if (renderTaskRef.current) {
+      renderTaskRef.current.cancel();
+      renderTaskRef.current = null;
+    }
+
+    const context = canvas.getContext("2d");
+    try {
+      const page = await pdfDocProxy.getPage(1); // Get the first page for preview
+      const viewport = page.getViewport({ scale: 1 });
+
+      const desiredWidth = 800; // Fixed width for preview
+      const scale = desiredWidth / viewport.width;
+      const scaledViewport = page.getViewport({ scale: scale });
+
+      canvas.width = scaledViewport.width;
+      canvas.height = scaledViewport.height;
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: scaledViewport,
+      };
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      renderTaskRef.current = page.render(renderContext);
+      await renderTaskRef.current.promise;
+      renderTaskRef.current = null;
+    } catch (e) {
+      if (e.name === "RenderingCancelledException") {
+        console.log("PDF rendering cancelled during preview:", e);
+      } else {
+        console.error("Error rendering PDF preview:", e);
+        setError("Failed to render PDF preview.");
+      }
+    }
+  }, [pdfDocProxy]);
+
+  // Effect to trigger PDF preview render when pdfDocProxy changes
+  useEffect(() => {
+    renderPdfPreview();
+  }, [renderPdfPreview]);
+
+  const handleFiles = (selectedFiles) => {
+    setFiles(selectedFiles);
     setPdfUrl(null);
     setError("");
+    setProgress(0); // Reset progress on new file selection
+
+    // Clear previous PDF proxy and preview if a new file is dropped
+    if (pdfDocProxy) {
+      pdfDocProxy.destroy();
+      setPdfDocProxy(null);
+    }
   };
 
   const createPdf = async () => {
-    setLoading(true);
+    if (files.length === 0) {
+      setError("Please upload at least one JPG or PNG image.");
+      return;
+    }
+
+    setIsProcessing(true);
     setError("");
+    setPdfUrl(null); // Clear previous URL
+    setProgress(0);
+
     try {
       const pdfDoc = await PDFDocument.create();
-      for (const file of files) {
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
         const imgData = await file.arrayBuffer();
-        let img, dims;
+        let img;
+        let dims;
+
         if (file.type === "image/jpeg") {
           img = await pdfDoc.embedJpg(imgData);
-          dims = img.scale(1);
         } else if (file.type === "image/png") {
           img = await pdfDoc.embedPng(imgData);
-          dims = img.scale(1);
         } else {
-          throw new Error("Unsupported file type");
+          throw new Error(`Unsupported file type: ${file.type}`);
         }
+
+        // Scale image to fit page or use original dimensions
+        // For simplicity, let's just use original image dimensions for now
+        dims = img.scale(1); // Use original scale. Consider scaling to fit standard page sizes later if needed.
+
         const page = pdfDoc.addPage([dims.width, dims.height]);
         page.drawImage(img, {
           x: 0,
@@ -48,16 +152,35 @@ export default function JpgToPdfPage() {
           width: dims.width,
           height: dims.height,
         });
+
+        // Update progress for each image processed
+        setProgress(Math.round(((i + 1) / files.length) * 90)); // 90% for image processing
       }
+
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      setPdfUrl(URL.createObjectURL(blob));
+      const newPdfUrl = URL.createObjectURL(blob);
+      setPdfUrl(newPdfUrl); // Set URL for download
+
+      // Load the generated PDF into pdf.js for preview
+      const loadingTask = pdfjs.getDocument({ data: pdfBytes });
+      const pdf = await loadingTask.promise;
+      setPdfDocProxy(pdf); // This will trigger renderPdfPreview via useEffect
+
+      setProgress(100); // Final progress
     } catch (err) {
+      console.error("Conversion error:", err);
       setError(
-        "Failed to convert images to PDF. Please ensure your files are valid JPG or PNG images and try again."
+        "Failed to convert images to PDF. Please ensure your files are valid JPG or PNG images and try again. Error: " +
+          err.message
       );
+      setPdfUrl(null);
+      setPdfDocProxy(null);
+    } finally {
+      setIsProcessing(false);
+      // Reset progress after a short delay
+      setTimeout(() => setProgress(0), 1000);
     }
-    setLoading(false);
   };
 
   return (
@@ -81,63 +204,107 @@ export default function JpgToPdfPage() {
           },
         ]}
       />
-      <main className="flex flex-col items-center justify-center min-h-screen p-4">
-        <h1 className="text-4xl font-bold mb-6 text-center">
-          JPG to PDF Converter
-        </h1>
-        <p className="mb-4 text-gray-400 text-center">
-          Convert your JPG or PNG images to a single PDF file. 100% client-side.
-        </p>
-        <div className="w-full max-w-md mx-auto mb-4">
-          <FileDropzone
-            accept="image/jpeg,image/png"
-            multiple
-            onFiles={handleFiles}
-            error={error}
-            setError={setError}
-            label="Choose Images"
-            description="Drag & drop or click to select JPG/PNG images."
-          />
-        </div>
-        {files.length > 0 && (
-          <ul className="mb-4 text-center">
-            {files.map((file, idx) => (
-              <li key={idx} className="text-gray-400">
-                {file.name}
-              </li>
-            ))}
-          </ul>
-        )}
-        <Button
-          onClick={createPdf}
-          className="mb-4 w-full max-w-xs"
-          disabled={loading || files.length === 0}
-        >
-          {loading ? "Converting..." : "Convert to PDF"}
-        </Button>
-        {loading && (
-          <Loader label="Converting images to PDF..." className="mb-4" />
-        )}
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            {error}
-          </Alert>
-        )}
-        {pdfUrl && (
-          <a
-            href={pdfUrl}
-            download="converted.pdf"
-            className="mt-2 inline-block bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700 transition"
-            aria-label="Download converted PDF"
-          >
+      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
+        {" "}
+        {/* Centering the main content */}
+        <Card className="bg-gray-800 border-gray-700 w-full">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold text-center text-gray-100">
+              JPG to PDF Converter
+            </CardTitle>
+            <CardDescription className="text-lg text-gray-300 text-center mt-2">
+              Combine multiple JPG or PNG images into a single PDF file. All
+              processing is done securely in your browser.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <FileDropzone
+              accept="image/jpeg,image/png"
+              multiple
+              onFiles={handleFiles}
+              error={error}
+              setError={setError}
+              label="Choose Images"
+              description="Drag & drop or click to select JPG/PNG images. Multiple files can be selected."
+              maxSize={50 * 1024 * 1024} // Max 50MB per file or total for this context
+              isLoading={isProcessing}
+            />
+
+            {files.length > 0 && (
+              <div className="space-y-2 text-gray-200">
+                <h3 className="text-xl font-semibold text-gray-100 mb-2">
+                  Selected Images:
+                </h3>
+                <ul className="list-disc list-inside text-gray-300 space-y-1">
+                  {files.map((file, idx) => (
+                    <li key={idx}>
+                      {file.name} ({Math.round(file.size / 1024)} KB)
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {isProcessing && (
+              <div className="space-y-2">
+                <Progress
+                  value={progress}
+                  className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
+                />
+                <p className="text-sm text-center text-gray-400">
+                  Converting images to PDF... {progress}%
+                </p>
+              </div>
+            )}
+
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                {error}
+              </Alert>
+            )}
+
             <Button
-              aria-label="Download PDF from images"
-              className="mb-4 w-full max-w-xs"
+              onClick={createPdf}
+              className="w-full max-w-xs mx-auto block"
+              variant="default" // Using default variant for the action button
+              disabled={isProcessing || files.length === 0}
+              aria-label="Convert selected images to PDF"
             >
-              Download
+              {isProcessing ? "Converting..." : "Convert to PDF"}
             </Button>
-          </a>
-        )}
+          </CardContent>
+
+          {pdfUrl && !isProcessing && (
+            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
+              <div className="w-full text-center space-y-2 text-gray-100">
+                <h3 className="text-xl font-semibold">PDF Preview</h3>
+                <div className="w-full flex justify-center items-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative">
+                  <canvas
+                    ref={pdfPreviewCanvasRef}
+                    className="max-w-full h-auto border border-gray-600 rounded-md shadow-lg"
+                    style={{ maxWidth: "100%", height: "auto" }}
+                    aria-label="Generated PDF preview"
+                  ></canvas>
+                </div>
+              </div>
+
+              <Button
+                asChild
+                variant="success"
+                className="w-full max-w-xs mx-auto block"
+              >
+                <a
+                  href={pdfUrl}
+                  download="converted.pdf"
+                  className="text-center" // Ensure text is centered if button expands
+                >
+                  Download Converted PDF
+                </a>
+              </Button>
+            </CardFooter>
+          )}
+        </Card>
       </main>
     </>
   );
