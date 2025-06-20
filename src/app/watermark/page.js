@@ -5,7 +5,6 @@ import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-// import Loader from "@/components/ui/Loader"; // Removed Loader as its functionality is integrated
 import {
   Card,
   CardHeader,
@@ -27,6 +26,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HexColorPicker } from "react-colorful"; // Assuming this is installed
+import Image from "next/image"; // Import Next.js Image component
 
 export default function WatermarkPdfPage() {
   const [file, setFile] = useState(null);
@@ -55,6 +55,11 @@ export default function WatermarkPdfPage() {
       // (though it's a DataURL here, good practice to consider for future changes)
     };
   }, [watermarkedUrl]); // Runs when watermarkedUrl changes or component unmounts
+
+  // Color change handler for react-colorful
+  const handleColorChange = (newColor) => {
+    setColor(newColor);
+  };
 
   /**
    * Handles PDF file selection from the dropzone.
@@ -512,10 +517,13 @@ export default function WatermarkPdfPage() {
                       Watermark Image
                     </Label>
                     <div className="flex items-center gap-4">
-                      <img
+                      {/* Replaced <img> with <Image> from next/image */}
+                      <Image
                         src={watermarkImage}
                         alt="Watermark preview"
-                        className="h-20 w-20 object-contain border border-gray-600 rounded-md shadow-md"
+                        width={80} // Specify appropriate width
+                        height={80} // Specify appropriate height
+                        className="object-contain border border-gray-600 rounded-md shadow-md"
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src =

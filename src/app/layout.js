@@ -2,6 +2,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image"; // Import the Image component from next/image
 import {
   Menu,
   X,
@@ -10,8 +11,7 @@ import {
   Combine,
   Spline,
   Shrink,
-  Image,
-  FileImage,
+  FileImage, // Keep FileImage if used for icons, but actual image optimization needs next/image
   RotateCw,
   Stamp,
   Lock,
@@ -45,7 +45,7 @@ const toolCategories = [
       {
         name: "JPG to PDF",
         href: "/jpg-to-pdf",
-        icon: <Image className="w-4 h-4" />,
+        icon: <FileImage className="w-4 h-4" />, // This FileImage is from lucide-react, not next/image
       },
       {
         name: "PDF to JPG",
@@ -201,11 +201,11 @@ function Navbar() {
               className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
               onClick={closeAllMenus}
             >
-              <img
+              <Image // Changed <img> to <Image>
                 src="/icon.png"
                 alt="easy-pdf Logo"
                 className="h-8 w-8"
-                width={32}
+                width={32} // Ensure width and height are provided for next/image
                 height={32}
               />
               <span className="text-xl font-bold text-white hidden sm:block">

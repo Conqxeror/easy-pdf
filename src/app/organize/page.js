@@ -321,8 +321,8 @@ export default function OrganizePage() {
                   Page Order & Selection
                 </h2>
                 <p className="text-sm text-gray-400 mb-4">
-                  Drag and drop pages to reorder them. Click "Exclude" to remove
-                  pages from the final PDF.
+                  Drag and drop pages to reorder them. Click &quot;Exclude&quot;
+                  to remove pages from the final PDF.
                 </p>
                 <ul
                   className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto max-h-[500px] p-2 custom-scrollbar"

@@ -1,12 +1,10 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react"; // Added useEffect, useRef, useCallback
 import MetaHead from "@/components/ui/MetaHead";
-// import { PDFDocument } from "pdf-lib"; // Not directly used in this component for PDF creation, only pdfjs
 import * as pdfjs from "pdfjs-dist";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-// import Loader from "@/components/ui/Loader"; // Replaced with Progress
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import {
@@ -15,7 +13,7 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
-  CardDescription, // Import CardDescription
+  CardDescription,
 } from "@/components/ui/card";
 import {
   Select,
@@ -24,8 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import { Slider } from "@/components/ui/slider"; // Removed Slider import
 import JSZip from "jszip";
+import Image from "next/image"; // Import Next.js Image component
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -34,10 +32,9 @@ export default function PdfToJpgPage() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false); // Changed to boolean
+  const [isProcessing, setIsProcessing] = useState(false);
   const [images, setImages] = useState([]); // Stores { url, fileName, size, isZip? }
-  // const [quality, setQuality] = useState(85); // Removed quality state
-  const [selectedPages, setSelectedPages] = useState("all"); // 'all' or 'page number string'
+  const [selectedPages, setSelectedPages] = useState("all");
   const [totalPages, setTotalPages] = useState(0);
 
   // New states for detailed progress
@@ -120,7 +117,7 @@ export default function PdfToJpgPage() {
     }
 
     const ctx = canvas.getContext("2d");
-    const img = new Image();
+    const img = new window.Image(); // Use window.Image to avoid conflict with next/image
     img.onload = () => {
       const aspectRatio = img.width / img.height;
       const desiredWidth = 300; // Fixed width for preview
@@ -428,11 +425,13 @@ export default function PdfToJpgPage() {
                       className="border border-gray-600 rounded-md p-3 bg-gray-700 text-gray-100 flex flex-col items-center text-center"
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        {/* Display thumbnail for individual image downloads */}
-                        <img
+                        {/* Replaced <img> with <Image> from next/image */}
+                        <Image
                           src={image.url}
                           alt={`Page ${image.pageNumber}`}
-                          className="h-16 w-16 object-cover rounded shadow"
+                          width={64} // Specify appropriate width
+                          height={64} // Specify appropriate height
+                          className="object-cover rounded shadow"
                           // Fallback in case image fails to load
                           onError={(e) => {
                             e.target.onerror = null;
@@ -442,7 +441,6 @@ export default function PdfToJpgPage() {
                         />
                         <div className="flex flex-col items-start">
                           {" "}
-                          {/* Align text to start */}
                           <p className="font-medium text-white">
                             {image.fileName}
                           </p>

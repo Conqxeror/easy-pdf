@@ -81,7 +81,7 @@ export default function OcrPage() {
         renderTaskRef.current = null;
       }
     };
-  }, []); // Run once on mount and cleanup on unmount
+  }, [previewImageUrl, pdfDocProxy]); // Added previewImageUrl and pdfDocProxy to dependencies
 
   // Function to render the uploaded file (image or first PDF page) to canvas
   const renderFileToCanvas = useCallback(async () => {
@@ -173,7 +173,7 @@ export default function OcrPage() {
         setPdfDocProxy(null);
       }
     }
-  }, [files, pdfDocProxy, renderFileToCanvas]);
+  }, [files, pdfDocProxy, previewImageUrl, renderFileToCanvas]); // Added previewImageUrl to dependencies
 
   const handleFiles = async (newFiles) => {
     setFiles(newFiles);

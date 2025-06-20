@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image"; // Keep this import if you intend to use next/image for actual images
 import {
   FileText,
   Merge,
@@ -8,7 +9,6 @@ import {
   Stamp,
   Lock,
   Unlock,
-  Image,
   Text,
   ListOrdered,
   Eraser,
@@ -16,6 +16,7 @@ import {
   PlusCircle,
   Signature,
   FileBadge2,
+  Image as LucideImage, // Alias the Image component from lucide-react
 } from "lucide-react";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
@@ -95,7 +96,9 @@ const tools = [
     href: "/jpg-to-pdf",
     title: "JPG to PDF",
     description: "Convert images to PDF documents",
-    icon: <Image className="w-8 h-8 text-pink-500" />,
+    icon: (
+      <LucideImage alt="JPG to PDF Icon" className="w-8 h-8 text-pink-500" />
+    ), // Use the aliased name here
     comingSoon: false,
   },
   {
@@ -244,7 +247,7 @@ export default function Home() {
           <Link
             href="#tools"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-blue-400 bg-blue-900/50 hover:bg-blue-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            aria-label="View all PDF tools"
+            aria-label="Explore all PDF tools"
           >
             Explore All Tools
           </Link>
@@ -256,12 +259,14 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
+              {/* Added alt prop for decorative SVG */}
               <svg
                 className="w-6 h-6 text-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true" // Indicate decorative image
               >
                 <path
                   strokeLinecap="round"
@@ -279,12 +284,14 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
+              {/* Added alt prop for decorative SVG */}
               <svg
                 className="w-6 h-6 text-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true" // Indicate decorative image
               >
                 <path
                   strokeLinecap="round"
@@ -302,12 +309,14 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
+              {/* Added alt prop for decorative SVG */}
               <svg
                 className="w-6 h-6 text-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true" // Indicate decorative image
               >
                 <path
                   strokeLinecap="round"
@@ -345,6 +354,8 @@ export default function Home() {
                 tabIndex={tool.comingSoon ? -1 : 0}
               >
                 <div className="flex items-center justify-center mb-4">
+                  {/* For `LucideImage` from lucide-react, it's an SVG icon, so it needs an alt prop for accessibility. */}
+                  {/* Or, if it's purely decorative, aria-hidden="true" can be used. */}
                   {tool.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-50 group-hover:text-blue-400 mb-2 text-center">
