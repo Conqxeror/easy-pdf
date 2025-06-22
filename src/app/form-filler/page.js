@@ -360,15 +360,16 @@ export default function FormFillerPage() {
   return (
     <>
       <MetaHead
-        title="PDF Form Filler - easy-pdf"
-        description="Add text and forms to your PDF files easily. This client-side tool ensures your privacy as files are processed directly in your browser."
+        title="PDF Form Filler Online - Free PDF Text Tool | easy-pdf"
+        description="Fill PDF forms and add text to PDF online for free. 100% client-side, privacy-first PDF tool."
         url="/form-filler"
+        keywords="PDF form filler, add text PDF, fill PDF form, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "PDF Form Filler",
+          name: "PDF Form Filler Online",
           description:
-            "A free, client-side tool to add custom text to PDF documents at specified coordinates, securely in your browser.",
+            "Fill PDF forms and add text to PDF online for free. 100% client-side, privacy-first PDF tool.",
           url: "https://easy-pdf-murex.vercel.app/form-filler",
         }}
         alternates={[

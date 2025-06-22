@@ -7,9 +7,18 @@ export default function PdfToWordPage() {
   return (
     <>
       <MetaHead
-        title="PDF to Word/Excel - easy-pdf"
-        description="Convert PDF to Word or Excel documents (advanced, server required)."
+        title="PDF to Word Online - Free PDF Converter | easy-pdf"
+        description="Convert PDF to Word or Excel documents online for free. 100% client-side, privacy-first PDF tool."
         url="/pdf-to-word"
+        keywords="PDF to Word, PDF to Excel, convert PDF, PDF tools, online PDF, free PDF, PDF toolkit"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "PDF to Word Online",
+          description:
+            "Convert PDF to Word or Excel documents online for free. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/pdf-to-word",
+        }}
       />
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">PDF to Word/Excel</h1>

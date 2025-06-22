@@ -275,23 +275,18 @@ export default function PdfToJpgPage() {
   return (
     <>
       <MetaHead
-        title="PDF to JPG – Free, Fast & Secure | easy-pdf"
-        description="Convert PDF pages to JPG images, 100% client-side. No uploads, no privacy risk."
+        title="PDF to JPG Online - Free PDF to Image Converter | easy-pdf"
+        description="Convert PDF pages to JPG images online for free. 100% client-side, privacy-first PDF tool."
         url="/pdf-to-jpg"
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/pdf-to-jpg",
-          },
-          {
-            hrefLang: "hi",
-            href: "https://easy-pdf-murex.vercel.app/hi/pdf-to-jpg",
-          },
-          {
-            hrefLang: "mr",
-            href: "https://easy-pdf-murex.vercel.app/mr/pdf-to-jpg",
-          },
-        ]}
+        keywords="PDF to JPG, PDF to image, convert PDF JPG, PDF tools, online PDF, free PDF, PDF toolkit"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "PDF to JPG Online",
+          description:
+            "Convert PDF pages to JPG images online for free. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/pdf-to-jpg",
+        }}
       />
 
       <main className="container max-w-4xl py-8 mx-auto">

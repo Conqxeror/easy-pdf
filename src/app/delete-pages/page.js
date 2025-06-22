@@ -192,18 +192,17 @@ export default function DeletePagesPage() {
     <>
       {/* MetaHead component for SEO and document metadata */}
       <MetaHead
-        title="Delete PDF Pages - easy-pdf"
-        description="Remove specific pages from your PDF easily. This client-side tool ensures your privacy as files are processed directly in your browser."
+        title="Delete PDF Pages Online - Free PDF Page Remover | easy-pdf"
+        description="Delete pages from PDF files online for free. Remove unwanted pages from your PDF. 100% client-side, privacy-first PDF tool."
         url="/delete-pages"
-        // Add more specific Open Graph and Twitter meta tags if needed, similar to the main page
+        keywords="delete PDF pages, remove PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Delete PDF Pages",
+          name: "Delete PDF Pages Online",
           description:
-            "A free, client-side tool to remove unwanted pages from PDF documents easily and securely.",
+            "Delete pages from PDF files online for free. Remove unwanted pages from your PDF. 100% client-side, privacy-first PDF tool.",
           url: "https://easy-pdf-murex.vercel.app/delete-pages",
-          // Consider adding more properties if relevant, e.g., about, applicationCategory
         }}
         alternates={[
           {

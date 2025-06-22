@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { Github, Linkedin, Mail } from "lucide-react"; // Import necessary icons
 
+// Define the footer links structure
 const footerLinks = [
   {
     section: "Tools",
@@ -26,68 +28,147 @@ const footerLinks = [
     ],
   },
   {
-    section: "Contact",
+    section: "Company",
     links: [
       {
-        name: "kadriwalimohammad@gmail.com",
-        href: "mailto:kadriwalimohammad@gmail.com",
+        name: "About easy-pdf",
+        href: "https://easy-pdf-murex.vercel.app/about",
         external: true,
       },
-    ],
-  },
-  {
-    section: "About",
-    links: [
       {
-        name: "easy-pdf is a blazing-fast, privacy-first PDF toolkit for India and the world. 100% client-side, open-source, and SEO-optimized.",
-        href: "https://easy-pdf-murex.vercel.app/",
+        name: "Sitemap", // Added Sitemap link
+        href: "/sitemap.xml", // Assuming your sitemap is at /sitemap.xml
         external: true,
       },
+      // Placeholder for other company links like Privacy Policy, Terms of Service
     ],
   },
 ];
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="w-full bg-gray-950 border-t border-gray-800 mt-12 py-10 px-4">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="w-full bg-gray-950 border-t border-gray-800 mt-16 py-12 px-4 font-inter">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-8">
+        {/* Branding/About Section */}
+        <div className="flex flex-col gap-4 col-span-full md:col-span-2 lg:col-span-1">
+          <Link
+            href="/"
+            className="text-3xl font-extrabold text-white hover:text-blue-400 transition-colors"
+          >
+            easy-pdf
+          </Link>
+          <p className="text-gray-400 text-sm leading-relaxed">
+            easy-pdf is a blazing-fast, privacy-first PDF toolkit for India and
+            the world. 100% client-side, open-source, and SEO-optimized.
+          </p>
+        </div>
+
+        {/* Dynamic Footer Links Sections (Tools & Company) */}
         {footerLinks.map((section) => (
-          <div key={section.section} className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold mb-2 text-white">
+          <div
+            key={section.section}
+            className={`flex flex-col gap-3 ${
+              section.section === "Tools"
+                ? "col-span-full md:col-span-2" // Tools section spans 2 columns on medium+ screens
+                : "col-span-full md:col-span-1" // Company section takes 1 column
+            }`}
+          >
+            <h2 className="text-xl font-semibold mb-3 text-white">
               {section.section}
             </h2>
-            <ul className="space-y-1">
-              {section.links.map((link) => (
-                <li key={link.href}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      className="text-blue-400 hover:underline text-sm break-all"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={link.name}
-                    >
-                      {link.name}
-                    </a>
-                  ) : (
+            {section.section === "Tools" ? (
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-6">
+                {section.links.map((link) => (
+                  <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="hover:text-blue-400 underline-offset-2 hover:underline focus:outline-none focus:text-blue-500 text-sm"
+                      className="text-gray-400 hover:text-blue-400 transition-colors text-base"
                     >
                       {link.name}
                     </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="space-y-2">
+                {section.links.map((link) => (
+                  <li key={link.href}>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        className="text-gray-400 hover:text-blue-400 transition-colors text-base break-all"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={link.name}
+                      >
+                        {link.name}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-gray-400 hover:text-blue-400 transition-colors text-base"
+                      >
+                        {link.name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+
+                {/* New Contact Section */}
+                <div className="flex flex-col gap-3 col-span-full md:col-span-1 pt-4">
+                  {" "}
+                  {/* This will naturally sit after Company if Tools is col-span-2 */}
+                  <h2 className="text-xl font-semibold mb-3 text-white">
+                    Contact:
+                  </h2>
+                  <ul className="space-y-2">
+                    <li>
+                      <a
+                        href="mailto:kadriwalimohammad@gmail.com"
+                        aria-label="Email"
+                        className="text-gray-400 hover:text-red-400 transition-colors text-base flex items-center gap-2"
+                      >
+                        <Mail size={18} /> kadriwalimohammad@gmail.com
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://www.linkedin.com/in/walimohammadkadri/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="LinkedIn Profile"
+                        className="text-gray-400 hover:text-blue-500 transition-colors text-base flex items-center gap-2"
+                      >
+                        <Linkedin size={18} /> LinkedIn Profile
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="https://github.com/Conqxeror"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="GitHub Profile"
+                        className="text-gray-400 hover:text-gray-300 transition-colors text-base flex items-center gap-2"
+                      >
+                        <Github size={18} /> GitHub Profile
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </ul>
+            )}
           </div>
         ))}
       </div>
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mt-8 gap-2 text-xs text-gray-400">
-        <span>
-          &copy; {new Date().getFullYear()} easy-pdf. All rights reserved.
-        </span>
+
+      {/* Copyright and Bottom Info */}
+      <div className="max-w-7xl mx-auto border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
+        <span>&copy; {currentYear} easy-pdf. All rights reserved.</span>
+        <span className="text-gray-600">Made with &hearts; in India.</span>
       </div>
+
       {/* SEO: Organization structured data */}
       <script
         type="application/ld+json"
@@ -97,13 +178,17 @@ export default function Footer() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "easy-pdf",
-            url: "https://easy-pdf.in",
+            url: "https://easy-pdf-murex.vercel.app/",
             contactPoint: [
               {
                 "@type": "ContactPoint",
                 email: "kadriwalimohammad@gmail.com",
                 contactType: "customer support",
               },
+            ],
+            sameAs: [
+              "https://www.linkedin.com/in/walimohammadkadri/",
+              "https://github.com/Conqxeror",
             ],
           }),
         }}

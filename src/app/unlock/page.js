@@ -81,20 +81,18 @@ export default function UnlockPdfPage() {
   return (
     <>
       <MetaHead
-        title="Unlock PDF – Free, Fast & Secure | easy-pdf"
-        description="Remove password from PDF files, 100% client-side. No uploads, no privacy risk."
+        title="Unlock PDF Online - Free PDF Unlocker Tool | easy-pdf"
+        description="Unlock PDF files online for free. Remove password protection from PDF documents. 100% client-side, privacy-first PDF tool."
         url="/unlock"
-        alternates={[
-          { hrefLang: "en", href: "https://easy-pdf-murex.vercel.app/unlock" },
-          {
-            hrefLang: "hi",
-            href: "https://easy-pdf-murex.vercel.app/hi/unlock",
-          },
-          {
-            hrefLang: "mr",
-            href: "https://easy-pdf-murex.vercel.app/mr/unlock",
-          },
-        ]}
+        keywords="unlock PDF, remove PDF password, PDF unlocker, PDF tools, online PDF, free PDF, PDF toolkit"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Unlock PDF Online",
+          description:
+            "Unlock PDF files online for free. Remove password protection from PDF documents. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/unlock",
+        }}
       />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}

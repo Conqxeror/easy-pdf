@@ -260,15 +260,16 @@ export default function ReorderPage() {
   return (
     <>
       <MetaHead
-        title="Reorder PDF Pages - easy-pdf"
-        description="Reorder pages in your PDF with a simple drag-and-drop interface. Visually arrange pages to your desired sequence."
+        title="Reorder PDF Pages Online - Free PDF Reorder Tool | easy-pdf"
+        description="Reorder PDF pages online for free. Drag and drop to rearrange PDF pages. 100% client-side, privacy-first PDF tool."
         url="/reorder"
+        keywords="reorder PDF, rearrange PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Reorder PDF Pages Tool",
+          name: "Reorder PDF Pages Online",
           description:
-            "A free, client-side tool to easily reorder PDF pages using a visual drag-and-drop interface, ensuring your privacy.",
+            "Reorder PDF pages online for free. Drag and drop to rearrange PDF pages. 100% client-side, privacy-first PDF tool.",
           url: "https://easy-pdf-murex.vercel.app/reorder",
         }}
         alternates={[

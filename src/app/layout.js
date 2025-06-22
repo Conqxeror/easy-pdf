@@ -33,6 +33,8 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Footer from "@/components/ui/Footer";
+import MetaHead from "@/components/ui/MetaHead"; // Import MetaHead component
+import VercelAnalytics from "./vercel-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -201,11 +203,11 @@ function Navbar() {
               className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md"
               onClick={closeAllMenus}
             >
-              <Image // Changed <img> to <Image>
+              <Image
                 src="/icon.png"
                 alt="easy-pdf Logo"
                 className="h-8 w-8"
-                width={32} // Ensure width and height are provided for next/image
+                width={32}
                 height={32}
               />
               <span className="text-xl font-bold text-white hidden sm:block">
@@ -220,7 +222,7 @@ function Navbar() {
               {toolCategories.map((category) => (
                 <div
                   key={category.name}
-                  className="relative h-full flex items-center group" // Added group for hover effect
+                  className="relative h-full flex items-center group"
                   onMouseEnter={() => setDesktopSubmenuOpen(category.name)}
                   onMouseLeave={() => setDesktopSubmenuOpen(null)}
                 >
@@ -347,7 +349,7 @@ function Navbar() {
                           href={subItem.href}
                           onClick={closeAllMenus}
                           className={clsx(
-                            "block px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2", // Added gap for icon
+                            "px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2", // Added gap for icon
                             pathname === subItem.href
                               ? "bg-blue-600 text-white"
                               : "text-gray-300 hover:bg-gray-700 hover:text-white",
@@ -397,12 +399,26 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} bg-gray-900 text-gray-100`}>
+        <MetaHead
+          title="easy-pdf - Free Online PDF Tools"
+          description="100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser."
+          url="/"
+          jsonLd={{
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "easy-pdf",
+            description:
+              "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
+            url: "https://easy-pdf-murex.vercel.app",
+          }}
+        />
         <Navbar />
         {/* Add pt-16 (same as navbar height) to main content */}
         <main className="min-h-screen pt-16" aria-label="Main content">
           {children}
         </main>
         <Footer />
+        <VercelAnalytics />
       </body>
     </html>
   );

@@ -283,17 +283,17 @@ export default function MergePDFs() {
   return (
     <>
       <MetaHead
-        title="Merge PDF – Free, Fast & Secure | easy-pdf"
-        description="Merge multiple PDF files into one, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/merge"
-        ogImage="/public/og-image.png"
+        title="Merge PDF Online - Free PDF Merger Tool | easy-pdf"
+        description="Merge PDF files online for free. Combine multiple PDF documents into one. 100% client-side, privacy-first PDF tool."
+        url="/merge"
+        keywords="merge PDF, PDF merger, combine PDF, PDF tools, online PDF, free PDF, PDF joiner, PDF combine, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Merge PDF",
+          name: "Merge PDF Online",
           description:
-            "Merge multiple PDF files into one, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://easy-pdf.com/merge",
+            "Merge PDF files online for free. Combine multiple PDF documents into one. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/merge",
         }}
       />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">

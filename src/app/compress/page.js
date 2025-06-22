@@ -164,17 +164,17 @@ export default function CompressPDFs() {
   return (
     <>
       <MetaHead
-        title="Compress PDF – Free, Fast & Secure | easy-pdf"
-        description="Compress PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/compress"
-        ogImage="/public/og-image.png"
+        title="Compress PDF Online - Free PDF Compressor | easy-pdf"
+        description="Compress PDF files online for free. Reduce PDF file size while preserving quality. 100% client-side, privacy-first PDF tool."
+        url="/compress"
+        keywords="compress PDF, PDF compressor, reduce PDF size, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Compress PDF",
+          name: "Compress PDF Online",
           description:
-            "Compress PDF files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://easy-pdf.com/compress",
+            "Compress PDF files online for free. Reduce PDF file size while preserving quality. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/compress",
         }}
       />
 

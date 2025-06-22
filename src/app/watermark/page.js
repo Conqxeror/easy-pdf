@@ -356,23 +356,18 @@ export default function WatermarkPdfPage() {
   return (
     <>
       <MetaHead
-        title="Watermark PDF – Free, Fast & Secure | easy-pdf"
-        description="Add text or image watermarks to your PDF, 100% client-side. No uploads, no privacy risk."
+        title="Watermark PDF Online - Free PDF Watermark Tool | easy-pdf"
+        description="Add watermark to PDF files online for free. Text and image watermarking. 100% client-side, privacy-first PDF tool."
         url="/watermark"
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/watermark",
-          },
-          {
-            hrefLang: "hi",
-            href: "https://easy-pdf-murex.vercel.app/hi/watermark",
-          },
-          {
-            hrefLang: "mr",
-            href: "https://easy-pdf-murex.vercel.app/mr/watermark",
-          },
-        ]}
+        keywords="watermark PDF, add watermark PDF, PDF watermark, PDF tools, online PDF, free PDF, PDF toolkit"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Watermark PDF Online",
+          description:
+            "Add watermark to PDF files online for free. Text and image watermarking. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/watermark",
+        }}
       />
 
       <main className="container max-w-4xl py-8 mx-auto">

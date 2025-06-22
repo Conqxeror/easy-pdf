@@ -329,15 +329,16 @@ export default function OcrPage() {
   return (
     <>
       <MetaHead
-        title="OCR PDF & Image - easy-pdf"
-        description="Extract text from scanned PDFs and images using Optical Character Recognition (OCR) directly in your browser. Fast, private, and free."
+        title="OCR PDF - Extract Text from PDF Online | easy-pdf"
+        description="Extract text from scanned PDF files and images using OCR online for free. 100% client-side, privacy-first PDF tool."
         url="/ocr"
+        keywords="OCR PDF, extract text PDF, PDF OCR, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "OCR (Text Recognition) Tool",
+          name: "OCR PDF Online",
           description:
-            "A free, client-side tool to extract text from image and PDF files using OCR technology, ensuring privacy as processing occurs locally.",
+            "Extract text from scanned PDF files and images using OCR online for free. 100% client-side, privacy-first PDF tool.",
           url: "https://easy-pdf-murex.vercel.app/ocr",
         }}
         alternates={[

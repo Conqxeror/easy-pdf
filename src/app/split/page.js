@@ -217,17 +217,17 @@ export default function SplitPdfPage() {
   return (
     <>
       <MetaHead
-        title="Split PDF – Free, Fast & Secure | easy-pdf"
-        description="Split PDF documents into multiple files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized."
-        url="https://easy-pdf.com/split"
-        ogImage="/public/og-image.png"
+        title="Split PDF Online - Free PDF Splitter Tool | easy-pdf"
+        description="Split PDF files online for free. Extract pages or ranges from PDF documents. 100% client-side, privacy-first PDF tool."
+        url="/split"
+        keywords="split PDF, PDF splitter, extract PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: "Split PDF",
+          name: "Split PDF Online",
           description:
-            "Split PDF documents into multiple files, 100% client-side. No uploads, no privacy risk. Fast, free, and India-optimized.",
-          url: "https://easy-pdf.com/split",
+            "Split PDF files online for free. Extract pages or ranges from PDF documents. 100% client-side, privacy-first PDF tool.",
+          url: "https://easy-pdf-murex.vercel.app/split",
         }}
       />
 
