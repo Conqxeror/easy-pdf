@@ -1,5 +1,4 @@
-// Replaced next/link with standard <a> tags for broader compatibility
-// In a full Next.js application, you would typically use next/link for internal routing.
+import Link from "next/link"; // Re-import Link from next/link
 
 // Define the mapping of tool names to their respective hrefs
 const toolsMap = {
@@ -45,15 +44,15 @@ const renderTextWithToolLinks = (text) => {
         parts.push(text.substring(lastIndex, startIndex));
       }
 
-      // Add the <a> tag component for the tool name
+      // Add the Link component for the tool name
       parts.push(
-        <a
+        <Link
           key={`${toolName}-${startIndex}`}
           href={href}
           className="text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
         >
           {toolName}
-        </a>
+        </Link>
       );
       lastIndex = endIndex;
     }
@@ -159,12 +158,12 @@ export default function AboutPage() {
               <div key={toolName} className="flex items-center">
                 <span className="text-blue-400 mr-2">&#8226;</span>{" "}
                 {/* Custom bullet point */}
-                <a
+                <Link
                   href={href}
                   className="text-gray-200 hover:text-blue-400 hover:underline transition-colors"
                 >
                   {toolName}
-                </a>
+                </Link>
                 {toolName.includes("Coming Soon") && (
                   <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full">
                     Coming Soon
@@ -258,12 +257,12 @@ export default function AboutPage() {
               and transform the way you handle documents. Your privacy, our
               priority.
             </p>
-            <a // Changed back to <a> for general compatibility
+            <Link // Changed back to Link from next/link for internal navigation
               href="/" // Link to your homepage or directly to the tools section
               className="inline-flex items-center justify-center px-10 py-4 border border-transparent text-lg font-medium rounded-full shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Try easy-pdf Now!
-            </a>
+            </Link>
           </div>
         </section>
       </div>
