@@ -17,7 +17,7 @@ const toolsMap = {
   "Organize PDF": "/organize",
   "Add Page Numbers": "/page-numbers",
   "HTML to PDF": "/html-to-pdf",
-  OCR: "/ocr",
+  "OCR": "/ocr",
   "Sign/Annotate PDF": "/sign",
   "PDF Form Filler": "/form-filler",
   "Word to PDF": "/word-to-pdf",
@@ -100,19 +100,19 @@ export default function AboutPage() {
                 No File Uploads to Servers
               </span>
               : Your sensitive PDF documents never leave your computer. All
-              processing – from{" "}
+              processing &mdash; from{" "}
               {renderTextWithToolLinks(
                 "PDF merging to compressing PDF files, splitting PDF documents, or rotating PDF pages"
               )}{" "}
-              – happens right in your web browser.
+              &mdash; happens right in your web browser.
             </li>
             <li>
               <span className="font-semibold text-white">
                 Complete Data Security
               </span>
-              : We don't store, collect, or even see your files. This radical
-              approach ensures your personal and professional data remains
-              entirely confidential.
+              : We don&apos;t store, collect, or even see your files. This
+              radical approach ensures your personal and professional data
+              remains entirely confidential.
             </li>
             <li>
               <span className="font-semibold text-white">
@@ -132,14 +132,14 @@ export default function AboutPage() {
           <p className="text-lg leading-relaxed">
             We understand that your time is valuable. easy-pdf is engineered for
             unparalleled speed, delivering instant results for your PDF tasks.
-            Whether you're{" "}
+            Whether you&apos;re{" "}
             {renderTextWithToolLinks(
               "converting JPG to PDF, unlocking PDF files, or organizing PDF pages"
             )}
             , our optimized algorithms ensure a seamless and quick experience.
             Experience the difference of a truly efficient{" "}
             <span className="font-semibold text-white">online PDF editor</span>{" "}
-            that doesn't compromise on performance.
+            that doesn&apos;t compromise on performance.
           </p>
         </section>
 
@@ -258,7 +258,7 @@ export default function AboutPage() {
               and transform the way you handle documents. Your privacy, our
               priority.
             </p>
-            <a
+            <a // Changed back to <a> for general compatibility
               href="/" // Link to your homepage or directly to the tools section
               className="inline-flex items-center justify-center px-10 py-4 border border-transparent text-lg font-medium rounded-full shadow-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
