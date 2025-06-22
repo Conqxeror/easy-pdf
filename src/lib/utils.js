@@ -2,37 +2,50 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Tesseract from "tesseract.js";
-import * as pdfjsLib from "pdfjs-dist";
+import * as pdfjsLib from "pdfjs-dist"; // Ensure this is correctly imported for Node.js environment
+// NOTE: pdfjs-dist requires specific configuration for Node.js/server environments if using
+// features that would normally rely on workers in a browser. For basic text extraction from
+// a Buffer, direct import as shown is typically sufficient without GlobalWorkerOptions.workerSrc
+// which is primarily for browser environments.
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-// Extract text from PDF, DOCX, or image using tesseract.js and pdfjs-dist
+/**
+ * Extracts text from a base64 encoded file (PDF, DOCX, or image).
+ * This function is intended for use in a server-side (Node.js) environment.
+ * @param {string} base64 - Base64 encoded file content.
+ * @param {string} name - Original file name, used to determine file type.
+ * @returns {Promise<string>} The extracted text content.
+ * @throws {Error} If the file type is unsupported or text extraction fails.
+ */
 export async function extractTextFromFile(base64, name) {
+  if (!base64 || !name) {
+    throw new Error("File data or name is missing for text extraction.");
+  }
+
   const ext = name.split(".").pop().toLowerCase();
+  // Decode base64 to Uint8Array for processing
   const binary = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
 
   if (["jpg", "jpeg", "png"].includes(ext)) {
-    // OCR for images
+    // OCR for images using Tesseract.js (ensure Tesseract is configured for Node.js if necessary)
     try {
       const {
         data: { text },
       } = await Tesseract.recognize(binary, "eng");
+      if (!text) {
+        throw new Error("No text found in image.");
+      }
       return text;
     } catch (e) {
-      throw new Error(`Image OCR failed: ${e.message}`);
+      throw new Error(`Image OCR failed for ${name}: ${e.message}`);
     }
   } else if (ext === "pdf") {
-    // Extract text from PDF
+    // Extract text from PDF using pdfjs-dist
     try {
-      // Set the workerSrc for pdfjs-dist. This is crucial for it to work.
-      // You might need to adjust the path based on where you serve pdf.worker.js
-      // If running on server, this might not be strictly necessary or might need a different setup.
-      // For Next.js API routes, pdfjs-dist might be used in a Node.js context where worker setup is different.
-      // For a purely server-side utility, direct PDF parsing often doesn't need a worker.
-      // If this were client-side, it would be: pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
-
+      // For Node.js, `pdfjsLib.getDocument({ data: binary })` can work directly with Uint8Array.
       const pdf = await pdfjsLib.getDocument({ data: binary }).promise;
       let text = "";
       for (let i = 1; i <= pdf.numPages; i++) {
@@ -40,25 +53,31 @@ export async function extractTextFromFile(base64, name) {
         const content = await page.getTextContent();
         text += content.items.map((item) => item.str).join(" ") + "\n";
       }
+      if (!text.trim()) {
+        throw new Error("No readable text found in PDF.");
+      }
       return text;
     } catch (e) {
-      throw new Error(`PDF text extraction failed: ${e.message}`);
+      throw new Error(`PDF text extraction failed for ${name}: ${e.message}`);
     }
   } else if (["doc", "docx"].includes(ext)) {
-    // DOCX: Use mammoth
+    // DOCX: Use mammoth.js
     try {
+      // Dynamic import for mammoth as it's not always needed and can be large
       const mammoth = await import("mammoth");
-      // For server-side Node.js environment, mammoth typically expects a Node.js Buffer
       // Convert Uint8Array to Node.js Buffer
       const docxBuffer = Buffer.from(binary);
-      const { value } = await mammoth.extractRawText({ buffer: docxBuffer }); // Pass as buffer option
+      const { value } = await mammoth.extractRawText({ buffer: docxBuffer });
+      if (!value.trim()) {
+        throw new Error("No readable text found in DOCX file.");
+      }
       return value;
     } catch (e) {
-      // Throw an error if DOCX extraction fails on the server
       throw new Error(
-        `DOCX extraction failed: ${e.message}. Ensure mammoth is correctly installed and configured.`
+        `DOCX extraction failed for ${name}: ${e.message}. Ensure mammoth is correctly installed and configured for Node.js.`
       );
     }
+  } else {
+    throw new Error(`Unsupported file type: .${ext} for text extraction.`);
   }
-  throw new Error("Unsupported file type for text extraction.");
 }
