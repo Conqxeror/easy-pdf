@@ -206,6 +206,13 @@ const tools = [
     icon: <FileText className="w-8 h-8 text-blue-800" />,
     comingSoon: false,
   },
+  {
+    href: "/legal-analyzer",
+    title: "Legal Document Analyzer",
+    description: "AI-powered legal document review and clause extraction",
+    icon: <FileText className="w-8 h-8 text-fuchsia-500" />,
+    comingSoon: false,
+  },
 ];
 
 export default function Home() {

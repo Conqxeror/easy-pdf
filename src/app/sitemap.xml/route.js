@@ -23,6 +23,8 @@ export async function GET() {
     "/pdf-to-word",
     "/add-page-numbers",
     "/sign-pdf",
+    "/legal-analyzer",
+    "/about",
   ];
 
   const pages = routes.map((route) => ({

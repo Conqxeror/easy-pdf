@@ -155,6 +155,17 @@ const toolCategories = [
       },
     ],
   },
+  {
+    name: "Legal & AI Tools",
+    icon: <FileBadge className="w-4 h-4" />, // Use a legal/AI icon
+    submenu: [
+      {
+        name: "Legal Document Analyzer",
+        href: "/legal-analyzer",
+        icon: <FileText className="w-4 h-4" />,
+      },
+    ],
+  },
 ];
 
 function Navbar() {
