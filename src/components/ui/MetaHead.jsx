@@ -38,7 +38,15 @@ export default function MetaHead({
   const fullUrl = url.startsWith("http")
     ? url
     : `https://easy-pdf-murex.vercel.app${url}`;
-  const ogImageUrl = `https://easy-pdf-murex.vercel.app/api/og?title=${encodeURIComponent(title)}${subtitle ? `&subtitle=${encodeURIComponent(subtitle)}` : ''}`;
+  // Use static OG image for homepage, dynamic for others
+  const isHome =
+    url === "/" ||
+    title.toLowerCase().includes("easy-pdf - free online pdf tools");
+  const ogImageUrl = isHome
+    ? "/og-image.jpg"
+    : `https://easy-pdf-murex.vercel.app/api/og?title=${encodeURIComponent(
+        title
+      )}${subtitle ? `&subtitle=${encodeURIComponent(subtitle)}` : ""}`;
   const canonical = canonicalUrl || fullUrl;
 
   // Enhanced JSON-LD with tool-specific data
@@ -154,7 +162,10 @@ export default function MetaHead({
       <meta name="HandheldFriendly" content="True" />
       <meta name="MobileOptimized" content="320" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="black-translucent"
+      />
     </Head>
   );
 }
