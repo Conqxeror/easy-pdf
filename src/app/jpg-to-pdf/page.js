@@ -187,8 +187,9 @@ export default function JpgToPdfPage() {
     <>
       <MetaHead
         title="JPG to PDF Online - Free Image to PDF Converter | easy-pdf"
-        description="Convert JPG images to PDF online for free. 100% client-side, privacy-first PDF tool."
+        description="Convert JPG images to PDF online. Combine multiple images into a single PDF. 100% client-side, privacy-first PDF tool."
         url="/jpg-to-pdf"
+        subtitle="Convert one or more JPG images into a single PDF file. Drag, drop, and arrange images."
         keywords="JPG to PDF, image to PDF, convert JPG PDF, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

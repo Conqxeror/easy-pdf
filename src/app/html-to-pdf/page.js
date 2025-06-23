@@ -207,9 +207,10 @@ export default function HtmlToPdfPage() {
   return (
     <>
       <MetaHead
-        title="HTML to PDF Online - Free HTML to PDF Converter | easy-pdf"
-        description="Convert HTML to PDF online for free. 100% client-side, privacy-first PDF tool."
+        title="HTML to PDF Online - Convert HTML to PDF | easy-pdf"
+        description="Convert HTML content or web pages to PDF. 100% client-side, privacy-first PDF tool."
         url="/html-to-pdf"
+        subtitle="Convert HTML or web pages into PDF documents. Paste, edit, and export instantly."
         keywords="HTML to PDF, convert HTML PDF, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

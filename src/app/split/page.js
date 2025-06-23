@@ -217,9 +217,10 @@ export default function SplitPdfPage() {
   return (
     <>
       <MetaHead
-        title="Split PDF Online - Free PDF Splitter Tool | easy-pdf"
-        description="Split PDF files online for free. Extract pages or ranges from PDF documents. 100% client-side, privacy-first PDF tool."
+        title="Split PDF Online - Free PDF Splitter | easy-pdf"
+        description="Split PDF files by page range or extract all pages as separate PDFs. 100% client-side, privacy-first PDF tool."
         url="/split"
+        subtitle="Extract specific pages or split your PDF into multiple files. Choose a range or split all pages."
         keywords="split PDF, PDF splitter, extract PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

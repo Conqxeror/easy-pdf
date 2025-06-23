@@ -283,9 +283,10 @@ export default function MergePDFs() {
   return (
     <>
       <MetaHead
-        title="Merge PDF Online - Free PDF Merger Tool | easy-pdf"
-        description="Merge PDF files online for free. Combine multiple PDF documents into one. 100% client-side, privacy-first PDF tool."
+        title="Merge PDF Files Online - Free PDF Merger | easy-pdf"
+        description="Merge multiple PDF files into one, instantly and securely. 100% client-side, privacy-first PDF tool."
         url="/merge"
+        subtitle="Combine multiple PDF files into a single document. Drag, drop, and reorder before merging."
         keywords="merge PDF, PDF merger, combine PDF, PDF tools, online PDF, free PDF, PDF joiner, PDF combine, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

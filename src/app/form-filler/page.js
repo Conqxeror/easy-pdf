@@ -360,9 +360,10 @@ export default function FormFillerPage() {
   return (
     <>
       <MetaHead
-        title="PDF Form Filler Online - Free PDF Text Tool | easy-pdf"
-        description="Fill PDF forms and add text to PDF online for free. 100% client-side, privacy-first PDF tool."
+        title="PDF Form Filler Online - Fill and Edit PDF Forms | easy-pdf"
+        description="Fill out and edit PDF forms online. 100% client-side, privacy-first PDF tool."
         url="/form-filler"
+        subtitle="Fill out PDF forms or add text anywhere on your PDF. Edit and save instantly."
         keywords="PDF form filler, add text PDF, fill PDF form, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

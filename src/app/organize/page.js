@@ -271,9 +271,10 @@ export default function OrganizePage() {
   return (
     <>
       <MetaHead
-        title="Organize PDF Pages Online - Free PDF Organizer | easy-pdf"
-        description="Organize PDF pages online for free. Reorder, delete, and arrange PDF pages visually. 100% client-side, privacy-first PDF tool."
+        title="Organize PDF Online - Arrange, Delete, and Reorder Pages | easy-pdf"
+        description="Organize your PDF by rearranging, deleting, or rotating pages. 100% client-side, privacy-first PDF tool."
         url="/organize"
+        subtitle="Rearrange, delete, or rotate pages in your PDF. All-in-one PDF organizer."
         keywords="organize PDF, reorder PDF, arrange PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

@@ -454,9 +454,10 @@ export default function SignPage() {
   return (
     <>
       <MetaHead
-        title="Sign PDF Online - Free PDF Signature Tool | easy-pdf"
-        description="Sign PDF files online for free. Add digital signatures to PDF documents. 100% client-side, privacy-first PDF tool."
+        title="Sign PDF Online - Draw or Add Signature to PDF | easy-pdf"
+        description="Sign or annotate your PDF by drawing or typing. 100% client-side, privacy-first PDF tool."
         url="/sign"
+        subtitle="Draw, type, or upload your signature to sign PDF documents. Annotate with ease."
         keywords="sign PDF, PDF signature, add signature PDF, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

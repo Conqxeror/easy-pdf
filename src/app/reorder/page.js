@@ -260,9 +260,10 @@ export default function ReorderPage() {
   return (
     <>
       <MetaHead
-        title="Reorder PDF Pages Online - Free PDF Reorder Tool | easy-pdf"
-        description="Reorder PDF pages online for free. Drag and drop to rearrange PDF pages. 100% client-side, privacy-first PDF tool."
+        title="Reorder PDF Pages Online - Rearrange PDF | easy-pdf"
+        description="Rearrange the order of pages in your PDF file. 100% client-side, privacy-first PDF tool."
         url="/reorder"
+        subtitle="Drag and drop to reorder pages in your PDF. Organize your document visually."
         keywords="reorder PDF, rearrange PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

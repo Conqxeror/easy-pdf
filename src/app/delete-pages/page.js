@@ -192,9 +192,10 @@ export default function DeletePagesPage() {
     <>
       {/* MetaHead component for SEO and document metadata */}
       <MetaHead
-        title="Delete PDF Pages Online - Free PDF Page Remover | easy-pdf"
-        description="Delete pages from PDF files online for free. Remove unwanted pages from your PDF. 100% client-side, privacy-first PDF tool."
+        title="Delete PDF Pages Online - Remove Pages from PDF | easy-pdf"
+        description="Delete specific pages from your PDF file. 100% client-side, privacy-first PDF tool."
         url="/delete-pages"
+        subtitle="Remove unwanted pages from your PDF. Select and delete with a click."
         keywords="delete PDF pages, remove PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

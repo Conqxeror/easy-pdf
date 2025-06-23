@@ -81,9 +81,10 @@ export default function UnlockPdfPage() {
   return (
     <>
       <MetaHead
-        title="Unlock PDF Online - Free PDF Unlocker Tool | easy-pdf"
-        description="Unlock PDF files online for free. Remove password protection from PDF documents. 100% client-side, privacy-first PDF tool."
+        title="Unlock PDF Online - Remove PDF Password | easy-pdf"
+        description="Remove password protection from your PDF file. 100% client-side, privacy-first PDF tool."
         url="/unlock"
+        subtitle="Remove password restrictions from your PDF. Unlock secured documents easily."
         keywords="unlock PDF, remove PDF password, PDF unlocker, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

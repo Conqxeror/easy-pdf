@@ -10,6 +10,7 @@ export default function PdfToWordPage() {
         title="PDF to Word Online - Free PDF Converter | easy-pdf"
         description="Convert PDF to Word or Excel documents online for free. 100% client-side, privacy-first PDF tool."
         url="/pdf-to-word"
+        subtitle="Convert PDF files to editable Word or Excel documents. Preserve formatting and layout."
         keywords="PDF to Word, PDF to Excel, convert PDF, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

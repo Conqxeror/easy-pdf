@@ -276,8 +276,9 @@ export default function PdfToJpgPage() {
     <>
       <MetaHead
         title="PDF to JPG Online - Free PDF to Image Converter | easy-pdf"
-        description="Convert PDF pages to JPG images online for free. 100% client-side, privacy-first PDF tool."
+        description="Convert PDF pages to high-quality JPG images online. 100% client-side, privacy-first PDF tool."
         url="/pdf-to-jpg"
+        subtitle="Convert each page of your PDF into a high-quality JPG image. Download single images or a ZIP."
         keywords="PDF to JPG, PDF to image, convert PDF JPG, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

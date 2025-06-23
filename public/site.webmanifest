@@ -3,17 +3,17 @@
   "short_name": "easy-pdf",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#1e40af",
+  "theme_color": "#1e40af",
   "description": "An easy and efficient PDF management tool.",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "/icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }

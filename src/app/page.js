@@ -1,3 +1,5 @@
+//src\app\page.js
+
 import Link from "next/link";
 import Image from "next/image"; // Keep this import if you intend to use next/image for actual images
 import {

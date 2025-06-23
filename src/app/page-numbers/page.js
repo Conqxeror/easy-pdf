@@ -448,9 +448,10 @@ export default function PageNumbersPage() {
   return (
     <>
       <MetaHead
-        title="Add Page Numbers to PDF - Free PDF Numbering Tool | easy-pdf"
-        description="Add page numbers, headers, or footers to PDF files online for free. 100% client-side, privacy-first PDF tool."
+        title="Add Page Numbers to PDF Online | easy-pdf"
+        description="Add page numbers, headers, or footers to your PDF. 100% client-side, privacy-first PDF tool."
         url="/page-numbers"
+        subtitle="Add page numbers, headers, or footers to your PDF. Customize position and style."
         keywords="add page numbers PDF, PDF numbering, PDF header, PDF footer, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

@@ -82,9 +82,10 @@ export default function ProtectPdfPage() {
   return (
     <>
       <MetaHead
-        title="Protect PDF Online - Free PDF Password Tool | easy-pdf"
-        description="Protect PDF files with a password online for free. 100% client-side, privacy-first PDF tool."
+        title="Protect PDF Online - Add Password to PDF | easy-pdf"
+        description="Encrypt your PDF with a password for security. 100% client-side, privacy-first PDF tool."
         url="/protect"
+        subtitle="Add password protection to your PDF file. Secure your documents instantly."
         keywords="protect PDF, PDF password, secure PDF, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

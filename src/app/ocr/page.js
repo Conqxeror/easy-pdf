@@ -329,9 +329,10 @@ export default function OcrPage() {
   return (
     <>
       <MetaHead
-        title="OCR PDF - Extract Text from PDF Online | easy-pdf"
-        description="Extract text from scanned PDF files and images using OCR online for free. 100% client-side, privacy-first PDF tool."
+        title="OCR PDF Online - Extract Text from PDF or Image | easy-pdf"
+        description="Extract text from scanned PDFs or images using OCR. 100% client-side, privacy-first PDF tool."
         url="/ocr"
+        subtitle="Extract text from scanned PDFs or images using OCR (Optical Character Recognition)."
         keywords="OCR PDF, extract text PDF, PDF OCR, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

@@ -1,1 +1,0 @@
-The api/compress.js file is now deleted and the api folder is no longer needed. You can safely remove the entire api/ directory to complete the removal of all server-side code.

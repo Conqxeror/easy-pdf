@@ -165,8 +165,9 @@ export default function CompressPDFs() {
     <>
       <MetaHead
         title="Compress PDF Online - Free PDF Compressor | easy-pdf"
-        description="Compress PDF files online for free. Reduce PDF file size while preserving quality. 100% client-side, privacy-first PDF tool."
+        description="Reduce PDF file size online with high-quality compression. 100% client-side, privacy-first PDF tool."
         url="/compress"
+        subtitle="Shrink your PDF file size while preserving quality. Fast, private, and free."
         keywords="compress PDF, PDF compressor, reduce PDF size, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

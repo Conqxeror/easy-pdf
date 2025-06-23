@@ -186,8 +186,10 @@ export default function LegalAnalyzerPage() {
   return (
     <>
       <MetaHead
-        title="Legal Document Analyzer | AI-powered Legal Review Tool"
-        description="Upload and analyze legal documents with AI. Summarize, extract clauses, assess risk, and get a report. 100% privacy-first."
+        title="Legal Document Analyzer - AI-Powered Contract Review | easy-pdf"
+        description="Analyze legal documents, extract clauses, and assess risks using AI. 100% client-side, privacy-first PDF tool."
+        url="/legal-analyzer"
+        subtitle="AI-powered analysis of contracts and legal documents. Extract clauses, assess risks, and generate reports."
         ogTitle="Legal Document Analyzer"
         ogDescription="AI-powered tool to analyze, summarize, and review legal documents."
         ogImage="/icon.png"

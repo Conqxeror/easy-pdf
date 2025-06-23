@@ -356,9 +356,10 @@ export default function WatermarkPdfPage() {
   return (
     <>
       <MetaHead
-        title="Watermark PDF Online - Free PDF Watermark Tool | easy-pdf"
-        description="Add watermark to PDF files online for free. Text and image watermarking. 100% client-side, privacy-first PDF tool."
+        title="Watermark PDF Online - Add Text or Image Watermark | easy-pdf"
+        description="Add a text or image watermark to your PDF. 100% client-side, privacy-first PDF tool."
         url="/watermark"
+        subtitle="Add a custom text or image watermark to every page of your PDF. Choose position, opacity, and style."
         keywords="watermark PDF, add watermark PDF, PDF watermark, PDF tools, online PDF, free PDF, PDF toolkit"
         jsonLd={{
           "@context": "https://schema.org",

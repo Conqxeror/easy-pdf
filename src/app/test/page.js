@@ -7,6 +7,7 @@ export default function Test() {
         title="Test Page | easy-pdf"
         description="Test page for easy-pdf UI and TailwindCSS."
         url="https://easy-pdf.com/test"
+        subtitle="Test and preview UI components and styles for easy-pdf."
         ogImage="/public/og-image.png"
         jsonLd={{
           "@context": "https://schema.org",

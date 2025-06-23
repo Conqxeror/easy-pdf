@@ -8,7 +8,6 @@ export default function MetaHead({
   title = "easy-pdf – Blazing-fast, Privacy-first PDF Tools",
   description = "100% client-side PDF tools: merge, split, compress, convert, protect, and more. Open-source, privacy-first, India-optimized.",
   url = "https://easy-pdf-murex.vercel.app",
-  ogImage = "/og-image.png",
   jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
@@ -34,13 +33,12 @@ export default function MetaHead({
     { hrefLang: "hi", href: "https://easy-pdf-murex.vercel.app/hi" },
     { hrefLang: "mr", href: "https://easy-pdf-murex.vercel.app/mr" },
   ],
+  subtitle, // New subtitle prop
 }) {
   const fullUrl = url.startsWith("http")
     ? url
     : `https://easy-pdf-murex.vercel.app${url}`;
-  const fullOgImage = ogImage.startsWith("http")
-    ? ogImage
-    : `https://easy-pdf-murex.vercel.app${ogImage}`;
+  const ogImageUrl = `https://easy-pdf-murex.vercel.app/api/og?title=${encodeURIComponent(title)}${subtitle ? `&subtitle=${encodeURIComponent(subtitle)}` : ''}`;
   const canonical = canonicalUrl || fullUrl;
 
   // Enhanced JSON-LD with tool-specific data
@@ -107,7 +105,7 @@ export default function MetaHead({
       <meta property="og:url" content={fullUrl} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={fullOgImage} />
+      <meta property="og:image" content={ogImageUrl} />
       <meta property="og:locale" content={locale} />
       <meta property="og:site_name" content="easy-pdf" />
       {/* Twitter */}
@@ -116,7 +114,7 @@ export default function MetaHead({
       <meta name="twitter:creator" content={twitterHandle} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={fullOgImage} />
+      <meta name="twitter:image" content={ogImageUrl} />
       {/* Favicons */}
       <link rel="icon" href="/favicon.ico" />
       <link
@@ -146,11 +144,17 @@ export default function MetaHead({
       <meta name="application-name" content="easy-pdf" />
       <meta name="apple-mobile-web-app-title" content="easy-pdf" />
       <meta name="theme-color" content="#1e40af" />
+      <meta name="background-color" content="#1e40af" />
       <meta name="msapplication-TileColor" content="#1e40af" />
       <meta
         name="google-site-verification"
         content="sVdN8Q1bz1KwTehC2WzKpxZCSttbZ3yjKeD1lTwCIck"
       />
+      <meta name="color-scheme" content="dark light" />
+      <meta name="HandheldFriendly" content="True" />
+      <meta name="MobileOptimized" content="320" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     </Head>
   );
 }
