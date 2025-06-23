@@ -448,25 +448,8 @@ export default function PageNumbersPage() {
   return (
     <>
       <MetaHead
-        title="Add Page Numbers to PDF Online | easy-pdf"
-        description="Add page numbers, headers, or footers to your PDF. 100% client-side, privacy-first PDF tool."
-        url="/page-numbers"
-        subtitle="Add page numbers, headers, or footers to your PDF. Customize position and style."
-        keywords="add page numbers PDF, PDF numbering, PDF header, PDF footer, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Add Page Numbers to PDF",
-          description:
-            "Add page numbers, headers, or footers to PDF files online for free. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/page-numbers",
-        }}
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/page-numbers",
-          },
-        ]}
+        title="Add Page Numbers to PDF – Easy PDF Tool"
+        description="Add page numbers, headers, and footers to your PDF, 100% client-side. Fast, secure, and privacy-first PDF numbering."
       />
 
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">

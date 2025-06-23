@@ -360,25 +360,8 @@ export default function FormFillerPage() {
   return (
     <>
       <MetaHead
-        title="PDF Form Filler Online - Fill and Edit PDF Forms | easy-pdf"
-        description="Fill out and edit PDF forms online. 100% client-side, privacy-first PDF tool."
-        url="/form-filler"
-        subtitle="Fill out PDF forms or add text anywhere on your PDF. Edit and save instantly."
-        keywords="PDF form filler, add text PDF, fill PDF form, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "PDF Form Filler Online",
-          description:
-            "Fill PDF forms and add text to PDF online for free. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/form-filler",
-        }}
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/form-filler",
-          },
-        ]}
+        title="PDF Form Filler Online – Easy PDF Tool"
+        description="Fill PDF forms and add text, 100% client-side. Fast, secure, and privacy-first PDF form filler."
       />
 
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">

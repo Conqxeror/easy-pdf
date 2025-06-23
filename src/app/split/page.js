@@ -217,19 +217,8 @@ export default function SplitPdfPage() {
   return (
     <>
       <MetaHead
-        title="Split PDF Online - Free PDF Splitter | easy-pdf"
-        description="Split PDF files by page range or extract all pages as separate PDFs. 100% client-side, privacy-first PDF tool."
-        url="/split"
-        subtitle="Extract specific pages or split your PDF into multiple files. Choose a range or split all pages."
-        keywords="split PDF, PDF splitter, extract PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Split PDF Online",
-          description:
-            "Split PDF files online for free. Extract pages or ranges from PDF documents. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/split",
-        }}
+        title="Split PDF Pages Online – Easy PDF Tool"
+        description="Split PDF files into separate pages, 100% client-side. Fast, secure, and privacy-first PDF splitter for everyone."
       />
 
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">

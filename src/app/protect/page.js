@@ -82,19 +82,8 @@ export default function ProtectPdfPage() {
   return (
     <>
       <MetaHead
-        title="Protect PDF Online - Add Password to PDF | easy-pdf"
-        description="Encrypt your PDF with a password for security. 100% client-side, privacy-first PDF tool."
-        url="/protect"
-        subtitle="Add password protection to your PDF file. Secure your documents instantly."
-        keywords="protect PDF, PDF password, secure PDF, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Protect PDF Online",
-          description:
-            "Protect PDF files with a password online for free. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/protect",
-        }}
+        title="Protect PDF with Password – Easy PDF Tool"
+        description="Add password protection to your PDF files, 100% client-side. Secure, fast, and privacy-first PDF protection."
       />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}

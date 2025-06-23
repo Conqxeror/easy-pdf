@@ -186,23 +186,8 @@ export default function LegalAnalyzerPage() {
   return (
     <>
       <MetaHead
-        title="Legal Document Analyzer - AI-Powered Contract Review | easy-pdf"
-        description="Analyze legal documents, extract clauses, and assess risks using AI. 100% client-side, privacy-first PDF tool."
-        url="/legal-analyzer"
-        subtitle="AI-powered analysis of contracts and legal documents. Extract clauses, assess risks, and generate reports."
-        ogTitle="Legal Document Analyzer"
-        ogDescription="AI-powered tool to analyze, summarize, and review legal documents."
-        ogImage="/icon.png"
-        twitterCard="summary_large_image"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebApplication",
-          name: "Legal Document Analyzer",
-          description:
-            "AI-powered tool to analyze, summarize, and review legal documents.",
-          applicationCategory: "LegalService",
-          url: "https://easy-pdf.in/legal-analyzer",
-        }}
+        title="Legal Analyzer for PDF – Easy PDF Tool"
+        description="Analyze legal clauses in PDF files, 100% client-side. Fast, secure, and privacy-first legal analyzer."
       />
       <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
         <div className="max-w-2xl w-full">

@@ -186,19 +186,8 @@ export default function JpgToPdfPage() {
   return (
     <>
       <MetaHead
-        title="JPG to PDF Online - Free Image to PDF Converter | easy-pdf"
-        description="Convert JPG images to PDF online. Combine multiple images into a single PDF. 100% client-side, privacy-first PDF tool."
-        url="/jpg-to-pdf"
-        subtitle="Convert one or more JPG images into a single PDF file. Drag, drop, and arrange images."
-        keywords="JPG to PDF, image to PDF, convert JPG PDF, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "JPG to PDF Online",
-          description:
-            "Convert JPG images to PDF online for free. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/jpg-to-pdf",
-        }}
+        title="JPG to PDF Converter – Easy PDF Tool"
+        description="Convert JPG images to PDF, 100% client-side. Fast, secure, and privacy-first JPG to PDF converter."
       />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}

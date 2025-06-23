@@ -137,19 +137,8 @@ export default function RotatePdfPage() {
   return (
     <>
       <MetaHead
-        title="Rotate PDF Pages Online - Free PDF Rotator | easy-pdf"
-        description="Rotate one or more pages in your PDF file. 100% client-side, privacy-first PDF tool."
-        url="/rotate"
-        subtitle="Rotate selected pages in your PDF to the desired angle. Quick and easy."
-        keywords="rotate PDF, PDF rotator, fix PDF orientation, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Rotate PDF Online",
-          description:
-            "Rotate PDF pages online for free. Fix orientation of PDF documents. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/rotate",
-        }}
+        title="Rotate PDF Pages Online – Easy PDF Tool"
+        description="Rotate PDF pages easily, 100% client-side. Fast, secure, and privacy-first PDF rotation tool."
       />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}

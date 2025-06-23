@@ -271,25 +271,8 @@ export default function OrganizePage() {
   return (
     <>
       <MetaHead
-        title="Organize PDF Online - Arrange, Delete, and Reorder Pages | easy-pdf"
-        description="Organize your PDF by rearranging, deleting, or rotating pages. 100% client-side, privacy-first PDF tool."
-        url="/organize"
-        subtitle="Rearrange, delete, or rotate pages in your PDF. All-in-one PDF organizer."
-        keywords="organize PDF, reorder PDF, arrange PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Organize PDF Pages Online",
-          description:
-            "Organize PDF pages online for free. Reorder, delete, and arrange PDF pages visually. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/organize",
-        }}
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/organize",
-          },
-        ]}
+        title="Organize PDF Pages Online – Easy PDF Tool"
+        description="Organize, reorder, and manage your PDF pages, 100% client-side. Fast, secure, and privacy-first PDF organizer."
       />
 
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">

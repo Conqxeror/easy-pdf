@@ -190,30 +190,10 @@ export default function DeletePagesPage() {
 
   return (
     <>
-      {/* MetaHead component for SEO and document metadata */}
       <MetaHead
-        title="Delete PDF Pages Online - Remove Pages from PDF | easy-pdf"
-        description="Delete specific pages from your PDF file. 100% client-side, privacy-first PDF tool."
-        url="/delete-pages"
-        subtitle="Remove unwanted pages from your PDF. Select and delete with a click."
-        keywords="delete PDF pages, remove PDF pages, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Delete PDF Pages Online",
-          description:
-            "Delete pages from PDF files online for free. Remove unwanted pages from your PDF. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/delete-pages",
-        }}
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/delete-pages",
-          },
-          // Add other language alternatives if available for this page
-        ]}
+        title="Delete PDF Pages Online – Easy PDF Tool"
+        description="Delete pages from your PDF, 100% client-side. Fast, secure, and privacy-first PDF page remover."
       />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         {" "}
         {/* Added flex utilities and standard responsive padding */}

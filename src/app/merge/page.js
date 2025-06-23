@@ -283,19 +283,8 @@ export default function MergePDFs() {
   return (
     <>
       <MetaHead
-        title="Merge PDF Files Online - Free PDF Merger | easy-pdf"
-        description="Merge multiple PDF files into one, instantly and securely. 100% client-side, privacy-first PDF tool."
-        url="/merge"
-        subtitle="Combine multiple PDF files into a single document. Drag, drop, and reorder before merging."
-        keywords="merge PDF, PDF merger, combine PDF, PDF tools, online PDF, free PDF, PDF joiner, PDF combine, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Merge PDF Online",
-          description:
-            "Merge PDF files online for free. Combine multiple PDF documents into one. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/merge",
-        }}
+        title="Merge PDF Files Online – Easy PDF Tool"
+        description="Merge multiple PDF files into one, 100% client-side, privacy-first. Fast, free, and secure PDF merger for everyone."
       />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         <Card className="bg-gray-800 border-gray-700 w-full">

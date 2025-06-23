@@ -164,21 +164,9 @@ export default function CompressPDFs() {
   return (
     <>
       <MetaHead
-        title="Compress PDF Online - Free PDF Compressor | easy-pdf"
-        description="Reduce PDF file size online with high-quality compression. 100% client-side, privacy-first PDF tool."
-        url="/compress"
-        subtitle="Shrink your PDF file size while preserving quality. Fast, private, and free."
-        keywords="compress PDF, PDF compressor, reduce PDF size, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Compress PDF Online",
-          description:
-            "Compress PDF files online for free. Reduce PDF file size while preserving quality. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/compress",
-        }}
+        title="Compress PDF Online – Easy PDF Tool"
+        description="Compress PDF files client-side for free. Reduce PDF size instantly, privacy-first, no upload required."
       />
-
       <main className="container max-w-4xl py-8 mx-auto">
         {" "}
         {/* Added mx-auto here for centering */}

@@ -207,25 +207,8 @@ export default function HtmlToPdfPage() {
   return (
     <>
       <MetaHead
-        title="HTML to PDF Online - Convert HTML to PDF | easy-pdf"
-        description="Convert HTML content or web pages to PDF. 100% client-side, privacy-first PDF tool."
-        url="/html-to-pdf"
-        subtitle="Convert HTML or web pages into PDF documents. Paste, edit, and export instantly."
-        keywords="HTML to PDF, convert HTML PDF, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "HTML to PDF Online",
-          description:
-            "Convert HTML to PDF online for free. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/html-to-pdf",
-        }}
-        alternates={[
-          {
-            hrefLang: "en",
-            href: "https://easy-pdf-murex.vercel.app/html-to-pdf",
-          },
-        ]}
+        title="HTML to PDF Converter – Easy PDF Tool"
+        description="Convert HTML to PDF, 100% client-side. Fast, secure, and privacy-first HTML to PDF converter."
       />
 
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">

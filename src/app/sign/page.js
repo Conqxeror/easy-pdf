@@ -454,22 +454,8 @@ export default function SignPage() {
   return (
     <>
       <MetaHead
-        title="Sign PDF Online - Draw or Add Signature to PDF | easy-pdf"
-        description="Sign or annotate your PDF by drawing or typing. 100% client-side, privacy-first PDF tool."
-        url="/sign"
-        subtitle="Draw, type, or upload your signature to sign PDF documents. Annotate with ease."
-        keywords="sign PDF, PDF signature, add signature PDF, PDF tools, online PDF, free PDF, PDF toolkit"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Sign PDF Online",
-          description:
-            "Sign PDF files online for free. Add digital signatures to PDF documents. 100% client-side, privacy-first PDF tool.",
-          url: "https://easy-pdf-murex.vercel.app/sign",
-        }}
-        alternates={[
-          { hrefLang: "en", href: "https://easy-pdf-murex.vercel.app/sign" },
-        ]}
+        title="Sign PDF Online – Easy PDF Tool"
+        description="Sign and annotate PDF files, 100% client-side. Fast, secure, and privacy-first PDF signing tool."
       />
 
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
