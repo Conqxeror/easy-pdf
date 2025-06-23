@@ -1,9 +1,18 @@
 // Server component layout for /protect route to provide SEO metadata
 export const metadata = {
   title: "Protect PDF with Password – Easy PDF Tool",
-  description: "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",
+  description:
+    "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",
   keywords: [
-    "Protect PDF", "Password PDF", "Encrypt PDF", "Secure PDF", "PDF security", "Client-side PDF", "Privacy PDF tool", "No upload PDF protection", "Wali Mohammad Kadri"
+    "Protect PDF",
+    "Password PDF",
+    "Encrypt PDF",
+    "Secure PDF",
+    "PDF security",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF protection",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +24,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/protect"
+    canonical: "https://easy-pdf-murex.vercel.app/protect",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Protect PDF with Password – Easy PDF Tool",
-    description: "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",
+    description:
+      "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/protect",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +49,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Protect PDF with Password – Easy PDF Tool",
-    description: "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",
+    description:
+      "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function ProtectLayout({ children }) {

@@ -1,9 +1,17 @@
 // Server component layout for /rotate route to provide SEO metadata
 export const metadata = {
   title: "Rotate PDF Pages Online – Easy PDF Tool",
-  description: "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",
+  description:
+    "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",
   keywords: [
-    "Rotate PDF", "PDF rotation", "Rotate pages", "PDF tools", "Client-side PDF", "Privacy PDF tool", "No upload PDF rotate", "Wali Mohammad Kadri"
+    "Rotate PDF",
+    "PDF rotation",
+    "Rotate pages",
+    "PDF tools",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF rotate",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +23,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/rotate"
+    canonical: "https://easy-pdf-murex.vercel.app/rotate",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Rotate PDF Pages Online – Easy PDF Tool",
-    description: "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",
+    description:
+      "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/rotate",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +48,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Rotate PDF Pages Online – Easy PDF Tool",
-    description: "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",
+    description:
+      "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function RotateLayout({ children }) {

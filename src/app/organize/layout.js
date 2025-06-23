@@ -1,9 +1,17 @@
 // Server component layout for /organize route to provide SEO metadata
 export const metadata = {
   title: "Organize PDF Pages Online – Easy PDF Tool",
-  description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
+  description:
+    "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
   keywords: [
-    "Organize PDF", "PDF organizer", "Reorder PDF", "PDF editor", "Client-side PDF", "Privacy PDF tool", "No upload PDF organize", "Wali Mohammad Kadri"
+    "Organize PDF",
+    "PDF organizer",
+    "Reorder PDF",
+    "PDF editor",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF organize",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +23,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/organize"
+    canonical: "https://easy-pdf-murex.vercel.app/organize",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Organize PDF Pages Online – Easy PDF Tool",
-    description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
+    description:
+      "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/organize",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +48,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Organize PDF Pages Online – Easy PDF Tool",
-    description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
+    description:
+      "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function OrganizeLayout({ children }) {

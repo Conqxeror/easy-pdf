@@ -1,9 +1,17 @@
 // Server component layout for /delete-pages route to provide SEO metadata
 export const metadata = {
   title: "Delete PDF Pages Online – Easy PDF Tool",
-  description: "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",
+  description:
+    "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",
   keywords: [
-    "Delete PDF pages", "Remove PDF pages", "PDF editor", "PDF page remover", "Client-side PDF", "Privacy PDF tool", "No upload PDF delete", "Wali Mohammad Kadri"
+    "Delete PDF pages",
+    "Remove PDF pages",
+    "PDF editor",
+    "PDF page remover",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF delete",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +23,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/delete-pages"
+    canonical: "https://easy-pdf-murex.vercel.app/delete-pages",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Delete PDF Pages Online – Easy PDF Tool",
-    description: "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",
+    description:
+      "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/delete-pages",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +48,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Delete PDF Pages Online – Easy PDF Tool",
-    description: "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",
+    description:
+      "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function DeletePagesLayout({ children }) {

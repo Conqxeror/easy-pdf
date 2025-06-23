@@ -1,9 +1,17 @@
 // Server component layout for /sign route to provide SEO metadata
 export const metadata = {
   title: "Sign PDF Online – Easy PDF Tool",
-  description: "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
+  description:
+    "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
   keywords: [
-    "Sign PDF", "Annotate PDF", "PDF signature", "PDF signing tool", "Client-side PDF", "Privacy PDF tool", "No upload PDF sign", "Wali Mohammad Kadri"
+    "Sign PDF",
+    "Annotate PDF",
+    "PDF signature",
+    "PDF signing tool",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF sign",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +23,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/sign"
+    canonical: "https://easy-pdf-murex.vercel.app/sign",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Sign PDF Online – Easy PDF Tool",
-    description: "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
+    description:
+      "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/sign",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +48,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Sign PDF Online – Easy PDF Tool",
-    description: "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
+    description:
+      "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function SignLayout({ children }) {

@@ -1,9 +1,17 @@
 // Server component layout for /unlock route to provide SEO metadata
 export const metadata = {
   title: "Unlock PDF (Remove Password) – Easy PDF Tool",
-  description: "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",
+  description:
+    "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",
   keywords: [
-    "Unlock PDF", "Remove PDF password", "Decrypt PDF", "PDF unlocker", "Client-side PDF", "Privacy PDF tool", "No upload PDF unlock", "Wali Mohammad Kadri"
+    "Unlock PDF",
+    "Remove PDF password",
+    "Decrypt PDF",
+    "PDF unlocker",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF unlock",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +23,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/unlock"
+    canonical: "https://easy-pdf-murex.vercel.app/unlock",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Unlock PDF (Remove Password) – Easy PDF Tool",
-    description: "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",
+    description:
+      "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/unlock",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +48,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Unlock PDF (Remove Password) – Easy PDF Tool",
-    description: "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",
+    description:
+      "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function UnlockLayout({ children }) {

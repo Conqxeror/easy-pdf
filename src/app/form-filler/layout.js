@@ -1,9 +1,17 @@
 // Server component layout for /form-filler route to provide SEO metadata
 export const metadata = {
   title: "PDF Form Filler Online – Easy PDF Tool",
-  description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
+  description:
+    "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
   keywords: [
-    "PDF form filler", "Fill PDF forms", "Add text PDF", "PDF editor", "Client-side PDF", "Privacy PDF tool", "No upload PDF form", "Wali Mohammad Kadri"
+    "PDF form filler",
+    "Fill PDF forms",
+    "Add text PDF",
+    "PDF editor",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF form",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +23,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/form-filler"
+    canonical: "https://easy-pdf-murex.vercel.app/form-filler",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "PDF Form Filler Online – Easy PDF Tool",
-    description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
+    description:
+      "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/form-filler",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +48,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PDF Form Filler Online – Easy PDF Tool",
-    description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
+    description:
+      "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function FormFillerLayout({ children }) {

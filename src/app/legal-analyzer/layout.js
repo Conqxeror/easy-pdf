@@ -1,9 +1,16 @@
 // Server component layout for /legal-analyzer route to provide SEO metadata
 export const metadata = {
   title: "Legal Analyzer for PDF – Easy PDF Tool",
-  description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
+  description:
+    "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
   keywords: [
-    "Legal analyzer PDF", "Analyze PDF clauses", "PDF legal tool", "Client-side PDF", "Privacy PDF tool", "No upload legal analyzer", "Wali Mohammad Kadri"
+    "Legal analyzer PDF",
+    "Analyze PDF clauses",
+    "PDF legal tool",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload legal analyzer",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +22,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/legal-analyzer"
+    canonical: "https://easy-pdf-murex.vercel.app/legal-analyzer",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Legal Analyzer for PDF – Easy PDF Tool",
-    description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
+    description:
+      "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/legal-analyzer",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +47,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Legal Analyzer for PDF – Easy PDF Tool",
-    description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
+    description:
+      "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function LegalAnalyzerLayout({ children }) {

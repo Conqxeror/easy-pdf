@@ -1,9 +1,18 @@
 // Server component layout for /watermark route to provide SEO metadata
 export const metadata = {
   title: "Add Watermark to PDF – Easy PDF Tool",
-  description: "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
+  description:
+    "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
   keywords: [
-    "Watermark PDF", "Add watermark", "PDF watermarking", "Text watermark", "Image watermark", "Client-side PDF", "Privacy PDF tool", "No upload PDF watermark", "Wali Mohammad Kadri"
+    "Watermark PDF",
+    "Add watermark",
+    "PDF watermarking",
+    "Text watermark",
+    "Image watermark",
+    "Client-side PDF",
+    "Privacy PDF tool",
+    "No upload PDF watermark",
+    "Wali Mohammad Kadri",
   ],
   authors: [{ name: "Wali Mohammad Kadri" }],
   applicationName: "easy-pdf",
@@ -15,14 +24,15 @@ export const metadata = {
   category: "DocumentEditor",
   robots: "index,follow",
   alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/watermark"
+    canonical: "https://easy-pdf-murex.vercel.app/watermark",
   },
   icons: {
-    icon: "/icon.png"
+    icon: "/icon.png",
   },
   openGraph: {
     title: "Add Watermark to PDF – Easy PDF Tool",
-    description: "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
+    description:
+      "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
     url: "https://easy-pdf-murex.vercel.app/watermark",
     siteName: "easy-pdf",
     images: [
@@ -39,14 +49,13 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Add Watermark to PDF – Easy PDF Tool",
-    description: "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
+    description:
+      "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
     site: "_MR_WALI_",
     creator: "_MR_WALI_",
-    images: [
-      "/og-image.jpg"
-    ]
+    images: ["/og-image.jpg"],
   },
-  manifest: "/site.webmanifest"
+  manifest: "/site.webmanifest",
 };
 
 export default function WatermarkLayout({ children }) {
