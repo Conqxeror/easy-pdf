@@ -66,8 +66,8 @@ export const metadata = {
   alternates: {
     canonical: "https://easy-pdf-murex.vercel.app",
     languages: {
-      "en-US": "/en-US",
-      "hi-IN": "/hi-IN",
+      "en": "/en",
+      "hi": "/hi",
     },
   },
 };

@@ -5,7 +5,6 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -22,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
@@ -359,11 +359,6 @@ export default function FormFillerPage() {
 
   return (
     <>
-      <MetaHead
-        title="PDF Form Filler Online – Easy PDF Tool"
-        description="Fill PDF forms and add text, 100% client-side. Fast, secure, and privacy-first PDF form filler."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>
@@ -571,6 +566,33 @@ export default function FormFillerPage() {
             </Button>
           </CardContent>
         </Card>
+        <ToolPageContent
+          toolName="PDF Form Filler"
+          toolDescription="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+            "Add text, checkmarks, and signatures to your PDF by clicking on the desired location.",
+            "Customize the font, size, and color of your text.",
+            "Download your filled PDF form.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to fill out PDF forms online?",
+              answer:
+                "Yes, our tool is completely free to use. You can fill out as many PDF forms as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I add a signature to my PDF form?",
+              answer:
+                "Yes, you can add a signature to your PDF form. You can draw your signature, type it, or upload an image of your signature.",
+            },
+          ]}
+        />
       </main>
     </>
   );

@@ -1,6 +1,5 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import { PDFDocument, rgb } from "pdf-lib";
 import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
 import FileDropzone from "@/components/ui/FileDropzone";
@@ -15,6 +14,7 @@ import {
   CardDescription, // Import CardDescription
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // Assuming Progress is used for conversion feedback
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -185,10 +185,6 @@ export default function JpgToPdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="JPG to PDF Converter – Easy PDF Tool"
-        description="Convert JPG images to PDF, 100% client-side. Fast, secure, and privacy-first JPG to PDF converter."
-      />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}
         {/* Centering the main content */}
@@ -290,6 +286,33 @@ export default function JpgToPdfPage() {
             </CardFooter>
           )}
         </Card>
+        <ToolPageContent
+          toolName="JPG to PDF"
+          toolDescription="Convert your JPG images to a single PDF file with our free online tool. You can also convert PNG images to PDF."
+          steps={[
+            "Upload your JPG or PNG images by dragging them into the dropzone or clicking to select files.",
+            "Rearrange the images in the desired order.",
+            "Click the \"Convert to PDF\" button to start the conversion process.",
+            "Download your new PDF file.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to convert JPG to PDF?",
+              answer:
+                "Yes, our tool is completely free to use. You can convert as many images as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I convert multiple images at once?",
+              answer:
+                "Yes, you can upload multiple JPG and PNG images at once. They will be combined into a single PDF file.",
+            },
+          ]}
+        />
       </main>
     </>
   );

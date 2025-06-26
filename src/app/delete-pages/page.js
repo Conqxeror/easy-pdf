@@ -5,9 +5,9 @@ import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import { Input } from "@/components/ui/input"; // Import Input component
 import { Label } from "@/components/ui/label"; // Import Label component
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 import {
   Card,
@@ -190,10 +190,6 @@ export default function DeletePagesPage() {
 
   return (
     <>
-      <MetaHead
-        title="Delete PDF Pages Online – Easy PDF Tool"
-        description="Delete pages from your PDF, 100% client-side. Fast, secure, and privacy-first PDF page remover."
-      />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         {" "}
         {/* Added flex utilities and standard responsive padding */}
@@ -318,6 +314,33 @@ export default function DeletePagesPage() {
             </Button>
           </CardContent>
         </Card>
+        <ToolPageContent
+          toolName="Delete PDF Pages"
+          toolDescription="Easily delete pages from your PDF files with our free online tool. Select the pages you want to remove and get a new PDF in seconds."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+            "Select the pages you want to delete by clicking on them.",
+            "Click the \"Delete Pages\" button to remove the selected pages.",
+            "Download your new PDF file without the deleted pages.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to delete pages from a PDF?",
+              answer:
+                "Yes, our tool is completely free to use. You can delete pages from as many PDFs as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I select multiple pages to delete?",
+              answer:
+                "Yes, you can select multiple pages to delete at once. Simply click on all the pages you want to remove before clicking the \"Delete Pages\" button.",
+            },
+          ]}
+        />
       </main>
     </>
   );

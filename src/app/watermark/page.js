@@ -1,7 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib"; // Added StandardFonts
-import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -27,6 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HexColorPicker } from "react-colorful"; // Assuming this is installed
 import Image from "next/image"; // Import Next.js Image component
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function WatermarkPdfPage() {
   const [file, setFile] = useState(null);
@@ -355,10 +355,6 @@ export default function WatermarkPdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="Add Watermark to PDF – Easy PDF Tool"
-        description="Add text or image watermark to your PDF, 100% client-side. Fast, secure, and privacy-first PDF watermarking."
-      />
       <main className="container max-w-4xl py-8 mx-auto">
         {" "}
         {/* Centering the main card */}
@@ -760,6 +756,34 @@ export default function WatermarkPdfPage() {
             </CardFooter>
           )}
         </Card>
+        <ToolPageContent
+          toolName="Add Watermark to PDF"
+          toolDescription="Add a text or image watermark to your PDF files. Customize the position, opacity, and rotation of your watermark to fit your needs."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select.",
+            "Select 'Text Watermark' or 'Image Watermark' and provide the content.",
+            "Adjust the watermark's position, opacity, font size (for text), and rotation.",
+            'Click the "Add Watermark" button to process your PDF.',
+            "Download your newly watermarked PDF file.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to add a watermark to a PDF?",
+              answer:
+                "Yes, our tool is completely free to use. You can add watermarks to as many PDFs as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I add an image as a watermark?",
+              answer:
+                "Yes, you can add an image as a watermark. We recommend using a transparent PNG for the best results.",
+            },
+          ]}
+        />
       </main>
     </>
   );

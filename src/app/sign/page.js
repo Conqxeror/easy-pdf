@@ -5,7 +5,6 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -453,11 +452,6 @@ export default function SignPage() {
 
   return (
     <>
-      <MetaHead
-        title="Sign PDF Online – Easy PDF Tool"
-        description="Sign and annotate PDF files, 100% client-side. Fast, secure, and privacy-first PDF signing tool."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>

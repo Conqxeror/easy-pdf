@@ -1,6 +1,5 @@
-"use client";
+use client";
 import { useState, useRef, useEffect, useCallback } from "react"; // Added useEffect, useRef, useCallback
-import MetaHead from "@/components/ui/MetaHead";
 import * as pdfjs from "pdfjs-dist";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import JSZip from "jszip";
 import Image from "next/image"; // Import Next.js Image component
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -274,11 +274,6 @@ export default function PdfToJpgPage() {
 
   return (
     <>
-      <MetaHead
-        title="PDF to JPG Converter – Easy PDF Tool"
-        description="Convert PDF pages to JPG images, 100% client-side. Fast, secure, and privacy-first PDF to JPG converter."
-      />
-
       <main className="container max-w-4xl py-8 mx-auto">
         <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
@@ -467,6 +462,33 @@ export default function PdfToJpgPage() {
             </CardFooter>
           )}
         </Card>
+        <ToolPageContent
+          toolName="PDF to JPG"
+          toolDescription="Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+            "Select the pages you want to convert.",
+            "Click the \"Convert to JPG\" button to start the conversion process.",
+            "Download your JPG images.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to convert PDF to JPG?",
+              answer:
+                "Yes, our tool is completely free to use. You can convert as many PDF files as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I convert multiple pages at once?",
+              answer:
+                "Yes, you can convert all pages of a PDF to JPG at once. The images will be downloaded as a single ZIP file.",
+            },
+          ]}
+        />
       </main>
     </>
   );

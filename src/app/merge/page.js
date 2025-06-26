@@ -1,4 +1,4 @@
-"use client";
+use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { PDFDocument } from "pdf-lib";
@@ -6,7 +6,6 @@ import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist for preview
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -16,6 +15,7 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // For merging progress (optional, but good practice)
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -282,10 +282,6 @@ export default function MergePDFs() {
 
   return (
     <>
-      <MetaHead
-        title="Merge PDF Files Online – Easy PDF Tool"
-        description="Merge multiple PDF files into one, 100% client-side, privacy-first. Fast, free, and secure PDF merger for everyone."
-      />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         <Card className="bg-gray-800 border-gray-700 w-full">
           <CardHeader>
@@ -426,6 +422,33 @@ export default function MergePDFs() {
             </CardFooter>
           )}
         </Card>
+        <ToolPageContent
+          toolName="Merge PDFs"
+          toolDescription="Combine multiple PDF files into one with our free online tool. Drag and drop to reorder your files before merging."
+          steps={[
+            "Upload your PDF files by dragging them into the dropzone or clicking to select files.",
+            "Drag and drop the files to reorder them as needed.",
+            "Click the \"Merge PDFs\" button to combine your files into a single PDF.",
+            "Download your merged PDF file.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to merge PDF files?",
+              answer:
+                "Yes, our tool is completely free to use. You can merge as many PDF files as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I reorder the files before merging?",
+              answer:
+                "Yes, you can drag and drop the files to reorder them before merging. This allows you to control the order of the pages in the final PDF.",
+            },
+          ]}
+        />
       </main>
     </>
   );

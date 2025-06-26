@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";
@@ -81,10 +80,6 @@ export default function ProtectPdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="Protect PDF with Password – Easy PDF Tool"
-        description="Add password protection to your PDF files, 100% client-side. Secure, fast, and privacy-first PDF protection."
-      />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}
         {/* Centering the main content */}

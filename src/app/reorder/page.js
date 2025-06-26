@@ -5,7 +5,6 @@ import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -259,11 +258,6 @@ export default function ReorderPage() {
 
   return (
     <>
-      <MetaHead
-        title="Reorder PDF Pages Online – Easy PDF Tool"
-        description="Reorder pages in your PDF, 100% client-side. Fast, secure, and privacy-first PDF page organizer."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>

@@ -5,7 +5,6 @@ import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -13,6 +12,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
@@ -270,11 +270,6 @@ export default function OrganizePage() {
 
   return (
     <>
-      <MetaHead
-        title="Organize PDF Pages Online – Easy PDF Tool"
-        description="Organize, reorder, and manage your PDF pages, 100% client-side. Fast, secure, and privacy-first PDF organizer."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>
@@ -455,6 +450,34 @@ export default function OrganizePage() {
             </Button>
           </CardContent>
         </Card>
+        <ToolPageContent
+          toolName="Organize PDF"
+          toolDescription="Reorder, delete, and rotate pages in your PDF files with our free online tool. Organize your PDFs exactly the way you want."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+            "Drag and drop the pages to reorder them.",
+            "Click on a page to rotate it or delete it.",
+            "Click the \"Organize PDF\" button to apply the changes.",
+            "Download your organized PDF file.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to organize PDF files?",
+              answer:
+                "Yes, our tool is completely free to use. You can organize as many PDF files as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I rotate pages in my PDF?",
+              answer:
+                "Yes, you can rotate pages in your PDF by clicking on them. Each click will rotate the page 90 degrees clockwise.",
+            },
+          ]}
+        />
       </main>
     </>
   );

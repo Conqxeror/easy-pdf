@@ -1,23 +1,23 @@
-import MetaHead from "@/components/ui/MetaHead";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function Test() {
   return (
     <>
-      <MetaHead
-        title="Test Page | easy-pdf"
-        description="Test page for easy-pdf UI and TailwindCSS."
-        url="https://easy-pdf.com/test"
-        subtitle="Test and preview UI components and styles for easy-pdf."
-        ogImage="/public/og-image.png"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Test Page",
-          description: "Test page for easy-pdf UI and TailwindCSS.",
-          url: "https://easy-pdf.com/test",
-        }}
-      />
       <div className="text-4xl text-red-500">Test Tailwind</div>
+      <ToolPageContent
+        toolName="Test Page"
+        toolDescription="This is a test page to verify the integration of ToolPageContent."
+        steps={[
+          "Step 1: Verify the content.",
+          "Step 2: Check for proper rendering.",
+        ]}
+        faqs={[
+          {
+            question: "Is this page functional?",
+            answer: "Yes, this page is for testing purposes.",
+          },
+        ]}
+      />
     </>
   );
 }

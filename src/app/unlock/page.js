@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input"; // Assuming you have this component
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function UnlockPdfPage() {
   const [file, setFile] = useState(null);
@@ -80,10 +80,6 @@ export default function UnlockPdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="Unlock PDF (Remove Password) – Easy PDF Tool"
-        description="Remove password from PDF files, 100% client-side. Fast, secure, and privacy-first PDF unlocker."
-      />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}
         {/* Centering the main card */}

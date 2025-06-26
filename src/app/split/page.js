@@ -2,7 +2,6 @@
 
 "use client";
 import { useState, useEffect } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -154,7 +153,7 @@ export default function SplitPdfPage() {
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         setPdfUrl(URL.createObjectURL(blob));
         setDownloadFileName(
-          `${file.name.replace(/\.pdf$/, "")}_pages_${start}-to-${end}.pdf`
+          `${file.name.replace(/\.pdf$/, "")}pages${start}-to-${end}.pdf`
         );
         setProgress(100); // Complete progress for range split
       } else if (splitMode === "all-pages") {
@@ -169,7 +168,7 @@ export default function SplitPdfPage() {
           const pdfBytes = await newPdfDoc.save();
 
           zip.file(
-            `${file.name.replace(/\.pdf$/, "")}_page-${i + 1}.pdf`, // File name for each PDF
+            `${file.name.replace(/\.pdf$/, "")}page-${i + 1}.pdf`,
             pdfBytes
           );
 
@@ -184,7 +183,7 @@ export default function SplitPdfPage() {
         });
         setPdfUrl(URL.createObjectURL(zipBlob));
         setDownloadFileName(
-          `${file.name.replace(/\.pdf$/, "")}_split_pages.zip`
+          `${file.name.replace(/\.pdf$/, "")}split_pages.zip`
         );
         setProgress(100); // Complete progress for all-pages split
       }
@@ -216,11 +215,6 @@ export default function SplitPdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="Split PDF Pages Online – Easy PDF Tool"
-        description="Split PDF files into separate pages, 100% client-side. Fast, secure, and privacy-first PDF splitter for everyone."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}
         {/* Centering the main card */}
@@ -389,3 +383,4 @@ export default function SplitPdfPage() {
     </>
   );
 }
+

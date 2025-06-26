@@ -1,11 +1,10 @@
-"use client";
+use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Tesseract from "tesseract.js";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -23,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"; // Import Select components
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
@@ -328,11 +328,6 @@ export default function OcrPage() {
 
   return (
     <>
-      <MetaHead
-        title="OCR PDF (Extract Text) – Easy PDF Tool"
-        description="Extract text from PDF using OCR, 100% client-side. Fast, secure, and privacy-first PDF OCR tool."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>
@@ -554,6 +549,32 @@ export default function OcrPage() {
             )}
           </CardContent>
         </Card>
+        <ToolPageContent
+          toolName="OCR PDF"
+          toolDescription="Extract text from your scanned PDF documents and images with our free online OCR tool. Convert your non-searchable PDFs into searchable and selectable text."
+          steps={[
+            "Upload your PDF or image file by dragging it into the dropzone or clicking to select a file.",
+            "Our OCR tool will automatically process the file and extract the text.",
+            "Copy the extracted text to your clipboard or download it as a text file.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to OCR a PDF?",
+              answer:
+                "Yes, our tool is completely free to use. You can OCR as many PDFs and images as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "What is the accuracy of the OCR tool?",
+              answer:
+                "The accuracy of our OCR tool depends on the quality of the uploaded file. For best results, we recommend using high-quality scans with clear text.",
+            },
+          ]}
+        />
       </main>
     </>
   );

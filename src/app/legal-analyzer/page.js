@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
@@ -16,6 +15,7 @@ import {
   ShieldAlert,
   Lightbulb,
 } from "lucide-react";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 const LEGAL_CLAUSES = [
   "Indemnity",
@@ -185,10 +185,6 @@ export default function LegalAnalyzerPage() {
 
   return (
     <>
-      <MetaHead
-        title="Legal Analyzer for PDF – Easy PDF Tool"
-        description="Analyze legal clauses in PDF files, 100% client-side. Fast, secure, and privacy-first legal analyzer."
-      />
       <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
         <div className="max-w-2xl w-full">
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
@@ -366,6 +362,33 @@ export default function LegalAnalyzerPage() {
             </div>
           </Alert>
         </div>
+        <ToolPageContent
+          toolName="Legal Analyzer"
+          toolDescription="Analyze your legal documents with our AI-powered tool. Get a summary, risk assessment, and suggestions for your contracts, agreements, and other legal documents."
+          steps={[
+            "Upload your legal document in PDF, Word, or image format.",
+            "Our AI will analyze the document and extract key information.",
+            "Review the summary, risk assessment, and suggestions provided by the tool.",
+            "Download the analysis report for your records.",
+          ]}
+          faqs={[
+            {
+              question: "Is this tool a substitute for legal advice?",
+              answer:
+                "No, this tool is not a substitute for legal advice. It is for informational purposes only. You should always consult with a qualified legal professional for any legal advice.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "What types of documents can I analyze?",
+              answer:
+                "You can analyze a variety of legal documents, including contracts, agreements, and terms of service. The tool supports PDF, Word, and image formats.",
+            },
+          ]}
+        />
       </div>
     </>
   );

@@ -2,7 +2,6 @@
 
 "use client";
 import { useState, useEffect } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument, Rotation } from "pdf-lib"; // Import Rotation enum
 import { Button } from "@/components/ui/button";
@@ -136,10 +135,6 @@ export default function RotatePdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="Rotate PDF Pages Online – Easy PDF Tool"
-        description="Rotate PDF pages easily, 100% client-side. Fast, secure, and privacy-first PDF rotation tool."
-      />
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
         {" "}
         {/* Centering the main content */}

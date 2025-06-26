@@ -1,11 +1,11 @@
-"use client";
+use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 import {
   Card,
   CardHeader,
@@ -447,11 +447,6 @@ export default function PageNumbersPage() {
 
   return (
     <>
-      <MetaHead
-        title="Add Page Numbers to PDF – Easy PDF Tool"
-        description="Add page numbers, headers, and footers to your PDF, 100% client-side. Fast, secure, and privacy-first PDF numbering."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>
@@ -768,6 +763,33 @@ export default function PageNumbersPage() {
             </Button>
           </CardContent>
         </Card>
+        <ToolPageContent
+          toolName="Add Page Numbers to PDF"
+          toolDescription="Easily add page numbers to your PDF files with our free online tool. Customize the position, format, and style of your page numbers in just a few clicks."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+            "Customize your page numbers by choosing the position, font size, color, and format.",
+            "Click the \"Add Page Numbers\" button to apply the changes to your PDF.",
+            "Download your new PDF with page numbers.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to add page numbers to a PDF?",
+              answer:
+                "Yes, our tool is completely free to use. You can add page numbers to as many PDFs as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I customize the page numbers?",
+              answer:
+                "Absolutely! You can customize the position, font size, color, and format of the page numbers to match your needs.",
+            },
+          ]}
+        />
       </main>
     </>
   );

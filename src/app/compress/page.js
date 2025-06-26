@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import MetaHead from "@/components/ui/MetaHead";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
 import FileDropzone from "@/components/ui/FileDropzone";
@@ -19,6 +18,7 @@ import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -163,10 +163,6 @@ export default function CompressPDFs() {
 
   return (
     <>
-      <MetaHead
-        title="Compress PDF Online – Easy PDF Tool"
-        description="Compress PDF files client-side for free. Reduce PDF size instantly, privacy-first, no upload required."
-      />
       <main className="container max-w-4xl py-8 mx-auto">
         {" "}
         {/* Added mx-auto here for centering */}
@@ -366,6 +362,33 @@ export default function CompressPDFs() {
             </CardFooter>
           )}
         </Card>
+        <ToolPageContent
+          toolName="Compress PDF"
+          toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files."
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+            "Select your desired compression level: Mild, Balanced, or Aggressive.",
+            "Click the \"Compress PDF\" button to start the compression process.",
+            "Download your compressed PDF file.",
+          ]}
+          faqs={[
+            {
+              question: "How much can I compress my PDF file?",
+              answer:
+                "The compression size depends on the content of your PDF file. Our tool uses advanced algorithms to reduce the file size as much as possible while preserving the quality of your document.",
+            },
+            {
+              question: "Is it safe to compress my PDF files online?",
+              answer:
+                "Yes, your privacy and security are our top priorities. All files are processed on the client-side, which means your files are never uploaded to our servers.",
+            },
+            {
+              question: "Will the quality of my PDF be affected?",
+              answer:
+                "Our PDF compressor is designed to reduce the file size without significantly affecting the quality of your document. You can choose from different compression levels to find the right balance between file size and quality.",
+            },
+          ]}
+        />
       </main>
     </>
   );

@@ -1,11 +1,10 @@
-"use client";
+use client";
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import html2canvas from "html2canvas";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import MetaHead from "@/components/ui/MetaHead";
 import {
   Card,
   CardHeader,
@@ -14,6 +13,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
@@ -206,11 +206,6 @@ export default function HtmlToPdfPage() {
 
   return (
     <>
-      <MetaHead
-        title="HTML to PDF Converter – Easy PDF Tool"
-        description="Convert HTML to PDF, 100% client-side. Fast, secure, and privacy-first HTML to PDF converter."
-      />
-
       <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
           <CardHeader>
@@ -283,6 +278,32 @@ export default function HtmlToPdfPage() {
             )}
           </CardContent>
         </Card>
+        <ToolPageContent
+          toolName="HTML to PDF"
+          toolDescription="Convert your HTML code to a PDF file with our free online tool. Simply paste your HTML code and get a high-quality PDF in seconds."
+          steps={[
+            "Paste your HTML code into the text area above.",
+            "Click the \"Convert to PDF\" button to start the conversion process.",
+            "Download your PDF file.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to convert HTML to PDF?",
+              answer:
+                "Yes, our tool is completely free to use. You can convert as many HTML files as you like without any hidden costs.",
+            },
+            {
+              question: "Is my data secure?",
+              answer:
+                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+            },
+            {
+              question: "Can I convert complex HTML files?",
+              answer:
+                "Our tool can handle most HTML files, but some complex CSS and JavaScript may not be rendered correctly. For best results, we recommend using simple HTML and CSS.",
+            },
+          ]}
+        />
       </main>
     </>
   );
