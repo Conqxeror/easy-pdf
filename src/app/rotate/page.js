@@ -1,7 +1,11 @@
 //Not Working
 
 "use client";
+
+import { Metadata } from 'next';
 import { useState, useEffect } from "react";
+
+
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument, Rotation } from "pdf-lib"; // Import Rotation enum
 import { Button } from "@/components/ui/button";

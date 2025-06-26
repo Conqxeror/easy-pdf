@@ -114,7 +114,7 @@ export default function AboutPage() {
                 <span className="font-semibold text-white">
                   No Data Collection
                 </span>
-                : We don't collect, store, or view your documents. Ever. Our
+                : We don&apos;t collect, store, or view your documents. Ever. Our
                 business model is not built on data exploitation.
               </li>
               <li>
@@ -191,7 +191,7 @@ export default function AboutPage() {
                 <span className="font-semibold text-white">
                   Comprehensive Toolset
                 </span>
-                : From basic merges to advanced OCR, we've got you covered.
+                : From basic merges to advanced OCR, we&apos;ve got you covered.
               </li>
               <li>
                 <span className="font-semibold text-white">
@@ -274,3 +274,4 @@ export default function AboutPage() {
       />
     </>
   );
+}

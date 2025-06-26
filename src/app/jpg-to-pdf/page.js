@@ -1,5 +1,8 @@
 "use client";
+import { Metadata } from 'next';
 import { useState, useRef, useEffect, useCallback } from "react";
+
+
 import { PDFDocument, rgb } from "pdf-lib";
 import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
 import FileDropzone from "@/components/ui/FileDropzone";

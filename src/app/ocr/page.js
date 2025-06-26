@@ -1,6 +1,10 @@
-use client";
+"use client";
+
+import { Metadata } from 'next';
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
+
+
 import Tesseract from "tesseract.js";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";

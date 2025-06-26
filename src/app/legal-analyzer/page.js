@@ -1,7 +1,11 @@
-// src/app/legal-analyzer/page.js
 "use client";
 
+import { Metadata } from 'next';
+// src/app/legal-analyzer/page.js
+
 import React, { useState, useCallback } from "react";
+
+
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";

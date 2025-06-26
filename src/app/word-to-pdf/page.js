@@ -1,7 +1,11 @@
 "use client";
 
+import { Metadata } from 'next';
+
 import { Alert } from "@/components/ui/alert";
 import ToolPageContent from "@/components/ui/ToolPageContent";
+
+
 
 export default function WordToPdfPage() {
   return (

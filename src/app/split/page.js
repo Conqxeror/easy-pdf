@@ -1,7 +1,11 @@
 //not working
 
 "use client";
+
+import { Metadata } from 'next';
 import { useState, useEffect } from "react";
+
+
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";

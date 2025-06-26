@@ -1,5 +1,8 @@
-use client";
-import { useState, useRef, useEffect, useCallback } from "react"; // Added useEffect, useRef, useCallback
+"use client";
+import { Metadata } from 'next';
+import { useState, useRef, useEffect, useCallback } from "react";
+
+ // Added useEffect, useRef, useCallback
 import * as pdfjs from "pdfjs-dist";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";

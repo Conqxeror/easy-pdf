@@ -1,6 +1,9 @@
-use client";
+"use client";
+import { Metadata } from 'next';
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
+
+
 import html2canvas from "html2canvas";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";

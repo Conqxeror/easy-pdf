@@ -1,5 +1,8 @@
 "use client";
+import { Metadata } from 'next';
 import { useState, useEffect } from "react";
+
+
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,8 @@
 "use client";
+import { Metadata } from 'next';
 import { useState, useRef, useEffect } from "react";
+
+
 import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib"; // Added StandardFonts
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
