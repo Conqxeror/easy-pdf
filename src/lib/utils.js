@@ -2,11 +2,9 @@
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Tesseract from "tesseract.js";
-import * as pdfjsLib from "pdfjs-dist"; // Ensure this is correctly imported for Node.js environment
-// NOTE: pdfjs-dist requires specific configuration for Node.js/server environments if using
-// features that would normally rely on workers in a browser. For basic text extraction from
-// a Buffer, direct import as shown is typically sufficient without GlobalWorkerOptions.workerSrc
-// which is primarily for browser environments.
+import * as pdfjsLib from "pdfjs-dist";
+import Link from "next/link";
+import { toolsData } from "./toolData";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -81,3 +79,57 @@ export async function extractTextFromFile(base64, name) {
     throw new Error(`Unsupported file type: .${ext} for text extraction.`);
   }
 }
+
+// Helper function to render text with dynamic links for tool names
+export const renderTextWithToolLinks = (text) => {
+  const parts = [];
+  let lastIndex = 0;
+
+  // Create a map from toolsData for easy lookup
+  const toolsMap = toolsData.reduce((acc, tool) => {
+    acc[tool.title] = tool.href;
+    return acc;
+  }, {});
+
+  // Iterate over each tool in the map
+  Object.entries(toolsMap).forEach(([toolName, href]) => {
+    let currentIndex = 0;
+    // Use a regular expression to find all occurrences of the tool name
+    const regex = new RegExp(`\\b${toolName}\\b`, "gi"); // \\b for word boundary, gi for global and case-insensitive
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      const startIndex = match.index;
+      const endIndex = regex.lastIndex;
+
+      // Add the text before the current match
+      if (startIndex > lastIndex) {
+        parts.push(text.substring(lastIndex, startIndex));
+      }
+
+      // Add the Link component for the tool name
+      parts.push(
+        <Link
+          key={`${toolName}-${startIndex}`}
+          href={href}
+          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
+        >
+          {toolName}
+        </Link>
+      );
+      lastIndex = endIndex;
+    }
+  });
+
+  // Add any remaining text after the last match
+  if (lastIndex < text.length) {
+    parts.push(text.substring(lastIndex));
+  }
+
+  // If no tools were found, return the original text wrapped in a span
+  if (parts.length === 0) {
+    return <span>{text}</span>;
+  }
+
+  return parts;
+};

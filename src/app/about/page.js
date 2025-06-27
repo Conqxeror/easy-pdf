@@ -1,77 +1,6 @@
-import Link from "next/link"; // Re-import Link from next/link
-
-// Define the mapping of tool names to their respective hrefs
-const toolsMap = {
-  "Merge PDF": "/merge",
-  "Split PDF": "/split",
-  "Compress PDF": "/compress",
-  "JPG to PDF": "/jpg-to-pdf",
-  "PDF to JPG": "/pdf-to-jpg",
-  "Rotate PDF": "/rotate",
-  "Watermark PDF": "/watermark",
-  "Protect PDF": "/protect",
-  "Unlock PDF": "/unlock",
-  "Delete PDF Pages": "/delete-pages",
-  "Reorder PDF Pages": "/reorder",
-  "Organize PDF": "/organize",
-  "Add Page Numbers": "/page-numbers",
-  "HTML to PDF": "/html-to-pdf",
-  OCR: "/ocr",
-  "Sign/Annotate PDF": "/sign",
-  "PDF Form Filler": "/form-filler",
-  "Word to PDF": "/word-to-pdf",
-  "PDF to Word": "/pdf-to-word",
-};
-
-// Helper function to render text with dynamic links for tool names
-const renderTextWithToolLinks = (text) => {
-  const parts = [];
-  let lastIndex = 0;
-
-  // Iterate over each tool in the map
-  Object.entries(toolsMap).forEach(([toolName, href]) => {
-    let currentIndex = 0;
-    // Use a regular expression to find all occurrences of the tool name
-    const regex = new RegExp(`\\b${toolName}\\b`, "gi"); // \b for word boundary, gi for global and case-insensitive
-    let match;
-
-    while ((match = regex.exec(text)) !== null) {
-      const startIndex = match.index;
-      const endIndex = regex.lastIndex;
-
-      // Add the text before the current match
-      if (startIndex > lastIndex) {
-        parts.push(text.substring(lastIndex, startIndex));
-      }
-
-      // Add the Link component for the tool name
-      parts.push(
-        <Link
-          key={`${toolName}-${startIndex}`}
-          href={href}
-          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
-        >
-          {toolName}
-        </Link>
-      );
-      lastIndex = endIndex;
-    }
-  });
-
-  // Add any remaining text after the last match
-  if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
-  }
-
-  // If no tools were found, return the original text wrapped in a span
-  if (parts.length === 0) {
-    return <span>{text}</span>;
-  }
-
-  return parts;
-};
-
+import Link from "next/link";
 import ToolPageContent from "@/components/ui/ToolPageContent";
+import { renderTextWithToolLinks } from "@/lib/utils";
 
 export default function AboutPage() {
   return (
@@ -124,6 +53,7 @@ export default function AboutPage() {
                 : Once the easy-pdf website is loaded, many of our tools can be
                 used offline, making it convenient and reliable even without an
                 internet connection.
+              (This is a placeholder for the actual content)
               </li>
             </ul>
           </section>

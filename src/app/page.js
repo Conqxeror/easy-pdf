@@ -1,27 +1,11 @@
 //src\app\page.js
 
 import Link from "next/link";
-import Image from "next/image"; // Keep this import if you intend to use next/image for actual images
-import {
-  FileText,
-  Merge,
-  Split,
-  Minimize2,
-  RotateCw,
-  Stamp,
-  Lock,
-  Unlock,
-  Text,
-  ListOrdered,
-  Eraser,
-  PencilRuler,
-  PlusCircle,
-  Signature,
-  FileBadge2,
-  Image as LucideImage, // Alias the Image component from lucide-react
-} from "lucide-react";
+import Image from "next/image";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
+import ToolCard from "@/components/ui/ToolCard";
+import { toolsData } from "@/lib/toolData";
 
 export const metadata = {
   title:
@@ -71,151 +55,6 @@ export const metadata = {
     },
   },
 };
-
-const tools = [
-  {
-    href: "/merge",
-    title: "Merge PDF",
-    description: "Combine multiple PDF files into one seamless document.",
-    icon: <Merge className="w-8 h-8 text-blue-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/split",
-    title: "Split PDF",
-    description: "Extract specific pages or split a PDF into multiple files.",
-    icon: <Split className="w-8 h-8 text-green-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/compress",
-    title: "Compress PDF",
-    description: "Reduce PDF file size for easier sharing and storage.",
-    icon: <Minimize2 className="w-8 h-8 text-purple-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/jpg-to-pdf",
-    title: "JPG to PDF",
-    description: "Convert your JPG, PNG, or other images into a PDF document.",
-    icon: (
-      <LucideImage alt="JPG to PDF Icon" className="w-8 h-8 text-pink-500" />
-    ), // Use the aliased name here
-    comingSoon: false,
-  },
-  {
-    href: "/pdf-to-jpg",
-    title: "PDF to JPG",
-    description: "Convert PDF pages into high-quality JPG image files.",
-    icon: <FileText className="w-8 h-8 text-teal-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/rotate",
-    title: "Rotate PDF",
-    description: "Rotate PDF pages to the correct orientation (90, 180, 270 degrees).",
-    icon: <RotateCw className="w-8 h-8 text-yellow-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/watermark",
-    title: "Watermark PDF",
-    description: "Add custom text or image watermarks to your PDF documents.",
-    icon: <Stamp className="w-8 h-8 text-red-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/protect",
-    title: "Protect PDF",
-    description: "Encrypt your PDFs with a password for enhanced security.",
-    icon: <Lock className="w-8 h-8 text-gray-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/unlock",
-    title: "Unlock PDF",
-    description: "Remove password protection from your PDF files.",
-    icon: <Unlock className="w-8 h-8 text-orange-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/delete-pages",
-    title: "Delete PDF Pages",
-    description: "Remove unwanted pages from your PDF document easily.",
-    icon: <Eraser className="w-8 h-8 text-indigo-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/reorder",
-    title: "Reorder PDF Pages",
-    description: "Rearrange the order of pages within your PDF document.",
-    icon: <ListOrdered className="w-8 h-8 text-cyan-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/organize",
-    title: "Organize PDF",
-    description: "Combine reordering and deletion to organize your PDF pages.",
-    icon: <ListOrdered className="w-8 h-8 text-cyan-700" />,
-    comingSoon: false,
-  },
-  {
-    href: "/page-numbers",
-    title: "Add Page Numbers",
-    description: "Insert customizable page numbers, headers, or footers into your PDF.",
-    icon: <PlusCircle className="w-8 h-8 text-amber-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/html-to-pdf",
-    title: "HTML to PDF",
-    description: "Convert HTML code or web content into a PDF document.",
-    icon: <FileText className="w-8 h-8 text-blue-400" />,
-    comingSoon: false,
-  },
-  {
-    href: "/ocr",
-    title: "OCR (Text Recognition)",
-    description: "Extract editable text from scanned PDFs and images.",
-    icon: <FileText className="w-8 h-8 text-green-400" />,
-    comingSoon: false,
-  },
-  {
-    href: "/sign",
-    title: "Sign / Annotate PDF",
-    description: "Draw, type, or upload your signature and place it on your PDF.",
-    icon: <Signature className="w-8 h-8 text-rose-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/form-filler",
-    title: "PDF Form Filler",
-    description: "Add text, checkmarks, or other inputs to any PDF form.",
-    icon: <Text className="w-8 h-8 text-lime-500" />,
-    comingSoon: false,
-  },
-  {
-    href: "/word-to-pdf",
-    title: "Word to PDF",
-    description: "Convert Word documents to PDF (Coming Soon - Server-side).",
-    icon: <FileText className="w-8 h-8 text-blue-600" />,
-    comingSoon: true,
-  },
-  {
-    href: "/pdf-to-word",
-    title: "PDF to Word",
-    description: "Convert PDF to editable Word documents (Coming Soon - Server-side).",
-    icon: <FileText className="w-8 h-8 text-blue-800" />,
-    comingSoon: true,
-  },
-  {
-    href: "/legal-analyzer",
-    title: "Legal Document Analyzer",
-    description: "AI-powered tool for legal document review and clause extraction.",
-    icon: <FileText className="w-8 h-8 text-fuchsia-500" />,
-    comingSoon: false,
-  },
-];
 
 export default function Home() {
   return (
@@ -268,20 +107,19 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
-              {/* Added alt prop for decorative SVG */}
               <svg
                 className="w-6 h-6 text-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true" // Indicate decorative image
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  d="M12 15v2m-6 4h12a2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
             </div>
@@ -293,14 +131,13 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
-              {/* Added alt prop for decorative SVG */}
               <svg
                 className="w-6 h-6 text-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true" // Indicate decorative image
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -318,14 +155,13 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
-              {/* Added alt prop for decorative SVG */}
               <svg
                 className="w-6 h-6 text-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true" // Indicate decorative image
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -352,33 +188,8 @@ export default function Home() {
         </h2>
         <Suspense fallback={<Skeleton />}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {tools.map((tool) => (
-              <Link
-                key={tool.href}
-                href={tool.comingSoon ? "#" : tool.href}
-                className={`group block p-6 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-all duration-300 border border-gray-700 hover:border-blue-500 ${
-                  tool.comingSoon ? "opacity-70" : ""
-                }`}
-                aria-disabled={tool.comingSoon}
-                tabIndex={tool.comingSoon ? -1 : 0}
-              >
-                <div className="flex items-center justify-center mb-4">
-                  {/* For `LucideImage` from lucide-react, it's an SVG icon, so it needs an alt prop for accessibility. */}
-                  {/* Or, if it's purely decorative, aria-hidden="true" can be used. */}
-                  {tool.icon}
-                </div>
-                <h3 className="text-xl font-semibold text-gray-50 group-hover:text-blue-400 mb-2 text-center">
-                  {tool.title}
-                  {tool.comingSoon && (
-                    <span className="ml-2 text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full">
-                      Coming Soon
-                    </span>
-                  )}
-                </h3>
-                <p className="text-gray-400 text-sm text-center">
-                  {tool.description}
-                </p>
-              </Link>
+            {toolsData.map((tool) => (
+              <ToolCard key={tool.href} tool={tool} />
             ))}
           </div>
         </Suspense>
