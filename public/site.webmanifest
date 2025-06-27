@@ -6,6 +6,7 @@
   "background_color": "#1e40af",
   "theme_color": "#1e40af",
   "description": "An easy and efficient PDF management tool.",
+  "display_override": ["window-controls-overlay"],
   "icons": [
     {
       "src": "/icon.png",

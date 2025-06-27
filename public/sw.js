@@ -3,6 +3,7 @@ const urlsToCache = [
   "/",
   "/site.webmanifest",
   "/favicon.ico",
+  "/icon.png",
   // Removed unused SVGs and manifest.json
 ];
 

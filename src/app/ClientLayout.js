@@ -5,6 +5,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+
+function registerServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/sw.js")
+        .then((registration) => {
+          console.log("SW registered: ", registration);
+        })
+        .catch((registrationError) => {
+          console.log("SW registration failed: ", registrationError);
+        });
+    });
+  }
+}
+
 import clsx from "clsx";
 import Footer from "@/components/ui/Footer";
 
@@ -93,6 +109,10 @@ function Navbar() {
 }
 
 export default function RootLayout({ children }) {
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
+
   return (
     <div className={`${inter.className} bg-gray-900 text-gray-100`}>
       <Navbar />

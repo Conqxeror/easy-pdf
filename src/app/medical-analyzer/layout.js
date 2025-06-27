@@ -1,4 +1,6 @@
-export const metadata = {
+import { generateMetadata } from "@/lib/metadata";
+
+export const metadata = generateMetadata({
   title: "Medical Document AI Analysis - easy-pdf",
   description: "AI-powered tool for medical document review and key information extraction. Secure and private processing.",
   keywords: [
@@ -8,10 +10,9 @@ export const metadata = {
     "medical record analysis",
     "patient data extraction",
   ],
-  alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app/medical-analyzer",
-  },
-};
+  canonicalUrl: "https://easy-pdf-murex.vercel.app/medical-analyzer",
+  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+});
 
 export default function MedicalAnalyzerLayout({ children }) {
   return <>{children}</>;

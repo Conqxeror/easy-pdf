@@ -1,63 +1,48 @@
 //src\app\page.js
 
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
 import { Lock, Cloud, Code, ArrowRight } from "lucide-react";
 import ToolCard from "@/components/ui/ToolCard";
 import { toolsData } from "@/lib/toolData";
 
-export const metadata = {
-  title:
-    "easy-pdf - Free Online PDF Tools for India | Merge, Split, Compress PDFs",
-  description:
-    "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser. No file uploads, complete privacy.",
-  keywords: [
-    "PDF tools India",
-    "merge PDF online",
-    "split PDF free",
-    "compress PDF",
-    "JPG to PDF converter",
-    "PDF to JPG",
-    "PDF editor online",
-    "privacy-focused PDF tools",
-    "client-side PDF processing",
-  ],
-  openGraph: {
-    title: "easy-pdf - Free Online PDF Tools for India",
-    description:
-      "100% client-side PDF tools. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
-    url: "https://easy-pdf-murex.vercel.app",
-    type: "website",
-    images: [
-      {
-        url: "https://easy-pdf-murex.vercel.app/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "easy-pdf - Free Online PDF Tools",
-      },
-    ],
-    locale: "en_IN",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "easy-pdf - Free Online PDF Tools for India",
-    description:
-      "100% client-side PDF tools. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
-    creator: "@easy_pdf",
-    images: ["https://easy-pdf-murex.vercel.app/twitter-image.jpg"],
-  },
-  alternates: {
-    canonical: "https://easy-pdf-murex.vercel.app",
-    languages: {
-      en: "/en",
-      hi: "/hi",
-    },
-  },
-};
-
 export default function Home() {
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault();
+      setInstallPrompt(event);
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPrompt) {
+      return;
+    }
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the PWA installation prompt');
+    } else {
+      console.log('User dismissed the PWA installation prompt');
+    }
+    setInstallPrompt(null);
+    setShowInstallButton(false);
+  };
+
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-80px)] pb-8 px-4 sm:px-6 lg:px-8 bg-gray-900 text-gray-100">
       {/* Hero Section */}
@@ -88,6 +73,15 @@ export default function Home() {
           >
             Explore All Tools
           </Link>
+          {showInstallButton && (
+            <button
+              onClick={handleInstallClick}
+              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-green-600 hover:bg-green-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+              aria-label="Install App"
+            >
+              Install App
+            </button>
+          )}
         </div>
       </section>
 

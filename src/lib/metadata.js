@@ -1,5 +1,6 @@
-export const generateMetadata = ({ title, description, keywords, canonicalUrl }) => {
+export const generateMetadata = ({ title, description, keywords, canonicalUrl, metadataBaseUrl }) => {
   return {
+    metadataBase: new URL(metadataBaseUrl),
     title,
     description,
     keywords,

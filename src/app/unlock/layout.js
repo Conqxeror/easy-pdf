@@ -15,6 +15,7 @@ export const metadata = generateMetadata({
     "Wali Mohammad Kadri",
   ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/unlock",
+  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
 export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
