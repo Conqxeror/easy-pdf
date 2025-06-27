@@ -27,9 +27,11 @@ export async function GET() {
     "/about",
   ];
 
+  const lastModified = new Date("2025-06-27").toISOString();
+
   const pages = routes.map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
+    lastModified: lastModified,
     changeFrequency: "monthly",
     priority: route === "" ? 1.0 : 0.8,
   }));
@@ -52,7 +54,7 @@ ${pages
 
   return new Response(sitemap, {
     headers: {
-      "Content-Type": "application/xml",
+      "Content-Type": "text/xml",
     },
   });
 }
