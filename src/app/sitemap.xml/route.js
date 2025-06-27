@@ -22,6 +22,7 @@ export async function GET() {
     "/word-to-pdf",
     "/pdf-to-word",
     "/legal-analyzer",
+    "/medical-analyzer",
     "/about",
     "/security",
   ];
