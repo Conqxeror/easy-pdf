@@ -1,8 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📄 All-in-One PDF & Document Toolkit
 
-## Getting Started
+![Project Banner](public/og-image.jpg)
 
-First, run the development server:
+Welcome to the **All-in-One PDF & Document Toolkit**! This is a comprehensive web application built with Next.js, designed to simplify your document management tasks. From merging and splitting PDFs to converting formats and performing OCR, this tool provides a seamless experience for all your document needs.
+
+## ✨ Features
+
+Our toolkit offers a wide range of functionalities to empower your document workflows:
+
+-   **Compress PDF**: 📉 Reduce PDF file size for easier sharing and storage.
+-   **Merge PDF**: 🔗 Combine multiple PDF files into a single document.
+-   **Split PDF**: ✂️ Extract specific pages or ranges from a PDF.
+-   **Organize PDF**: 🗂️ Rearrange, add, or delete pages within your PDF.
+-   **PDF to JPG**: 🖼️ Convert PDF pages into high-quality JPG images.
+-   **JPG to PDF**: 📸 Transform your JPG images back into a single PDF.
+-   **HTML to PDF**: 🌐 Convert web pages or HTML content into PDF documents.
+-   **Word to PDF**: 📝 Convert Word documents (.docx) to PDF.
+-   **PDF to Word**: ✍️ Convert PDF documents to editable Word (.docx) files.
+-   **OCR (Optical Character Recognition)**: 🔍 Extract text from scanned documents and images.
+-   **Protect PDF**: 🔒 Add password protection to your PDF files.
+-   **Unlock PDF**: 🔓 Remove password protection from secured PDFs.
+-   **Rotate PDF**: 🔄 Rotate pages in your PDF to the correct orientation.
+-   **Add Page Numbers**: #️⃣ Insert customizable page numbers into your PDF.
+-   **Add Watermark**: 💧 Apply text or image watermarks to your PDF.
+-   **Sign PDF**: ✍️ Electronically sign your PDF documents.
+-   **Form Filler**:  заполнить формы в PDF.
+-   **Legal Analyzer**: ⚖️ Analyze legal documents (via API).
+-   **Medical Analyzer**: ⚕️ Analyze medical documents (via API).
+
+## 🚀 Technologies Used
+
+This project leverages modern web technologies to deliver a robust and efficient application:
+
+-   **Next.js 15**: ⚛️ A React framework for production-grade applications.
+-   **React 19**: 💡 A JavaScript library for building user interfaces.
+-   **Tailwind CSS**: 🎨 A utility-first CSS framework for rapid UI development.
+-   **Radix UI**: 🧩 High-quality, accessible UI components.
+-   **PDF.js**: 📖 For rendering and manipulating PDF documents directly in the browser.
+-   **Tesseract.js**: 🤖 For performing Optical Character Recognition (OCR).
+-   **Framer Motion**: ✨ For smooth animations and transitions.
+
+## 💻 Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+Make sure you have Node.js (v18 or higher) and npm/yarn/pnpm/bun installed.
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    # or
+    bun install
+    ```
+
+### Running the Development Server
 
 ```bash
 npm run dev
@@ -16,21 +80,31 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 💡 Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Select a Tool**: Choose the desired document manipulation tool from the homepage.
+2.  **Upload Files**: Drag and drop your PDF or image files into the designated area.
+3.  **Configure Options**: Adjust settings specific to the chosen tool (e.g., page range for splitting, compression level).
+4.  **Process & Download**: Click the process button and download your modified document.
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
-## Deploy on Vercel
+## 📄 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Distributed under the MIT License. See `LICENSE` for more information.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📞 Contact
+
+Your Name - [kadriwalimohammad@gmail.com](mailto:kadriwalimohammad@gmail.com)
+
+Project Link: [https://github.com/Conqxeror/easy-pdf](https://github.com/Conqxeror/easy-pdf)
