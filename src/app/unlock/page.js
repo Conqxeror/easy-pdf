@@ -181,6 +181,38 @@ export default function UnlockPdfPage() {
           )}
         </Card>
       </main>
+      <ToolPageContent
+        toolName="Unlock PDF"
+        toolDescription="Remove password protection from your PDF documents quickly and securely. Our online Unlock PDF tool allows you to decrypt password-protected PDFs directly in your browser, ensuring your files remain private. Simply upload your file, enter the correct password, and download the unlocked version instantly."
+        steps={[
+          "Upload your password-protected PDF file by dragging it into the dropzone or clicking to select.",
+          "Enter the correct password for the PDF in the provided input field.",
+          "Click the 'Unlock PDF' button to remove the password protection.",
+          "Once processed, your unlocked PDF will be available for preview and download.",
+        ]}
+        faqs={[
+          {
+            question: "Is it free to unlock a PDF?",
+            answer:
+              "Yes, our Unlock PDF tool is completely free to use. You can remove password protection from as many PDF files as you need without any hidden costs.",
+          },
+          {
+            question: "Are my files secure when unlocking a PDF?",
+            answer:
+              "Absolutely. Your privacy is our top priority. All PDF processing, including unlocking, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+          },
+          {
+            question: "What if I don't know the password?",
+            answer:
+              "Our tool requires the correct password to unlock the PDF. If you do not know the password, we cannot unlock the document for you, as this would be a security breach.",
+          },
+          {
+            question: "Is there a file size limit for unlocking PDFs?",
+            answer:
+              "Yes, the maximum file size for a PDF to be unlocked is 50MB. For larger files, you might experience slower processing times or need to use a desktop application.",
+          },
+        ]}
+      />
     </>
   );
 }

@@ -18,11 +18,11 @@ import {
   CardFooter,
   CardDescription, // Added CardDescription import
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Label } from "@/components/ui/label";
+import { Progress }nimport { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageContent from "@/components/ui/ToolPageContent";
+import Loader from "@/components/ui/Loader";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -36,6 +36,7 @@ export default function CompressPDFs() {
   const [originalSize, setOriginalSize] = useState(0);
   const [compressedSize, setCompressedSize] = useState(0);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState("");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
   const [imageQuality, setImageQuality] = useState(75); // New state for image quality, default 75%
@@ -82,6 +83,7 @@ export default function CompressPDFs() {
 
     setError("");
     setIsCompressing(true);
+    setProcessingMessage("Loading PDF document...");
     setProgress(0);
     setCompressedPdfUrl(null); // Clear previous URL
 
@@ -91,6 +93,7 @@ export default function CompressPDFs() {
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       const numPages = pdf.numPages;
       setProgress(10); // Initial progress after loading document
+      setProcessingMessage("Processing pages...");
 
       const newPdfDoc = await PDFDocument.create(); // Create a new PDF document
 
@@ -100,6 +103,7 @@ export default function CompressPDFs() {
 
       // Step 2: Iterate through each page, render to canvas, and convert to JPEG
       for (let i = 1; i <= numPages; i++) {
+        setProcessingMessage(`Compressing page ${i} of ${numPages}...`);
         const page = await pdf.getPage(i);
         // Scale for rendering quality - higher scale means better quality image for compression
         const viewport = page.getViewport({ scale: 1.5 });
@@ -142,6 +146,7 @@ export default function CompressPDFs() {
         setProgress(10 + Math.round((i / numPages) * 80)); // 10% for load, 80% for page processing
       }
 
+      setProcessingMessage("Saving compressed PDF...");
       // Step 4: Save the new compressed PDF
       const pdfBytes = await newPdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -153,6 +158,7 @@ export default function CompressPDFs() {
       setCompressionPercentage(calculatedPercentage);
       setCompressedPdfUrl(URL.createObjectURL(blob));
       setProgress(100); // Final progress
+      setProcessingMessage("Compression complete!");
     } catch (e) {
       console.error("Compression error:", e);
       setError(
@@ -161,7 +167,10 @@ export default function CompressPDFs() {
     } finally {
       setIsCompressing(false);
       // Reset progress after a short delay to allow UI to show 100% briefly
-      setTimeout(() => setProgress(0), 1000);
+      setTimeout(() => {
+        setProgress(0);
+        setProcessingMessage("");
+      }, 1000);
     }
   };
 
@@ -314,7 +323,7 @@ export default function CompressPDFs() {
                   className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
                 />
                 <p className="text-sm text-center text-gray-400">
-                  Compressing PDF... {progress}%
+                  {processingMessage || `Compressing PDF... ${progress}%`}
                 </p>
               </div>
             )}
@@ -368,28 +377,38 @@ export default function CompressPDFs() {
         </Card>
         <ToolPageContent
           toolName="Compress PDF"
-          toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files."
+          toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files. Choose from different compression levels to find the perfect balance between file size and document quality. All processing is done securely in your browser, ensuring your files remain private."
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Select your desired compression level: Mild, Balanced, or Aggressive.",
-            "Click the \"Compress PDF\" button to start the compression process.",
-            "Download your compressed PDF file.",
+            "Select your desired compression level: Mild (good quality), Balanced (recommended), or Aggressive (smallest size). You can also fine-tune the image quality using the slider.",
+            "Click the 'Compress PDF' button to start the compression process.",
+            "Once compressed, you'll see the original and new file sizes, along with the percentage of reduction. Download your optimized PDF file.",
           ]}
           faqs={[
             {
               question: "How much can I compress my PDF file?",
               answer:
-                "The compression size depends on the content of your PDF file. Our tool uses advanced algorithms to reduce the file size as much as possible while preserving the quality of your document.",
+                "The compression amount depends on the content of your PDF. Documents with many images or large embedded fonts will see significant reduction, while text-only PDFs may have less room for compression. Our tool uses advanced algorithms to optimize file size.",
             },
             {
               question: "Is it safe to compress my PDF files online?",
               answer:
-                "Yes, your privacy and security are our top priorities. All files are processed on the client-side, which means your files are never uploaded to our servers.",
+                "Absolutely. Your privacy and security are our top priorities. All PDF compression happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
               question: "Will the quality of my PDF be affected?",
               answer:
-                "Our PDF compressor is designed to reduce the file size without significantly affecting the quality of your document. You can choose from different compression levels to find the right balance between file size and quality.",
+                "Our PDF compressor is designed to reduce file size while minimizing quality loss. You can choose from different compression levels and adjust image quality to find the right balance for your needs. For most uses, the 'Balanced' option provides excellent results.",
+            },
+            {
+              question: "What types of content are compressed in a PDF?",
+              answer:
+                "Our compressor primarily optimizes images within the PDF by re-encoding them with efficient compression algorithms. It also removes redundant PDF objects and optimizes fonts, leading to overall file size reduction.",
+            },
+            {
+              question: "Is there a file size limit for compression?",
+              answer:
+                "Yes, the maximum file size for a PDF to be compressed is 50MB. For larger files, processing might be slower due to client-side operations.",
             },
           ]}
         />

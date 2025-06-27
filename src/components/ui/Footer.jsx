@@ -41,7 +41,11 @@ const footerLinks = [
         href: "/sitemap.xml", // Assuming your sitemap is at /sitemap.xml
         external: true,
       },
-      // Placeholder for other company links like Privacy Policy, Terms of Service
+      {
+        name: "Privacy Policy",
+        href: "/security",
+        external: false,
+      },
     ],
   },
 ];

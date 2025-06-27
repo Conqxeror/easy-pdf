@@ -738,6 +738,44 @@ export default function SignPage() {
           </CardContent>
         </Card>
       </main>
+      <ToolPageContent
+        toolName="Sign / Annotate PDF"
+        toolDescription="Easily sign your PDF documents or add custom annotations directly in your browser. Draw your signature using your mouse or trackpad, then place it precisely on any page of your PDF. Our tool offers a secure and private way to sign documents, as all processing happens client-side, ensuring your sensitive information never leaves your device."
+        steps={[
+          "Upload the PDF file you wish to sign or annotate by dragging it into the dropzone or clicking to select.",
+          "In the signature drawing area, use your mouse or trackpad to draw your signature or any annotation. You can adjust the pen color and stroke width.",
+          "Once drawn, your signature will appear on the PDF preview. Drag and resize it to your desired position and size on the selected page.",
+          "If your PDF has multiple pages, use the page selector to navigate and place the signature on the correct page.",
+          "Click the 'Download Signed PDF' button to save your document with the applied signature or annotation.",
+        ]}
+        faqs={[
+          {
+            question: "Is it free to sign PDFs online?",
+            answer:
+              "Yes, our Sign PDF tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or subscriptions.",
+          },
+          {
+            question: "Are my files secure when I sign them?",
+            answer:
+              "Absolutely. Your privacy and security are our top priorities. All PDF processing, including the application of your signature, occurs directly within your web browser. Your documents are never uploaded to our servers.",
+          },
+          {
+            question: "Can I resize and move my signature after drawing it?",
+            answer:
+              "Yes, once you've drawn your signature, you can easily drag it to any position on the PDF page and resize it to fit your needs using the provided controls.",
+          },
+          {
+            question: "Can I sign multiple pages in a single PDF?",
+            answer:
+              "Currently, our tool allows you to place one signature per operation on a selected page. To sign multiple pages, you would need to repeat the process for each page.",
+          },
+          {
+            question: "What kind of annotations can I add?",
+            answer:
+              "Beyond signatures, you can use the drawing tool to add freehand annotations, highlights, or simple drawings directly onto your PDF pages.",
+          },
+        ]}
+      />
     </>
   );
 }

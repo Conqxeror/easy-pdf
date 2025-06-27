@@ -171,7 +171,7 @@ export default function PageNumbersPage() {
               textY = margin + footerScaledFontSize;
               break;
             case "bottom-left":
-              textX = margin;
+              x = margin;
               y = canvas.height - margin;
               break;
             case "bottom-center":
@@ -768,29 +768,40 @@ export default function PageNumbersPage() {
           </CardContent>
         </Card>
         <ToolPageContent
-          toolName="Add Page Numbers to PDF"
-          toolDescription="Easily add page numbers to your PDF files with our free online tool. Customize the position, format, and style of your page numbers in just a few clicks."
+          toolName="Add Page Numbers / Header / Footer to PDF"
+          toolDescription="Easily add customizable page numbers, headers, or footers to your PDF documents. Our tool offers flexible options for position, font size, color, and numbering format (e.g., 'Page X of Y'). Enhance your documents for professional or personal use, all while ensuring your files remain private with client-side processing."
           steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Customize your page numbers by choosing the position, font size, color, and format.",
-            "Click the \"Add Page Numbers\" button to apply the changes to your PDF.",
-            "Download your new PDF with page numbers.",
+            "Upload your PDF file by dragging it into the dropzone or clicking to select.",
+            "Configure your additions: Choose to add a header, a footer, or dynamic page numbers. You can use placeholders like {NUM} for the current page and {TOTAL} for the total page count.",
+            "Customize the appearance: Select font size, text color, and the position (e.g., top-left, bottom-center).",
+            "Choose which pages to apply the changes to: all pages, a single page, or a specific page range.",
+            "Click the 'Download PDF with Additions' button to process and save your document.",
           ]}
           faqs={[
             {
-              question: "Is it free to add page numbers to a PDF?",
+              question: "Is it free to add page numbers or headers/footers?",
               answer:
-                "Yes, our tool is completely free to use. You can add page numbers to as many PDFs as you like without any hidden costs.",
+                "Yes, our tool is completely free to use. You can add page numbers, headers, and footers to as many PDF files as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when adding these elements?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All PDF processing, including adding page numbers, headers, and footers, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
-              question: "Can I customize the page numbers?",
+              question: "Can I customize the format of the page numbers?",
               answer:
-                "Absolutely! You can customize the position, font size, color, and format of the page numbers to match your needs.",
+                "Yes, you can use custom text with placeholders like {NUM} for the current page number and {TOTAL} for the total number of pages. For example, 'Page {NUM} of {TOTAL}' will display as 'Page 1 of 10'.",
+            },
+            {
+              question: "Can I add both a header and a footer?",
+              answer:
+                "Yes, you can add both a header and a footer simultaneously. You can also choose to apply them to all pages, a single page, or a custom range of pages.",
+            },
+            {
+              question: "Does adding page numbers affect the quality of my PDF?",
+              answer:
+                "No, adding page numbers, headers, or footers with our tool does not affect the quality of your document's existing content. The new elements are seamlessly integrated.",
             },
           ]}
         />

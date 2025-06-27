@@ -21,10 +21,9 @@ export async function GET() {
     "/sign",
     "/word-to-pdf",
     "/pdf-to-word",
-    "/add-page-numbers",
-    "/sign-pdf",
     "/legal-analyzer",
     "/about",
+    "/security",
   ];
 
   const lastModified = new Date("2025-06-27").toISOString();

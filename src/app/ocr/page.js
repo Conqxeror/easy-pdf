@@ -36,6 +36,7 @@ export default function OcrPage() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState("");
   const [result, setResult] = useState("");
   const [previewImageUrl, setPreviewImageUrl] = useState(null); // URL for the image passed to Tesseract
   const previewCanvasRef = useRef(null); // Ref for canvas to show PDF/Image preview
@@ -230,6 +231,7 @@ export default function OcrPage() {
     }
 
     setIsProcessing(true);
+    setProcessingMessage("Initializing OCR engine...");
     setError("");
     setResult("");
 
@@ -280,6 +282,9 @@ export default function OcrPage() {
       }
 
       for (const pageNum of pagesToOcr) {
+        setProcessingMessage(
+          `Rendering page ${pageNum} for text recognition...`
+        );
         let imageUrlToOcr = previewImageUrl; // Default to existing preview for single image or first page
 
         if (file.type === "application/pdf") {
@@ -306,12 +311,14 @@ export default function OcrPage() {
         }
 
         if (imageUrlToOcr) {
+          setProcessingMessage(`Recognizing text on page ${pageNum}...`);
           const { data } = await workerRef.current.recognize(imageUrlToOcr);
           allExtractedText.push(`--- Page ${pageNum} ---\n${data.text.trim()}`);
         }
       }
 
       setResult(allExtractedText.join("\n\n"));
+      setProcessingMessage("Text extraction complete!");
     } catch (e) {
       setError(
         "Failed to extract text. Ensure the text is clear and readable."
@@ -319,6 +326,8 @@ export default function OcrPage() {
       console.error("OCR error:", e);
     } finally {
       setIsProcessing(false);
+      // Clear message after a short delay
+      setTimeout(() => setProcessingMessage(""), 2000);
     }
   };
 
@@ -326,7 +335,7 @@ export default function OcrPage() {
     if (result) {
       document.execCommand("copy", false, result); // Use execCommand for broader compatibility in iframes
       setError("Text copied to clipboard!");
-      setTimeout(() => setError(""), 3000); // Clear message after 3 seconds
+      setTimeout(() => setError(""), 3000);
     }
   };
 
@@ -526,6 +535,12 @@ export default function OcrPage() {
               {isProcessing ? "Processing..." : "Extract Text"}
             </Button>
 
+            {isProcessing && processingMessage && (
+              <div className="mt-4 text-center text-gray-400">
+                <Loader size="sm" color="gray" className="inline-block mr-2" message={processingMessage} />
+              </div>
+            )}
+
             {result && (
               <Card className="mt-6 bg-gray-700 border-gray-600">
                 <CardHeader>
@@ -554,28 +569,39 @@ export default function OcrPage() {
           </CardContent>
         </Card>
         <ToolPageContent
-          toolName="OCR PDF"
-          toolDescription="Extract text from your scanned PDF documents and images with our free online OCR tool. Convert your non-searchable PDFs into searchable and selectable text."
+          toolName="OCR (Text Recognition)"
+          toolDescription="Extract readable and editable text from your scanned PDF documents and image files with our free online OCR tool. Convert your non-searchable PDFs into searchable and selectable text, making it easy to copy, edit, and reuse content from scanned documents. All processing is done securely in your browser, ensuring your files remain private."
           steps={[
             "Upload your PDF or image file by dragging it into the dropzone or clicking to select a file.",
-            "Our OCR tool will automatically process the file and extract the text.",
-            "Copy the extracted text to your clipboard or download it as a text file.",
+            "Choose the scope of OCR: all pages, a single page, or a specific page range (for PDFs).",
+            "Click the 'Extract Text' button. Our OCR engine will process the visual content and convert it into text.",
+            "Once processed, the extracted text will appear in the text area. You can then copy it to your clipboard or save it.",
           ]}
           faqs={[
             {
-              question: "Is it free to OCR a PDF?",
+              question: "Is it free to OCR a PDF or image?",
               answer:
-                "Yes, our tool is completely free to use. You can OCR as many PDFs and images as you like without any hidden costs.",
+                "Yes, our OCR tool is completely free to use. You can extract text from as many PDFs and images as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when using OCR?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All OCR processing happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
               question: "What is the accuracy of the OCR tool?",
               answer:
-                "The accuracy of our OCR tool depends on the quality of the uploaded file. For best results, we recommend using high-quality scans with clear text.",
+                "The accuracy of our OCR tool depends heavily on the quality of the uploaded file. For best results, we recommend using high-resolution scans with clear, well-defined text. Blurry or low-quality images may result in lower accuracy.",
+            },
+            {
+              question: "Can I OCR multiple pages from a PDF?",
+              answer:
+                "Yes, you can choose to OCR all pages of a PDF, a single specific page, or a custom range of pages. The extracted text from multiple pages will be concatenated with clear page separators.",
+            },
+            {
+              question: "What languages does the OCR tool support?",
+              answer:
+                "Currently, our OCR tool primarily supports English. We are working to expand language support in the future.",
             },
           ]}
         />

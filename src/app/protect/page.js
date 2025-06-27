@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label"; // Import Label
 import { Input } from "@/components/ui/input"; // Import Input
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function ProtectPdfPage() {
   const [file, setFile] = useState(null);
@@ -181,6 +182,43 @@ export default function ProtectPdfPage() {
           )}
         </Card>
       </main>
+      <ToolPageContent
+        toolName="Protect PDF"
+        toolDescription="Secure your sensitive PDF documents with password protection. Our online tool allows you to encrypt your PDFs, restricting access and ensuring only authorized individuals can view or modify them. All processing is done client-side, guaranteeing your privacy and the confidentiality of your files."
+        steps={[
+          "Upload the PDF file you wish to protect by dragging it into the dropzone or clicking to select.",
+          "Enter a strong password in the designated field. This password will be required to open the protected PDF.",
+          "Click the 'Protect PDF' button to apply the encryption.",
+          "Download your newly password-protected PDF file.",
+        ]}
+        faqs={[
+          {
+            question: "Is it free to protect a PDF with a password?",
+            answer:
+              "Yes, our Protect PDF tool is completely free to use. You can add password protection to as many PDF files as you need without any hidden costs or limitations.",
+          },
+          {
+            question: "Are my files secure when I protect them?",
+            answer:
+              "Absolutely. Your privacy is our top priority. All PDF processing, including encryption, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+          },
+          {
+            question: "What kind of password should I use?",
+            answer:
+              "We recommend using a strong, unique password that combines uppercase and lowercase letters, numbers, and symbols to maximize security.",
+          },
+          {
+            question: "Can I remove the password later?",
+            answer:
+              "Yes, you can use our 'Unlock PDF' tool to remove the password protection from your PDF, provided you know the correct password.",
+          },
+          {
+            question: "Does protecting a PDF affect its content or quality?",
+            answer:
+              "No, adding password protection to your PDF does not alter its content or quality. It only encrypts the file, restricting access to unauthorized users.",
+          },
+        ]}
+      />
     </>
   );
 }

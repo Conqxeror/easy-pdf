@@ -320,28 +320,38 @@ export default function DeletePagesPage() {
         </Card>
         <ToolPageContent
           toolName="Delete PDF Pages"
-          toolDescription="Easily delete pages from your PDF files with our free online tool. Select the pages you want to remove and get a new PDF in seconds."
+          toolDescription="Easily remove unwanted pages from your PDF documents with our free online tool. Select specific pages or a range of pages to delete, and create a new, cleaner PDF in seconds. All processing is done securely in your browser, ensuring your files remain private."
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Select the pages you want to delete by clicking on them.",
-            "Click the \"Delete Pages\" button to remove the selected pages.",
-            "Download your new PDF file without the deleted pages.",
+            "You will see a list of page numbers. Click on the page numbers you wish to remove. Selected pages will be highlighted.",
+            "Alternatively, use the 'Enter Page Range' input to specify pages for deletion (e.g., '1-5, 8, 10').",
+            "Click the 'Download PDF (Pages Deleted)' button to process and save your new PDF without the selected pages.",
           ]}
           faqs={[
             {
               question: "Is it free to delete pages from a PDF?",
               answer:
-                "Yes, our tool is completely free to use. You can delete pages from as many PDFs as you like without any hidden costs.",
+                "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when deleting pages?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
-              question: "Can I select multiple pages to delete?",
+              question: "Can I delete multiple pages at once?",
               answer:
-                "Yes, you can select multiple pages to delete at once. Simply click on all the pages you want to remove before clicking the \"Delete Pages\" button.",
+                "Yes, you can select multiple individual pages or specify a range of pages to delete simultaneously. Our tool is designed for efficient bulk deletion.",
+            },
+            {
+              question: "What happens if I accidentally delete a page?",
+              answer:
+                "Our tool creates a new PDF with the selected pages removed. Your original PDF remains untouched on your device. If you make a mistake, simply re-upload the original PDF and try again.",
+            },
+            {
+              question: "Is there a file size limit for deleting pages?",
+              answer:
+                "Yes, the maximum file size for a PDF to be processed is 50MB. For larger files, processing might be slower due to client-side operations.",
             },
           ]}
         />

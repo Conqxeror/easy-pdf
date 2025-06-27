@@ -1,5 +1,3 @@
-//Not Working
-
 "use client";
 
 import { Metadata } from 'next';
@@ -28,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"; // Import Select components
 import PageRangeInput from "@/components/ui/PageRangeInput"; // Assuming this component is themed correctly
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function RotatePdfPage() {
   const [file, setFile] = useState(null);
@@ -250,6 +249,44 @@ export default function RotatePdfPage() {
           )}
         </Card>
       </main>
+      <ToolPageContent
+        toolName="Rotate PDF"
+        toolDescription="Easily rotate pages in your PDF documents. Whether you need to adjust the orientation of a single page, a specific range, or the entire document, our online tool allows you to rotate by 90, 180, or 270 degrees. All processing is done securely in your browser, ensuring your files remain private."
+        steps={[
+          "Upload your PDF file by dragging it into the dropzone or clicking to select.",
+          "Specify the page range you want to rotate. You can choose to rotate all pages, or a custom range (e.g., pages 5-10).",
+          "Select the rotation angle: 90° clockwise, 180°, or 270° clockwise (90° counter-clockwise).",
+          "Click the 'Rotate PDF' button to apply the changes.",
+          "Download your newly rotated PDF file.",
+        ]}
+        faqs={[
+          {
+            question: "Is it free to rotate PDF pages?",
+            answer:
+              "Yes, our Rotate PDF tool is completely free to use. You can rotate as many PDF files as you need without any hidden costs or limitations.",
+          },
+          {
+            question: "Are my files secure when rotating PDFs?",
+            answer:
+              "Absolutely. Your privacy is our top priority. All PDF processing, including rotation, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+          },
+          {
+            question: "Can I rotate only specific pages?",
+            answer:
+              "Yes, you can specify a custom page range to rotate. This allows you to precisely control which pages are affected by the rotation.",
+          },
+          {
+            question: "What rotation angles are supported?",
+            answer:
+              "You can choose from 90 degrees clockwise, 180 degrees, or 270 degrees clockwise (which is equivalent to 90 degrees counter-clockwise).",
+          },
+          {
+            question: "Does rotating affect the quality of my PDF?",
+            answer:
+              "No, rotating your PDF pages with our tool does not affect the quality of your document. The content remains sharp and clear.",
+          },
+        ]}
+      />
     </>
   );
 }

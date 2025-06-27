@@ -20,6 +20,7 @@ import {
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function ReorderPage() {
   const [files, setFiles] = useState([]);
@@ -357,6 +358,38 @@ export default function ReorderPage() {
           </CardContent>
         </Card>
       </main>
+      <ToolPageContent
+        toolName="Reorder PDF Pages"
+        toolDescription="Easily rearrange the pages of your PDF document with our intuitive drag-and-drop interface. Organize your content exactly how you need it, whether you're preparing a report, presentation, or simply tidying up a document. All processing is done securely in your browser, ensuring your files remain private."
+        steps={[
+          "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+          "Once your PDF is loaded, you will see thumbnails of all its pages. Drag and drop the page thumbnails to change their order.",
+          "After arranging the pages to your satisfaction, click the 'Download Reordered PDF' button.",
+          "Your PDF with the new page order will be instantly available for download.",
+        ]}
+        faqs={[
+          {
+            question: "Is it free to reorder PDF pages?",
+            answer:
+              "Yes, our Reorder PDF Pages tool is completely free to use. You can rearrange pages in as many PDF files as you need without any hidden costs or limitations.",
+          },
+          {
+            question: "Are my files secure when reordering pages?",
+            answer:
+              "Absolutely. Your privacy is our top priority. All PDF processing, including reordering, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+          },
+          {
+            question: "Can I reorder pages from multiple PDFs?",
+            answer:
+              "This tool is designed to reorder pages within a single PDF document. If you need to combine pages from multiple PDFs, please use our 'Merge PDF' tool first, and then reorder the combined document.",
+          },
+          {
+            question: "Is there a limit to the number of pages I can reorder?",
+            answer:
+              "While there isn't a strict limit on the number of pages, very large PDFs (e.g., hundreds of pages) might take longer to load and process due to client-side operations. We recommend keeping file sizes manageable for optimal performance.",
+          },
+        ]}
+      />
     </>
   );
 }

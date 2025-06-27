@@ -761,29 +761,41 @@ export default function WatermarkPdfPage() {
         </Card>
         <ToolPageContent
           toolName="Add Watermark to PDF"
-          toolDescription="Add a text or image watermark to your PDF files. Customize the position, opacity, and rotation of your watermark to fit your needs."
+          toolDescription="Protect your PDF documents or add important information by applying custom text or image watermarks. Our online tool allows you to easily add a watermark with adjustable position, opacity, rotation, and font settings (for text watermarks). Enhance document security and branding, all while keeping your files private with client-side processing."
           steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select.",
-            "Select 'Text Watermark' or 'Image Watermark' and provide the content.",
-            "Adjust the watermark's position, opacity, font size (for text), and rotation.",
-            'Click the "Add Watermark" button to process your PDF.',
-            "Download your newly watermarked PDF file.",
+            "Upload your PDF file by dragging it into the dropzone or clicking to select it from your device.",
+            "Choose between a 'Text Watermark' or 'Image Watermark'.",
+            "For text watermarks: Enter your desired text, select font size, color, and rotation.",
+            "For image watermarks: Upload your image (PNG or JPG recommended), and adjust its rotation.",
+            "Select the desired position for your watermark (e.g., center, diagonal, tiled, corners) and set its overall opacity.",
+            "Click the 'Add Watermark' button to apply the watermark to your PDF.",
+            "Preview your watermarked PDF and then download the file to your computer.",
           ]}
           faqs={[
             {
               question: "Is it free to add a watermark to a PDF?",
               answer:
-                "Yes, our tool is completely free to use. You can add watermarks to as many PDFs as you like without any hidden costs.",
+                "Yes, our PDF watermark tool is completely free to use. You can add watermarks to as many PDF files as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when adding a watermark?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All PDF processing, including watermarking, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
-              question: "Can I add an image as a watermark?",
+              question: "Can I use an image as a watermark?",
               answer:
-                "Yes, you can add an image as a watermark. We recommend using a transparent PNG for the best results.",
+                "Yes, you can upload an image (PNG or JPG) to use as a watermark. For best results, especially with transparency, we recommend using a PNG image.",
+            },
+            {
+              question: "Can I adjust the transparency of the watermark?",
+              answer:
+                "Yes, our tool provides an opacity slider that allows you to control the transparency level of your text or image watermark, from nearly invisible to fully opaque.",
+            },
+            {
+              question: "What positions can I place the watermark in?",
+              answer:
+                "You can choose from various positions including top-left, top-right, center, bottom-left, bottom-right, diagonal, or even a tiled pattern across all pages.",
             },
           ]}
         />

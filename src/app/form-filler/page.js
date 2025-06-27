@@ -572,28 +572,39 @@ export default function FormFillerPage() {
         </Card>
         <ToolPageContent
           toolName="PDF Form Filler"
-          toolDescription="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document."
+          toolDescription="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document. Our intuitive tool allows you to easily add text, select font size and color, and precisely position your input on any page. All processing is done securely in your browser, ensuring your sensitive information remains private."
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Add text, checkmarks, and signatures to your PDF by clicking on the desired location.",
-            "Customize the font, size, and color of your text.",
-            "Download your filled PDF form.",
+            "Enter the text you wish to add in the 'Text to Add' field.",
+            "Adjust the font size and color of the text. You can also select the page where you want to add the text.",
+            "Drag the text box directly on the PDF preview to position it precisely, or use the X and Y coordinate inputs for fine-tuning.",
+            "Click the 'Fill Form & Download' button to apply your text and save the updated PDF.",
           ]}
           faqs={[
             {
               question: "Is it free to fill out PDF forms online?",
               answer:
-                "Yes, our tool is completely free to use. You can fill out as many PDF forms as you like without any hidden costs.",
+                "Yes, our PDF Form Filler tool is completely free to use. You can add text to as many PDF forms as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when filling forms?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All PDF processing, including adding text to forms, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
-              question: "Can I add a signature to my PDF form?",
+              question: "Can I add multiple text fields to a PDF?",
               answer:
-                "Yes, you can add a signature to your PDF form. You can draw your signature, type it, or upload an image of your signature.",
+                "Currently, our tool allows you to add one text field at a time. To add multiple fields, you would need to repeat the process for each text entry.",
+            },
+            {
+              question: "Can I add signatures or images with this tool?",
+              answer:
+                "This tool is primarily designed for adding text. For adding signatures, please use our dedicated 'Sign PDF' tool. For adding images, you might consider converting your image to PDF first and then merging it.",
+            },
+            {
+              question: "Does this tool work with interactive PDF forms?",
+              answer:
+                "Our tool adds text as a new layer on top of the PDF. While it works on all PDFs, it does not interact with pre-existing interactive form fields (AcroForm fields) within the PDF. It's best for adding text to non-fillable PDFs or adding additional text to existing forms.",
             },
           ]}
         />

@@ -18,29 +18,28 @@ export default function WordToPdfPage() {
         </Alert>
       </div>
       <ToolPageContent
-        toolName="Word to PDF Converter"
-        toolDescription="Convert your Word documents to high-quality PDFs seamlessly. Our tool ensures that your formatting, images, and tables are preserved perfectly in the output PDF. It's fast, secure, and incredibly easy to use."
+        toolName="Word to PDF Converter (Coming Soon)"
+        toolDescription="Converting Word documents to PDF is a complex task that often requires server-side processing to ensure perfect fidelity. As a privacy-first tool, we are committed to client-side processing, meaning your files never leave your device. We are actively exploring secure, client-side solutions for this feature. In the meantime, you can use our other powerful PDF tools."
         steps={[
-          "Upload your Word document (.doc or .docx) by dragging it into the dropzone or clicking to select a file.",
-          "Adjust any conversion settings if necessary (e.g., page orientation, margins).",
-          'Click the "Convert to PDF" button to begin the process.',
-          "Download your newly created PDF file instantly.",
+          "Currently, direct client-side Word to PDF conversion is not available due to its complexity and our commitment to privacy (no server uploads).",
+          "For now, you can convert your Word document to PDF using your word processor (e.g., Microsoft Word, Google Docs) and then use our other tools for further PDF manipulation.",
+          "Stay tuned! We are researching and developing a secure, client-side solution for this feature.",
         ]}
         faqs={[
           {
-            question: "Is it free to convert Word to PDF?",
+            question: "Why isn't Word to PDF conversion available client-side?",
             answer:
-              "Yes, our Word to PDF converter is completely free to use. There are no hidden charges or limitations on the number of conversions.",
+              "Converting complex document formats like Word (.docx) to PDF accurately is very resource-intensive and typically requires server-side processing. To maintain our privacy-first approach (where your files never leave your device), we are still developing a robust client-side solution.",
           },
           {
-            question: "Will my formatting be preserved?",
+            question: "Will this feature be added in the future?",
             answer:
-              "Absolutely. Our converter is designed to maintain the original formatting of your Word document, including fonts, images, and layout, ensuring a professional-looking PDF.",
+              "Yes, we are actively working on a secure and efficient client-side Word to PDF converter. Our goal is to provide this functionality while adhering to our strict privacy standards.",
           },
           {
-            question: "Are my files secure?",
+            question: "Are my files still secure if I use other tools?",
             answer:
-              "Yes, your privacy and security are our top priorities. All files are processed on the client-side, which means your files are never uploaded to our servers.",
+              "Absolutely. All other tools on easy-pdf operate entirely client-side. Your documents are processed in your browser and are never uploaded to our servers, ensuring your privacy and security.",
           },
         ]}
       />

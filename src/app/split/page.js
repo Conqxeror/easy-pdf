@@ -1,5 +1,3 @@
-//not working
-
 "use client";
 
 import { Metadata } from 'next';
@@ -24,6 +22,7 @@ import { Label } from "@/components/ui/label"; // Import Label
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup components
 import { Progress } from "@/components/ui/progress"; // Import Progress
 import JSZip from "jszip"; // Assuming JSZip is installed (npm install jszip)
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
@@ -384,7 +383,44 @@ export default function SplitPdfPage() {
           )}
         </Card>
       </main>
+      <ToolPageContent
+        toolName="Split PDF"
+        toolDescription="Easily split your PDF documents into multiple files. Extract specific pages or ranges, or separate every page into its own PDF. Our online PDF splitter is fast, secure, and processes all your files directly in your browser, ensuring your privacy. Perfect for creating smaller documents, reorganizing content, or sharing only relevant sections."
+        steps={[
+          "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+          "Choose your splitting option: 'By Page Range' to extract a specific set of pages, or 'Extract All Pages' to get each page as a separate PDF.",
+          "If splitting by page range, enter the start and end page numbers you wish to extract.",
+          "Click the 'Split PDF' button. The tool will process your document instantly.",
+          "Download your newly split PDF file(s). If you chose 'Extract All Pages', you will receive a ZIP archive containing individual PDF files.",
+        ]}
+        faqs={[
+          {
+            question: "Is it free to split PDF files?",
+            answer:
+              "Yes, our Split PDF tool is completely free to use. You can split as many PDF files as you need without any hidden costs or limitations.",
+          },
+          {
+            question: "Are my files secure when splitting PDFs?",
+            answer:
+              "Absolutely. Your privacy is our top priority. All PDF processing, including splitting, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+          },
+          {
+            question: "Can I extract multiple page ranges from one PDF?",
+            answer:
+              "Currently, our tool allows you to extract one continuous page range at a time. To extract multiple non-contiguous ranges, you would need to perform the operation multiple times.",
+          },
+          {
+            question: "What happens if I choose 'Extract All Pages'?",
+            answer:
+              "If you select 'Extract All Pages', each page of your original PDF will be converted into a separate PDF file. These individual files will then be compressed into a single ZIP archive for easy download.",
+          },
+          {
+            question: "Is there a file size limit for splitting PDFs?",
+            answer:
+              "Yes, the maximum file size for a PDF to be split is 50MB. For larger files, you might experience slower processing times.",
+          },
+        ]}
+      />
     </>
   );
 }
-

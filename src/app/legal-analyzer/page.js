@@ -227,8 +227,7 @@ export default function LegalAnalyzerPage() {
           {loading && (
             // Changed <p> to <div> to resolve hydration error as <Loader> renders a <div>
             <div className="mt-8 text-center text-gray-400 flex items-center justify-center">
-              <Loader size="sm" color="gray" className="inline-block mr-2" />
-              {loadingMessage || "Processing document..."}
+              <Loader size="sm" color="gray" className="inline-block mr-2" message={loadingMessage || "Processing document..."} />
             </div>
           )}
           <Button
@@ -367,29 +366,39 @@ export default function LegalAnalyzerPage() {
           </Alert>
         </div>
         <ToolPageContent
-          toolName="Legal Analyzer"
-          toolDescription="Analyze your legal documents with our AI-powered tool. Get a summary, risk assessment, and suggestions for your contracts, agreements, and other legal documents."
+          toolName="AI Legal Document Analyzer"
+          toolDescription="Leverage the power of AI to quickly analyze your legal documents. Our tool provides a concise summary, identifies key entities and clauses, assesses potential risks, and offers actionable suggestions. Ideal for contracts, agreements, and other legal texts, this tool helps you understand complex documents faster and more efficiently. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
           steps={[
-            "Upload your legal document in PDF, Word, or image format.",
-            "Our AI will analyze the document and extract key information.",
-            "Review the summary, risk assessment, and suggestions provided by the tool.",
-            "Download the analysis report for your records.",
+            "Upload your legal document (PDF, Word, or image format) using the drag-and-drop zone or by clicking to select a file.",
+            "Click the 'Analyze Document' button. Our AI will process the content to extract relevant information.",
+            "Review the comprehensive analysis report, which includes a summary, key entities, detected clauses, a risk assessment, and practical suggestions.",
+            "Optionally, download the full analysis report as a text file for your records.",
           ]}
           faqs={[
             {
-              question: "Is this tool a substitute for legal advice?",
+              question: "Is this tool a substitute for professional legal advice?",
               answer:
-                "No, this tool is not a substitute for legal advice. It is for informational purposes only. You should always consult with a qualified legal professional for any legal advice.",
+                "No, this AI Legal Document Analyzer is for informational purposes only and should not be considered a substitute for professional legal advice. Always consult with a qualified legal professional for specific legal guidance.",
             },
             {
-              question: "Is my data secure?",
+              question: "How secure are my documents during analysis?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Your privacy and data security are our top priorities. All document processing and AI analysis are performed securely, and your documents are never stored on our servers. They are processed in a temporary, isolated environment.",
             },
             {
-              question: "What types of documents can I analyze?",
+              question: "What types of legal documents can I analyze?",
               answer:
-                "You can analyze a variety of legal documents, including contracts, agreements, and terms of service. The tool supports PDF, Word, and image formats.",
+                "You can analyze a wide range of legal documents, including contracts, agreements, terms of service, policies, and more. The tool supports PDF, Microsoft Word (.doc, .docx), and common image formats (JPG, PNG).",
+            },
+            {
+              question: "What kind of insights does the AI provide?",
+              answer:
+                "The AI provides a concise summary of the document, identifies key entities (like parties, dates, and amounts), lists detected legal clauses, offers a risk assessment (e.g., low, moderate, high), and provides actionable suggestions based on its analysis.",
+            },
+            {
+              question: "Is there a limit to the document size or length?",
+              answer:
+                "While there isn't a strict page limit, very large or complex documents may take longer to process. The maximum file size for upload is 50MB. For optimal performance, we recommend documents of reasonable length.",
             },
           ]}
         />

@@ -26,6 +26,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 export default function HtmlToPdfPage() {
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState("");
   const contentRef = useRef(null); // Ref for the editable HTML content
   const previewCanvasRef = useRef(null); // Ref for the PDF preview canvas
   const [previewPdfUrl, setPreviewPdfUrl] = useState(null); // URL for the generated PDF preview
@@ -233,7 +234,7 @@ export default function HtmlToPdfPage() {
               ref={contentRef}
               contentEditable="true" // Make the div editable
               className="w-full p-4 bg-gray-700 rounded-md border border-gray-600 min-h-[250px] overflow-y-auto resize-y
-                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-blue-500
                          text-gray-100 dark:text-gray-100" // Removed prose classes, added explicit text colors
               aria-label="Editable HTML content"
               placeholder="Start typing or paste your HTML here..." // Placeholder for contenteditable
@@ -282,28 +283,38 @@ export default function HtmlToPdfPage() {
           </CardContent>
         </Card>
         <ToolPageContent
-          toolName="HTML to PDF"
-          toolDescription="Convert your HTML code to a PDF file with our free online tool. Simply paste your HTML code and get a high-quality PDF in seconds."
+          toolName="HTML to PDF Converter"
+          toolDescription="Convert your HTML code or web content into a high-quality PDF document. Our free online tool allows you to paste HTML, edit it directly, and then generate a PDF that accurately preserves the layout and styling. Ideal for archiving web pages, creating reports from HTML data, or saving online articles for offline reading. All processing is done securely in your browser, ensuring your content remains private."
           steps={[
-            "Paste your HTML code into the text area above.",
-            "Click the \"Convert to PDF\" button to start the conversion process.",
-            "Download your PDF file.",
+            "Paste your HTML code or type your content directly into the editable text area above.",
+            "Click the 'Generate PDF Preview' button to see how your HTML content will look as a PDF.",
+            "Review the preview. If satisfied, click the 'Download PDF' button to save your newly created PDF file.",
           ]}
           faqs={[
             {
               question: "Is it free to convert HTML to PDF?",
               answer:
-                "Yes, our tool is completely free to use. You can convert as many HTML files as you like without any hidden costs.",
+                "Yes, our HTML to PDF converter is completely free to use. You can convert as much HTML content as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when converting HTML to PDF?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All HTML to PDF conversion happens directly in your web browser. Your content is never uploaded to our servers, ensuring your data remains confidential.",
             },
             {
-              question: "Can I convert complex HTML files?",
+              question: "Can I convert complex HTML with CSS and JavaScript?",
               answer:
-                "Our tool can handle most HTML files, but some complex CSS and JavaScript may not be rendered correctly. For best results, we recommend using simple HTML and CSS.",
+                "Our tool uses `html2canvas` to render HTML, which captures the visual representation. While it handles most standard HTML and CSS well, very complex layouts, advanced CSS features (like `oklch()` colors), or dynamic JavaScript interactions might not be perfectly replicated. For best results, simpler HTML structures are recommended.",
+            },
+            {
+              question: "Can I edit the HTML content before converting?",
+              answer:
+                "Yes, the input area is fully editable. You can type, paste, and modify your HTML content directly within the browser before initiating the conversion to PDF.",
+            },
+            {
+              question: "What is the maximum size of HTML content I can convert?",
+              answer:
+                "While there isn't a strict character limit, very large HTML documents with extensive styling or many images might take longer to process due to client-side rendering. For optimal performance, we recommend content of reasonable length.",
             },
           ]}
         />

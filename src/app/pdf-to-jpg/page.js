@@ -27,6 +27,7 @@ import {
 import JSZip from "jszip";
 import Image from "next/image"; // Import Next.js Image component
 import ToolPageContent from "@/components/ui/ToolPageContent";
+import Loader from "@/components/ui/Loader";
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -36,6 +37,7 @@ export default function PdfToJpgPage() {
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState("");
   const [images, setImages] = useState([]); // Stores { url, fileName, size, isZip? }
   const [selectedPages, setSelectedPages] = useState("all");
   const [totalPages, setTotalPages] = useState(0);
@@ -159,6 +161,7 @@ export default function PdfToJpgPage() {
 
     setError("");
     setIsProcessing(true);
+    setProcessingMessage("Loading PDF document...");
     setImages([]); // Clear previous images
     setCurrentProgress(0);
     setCurrentConvertingPage(0);
@@ -189,6 +192,9 @@ export default function PdfToJpgPage() {
 
       for (let i = 0; i < pagesToConvert.length; i++) {
         const pageNumber = pagesToConvert[i];
+        setProcessingMessage(
+          `Rendering page ${pageNumber} of ${pagesToConvert.length}...`
+        );
         const page = await pdf.getPage(pageNumber);
         const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better image quality
 
@@ -232,6 +238,7 @@ export default function PdfToJpgPage() {
 
       // Add zip file to convertedImages if multiple pages were converted
       if (pagesToConvert.length > 1) {
+        setProcessingMessage("Compressing images into ZIP...");
         const zipBlob = await zip.generateAsync({
           type: "blob",
           compression: "DEFLATE",
@@ -246,6 +253,7 @@ export default function PdfToJpgPage() {
         });
       }
       setImages(convertedImages);
+      setProcessingMessage("Conversion complete!");
     } catch (err) {
       console.error("Conversion error:", err);
       setError(
@@ -258,6 +266,7 @@ export default function PdfToJpgPage() {
         setCurrentProgress(0);
         setCurrentConvertingPage(0);
         setTotalConvertingPages(0);
+        setProcessingMessage("");
       }, 1000);
     }
   };
@@ -349,8 +358,8 @@ export default function PdfToJpgPage() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-300">
-                    Converting page {currentConvertingPage} of{" "}
-                    {totalConvertingPages}
+                    {processingMessage ||
+                      `Converting page ${currentConvertingPage} of ${totalConvertingPages}`}
                   </span>
                   <span className="font-medium text-gray-100">
                     {currentProgress}%
@@ -466,29 +475,39 @@ export default function PdfToJpgPage() {
           )}
         </Card>
         <ToolPageContent
-          toolName="PDF to JPG"
-          toolDescription="Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file."
+          toolName="PDF to JPG Converter"
+          toolDescription="Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file. Our tool ensures excellent image quality while processing your files securely in your browser, keeping your documents private."
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Select the pages you want to convert.",
-            "Click the \"Convert to JPG\" button to start the conversion process.",
-            "Download your JPG images.",
+            "Choose which pages to convert: all pages, or a specific page number.",
+            "Click the 'Convert to JPG' button to start the conversion process.",
+            "Download your JPG images. If you converted multiple pages, they will be provided in a convenient ZIP archive.",
           ]}
           faqs={[
             {
               question: "Is it free to convert PDF to JPG?",
               answer:
-                "Yes, our tool is completely free to use. You can convert as many PDF files as you like without any hidden costs.",
+                "Yes, our PDF to JPG converter is completely free to use. You can convert as many PDF files as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when converting PDF to JPG?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All PDF to JPG conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
               question: "Can I convert multiple pages at once?",
               answer:
-                "Yes, you can convert all pages of a PDF to JPG at once. The images will be downloaded as a single ZIP file.",
+                "Yes, you can convert all pages of a PDF to JPG at once. If you choose this option, all individual JPG images will be bundled into a single ZIP file for easy download.",
+            },
+            {
+              question: "What quality are the output JPG images?",
+            answer:
+              "Our tool converts PDF pages to JPG images with high quality (90% compression) to balance file size and visual fidelity. This ensures your images look great without being excessively large.",
+            },
+            {
+              question: "Is there a file size limit for PDF to JPG conversion?",
+            answer:
+              "Yes, the maximum file size for a PDF to be converted to JPG is 50MB. For larger files, processing might be slower due to client-side operations.",
             },
           ]}
         />

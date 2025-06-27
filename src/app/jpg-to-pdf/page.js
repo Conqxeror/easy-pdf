@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // Assuming Progress is used for conversion feedback
 import ToolPageContent from "@/components/ui/ToolPageContent";
+import Loader from "@/components/ui/Loader";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -26,7 +27,8 @@ export default function JpgToPdfPage() {
   const [files, setFiles] = useState([]);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false); // Renamed from 'loading' for consistency
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState("");
   const [progress, setProgress] = useState(0); // Progress state for conversion
   const pdfPreviewCanvasRef = useRef(null); // Ref for the PDF preview canvas
   const [pdfDocProxy, setPdfDocProxy] = useState(null); // pdf.js document proxy for preview
@@ -55,7 +57,7 @@ export default function JpgToPdfPage() {
         // Clear canvas if no PDF or invalid proxy
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.height = 0; // Collapse canvas height
+        canvas.height = 0; // Collapse canvas if no PDF
       }
       return;
     }
@@ -123,6 +125,7 @@ export default function JpgToPdfPage() {
     }
 
     setIsProcessing(true);
+    setProcessingMessage("Creating new PDF document...");
     setError("");
     setPdfUrl(null); // Clear previous URL
     setProgress(0);
@@ -132,6 +135,7 @@ export default function JpgToPdfPage() {
 
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
+        setProcessingMessage(`Embedding image ${i + 1} of ${files.length}...`);
         const imgData = await file.arrayBuffer();
         let img;
         let dims;
@@ -160,6 +164,7 @@ export default function JpgToPdfPage() {
         setProgress(Math.round(((i + 1) / files.length) * 90)); // 90% for image processing
       }
 
+      setProcessingMessage("Saving PDF...");
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const newPdfUrl = URL.createObjectURL(blob);
@@ -171,6 +176,7 @@ export default function JpgToPdfPage() {
       setPdfDocProxy(pdf); // This will trigger renderPdfPreview via useEffect
 
       setProgress(100); // Final progress
+      setProcessingMessage("Conversion complete!");
     } catch (err) {
       console.error("Conversion error:", err);
       setError(
@@ -182,7 +188,10 @@ export default function JpgToPdfPage() {
     } finally {
       setIsProcessing(false);
       // Reset progress after a short delay
-      setTimeout(() => setProgress(0), 1000);
+      setTimeout(() => {
+        setProgress(0);
+        setProcessingMessage("");
+      }, 1000);
     }
   };
 
@@ -237,7 +246,7 @@ export default function JpgToPdfPage() {
                   className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
                 />
                 <p className="text-sm text-center text-gray-400">
-                  Converting images to PDF... {progress}%
+                  {processingMessage || `Converting images to PDF... ${progress}%`}
                 </p>
               </div>
             )}
@@ -290,29 +299,39 @@ export default function JpgToPdfPage() {
           )}
         </Card>
         <ToolPageContent
-          toolName="JPG to PDF"
-          toolDescription="Convert your JPG images to a single PDF file with our free online tool. You can also convert PNG images to PDF."
+          toolName="JPG to PDF Converter"
+          toolDescription="Convert your JPG and PNG images into a single, high-quality PDF document. Our free online tool allows you to combine multiple images, arrange their order, and create a professional-looking PDF. All processing is done securely in your browser, ensuring your files remain private."
           steps={[
-            "Upload your JPG or PNG images by dragging them into the dropzone or clicking to select files.",
-            "Rearrange the images in the desired order.",
-            "Click the \"Convert to PDF\" button to start the conversion process.",
-            "Download your new PDF file.",
+            "Upload your JPG or PNG images by dragging them into the dropzone or clicking to select files. You can select multiple images at once.",
+            "Once uploaded, you can review the list of selected images. The tool will combine them in the order they were uploaded.",
+            "Click the 'Convert to PDF' button to start the conversion process.",
+            "A preview of the generated PDF will appear. You can then download your new PDF file to your device.",
           ]}
           faqs={[
             {
               question: "Is it free to convert JPG to PDF?",
               answer:
-                "Yes, our tool is completely free to use. You can convert as many images as you like without any hidden costs.",
+                "Yes, our JPG to PDF converter is completely free to use. You can convert as many images as you need without any hidden costs or limitations.",
             },
             {
-              question: "Is my data secure?",
+              question: "Are my files secure when converting images to PDF?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Absolutely. Your privacy is our top priority. All image to PDF conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
             },
             {
               question: "Can I convert multiple images at once?",
               answer:
-                "Yes, you can upload multiple JPG and PNG images at once. They will be combined into a single PDF file.",
+                "Yes, you can upload multiple JPG and PNG images simultaneously. They will be combined into a single PDF document, with each image appearing on a new page.",
+            },
+            {
+              question: "Does the tool support PNG images as well?",
+              answer:
+                "Yes, in addition to JPG, our tool also fully supports converting PNG images to PDF. You can mix and match both formats in a single conversion.",
+            },
+            {
+              question: "Is there a file size limit for images?",
+              answer:
+                "While there's not a strict limit on the total number of images, individual image files should ideally be under 50MB for optimal performance during client-side processing.",
             },
           ]}
         />

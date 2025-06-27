@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Loader({ label = "Loading...", className = "" }) {
+export default function Loader({ label = "Loading...", message = "", className = "" }) {
   return (
     <div
       className={`flex flex-col items-center justify-center gap-2 ${className}`}
@@ -28,6 +28,7 @@ export default function Loader({ label = "Loading...", className = "" }) {
         />
       </svg>
       <span className="text-blue-500 text-sm">{label}</span>
+      {message && <p className="text-gray-400 text-xs mt-1">{message}</p>}
     </div>
   );
 }

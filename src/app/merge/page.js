@@ -428,28 +428,38 @@ export default function MergePDFs() {
         </Card>
         <ToolPageContent
           toolName="Merge PDFs"
-          toolDescription="Combine multiple PDF files into one with our free online tool. Drag and drop to reorder your files before merging."
+          toolDescription="Effortlessly combine multiple PDF files into a single, organized document with our easy-to-use PDF merger. Whether you're assembling a report, archiving documents, or preparing a presentation, our tool simplifies the process. Drag and drop your files, reorder them as needed, and merge them in seconds—all for free and right in your browser."
           steps={[
-            "Upload your PDF files by dragging them into the dropzone or clicking to select files.",
-            "Drag and drop the files to reorder them as needed.",
-            "Click the \"Merge PDFs\" button to combine your files into a single PDF.",
-            "Download your merged PDF file.",
+            "Upload your PDF files by dragging them into the dropzone or by clicking to select them from your device.",
+            "Once uploaded, you can see a list of your files. Drag and drop the files to arrange them in the desired order for the final document.",
+            "Click the 'Merge PDFs' button. Our tool will instantly combine all the uploaded files into a single PDF.",
+            "A preview of the merged PDF will appear. You can then download the final, merged PDF to your device.",
           ]}
           faqs={[
             {
-              question: "Is it free to merge PDF files?",
+              question: "How many PDF files can I merge at once?",
               answer:
-                "Yes, our tool is completely free to use. You can merge as many PDF files as you like without any hidden costs.",
+                "You can merge up to 20 PDF files in a single operation. For most users, this is more than enough for common tasks.",
             },
             {
-              question: "Is my data secure?",
+              question: "Is there a limit on the file size?",
               answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+                "Yes, each individual PDF file can be up to 50MB in size. The total size of all files combined should not exceed 200MB.",
+            },
+            {
+              question: "Will the quality of my PDFs be affected?",
+              answer:
+                "No, our tool merges your PDF files without compromising their quality. All original formatting, images, and text will be preserved.",
+            },
+            {
+              question: "Is it safe to merge my PDF files here?",
+              answer:
+                "Absolutely. We prioritize your privacy and security. All files are processed on your device (client-side), which means they are never uploaded to our servers. Your documents remain private to you.",
             },
             {
               question: "Can I reorder the files before merging?",
               answer:
-                "Yes, you can drag and drop the files to reorder them before merging. This allows you to control the order of the pages in the final PDF.",
+                "Yes, our tool includes a simple drag-and-drop interface that allows you to reorder the files into the exact sequence you need before you merge them.",
             },
           ]}
         />
