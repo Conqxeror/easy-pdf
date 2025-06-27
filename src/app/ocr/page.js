@@ -9,6 +9,7 @@ import Tesseract from "tesseract.js";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
+import Loader from "@/components/ui/Loader";
 import {
   Card,
   CardHeader,

@@ -9,6 +9,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 import {
   Card,
   CardHeader,
