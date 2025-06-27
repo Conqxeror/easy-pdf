@@ -8,6 +8,9 @@ export const metadata = {
     "medical record analysis",
     "patient data extraction",
   ],
+  alternates: {
+    canonical: "https://easy-pdf-murex.vercel.app/medical-analyzer",
+  },
 };
 
 export default function MedicalAnalyzerLayout({ children }) {
