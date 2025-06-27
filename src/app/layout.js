@@ -2,8 +2,6 @@ import ClientLayout from "./ClientLayout";
 import { generateMetadata } from "@/lib/metadata";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-
-
 export const metadata = generateMetadata({
   title: "easy-pdf - Free Online PDF Tools",
   description:
