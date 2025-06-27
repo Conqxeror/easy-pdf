@@ -96,7 +96,7 @@ export default function RootLayout({ children }) {
   return (
     <div className={`${inter.className} bg-gray-900 text-gray-100`}>
       <Navbar />
-      <main className="min-h-screen" aria-label="Main content">
+      <main className="min-h-screen pt-24" aria-label="Main content">
         {children}
       </main>
       <Footer />

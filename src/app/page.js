@@ -51,15 +51,15 @@ export const metadata = {
   alternates: {
     canonical: "https://easy-pdf-murex.vercel.app",
     languages: {
-      "en": "/en",
-      "hi": "/hi",
+      en: "/en",
+      hi: "/hi",
     },
   },
 };
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center min-h-[calc(100vh-80px)] pt-24 pb-8 px-4 sm:px-6 lg:px-8 bg-gray-900 text-gray-100">
+    <div className="flex flex-col items-center min-h-[calc(100vh-80px)] pb-8 px-4 sm:px-6 lg:px-8 bg-gray-900 text-gray-100">
       {/* Hero Section */}
       <section className="text-center mb-16 max-w-4xl animate-fade-in">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
