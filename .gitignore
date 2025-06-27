@@ -44,3 +44,5 @@ next-env.d.ts
 /repomix-output.md
 
 .continue/
+
+lighthouse-tool-page-result.json

@@ -1,18 +1,20 @@
 "use client";
-import { Metadata } from 'next';
+import { Metadata } from "next";
 import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
 import { Card } from "@/components/ui/card";
-import * as pdfjsLib from "pdfjs-dist";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
 import { Alert } from "@/components/ui/alert";
-import { FileHeart, Stethoscope, User, Calendar, FlaskConical } from "lucide-react";
+import {
+  FileHeart,
+  Stethoscope,
+  User,
+  Calendar,
+  FlaskConical,
+} from "lucide-react";
 import ToolPageContent from "@/components/ui/ToolPageContent";
-
-
 
 export default function MedicalAnalyzerPage() {
   const [file, setFile] = useState(null);
@@ -57,6 +59,14 @@ export default function MedicalAnalyzerPage() {
           setLoadingMessage("Extracting text from document...");
           await new Promise((resolve) => setTimeout(resolve, 500));
 
+          // Dynamically import pdfjs-dist only if the file is a PDF
+          if (file.type === "application/pdf") {
+            const pdfjsLib = await import("pdfjs-dist");
+            pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
+            // You might need to do something with the PDF here, e.g., extract text
+            // For now, just setting the workerSrc
+          }
+
           setLoadingMessage("Analyzing medical document with AI...");
           const res = await fetch("/api/medical-analyzer", {
             method: "POST",
@@ -68,14 +78,17 @@ export default function MedicalAnalyzerPage() {
           });
 
           if (!res.ok) {
-            let errorMsg = "Analysis failed. Server responded with an unexpected error.";
+            let errorMsg =
+              "Analysis failed. Server responded with an unexpected error.";
             try {
               const errorData = await res.json();
               errorMsg = errorData.error || errorMsg;
             } catch (jsonParseError) {
               try {
                 const rawText = await res.text();
-                errorMsg = `Analysis failed (Status: ${res.status} ${res.statusText}). Response: ${rawText.substring(0, 200)}...`;
+                errorMsg = `Analysis failed (Status: ${res.status} ${
+                  res.statusText
+                }). Response: ${rawText.substring(0, 200)}...`;
               } catch (textParseError) {
                 errorMsg = `Analysis failed (Status: ${res.status} ${res.statusText}). Could not read response.`;
               }
@@ -86,17 +99,27 @@ export default function MedicalAnalyzerPage() {
           const data = await res.json();
           setResult({
             summary: data.summary || "No summary provided.",
-            patientInfo: Array.isArray(data.patientInfo) ? data.patientInfo : [],
+            patientInfo: Array.isArray(data.patientInfo)
+              ? data.patientInfo
+              : [],
             diagnoses: Array.isArray(data.diagnoses) ? data.diagnoses : [],
-            medications: Array.isArray(data.medications) ? data.medications : [],
+            medications: Array.isArray(data.medications)
+              ? data.medications
+              : [],
             labResults: Array.isArray(data.labResults) ? data.labResults : [],
-            recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
+            recommendations: Array.isArray(data.recommendations)
+              ? data.recommendations
+              : [],
           });
         } catch (err) {
           console.error("Analysis processing error:", err);
           let userMessage = "Failed to analyze document. Please try again.";
-          if (err instanceof TypeError && err.message.includes("fetch failed")) {
-            userMessage = "Network error: Could not connect to the analysis service. Please check your internet connection.";
+          if (
+            err instanceof TypeError &&
+            err.message.includes("fetch failed")
+          ) {
+            userMessage =
+              "Network error: Could not connect to the analysis service. Please check your internet connection.";
           } else if (err.message) {
             userMessage = err.message;
           }
@@ -119,7 +142,9 @@ export default function MedicalAnalyzerPage() {
       console.error("Analysis initiation error:", err);
       setLoading(false);
       setLoadingMessage("");
-      setError(err.message || "Failed to start document analysis. Please try again.");
+      setError(
+        err.message || "Failed to start document analysis. Please try again."
+      );
     }
   };
 
@@ -134,7 +159,8 @@ export default function MedicalAnalyzerPage() {
             Upload your medical document (PDF, Word, or image). Our AI will
             extract key patient information, diagnoses, medications, and more.
             <b className="text-pink-300">
-              Your document content is sent to an external AI service for analysis and is not stored by easy-pdf.&apos;s.
+              Your document content is sent to an external AI service for
+              analysis and is not stored by easy-pdf.&apos;s.
             </b>
           </p>
           <FileDropzone
@@ -161,7 +187,12 @@ export default function MedicalAnalyzerPage() {
           )}
           {loading && (
             <div className="mt-8 text-center text-gray-400 flex items-center justify-center">
-              <Loader size="sm" color="gray" className="inline-block mr-2" message={loadingMessage || "Processing document..."} />
+              <Loader
+                size="sm"
+                color="gray"
+                className="inline-block mr-2"
+                message={loadingMessage || "Processing document..."}
+              />
             </div>
           )}
           <Button
@@ -184,14 +215,24 @@ export default function MedicalAnalyzerPage() {
               <h2 className="text-3xl font-bold mb-6 text-center text-red-400">
                 Analysis Report
               </h2>
-              <Alert className="mb-6 p-4 bg-yellow-900/20 text-yellow-300 border border-yellow-700 rounded-lg">
+              <Alert className="block mb-6 p-4 bg-yellow-900/20 text-yellow-300 border border-yellow-700 rounded-lg">
                 <p className="text-sm text-center">
-                  <strong>Important:</strong> This analysis is performed by an external AI service (OpenRouter). While your document is not stored by easy-pdf, its content is sent to this external service for processing. Please review OpenRouter&apos;s privacy policy for more details.
+                  <div className="font-semibold mb-2">
+                    <b>Important:</b>
+                  </div>
+                  <div>
+                    This analysis is performed by an external AI service
+                    (OpenRouter). While your document is not stored by easy-pdf,
+                    its content is sent to this external service for processing.
+                    Please review OpenRouter&apos;s privacy policy for more
+                    details.
+                  </div>
                 </p>
               </Alert>
               <div className="mb-6 border-b border-gray-700 pb-4">
                 <h3 className="text-red-300 block mb-2 text-lg items-center">
-                  <FileHeart className="w-6 h-6 inline-block mr-2 text-red-400" /> Summary:
+                  <FileHeart className="w-6 h-6 inline-block mr-2 text-red-400" />{" "}
+                  Summary:
                 </h3>
                 <p className="text-gray-300 whitespace-pre-line leading-relaxed">
                   {result.summary}
@@ -199,7 +240,8 @@ export default function MedicalAnalyzerPage() {
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
                 <h3 className="text-red-300 block mb-2 text-lg items-center">
-                  <User className="w-6 h-6 inline-block mr-2 text-red-400" /> Patient Information:
+                  <User className="w-6 h-6 inline-block mr-2 text-red-400" />{" "}
+                  Patient Information:
                 </h3>
                 {result.patientInfo && result.patientInfo.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
@@ -208,12 +250,15 @@ export default function MedicalAnalyzerPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">No patient information extracted.</p>
+                  <p className="text-gray-400 italic">
+                    No patient information extracted.
+                  </p>
                 )}
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
                 <h3 className="text-red-300 block mb-2 text-lg items-center">
-                  <Stethoscope className="w-6 h-6 inline-block mr-2 text-red-400" /> Diagnoses:
+                  <Stethoscope className="w-6 h-6 inline-block mr-2 text-red-400" />{" "}
+                  Diagnoses:
                 </h3>
                 {result.diagnoses && result.diagnoses.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
@@ -222,12 +267,15 @@ export default function MedicalAnalyzerPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">No diagnoses extracted.</p>
+                  <p className="text-gray-400 italic">
+                    No diagnoses extracted.
+                  </p>
                 )}
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
                 <h3 className="text-red-300 block mb-2 text-lg items-center">
-                  <FlaskConical className="w-6 h-6 inline-block mr-2 text-red-400" /> Lab Results:
+                  <FlaskConical className="w-6 h-6 inline-block mr-2 text-red-400" />{" "}
+                  Lab Results:
                 </h3>
                 {result.labResults && result.labResults.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
@@ -236,12 +284,15 @@ export default function MedicalAnalyzerPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">No lab results extracted.</p>
+                  <p className="text-gray-400 italic">
+                    No lab results extracted.
+                  </p>
                 )}
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
                 <h3 className="text-red-300 block mb-2 text-lg items-center">
-                  <Calendar className="w-6 h-6 inline-block mr-2 text-red-400" /> Medications:
+                  <Calendar className="w-6 h-6 inline-block mr-2 text-red-400" />{" "}
+                  Medications:
                 </h3>
                 {result.medications && result.medications.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
@@ -250,12 +301,15 @@ export default function MedicalAnalyzerPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">No medications extracted.</p>
+                  <p className="text-gray-400 italic">
+                    No medications extracted.
+                  </p>
                 )}
               </div>
               <div className="mb-6">
                 <h3 className="text-red-300 block mb-2 text-lg items-center">
-                  <Stethoscope className="w-6 h-6 inline-block mr-2 text-red-400" /> Recommendations:
+                  <Stethoscope className="w-6 h-6 inline-block mr-2 text-red-400" />{" "}
+                  Recommendations:
                 </h3>
                 {result.recommendations && result.recommendations.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
@@ -264,7 +318,9 @@ export default function MedicalAnalyzerPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">No recommendations provided.</p>
+                  <p className="text-gray-400 italic">
+                    No recommendations provided.
+                  </p>
                 )}
               </div>
               <Button
@@ -274,7 +330,19 @@ export default function MedicalAnalyzerPage() {
                 onClick={() => {
                   const blob = new Blob(
                     [
-                      `Summary:\n${result.summary}\n\nPatient Information:\n${result.patientInfo?.join("\n")}\n\nDiagnoses:\n${result.diagnoses?.join("\n")}\n\nMedications:\n${result.medications?.join("\n")}\n\nLab Results:\n${result.labResults?.join("\n")}\n\nRecommendations:\n${result.recommendations?.join("\n")}`,
+                      `Summary:\n${
+                        result.summary
+                      }\n\nPatient Information:\n${result.patientInfo?.join(
+                        "\n"
+                      )}\n\nDiagnoses:\n${result.diagnoses?.join(
+                        "\n"
+                      )}\n\nMedications:\n${result.medications?.join(
+                        "\n"
+                      )}\n\nLab Results:\n${result.labResults?.join(
+                        "\n"
+                      )}\n\nRecommendations:\n${result.recommendations?.join(
+                        "\n"
+                      )}`,
                     ],
                     { type: "text/plain" }
                   );
@@ -296,8 +364,8 @@ export default function MedicalAnalyzerPage() {
             <div>
               This tool uses AI (OpenRouter) to assist with medical document
               analysis. Results are for informational purposes only and do not
-              constitute medical advice. Your documents are processed securely and
-              never stored.
+              constitute medical advice. Your documents are processed securely
+              and never stored.
             </div>
           </Alert>
         </div>
@@ -312,7 +380,8 @@ export default function MedicalAnalyzerPage() {
           ]}
           faqs={[
             {
-              question: "Is this tool a substitute for professional medical advice?",
+              question:
+                "Is this tool a substitute for professional medical advice?",
               answer:
                 "No, this AI Medical Document Analyzer is for informational purposes only and should not be considered a substitute for professional medical advice. Always consult with a qualified medical professional for specific medical guidance.",
             },
