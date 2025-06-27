@@ -170,38 +170,7 @@ export default function AboutPage() {
           </section>
         </div>
       </div>
-      <ToolPageContent
-        toolName="About easy-pdf"
-        toolDescription="Learn more about easy-pdf, your privacy-first online PDF toolkit. We offer a suite of client-side PDF tools that ensure your documents never leave your device."
-        steps={[
-          "Explore our range of PDF tools from the homepage.",
-          "Upload your PDF files directly in your browser.",
-          "Process your documents with complete privacy and security.",
-          "Download your processed PDFs instantly.",
-        ]}
-        faqs={[
-          {
-            question: "What does 'client-side' processing mean?",
-            answer:
-              "Client-side processing means all operations on your PDF files happen directly in your web browser. Your documents are never uploaded to our servers, ensuring maximum privacy and security.",
-          },
-          {
-            question: "Is easy-pdf free to use?",
-            answer:
-              "Yes, easy-pdf offers a comprehensive suite of PDF tools that are completely free to use, with no hidden costs or subscriptions.",
-          },
-          {
-            question: "Do you store my documents?",
-            answer:
-              "No, we do not store your documents. Your files are processed in real-time in your browser and are deleted from memory once the operation is complete or you close the tab.",
-          },
-          {
-            question: "Can I use easy-pdf offline?",
-            answer:
-              "Once the easy-pdf website is loaded, many of our tools can be used offline, providing convenience and reliability even without an internet connection.",
-          },
-        ]}
-      />
+      
     </>
   );
 }
