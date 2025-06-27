@@ -1,4 +1,4 @@
-import { FileText, Merge, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, FileCode, FileType, Search } from "lucide-react";
+import { FileText, Merge, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, FileCode, FileType, Search, FileHeart } from "lucide-react";
 
 export const toolsData = [
   {
@@ -139,6 +139,13 @@ export const toolsData = [
     title: "Legal Document Analyzer",
     description: "AI-powered tool for legal document review and clause extraction.",
     icon: <FileText className="w-8 h-8 text-fuchsia-500" />,
+    comingSoon: false,
+  },
+  {
+    href: "/medical-analyzer",
+    title: "Medical Document Analyzer",
+    description: "AI-powered tool for medical document review and key information extraction.",
+    icon: <FileHeart className="w-8 h-8 text-red-500" />,
     comingSoon: false,
   },
 ];

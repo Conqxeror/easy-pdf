@@ -148,6 +148,11 @@ export const toolCategories = [
         href: "/legal-analyzer",
         icon: <FileText className="w-4 h-4" />,
       },
+      {
+        name: "Medical Document Analyzer",
+        href: "/medical-analyzer",
+        icon: <FileBadge className="w-4 h-4" />,
+      },
     ],
   },
 ];

@@ -7,7 +7,7 @@ export const generateMetadata = ({ title, description, keywords, canonicalUrl })
     applicationName: "easy-pdf",
     generator: "Next.js",
     referrer: "origin-when-cross-origin",
-    colorScheme: "dark",
+    
     creator: "Wali Mohammad Kadri",
     publisher: "Wali Mohammad Kadri",
     category: "DocumentEditor",

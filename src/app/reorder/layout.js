@@ -17,6 +17,8 @@ export const metadata = generateMetadata({
   canonicalUrl: "https://easy-pdf-murex.vercel.app/reorder",
 });
 
+export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+
 export default function ReorderLayout({ children }) {
   return children;
 }

@@ -3,6 +3,11 @@ import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Tesseract from "tesseract.js";
 import * as pdfjsLib from "pdfjs-dist";
+
+// Configure pdfjs-dist worker for Node.js environment
+if (typeof window === 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
+}
 import Link from "next/link";
 import { toolsData } from "./toolData";
 

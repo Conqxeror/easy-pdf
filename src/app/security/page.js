@@ -1,5 +1,4 @@
-import { Metadata } from 'next';
-import { Metadata } from 'next';
+
 
 export const metadata = {
   title: "Security & Privacy Policy - easy-pdf",

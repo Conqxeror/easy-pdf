@@ -25,7 +25,8 @@ const footerLinks = [
       { name: "PDF Form Filler", href: "/form-filler" },
       { name: "Word to PDF", href: "/word-to-pdf" },
       { name: "PDF to Word", href: "/pdf-to-word" },
-      { name: "Legal Document Analyzer", href: "/legal-analyzer" }, // New link added here
+      { name: "Legal Document Analyzer", href: "/legal-analyzer" },
+      { name: "Medical Document Analyzer", href: "/medical-analyzer" },
     ],
   },
   {

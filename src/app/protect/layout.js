@@ -18,6 +18,8 @@ export const metadata = generateMetadata({
   canonicalUrl: "https://easy-pdf-murex.vercel.app/protect",
 });
 
+export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+
 export default function ProtectLayout({ children }) {
   return children;
 }

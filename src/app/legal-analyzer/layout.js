@@ -16,7 +16,7 @@ export const metadata = {
   applicationName: "easy-pdf",
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
-  colorScheme: "dark",
+  
   creator: "Wali Mohammad Kadri",
   publisher: "Wali Mohammad Kadri",
   category: "DocumentEditor",
@@ -55,6 +55,8 @@ export const metadata = {
   },
   manifest: "/site.webmanifest",
 };
+
+export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
 
 export default function LegalAnalyzerLayout({ children }) {
   return children;

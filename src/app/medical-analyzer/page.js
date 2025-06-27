@@ -1,83 +1,33 @@
 "use client";
-
 import { Metadata } from 'next';
-// src/app/legal-analyzer/page.js
-
 import React, { useState, useCallback } from "react";
-
-
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
 import { Card } from "@/components/ui/card";
+import * as pdfjsLib from "pdfjs-dist";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
 import { Alert } from "@/components/ui/alert";
-// Import lucide-react icons
-import {
-  FileText,
-  Users,
-  ScrollText,
-  ShieldAlert,
-  Lightbulb,
-} from "lucide-react";
+import { FileHeart, Stethoscope, User, Calendar, FlaskConical } from "lucide-react";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
-const LEGAL_CLAUSES = [
-  "Indemnity",
-  "Termination",
-  "Confidentiality",
-  "Jurisdiction",
-  "Force Majeure",
-  "Arbitration",
-  "Governing Law",
-  "Limitation of Liability",
-  "Non-Compete",
-  "Severability",
-];
 
-export default function LegalAnalyzerPage() {
+
+export default function MedicalAnalyzerPage() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState(""); // New state for detailed loading message
+  const [loadingMessage, setLoadingMessage] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
   const handleFile = useCallback((f) => {
     const selectedFile = f && f.length > 0 ? f[0] : null;
     setFile(selectedFile);
-    setResult(null); // Clear previous results
-    setError(""); // Clear error when a new file is dropped
-    setLoadingMessage(""); // Clear loading message
+    setResult(null);
+    setError("");
+    setLoadingMessage("");
   }, []);
-
-  // Helper to determine risk text color
-  const getRiskColorClass = (riskText) => {
-    // Ensure riskText is a string before calling toLowerCase()
-    const textToAnalyze = String(riskText || ""); // Convert to string, default to empty string if null/undefined
-    const lowerCaseRisk = textToAnalyze.toLowerCase();
-    if (
-      lowerCaseRisk.includes("high risk") ||
-      lowerCaseRisk.includes("significant risk") ||
-      lowerCaseRisk.includes("unfavorable") ||
-      lowerCaseRisk.includes("major concern")
-    ) {
-      return "text-red-400";
-    }
-    if (
-      lowerCaseRisk.includes("moderate risk") ||
-      lowerCaseRisk.includes("medium risk") ||
-      lowerCaseRisk.includes("potential concern")
-    ) {
-      return "text-orange-400";
-    }
-    if (
-      lowerCaseRisk.includes("low risk") ||
-      lowerCaseRisk.includes("minimal risk") ||
-      lowerCaseRisk.includes("favorable")
-    ) {
-      return "text-green-400";
-    }
-    return "text-gray-300"; // Default color
-  };
 
   const analyzeDocument = async () => {
     if (!file) {
@@ -87,8 +37,8 @@ export default function LegalAnalyzerPage() {
 
     setLoading(true);
     setLoadingMessage("Uploading document...");
-    setError(""); // Clear previous errors before starting analysis
-    setResult(null); // Clear previous results before starting analysis
+    setError("");
+    setResult(null);
 
     try {
       const reader = new FileReader();
@@ -105,32 +55,27 @@ export default function LegalAnalyzerPage() {
           }
 
           setLoadingMessage("Extracting text from document...");
-          // Simulate a small delay for visual feedback, not strictly necessary for functionality
           await new Promise((resolve) => setTimeout(resolve, 500));
 
-          setLoadingMessage("Analyzing document with AI...");
-          const res = await fetch("/api/legal-analyzer", {
+          setLoadingMessage("Analyzing medical document with AI...");
+          const res = await fetch("/api/medical-analyzer", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               file: base64,
               name: file.name,
-              legalClauses: LEGAL_CLAUSES,
             }),
           });
 
           if (!res.ok) {
-            let errorMsg =
-              "Analysis failed. Server responded with an unexpected error.";
+            let errorMsg = "Analysis failed. Server responded with an unexpected error.";
             try {
               const errorData = await res.json();
               errorMsg = errorData.error || errorMsg;
             } catch (jsonParseError) {
               try {
                 const rawText = await res.text();
-                errorMsg = `Analysis failed (Status: ${res.status} ${
-                  res.statusText
-                }). Response: ${rawText.substring(0, 200)}...`;
+                errorMsg = `Analysis failed (Status: ${res.status} ${res.statusText}). Response: ${rawText.substring(0, 200)}...`;
               } catch (textParseError) {
                 errorMsg = `Analysis failed (Status: ${res.status} ${res.statusText}). Could not read response.`;
               }
@@ -139,33 +84,26 @@ export default function LegalAnalyzerPage() {
           }
 
           const data = await res.json();
-          // Ensure arrays are indeed arrays, even if LLM provides empty or non-array values
           setResult({
             summary: data.summary || "No summary provided.",
-            entities: Array.isArray(data.entities) ? data.entities : [],
-            clauses: Array.isArray(data.clauses) ? data.clauses : [],
-            risk: data.risk || "No risk assessment provided.",
-            suggestions: Array.isArray(data.suggestions)
-              ? data.suggestions
-              : [],
+            patientInfo: Array.isArray(data.patientInfo) ? data.patientInfo : [],
+            diagnoses: Array.isArray(data.diagnoses) ? data.diagnoses : [],
+            medications: Array.isArray(data.medications) ? data.medications : [],
+            labResults: Array.isArray(data.labResults) ? data.labResults : [],
+            recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
           });
         } catch (err) {
           console.error("Analysis processing error:", err);
           let userMessage = "Failed to analyze document. Please try again.";
-
-          if (
-            err instanceof TypeError &&
-            err.message.includes("fetch failed")
-          ) {
-            userMessage =
-              "Network error: Could not connect to the analysis service. Please check your internet connection.";
+          if (err instanceof TypeError && err.message.includes("fetch failed")) {
+            userMessage = "Network error: Could not connect to the analysis service. Please check your internet connection.";
           } else if (err.message) {
             userMessage = err.message;
           }
           setError(userMessage);
         } finally {
           setLoading(false);
-          setLoadingMessage(""); // Clear loading message on completion or error
+          setLoadingMessage("");
         }
       };
 
@@ -181,9 +119,7 @@ export default function LegalAnalyzerPage() {
       console.error("Analysis initiation error:", err);
       setLoading(false);
       setLoadingMessage("");
-      setError(
-        err.message || "Failed to start document analysis. Please try again."
-      );
+      setError(err.message || "Failed to start document analysis. Please try again.");
     }
   };
 
@@ -191,23 +127,22 @@ export default function LegalAnalyzerPage() {
     <>
       <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
         <div className="max-w-2xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-            AI Legal Document Analyzer
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500">
+            Medical Document AI Analyzer
           </h1>
           <p className="mb-8 text-lg text-gray-300 text-center">
-            Upload your legal document (PDF, Word, or image). Our AI will
-            extract key points, highlight important clauses, assess risk, and
-            generate a summary report.{" "}
-            <b className="text-blue-300">
-              Your document content is sent to an external AI service for analysis and is not stored by easy-pdf.&apos;s
+            Upload your medical document (PDF, Word, or image). Our AI will
+            extract key patient information, diagnoses, medications, and more.
+            <b className="text-pink-300">
+              Your document content is sent to an external AI service for analysis and is not stored by easy-pdf.&apos;s.
             </b>
           </p>
           <FileDropzone
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             onFiles={handleFile}
             setError={setError}
-            aria-label="Upload legal document"
-            isLoading={loading} // Pass loading state to FileDropzone
+            aria-label="Upload medical document"
+            isLoading={loading}
           />
           {file && (
             <div className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md shadow-md border border-gray-700">
@@ -225,15 +160,14 @@ export default function LegalAnalyzerPage() {
             </div>
           )}
           {loading && (
-            // Changed <p> to <div> to resolve hydration error as <Loader> renders a <div>
             <div className="mt-8 text-center text-gray-400 flex items-center justify-center">
               <Loader size="sm" color="gray" className="inline-block mr-2" message={loadingMessage || "Processing document..."} />
             </div>
           )}
           <Button
             className="mt-3 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                       bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
-                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900"
+                       bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
+                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
             onClick={analyzeDocument}
             disabled={!file || loading}
             aria-label="Analyze Document"
@@ -247,7 +181,7 @@ export default function LegalAnalyzerPage() {
           )}
           {result && (
             <Card className="mt-10 p-8 bg-gray-800 text-gray-200 rounded-lg shadow-xl border border-gray-700">
-              <h2 className="text-3xl font-bold mb-4 text-center text-blue-400">
+              <h2 className="text-3xl font-bold mb-6 text-center text-red-400">
                 Analysis Report
               </h2>
               <Alert className="mb-6 p-4 bg-yellow-900/20 text-yellow-300 border border-yellow-700 rounded-lg">
@@ -256,76 +190,81 @@ export default function LegalAnalyzerPage() {
                 </p>
               </Alert>
               <div className="mb-6 border-b border-gray-700 pb-4">
-                <h3 className="text-blue-300 block mb-2 text-lg items-center">
-                  <FileText className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
-                  Summary:
+                <h3 className="text-red-300 block mb-2 text-lg items-center">
+                  <FileHeart className="w-6 h-6 inline-block mr-2 text-red-400" /> Summary:
                 </h3>
                 <p className="text-gray-300 whitespace-pre-line leading-relaxed">
                   {result.summary}
                 </p>
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
-                <h3 className="text-blue-300 block mb-2 text-lg items-center">
-                  <Users className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
-                  Key Entities:
+                <h3 className="text-red-300 block mb-2 text-lg items-center">
+                  <User className="w-6 h-6 inline-block mr-2 text-red-400" /> Patient Information:
                 </h3>
-                {result.entities && result.entities.length > 0 ? (
+                {result.patientInfo && result.patientInfo.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
-                    {result.entities.map((e, i) => (
-                      <li key={i}>{e}</li>
+                    {result.patientInfo.map((info, i) => (
+                      <li key={i}>{info}</li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">
-                    No key entities detected.
-                  </p>
+                  <p className="text-gray-400 italic">No patient information extracted.</p>
                 )}
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
-                <h3 className="text-blue-300 block mb-2 text-lg items-center">
-                  <ScrollText className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
-                  Detected Clauses:
+                <h3 className="text-red-300 block mb-2 text-lg items-center">
+                  <Stethoscope className="w-6 h-6 inline-block mr-2 text-red-400" /> Diagnoses:
                 </h3>
-                {result.clauses && result.clauses.length > 0 ? (
+                {result.diagnoses && result.diagnoses.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
-                    {result.clauses.map((c, i) => (
-                      <li key={i}>{c}</li>
+                    {result.diagnoses.map((diag, i) => (
+                      <li key={i}>{diag}</li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">
-                    No specific clauses detected or mentioned.
-                  </p>
+                  <p className="text-gray-400 italic">No diagnoses extracted.</p>
                 )}
               </div>
               <div className="mb-6 border-b border-gray-700 pb-4">
-                <h3 className="text-blue-300 block mb-2 text-lg items-center">
-                  <ShieldAlert className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
-                  Risk Assessment:
+                <h3 className="text-red-300 block mb-2 text-lg items-center">
+                  <FlaskConical className="w-6 h-6 inline-block mr-2 text-red-400" /> Lab Results:
                 </h3>
-                <p
-                  className={`${getRiskColorClass(
-                    result.risk
-                  )} whitespace-pre-line leading-relaxed`}
-                >
-                  {result.risk}
-                </p>
+                {result.labResults && result.labResults.length > 0 ? (
+                  <ul className="list-disc ml-6 text-gray-300 space-y-1">
+                    {result.labResults.map((lab, i) => (
+                      <li key={i}>{lab}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-400 italic">No lab results extracted.</p>
+                )}
+              </div>
+              <div className="mb-6 border-b border-gray-700 pb-4">
+                <h3 className="text-red-300 block mb-2 text-lg items-center">
+                  <Calendar className="w-6 h-6 inline-block mr-2 text-red-400" /> Medications:
+                </h3>
+                {result.medications && result.medications.length > 0 ? (
+                  <ul className="list-disc ml-6 text-gray-300 space-y-1">
+                    {result.medications.map((med, i) => (
+                      <li key={i}>{med}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-400 italic">No medications extracted.</p>
+                )}
               </div>
               <div className="mb-6">
-                <h3 className="text-blue-300 block mb-2 text-lg items-center">
-                  <Lightbulb className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
-                  Suggestions:
+                <h3 className="text-red-300 block mb-2 text-lg items-center">
+                  <Stethoscope className="w-6 h-6 inline-block mr-2 text-red-400" /> Recommendations:
                 </h3>
-                {result.suggestions && result.suggestions.length > 0 ? (
+                {result.recommendations && result.recommendations.length > 0 ? (
                   <ul className="list-disc ml-6 text-gray-300 space-y-1">
-                    {result.suggestions.map((s, i) => (
-                      <li key={i}>{s}</li>
+                    {result.recommendations.map((rec, i) => (
+                      <li key={i}>{rec}</li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 italic">
-                    No specific suggestions provided.
-                  </p>
+                  <p className="text-gray-400 italic">No recommendations provided.</p>
                 )}
               </div>
               <Button
@@ -335,22 +274,14 @@ export default function LegalAnalyzerPage() {
                 onClick={() => {
                   const blob = new Blob(
                     [
-                      `Summary:\n${
-                        result.summary
-                      }\n\nKey Entities:\n${result.entities?.join(
-                        ", "
-                      )}\n\nDetected Clauses:\n${result.clauses?.join(
-                        ", "
-                      )}\n\nRisk Assessment:\n${
-                        result.risk
-                      }\n\nSuggestions:\n${result.suggestions?.join("\n")}`,
+                      `Summary:\n${result.summary}\n\nPatient Information:\n${result.patientInfo?.join("\n")}\n\nDiagnoses:\n${result.diagnoses?.join("\n")}\n\nMedications:\n${result.medications?.join("\n")}\n\nLab Results:\n${result.labResults?.join("\n")}\n\nRecommendations:\n${result.recommendations?.join("\n")}`,
                     ],
                     { type: "text/plain" }
                   );
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement("a");
                   a.href = url;
-                  a.download = `legal-analysis-${file.name}.txt`;
+                  a.download = `medical-analysis-${file.name}.txt`;
                   a.click();
                   URL.revokeObjectURL(url);
                 }}
@@ -363,27 +294,27 @@ export default function LegalAnalyzerPage() {
           <Alert className="block mt-10 p-6 bg-gray-800/70 text-gray-400 rounded-lg border border-gray-700 italic text-sm text-center">
             <b className="text-gray-200 mb-2 not-italic">Disclaimer:</b>
             <div>
-              This tool uses AI (OpenRouter) to assist with legal document
+              This tool uses AI (OpenRouter) to assist with medical document
               analysis. Results are for informational purposes only and do not
-              constitute legal advice. Your documents are processed securely and
+              constitute medical advice. Your documents are processed securely and
               never stored.
             </div>
           </Alert>
         </div>
         <ToolPageContent
-          toolName="AI Legal Document Analyzer"
-          toolDescription="Leverage the power of AI to quickly analyze your legal documents. Our tool provides a concise summary, identifies key entities and clauses, assesses potential risks, and offers actionable suggestions. Ideal for contracts, agreements, and other legal texts, this tool helps you understand complex documents faster and more efficiently. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
+          toolName="Medical Document AI Analyzer"
+          toolDescription="Leverage the power of AI to quickly analyze your medical documents. Our tool provides a concise summary, identifies key patient information, diagnoses, medications, lab results, and offers recommendations. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
           steps={[
-            "Upload your legal document (PDF, Word, or image format) using the drag-and-drop zone or by clicking to select a file.",
+            "Upload your medical document (PDF, Word, or image format) using the drag-and-drop zone or by clicking to select a file.",
             "Click the 'Analyze Document' button. Our AI will process the content to extract relevant information.",
-            "Review the comprehensive analysis report, which includes a summary, key entities, detected clauses, a risk assessment, and practical suggestions.",
+            "Review the comprehensive analysis report, which includes a summary, patient information, diagnoses, medications, lab results, and recommendations.",
             "Optionally, download the full analysis report as a text file for your records.",
           ]}
           faqs={[
             {
-              question: "Is this tool a substitute for professional legal advice?",
+              question: "Is this tool a substitute for professional medical advice?",
               answer:
-                "No, this AI Legal Document Analyzer is for informational purposes only and should not be considered a substitute for professional legal advice. Always consult with a qualified legal professional for specific legal guidance.",
+                "No, this AI Medical Document Analyzer is for informational purposes only and should not be considered a substitute for professional medical advice. Always consult with a qualified medical professional for specific medical guidance.",
             },
             {
               question: "How secure are my documents during analysis?",
@@ -391,14 +322,14 @@ export default function LegalAnalyzerPage() {
                 "Your privacy and data security are our top priorities. All document processing and AI analysis are performed securely, and your documents are never stored on our servers. They are processed in a temporary, isolated environment.",
             },
             {
-              question: "What types of legal documents can I analyze?",
+              question: "What types of medical documents can I analyze?",
               answer:
-                "You can analyze a wide range of legal documents, including contracts, agreements, terms of service, policies, and more. The tool supports PDF, Microsoft Word (.doc, .docx), and common image formats (JPG, PNG).",
+                "You can analyze a wide range of medical documents, including patient records, lab results, prescriptions, and more. The tool supports PDF, Microsoft Word (.doc, .docx), and common image formats (JPG, PNG).",
             },
             {
               question: "What kind of insights does the AI provide?",
               answer:
-                "The AI provides a concise summary of the document, identifies key entities (like parties, dates, and amounts), lists detected legal clauses, offers a risk assessment (e.g., low, moderate, high), and provides actionable suggestions based on its analysis.",
+                "The AI provides a concise summary of the document, identifies key patient information (like name, age, gender), lists diagnoses, medications, lab results, and provides recommendations based on its analysis.",
             },
             {
               question: "Is there a limit to the document size or length?",

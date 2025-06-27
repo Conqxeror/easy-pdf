@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
+import { Lock, Cloud, Code, ArrowRight } from "lucide-react";
 import ToolCard from "@/components/ui/ToolCard";
 import { toolsData } from "@/lib/toolData";
 
@@ -58,14 +59,14 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <div className="flex flex-col items-center min-h-[calc(100vh-80px)] py-8 px-4 sm:px-6 lg:px-8 bg-gray-900 text-gray-100">
+    <div className="flex flex-col items-center min-h-[calc(100vh-80px)] pt-24 pb-8 px-4 sm:px-6 lg:px-8 bg-gray-900 text-gray-100">
       {/* Hero Section */}
       <section className="text-center mb-16 max-w-4xl animate-fade-in">
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
           <span className="bg-gradient-to-r from-blue-400 to-teal-500 bg-clip-text text-transparent">
             Privacy-First
           </span>{" "}
-          PDF Tools for India
+          PDF Tools
         </h1>
         <p className="text-lg sm:text-xl text-gray-300 mb-8">
           All processing happens in your browser. No file uploads, no privacy
@@ -78,19 +79,7 @@ export default function Home() {
             aria-label="Get started with Merge PDF"
           >
             Get Started Now
-            <svg
-              className="ml-2 -mr-1 h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <ArrowRight className="ml-2 -mr-1 h-5 w-5" />
           </Link>
           <Link
             href="#tools"
@@ -107,21 +96,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
-              <svg
-                className="w-6 h-6 text-blue-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
+              <Lock className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="text-xl font-semibold mb-2">100% Client-Side</h3>
             <p className="text-gray-400">
@@ -131,21 +106,7 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
-              <svg
-                className="w-6 h-6 text-blue-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
-                />
-              </svg>
+              <Cloud className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="text-xl font-semibold mb-2">India-Optimized</h3>
             <p className="text-gray-400">
@@ -155,21 +116,7 @@ export default function Home() {
           </div>
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
-              <svg
-                className="w-6 h-6 text-blue-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"
-                />
-              </svg>
+              <Code className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="text-xl font-semibold mb-2">Open Source</h3>
             <p className="text-gray-400">
