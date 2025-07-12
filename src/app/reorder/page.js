@@ -361,6 +361,7 @@ export default function ReorderPage() {
       <ToolPageContent
         toolName="Reorder PDF Pages"
         toolDescription="Easily rearrange the pages of your PDF document with our intuitive drag-and-drop interface. Organize your content exactly how you need it, whether you're preparing a report, presentation, or simply tidying up a document. All processing is done securely in your browser, ensuring your files remain private."
+        currentTool="reorder"
         steps={[
           "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
           "Once your PDF is loaded, you will see thumbnails of all its pages. Drag and drop the page thumbnails to change their order.",

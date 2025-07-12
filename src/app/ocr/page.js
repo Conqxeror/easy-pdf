@@ -572,6 +572,7 @@ export default function OcrPage() {
         <ToolPageContent
           toolName="OCR (Text Recognition)"
           toolDescription="Extract readable and editable text from your scanned PDF documents and image files with our free online OCR tool. Convert your non-searchable PDFs into searchable and selectable text, making it easy to copy, edit, and reuse content from scanned documents. All processing is done securely in your browser, ensuring your files remain private."
+          currentTool="ocr"
           steps={[
             "Upload your PDF or image file by dragging it into the dropzone or clicking to select a file.",
             "Choose the scope of OCR: all pages, a single page, or a specific page range (for PDFs).",

@@ -20,6 +20,7 @@ export default function WordToPdfPage() {
       <ToolPageContent
         toolName="Word to PDF Converter (Coming Soon)"
         toolDescription="Converting Word documents to PDF is a complex task that often requires server-side processing to ensure perfect fidelity. As a privacy-first tool, we are committed to client-side processing, meaning your files never leave your device. We are actively exploring secure, client-side solutions for this feature. In the meantime, you can use our other powerful PDF tools."
+        currentTool="word-to-pdf"
         steps={[
           "Currently, direct client-side Word to PDF conversion is not available due to its complexity and our commitment to privacy (no server uploads).",
           "For now, you can convert your Word document to PDF using your word processor (e.g., Microsoft Word, Google Docs) and then use our other tools for further PDF manipulation.",

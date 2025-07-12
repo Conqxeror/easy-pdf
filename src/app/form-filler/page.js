@@ -573,6 +573,7 @@ export default function FormFillerPage() {
         <ToolPageContent
           toolName="PDF Form Filler"
           toolDescription="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document. Our intuitive tool allows you to easily add text, select font size and color, and precisely position your input on any page. All processing is done securely in your browser, ensuring your sensitive information remains private."
+          currentTool="form-filler"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
             "Enter the text you wish to add in the 'Text to Add' field.",

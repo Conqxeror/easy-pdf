@@ -20,6 +20,7 @@ export default function PdfToWordPage() {
       <ToolPageContent
         toolName="PDF to Word Converter (Coming Soon)"
         toolDescription="Converting PDF documents to editable Word files is a complex task that often requires server-side processing to ensure perfect fidelity, especially with complex layouts and fonts. As a privacy-first tool, we are committed to client-side processing, meaning your files never leave your device. We are actively exploring secure, client-side solutions for this feature. In the meantime, you can use our other powerful PDF tools."
+        currentTool="pdf-to-word"
         steps={[
           "Currently, direct client-side PDF to Word conversion is not available due to its complexity and our commitment to privacy (no server uploads).",
           "For now, you can use other online or desktop converters for PDF to Word conversion, and then use our other tools for further PDF manipulation.",

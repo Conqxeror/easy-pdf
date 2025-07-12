@@ -742,6 +742,7 @@ export default function SignPage() {
       <ToolPageContent
         toolName="Sign / Annotate PDF"
         toolDescription="Easily sign your PDF documents or add custom annotations directly in your browser. Draw your signature using your mouse or trackpad, then place it precisely on any page of your PDF. Our tool offers a secure and private way to sign documents, as all processing happens client-side, ensuring your sensitive information never leaves your device."
+        currentTool="sign"
         steps={[
           "Upload the PDF file you wish to sign or annotate by dragging it into the dropzone or clicking to select.",
           "In the signature drawing area, use your mouse or trackpad to draw your signature or any annotation. You can adjust the pen color and stroke width.",
