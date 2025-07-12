@@ -9,13 +9,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -363,217 +357,213 @@ export default function FormFillerPage() {
 
   return (
     <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              PDF Form Filler
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Add text anywhere on your PDF documents. Upload, specify text,
-              position, and style for quick form filling.
-            </CardDescription>
-          </CardHeader>
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+        <div className="max-w-4xl w-full">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            PDF Form Filler
+          </h1>
+          <p className="mb-8 text-lg text-gray-300 text-center">
+            Add text anywhere on your PDF documents. Upload, specify text,
+            position, and style for quick form filling.
+          </p>
+          
+          <FileDropzone
+            accept="application/pdf"
+            multiple={false}
+            onFiles={handleFiles}
+            error={error}
+            setError={setError}
+            label="Upload PDF"
+            description="Drag & drop or click to select a PDF file (Max 50MB)"
+            maxSize={50 * 1024 * 1024}
+            isLoading={isProcessing}
+          />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Upload PDF"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing}
-            />
-
-            {files.length > 0 && numPages > 0 && (
-              <form
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleFormFill();
-                }}
-                aria-label="Form Filler Controls"
-              >
-                <div className="space-y-4">
-                  <div>
-                    <Label
-                      htmlFor="textToAdd"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Text to Add
-                    </Label>
-                    <Input
-                      id="textToAdd"
-                      type="text"
-                      value={text}
-                      onChange={(e) => setText(e.target.value)}
-                      placeholder="Enter text to add to PDF"
-                      aria-label="Text to add"
-                      required
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="pageSelect"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Page
-                    </Label>
-                    <Select
-                      value={String(pageIdx)}
-                      onValueChange={(value) => setPageIdx(Number(value))}
-                      disabled={numPages === 0}
-                    >
-                      <SelectTrigger
-                        id="pageSelect"
-                        className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                      >
-                        <SelectValue placeholder="Select a page" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-700 text-gray-100 border-gray-100">
-                        {Array.from({ length: numPages }, (_, i) => (
-                          <SelectItem key={i} value={String(i)}>
-                            Page {i + 1}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="xPosition"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        X Position (PDF Units)
-                      </Label>
-                      <Input
-                        id="xPosition"
-                        type="number"
-                        value={x}
-                        onChange={(e) => setX(Number(e.target.value))}
-                        aria-label="X position"
-                        min={0}
-                        className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="yPosition"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Y Position (PDF Units)
-                      </Label>
-                      <Input
-                        id="yPosition"
-                        type="number"
-                        value={y}
-                        onChange={(e) => setY(Number(e.target.value))}
-                        aria-label="Y position"
-                        min={0}
-                        className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="fontSize"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Font Size
-                    </Label>
-                    <Input
-                      id="fontSize"
-                      type="number"
-                      value={fontSize}
-                      onChange={(e) => setFontSize(Number(e.target.value))}
-                      aria-label="Font size"
-                      min={6}
-                      max={72}
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="textColor"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Text Color
-                    </Label>
-                    <Input
-                      id="textColor"
-                      type="color"
-                      value={color}
-                      onChange={(e) => setColor(e.target.value)}
-                      aria-label="Text color"
-                      className="w-16 h-8 p-0 border-none mt-1"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-center justify-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative">
-                  {pdfImageRef.current ? ( // Check pdfImageRef.current instead of pdfDocProxy for rendering
-                    <canvas
-                      ref={canvasRef}
-                      className={`w-full h-full object-contain ${
-                        isDragging ? "cursor-grabbing" : "cursor-grab"
-                      }`}
-                      width="800"
-                      onMouseDown={handleMouseDown}
-                      onMouseMove={handleMouseMove}
-                      onMouseUp={handleMouseUp}
-                      onMouseLeave={handleMouseUp} // Important: stop dragging if mouse leaves
-                    ></canvas>
-                  ) : (
-                    <div className="text-gray-400 text-center p-4">
-                      Upload a PDF to see the preview and place text.
-                    </div>
-                  )}
-                  {isDragging && (
-                    <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-sm rounded-full shadow-lg pointer-events-none z-10">
-                      {" "}
-                      {/* Subtle "DRAGGING" banner */}
-                      DRAGGING
-                    </div>
-                  )}
-                </div>
-              </form>
-            )}
-
-            {error && (
-              <Alert variant="destructive" className="mt-2">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              variant="success"
-              className="mt-6 w-full max-w-xs mx-auto block"
-              onClick={handleFormFill}
-              disabled={
-                isProcessing ||
-                !text.trim() ||
-                files.length === 0 ||
-                numPages === 0
-              }
-              aria-label="Fill PDF Form"
+          {files.length > 0 && numPages > 0 && (
+            <form
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleFormFill();
+              }}
+              aria-label="Form Filler Controls"
             >
-              {isProcessing ? "Processing..." : "Fill Form & Download"}
-            </Button>
-          </CardContent>
-        </Card>
+              <div className="space-y-4">
+                <div>
+                  <Label
+                    htmlFor="textToAdd"
+                    className="text-sm font-medium text-gray-200"
+                  >
+                    Text to Add
+                  </Label>
+                  <Input
+                    id="textToAdd"
+                    type="text"
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Enter text to add to PDF"
+                    aria-label="Text to add"
+                    required
+                    className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="pageSelect"
+                    className="text-sm font-medium text-gray-200"
+                  >
+                    Page
+                  </Label>
+                  <Select
+                    value={String(pageIdx)}
+                    onValueChange={(value) => setPageIdx(Number(value))}
+                    disabled={numPages === 0}
+                  >
+                    <SelectTrigger
+                      id="pageSelect"
+                      className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                    >
+                      <SelectValue placeholder="Select a page" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-700 text-gray-100 border-gray-100">
+                      {Array.from({ length: numPages }, (_, i) => (
+                        <SelectItem key={i} value={String(i)}>
+                          Page {i + 1}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label
+                      htmlFor="xPosition"
+                      className="text-sm font-medium text-gray-200"
+                    >
+                      X Position (PDF Units)
+                    </Label>
+                    <Input
+                      id="xPosition"
+                      type="number"
+                      value={x}
+                      onChange={(e) => setX(Number(e.target.value))}
+                      aria-label="X position"
+                      min={0}
+                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <Label
+                      htmlFor="yPosition"
+                      className="text-sm font-medium text-gray-200"
+                    >
+                      Y Position (PDF Units)
+                    </Label>
+                    <Input
+                      id="yPosition"
+                      type="number"
+                      value={y}
+                      onChange={(e) => setY(Number(e.target.value))}
+                      aria-label="Y position"
+                      min={0}
+                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="fontSize"
+                    className="text-sm font-medium text-gray-200"
+                  >
+                    Font Size
+                  </Label>
+                  <Input
+                    id="fontSize"
+                    type="number"
+                    value={fontSize}
+                    onChange={(e) => setFontSize(Number(e.target.value))}
+                    aria-label="Font size"
+                    min={6}
+                    max={72}
+                    className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="textColor"
+                    className="text-sm font-medium text-gray-200"
+                  >
+                    Text Color
+                  </Label>
+                  <Input
+                    id="textColor"
+                    type="color"
+                    value={color}
+                    onChange={(e) => setColor(e.target.value)}
+                    aria-label="Text color"
+                    className="w-16 h-8 p-0 border-none mt-1"
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col items-center justify-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative">
+                {pdfImageRef.current ? ( // Check pdfImageRef.current instead of pdfDocProxy for rendering
+                  <canvas
+                    ref={canvasRef}
+                    className={`w-full h-full object-contain ${
+                      isDragging ? "cursor-grabbing" : "cursor-grab"
+                    }`}
+                    width="800"
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp} // Important: stop dragging if mouse leaves
+                  ></canvas>
+                ) : (
+                  <div className="text-gray-400 text-center p-4">
+                    Upload a PDF to see the preview and place text.
+                  </div>
+                )}
+                {isDragging && (
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-sm rounded-full shadow-lg pointer-events-none z-10">
+                    {" "}
+                    {/* Subtle "DRAGGING" banner */}
+                    DRAGGING
+                  </div>
+                )}
+              </div>
+            </form>
+          )}
+
+          {error && (
+            <Alert variant="destructive" className="mt-2">
+              {error}
+            </Alert>
+          )}
+
+          <Button
+            className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
+                       bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
+                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
+            onClick={handleFormFill}
+            disabled={
+              isProcessing ||
+              !text.trim() ||
+              files.length === 0 ||
+              numPages === 0
+            }
+            aria-label="Fill PDF Form"
+          >
+            {isProcessing ? "Processing..." : "Fill Form & Download"}
+          </Button>
+        </div>
         <ToolPageContent
           toolName="PDF Form Filler"
           toolDescription="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document. Our intuitive tool allows you to easily add text, select font size and color, and precisely position your input on any page. All processing is done securely in your browser, ensuring your sensitive information remains private."
-          currentTool="form-filler"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
             "Enter the text you wish to add in the 'Text to Add' field.",
@@ -609,7 +599,7 @@ export default function FormFillerPage() {
             },
           ]}
         />
-      </main>
+      </div>
     </>
   );
 }

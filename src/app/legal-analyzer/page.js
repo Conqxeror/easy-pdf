@@ -9,14 +9,7 @@ import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
-import { Card } from "@/components/ui/card";
-import {
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription,
-} from "@/components/ui/card";
+
 import { Alert } from "@/components/ui/alert";
 // Import lucide-react icons
 import {
@@ -196,79 +189,68 @@ export default function LegalAnalyzerPage() {
 
   return (
     <>
-      <main className="container max-w-4xl py-8 mx-auto">
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              AI Legal Document Analyzer
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Upload your legal document (PDF, Word, or image). Our AI will
-              extract key points, highlight important clauses, assess risk, and
-              generate a summary report.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-6">
-            <Alert className="block p-4 bg-yellow-900/20 text-yellow-300 border border-yellow-700 rounded-lg">
-              <p className="text-sm text-center">
-                <b className="text-blue-300">
-                  Your document content is sent to an external AI service for analysis and is not stored by easy-pdf.
-                </b>
-              </p>
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+        <div className="max-w-2xl w-full">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            AI Legal Document Analyzer
+          </h1>
+          <p className="mb-8 text-lg text-gray-300 text-center">
+            Upload your legal document (PDF, Word, or image). Our AI will
+            extract key points, highlight important clauses, assess risk, and
+            generate a summary report.
+            <b className="text-pink-300">
+              Your document content is sent to an external AI service for analysis and is not stored by easy-pdf.
+            </b>
+          </p>
+          <FileDropzone
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            onFiles={handleFile}
+            setError={setError}
+            aria-label="Upload legal document"
+            isLoading={loading}
+          />
+          {file && (
+            <div className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md shadow-md border border-gray-700">
+              <span className="text-sm text-gray-200 truncate pr-2">
+                {file.name}
+              </span>
+              <Button
+                size="sm"
+                onClick={() => setFile(null)}
+                variant="outline"
+                className="bg-red-600 hover:bg-red-700 text-white border-red-700"
+              >
+                Remove
+              </Button>
+            </div>
+          )}
+          {loading && (
+            <div className="mt-8 text-center text-gray-400 flex items-center justify-center">
+              <Loader
+                size="sm"
+                color="gray"
+                className="inline-block mr-2"
+                message={loadingMessage || "Processing document..."}
+              />
+            </div>
+          )}
+          <Button
+            className="mt-3 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
+                       bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
+                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900"
+            onClick={analyzeDocument}
+            disabled={!file || loading}
+            aria-label="Analyze Document"
+          >
+            {loading ? "Analyzing..." : "Analyze Document"}
+          </Button>
+          {error && (
+            <Alert className="mt-6" variant="destructive">
+              {error}
             </Alert>
-            <FileDropzone
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-              onFiles={handleFile}
-              setError={setError}
-              aria-label="Upload legal document"
-              isLoading={loading}
-            />
-            {file && (
-              <div className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md shadow-md border border-gray-700">
-                <span className="text-sm text-gray-200 truncate pr-2">
-                  {file.name}
-                </span>
-                <Button
-                  size="sm"
-                  onClick={() => setFile(null)}
-                  variant="outline"
-                  className="bg-red-600 hover:bg-red-700 text-white border-red-700"
-                >
-                  Remove
-                </Button>
-              </div>
-            )}
-            {loading && (
-              <div className="mt-8 text-center text-gray-400 flex items-center justify-center">
-                <Loader
-                  size="sm"
-                  color="gray"
-                  className="inline-block mr-2"
-                  message={loadingMessage || "Processing document..."}
-                />
-              </div>
-            )}
-            <Button
-              className="mt-3 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                         bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
-                         text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900"
-              onClick={analyzeDocument}
-              disabled={!file || loading}
-              aria-label="Analyze Document"
-            >
-              {loading ? "Analyzing..." : "Analyze Document"}
-            </Button>
-            {error && (
-              <Alert className="mt-6" variant="destructive">
-                {error}
-              </Alert>
-            )}
-          </CardContent>
-
+          )}
           {result && (
-            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
-              <Card className="w-full p-8 bg-gray-800 text-gray-200 rounded-lg shadow-xl border border-gray-700">
+            <Card className="mt-10 p-8 bg-gray-800 text-gray-200 rounded-lg shadow-xl border border-gray-700">
               <h2 className="text-3xl font-bold mb-4 text-center text-blue-400">
                 Analysis Report
               </h2>
@@ -380,21 +362,18 @@ export default function LegalAnalyzerPage() {
               >
                 Download Report
               </Button>
-              
-              <Alert className="block mt-6 p-6 bg-gray-800/70 text-gray-400 rounded-lg border border-gray-700 italic text-sm text-center">
-                <b className="text-gray-200 mb-2 not-italic">Disclaimer:</b>
-                <div>
-                  This tool uses AI (OpenRouter) to assist with legal document
-                  analysis. Results are for informational purposes only and do not
-                  constitute legal advice. Your documents are processed securely and
-                  never stored.
-                </div>
-              </Alert>
-              </Card>
-            </CardFooter>
+            </Card>
           )}
-        </Card>
-        
+          <Alert className="block mt-10 p-6 bg-gray-800/70 text-gray-400 rounded-lg border border-gray-700 italic text-sm text-center">
+            <b className="text-gray-200 mb-2 not-italic">Disclaimer:</b>
+            <div>
+              This tool uses AI (OpenRouter) to assist with legal document
+              analysis. Results are for informational purposes only and do not
+              constitute legal advice. Your documents are processed securely and
+              never stored.
+            </div>
+          </Alert>
+        </div>
         <ToolPageContent
           toolName="AI Legal Document Analyzer"
           toolDescription="Leverage the power of AI to quickly analyze your legal documents. Our tool provides a concise summary, identifies key entities and clauses, assesses potential risks, and offers actionable suggestions. Ideal for contracts, agreements, and other legal texts, this tool helps you understand complex documents faster and more efficiently. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
@@ -433,7 +412,7 @@ export default function LegalAnalyzerPage() {
             },
           ]}
         />
-      </main>
+      </div>
     </>
   );
 }

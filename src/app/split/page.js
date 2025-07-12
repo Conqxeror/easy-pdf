@@ -10,14 +10,6 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 // import Loader from "@/components/ui/Loader"; // Replaced with progress bar
 import PageRangeInput from "@/components/ui/PageRangeInput";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label"; // Import Label
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup components
 import { Progress } from "@/components/ui/progress"; // Import Progress
@@ -154,84 +146,64 @@ export default function SplitPdfPage() {
 
         const pdfBytes = await newPdfDoc.save();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        setPdfUrl(URL.createObjectURL(blob));
+        const url = URL.createObjectURL(blob);
+        setPdfUrl(url);
         setDownloadFileName(
-          `${file.name.replace(/\.pdf$/, "")}pages${start}-to-${end}.pdf`
+          `${fileName.replace(/\.pdf$/i, "")}_pages_${start}-${end}.pdf`
         );
-        setProgress(100); // Complete progress for range split
+        setProgress(100);
       } else if (splitMode === "all-pages") {
         const zip = new JSZip();
-        const pageCount = pdfDoc.getPageCount();
-        let pagesProcessed = 0;
+        const numPages = pdfDoc.getPageCount();
 
-        for (let i = 0; i < pageCount; i++) {
-          const newPdfDoc = await PDFDocument.create();
-          const [copiedPage] = await newPdfDoc.copyPages(pdfDoc, [i]); // Copy page by 0-based index
-          newPdfDoc.addPage(copiedPage);
-          const pdfBytes = await newPdfDoc.save();
+        for (let i = 0; i < numPages; i++) {
+          const singlePageDoc = await PDFDocument.create();
+          const [copiedPage] = await singlePageDoc.copyPages(pdfDoc, [i]);
+          singlePageDoc.addPage(copiedPage);
 
+          const pdfBytes = await singlePageDoc.save();
+          const pageNumber = i + 1; // 1-based for filename
           zip.file(
-            `${file.name.replace(/\.pdf$/, "")}page-${i + 1}.pdf`,
+            `${fileName.replace(/\.pdf$/i, "")}_page_${pageNumber}.pdf`,
             pdfBytes
           );
 
-          pagesProcessed++;
-          setProgress(Math.round((pagesProcessed / pageCount) * 100)); // Update progress
+          // Update progress
+          setProgress(Math.round(((i + 1) / numPages) * 100));
         }
 
-        const zipBlob = await zip.generateAsync({
-          type: "blob",
-          compression: "DEFLATE",
-          compressionOptions: { level: 9 },
-        });
-        setPdfUrl(URL.createObjectURL(zipBlob));
-        setDownloadFileName(
-          `${file.name.replace(/\.pdf$/, "")}split_pages.zip`
-        );
-        setProgress(100); // Complete progress for all-pages split
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        const url = URL.createObjectURL(zipBlob);
+        setPdfUrl(url);
+        setDownloadFileName(`${fileName.replace(/\.pdf$/i, "")}_pages.zip`);
       }
     } catch (err) {
-      console.error("Error splitting PDF:", err);
-      setError("Failed to split PDF. Please try again.");
-      setPdfUrl(null);
+      setError("Failed to split PDF. Please try again. " + err.message);
+      console.error("Split error:", err);
     } finally {
       setIsProcessing(false);
-      // Reset progress after a short delay
-      setTimeout(() => setProgress(0), 1000);
     }
   };
 
-  // Determine if the split button should be disabled
+  // Helper to determine if the split button should be disabled
   const isSplitButtonDisabled =
-    isProcessing || // If overall processing (loading or splitting)
-    !file || // No file uploaded
-    totalPages === 0 || // PDF not loaded or has no pages
-    (splitMode === "range" && // If range mode, check page inputs
-      (!startPage ||
-        !endPage ||
-        isNaN(parseInt(startPage)) ||
-        isNaN(parseInt(endPage)) ||
-        parseInt(startPage) < 1 ||
-        parseInt(endPage) < 1 ||
-        parseInt(startPage) > parseInt(endPage) ||
-        parseInt(endPage) > totalPages));
+    isProcessing ||
+    !file ||
+    totalPages === 0 ||
+    (splitMode === "range" && (!startPage || !endPage));
 
   return (
     <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
-        {" "}
-        {/* Centering the main card */}
-        <Card className="w-full bg-gray-800 border-gray-700 shadow-lg rounded-xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-gray-100">
-              Split PDF
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 mt-2">
-              Extract specific pages or ranges, or separate all pages. All
-              processing is 100% client-side.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-center p-6 space-y-6">
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+        <div className="max-w-4xl w-full">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            Split PDF
+          </h1>
+          <p className="mb-8 text-lg text-gray-300 text-center">
+            Extract specific pages or ranges, or separate all pages. All processing is 100% client-side.
+          </p>
+
+          <div className="space-y-6">
             <FileDropzone
               accept="application/pdf"
               onFiles={handleFile}
@@ -313,7 +285,7 @@ export default function SplitPdfPage() {
 
             {isProcessing &&
               file && ( // Show progress only when splitting (file is loaded)
-                <div className="space-y-2 w-full max-w-xs text-center">
+                <div className="space-y-2 w-full max-w-xs text-center mx-auto">
                   <Progress
                     value={progress}
                     className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
@@ -340,49 +312,49 @@ export default function SplitPdfPage() {
             >
               {isProcessing && file ? "Splitting..." : "Split PDF"}
             </Button>
-          </CardContent>
 
-          {pdfUrl && !isProcessing && (
-            <CardFooter className="flex flex-col items-center mt-6 border-t border-gray-700 pt-6">
-              <h2 className="text-xl font-semibold mb-4 text-gray-100">
-                Result:
-              </h2>
-              {splitMode === "range" && (
-                <iframe
-                  src={pdfUrl}
-                  width="100%"
-                  height="500px"
-                  className="border border-gray-600 rounded-md mb-4 shadow-inner"
-                  title="PDF Preview"
-                ></iframe>
-              )}
-              {splitMode === "all-pages" && (
-                <p className="text-gray-300 mb-4 text-center">
-                  Your PDF has been split into individual pages and compressed
-                  into a ZIP file.
-                </p>
-              )}
-              <Button asChild variant="success" className="w-full max-w-xs">
-                {" "}
-                {/* Consistent styling */}
-                <a
-                  href={pdfUrl}
-                  download={downloadFileName}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>
-                    {" "}
-                    {/* Added span to wrap children */}
-                    Download{" "}
-                    {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
-                  </span>
-                </a>
-              </Button>
-            </CardFooter>
-          )}
-        </Card>
-      </main>
+            {pdfUrl && !isProcessing && (
+              <div className="flex flex-col items-center mt-6 border-t border-gray-700 pt-6">
+                <h2 className="text-xl font-semibold mb-4 text-gray-100">
+                  Result:
+                </h2>
+                {splitMode === "range" && (
+                  <iframe
+                    src={pdfUrl}
+                    width="100%"
+                    height="500px"
+                    className="border border-gray-600 rounded-md mb-4 shadow-inner"
+                    title="PDF Preview"
+                  ></iframe>
+                )}
+                {splitMode === "all-pages" && (
+                  <p className="text-gray-300 mb-4 text-center">
+                    Your PDF has been split into individual pages and compressed
+                    into a ZIP file.
+                  </p>
+                )}
+                <Button asChild variant="success" className="w-full max-w-xs">
+                  {" "}
+                  {/* Consistent styling */}
+                  <a
+                    href={pdfUrl}
+                    download={downloadFileName}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>
+                      {" "}
+                      {/* Added span to wrap children */}
+                      Download{" "}
+                      {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
+                    </span>
+                  </a>
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
       <ToolPageContent
         toolName="Split PDF"
         toolDescription="Easily split your PDF documents into multiple files. Extract specific pages or ranges, or separate every page into its own PDF. Our online PDF splitter is fast, secure, and processes all your files directly in your browser, ensuring your privacy. Perfect for creating smaller documents, reorganizing content, or sharing only relevant sections."

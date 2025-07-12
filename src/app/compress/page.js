@@ -10,14 +10,6 @@ import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription, // Added CardDescription import
-} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -148,50 +140,44 @@ export default function CompressPDFs() {
       }
 
       setProcessingMessage("Saving compressed PDF...");
-      // Step 4: Save the new compressed PDF
-      const pdfBytes = await newPdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
 
-      setCompressedSize(blob.size);
-      const calculatedPercentage = Math.round(
-        ((originalSize - blob.size) / originalSize) * 100
-      );
-      setCompressionPercentage(calculatedPercentage);
-      setCompressedPdfUrl(URL.createObjectURL(blob));
-      setProgress(100); // Final progress
+      // Step 4: Save the new PDF and create a download URL
+      const compressedPdfBytes = await newPdfDoc.save();
+      const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      setCompressedPdfUrl(url);
+
+      // Calculate compression percentage
+      const newSize = blob.size;
+      setCompressedSize(newSize);
+      const reduction = ((originalSize - newSize) / originalSize) * 100;
+      setCompressionPercentage(Math.max(0, Math.round(reduction))); // Ensure non-negative
+
+      setProgress(100); // Complete
       setProcessingMessage("Compression complete!");
-    } catch (e) {
-      console.error("Compression error:", e);
+    } catch (error) {
+      console.error("Error compressing PDF:", error);
       setError(
-        "Failed to compress PDF. The file may be corrupted or cannot be processed."
+        "Failed to compress PDF. Please try again with a different file."
       );
     } finally {
       setIsCompressing(false);
-      // Reset progress after a short delay to allow UI to show 100% briefly
-      setTimeout(() => {
-        setProgress(0);
-        setProcessingMessage("");
-      }, 1000);
+      setProcessingMessage("");
     }
   };
 
   return (
     <>
-      <main className="container max-w-4xl py-8 mx-auto">
-        {" "}
-        {/* Added mx-auto here for centering */}
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Compress PDF
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Reduce the file size of your PDF documents with powerful
-              client-side compression.
-            </CardDescription>
-          </CardHeader>
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+        <div className="max-w-4xl w-full">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+            Compress PDF
+          </h1>
+          <p className="mb-8 text-lg text-gray-300 text-center">
+            Reduce the file size of your PDF documents with powerful client-side compression.
+          </p>
 
-          <CardContent className="space-y-6">
+          <div className="space-y-6">
             <FileDropzone
               accept="application/pdf"
               multiple={false}
@@ -339,82 +325,82 @@ export default function CompressPDFs() {
             >
               {isCompressing ? "Compressing..." : "Compress PDF"}
             </Button>
-          </CardContent>
 
-          {compressedPdfUrl && !isCompressing && (
-            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
-              <div className="w-full text-center space-y-2 text-gray-100">
-                <h3 className="text-xl font-semibold">Compression Results</h3>
-                <div className="flex justify-between max-w-md mx-auto text-sm">
-                  <div className="text-gray-400">
-                    Original:{" "}
-                    <span className="font-medium">
-                      {formatFileSize(originalSize)}
-                    </span>
+            {compressedPdfUrl && !isCompressing && (
+              <div className="flex flex-col gap-4 border-t border-gray-700 pt-6">
+                <div className="w-full text-center space-y-2 text-gray-100">
+                  <h3 className="text-xl font-semibold">Compression Results</h3>
+                  <div className="flex justify-between max-w-md mx-auto text-sm">
+                    <div className="text-gray-400">
+                      Original:{" "}
+                      <span className="font-medium">
+                        {formatFileSize(originalSize)}
+                      </span>
+                    </div>
+                    <div className="text-green-400">
+                      Compressed:{" "}
+                      <span className="font-medium">
+                        {formatFileSize(compressedSize)}
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-green-400">
-                    Compressed:{" "}
-                    <span className="font-medium">
-                      {formatFileSize(compressedSize)}
-                    </span>
+                  <div className="text-blue-400 font-medium">
+                    Reduced by {compressionPercentage}%
                   </div>
                 </div>
-                <div className="text-blue-400 font-medium">
-                  Reduced by {compressionPercentage}%
-                </div>
+
+                <Button asChild variant="success" className="w-full">
+                  <a
+                    href={compressedPdfUrl}
+                    download={`compressed_${fileName}`}
+                    className="text-center"
+                  >
+                    Download Compressed PDF
+                  </a>
+                </Button>
               </div>
-
-              <Button asChild variant="success" className="w-full">
-                <a
-                  href={compressedPdfUrl}
-                  download={`compressed_${fileName}`}
-                  className="text-center"
-                >
-                  Download Compressed PDF
-                </a>
-              </Button>
-            </CardFooter>
-          )}
-        </Card>
-        <ToolPageContent
-          toolName="Compress PDF"
-          toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files. Choose from different compression levels to find the perfect balance between file size and document quality. All processing is done securely in your browser, ensuring your files remain private."
-          currentTool="compress"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Select your desired compression level: Mild (good quality), Balanced (recommended), or Aggressive (smallest size). You can also fine-tune the image quality using the slider.",
-            "Click the 'Compress PDF' button to start the compression process.",
-            "Once compressed, you'll see the original and new file sizes, along with the percentage of reduction. Download your optimized PDF file.",
-          ]}
-          faqs={[
-            {
-              question: "How much can I compress my PDF file?",
-              answer:
-                "The compression amount depends on the content of your PDF. Documents with many images or large embedded fonts will see significant reduction, while text-only PDFs may have less room for compression. Our tool uses advanced algorithms to optimize file size.",
-            },
-            {
-              question: "Is it safe to compress my PDF files online?",
-              answer:
-                "Absolutely. Your privacy and security are our top priorities. All PDF compression happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "Will the quality of my PDF be affected?",
-              answer:
-                "Our PDF compressor is designed to reduce file size while minimizing quality loss. You can choose from different compression levels and adjust image quality to find the right balance for your needs. For most uses, the 'Balanced' option provides excellent results.",
-            },
-            {
-              question: "What types of content are compressed in a PDF?",
-              answer:
-                "Our compressor primarily optimizes images within the PDF by re-encoding them with efficient compression algorithms. It also removes redundant PDF objects and optimizes fonts, leading to overall file size reduction.",
-            },
-            {
-              question: "Is there a file size limit for compression?",
-              answer:
-                "Yes, the maximum file size for a PDF to be compressed is 50MB. For larger files, processing might be slower due to client-side operations.",
-            },
-          ]}
-        />
-      </main>
+            )}
+          </div>
+        </div>
+      </div>
+      <ToolPageContent
+        toolName="Compress PDF"
+        toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files. Choose from different compression levels to find the perfect balance between file size and document quality. All processing is done securely in your browser, ensuring your files remain private."
+        currentTool="compress"
+        steps={[
+          "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+          "Select your desired compression level: Mild (good quality), Balanced (recommended), or Aggressive (smallest size). You can also fine-tune the image quality using the slider.",
+          "Click the 'Compress PDF' button to start the compression process.",
+          "Once compressed, you'll see the original and new file sizes, along with the percentage of reduction. Download your optimized PDF file.",
+        ]}
+        faqs={[
+          {
+            question: "How much can I compress my PDF file?",
+            answer:
+              "The compression amount depends on the content of your PDF. Documents with many images or large embedded fonts will see significant reduction, while text-only PDFs may have less room for compression. Our tool uses advanced algorithms to optimize file size.",
+          },
+          {
+            question: "Is it safe to compress my PDF files online?",
+            answer:
+              "Absolutely. Your privacy and security are our top priorities. All PDF compression happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+          },
+          {
+            question: "Will the quality of my PDF be affected?",
+            answer:
+              "Our PDF compressor is designed to reduce file size while minimizing quality loss. You can choose from different compression levels and adjust image quality to find the right balance for your needs. For most uses, the 'Balanced' option provides excellent results.",
+          },
+          {
+            question: "What types of content are compressed in a PDF?",
+            answer:
+              "Our compressor primarily optimizes images within the PDF by re-encoding them with efficient compression algorithms. It also removes redundant PDF objects and optimizes fonts, leading to overall file size reduction.",
+          },
+          {
+            question: "Is there a file size limit for compression?",
+            answer:
+              "Yes, the maximum file size for a PDF to be compressed is 50MB. For larger files, processing might be slower due to client-side operations.",
+          },
+        ]}
+      />
     </>
   );
 }

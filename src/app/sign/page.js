@@ -10,13 +10,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import ToolPageContent from "@/components/ui/ToolPageContent";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -457,128 +451,109 @@ export default function SignPage() {
 
   return (
     <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Sign / Annotate PDF
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Draw your signature or annotation and place it directly onto any
-              page of your PDF document.
-            </CardDescription>
-          </CardHeader>
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+        <div className="max-w-4xl w-full">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500">
+            Sign / Annotate PDF
+          </h1>
+          <p className="mb-8 text-lg text-gray-300 text-center">
+            Draw your signature or annotation and place it directly onto any
+            page of your PDF document.
+          </p>
+          
+          <FileDropzone
+            accept="application/pdf"
+            multiple={false}
+            onFiles={handleFiles}
+            error={error}
+            setError={setError}
+            label="Upload PDF"
+            description="Drag & drop or click to select a PDF file (Max 50MB)"
+            maxSize={50 * 1024 * 1024}
+            isLoading={isProcessing}
+          />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Upload PDF"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing}
-            />
-
-            {files.length > 0 && numPages > 0 && (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-                {/* Signature Drawing Controls */}
-                <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
-                  <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                    1. Draw Your Signature
-                  </h2>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="penColor"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Pen Color
-                      </Label>
-                      <Input
-                        id="penColor"
-                        type="color"
-                        value={penColor}
-                        onChange={(e) => setPenColor(e.target.value)}
-                        className="w-full h-8 p-0 border-none mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="strokeWidth"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Stroke Width
-                      </Label>
-                      <Input
-                        id="strokeWidth"
-                        type="number"
-                        value={strokeWidth}
-                        onChange={(e) =>
-                          setStrokeWidth(Math.max(1, Number(e.target.value)))
-                        }
-                        min={1}
-                        max={10}
-                        className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
+          {files.length > 0 && numPages > 0 && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+              {/* Signature Drawing Controls */}
+              <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
+                <h2 className="font-semibold text-xl mb-3 text-gray-100">
+                  1. Draw Your Signature
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label
+                      htmlFor="penColor"
+                      className="text-sm font-medium text-gray-200"
+                    >
+                      Pen Color
+                    </Label>
+                    <Input
+                      id="penColor"
+                      type="color"
+                      value={penColor}
+                      onChange={(e) => setPenColor(e.target.value)}
+                      className="w-16 h-8 p-0 border-none mt-1"
+                    />
                   </div>
-                  <canvas
-                    ref={signatureCanvasRef}
-                    width={400}
-                    height={150}
-                    className="border border-gray-600 mt-2 bg-white rounded-md shadow-md w-full max-w-sm mx-auto cursor-crosshair"
-                    onMouseDown={handleSignatureMouseDown}
-                    onMouseMove={handleSignatureMouseMove}
-                    onMouseUp={handleSignatureMouseUp}
-                    onMouseLeave={handleSignatureMouseUp}
-                    onTouchStart={(e) => {
-                      e.preventDefault();
-                      handleSignatureMouseDown(e.touches[0]);
-                    }}
-                    onTouchMove={(e) => {
-                      e.preventDefault();
-                      handleSignatureMouseMove(e.touches[0]);
-                    }}
-                    onTouchEnd={handleSignatureMouseUp}
-                    aria-label="Signature drawing canvas"
-                  />
-                  <Button
-                    variant="secondary"
-                    onClick={handleClearSignature}
-                    className="w-full max-w-xs mx-auto block"
-                    aria-label="Clear signature"
-                  >
-                    Clear Signature
-                  </Button>
+                  <div>
+                    <Label
+                      htmlFor="strokeWidth"
+                      className="text-sm font-medium text-gray-200"
+                    >
+                      Stroke Width
+                    </Label>
+                    <Input
+                      id="strokeWidth"
+                      type="range"
+                      min="1"
+                      max="10"
+                      value={strokeWidth}
+                      onChange={(e) => setStrokeWidth(Number(e.target.value))}
+                      className="mt-1"
+                    />
+                  </div>
                 </div>
+                <canvas
+                  ref={signatureCanvasRef}
+                  width={400}
+                  height={200}
+                  className="w-full h-auto border border-gray-600 rounded-md bg-white cursor-crosshair"
+                  onMouseDown={handleSignatureMouseDown}
+                  onMouseMove={handleSignatureMouseMove}
+                  onMouseUp={handleSignatureMouseUp}
+                ></canvas>
+                <Button
+                  onClick={handleClearSignature}
+                  variant="outline"
+                  className="w-full bg-gray-700 hover:bg-gray-600 text-gray-100 border-gray-600"
+                >
+                  Clear Signature
+                </Button>
+              </div>
 
-                {/* PDF Preview & Signature Placement Controls */}
-                <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
-                  <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                    2. Place Signature on PDF
-                  </h2>
+              {/* PDF Preview & Placement */}
+              <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
+                <h2 className="font-semibold text-xl mb-3 text-gray-100">
+                  2. Position Signature
+                </h2>
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label
                       htmlFor="pageSelect"
                       className="text-sm font-medium text-gray-200"
                     >
-                      Select Page to Sign
+                      Page
                     </Label>
                     <Select
                       value={String(currentPageIdx)}
-                      onValueChange={(value) =>
-                        setCurrentPageIdx(Number(value))
-                      }
-                      disabled={numPages === 0}
+                      onValueChange={(value) => setCurrentPageIdx(Number(value))}
                     >
                       <SelectTrigger
                         id="pageSelect"
-                        className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                        className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600"
                       >
-                        <SelectValue placeholder="Select a page" />
+                        <SelectValue placeholder="Select page" />
                       </SelectTrigger>
                       <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
                         {Array.from({ length: numPages }, (_, i) => (
@@ -589,195 +564,114 @@ export default function SignPage() {
                       </SelectContent>
                     </Select>
                   </div>
-
-                  {signatureDataUrl && (
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label
-                          htmlFor="signatureX"
-                          className="text-sm font-medium text-gray-200"
-                        >
-                          Signature X
-                        </Label>
-                        <Input
-                          id="signatureX"
-                          type="number"
-                          value={signatureX}
-                          onChange={(e) =>
-                            setSignatureX(Number(e.target.value))
-                          }
-                          min={0}
-                          className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <Label
-                          htmlFor="signatureY"
-                          className="text-sm font-medium text-gray-200"
-                        >
-                          Signature Y
-                        </Label>
-                        <Input
-                          id="signatureY"
-                          type="number"
-                          value={signatureY}
-                          onChange={(e) =>
-                            setSignatureY(Number(e.target.value))
-                          }
-                          min={0}
-                          className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <Label
-                          htmlFor="signatureWidth"
-                          className="text-sm font-medium text-gray-200"
-                        >
-                          Signature Width
-                        </Label>
-                        <Input
-                          id="signatureWidth"
-                          type="number"
-                          value={signatureWidth}
-                          onChange={(e) =>
-                            setSignatureWidth(
-                              Math.max(10, Number(e.target.value))
-                            )
-                          }
-                          min={10}
-                          max={800} // Example max
-                          className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <Label
-                          htmlFor="signatureHeight"
-                          className="text-sm font-medium text-gray-200"
-                        >
-                          Signature Height
-                        </Label>
-                        <Input
-                          id="signatureHeight"
-                          type="number"
-                          value={signatureHeight}
-                          onChange={(e) =>
-                            setSignatureHeight(
-                              Math.max(10, Number(e.target.value))
-                            )
-                          }
-                          min={10}
-                          max={600} // Example max
-                          className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </div>
+                  <div>
+                    <Label
+                      htmlFor="signatureSize"
+                      className="text-sm font-medium text-gray-200"
+                    >
+                      Size
+                    </Label>
+                    <div className="grid grid-cols-2 gap-2 mt-1">
+                      <Input
+                        type="number"
+                        value={signatureWidth}
+                        onChange={(e) => setSignatureWidth(Number(e.target.value))}
+                        placeholder="Width"
+                        className="bg-gray-700 text-gray-100 border-gray-600"
+                      />
+                      <Input
+                        type="number"
+                        value={signatureHeight}
+                        onChange={(e) => setSignatureHeight(Number(e.target.value))}
+                        placeholder="Height"
+                        className="bg-gray-700 text-gray-100 border-gray-600"
+                      />
                     </div>
-                  )}
-
-                  <div className="w-full flex justify-center items-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative">
-                    {numPages > 0 ? (
-                      <canvas
-                        ref={pdfPreviewCanvasRef}
-                        className={`max-w-full h-auto border border-gray-600 rounded-md shadow-lg
-                                   ${
-                                     signatureDataUrl
-                                       ? isDraggingSignature
-                                         ? "cursor-grabbing"
-                                         : "cursor-grab"
-                                       : ""
-                                   }`}
-                        style={{ maxWidth: "100%", height: "auto" }}
-                        onMouseDown={handlePreviewMouseDown}
-                        onMouseMove={handlePreviewMouseMove}
-                        onMouseUp={handlePreviewMouseUp}
-                        onMouseLeave={handlePreviewMouseUp} // Stop dragging if mouse leaves
-                        onTouchStart={(e) => {
-                          e.preventDefault();
-                          handlePreviewMouseDown(e.touches[0]);
-                        }}
-                        onTouchMove={(e) => {
-                          e.preventDefault();
-                          handlePreviewMouseMove(e.touches[0]);
-                        }}
-                        onTouchEnd={handlePreviewMouseUp}
-                        aria-label="PDF preview with signature placement"
-                      ></canvas>
-                    ) : (
-                      <div className="text-gray-400 text-center p-4">
-                        Upload a PDF to see the preview.
-                      </div>
-                    )}
-                    {isDraggingSignature && (
-                      <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-sm rounded-full shadow-lg pointer-events-none z-10">
-                        DRAGGING SIGNATURE
-                      </div>
-                    )}
                   </div>
                 </div>
+                <div className="w-full flex justify-center items-center overflow-hidden">
+                  <canvas
+                    ref={pdfPreviewCanvasRef}
+                    className={`max-w-full h-auto border border-gray-600 rounded-md ${
+                      signatureDataUrl ? "cursor-move" : "cursor-default"
+                    }`}
+                    onMouseDown={handlePreviewMouseDown}
+                    onMouseMove={handlePreviewMouseMove}
+                    onMouseUp={handlePreviewMouseUp}
+                    onMouseLeave={handlePreviewMouseUp}
+                  ></canvas>
+                </div>
+                <p className="text-xs text-gray-400 text-center">
+                  {signatureDataUrl
+                    ? "Click and drag your signature on the preview to position it"
+                    : "Draw a signature first to see it on the preview"}
+                </p>
               </div>
-            )}
+            </div>
+          )}
 
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
+          {error && (
+            <Alert variant="destructive" className="mt-4">
+              {error}
+            </Alert>
+          )}
 
-            <Button
-              variant="success"
-              className="mt-6 w-full max-w-xs mx-auto block"
-              onClick={handleSign}
-              disabled={
-                isProcessing ||
-                files.length === 0 ||
-                !signatureDataUrl ||
-                numPages === 0
-              }
-              aria-label="Download signed PDF"
-            >
-              {isProcessing ? "Processing..." : "Download Signed PDF"}
-            </Button>
-          </CardContent>
-        </Card>
-      </main>
-      <ToolPageContent
-        toolName="Sign / Annotate PDF"
-        toolDescription="Easily sign your PDF documents or add custom annotations directly in your browser. Draw your signature using your mouse or trackpad, then place it precisely on any page of your PDF. Our tool offers a secure and private way to sign documents, as all processing happens client-side, ensuring your sensitive information never leaves your device."
-        currentTool="sign"
-        steps={[
-          "Upload the PDF file you wish to sign or annotate by dragging it into the dropzone or clicking to select.",
-          "In the signature drawing area, use your mouse or trackpad to draw your signature or any annotation. You can adjust the pen color and stroke width.",
-          "Once drawn, your signature will appear on the PDF preview. Drag and resize it to your desired position and size on the selected page.",
-          "If your PDF has multiple pages, use the page selector to navigate and place the signature on the correct page.",
-          "Click the 'Download Signed PDF' button to save your document with the applied signature or annotation.",
-        ]}
-        faqs={[
-          {
-            question: "Is it free to sign PDFs online?",
-            answer:
-              "Yes, our Sign PDF tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or subscriptions.",
-          },
-          {
-            question: "Are my files secure when I sign them?",
-            answer:
-              "Absolutely. Your privacy and security are our top priorities. All PDF processing, including the application of your signature, occurs directly within your web browser. Your documents are never uploaded to our servers.",
-          },
-          {
-            question: "Can I resize and move my signature after drawing it?",
-            answer:
-              "Yes, once you've drawn your signature, you can easily drag it to any position on the PDF page and resize it to fit your needs using the provided controls.",
-          },
-          {
-            question: "Can I sign multiple pages in a single PDF?",
-            answer:
-              "Currently, our tool allows you to place one signature per operation on a selected page. To sign multiple pages, you would need to repeat the process for each page.",
-          },
-          {
-            question: "What kind of annotations can I add?",
-            answer:
-              "Beyond signatures, you can use the drawing tool to add freehand annotations, highlights, or simple drawings directly onto your PDF pages.",
-          },
-        ]}
-      />
+          <Button
+            className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
+                       bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
+                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
+            onClick={handleSign}
+            disabled={
+              isProcessing ||
+              files.length === 0 ||
+              !signatureDataUrl ||
+              numPages === 0
+            }
+            aria-label="Sign and Download PDF"
+          >
+            {isProcessing ? "Processing..." : "Sign & Download PDF"}
+          </Button>
+        </div>
+        <ToolPageContent
+          toolName="Sign / Annotate PDF"
+          toolDescription="Add your digital signature or annotations to any PDF document with our intuitive drawing tool. Perfect for signing contracts, forms, or adding personal notes to documents. All processing happens securely in your browser, ensuring your documents remain private."
+          currentTool="sign"
+          steps={[
+            "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+            "Use the signature canvas to draw your signature or annotation with customizable pen color and stroke width.",
+            "Select the page where you want to place your signature and adjust its size if needed.",
+            "Click and drag your signature on the PDF preview to position it exactly where you want it.",
+            "Click 'Sign & Download PDF' to apply your signature and download the signed document.",
+          ]}
+          faqs={[
+            {
+              question: "Is it free to sign PDF documents?",
+              answer:
+                "Yes, our PDF signing tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or limitations.",
+            },
+            {
+              question: "Are my documents secure when signing?",
+              answer:
+                "Absolutely. Your privacy is our top priority. All PDF processing, including signature placement, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+            },
+            {
+              question: "Can I add multiple signatures to one document?",
+              answer:
+                "Currently, you can add one signature per session. To add multiple signatures, you would need to repeat the process with the previously signed PDF.",
+            },
+            {
+              question: "What signature formats are supported?",
+              answer:
+                "You can draw freehand signatures using your mouse, trackpad, or touch screen. The tool supports customizable pen colors and stroke widths for personalized signatures.",
+            },
+            {
+              question: "Can I sign on any page of the PDF?",
+              answer:
+                "Yes, you can select any page of your PDF document to place your signature. Use the page selector to choose the specific page where you want to add your signature.",
+            },
+          ]}
+        />
+      </div>
     </>
   );
 }
