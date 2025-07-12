@@ -26,8 +26,11 @@ export default function DesktopNav({ closeAllMenus }) {
                   category.submenu.some((i) => pathname === i.href)
                   ? "bg-gray-800 text-white"
                   : "text-gray-300 hover:bg-gray-800 hover:text-white",
-                "transition-colors duration-200"
+                "transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
               )}
+              aria-expanded={desktopSubmenuOpen === category.name}
+              aria-haspopup="true"
+              aria-label={`${category.name} tools menu`}
             >
               {category.icon}
               <span className="ml-2">{category.name}</span>

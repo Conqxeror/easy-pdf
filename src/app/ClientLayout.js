@@ -5,20 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
+import { initializePerformanceOptimizations } from "@/lib/webVitals";
 
+// Temporarily disable service worker registration
 function registerServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker
-        .register("/sw.js")
-        .then((registration) => {
-          console.log("SW registered: ", registration);
-        })
-        .catch((registrationError) => {
-          console.log("SW registration failed: ", registrationError);
-        });
-    });
-  }
+  // Service worker registration disabled for build
+  console.log("Service worker registration disabled");
 }
 
 import clsx from "clsx";
@@ -28,7 +20,12 @@ import VercelAnalytics from "./vercel-analytics";
 import DesktopNav from "@/components/layout/DesktopNav";
 import MobileNav from "@/components/layout/MobileNav";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ 
+  subsets: ["latin"],
+  display: 'swap',
+  preload: true,
+  variable: '--font-inter'
+});
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +35,9 @@ function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    window.addEventListener("scroll", handleScroll);
+    
+    // Use passive listener for better performance
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -74,6 +73,8 @@ function Navbar() {
                 className="h-8 w-8"
                 width={32}
                 height={32}
+                priority
+                sizes="32px"
               />
               <span className="text-xl font-bold text-white hidden sm:block">
                 easy-pdf
@@ -88,7 +89,7 @@ function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 transition-colors duration-200"
               aria-expanded={isOpen}
               aria-label="Toggle menu"
             >
@@ -111,12 +112,20 @@ function Navbar() {
 export default function RootLayout({ children }) {
   useEffect(() => {
     registerServiceWorker();
+    initializePerformanceOptimizations();
   }, []);
 
   return (
     <div className={`${inter.className} bg-gray-900 text-gray-100`}>
+      {/* Skip Navigation Link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
       <Navbar />
-      <main className="min-h-screen pt-24" aria-label="Main content">
+      <main id="main-content" className="min-h-screen pt-24" aria-label="Main content">
         {children}
       </main>
       <Footer />

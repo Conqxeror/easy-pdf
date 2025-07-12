@@ -9,6 +9,79 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  
+  // Performance optimizations
+  compress: true,
+  poweredByHeader: false,
+  
+  // Image optimization
+  images: {
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+  
+  // Bundle optimization
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-slot', 'framer-motion'],
+    webVitalsAttribution: ['CLS', 'LCP'],
+  },
+  
+  // External packages for server components
+  serverExternalPackages: ['pdf-lib', 'pdfjs-dist', 'canvas'],
+  
+  // Webpack optimizations
+  webpack: (config, { dev, isServer }) => {
+    // Exclude service worker from server bundle
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        './sw.js': 'commonjs ./sw.js'
+      });
+    }
+    
+    // Production optimizations
+    if (!dev) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              priority: 10,
+              reuseExistingChunk: true,
+            },
+            pdf: {
+              test: /[\\/]node_modules[\\/](pdf-lib|pdfjs-dist)[\\/]/,
+              name: 'pdf-libs',
+              priority: 20,
+              reuseExistingChunk: true,
+            },
+            ui: {
+              test: /[\\/]node_modules[\\/](@radix-ui|lucide-react|framer-motion)[\\/]/,
+              name: 'ui-libs',
+              priority: 15,
+              reuseExistingChunk: true,
+            },
+          },
+        },
+      };
+    }
+    
+    // Handle PDF.js worker
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'pdfjs-dist/build/pdf.worker.js': 'pdfjs-dist/build/pdf.worker.min.js',
+    };
+    
+    return config;
+  },
+  
   async headers() {
     return [
       {
@@ -26,21 +99,58 @@ const nextConfig = {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+        ],
+      },
+      // Cache static assets
+      {
+        source: '/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache images
+      {
+        source: '/:path*\\.(jpg|jpeg|png|gif|ico|svg|webp|avif)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache fonts
+      {
+        source: '/:path*\\.(woff|woff2|eot|ttf|otf)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
       },
     ];
   },
-  // --- Turbopack Configuration (Updated for stability) ---
-  // The 'experimental.turbo' flag is deprecated.
-  // All Turbopack configuration now goes directly under a top-level 'turbopack' object.
+  
+  // Turbopack Configuration
   turbopack: {
-    // Add other Turbopack specific rules or configurations here if needed.
-    // E.g., for custom loaders or aliases, as per Next.js documentation:
-    // rules: { /* ... */ },
-    // resolveAlias: { /* ... */ },
-    // resolveExtensions: [ /* ... */ ],
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
   },
 };
 
-// Export the nextConfig object.
 export default nextConfig;

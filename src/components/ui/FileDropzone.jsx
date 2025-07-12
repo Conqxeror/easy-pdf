@@ -2,10 +2,9 @@
 "use client";
 
 import React, { useState, useCallback, useRef } from "react";
-// Removed useDropzone as per your provided new component structure
-import { cn } from "@/lib/utils"; // Assuming cn is used for class names
-import { FileText, UploadCloud, X } from "lucide-react"; // Assuming these icons are used
-import Loader from "./Loader"; // Assuming Loader component exists in your ui folder
+import { cn } from "@/lib/utils";
+import { FileText, UploadCloud, X } from "lucide-react";
+import Loader from "./Loader";
 import { Button } from "./button";
 
 const FileDropzone = ({
@@ -209,8 +208,8 @@ const FileDropzone = ({
           "relative border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center cursor-pointer transition-colors",
           isDragActive
             ? "border-blue-500 bg-blue-900/20"
-            : "border-gray-600 hover:border-gray-500 bg-gray-800/50",
-          (internalError || externalError) && "border-red-500" // Use internalError for styling, combine with external error prop
+            : "border-gray-600 hover:border-gray-500 bg-gray-800",
+          (internalError || externalError) && "border-red-500"
         )}
         onClick={openFileDialog}
         onDragEnter={handleDrag}
@@ -300,12 +299,14 @@ const FileDropzone = ({
         </div>
       )}
 
-      {(internalError || externalError) && ( // Display either internal or external error
-        <Alert variant="destructive" className="mt-2">
-          {(internalError || externalError).split("\n").map((line, i) => (
-            <p key={i}>{line}</p>
-          ))}
-        </Alert>
+      {(internalError || externalError) && (
+        <div className="mt-2 p-3 bg-red-900/20 border border-red-500 rounded-md">
+          <div className="text-red-400 text-sm">
+            {(internalError || externalError).split("\n").map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

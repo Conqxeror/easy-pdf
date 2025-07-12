@@ -7,6 +7,11 @@ export const toolsData = [
     description: "Combine multiple PDF files into one seamless document.",
     icon: <Merge className="w-8 h-8 text-blue-500" />,
     comingSoon: false,
+    keywords: ["merge pdf", "combine pdf", "join pdf files", "pdf merger", "unite pdf"],
+    seoTitle: "Free PDF Merger - Combine Multiple PDFs Online",
+    seoDescription: "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
+    features: ["Drag & drop multiple files", "Reorder before merging", "No file size limits", "100% secure processing"],
+    relatedTools: ["/split", "/organize", "/compress"]
   },
   {
     href: "/split",
@@ -14,6 +19,11 @@ export const toolsData = [
     description: "Extract specific pages or split a PDF into multiple files.",
     icon: <Split className="w-8 h-8 text-green-500" />,
     comingSoon: false,
+    keywords: ["split pdf", "extract pdf pages", "separate pdf", "divide pdf", "pdf splitter"],
+    seoTitle: "Free PDF Splitter - Extract Pages from PDF Online",
+    seoDescription: "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing.",
+    features: ["Extract specific pages", "Split by page ranges", "Preview before splitting", "Download as ZIP"],
+    relatedTools: ["/merge", "/delete-pages", "/organize"]
   },
   {
     href: "/compress",
@@ -21,6 +31,11 @@ export const toolsData = [
     description: "Reduce PDF file size for easier sharing and storage.",
     icon: <Minimize2 className="w-8 h-8 text-purple-500" />,
     comingSoon: false,
+    keywords: ["compress pdf", "reduce pdf size", "optimize pdf", "shrink pdf", "pdf compressor"],
+    seoTitle: "Free PDF Compressor - Reduce PDF File Size Online",
+    seoDescription: "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels.",
+    features: ["Multiple compression levels", "Quality preservation", "Batch processing", "Size preview"],
+    relatedTools: ["/merge", "/optimize", "/convert"]
   },
   {
     href: "/jpg-to-pdf",
@@ -28,6 +43,11 @@ export const toolsData = [
     description: "Convert your JPG, PNG, or other images into a PDF document.",
     icon: <LucideImage alt="JPG to PDF Icon" className="w-8 h-8 text-pink-500" />,
     comingSoon: false,
+    keywords: ["jpg to pdf", "png to pdf", "image to pdf", "convert images", "photo to pdf"],
+    seoTitle: "Free JPG to PDF Converter - Convert Images to PDF Online",
+    seoDescription: "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing.",
+    features: ["Multiple image formats", "Batch conversion", "Custom page sizes", "Image ordering"],
+    relatedTools: ["/pdf-to-jpg", "/merge", "/compress"]
   },
   {
     href: "/pdf-to-jpg",
@@ -35,6 +55,11 @@ export const toolsData = [
     description: "Convert PDF pages into high-quality JPG image files.",
     icon: <FileText className="w-8 h-8 text-teal-500" />,
     comingSoon: false,
+    keywords: ["pdf to jpg", "pdf to png", "convert pdf to image", "pdf to photo", "extract images"],
+    seoTitle: "Free PDF to JPG Converter - Convert PDF to Images Online",
+    seoDescription: "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
+    features: ["High-quality output", "Custom resolution", "Batch processing", "Multiple formats"],
+    relatedTools: ["/jpg-to-pdf", "/split", "/extract"]
   },
   {
     href: "/rotate",
@@ -42,6 +67,11 @@ export const toolsData = [
     description: "Rotate PDF pages to the correct orientation (90, 180, 270 degrees).",
     icon: <RotateCw className="w-8 h-8 text-yellow-500" />,
     comingSoon: false,
+    keywords: ["rotate pdf", "fix pdf orientation", "turn pdf pages", "pdf rotation", "flip pdf"],
+    seoTitle: "Free PDF Rotator - Rotate PDF Pages Online",
+    seoDescription: "Rotate PDF pages by 90, 180, or 270 degrees. Fix document orientation with our free online PDF rotation tool.",
+    features: ["Multiple rotation angles", "Page-specific rotation", "Batch rotation", "Preview changes"],
+    relatedTools: ["/organize", "/reorder", "/split"]
   },
   {
     href: "/watermark",
@@ -49,6 +79,11 @@ export const toolsData = [
     description: "Add custom text or image watermarks to your PDF documents.",
     icon: <Stamp className="w-8 h-8 text-red-500" />,
     comingSoon: false,
+    keywords: ["watermark pdf", "add watermark", "pdf branding", "document protection", "pdf stamp"],
+    seoTitle: "Free PDF Watermark Tool - Add Watermarks to PDF Online",
+    seoDescription: "Add text or image watermarks to PDF documents. Customize position, opacity, and rotation with our free online watermarking tool.",
+    features: ["Text & image watermarks", "Custom positioning", "Opacity control", "Rotation options"],
+    relatedTools: ["/protect", "/sign", "/page-numbers"]
   },
   {
     href: "/protect",
@@ -56,6 +91,11 @@ export const toolsData = [
     description: "Encrypt your PDFs with a password for enhanced security.",
     icon: <Lock className="w-8 h-8 text-gray-500" />,
     comingSoon: false,
+    keywords: ["protect pdf", "password pdf", "encrypt pdf", "secure pdf", "pdf security"],
+    seoTitle: "Free PDF Password Protection - Secure PDF Files Online",
+    seoDescription: "Protect PDF files with password encryption. Add security to sensitive documents with our free online PDF protection tool.",
+    features: ["Password encryption", "User permissions", "Print restrictions", "Copy protection"],
+    relatedTools: ["/unlock", "/watermark", "/sign"]
   },
   {
     href: "/unlock",
@@ -63,6 +103,11 @@ export const toolsData = [
     description: "Remove password protection from your PDF files.",
     icon: <Unlock className="w-8 h-8 text-orange-500" />,
     comingSoon: false,
+    keywords: ["unlock pdf", "remove pdf password", "decrypt pdf", "pdf password remover", "open protected pdf"],
+    seoTitle: "Free PDF Unlocker - Remove PDF Password Online",
+    seoDescription: "Remove password protection from PDF files. Unlock encrypted PDFs with our free online PDF password removal tool.",
+    features: ["Password removal", "Quick processing", "Secure unlocking", "No data retention"],
+    relatedTools: ["/protect", "/merge", "/split"]
   },
   {
     href: "/delete-pages",
@@ -70,6 +115,11 @@ export const toolsData = [
     description: "Remove unwanted pages from your PDF document easily.",
     icon: <Eraser className="w-8 h-8 text-indigo-500" />,
     comingSoon: false,
+    keywords: ["delete pdf pages", "remove pdf pages", "extract pdf pages", "pdf page removal", "trim pdf"],
+    seoTitle: "Free PDF Page Deleter - Remove Pages from PDF Online",
+    seoDescription: "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool.",
+    features: ["Select specific pages", "Page range deletion", "Preview before deletion", "Instant processing"],
+    relatedTools: ["/split", "/organize", "/reorder"]
   },
   {
     href: "/reorder",
@@ -77,6 +127,11 @@ export const toolsData = [
     description: "Rearrange the order of pages within your PDF document.",
     icon: <ListOrdered className="w-8 h-8 text-cyan-500" />,
     comingSoon: false,
+    keywords: ["reorder pdf pages", "rearrange pdf", "organize pdf pages", "pdf page order", "sort pdf pages"],
+    seoTitle: "Free PDF Page Reorder Tool - Rearrange PDF Pages Online",
+    seoDescription: "Reorder and rearrange PDF pages with drag-and-drop interface. Organize your PDF documents with our free online tool.",
+    features: ["Drag & drop interface", "Visual page preview", "Instant reordering", "Download organized PDF"],
+    relatedTools: ["/organize", "/delete-pages", "/split"]
   },
   {
     href: "/organize",
@@ -84,6 +139,11 @@ export const toolsData = [
     description: "Combine reordering and deletion to organize your PDF pages.",
     icon: <ListOrdered className="w-8 h-8 text-cyan-700" />,
     comingSoon: false,
+    keywords: ["organize pdf", "pdf organizer", "manage pdf pages", "pdf page management", "restructure pdf"],
+    seoTitle: "Free PDF Organizer - Manage PDF Pages Online",
+    seoDescription: "Organize PDF pages by reordering, deleting, and managing content. Complete PDF organization tool with visual interface.",
+    features: ["Page reordering", "Page deletion", "Visual management", "Complete organization"],
+    relatedTools: ["/reorder", "/delete-pages", "/merge"]
   },
   {
     href: "/page-numbers",
@@ -91,6 +151,11 @@ export const toolsData = [
     description: "Insert customizable page numbers, headers, or footers into your PDF.",
     icon: <PlusCircle className="w-8 h-8 text-amber-500" />,
     comingSoon: false,
+    keywords: ["add page numbers", "pdf page numbers", "number pdf pages", "pdf headers footers", "paginate pdf"],
+    seoTitle: "Free PDF Page Number Tool - Add Page Numbers Online",
+    seoDescription: "Add page numbers, headers, and footers to PDF documents. Customize format, position, and styling with our free online tool.",
+    features: ["Custom numbering formats", "Header & footer options", "Position control", "Font customization"],
+    relatedTools: ["/watermark", "/organize", "/merge"]
   },
   {
     href: "/html-to-pdf",
@@ -98,6 +163,11 @@ export const toolsData = [
     description: "Convert HTML code or web content into a PDF document.",
     icon: <FileText className="w-8 h-8 text-blue-400" />,
     comingSoon: false,
+    keywords: ["html to pdf", "convert html", "web to pdf", "html converter", "webpage to pdf"],
+    seoTitle: "Free HTML to PDF Converter - Convert Web Content to PDF",
+    seoDescription: "Convert HTML code and web content to PDF format. Free online HTML to PDF converter with styling preservation.",
+    features: ["HTML code conversion", "CSS styling support", "Web content capture", "Custom page sizes"],
+    relatedTools: ["/merge", "/compress", "/watermark"]
   },
   {
     href: "/ocr",
@@ -105,6 +175,11 @@ export const toolsData = [
     description: "Extract editable text from scanned PDFs and images.",
     icon: <Search className="w-8 h-8 text-green-400" />,
     comingSoon: false,
+    keywords: ["ocr pdf", "extract text", "pdf text recognition", "scan to text", "pdf ocr online"],
+    seoTitle: "Free PDF OCR Tool - Extract Text from Scanned PDFs",
+    seoDescription: "Extract editable text from scanned PDFs and images using OCR technology. Free online optical character recognition tool.",
+    features: ["Text extraction", "Multiple languages", "Image processing", "Editable output"],
+    relatedTools: ["/form-filler", "/search", "/convert"]
   },
   {
     href: "/sign",
@@ -112,6 +187,11 @@ export const toolsData = [
     description: "Draw, type, or upload your signature and place it on your PDF.",
     icon: <Signature className="w-8 h-8 text-rose-500" />,
     comingSoon: false,
+    keywords: ["sign pdf", "pdf signature", "annotate pdf", "digital signature", "pdf signing tool"],
+    seoTitle: "Free PDF Signature Tool - Sign PDF Documents Online",
+    seoDescription: "Sign PDF documents with digital signatures and annotations. Free online PDF signing tool with drawing and typing options.",
+    features: ["Digital signatures", "Drawing tools", "Text annotations", "Signature placement"],
+    relatedTools: ["/form-filler", "/protect", "/watermark"]
   },
   {
     href: "/form-filler",
@@ -119,6 +199,11 @@ export const toolsData = [
     description: "Add text, checkmarks, or other inputs to any PDF form.",
     icon: <Text className="w-8 h-8 text-lime-500" />,
     comingSoon: false,
+    keywords: ["fill pdf form", "pdf form filler", "complete pdf forms", "pdf input", "form completion"],
+    seoTitle: "Free PDF Form Filler - Complete PDF Forms Online",
+    seoDescription: "Fill out PDF forms online with text, checkboxes, and signatures. Free PDF form completion tool with save functionality.",
+    features: ["Form field detection", "Text input", "Checkbox support", "Form saving"],
+    relatedTools: ["/sign", "/ocr", "/protect"]
   },
   {
     href: "/word-to-pdf",
@@ -126,6 +211,11 @@ export const toolsData = [
     description: "Convert Word documents to PDF (Coming Soon - Server-side).",
     icon: <FileText className="w-8 h-8 text-blue-600" />,
     comingSoon: true,
+    keywords: ["word to pdf", "docx to pdf", "convert word", "document converter", "office to pdf"],
+    seoTitle: "Word to PDF Converter - Convert DOCX to PDF (Coming Soon)",
+    seoDescription: "Convert Microsoft Word documents to PDF format. Professional document conversion tool coming soon.",
+    features: ["DOCX conversion", "Formatting preservation", "Batch processing", "High quality output"],
+    relatedTools: ["/pdf-to-word", "/merge", "/compress"]
   },
   {
     href: "/pdf-to-word",
@@ -133,6 +223,11 @@ export const toolsData = [
     description: "Convert PDF to editable Word documents (Coming Soon - Server-side).",
     icon: <FileText className="w-8 h-8 text-blue-800" />,
     comingSoon: true,
+    keywords: ["pdf to word", "pdf to docx", "convert pdf", "editable document", "pdf converter"],
+    seoTitle: "PDF to Word Converter - Convert PDF to DOCX (Coming Soon)",
+    seoDescription: "Convert PDF files to editable Microsoft Word documents. Professional PDF to Word conversion tool coming soon.",
+    features: ["Editable output", "Layout preservation", "Text extraction", "Format conversion"],
+    relatedTools: ["/word-to-pdf", "/ocr", "/form-filler"]
   },
   {
     href: "/legal-analyzer",
@@ -140,6 +235,11 @@ export const toolsData = [
     description: "AI-powered tool for legal document review and clause extraction.",
     icon: <FileText className="w-8 h-8 text-fuchsia-500" />,
     comingSoon: false,
+    keywords: ["legal document analyzer", "contract review", "legal ai", "document analysis", "clause extraction"],
+    seoTitle: "AI Legal Document Analyzer - Review Contracts Online",
+    seoDescription: "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts.",
+    features: ["AI-powered analysis", "Clause extraction", "Risk assessment", "Legal insights"],
+    relatedTools: ["/medical-analyzer", "/ocr", "/form-filler"]
   },
   {
     href: "/medical-analyzer",
@@ -147,5 +247,10 @@ export const toolsData = [
     description: "AI-powered tool for medical document review and key information extraction.",
     icon: <FileHeart className="w-8 h-8 text-red-500" />,
     comingSoon: false,
+    keywords: ["medical document analyzer", "medical ai", "health document review", "medical analysis", "patient document"],
+    seoTitle: "AI Medical Document Analyzer - Review Medical Records",
+    seoDescription: "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records.",
+    features: ["Medical AI analysis", "Patient data extraction", "Diagnosis identification", "Health insights"],
+    relatedTools: ["/legal-analyzer", "/ocr", "/form-filler"]
   },
 ];

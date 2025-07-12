@@ -57,7 +57,7 @@ export default function Home() {
           All processing happens in your browser. No file uploads, no privacy
           risks. Fast, free, and made for Indian users.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link
             href="/merge"
             className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -87,7 +87,7 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="w-full max-w-6xl mb-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-all">
             <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-900/50 mb-4">
               <Lock className="w-6 h-6 text-blue-400" />
@@ -128,7 +128,7 @@ export default function Home() {
           </span>
         </h2>
         <Suspense fallback={<Skeleton />}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {toolsData.map((tool) => (
               <ToolCard key={tool.href} tool={tool} />
             ))}
