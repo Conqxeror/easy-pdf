@@ -457,6 +457,7 @@ export default function OrganizePage() {
         <ToolPageContent
           toolName="Organize PDF"
           toolDescription="Reorder, delete, and rotate pages in your PDF files with our free online tool. Organize your PDFs exactly the way you want."
+          currentTool="organize"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
             "Drag and drop the pages to reorder them.",

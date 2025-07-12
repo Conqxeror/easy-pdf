@@ -285,6 +285,7 @@ export default function HtmlToPdfPage() {
         <ToolPageContent
           toolName="HTML to PDF Converter"
           toolDescription="Convert your HTML code or web content into a high-quality PDF document. Our free online tool allows you to paste HTML, edit it directly, and then generate a PDF that accurately preserves the layout and styling. Ideal for archiving web pages, creating reports from HTML data, or saving online articles for offline reading. All processing is done securely in your browser, ensuring your content remains private."
+          currentTool="html-to-pdf"
           steps={[
             "Paste your HTML code or type your content directly into the editable text area above.",
             "Click the 'Generate PDF Preview' button to see how your HTML content will look as a PDF.",

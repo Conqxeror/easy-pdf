@@ -301,6 +301,7 @@ export default function JpgToPdfPage() {
         <ToolPageContent
           toolName="JPG to PDF Converter"
           toolDescription="Convert your JPG and PNG images into a single, high-quality PDF document. Our free online tool allows you to combine multiple images, arrange their order, and create a professional-looking PDF. All processing is done securely in your browser, ensuring your files remain private."
+          currentTool="jpg-to-pdf"
           steps={[
             "Upload your JPG or PNG images by dragging them into the dropzone or clicking to select files. You can select multiple images at once.",
             "Once uploaded, you can review the list of selected images. The tool will combine them in the order they were uploaded.",

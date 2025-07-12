@@ -252,6 +252,7 @@ export default function RotatePdfPage() {
       <ToolPageContent
         toolName="Rotate PDF"
         toolDescription="Easily rotate pages in your PDF documents. Whether you need to adjust the orientation of a single page, a specific range, or the entire document, our online tool allows you to rotate by 90, 180, or 270 degrees. All processing is done securely in your browser, ensuring your files remain private."
+        currentTool="rotate"
         steps={[
           "Upload your PDF file by dragging it into the dropzone or clicking to select.",
           "Specify the page range you want to rotate. You can choose to rotate all pages, or a custom range (e.g., pages 5-10).",

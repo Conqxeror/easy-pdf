@@ -2,30 +2,39 @@ import { toolsData } from '@/lib/toolData'
 
 export default function sitemap() {
   const baseUrl = 'https://easy-pdf-murex.vercel.app'
+  const lastModified = new Date('2025-06-27')
   
-  // Static pages
+  // Static pages that definitely exist
   const staticPages = [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: lastModified,
       changeFrequency: 'weekly',
       priority: 1.0,
     },
     {
+      url: `${baseUrl}/about`,
+      lastModified: lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/security`,
-      lastModified: new Date(),
+      lastModified: lastModified,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
   ]
 
-  // Dynamic tool pages
-  const toolPages = toolsData.map((tool) => ({
-    url: `${baseUrl}${tool.href}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.9,
-  }))
+  // Tool pages - only include tools that exist and are not coming soon
+  const existingToolPages = toolsData
+    .filter((tool) => !tool.comingSoon)
+    .map((tool) => ({
+      url: `${baseUrl}${tool.href}`,
+      lastModified: lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    }))
 
-  return [...staticPages, ...toolPages]
+  return [...staticPages, ...existingToolPages]
 }

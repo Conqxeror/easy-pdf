@@ -762,6 +762,7 @@ export default function WatermarkPdfPage() {
         <ToolPageContent
           toolName="Add Watermark to PDF"
           toolDescription="Protect your PDF documents or add important information by applying custom text or image watermarks. Our online tool allows you to easily add a watermark with adjustable position, opacity, rotation, and font settings (for text watermarks). Enhance document security and branding, all while keeping your files private with client-side processing."
+          currentTool="watermark"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select it from your device.",
             "Choose between a 'Text Watermark' or 'Image Watermark'.",

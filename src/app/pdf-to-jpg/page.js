@@ -477,6 +477,7 @@ export default function PdfToJpgPage() {
         <ToolPageContent
           toolName="PDF to JPG Converter"
           toolDescription="Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file. Our tool ensures excellent image quality while processing your files securely in your browser, keeping your documents private."
+          currentTool="pdf-to-jpg"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
             "Choose which pages to convert: all pages, or a specific page number.",

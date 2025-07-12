@@ -185,6 +185,7 @@ export default function ProtectPdfPage() {
       <ToolPageContent
         toolName="Protect PDF"
         toolDescription="Secure your sensitive PDF documents with password protection. Our online tool allows you to encrypt your PDFs, restricting access and ensuring only authorized individuals can view or modify them. All processing is done client-side, guaranteeing your privacy and the confidentiality of your files."
+        currentTool="protect"
         steps={[
           "Upload the PDF file you wish to protect by dragging it into the dropzone or clicking to select.",
           "Enter a strong password in the designated field. This password will be required to open the protected PDF.",

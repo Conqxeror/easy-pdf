@@ -379,6 +379,7 @@ export default function CompressPDFs() {
         <ToolPageContent
           toolName="Compress PDF"
           toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files. Choose from different compression levels to find the perfect balance between file size and document quality. All processing is done securely in your browser, ensuring your files remain private."
+          currentTool="compress"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
             "Select your desired compression level: Mild (good quality), Balanced (recommended), or Aggressive (smallest size). You can also fine-tune the image quality using the slider.",

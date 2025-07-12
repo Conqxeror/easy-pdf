@@ -184,6 +184,7 @@ export default function UnlockPdfPage() {
       <ToolPageContent
         toolName="Unlock PDF"
         toolDescription="Remove password protection from your PDF documents quickly and securely. Our online Unlock PDF tool allows you to decrypt password-protected PDFs directly in your browser, ensuring your files remain private. Simply upload your file, enter the correct password, and download the unlocked version instantly."
+        currentTool="unlock"
         steps={[
           "Upload your password-protected PDF file by dragging it into the dropzone or clicking to select.",
           "Enter the correct password for the PDF in the provided input field.",
