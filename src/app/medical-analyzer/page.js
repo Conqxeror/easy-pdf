@@ -7,6 +7,7 @@ import Loader from "@/components/ui/Loader";
 
 
 import { Alert } from "@/components/ui/alert";
+import { Card } from "@/components/ui/card";
 import {
   FileHeart,
   Stethoscope,

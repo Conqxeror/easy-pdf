@@ -11,6 +11,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
 
 import { Alert } from "@/components/ui/alert";
+import { Card } from "@/components/ui/card";
 // Import lucide-react icons
 import {
   FileText,
