@@ -50,6 +50,7 @@ function needsReactImport(content) {
 function hasReactImport(content) {
   const reactImportPatterns = [
     /import\s+React\s+from\s+['"]react['"]/,
+    /import\s+React\s*,\s*\{[^}]*\}\s+from\s+['"]react['"]/,  // import React, { ... } from 'react'
     /import\s+\*\s+as\s+React\s+from\s+['"]react['"]/,
     /import\s+\{[^}]*React[^}]*\}\s+from\s+['"]react['"]/,
     /const\s+React\s*=\s*require\s*\(\s*['"]react['"]\s*\)/
@@ -58,13 +59,50 @@ function hasReactImport(content) {
   return reactImportPatterns.some(pattern => pattern.test(content));
 }
 
+function isNextJsAppRouterFile(filePath) {
+  // Check if file is in Next.js App Router structure
+  const normalizedPath = filePath.replace(/\\/g, '/');
+  return normalizedPath.includes('/src/app/') || 
+         normalizedPath.includes('/app/') ||
+         normalizedPath.includes('/src/components/') ||
+         normalizedPath.includes('/components/');
+}
+
+function hasNextJsConfig() {
+  // Check if this is a Next.js project with automatic JSX transformation
+  try {
+    const nextConfigPath = path.join(process.cwd(), 'next.config.js');
+    const nextConfigMjsPath = path.join(process.cwd(), 'next.config.mjs');
+    const packageJsonPath = path.join(process.cwd(), 'package.json');
+    
+    if (fs.existsSync(nextConfigPath) || fs.existsSync(nextConfigMjsPath)) {
+      return true;
+    }
+    
+    if (fs.existsSync(packageJsonPath)) {
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+      return packageJson.dependencies && packageJson.dependencies.next;
+    }
+    
+    return false;
+  } catch (error) {
+    return false;
+  }
+}
+
 function scanFile(filePath) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     const needsReact = needsReactImport(content);
     const hasReact = hasReactImport(content);
     
+    // Skip validation for Next.js App Router files if automatic JSX is enabled
     if (needsReact && !hasReact) {
+      if (hasNextJsConfig() && isNextJsAppRouterFile(filePath)) {
+        // Next.js 13+ with App Router has automatic JSX transformation
+        return null;
+      }
+      
       return {
         file: filePath,
         issues: ['React usage detected without proper import']
