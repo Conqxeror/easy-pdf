@@ -1,6 +1,6 @@
 "use client";
 
-import { Metadata } from 'next';
+
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
@@ -147,13 +147,13 @@ export default function FormFillerPage() {
     // Draw the text preview on top
     if (text.trim()) {
       // Scale based on the original PDF page dimensions to canvas width
-      const currentCanvasScale = canvas.width / pdfPageDimensions.width;
-      context.font = `${fontSize * currentCanvasScale}px Helvetica`; // Scale font size
+            const canvasScale = canvas.width / pdfPageDimensions.width;
+      context.font = `${fontSize * canvasScale}px Helvetica`; // Scale font size
       context.fillStyle = color;
 
       // Convert PDF Y coordinate (bottom-left origin) to Canvas Y coordinate (top-left origin)
-      const canvasX = x * currentCanvasScale;
-      const canvasY = canvas.height - y * currentCanvasScale;
+      const canvasX = x * canvasScale;
+      const canvasY = canvas.height - y * canvasScale;
 
       context.fillText(text, canvasX, canvasY);
     }
@@ -237,8 +237,7 @@ export default function FormFillerPage() {
       const mouseY = e.clientY - rect.top;
 
       // Calculate current canvas scale relative to PDF units
-      const currentCanvasScale = canvas.width / pdfPageDimensions.width;
-
+      
       // Set dragging state and initial positions
       setIsDragging(true);
       setDragStartX(mouseX);
@@ -264,15 +263,14 @@ export default function FormFillerPage() {
       const currentMouseY = e.clientY - rect.top;
 
       // Calculate current canvas scale relative to PDF units
-      const currentCanvasScale = canvas.width / pdfPageDimensions.width;
-
+      
       // Calculate delta in canvas pixels
       const deltaCanvasX = currentMouseX - dragStartX;
       const deltaCanvasY = currentMouseY - dragStartY;
 
       // Convert canvas pixel delta to PDF unit delta
-      const deltaPdfX = deltaCanvasX / currentCanvasScale;
-      const deltaPdfY = -deltaCanvasY / currentCanvasScale; // Y is inverted in PDF vs Canvas
+      const deltaPdfX = deltaCanvasX / (canvas.width / pdfPageDimensions.width);
+      const deltaPdfY = -deltaCanvasY / (canvas.width / pdfPageDimensions.width); // Y is inverted in PDF vs Canvas
 
       // Calculate new PDF coordinates
       let newX = initialTextX + deltaPdfX;

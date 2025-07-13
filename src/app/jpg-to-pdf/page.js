@@ -1,9 +1,9 @@
 "use client";
-import { Metadata } from 'next';
-import { useState, useRef, useEffect, useCallback } from "react";
+
+import React, { useState, useRef, useEffect, useCallback  } from "react";
 
 
-import { PDFDocument, rgb } from "pdf-lib";
+import { PDFDocument } from "pdf-lib";
 import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // Assuming Progress is used for conversion feedback
 import ToolPageContent from "@/components/ui/ToolPageContent";
-import Loader from "@/components/ui/Loader";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -82,8 +81,7 @@ export default function JpgToPdfPage() {
 
       const renderContext = {
         canvasContext: context,
-        viewport: scaledViewport,
-      };
+        viewport: scaledViewport };
 
       context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -157,8 +155,7 @@ export default function JpgToPdfPage() {
           x: 0,
           y: 0,
           width: dims.width,
-          height: dims.height,
-        });
+          height: dims.height });
 
         // Update progress for each image processed
         setProgress(Math.round(((i + 1) / files.length) * 90)); // 90% for image processing
@@ -312,28 +309,23 @@ export default function JpgToPdfPage() {
             {
               question: "Is it free to convert JPG to PDF?",
               answer:
-                "Yes, our JPG to PDF converter is completely free to use. You can convert as many images as you need without any hidden costs or limitations.",
-            },
+                "Yes, our JPG to PDF converter is completely free to use. You can convert as many images as you need without any hidden costs or limitations." },
             {
               question: "Are my files secure when converting images to PDF?",
               answer:
-                "Absolutely. Your privacy is our top priority. All image to PDF conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
+                "Absolutely. Your privacy is our top priority. All image to PDF conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential." },
             {
               question: "Can I convert multiple images at once?",
               answer:
-                "Yes, you can upload multiple JPG and PNG images simultaneously. They will be combined into a single PDF document, with each image appearing on a new page.",
-            },
+                "Yes, you can upload multiple JPG and PNG images simultaneously. They will be combined into a single PDF document, with each image appearing on a new page." },
             {
               question: "Does the tool support PNG images as well?",
               answer:
-                "Yes, in addition to JPG, our tool also fully supports converting PNG images to PDF. You can mix and match both formats in a single conversion.",
-            },
+                "Yes, in addition to JPG, our tool also fully supports converting PNG images to PDF. You can mix and match both formats in a single conversion." },
             {
               question: "Is there a file size limit for images?",
               answer:
-                "While there's not a strict limit on the total number of images, individual image files should ideally be under 50MB for optimal performance during client-side processing.",
-            },
+                "While there's not a strict limit on the total number of images, individual image files should ideally be under 50MB for optimal performance during client-side processing." },
           ]}
         />
       </main>

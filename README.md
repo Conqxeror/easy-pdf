@@ -24,9 +24,25 @@ Our toolkit offers a wide range of functionalities to empower your document work
 -   **Add Page Numbers**: #️⃣ Insert customizable page numbers into your PDF.
 -   **Add Watermark**: 💧 Apply text or image watermarks to your PDF.
 -   **Sign PDF**: ✍️ Electronically sign your PDF documents.
--   **Form Filler**:  заполнить формы в PDF.
--   **Legal Analyzer**: ⚖️ Analyze legal documents (via API).
--   **Medical Analyzer**: ⚕️ Analyze medical documents (via API).
+-   **Form Filler**: 📝 Fill out PDF forms with text, checkboxes, and signatures.
+-   **Legal Analyzer**: ⚖️ Analyze legal documents with AI-powered insights.
+-   **Medical Analyzer**: ⚕️ Analyze medical documents with AI-powered review.
+-   **PDF Metadata Editor**: 🏷️ Edit PDF metadata including title, author, and keywords.
+-   **PDF Bookmark Manager**: 📑 Add and organize PDF bookmarks and navigation.
+-   **PDF Table Extractor**: 📊 Extract tables from PDFs to CSV, Excel, or JSON.
+-   **PDF Batch Processor**: 🔄 Process multiple PDFs with batch operations.
+-   **PDF Form Creator**: 📋 Create interactive PDF forms with various field types.
+-   **Advanced OCR with AI**: 🤖 AI-enhanced text extraction with formatting.
+-   **PDF Accessibility Checker**: ♿ Check PDF compliance with WCAG standards.
+-   **PDF Digital Signature**: 🔐 Add legally binding digital signatures.
+-   **PDF Redaction Tool**: 🚫 Permanently remove sensitive information.
+-   **PDF Version Comparison**: 🔍 Compare different versions with visual diff.
+-   **PDF Annotation Collaboration**: 👥 Collaborate on PDF annotations.
+-   **Invoice Generator**: 💰 Create professional invoices with GST support.
+-   **QR Code Generator**: 📱 Generate QR codes for URLs, WiFi, and more.
+-   **Certificate Generator**: 🏆 Create professional certificates and awards.
+-   **Portfolio Creator**: 💼 Build professional PDF portfolios.
+-   **Report Generator**: 📈 Create business reports with metrics and charts.
 
 ## 🚀 Technologies Used
 

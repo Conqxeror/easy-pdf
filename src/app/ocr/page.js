@@ -327,11 +327,38 @@ export default function OcrPage() {
     }
   };
 
-  const handleCopyText = () => {
+  const handleCopyText = async () => {
     if (result) {
-      document.execCommand("copy", false, result); // Use execCommand for broader compatibility in iframes
-      setError("Text copied to clipboard!");
-      setTimeout(() => setError(""), 3000);
+      try {
+        // Use modern clipboard API if available
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(result);
+          setError("Text copied to clipboard!");
+        } else {
+          // Fallback for older browsers or insecure contexts
+          const textArea = document.createElement('textarea');
+          textArea.value = result;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-999999px';
+          textArea.style.top = '-999999px';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          
+          try {
+            document.execCommand('copy');
+            setError("Text copied to clipboard!");
+          } catch {
+            setError("Failed to copy text. Please select and copy manually.");
+          } finally {
+            document.body.removeChild(textArea);
+          }
+        }
+        setTimeout(() => setError(""), 3000);
+      } catch {
+        setError("Failed to copy text. Please select and copy manually.");
+        setTimeout(() => setError(""), 3000);
+      }
     }
   };
 

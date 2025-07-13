@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { Github, Linkedin, Mail } from "lucide-react"; // Import necessary icons
 
@@ -47,6 +48,7 @@ const footerLinks = [
         href: "/security",
         external: false,
       },
+      { name: "Sponsors", href: "/sponsors" },
     ],
   },
 ];

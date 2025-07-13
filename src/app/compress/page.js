@@ -2,7 +2,7 @@
 
 
 
-import { useState, useCallback } from "react";
+import React, { useState, useCallback  } from "react";
 
 
 import { PDFDocument } from "pdf-lib";
@@ -15,7 +15,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageContent from "@/components/ui/ToolPageContent";
-import Loader from "@/components/ui/Loader";
 
 // Configure pdfjs worker to run from CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;

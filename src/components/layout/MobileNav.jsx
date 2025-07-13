@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import clsx from "clsx";
-import { useState } from "react";
+import React, { useState  } from "react";
 import { usePathname } from "next/navigation";
 import { toolCategories } from "@/lib/toolCategories";
 

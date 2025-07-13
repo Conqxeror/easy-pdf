@@ -1,3 +1,4 @@
+import React from "react";
 import { generateMetadata } from "@/lib/metadata";
 
 export const metadata = generateMetadata({

@@ -1,11 +1,9 @@
 "use client";
-import { Metadata } from "next";
+
 import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
-
-
 import { Alert } from "@/components/ui/alert";
 import { Card } from "@/components/ui/card";
 import {
@@ -16,6 +14,7 @@ import {
   FlaskConical,
 } from "lucide-react";
 import ToolPageContent from "@/components/ui/ToolPageContent";
+import EnhancedErrorBoundary from "@/components/ui/EnhancedErrorBoundary";
 
 export default function MedicalAnalyzerPage() {
   const [file, setFile] = useState(null);
@@ -25,11 +24,16 @@ export default function MedicalAnalyzerPage() {
   const [error, setError] = useState("");
 
   const handleFile = useCallback((f) => {
-    const selectedFile = f && f.length > 0 ? f[0] : null;
-    setFile(selectedFile);
-    setResult(null);
-    setError("");
-    setLoadingMessage("");
+    try {
+      const selectedFile = f && f.length > 0 ? f[0] : null;
+      setFile(selectedFile);
+      setResult(null);
+      setError("");
+      setLoadingMessage("");
+    } catch (err) {
+      setError("Failed to process file selection");
+      console.error("File handling error:", err);
+    }
   }, []);
 
   const analyzeDocument = async () => {
@@ -52,7 +56,7 @@ export default function MedicalAnalyzerPage() {
             throw new Error(`File read error: ${reader.error.message}`);
           }
 
-          const base64 = e.target.result.split(",")[1];
+          const base64 = e.target?.result?.split(",")[1];
           if (!base64) {
             throw new Error("Failed to read file content.");
           }
@@ -62,10 +66,12 @@ export default function MedicalAnalyzerPage() {
 
           // Dynamically import pdfjs-dist only if the file is a PDF
           if (file.type === "application/pdf") {
-            const pdfjsLib = await import("pdfjs-dist");
-            pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
-            // You might need to do something with the PDF here, e.g., extract text
-            // For now, just setting the workerSrc
+            try {
+              const pdfjsLib = await import("pdfjs-dist");
+              pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
+            } catch (pdfError) {
+              console.warn("PDF.js worker setup failed:", pdfError);
+            }
           }
 
           setLoadingMessage("Analyzing medical document with AI...");
@@ -84,13 +90,13 @@ export default function MedicalAnalyzerPage() {
             try {
               const errorData = await res.json();
               errorMsg = errorData.error || errorMsg;
-            } catch (jsonParseError) {
+            } catch {
               try {
                 const rawText = await res.text();
                 errorMsg = `Analysis failed (Status: ${res.status} ${
                   res.statusText
                 }). Response: ${rawText.substring(0, 200)}...`;
-              } catch (textParseError) {
+              } catch {
                 errorMsg = `Analysis failed (Status: ${res.status} ${res.statusText}). Could not read response.`;
               }
             }
@@ -150,7 +156,7 @@ export default function MedicalAnalyzerPage() {
   };
 
   return (
-    <>
+    <EnhancedErrorBoundary>
       <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
         <div className="max-w-2xl w-full">
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
@@ -410,6 +416,6 @@ export default function MedicalAnalyzerPage() {
           ]}
         />
       </div>
-    </>
+    </EnhancedErrorBoundary>
   );
 }

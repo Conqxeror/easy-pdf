@@ -1,7 +1,9 @@
 "use client";
 
-import { Metadata } from 'next';
 
+
+
+import React from 'react';
 import { Alert } from "@/components/ui/alert";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 

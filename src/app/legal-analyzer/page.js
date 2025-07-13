@@ -1,10 +1,8 @@
 "use client";
 
-import { Metadata } from 'next';
 // src/app/legal-analyzer/page.js
 
 import React, { useState, useCallback } from "react";
-
 
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
@@ -126,13 +124,13 @@ export default function LegalAnalyzerPage() {
             try {
               const errorData = await res.json();
               errorMsg = errorData.error || errorMsg;
-            } catch (jsonParseError) {
+            } catch {
               try {
                 const rawText = await res.text();
                 errorMsg = `Analysis failed (Status: ${res.status} ${
                   res.statusText
                 }). Response: ${rawText.substring(0, 200)}...`;
-              } catch (textParseError) {
+              } catch {
                 errorMsg = `Analysis failed (Status: ${res.status} ${res.statusText}). Could not read response.`;
               }
             }

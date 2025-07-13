@@ -109,7 +109,7 @@ export default function PageNumbersPage() {
       // Now, draw the text overlay on the preview canvas
       if (files.length > 0) {
         const previewPageIndex = pageNumForPreview - 1; // Convert back to 0-based for calculations
-        const { width: pageWidth, height: pageHeight } = viewport; // Original PDF page dimensions
+        viewport; // Original PDF page dimensions (not used in current implementation)
 
         context.font = `${fontSize * scale}px Helvetica`; // Scale font for preview
         context.fillStyle = textColor; // Use selected text color
@@ -171,8 +171,8 @@ export default function PageNumbersPage() {
               textY = margin + footerScaledFontSize;
               break;
             case "bottom-left":
-              x = margin;
-              y = canvas.height - margin;
+              textX = margin;
+              textY = canvas.height - margin;
               break;
             case "bottom-center":
               textX = (canvas.width - footerTextWidth) / 2;
@@ -322,9 +322,9 @@ export default function PageNumbersPage() {
       } else if (applyToMode === "range") {
         const actualRangeStart = Math.max(
           1,
-          Math.min(pageRangeStart, numPages)
+          Math.min(rangeStart, numPages)
         );
-        const actualRangeEnd = Math.max(1, Math.min(pageRangeEnd, numPages));
+        const actualRangeEnd = Math.max(1, Math.min(rangeEnd, numPages));
         if (actualRangeStart > actualRangeEnd) {
           setError("Page range start cannot be greater than end.");
           setIsProcessing(false);

@@ -1,8 +1,6 @@
 "use client";
-import { Metadata } from 'next';
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
-
 
 import html2canvas from "html2canvas";
 import { PDFDocument } from "pdf-lib";
@@ -26,7 +24,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 export default function HtmlToPdfPage() {
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [processingMessage, setProcessingMessage] = useState("");
+  
   const contentRef = useRef(null); // Ref for the editable HTML content
   const previewCanvasRef = useRef(null); // Ref for the PDF preview canvas
   const [previewPdfUrl, setPreviewPdfUrl] = useState(null); // URL for the generated PDF preview

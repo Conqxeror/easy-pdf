@@ -6,9 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:strict": "next lint --max-warnings 0",
+    "lint:lenient": "next lint --max-warnings 200",
+    "lint:dev": "ESLINT_CONFIG_FILE=eslint.config.dev.mjs next lint --max-warnings 100",
+    "type-check": "tsc --noEmit",
+    "validate-react": "node scripts/validate-react-imports.js",
+    "validate": "npm run lint:strict && npm run type-check && npm run validate-react",
+    "prebuild": "npm run validate"
   },
   "dependencies": {
+    "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-checkbox": "^1.3.2",
     "@radix-ui/react-label": "^2.1.7",
     "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-radio-group": "^1.3.7",
@@ -32,9 +41,12 @@
     "next": "15.3.3",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^3.11.174",
+    "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
+    "recharts": "^3.1.0",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
     "tesseract.js": "^6.0.1"
@@ -42,10 +54,16 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.1.10",
+    "@types/node": "24.0.13",
+    "@types/react": "18.3.23",
+    "@types/react-dom": "^18.3.5",
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.1.0",
     "tailwindcss": "^4.1.10",
-    "tw-animate-css": "^1.3.4"
+    "tw-animate-css": "^1.3.4",
+    "typescript": "^5.7.3"
   }
 }

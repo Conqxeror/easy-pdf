@@ -1,6 +1,6 @@
 "use client";
-import { Metadata } from 'next';
-import { useState, useRef, useEffect, useCallback } from "react";
+
+import React, { useState, useRef, useEffect, useCallback  } from "react";
 
  // Added useEffect, useRef, useCallback
 import * as pdfjs from "pdfjs-dist";
@@ -27,7 +27,6 @@ import {
 import JSZip from "jszip";
 import Image from "next/image"; // Import Next.js Image component
 import ToolPageContent from "@/components/ui/ToolPageContent";
-import Loader from "@/components/ui/Loader";
 
 // Configure pdfjs worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -97,7 +96,7 @@ export default function PdfToJpgPage() {
       const arrayBuffer = await selectedFile.arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       setTotalPages(pdf.numPages);
-    } catch (err) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
       setFile(null);
       setFileName("");
@@ -254,8 +253,8 @@ export default function PdfToJpgPage() {
       }
       setImages(convertedImages);
       setProcessingMessage("Conversion complete!");
-    } catch (err) {
-      console.error("Conversion error:", err);
+    } catch {
+      console.error("Conversion error:");
       setError(
         "Failed to convert PDF to JPG. The file may be corrupted or password protected."
       );
@@ -411,7 +410,7 @@ export default function PdfToJpgPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                 {images
                   .filter((img) => !img.isZip)
-                  .map((image, index) => (
+                  .map((image, _index) => (
                     <div
                       key={image.fileName} // Use fileName as key (should be unique)
                       className="border border-gray-600 rounded-md p-3 bg-gray-700 text-gray-100 flex flex-col items-center text-center"

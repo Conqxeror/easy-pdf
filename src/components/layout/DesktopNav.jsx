@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import clsx from "clsx";
-import { useState } from "react";
+import React, { useState  } from "react";
 import { usePathname } from "next/navigation";
 import { toolCategories } from "@/lib/toolCategories";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function DesktopNav({ closeAllMenus }) {
   const [desktopSubmenuOpen, setDesktopSubmenuOpen] = useState(null);
@@ -68,6 +69,11 @@ export default function DesktopNav({ closeAllMenus }) {
             )}
           </div>
         ))}
+        
+        {/* Theme Toggle */}
+        <div className="ml-4 flex items-center">
+          <ThemeToggle />
+        </div>
       </div>
     </div>
   );

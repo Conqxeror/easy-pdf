@@ -1,5 +1,5 @@
+import React from "react";
 import Link from "next/link";
-import ToolPageContent from "@/components/ui/ToolPageContent";
 import { renderTextWithToolLinks } from "@/lib/utils";
 
 export default function AboutPage() {

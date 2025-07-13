@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import React, { lazy } from 'react';
 
 // Lazy load components for better performance
 const LazyFAQSection = lazy(() => import('@/components/FAQ'));

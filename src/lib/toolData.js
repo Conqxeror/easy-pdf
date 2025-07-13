@@ -1,4 +1,5 @@
-import { FileText, Merge, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, FileCode, FileType, Search, FileHeart } from "lucide-react";
+import React from "react";
+import { FileText, Merge, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, Search, FileHeart, Settings, Bookmark, Table, Layers, CheckCircle, Shield, EyeOff, GitCompare, MessageSquare, Calculator, QrCode, Award, Briefcase } from "lucide-react";
 
 export const toolsData = [
   {
@@ -253,4 +254,184 @@ export const toolsData = [
     features: ["Medical AI analysis", "Patient data extraction", "Diagnosis identification", "Health insights"],
     relatedTools: ["/legal-analyzer", "/ocr", "/form-filler"]
   },
+  {
+    id: 23,
+    title: "PDF Metadata Editor",
+    description: "Edit PDF metadata including title, author, subject, keywords, and creation date",
+    icon: <Settings className="w-8 h-8 text-gray-500" />,
+    href: "/tools/pdf-metadata-editor",
+    category: "Edit",
+    features: ["Edit title, author, subject", "Modify keywords and creation date", "Preserve document structure", "Client-side processing"],
+    isNew: true
+  },
+  {
+    id: 24,
+    title: "PDF Bookmark Manager",
+    description: "Add, edit, and organize PDF bookmarks and navigation structure",
+    icon: <Bookmark className="w-8 h-8 text-blue-500" />,
+    href: "/tools/pdf-bookmark-manager",
+    category: "Edit",
+    features: ["Add custom bookmarks", "Edit existing bookmarks", "Organize bookmark hierarchy", "Export bookmark list"],
+    isNew: true
+  },
+  {
+    id: 25,
+    title: "PDF Table Extractor",
+    description: "Extract and export tables from PDF documents to CSV, Excel, or JSON format",
+    icon: <Table className="w-8 h-8 text-green-500" />,
+    href: "/tools/pdf-table-extractor",
+    category: "Convert",
+    features: ["Extract tables automatically", "Export to CSV/Excel/JSON", "Preview extracted data", "Handle complex table structures"],
+    isNew: true
+  },
+  {
+    id: 26,
+    title: "PDF Batch Processor",
+    description: "Process multiple PDF files at once with various operations like merge, split, compress",
+    icon: <Layers className="w-8 h-8 text-purple-500" />,
+    href: "/tools/pdf-batch-processor",
+    category: "Utility",
+    features: ["Batch merge multiple PDFs", "Bulk compression", "Mass watermarking", "Batch operations"],
+    isNew: true
+  },
+  {
+    id: 27,
+    title: "PDF Form Creator",
+    description: "Create interactive PDF forms with various field types including text, checkboxes, and signatures",
+    icon: <FileBadge2 className="w-8 h-8 text-orange-500" />,
+    href: "/tools/pdf-form-creator",
+    category: "Create",
+    features: ["Text input fields", "Checkboxes and radio buttons", "Dropdown menus", "Signature fields"],
+    isNew: true
+  },
+  {
+    id: 28,
+    title: "Advanced OCR with AI",
+    description: "Extract text from PDFs and images with AI-powered enhancement and formatting",
+    icon: <Search className="w-8 h-8 text-teal-500" />,
+    href: "/tools/advanced-ocr",
+    category: "AI Tools",
+    features: ["AI-enhanced text extraction", "Multiple language support", "Format preservation", "Confidence scoring"],
+    isNew: true
+  },
+  {
+    id: 29,
+    title: "PDF Accessibility Checker",
+    description: "Check PDF documents for accessibility compliance and WCAG standards",
+    icon: <CheckCircle className="w-8 h-8 text-green-600" />,
+    href: "/tools/pdf-accessibility-checker",
+    category: "Utility",
+    features: ["WCAG compliance check", "Alt text validation", "Reading order analysis", "Color contrast testing"],
+    isNew: true
+  },
+  {
+    id: 30,
+    title: "PDF Digital Signature",
+    description: "Add legally binding digital signatures with certificate management and validation",
+    icon: <Shield className="w-8 h-8 text-blue-600" />,
+    href: "/tools/pdf-digital-signature",
+    category: "Security",
+    features: ["Digital certificates", "Signature validation", "Timestamp authority", "Legal compliance"],
+    isNew: true
+  },
+  {
+    id: 31,
+    title: "PDF Redaction Tool",
+    description: "Permanently remove sensitive information from PDF documents with verification",
+    icon: <EyeOff className="w-8 h-8 text-red-600" />,
+    href: "/tools/pdf-redaction",
+    category: "Security",
+    features: ["Content removal", "Metadata cleaning", "Visual verification", "Secure deletion"],
+    isNew: true
+  },
+  {
+    id: 32,
+    title: "PDF Version Comparison",
+    description: "Compare different versions of PDF documents with visual diff highlighting",
+    icon: <GitCompare className="w-8 h-8 text-indigo-600" />,
+    href: "/tools/pdf-version-comparison",
+    category: "Analysis",
+    features: ["Visual diff", "Text comparison", "Layout changes", "Version tracking"],
+    isNew: true
+  },
+  {
+    id: 33,
+    title: "PDF Annotation Collaboration",
+    description: "Collaborate on PDF annotations with team members and export shared comments",
+    icon: <MessageSquare className="w-8 h-8 text-cyan-600" />,
+    href: "/tools/pdf-annotation-collaboration",
+    category: "Collaboration",
+    features: ["Team annotations", "Comment threads", "Export annotations", "Review workflows"],
+    isNew: true
+  },
+  {
+    href: "/invoice-generator",
+    title: "PDF Invoice Generator",
+    description: "Create professional invoices with GST support, multiple currencies, and customizable templates.",
+    icon: <Calculator className="w-8 h-8 text-green-500" />,
+    comingSoon: false,
+    keywords: ["pdf invoice generator", "create invoice", "invoice maker", "business invoice", "gst invoice", "professional invoice"],
+    seoTitle: "PDF Invoice Generator - Create Professional Invoices Online",
+    seoDescription: "Generate professional PDF invoices with GST support, multiple currencies, and customizable templates. Perfect for businesses and freelancers.",
+    features: ["Professional invoice templates", "GST and tax calculations", "Multiple currency support", "Client and company management"],
+    relatedTools: ["/form-filler", "/sign", "/watermark"],
+    category: "Business",
+    isNew: true
+  },
+  {
+    href: "/qr-generator",
+    title: "QR Code Generator",
+    description: "Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF.",
+    icon: <QrCode className="w-8 h-8 text-purple-500" />,
+    comingSoon: false,
+    keywords: ["qr code generator", "qr code maker", "wifi qr code", "vcard qr code", "url qr code", "qr code pdf"],
+    seoTitle: "QR Code Generator - Create QR Codes for PDF Online",
+    seoDescription: "Generate QR codes for URLs, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality.",
+    features: ["Multiple QR code types", "Customizable size and quality", "WiFi and vCard support", "PNG and PDF export"],
+    relatedTools: ["/watermark", "/merge", "/form-filler"],
+    category: "Generate",
+    isNew: true
+  },
+  {
+    href: "/certificate-generator",
+    title: "Certificate Generator",
+    description: "Create professional certificates for courses, training, achievements, and more with customizable templates.",
+    icon: <Award className="w-8 h-8 text-yellow-500" />,
+    comingSoon: false,
+    keywords: ["certificate generator", "certificate maker", "course certificate", "training certificate", "achievement certificate"],
+    seoTitle: "Certificate Generator - Create Professional Certificates PDF",
+    seoDescription: "Generate professional certificates for courses, training, achievements with customizable templates and styling options.",
+    features: ["Multiple certificate templates", "Customizable colors and styles", "Professional layouts", "Automatic certificate IDs"],
+    relatedTools: ["/sign", "/watermark", "/form-filler"],
+    category: "Create",
+    isNew: true
+  },
+  {
+    href: "/portfolio-creator",
+    title: "Portfolio Creator",
+    description: "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
+    icon: <Briefcase className="w-8 h-8 text-blue-500" />,
+    comingSoon: false,
+    keywords: ["portfolio creator", "pdf portfolio", "professional portfolio", "resume builder", "cv maker"],
+    seoTitle: "Portfolio Creator - Create Professional PDF Portfolios",
+    seoDescription: "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
+    features: ["Professional portfolio templates", "Multiple customizable sections", "Experience and education tracking", "Skills and projects showcase"],
+    relatedTools: ["/certificate-generator", "/invoice-generator", "/form-filler"],
+    category: "Create",
+    isNew: true
+  },
+  {
+    href: "/report-generator",
+    title: "Report Generator",
+    description: "Create professional business reports with sections, metrics, charts, and recommendations.",
+    icon: <FileText className="w-8 h-8 text-indigo-500" />,
+    comingSoon: false,
+    keywords: ["report generator", "business report", "pdf report", "professional report", "report maker"],
+    seoTitle: "Report Generator - Create Professional Business Reports PDF",
+    seoDescription: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting.",
+    features: ["Multiple report templates", "Key metrics dashboard", "Customizable sections", "Professional formatting"],
+    relatedTools: ["/portfolio-creator", "/invoice-generator", "/certificate-generator"],
+    category: "Business",
+    isNew: true
+  }
 ];

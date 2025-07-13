@@ -1,3 +1,4 @@
+import React from "react";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export const metadata = {

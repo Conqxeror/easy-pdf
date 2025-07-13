@@ -1,16 +1,13 @@
 "use client";
 
-import { Metadata } from 'next';
-
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import ToolPageContent from "@/components/ui/ToolPageContent";
-import { Card } from "@/components/ui/card";
+// import { Card } from "@/components/ui/card"; // Unused import
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,8 +15,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue } from "@/components/ui/select";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
@@ -61,17 +57,11 @@ export default function SignPage() {
   const [initialSignatureY, setInitialSignatureY] = useState(0); // Signature Y when drag starts (PDF units)
   const [pdfPageDimensions, setPdfPageDimensions] = useState({
     width: 0,
-    height: 0,
-  }); // Current PDF preview page dimensions in PDF units
+    height: 0 }); // Current PDF preview page dimensions in PDF units
 
   // --- Helper Functions ---
   // Helper to convert hex color to RGB for pdf-lib
-  const hexToRgb = (hex) => {
-    const r = parseInt(hex.substring(1, 3), 16) / 255;
-    const g = parseInt(hex.substring(3, 5), 16) / 255;
-    const b = parseInt(hex.substring(5, 7), 16) / 255;
-    return rgb(r, g, b);
-  };
+  
 
   // --- Signature Drawing Canvas Handlers ---
   const initSignatureCanvas = useCallback(() => {
@@ -162,8 +152,7 @@ export default function SignPage() {
 
       const renderContext = {
         canvasContext: context,
-        viewport: scaledViewport,
-      };
+        viewport: scaledViewport };
 
       context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -426,8 +415,7 @@ export default function SignPage() {
         x: signatureX,
         y: signatureY,
         width: signatureWidth,
-        height: signatureHeight,
-      });
+        height: signatureHeight });
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
@@ -647,28 +635,23 @@ export default function SignPage() {
             {
               question: "Is it free to sign PDF documents?",
               answer:
-                "Yes, our PDF signing tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or limitations.",
-            },
+                "Yes, our PDF signing tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or limitations." },
             {
               question: "Are my documents secure when signing?",
               answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including signature placement, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
+                "Absolutely. Your privacy is our top priority. All PDF processing, including signature placement, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential." },
             {
               question: "Can I add multiple signatures to one document?",
               answer:
-                "Currently, you can add one signature per session. To add multiple signatures, you would need to repeat the process with the previously signed PDF.",
-            },
+                "Currently, you can add one signature per session. To add multiple signatures, you would need to repeat the process with the previously signed PDF." },
             {
               question: "What signature formats are supported?",
               answer:
-                "You can draw freehand signatures using your mouse, trackpad, or touch screen. The tool supports customizable pen colors and stroke widths for personalized signatures.",
-            },
+                "You can draw freehand signatures using your mouse, trackpad, or touch screen. The tool supports customizable pen colors and stroke widths for personalized signatures." },
             {
               question: "Can I sign on any page of the PDF?",
               answer:
-                "Yes, you can select any page of your PDF document to place your signature. Use the page selector to choose the specific page where you want to add your signature.",
-            },
+                "Yes, you can select any page of your PDF document to place your signature. Use the page selector to choose the specific page where you want to add your signature." },
           ]}
         />
       </div>

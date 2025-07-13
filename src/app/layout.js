@@ -1,3 +1,4 @@
+import React from "react";
 import ClientLayout from "./ClientLayout";
 import { generateMetadata } from "@/lib/metadata";
 import { generateJsonLd } from "@/lib/structuredData";

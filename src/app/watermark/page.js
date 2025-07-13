@@ -1,6 +1,6 @@
 "use client";
-import { Metadata } from 'next';
-import { useState, useRef, useEffect } from "react";
+
+import React, { useState, useRef, useEffect  } from "react";
 
 
 import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib"; // Added StandardFonts
@@ -18,13 +18,6 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HexColorPicker } from "react-colorful"; // Assuming this is installed
@@ -183,8 +176,7 @@ export default function WatermarkPdfPage() {
         width: imgW,
         height: imgH,
         opacity: opacityVal,
-        rotate: rotationVal,
-      });
+        rotate: rotationVal });
     }
   };
 
@@ -776,28 +768,23 @@ export default function WatermarkPdfPage() {
             {
               question: "Is it free to add a watermark to a PDF?",
               answer:
-                "Yes, our PDF watermark tool is completely free to use. You can add watermarks to as many PDF files as you need without any hidden costs or limitations.",
-            },
+                "Yes, our PDF watermark tool is completely free to use. You can add watermarks to as many PDF files as you need without any hidden costs or limitations." },
             {
               question: "Are my files secure when adding a watermark?",
               answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including watermarking, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
+                "Absolutely. Your privacy is our top priority. All PDF processing, including watermarking, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential." },
             {
               question: "Can I use an image as a watermark?",
               answer:
-                "Yes, you can upload an image (PNG or JPG) to use as a watermark. For best results, especially with transparency, we recommend using a PNG image.",
-            },
+                "Yes, you can upload an image (PNG or JPG) to use as a watermark. For best results, especially with transparency, we recommend using a PNG image." },
             {
               question: "Can I adjust the transparency of the watermark?",
               answer:
-                "Yes, our tool provides an opacity slider that allows you to control the transparency level of your text or image watermark, from nearly invisible to fully opaque.",
-            },
+                "Yes, our tool provides an opacity slider that allows you to control the transparency level of your text or image watermark, from nearly invisible to fully opaque." },
             {
               question: "What positions can I place the watermark in?",
               answer:
-                "You can choose from various positions including top-left, top-right, center, bottom-left, bottom-right, diagonal, or even a tiled pattern across all pages.",
-            },
+                "You can choose from various positions including top-left, top-right, center, bottom-left, bottom-right, diagonal, or even a tiled pattern across all pages." },
           ]}
         />
       </main>

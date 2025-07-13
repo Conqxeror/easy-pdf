@@ -1,10 +1,9 @@
 import React, { Suspense, lazy, memo, useMemo } from 'react';
-import { usePerformanceMonitoring } from '@/lib/performance';
 
-// Lazy load heavy components
-const LazyBreadcrumb = lazy(() => import('@/components/Breadcrumb'));
-const LazyRelatedTools = lazy(() => import('@/components/RelatedTools'));
-const LazyFAQ = lazy(() => import('@/components/FAQ'));
+// Lazy load heavy components with error boundaries
+const LazyBreadcrumb = lazy(() => import('@/components/Breadcrumb').catch(() => ({ default: () => null })));
+const LazyRelatedTools = lazy(() => import('@/components/RelatedTools').catch(() => ({ default: () => null })));
+const LazyFAQ = lazy(() => import('@/components/FAQ').catch(() => ({ default: () => null })));
 
 // Loading skeletons for better UX
 const BreadcrumbSkeleton = () => (
@@ -46,7 +45,7 @@ const StepsList = memo(({ steps }) => (
 ));
 
 // Memoized features grid
-const FeaturesGrid = memo(({ toolName }) => (
+const FeaturesGrid = memo(({ toolName: _toolName }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
     <div>
       <h4 className="text-lg font-semibold text-white mb-3">🔒 100% Secure & Private</h4>
@@ -80,27 +79,33 @@ const FeaturesGrid = memo(({ toolName }) => (
 ));
 
 const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }) => {
-  const { measurePerformance } = usePerformanceMonitoring();
-
   // Memoize enhanced FAQs to prevent unnecessary recalculations
   const enhancedFAQs = useMemo(() => {
-    return measurePerformance('faq-generation', () => {
+    try {
       if (currentTool) {
         // Lazy load FAQ data only when needed
         const { getFAQsForTool } = require('@/lib/faqData');
         return getFAQsForTool(currentTool);
       }
-      return faqs;
-    });
+      return faqs || [];
+    } catch (error) {
+      console.warn('Failed to load FAQ data:', error);
+      return faqs || [];
+    }
   }, [currentTool, faqs]);
 
   // Memoize tools data for related tools
   const toolsData = useMemo(() => {
-    if (currentTool) {
-      const { toolsData } = require('@/lib/toolData');
-      return toolsData;
+    try {
+      if (currentTool) {
+        const { toolsData } = require('@/lib/toolData');
+        return toolsData;
+      }
+      return null;
+    } catch (error) {
+      console.warn('Failed to load tools data:', error);
+      return null;
     }
-    return null;
   }, [currentTool]);
 
   return (
@@ -189,6 +194,10 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
     </div>
   );
 };
+
+// Add display names for better debugging
+StepsList.displayName = 'StepsList';
+FeaturesGrid.displayName = 'FeaturesGrid';
 
 // Memoize the entire component to prevent unnecessary re-renders
 export default memo(ToolPageContent);

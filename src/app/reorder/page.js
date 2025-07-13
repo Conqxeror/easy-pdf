@@ -1,6 +1,6 @@
 "use client";
 
-import { Metadata } from 'next';
+
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
@@ -9,7 +9,7 @@ import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
-import { Card } from "@/components/ui/card";
+// import { Card } from "@/components/ui/card"; // Unused import
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";

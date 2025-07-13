@@ -1,15 +1,8 @@
 // src/lib/utils.js
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import Tesseract from "tesseract.js";
-import * as pdfjsLib from "pdfjs-dist";
-
-// Configure pdfjs-dist worker for Node.js environment
-if (typeof window === 'undefined') {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.js');
-}
+import React from "react";
 import Link from "next/link";
-import { toolsData } from "./toolData";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -35,6 +28,8 @@ export async function extractTextFromFile(base64, name) {
   if (["jpg", "jpeg", "png"].includes(ext)) {
     // OCR for images using Tesseract.js (ensure Tesseract is configured for Node.js if necessary)
     try {
+      // Dynamic import for server-side compatibility
+      const Tesseract = await import("tesseract.js");
       const {
         data: { text },
       } = await Tesseract.recognize(binary, "eng");
@@ -48,7 +43,20 @@ export async function extractTextFromFile(base64, name) {
   } else if (ext === "pdf") {
     // Extract text from PDF using pdfjs-dist
     try {
-      // For Node.js, `pdfjsLib.getDocument({ data: binary })` can work directly with Uint8Array.
+      // Dynamic import for server-side compatibility
+      const pdfjsLib = await import("pdfjs-dist");
+      
+      // Configure worker for server environment
+      if (typeof window === 'undefined') {
+        try {
+          const workerPath = require.resolve('pdfjs-dist/build/pdf.worker.js');
+          pdfjsLib.GlobalWorkerOptions.workerSrc = workerPath;
+        } catch {
+          // Fallback to CDN worker
+          pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+        }
+      }
+      
       const pdf = await pdfjsLib.getDocument({ data: binary }).promise;
       let text = "";
       for (let i = 1; i <= pdf.numPages; i++) {
@@ -87,54 +95,77 @@ export async function extractTextFromFile(base64, name) {
 
 // Helper function to render text with dynamic links for tool names
 export const renderTextWithToolLinks = (text) => {
-  const parts = [];
-  let lastIndex = 0;
+  // For server-side rendering, just return the text without links
+  if (typeof window === 'undefined') {
+    return text;
+  }
+  
+  try {
+    // Use dynamic import instead of require for consistency
+    const { toolsData } = require('./toolData');
+    const parts = [];
+    let lastIndex = 0;
 
-  // Create a map from toolsData for easy lookup
-  const toolsMap = toolsData.reduce((acc, tool) => {
-    acc[tool.title] = tool.href;
-    return acc;
-  }, {});
+    // Create a map from toolsData for easy lookup
+    const toolsMap = toolsData.reduce((acc, tool) => {
+      acc[tool.title] = tool.href;
+      return acc;
+    }, {});
 
-  // Iterate over each tool in the map
-  Object.entries(toolsMap).forEach(([toolName, href]) => {
-    let currentIndex = 0;
-    // Use a regular expression to find all occurrences of the tool name
-    const regex = new RegExp(`\\b${toolName}\\b`, "gi"); // \\b for word boundary, gi for global and case-insensitive
-    let match;
+    // Iterate over each tool in the map
+    Object.entries(toolsMap).forEach(([toolName, href]) => {
+      // Use a regular expression to find all occurrences of the tool name
+      const regex = new RegExp(`\\b${toolName}\\b`, "gi");
+      let match;
 
-    while ((match = regex.exec(text)) !== null) {
-      const startIndex = match.index;
-      const endIndex = regex.lastIndex;
+      while ((match = regex.exec(text)) !== null) {
+        const startIndex = match.index;
+        const endIndex = regex.lastIndex;
 
-      // Add the text before the current match
-      if (startIndex > lastIndex) {
-        parts.push(text.substring(lastIndex, startIndex));
+        // Add the text before the current match
+        if (startIndex > lastIndex) {
+          parts.push(text.substring(lastIndex, startIndex));
+        }
+
+        // Add the Link component for the tool name
+        parts.push(
+          React.createElement(Link, {
+            key: `${toolName}-${startIndex}`,
+            href: href,
+            className: "text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
+          }, toolName)
+        );
+        lastIndex = endIndex;
       }
+    });
 
-      // Add the Link component for the tool name
-      parts.push(
-        <Link
-          key={`${toolName}-${startIndex}`}
-          href={href}
-          className="text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
-        >
-          {toolName}
-        </Link>
-      );
-      lastIndex = endIndex;
+    // Add any remaining text after the last match
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
     }
-  });
 
-  // Add any remaining text after the last match
-  if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
+    // If no tools were found, return the original text wrapped in a span
+    if (parts.length === 0) {
+      return React.createElement('span', {}, text);
+    }
+
+    return parts;
+  } catch {
+    // Fallback to plain text if there's an error
+    return text;
   }
-
-  // If no tools were found, return the original text wrapped in a span
-  if (parts.length === 0) {
-    return <span>{text}</span>;
-  }
-
-  return parts;
 };
+
+/**
+ * Formats file size in bytes to human readable format
+ * @param {number} bytes - File size in bytes
+ * @returns {string} Formatted file size
+ */
+export function formatFileSize(bytes) {
+  if (!bytes || bytes === 0) return '0 B';
+  
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+  
+  return `${(bytes / Math.pow(1024, i)).toFixed(i === 0 ? 0 : 1)} ${sizes[i]}`;
+}

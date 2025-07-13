@@ -4,8 +4,11 @@ import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect  } from "react";
 import { initializePerformanceOptimizations } from "@/lib/webVitals";
+import UserPreferencesProvider from "@/lib/userPreferences";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { Toaster } from "sonner";
 
 // Temporarily disable service worker registration
 function registerServiceWorker() {
@@ -113,23 +116,42 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     registerServiceWorker();
     initializePerformanceOptimizations();
+    
+    // Initialize analytics on client side
+    import('@/lib/analytics').then((_analytics) => {
+      // Analytics automatically initializes
+    });
   }, []);
 
   return (
-    <div className={`${inter.className} bg-gray-900 text-gray-100`}>
-      {/* Skip Navigation Link */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-      >
-        Skip to main content
-      </a>
-      <Navbar />
-      <main id="main-content" className="min-h-screen pt-24" aria-label="Main content">
-        {children}
-      </main>
-      <Footer />
-      <VercelAnalytics />
-    </div>
+    <ThemeProvider>
+      <UserPreferencesProvider>
+        <div className={`${inter.className} bg-gray-900 text-gray-100 dark:bg-gray-900 dark:text-gray-100 light:bg-white light:text-gray-900`}>
+        {/* Skip Navigation Link */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Skip to main content
+        </a>
+        <Navbar />
+        <main id="main-content" className="min-h-screen pt-24" aria-label="Main content">
+          {children}
+        </main>
+        <Footer />
+        <VercelAnalytics />
+        <Toaster 
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: '#1f2937',
+              border: '1px solid #374151',
+              color: '#f3f4f6',
+            },
+          }}
+        />
+        </div>
+      </UserPreferencesProvider>
+    </ThemeProvider>
   );
 }
