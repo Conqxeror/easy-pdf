@@ -376,7 +376,26 @@ export default function InvoiceGeneratorPage() {
   };
 
   return (
-    <ToolPageContent toolConfig={toolConfig}>
+    <ToolPageContent
+  toolName="Invoice Generator"
+  toolDescription="Create professional PDF invoices with customizable fields, tax/GST calculations, multiple currencies, and ready-to-download output."
+  currentTool="invoice-generator"
+  steps={[
+    "Fill in your company and client details.",
+    "Add line items with quantities and rates.",
+    "Select tax/GST rate and currency as needed.",
+    "Add optional notes or terms.",
+    "Click 'Generate Invoice PDF' to download your invoice."
+  ]}
+  faqs={[
+    { question: "Is the invoice generator free?", answer: "Yes, you can generate unlimited invoices for free with no hidden charges." },
+    { question: "Is my invoice data stored?", answer: "No, all data is processed client-side and never stored or uploaded." },
+    { question: "Can I customize the template?", answer: "Yes, you can adjust fields, tax rate, currency, and notes before generating the PDF." },
+    { question: "Does it support GST and other taxes?", answer: "Yes, GST and custom tax rates are supported and automatically calculated." },
+    { question: "Can I generate invoices for international clients?", answer: "Absolutely, select from multiple currencies (INR, USD, EUR, GBP) for your invoices." }
+  ]}
+  toolConfig={toolConfig}
+>
       <div className="space-y-6">
         {/* Invoice Header */}
         <Card>

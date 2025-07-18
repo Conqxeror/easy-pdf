@@ -36,13 +36,18 @@ const FAQSkeleton = () => (
 );
 
 // Memoized step component for better performance
-const StepsList = memo(({ steps }) => (
-  <ol className="list-decimal list-inside space-y-4 text-gray-300">
-    {steps.map((step, index) => (
-      <li key={index} className="leading-relaxed">{step}</li>
-    ))}
-  </ol>
-));
+const StepsList = memo(({ steps }) => {
+  if (!Array.isArray(steps)) {
+    return null;
+  }
+  return (
+    <ol className="list-decimal list-inside space-y-4 text-gray-300">
+      {(steps || []).map((step, index) => (
+        <li key={index} className="leading-relaxed">{step}</li>
+      ))}
+    </ol>
+  );
+});
 
 // Memoized features grid
 const FeaturesGrid = memo(({ toolName: _toolName }) => (
@@ -78,7 +83,7 @@ const FeaturesGrid = memo(({ toolName: _toolName }) => (
   </div>
 ));
 
-const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }) => {
+const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, children }) => {
   // Memoize enhanced FAQs to prevent unnecessary recalculations
   const enhancedFAQs = useMemo(() => {
     try {
@@ -134,6 +139,7 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
             {toolDescription}
           </p>
         </div>
+        <div className="mb-8">{children}</div>
 
         {/* Main content grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -162,7 +168,7 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
                 <LazyFAQ faqs={enhancedFAQs} />
               ) : (
                 <div className="space-y-6">
-                  {faqs.map((faq, index) => (
+                  {(faqs || []).map((faq, index) => (
                     <div key={index} className="border-b border-gray-700 last:border-b-0 pb-4 last:pb-0">
                       <h3 className="text-lg font-semibold text-white mb-2">{faq.question}</h3>
                       <p className="text-gray-300 leading-relaxed">{faq.answer}</p>

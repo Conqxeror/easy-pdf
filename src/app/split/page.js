@@ -1,8 +1,6 @@
 "use client";
 
-
 import React, { useState, useEffect  } from "react";
-
 
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
@@ -345,8 +343,7 @@ export default function SplitPdfPage() {
                     <span>
                       {" "}
                       {/* Added span to wrap children */}
-                      Download{" "}
-                      {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
+                      Download {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
                     </span>
                   </a>
                 </Button>
@@ -360,11 +357,18 @@ export default function SplitPdfPage() {
         toolDescription="Easily split your PDF documents into multiple files. Extract specific pages or ranges, or separate every page into its own PDF. Our online PDF splitter is fast, secure, and processes all your files directly in your browser, ensuring your privacy. Perfect for creating smaller documents, reorganizing content, or sharing only relevant sections."
         currentTool="split"
         steps={[
-          "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
-          "Choose your splitting option: 'By Page Range' to extract a specific set of pages, or 'Extract All Pages' to get each page as a separate PDF.",
-          "If splitting by page range, enter the start and end page numbers you wish to extract.",
-          "Click the 'Split PDF' button. The tool will process your document instantly.",
-          "Download your newly split PDF file(s). If you chose 'Extract All Pages', you will receive a ZIP archive containing individual PDF files.",
+          'Upload your PDF file by dragging it into the dropzone or clicking to select it.',
+          'Choose your splitting option: By Page Range to extract a specific set of pages, or Extract All Pages to get each page as a separate PDF.',
+          'If splitting by page range, enter the start and end page numbers you wish to extract.',
+          'Click the Split PDF button. The tool will process your document instantly.',
+          'Download your newly split PDF file(s). If you chose Extract All Pages, you will receive a ZIP archive containing individual PDF files.'
+        ]}
+        faqs={[
+          { question: "Is it free to split PDF files?", answer: "Yes, our PDF splitter is 100% free to use with no hidden fees or limits." },
+          { question: "Are my files secure and private?", answer: "All splitting is done client-side in your browser. Your files never leave your device." },
+          { question: "Can I split large PDFs?", answer: "You can split PDFs up to 50MB in size. For very large files, consider splitting in batches." },
+          { question: "Can I extract non-consecutive pages?", answer: "This tool currently supports extracting a range or all pages. For custom selection, split in multiple steps." },
+          { question: "What format will my split files be in?", answer: "You will receive standard PDF files, or a ZIP archive if extracting all pages." }
         ]}
       />
     </>

@@ -455,7 +455,26 @@ END:VCARD`;
   };
 
   return (
-    <ToolPageContent toolConfig={toolConfig}>
+    <ToolPageContent
+  toolName="QR Code Generator"
+  toolDescription="Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF."
+  currentTool="qr-generator"
+  steps={[
+    "Choose the type of QR code you want to create (text, URL, email, WiFi, etc.).",
+    "Enter the required content or details in the form.",
+    "Customize size, margin, and error correction as needed.",
+    "Click 'Generate QR Code' to see a preview.",
+    "Download your QR code as PNG or PDF."
+  ]}
+  faqs={[
+    { question: "Is the QR code generator free?", answer: "Yes, you can create and download unlimited QR codes for free." },
+    { question: "Can I create QR codes for WiFi, email, or contacts?", answer: "Yes, our tool supports many QR code types including WiFi, email, vCard, phone, and more." },
+    { question: "Are my QR code contents stored?", answer: "No, all generation is done in your browser. Your content is never uploaded or saved." },
+    { question: "Can I customize the QR code's appearance?", answer: "You can adjust size, margin, and error correction level. Advanced styling coming soon." },
+    { question: "Is there a limit to the number of QR codes I can generate?", answer: "No limits—generate as many as you need!" }
+  ]}
+  toolConfig={toolConfig}
+>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Configuration Panel */}
         <div className="space-y-6">

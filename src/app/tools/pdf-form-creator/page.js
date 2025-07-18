@@ -21,11 +21,11 @@ export default function PDFFormCreator() {
   const [formTitle, setFormTitle] = useState('New Form');
 
   const fieldTypes = [
-    { id: 'text', name: 'Text Field', icon: React.createElement(Type, { className: "w-4 h-4" }) },
-    { id: 'checkbox', name: 'Checkbox', icon: React.createElement(CheckSquare, { className: "w-4 h-4" }) },
-    { id: 'radio', name: 'Radio Button', icon: React.createElement(Circle, { className: "w-4 h-4" }) },
-    { id: 'dropdown', name: 'Dropdown', icon: React.createElement(ChevronDown, { className: "w-4 h-4" }) },
-    { id: 'signature', name: 'Signature', icon: React.createElement(PenTool, { className: "w-4 h-4" }) }
+    { id: 'text', name: 'Text Field', icon: Type },
+    { id: 'checkbox', name: 'Checkbox', icon: CheckSquare },
+    { id: 'radio', name: 'Radio Button', icon: Circle },
+    { id: 'dropdown', name: 'Dropdown', icon: ChevronDown },
+    { id: 'signature', name: 'Signature', icon: PenTool }
   ];
 
   const onDrop = useCallback((acceptedFiles) => {

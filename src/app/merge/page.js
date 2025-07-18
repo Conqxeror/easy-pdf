@@ -410,6 +410,28 @@ export default function MergePDFs() {
           "Click the 'Merge PDFs' button. Our tool will instantly combine all the uploaded files into a single PDF.",
           "A preview of the merged PDF will appear. You can then download the final, merged PDF to your device.",
         ]}
+        faqs={[
+          {
+            question: "Is it free to merge PDF files?",
+            answer: "Yes, our PDF merger is completely free to use. You can combine as many PDF files as you want without any hidden fees or limits."
+          },
+          {
+            question: "Are my files secure when merging PDFs?",
+            answer: "Absolutely. All processing, including merging, happens in your browser. Your files are never uploaded or stored on any server."
+          },
+          {
+            question: "Can I reorder files before merging?",
+            answer: "Yes, you can drag and drop your uploaded files to arrange them in any order you prefer before merging."
+          },
+          {
+            question: "Is there a limit on the number or size of files?",
+            answer: "You can upload multiple files, up to 50MB each. For best performance, keep the total number of files reasonable."
+          },
+          {
+            question: "Will merging affect the quality of my PDFs?",
+            answer: "No, merging simply combines your files. The original quality and content of each PDF is preserved in the final document."
+          }
+        ]}
       />
     </>
   );

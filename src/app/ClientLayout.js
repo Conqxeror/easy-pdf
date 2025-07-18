@@ -126,7 +126,7 @@ export default function RootLayout({ children }) {
   return (
     <ThemeProvider>
       <UserPreferencesProvider>
-        <div className={`${inter.className} bg-gray-900 text-gray-100 dark:bg-gray-900 dark:text-gray-100 light:bg-white light:text-gray-900`}>
+        <div className={`${inter.className} min-h-screen bg-gray-900 text-gray-100 dark`}>
         {/* Skip Navigation Link */}
         <a
           href="#main-content"

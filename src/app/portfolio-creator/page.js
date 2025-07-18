@@ -579,7 +579,25 @@ export default function PortfolioCreatorPage() {
   };
 
   return (
-    <ToolPageContent toolConfig={toolConfig}>
+    <ToolPageContent
+  toolName="Portfolio Creator"
+  toolDescription="Design and export a professional portfolio or resume as a polished PDF. Add your experience, skills, education, and more."
+  currentTool="portfolio-creator"
+  steps={[
+    "Enter your personal information (name, title, contact details).",
+    "Add work experience, education, skills, projects, and certifications.",
+    "Customize the template and colors.",
+    "Click 'Generate Portfolio PDF' to download your document."
+  ]}
+  faqs={[
+    { question: "Is the portfolio creator free?", answer: "Yes, you can create and download unlimited portfolios for free." },
+    { question: "Can I add multiple jobs, schools, or projects?", answer: "Yes, you can add as many sections as you need." },
+    { question: "Are my details stored?", answer: "No, all portfolio data is processed in your browser and never uploaded or saved." },
+    { question: "Can I edit my portfolio later?", answer: "You can update the fields and regenerate your PDF at any time." },
+    { question: "Does the PDF have watermarks?", answer: "No, your portfolio PDFs are watermark-free and print-ready." }
+  ]}
+  toolConfig={toolConfig}
+>
       <div className="space-y-6">
         {/* Personal Information */}
         <Card>
