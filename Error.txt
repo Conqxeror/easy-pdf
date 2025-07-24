@@ -1,0 +1,170 @@
+ocr:1  GET http://localhost:3000/fonts/inter-var.woff2 net::ERR_ABORTED 404 (Not Found)
+ocr:1  GET http://localhost:3000/_next/static/chunks/main.js net::ERR_ABORTED 404 (Not Found)
+main-app.js?v=1753370406766:2248 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+D:\Projects\workspace\src\app\ClientLayout.js:16 Service worker registration disabled
+D:\Projects\workspace\src\app\ocr\page.js:55 Starting simplified Tesseract worker initialization...
+D:\Projects\workspace\src\app\ocr\page.js:55 Starting simplified Tesseract worker initialization...
+script.debug.js:1 [Vercel Web Analytics] Debug mode is enabled by default in development. No requests will be sent to the server.
+script.debug.js:1 [Vercel Web Analytics] [pageview] http://localhost:3000/ocr {o: 'http://localhost:3000/ocr', sv: '0.1.3', sdkn: '@vercel/analytics/react', sdkv: '1.5.0', ts: 1753370416544, …}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {status: 'loading tesseract core', progress: 0, userJobId: 'Job-0-a75c4'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {status: 'loading tesseract core', progress: 0, userJobId: 'Job-1-98abb'}
+script.debug.js:1 [Vercel Speed Insights] Debug mode is enabled by default in development. No requests will be sent to the server.
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {status: 'loading tesseract core', progress: 1, userJobId: 'Job-1-98abb'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'initializing tesseract', progress: 0, userJobId: 'Job-1-98abb'}
+tesseract-core-simd-lstm.wasm.js:16 Refused to connect to 'data:application/octet-stream;base64,AGFzbQEAAAABpgmNAWABfwBgAX8Bf2ADf39/AX9gAn9/AGACf38Bf2ADf39/AGAEf39/fwBgBH9/f38Bf2AFf39/f38AYAV/f39/fwF/YAZ/f39/f38Bf2AGf39/f39/AGADf35/AX5gB39/f39/f38AYAl/f39/f39/f38AYAF/AX1gCH9/f39/f39/AX9gAAF/YAd/f39/f39/AX9gAABgAn9+AX9gCH9/f39/f39/AXxgAX8BfmAEf35/fwF+YAJ/fgF+YAx/f39/f39/f39/f38AYAF8AXxgA399fwF/YAJ/fwF+YAJ/fwF9YAV/fn5+fgBgBH9/f38BfmABfQF9YAV/fX19fwBgAn99AGAJf39/f39/f39/AX9gA39/fwF9YAJ/fwF8YAF/AXxgBX9/f398AX9gA399fQF/YAN/f38BfGAFf39+f38AYAV/f39/fgF/YAp/f39/f39/f39/AG...////8AAAD/BAAAAHwCAABLAAAAWfP4wh9upQEHXBQzJqahPGBCog0uvbuzAACADQBBtsYZCw1wAR8EAAAgBAAAQGMGAEHQxhkLeTBwBQA0cAUAOXAFAD9wBQBgYwYAQQQAAGhjBgBcdAUA0HgFAE96BQBPfQUAfGMGAIBjBgCEYwYAiGMGAIxjBgCQYwYAlGMGAJhjBgCcYwYAoGMGAKRjBgCoYwYArGMGAPYEAAD3BAAA+AQAAPkEAAD6BAAA+wQAAAUAQdTHGQsCBQUAQezHGQsLAwUAAAIFAADYkwYAQYTIGQsBAgBBlMgZCwj//////////wBB2MgZCwnIYwYAAAAAAAkAQezIGQsCBQUAQYDJGQsSBAUAAAAAAAACBQAA6JMGAAAEAEGsyRkLBP////8AQfDJGQsBBQBB/MkZCwIOBQBBlMoZCw4DBQAADwUAAPiXBgAABABBrMoZCwEBAEG8yhkLBf////8KAEGAyxkLCvBkBgBwqgcAjAY=' because it violates the following Content Security Policy directive: "connect-src 'self' https://infragrid.v.network".
+
+Na @ tesseract-core-simd-lstm.wasm.js:16
+Oa @ tesseract-core-simd-lstm.wasm.js:16
+Pa @ tesseract-core-simd-lstm.wasm.js:17
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ index.js:46
+p @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+f @ index.js:2
+a @ index.js:2
+Promise.then
+f @ index.js:2
+a @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:36
+e.dispatchHandlers @ index.js:529
+(anonymous) @ index.js:22
+tesseract-core-simd-lstm.wasm.js:16 Fetch API cannot load data:application/octet-stream;base64,AGFzbQEAAAABpgmNAWABfwBgAX8Bf2ADf39/AX9gAn9/AGACf38Bf2ADf39/AGAEf39/fwBgBH9/f38Bf2AFf39/f38AYAV/f39/fwF/YAZ/f39/f38Bf2AGf39/f39/AGADf35/AX5gB39/f39/f38AYAl/f39/f39/f38AYAF/AX1gCH9/f39/f39/AX9gAAF/YAd/f39/f39/AX9gAABgAn9+AX9gCH9/f39/f39/AXxgAX8BfmAEf35/fwF+YAJ/fgF+YAx/f39/f39/f39/f38AYAF8AXxgA399fwF/YAJ/fwF+YAJ/fwF9YAV/fn5+fgBgBH9/f38BfmABfQF9YAV/fX19fwBgAn99AGAJf39/f39/f39/AX9gA39/fwF9YAJ/fwF8YAF/AXxgBX9/f398AX9gA399fQF/YAN/f38BfGAFf39+f38AYAV/f39/fgF/YAp/f39/f39/f39/AG...////8AAAD/BAAAAHwCAABLAAAAWfP4wh9upQEHXBQzJqahPGBCog0uvbuzAACADQBBtsYZCw1wAR8EAAAgBAAAQGMGAEHQxhkLeTBwBQA0cAUAOXAFAD9wBQBgYwYAQQQAAGhjBgBcdAUA0HgFAE96BQBPfQUAfGMGAIBjBgCEYwYAiGMGAIxjBgCQYwYAlGMGAJhjBgCcYwYAoGMGAKRjBgCoYwYArGMGAPYEAAD3BAAA+AQAAPkEAAD6BAAA+wQAAAUAQdTHGQsCBQUAQezHGQsLAwUAAAIFAADYkwYAQYTIGQsBAgBBlMgZCwj//////////wBB2MgZCwnIYwYAAAAAAAkAQezIGQsCBQUAQYDJGQsSBAUAAAAAAAACBQAA6JMGAAAEAEGsyRkLBP////8AQfDJGQsBBQBB/MkZCwIOBQBBlMoZCw4DBQAADwUAAPiXBgAABABBrMoZCwEBAEG8yhkLBf////8KAEGAyxkLCvBkBgBwqgcAjAY=. Refused to connect because it violates the document's Content Security Policy.
+Na @ tesseract-core-simd-lstm.wasm.js:16
+Oa @ tesseract-core-simd-lstm.wasm.js:16
+Pa @ tesseract-core-simd-lstm.wasm.js:17
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ index.js:46
+p @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+f @ index.js:2
+a @ index.js:2
+Promise.then
+f @ index.js:2
+a @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:36
+e.dispatchHandlers @ index.js:529
+(anonymous) @ index.js:22
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {status: 'loading tesseract core', progress: 1, userJobId: 'Job-0-a75c4'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'initializing tesseract', progress: 0, userJobId: 'Job-0-a75c4'}
+tesseract-core-simd-lstm.wasm.js:16 Refused to connect to 'data:application/octet-stream;base64,AGFzbQEAAAABpgmNAWABfwBgAX8Bf2ADf39/AX9gAn9/AGACf38Bf2ADf39/AGAEf39/fwBgBH9/f38Bf2AFf39/f38AYAV/f39/fwF/YAZ/f39/f38Bf2AGf39/f39/AGADf35/AX5gB39/f39/f38AYAl/f39/f39/f38AYAF/AX1gCH9/f39/f39/AX9gAAF/YAd/f39/f39/AX9gAABgAn9+AX9gCH9/f39/f39/AXxgAX8BfmAEf35/fwF+YAJ/fgF+YAx/f39/f39/f39/f38AYAF8AXxgA399fwF/YAJ/fwF+YAJ/fwF9YAV/fn5+fgBgBH9/f38BfmABfQF9YAV/fX19fwBgAn99AGAJf39/f39/f39/AX9gA39/fwF9YAJ/fwF8YAF/AXxgBX9/f398AX9gA399fQF/YAN/f38BfGAFf39+f38AYAV/f39/fgF/YAp/f39/f39/f39/AG...////8AAAD/BAAAAHwCAABLAAAAWfP4wh9upQEHXBQzJqahPGBCog0uvbuzAACADQBBtsYZCw1wAR8EAAAgBAAAQGMGAEHQxhkLeTBwBQA0cAUAOXAFAD9wBQBgYwYAQQQAAGhjBgBcdAUA0HgFAE96BQBPfQUAfGMGAIBjBgCEYwYAiGMGAIxjBgCQYwYAlGMGAJhjBgCcYwYAoGMGAKRjBgCoYwYArGMGAPYEAAD3BAAA+AQAAPkEAAD6BAAA+wQAAAUAQdTHGQsCBQUAQezHGQsLAwUAAAIFAADYkwYAQYTIGQsBAgBBlMgZCwj//////////wBB2MgZCwnIYwYAAAAAAAkAQezIGQsCBQUAQYDJGQsSBAUAAAAAAAACBQAA6JMGAAAEAEGsyRkLBP////8AQfDJGQsBBQBB/MkZCwIOBQBBlMoZCw4DBQAADwUAAPiXBgAABABBrMoZCwEBAEG8yhkLBf////8KAEGAyxkLCvBkBgBwqgcAjAY=' because it violates the following Content Security Policy directive: "connect-src 'self' https://infragrid.v.network".
+
+Na @ tesseract-core-simd-lstm.wasm.js:16
+Oa @ tesseract-core-simd-lstm.wasm.js:16
+Pa @ tesseract-core-simd-lstm.wasm.js:17
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ index.js:46
+p @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+f @ index.js:2
+a @ index.js:2
+Promise.then
+f @ index.js:2
+a @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:36
+e.dispatchHandlers @ index.js:529
+(anonymous) @ index.js:22
+tesseract-core-simd-lstm.wasm.js:16 Fetch API cannot load data:application/octet-stream;base64,AGFzbQEAAAABpgmNAWABfwBgAX8Bf2ADf39/AX9gAn9/AGACf38Bf2ADf39/AGAEf39/fwBgBH9/f38Bf2AFf39/f38AYAV/f39/fwF/YAZ/f39/f38Bf2AGf39/f39/AGADf35/AX5gB39/f39/f38AYAl/f39/f39/f38AYAF/AX1gCH9/f39/f39/AX9gAAF/YAd/f39/f39/AX9gAABgAn9+AX9gCH9/f39/f39/AXxgAX8BfmAEf35/fwF+YAJ/fgF+YAx/f39/f39/f39/f38AYAF8AXxgA399fwF/YAJ/fwF+YAJ/fwF9YAV/fn5+fgBgBH9/f38BfmABfQF9YAV/fX19fwBgAn99AGAJf39/f39/f39/AX9gA39/fwF9YAJ/fwF8YAF/AXxgBX9/f398AX9gA399fQF/YAN/f38BfGAFf39+f38AYAV/f39/fgF/YAp/f39/f39/f39/AG...////8AAAD/BAAAAHwCAABLAAAAWfP4wh9upQEHXBQzJqahPGBCog0uvbuzAACADQBBtsYZCw1wAR8EAAAgBAAAQGMGAEHQxhkLeTBwBQA0cAUAOXAFAD9wBQBgYwYAQQQAAGhjBgBcdAUA0HgFAE96BQBPfQUAfGMGAIBjBgCEYwYAiGMGAIxjBgCQYwYAlGMGAJhjBgCcYwYAoGMGAKRjBgCoYwYArGMGAPYEAAD3BAAA+AQAAPkEAAD6BAAA+wQAAAUAQdTHGQsCBQUAQezHGQsLAwUAAAIFAADYkwYAQYTIGQsBAgBBlMgZCwj//////////wBB2MgZCwnIYwYAAAAAAAkAQezIGQsCBQUAQYDJGQsSBAUAAAAAAAACBQAA6JMGAAAEAEGsyRkLBP////8AQfDJGQsBBQBB/MkZCwIOBQBBlMoZCw4DBQAADwUAAPiXBgAABABBrMoZCwEBAEG8yhkLBf////8KAEGAyxkLCvBkBgBwqgcAjAY=. Refused to connect because it violates the document's Content Security Policy.
+Na @ tesseract-core-simd-lstm.wasm.js:16
+Oa @ tesseract-core-simd-lstm.wasm.js:16
+Pa @ tesseract-core-simd-lstm.wasm.js:17
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ tesseract-core-simd-lstm.wasm.js:105
+(anonymous) @ index.js:46
+p @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+f @ index.js:2
+a @ index.js:2
+Promise.then
+f @ index.js:2
+a @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:2
+(anonymous) @ index.js:36
+e.dispatchHandlers @ index.js:529
+(anonymous) @ index.js:22
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'initializing tesseract', progress: 1, userJobId: 'Job-1-98abb'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'loading language traineddata', progress: 0, userJobId: 'Job-2-151d4'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'initializing tesseract', progress: 1, userJobId: 'Job-0-a75c4'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'loading language traineddata', progress: 0, userJobId: 'Job-3-8d6ab'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'loading language traineddata', progress: 0.5, userJobId: 'Job-2-151d4'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'loading language traineddata', progress: 1, userJobId: 'Job-2-151d4'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'initializing api', progress: 0, userJobId: 'Job-4-6b529'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'loading language traineddata', progress: 0.5, userJobId: 'Job-3-8d6ab'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'loading language traineddata', progress: 1, userJobId: 'Job-3-8d6ab'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'initializing api', progress: 0, userJobId: 'Job-5-4ffc7'}
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-1-c3fcd', status: 'initializing api', progress: 1, userJobId: 'Job-4-6b529'}
+D:\Projects\workspace\src\app\ocr\page.js:73 Tesseract worker created successfully
+D:\Projects\workspace\src\app\ocr\page.js:78 Tesseract worker test completed successfully
+D:\Projects\workspace\src\app\ocr\page.js:60 Tesseract: {workerId: 'Worker-0-b538f', status: 'initializing api', progress: 1, userJobId: 'Job-5-4ffc7'}
+D:\Projects\workspace\src\app\ocr\page.js:73 Tesseract worker created successfully
+D:\Projects\workspace\src\app\ocr\page.js:78 Tesseract worker test completed successfully
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+The resource <URL> was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+D:\Projects\workspace\src\app\ocr\page.js:200 handleFiles called with: 1 files
+D:\Projects\workspace\src\app\ocr\page.js:217 Processing file: Resume.pdf Type: application/pdf Size: 101302
+D:\Projects\workspace\src\app\ocr\page.js:221 Loading PDF document...
+D:\Projects\workspace\src\app\ocr\page.js:98 renderFileToCanvas called
+D:\Projects\workspace\src\app\ocr\page.js:105 Starting file rendering to canvas...
+D:\Projects\workspace\src\app\ocr\page.js:120 File type: application/pdf
+D:\Projects\workspace\src\app\ocr\page.js:124 Rendering PDF file...
+D:\Projects\workspace\src\app\ocr\page.js:126 PDF document proxy not ready, waiting...
+D:\Projects\workspace\src\app\ocr\page.js:229 PDF loaded successfully. Pages: 1
+D:\Projects\workspace\src\app\ocr\page.js:98 renderFileToCanvas called
+D:\Projects\workspace\src\app\ocr\page.js:105 Starting file rendering to canvas...
+D:\Projects\workspace\src\app\ocr\page.js:120 File type: application/pdf
+D:\Projects\workspace\src\app\ocr\page.js:124 Rendering PDF file...
+D:\Projects\workspace\src\app\ocr\page.js:149 PDF preview rendered successfully
+D:\Projects\workspace\src\app\ocr\page.js:250 handleOcr called
+D:\Projects\workspace\src\app\ocr\page.js:262 Starting OCR process...
+D:\Projects\workspace\src\app\ocr\page.js:272 OCR file: Resume.pdf application/pdf
+D:\Projects\workspace\src\app\ocr\page.js:277 Creating Tesseract worker for OCR...
+D:\Projects\workspace\src\app\ocr\page.js:282 OCR Progress: {status: 'loading tesseract core', progress: 0, userJobId: 'Job-6-0c834'}
+D:\Projects\workspace\src\app\ocr\page.js:282 OCR Progress: {status: 'loading tesseract core', progress: 1, userJobId: 'Job-6-0c834'}
+D:\Projects\workspace\src\app\ocr\page.js:282 OCR Progress: {workerId: 'Worker-2-6dac6', status: 'initializing tesseract', progress: 0, userJobId: 'Job-6-0c834'}
+tesseract-core.js:16 Uncaught (in promise) TypeError: Failed to execute 'fetch' on 'WorkerGlobalScope': Failed to parse URL from tesseract-core.wasm
+    at Pa (tesseract-core.js:16:162)
+    at tesseract-core.js:100:293
+    at tesseract-core.js:100:346
+    at tesseract-worker.js:2:90137
+    at p (tesseract-worker.js:2:83464)
+    at Generator.<anonymous> (tesseract-worker.js:2:84806)
+    at Generator.next (tesseract-worker.js:2:83893)
+    at f (tesseract-worker.js:2:89367)
+    at a (tesseract-worker.js:2:89570)
+Pa @ tesseract-core.js:16
+(anonymous) @ tesseract-core.js:100
+(anonymous) @ tesseract-core.js:100
+(anonymous) @ tesseract-worker.js:2
+p @ tesseract-worker.js:2
+(anonymous) @ tesseract-worker.js:2
+(anonymous) @ tesseract-worker.js:2
+f @ tesseract-worker.js:2
+a @ tesseract-worker.js:2
+Promise.then
+f @ tesseract-worker.js:2
+a @ tesseract-worker.js:2
+(anonymous) @ tesseract-worker.js:2
+(anonymous) @ tesseract-worker.js:2
+(anonymous) @ tesseract-worker.js:2
+e.dispatchHandlers @ tesseract-worker.js:2
+(anonymous) @ tesseract-worker.js:2

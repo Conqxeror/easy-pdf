@@ -1,16 +1,59 @@
 import React from "react";
 import Link from "next/link";
 import { renderTextWithToolLinks } from "@/lib/utils";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+
+export const metadata = generateEnhancedMetadata({
+  title: "About easy-pdf - Privacy-First PDF Tools",
+  description: "Learn about easy-pdf's mission to provide secure, client-side PDF processing tools. 100% privacy-focused with no file uploads or data collection.",
+  keywords: [
+    "about easy-pdf", "privacy-first PDF tools", "client-side PDF processing", "secure PDF tools",
+    "no upload PDF tools", "browser-based PDF editor", "privacy policy", "data security",
+    "offline PDF tools", "free PDF software", "document privacy", "PDF tool security"
+  ],
+  canonicalUrl: "https://easy-pdf-murex.vercel.app/about",
+  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  pageType: "about",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "About", url: "https://easy-pdf-murex.vercel.app/about" }
+  ]
+});
+
+const structuredData = generateComprehensiveJsonLd('about');
 
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className="min-h-screen bg-gray-900 text-gray-200 font-inter py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+          {/* Breadcrumb Navigation */}
+          <nav className="mb-8" aria-label="Breadcrumb">
+            <ol className="flex items-center space-x-2 text-sm text-gray-400">
+              <li>
+                <Link href="/" className="hover:text-blue-400 transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li className="flex items-center">
+                <svg className="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+                <span className="text-gray-300">About</span>
+              </li>
+            </ol>
+          </nav>
+
           {/* Main Heading */}
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center mb-12 leading-tight">
-            About easy-pdf: Your Privacy-First Online PDF Toolkit
-          </h1>
+          <header>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center mb-12 leading-tight">
+              About easy-pdf: Your Privacy-First Online PDF Toolkit
+            </h1>
+          </header>
 
           {/* Section: Our Core Philosophy */}
           <section className="mb-12">

@@ -1,13 +1,76 @@
 User-agent: *
 Allow: /
 
+# Enhanced crawling directives
+Allow: /merge
+Allow: /split
+Allow: /compress
+Allow: /jpg-to-pdf
+Allow: /pdf-to-jpg
+Allow: /rotate
+Allow: /watermark
+Allow: /protect
+Allow: /unlock
+Allow: /delete-pages
+Allow: /reorder
+Allow: /organize
+Allow: /page-numbers
+Allow: /html-to-pdf
+Allow: /ocr
+Allow: /sign
+Allow: /form-filler
+Allow: /legal-analyzer
+Allow: /medical-analyzer
+Allow: /invoice-generator
+Allow: /qr-generator
+Allow: /certificate-generator
+Allow: /portfolio-creator
+Allow: /report-generator
+Allow: /about
+Allow: /security
+
 # Block unnecessary crawling
 Disallow: /api/
 Disallow: /_next/
 Disallow: /static/
+Disallow: /.well-known/
+Disallow: /scripts/
+Disallow: /node_modules/
+
+# Block admin and private areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+
+# Allow important assets
+Allow: /icon.png
+Allow: /og-image.jpg
+Allow: /twitter-image.jpg
+Allow: /site.webmanifest
+Allow: /favicon.ico
 
 # Sitemap
 Sitemap: https://easy-pdf-murex.vercel.app/sitemap.xml
 
 # Crawl-delay for better server performance
 Crawl-delay: 1
+
+# Additional directives for specific bots
+User-agent: Googlebot
+Crawl-delay: 0.5
+
+User-agent: Bingbot
+Crawl-delay: 1
+
+User-agent: Slurp
+Crawl-delay: 2
+
+# Block bad bots
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
