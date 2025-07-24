@@ -69,7 +69,7 @@ const FeaturesGrid = memo(({ toolName: _toolName }) => (
     <div>
       <h4 className="text-lg font-semibold text-white mb-3">💰 Completely Free</h4>
       <p className="leading-relaxed">
-        No hidden costs, subscriptions, or premium features. All tools are free to use 
+        No hidden costs, subscriptions, or limitations. All tools are free to use 
         with unlimited access and no watermarks.
       </p>
     </div>

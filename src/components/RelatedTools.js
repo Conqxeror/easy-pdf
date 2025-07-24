@@ -27,8 +27,8 @@ const RelatedTools = ({ currentTool, tools }) => {
       'html-to-pdf': ['merge', 'compress', 'watermark', 'protect'],
       'ocr': ['form-filler', 'sign', 'merge', 'compress'],
       'form-filler': ['sign', 'ocr', 'protect', 'merge'],
-      'word-to-pdf': ['merge', 'compress', 'protect', 'watermark'],
-      'pdf-to-word': ['ocr', 'form-filler', 'split', 'compress'],
+
+
       'legal-analyzer': ['ocr', 'form-filler', 'protect', 'sign'],
       'medical-analyzer': ['ocr', 'form-filler', 'protect', 'sign']
     }

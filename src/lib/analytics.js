@@ -128,19 +128,10 @@ class AnalyticsManager {
       ...properties
     });
 
-    // Special handling for premium feature views
-    if (conversionType === 'premium_feature_viewed') {
-      this.trackPremiumInterest(properties.feature);
-    }
+    // Premium tracking removed - all features are now free
   }
 
-  trackPremiumInterest(feature) {
-    const premiumInterest = this.getUserPreference('premiumInterest') || {};
-    premiumInterest[feature] = (premiumInterest[feature] || 0) + 1;
-    premiumInterest.lastViewed = Date.now();
-    
-    this.setUserPreference('premiumInterest', premiumInterest);
-  }
+  // Premium tracking removed
 
   // User preferences and behavior
   trackUserPreferences() {

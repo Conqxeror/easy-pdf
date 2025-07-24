@@ -15,8 +15,8 @@ Our toolkit offers a wide range of functionalities to empower your document work
 -   **PDF to JPG**: 🖼️ Convert PDF pages into high-quality JPG images.
 -   **JPG to PDF**: 📸 Transform your JPG images back into a single PDF.
 -   **HTML to PDF**: 🌐 Convert web pages or HTML content into PDF documents.
--   **Word to PDF**: 📝 Convert Word documents (.docx) to PDF.
--   **PDF to Word**: ✍️ Convert PDF documents to editable Word (.docx) files.
+
+
 -   **OCR (Optical Character Recognition)**: 🔍 Extract text from scanned documents and images.
 -   **Protect PDF**: 🔒 Add password protection to your PDF files.
 -   **Unlock PDF**: 🔓 Remove password protection from secured PDFs.

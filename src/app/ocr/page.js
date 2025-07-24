@@ -26,13 +26,18 @@ import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
 
 export default function OcrPage() {
   const [files, setFiles] = useState([]);
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingMessage, setProcessingMessage] = useState("");
+
+  // Add logging for isProcessing state changes
+  useEffect(() => {
+    console.log("isProcessing state changed to:", isProcessing);
+  }, [isProcessing]);
   const [result, setResult] = useState("");
   const [previewImageUrl, setPreviewImageUrl] = useState(null); // URL for the image passed to Tesseract
   const previewCanvasRef = useRef(null); // Ref for canvas to show PDF/Image preview
@@ -48,18 +53,32 @@ export default function OcrPage() {
 
   // Initialize Tesseract worker (optional: can be moved to a global context or hook for single instance)
   const workerRef = useRef(null);
+  const [workerReady, setWorkerReady] = useState(false);
+  
   useEffect(() => {
     // Lazy load Tesseract worker
     const loadWorker = async () => {
-      workerRef.current = await Tesseract.createWorker("eng", 1, {
-        logger: (m) => {
-          if (m.status === "recognizing") {
-            // Optional: Update progress for UI
-            // console.log(`OCR Progress: ${m.progress * 100}%`);
-          }
-        },
-      });
-      console.log("Tesseract worker loaded and initialized."); // Adjusted log message
+      try {
+        console.log("Starting Tesseract worker initialization...");
+        
+        workerRef.current = await Tesseract.createWorker("eng", 1, {
+          workerPath: "/tesseract-worker.js", // Use local worker file
+          corePath: "/", // Use local core files from public folder
+          logger: (m) => {
+            console.log("Tesseract:", m);
+            if (m.status === "recognizing") {
+              // Optional: Update progress for UI
+              // console.log(`OCR Progress: ${m.progress * 100}%`);
+            }
+          },
+        });
+        console.log("Tesseract worker loaded and initialized successfully.");
+        setWorkerReady(true);
+      } catch (error) {
+        console.error("Failed to initialize Tesseract worker:", error);
+        setError("Failed to initialize OCR engine. Please refresh the page.");
+        setWorkerReady(false);
+      }
     };
     loadWorker();
 
@@ -70,29 +89,28 @@ export default function OcrPage() {
         workerRef.current = null;
         console.log("Tesseract worker terminated.");
       }
-      // Cleanup object URLs
-      if (previewImageUrl) {
-        URL.revokeObjectURL(previewImageUrl);
-      }
-      if (pdfDocProxy) {
-        pdfDocProxy.destroy();
-      }
+      // Note: cleanup of previewImageUrl and pdfDocProxy is handled in other useEffects
       if (renderTaskRef.current) {
         renderTaskRef.current.cancel();
         renderTaskRef.current = null;
       }
     };
-  }, [previewImageUrl, pdfDocProxy]); // Added previewImageUrl and pdfDocProxy to dependencies
+  }, []); // Remove problematic dependencies
 
   // Function to render the uploaded file (image or first PDF page) to canvas
   const renderFileToCanvas = useCallback(async () => {
+    console.log("renderFileToCanvas called");
     const canvas = previewCanvasRef.current;
     if (!canvas || !files.length) {
+      console.log("No canvas or files for rendering - canvas:", !!canvas, "files:", files.length);
       return;
     }
 
+    console.log("Starting file rendering to canvas...");
+
     // Cancel any ongoing render task to prevent conflicts
     if (renderTaskRef.current) {
+      console.log("Cancelling previous render task");
       renderTaskRef.current.cancel();
       renderTaskRef.current = null;
     }
@@ -103,10 +121,19 @@ export default function OcrPage() {
     const file = files[0];
     const desiredWidth = 800; // Fixed width for consistent preview size
 
+    console.log("File type:", file.type);
+
     try {
       if (file.type === "application/pdf") {
-        if (!pdfDocProxy) return; // Wait for pdfDocProxy to be set
+        console.log("Rendering PDF file...");
+        if (!pdfDocProxy) {
+          console.log("PDF document proxy not ready, waiting...");
+          return; // Wait for pdfDocProxy to be set
+        }
+        console.log("Getting first page of PDF...");
         const page = await pdfDocProxy.getPage(1); // Get the first page for preview
+        console.log("PDF page retrieved successfully");
+        
         const viewport = page.getViewport({ scale: 1 });
         const scale = desiredWidth / viewport.width;
         const scaledViewport = page.getViewport({ scale: scale });
@@ -114,39 +141,53 @@ export default function OcrPage() {
         canvas.width = scaledViewport.width;
         canvas.height = scaledViewport.height;
 
+        console.log(`Canvas size set to: ${canvas.width}x${canvas.height}`);
+
         const renderContext = {
           canvasContext: context,
           viewport: scaledViewport,
         };
 
+        console.log("Starting PDF page render...");
         renderTaskRef.current = page.render(renderContext);
         await renderTaskRef.current.promise;
         renderTaskRef.current = null;
 
+        console.log("PDF page rendered successfully");
+
         // Convert canvas content to image URL for Tesseract
         const imgDataUrl = canvas.toDataURL("image/png", 0.9); // Quality 0.9
         setPreviewImageUrl(imgDataUrl);
+        console.log("Preview image URL set from canvas");
       } else if (file.type.startsWith("image/")) {
+        console.log("Rendering image file...");
         const img = new Image();
         img.onload = () => {
+          console.log("Image loaded successfully");
           const aspectRatio = img.width / img.height;
           canvas.width = desiredWidth;
           canvas.height = desiredWidth / aspectRatio;
           context.drawImage(img, 0, 0, canvas.width, canvas.height);
+          console.log(`Image rendered to canvas: ${canvas.width}x${canvas.height}`);
           // Directly use the image URL for Tesseract if it's already an image
-          setPreviewImageUrl(URL.createObjectURL(file));
+          const imageUrl = URL.createObjectURL(file);
+          setPreviewImageUrl(imageUrl);
+          console.log("Preview image URL set from file object");
         };
-        img.onerror = () => {
+        img.onerror = (error) => {
+          console.error("Failed to load image:", error);
           setError("Failed to load image for preview.");
           setPreviewImageUrl(null);
         };
         img.src = URL.createObjectURL(file);
+        console.log("Image src set, waiting for load...");
       }
     } catch (e) {
       if (e.name === "RenderingCancelledException") {
         console.log("PDF rendering cancelled:", e);
       } else {
         console.error("Error rendering file to canvas:", e);
+        console.error("Error details:", e.message, e.stack);
         setError("Failed to prepare file for OCR preview.");
         setPreviewImageUrl(null);
       }
@@ -155,28 +196,31 @@ export default function OcrPage() {
 
   // Effect to trigger canvas rendering when files or pdfDocProxy are updated
   useEffect(() => {
+    console.log("useEffect triggered - files:", files.length, "pdfDocProxy:", !!pdfDocProxy);
     if (files.length > 0) {
+      console.log("Calling renderFileToCanvas from useEffect");
       renderFileToCanvas();
     } else {
+      console.log("No files, clearing preview");
       // Clear preview when no files
       const canvas = previewCanvasRef.current;
       if (canvas) {
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
         canvas.height = 0; // Collapse canvas if no file
+        console.log("Canvas cleared and collapsed");
       }
-      if (previewImageUrl) {
-        URL.revokeObjectURL(previewImageUrl);
-        setPreviewImageUrl(null);
-      }
+      // Note: previewImageUrl cleanup is handled in handleFiles function
       if (pdfDocProxy) {
+        console.log("Destroying PDF proxy in cleanup");
         pdfDocProxy.destroy();
         setPdfDocProxy(null);
       }
     }
-  }, [files, pdfDocProxy, previewImageUrl, renderFileToCanvas]); // Added previewImageUrl to dependencies
+  }, [files, pdfDocProxy, renderFileToCanvas]); // Added renderFileToCanvas back as it's used in the effect
 
   const handleFiles = async (newFiles) => {
+    console.log("handleFiles called with:", newFiles.length, "files");
     setFiles(newFiles);
     setError("");
     setResult(""); // Clear previous OCR result
@@ -185,47 +229,70 @@ export default function OcrPage() {
 
     if (pdfDocProxy) {
       // Destroy previous PDF proxy if exists
+      console.log("Destroying previous PDF proxy");
       pdfDocProxy.destroy();
       setPdfDocProxy(null);
     }
 
-    if (newFiles.length === 0) return;
+    if (newFiles.length === 0) {
+      console.log("No files provided, clearing state");
+      return;
+    }
 
     const file = newFiles[0];
+    console.log("Processing file:", file.name, "Type:", file.type, "Size:", file.size);
+    
     if (file.type === "application/pdf") {
       try {
+        console.log("Loading PDF document...");
+        const arrayBuffer = await file.arrayBuffer();
+        console.log("PDF ArrayBuffer created, size:", arrayBuffer.byteLength);
+        
         const loadingTask = pdfjs.getDocument({
-          data: await file.arrayBuffer(),
+          data: arrayBuffer,
         });
+        console.log("PDF loading task created, waiting for promise...");
+        
         const pdf = await loadingTask.promise;
+        console.log("PDF loaded successfully. Pages:", pdf.numPages);
+        
         setPdfDocProxy(pdf);
         setNumPages(pdf.numPages); // Set total pages for PDF
         setPageRangeEnd(pdf.numPages); // Default end range to total pages
+        console.log("PDF state updated successfully");
       } catch (e) {
-        setError("Failed to load PDF. Please ensure it's a valid PDF file.");
         console.error("PDF loading error:", e);
+        console.error("Error details:", e.message, e.stack);
+        setError("Failed to load PDF. Please ensure it's a valid PDF file.");
         setFiles([]);
       }
     } else if (file.type.startsWith("image/")) {
+      console.log("Processing image file");
       // For images, set files and renderFileToCanvas will handle previewImageUrl
       setNumPages(1); // Single page for image
+      console.log("Image file processed, numPages set to 1");
       // No special pdfDocProxy handling needed here.
     } else {
+      console.log("Unsupported file type:", file.type);
       setError("Unsupported file type. Please upload a PDF or image file.");
       setFiles([]);
     }
   };
 
   const handleOcr = async () => {
+    console.log("handleOcr called");
+    
     if (files.length === 0) {
       setError("Please upload a PDF or image file first.");
       return;
     }
-    if (!workerRef.current) {
-      setError("Tesseract worker not loaded. Please wait a moment or refresh.");
+    if (!workerReady || !workerRef.current) {
+      console.error("Tesseract worker not ready");
+      setError("OCR engine is still loading. Please wait a moment or refresh.");
       return;
     }
 
+    console.log("Starting OCR process...");
     setIsProcessing(true);
     setProcessingMessage("Initializing OCR engine...");
     setError("");
@@ -233,16 +300,20 @@ export default function OcrPage() {
 
     try {
       const file = files[0];
+      console.log("OCR file:", file.name, file.type);
       const allExtractedText = [];
       let pagesToOcr = [];
 
       // Determine which pages to OCR based on mode
       if (file.type === "application/pdf") {
         if (!pdfDocProxy) {
+          console.error("PDF document proxy not available for OCR");
           setError("PDF document not loaded for OCR.");
           setIsProcessing(false);
           return;
         }
+
+        console.log("OCR mode:", ocrMode, "Total pages:", numPages);
 
         if (ocrMode === "all") {
           pagesToOcr = Array.from({ length: numPages }, (_, i) => i + 1);
@@ -277,13 +348,17 @@ export default function OcrPage() {
         pagesToOcr = [1]; // For image, always process as a single "page"
       }
 
+      console.log("Pages to OCR:", pagesToOcr);
+
       for (const pageNum of pagesToOcr) {
+        console.log(`Processing page ${pageNum}...`);
         setProcessingMessage(
           `Rendering page ${pageNum} for text recognition...`
         );
         let imageUrlToOcr = previewImageUrl; // Default to existing preview for single image or first page
 
         if (file.type === "application/pdf") {
+          console.log(`Rendering PDF page ${pageNum} for OCR...`);
           // For PDFs, render each specific page to an offscreen canvas
           const offscreenCanvas = document.createElement("canvas");
           const offscreenContext = offscreenCanvas.getContext("2d");
@@ -304,22 +379,28 @@ export default function OcrPage() {
 
           await page.render(renderContext).promise;
           imageUrlToOcr = offscreenCanvas.toDataURL("image/png", 0.9);
+          console.log(`PDF page ${pageNum} rendered for OCR`);
         }
 
         if (imageUrlToOcr) {
+          console.log(`Starting text recognition for page ${pageNum}...`);
           setProcessingMessage(`Recognizing text on page ${pageNum}...`);
           const { data } = await workerRef.current.recognize(imageUrlToOcr);
+          console.log(`Text recognition completed for page ${pageNum}`);
           allExtractedText.push(`--- Page ${pageNum} ---\n${data.text.trim()}`);
+        } else {
+          console.error(`No image URL available for page ${pageNum}`);
         }
       }
 
+      console.log("OCR completed successfully");
       setResult(allExtractedText.join("\n\n"));
       setProcessingMessage("Text extraction complete!");
     } catch (e) {
+      console.error("OCR error:", e);
       setError(
         "Failed to extract text. Ensure the text is clear and readable."
       );
-      console.error("OCR error:", e);
     } finally {
       setIsProcessing(false);
       // Clear message after a short delay
@@ -382,7 +463,6 @@ export default function OcrPage() {
             label="Upload PDF or Image"
             description="Drag & drop or click to select a PDF or image file (Max 50MB)"
             maxSize={50 * 1024 * 1024}
-            isLoading={isProcessing}
           />
 
           {files.length > 0 && (
@@ -548,10 +628,10 @@ export default function OcrPage() {
                        bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
                        text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
             onClick={handleOcr}
-            disabled={files.length === 0 || isProcessing}
+            disabled={files.length === 0 || isProcessing || !workerReady}
             aria-label="Extract Text"
           >
-            {isProcessing ? "Extracting Text..." : "Extract Text"}
+            {!workerReady ? "Loading OCR Engine..." : isProcessing ? "Extracting Text..." : "Extract Text"}
           </Button>
 
           {result && (

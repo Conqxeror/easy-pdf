@@ -5,11 +5,10 @@
 import Link from "next/link";
 import React, { Suspense, useState, useEffect  } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
-import { Lock, Cloud, Code, ArrowRight, Star, Zap } from "lucide-react";
+import { Lock, Cloud, Code, ArrowRight } from "lucide-react";
 import ToolCard from "@/components/ui/ToolCard";
 import { toolsData } from "@/lib/toolData";
 import SponsorSection from "@/components/ui/SponsorSection";
-import PremiumBadge from "@/components/ui/PremiumBadge";
 import UsageIndicator from "@/components/ui/UsageIndicator";
 import { trackEvent } from "@/lib/analytics";
 import { useUserPreferences } from "@/lib/userPreferences";
@@ -78,9 +77,7 @@ export default function Home() {
     trackEvent('explore_tools_clicked', { source: 'hero_section' });
   };
 
-  const handlePremiumClick = () => {
-    trackEvent('premium_cta_clicked', { source: 'homepage' });
-  };
+  // Premium functionality removed
 
   // Get recent and favorite tools
   const recentTools = preferences.recentTools || [];
@@ -110,30 +107,13 @@ export default function Home() {
     }
   ];
 
-  const premiumFeatures = [
-    {
-      icon: <Zap className="w-6 h-6" />,
-      title: "AI Document Analysis",
-      description: "Advanced legal, medical, and financial document insights"
-    },
-    {
-      icon: <ArrowRight className="w-6 h-6" />,
-      title: "Batch Processing",
-      description: "Process up to 50 files simultaneously"
-    },
-    {
-      icon: <Star className="w-6 h-6" />,
-      title: "Priority Support",
-      description: "Get help when you need it most"
-    }
-  ];
+  // Premium features removed
 
   return (
     <PageContainer>
       {/* User Status Bar */}
       <div className="container-standard pt-6">
-        <div className="flex items-center justify-between">
-          <PremiumBadge showDetails />
+        <div className="flex items-center justify-end">
           <UsageIndicator compact />
         </div>
       </div>
@@ -166,17 +146,7 @@ export default function Home() {
             </Link>
           </Button>
           
-          <Button
-            asChild
-            variant="gradient"
-            size="lg"
-            className="px-8 bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 hover:from-purple-700 hover:via-blue-700 hover:to-teal-700 text-white"
-          >
-            <Link href="/pricing" onClick={handlePremiumClick}>
-              <Star className="w-4 h-4 mr-2" />
-              Go Premium
-            </Link>
-          </Button>
+          {/* Premium button removed */}
           
           {showInstallButton && (
             <Button
@@ -232,28 +202,7 @@ export default function Home() {
         </Suspense>
       </Section>
 
-      {/* Premium Features Showcase */}
-      <Section
-        title="Unlock Premium Features"
-        subtitle="Get advanced AI analysis, unlimited processing, and priority support"
-        className="bg-gradient-to-r from-primary/5 to-primary-light/5 rounded-2xl"
-      >
-        <FeatureGrid features={premiumFeatures} className="mb-8" />
-        
-        <div className="text-center">
-          <Button
-            asChild
-            variant="gradient"
-            size="lg"
-            className="px-8 bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 hover:from-purple-700 hover:via-blue-700 hover:to-teal-700 text-white"
-          >
-            <Link href="/pricing" onClick={handlePremiumClick}>
-              <Star className="w-4 h-4 mr-2" />
-              Start Free Trial
-            </Link>
-          </Button>
-        </div>
-      </Section>
+      {/* Premium features section removed */}
 
       {/* Sponsors Section */}
       <Section spacing="small">

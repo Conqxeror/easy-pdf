@@ -15,8 +15,8 @@ declare -A tools=(
     ["page-numbers"]="Add Page Numbers"
     ["delete-pages"]="Delete Pages"
     ["reorder"]="Reorder Pages"
-    ["pdf-to-word"]="PDF to Word"
-    ["word-to-pdf"]="Word to PDF"
+
+
     ["html-to-pdf"]="HTML to PDF"
     ["organize"]="Organize PDF"
     ["ocr"]="OCR PDF"

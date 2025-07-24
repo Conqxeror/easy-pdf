@@ -206,30 +206,8 @@ export const toolsData = [
     features: ["Form field detection", "Text input", "Checkbox support", "Form saving"],
     relatedTools: ["/sign", "/ocr", "/protect"]
   },
-  {
-    href: "/word-to-pdf",
-    title: "Word to PDF",
-    description: "Convert Word documents to PDF (Coming Soon - Server-side).",
-    icon: <FileText className="w-8 h-8 text-blue-600" />,
-    comingSoon: true,
-    keywords: ["word to pdf", "docx to pdf", "convert word", "document converter", "office to pdf"],
-    seoTitle: "Word to PDF Converter - Convert DOCX to PDF (Coming Soon)",
-    seoDescription: "Convert Microsoft Word documents to PDF format. Professional document conversion tool coming soon.",
-    features: ["DOCX conversion", "Formatting preservation", "Batch processing", "High quality output"],
-    relatedTools: ["/pdf-to-word", "/merge", "/compress"]
-  },
-  {
-    href: "/pdf-to-word",
-    title: "PDF to Word",
-    description: "Convert PDF to editable Word documents (Coming Soon - Server-side).",
-    icon: <FileText className="w-8 h-8 text-blue-800" />,
-    comingSoon: true,
-    keywords: ["pdf to word", "pdf to docx", "convert pdf", "editable document", "pdf converter"],
-    seoTitle: "PDF to Word Converter - Convert PDF to DOCX (Coming Soon)",
-    seoDescription: "Convert PDF files to editable Microsoft Word documents. Professional PDF to Word conversion tool coming soon.",
-    features: ["Editable output", "Layout preservation", "Text extraction", "Format conversion"],
-    relatedTools: ["/word-to-pdf", "/ocr", "/form-filler"]
-  },
+
+
   {
     href: "/legal-analyzer",
     title: "Legal Document Analyzer",

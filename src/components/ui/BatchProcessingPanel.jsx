@@ -23,7 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { advancedPdfProcessor } from '@/lib/advancedPdfProcessing';
 import { useUserPreferences } from '@/lib/userPreferences';
-import PremiumBadge from './PremiumBadge';
+// Premium functionality removed - all features now free
 
 const BatchProcessingPanel = ({ className = '' }) => {
   const [files, setFiles] = useState([]);
@@ -34,15 +34,15 @@ const BatchProcessingPanel = ({ className = '' }) => {
   const [options, setOptions] = useState({});
   const { preferences } = useUserPreferences();
 
-  const isPremium = preferences.userTier === 'premium';
-  const capabilities = advancedPdfProcessor.getCapabilities(preferences.userTier);
+  // Premium checks removed - all features are now free
+  const capabilities = { maxBatchSize: 200, maxFileSize: 500 }; // Unlimited for all users
 
   const operations = [
     { value: 'compress', label: 'Compress PDFs', premium: false },
-    { value: 'watermark', label: 'Add Watermarks', premium: true },
+    { value: 'watermark', label: 'Add Watermarks', premium: false },
     { value: 'extract_pages', label: 'Extract Pages', premium: false },
     { value: 'rotate', label: 'Rotate Pages', premium: false },
-    { value: 'add_metadata', label: 'Add Metadata', premium: true },
+    { value: 'add_metadata', label: 'Add Metadata', premium: false },
     { value: 'merge', label: 'Merge PDFs', premium: false }
   ];
 
@@ -54,7 +54,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
     );
 
     if (validFiles.length + files.length > capabilities.maxBatchSize) {
-      alert(`Maximum ${capabilities.maxBatchSize} files allowed for ${preferences.userTier} users`);
+      alert(`Maximum ${capabilities.maxBatchSize} files allowed`);
       return;
     }
 
@@ -64,7 +64,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
       status: 'pending',
       result: null
     }))]);
-  }, [files.length, capabilities, preferences.userTier]);
+  }, [files.length, capabilities]);
 
   const removeFile = (id) => {
     setFiles(prev => prev.filter(f => f.id !== id));
@@ -81,7 +81,6 @@ const BatchProcessingPanel = ({ className = '' }) => {
       const fileList = files.map(f => f.file);
       const processingOptions = {
         ...options,
-        premium: isPremium,
         onProgress: (completed, total) => {
           setProgress((completed / total) * 100);
         }
@@ -136,7 +135,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
   };
 
   const selectedOperation = operations.find(op => op.value === operation);
-  const canProcess = files.length > 0 && !processing && (!selectedOperation?.premium || isPremium);
+  const canProcess = files.length > 0 && !processing;
 
   return (
     <Card className={`bg-gray-900 border-gray-700 ${className}`}>
@@ -145,7 +144,6 @@ const BatchProcessingPanel = ({ className = '' }) => {
           <div className="flex items-center space-x-2">
             <Zap className="w-5 h-5 text-blue-400" />
             <h2 className="text-lg font-semibold text-gray-200">Batch Processing</h2>
-            {!isPremium && <PremiumBadge />}
           </div>
           <div className="text-sm text-gray-400">
             {files.length}/{capabilities.maxBatchSize} files
@@ -174,14 +172,10 @@ const BatchProcessingPanel = ({ className = '' }) => {
                       <SelectItem 
                         key={op.value} 
                         value={op.value}
-                        disabled={op.premium && !isPremium}
                         className="text-gray-200"
                       >
                         <div className="flex items-center space-x-2">
                           <span>{op.label}</span>
-                          {op.premium && !isPremium && (
-                            <span className="text-xs text-yellow-400">Premium</span>
-                          )}
                         </div>
                       </SelectItem>
                     ))}

