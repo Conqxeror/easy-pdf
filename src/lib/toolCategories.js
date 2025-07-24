@@ -3,7 +3,6 @@ import {
   FileText,
   Combine,
   Spline,
-  Shrink,
   FileImage,
   RotateCw,
   Stamp,
@@ -20,6 +19,11 @@ import {
   Text,
   Minimize2,
   FileBadge2,
+  QrCode,
+  Calculator,
+  Award,
+  User,
+  BarChart3,
 } from "lucide-react";
 
 export const toolCategories = [
@@ -41,6 +45,11 @@ export const toolCategories = [
         name: "HTML to PDF",
         href: "/html-to-pdf",
         icon: <FileCode className="w-4 h-4" />,
+      },
+      {
+        name: "QR Code Generator",
+        href: "/qr-generator",
+        icon: <QrCode className="w-4 h-4" />,
       },
     ],
   },
@@ -81,8 +90,8 @@ export const toolCategories = [
     ],
   },
   {
-    name: "Optimize & Secure",
-    icon: <Shrink className="w-4 h-4" />,
+    name: "Security & Privacy",
+    icon: <Lock className="w-4 h-4" />,
     submenu: [
       {
         name: "Compress PDF",
@@ -109,29 +118,84 @@ export const toolCategories = [
         href: "/page-numbers",
         icon: <PlusCircle className="w-4 h-4" />,
       },
+      {
+        name: "PDF Redaction",
+        href: "/tools/pdf-redaction",
+        icon: <Eraser className="w-4 h-4" />,
+      },
     ],
   },
   {
-    name: "Advanced Tools",
-    icon: <FileBadge2 className="w-4 h-4" />,
+    name: "Forms & Documents",
+    icon: <Text className="w-4 h-4" />,
     submenu: [
-      { name: "OCR", href: "/ocr", icon: <Search className="w-4 h-4" /> },
+      {
+        name: "PDF Form Filler",
+        href: "/form-filler",
+        icon: <Text className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Form Creator",
+        href: "/tools/pdf-form-creator",
+        icon: <PlusCircle className="w-4 h-4" />,
+      },
       {
         name: "Sign/Annotate PDF",
         href: "/sign",
         icon: <Signature className="w-4 h-4" />,
       },
       {
-        name: "PDF Form Filler",
-        href: "/form-filler",
+        name: "Digital Signature",
+        href: "/tools/pdf-digital-signature",
+        icon: <Signature className="w-4 h-4" />,
+      },
+      {
+        name: "Annotation Collaboration",
+        href: "/tools/pdf-annotation-collaboration",
         icon: <Text className="w-4 h-4" />,
       },
     ],
   },
   {
-    name: "Legal & AI Tools",
-    icon: <FileBadge className="w-4 h-4" />,
+    name: "Business Tools",
+    icon: <Calculator className="w-4 h-4" />,
     submenu: [
+      {
+        name: "Invoice Generator",
+        href: "/invoice-generator",
+        icon: <Calculator className="w-4 h-4" />,
+      },
+      {
+        name: "Certificate Generator",
+        href: "/certificate-generator",
+        icon: <Award className="w-4 h-4" />,
+      },
+      {
+        name: "Report Generator",
+        href: "/report-generator",
+        icon: <BarChart3 className="w-4 h-4" />,
+      },
+      {
+        name: "Portfolio Creator",
+        href: "/portfolio-creator",
+        icon: <User className="w-4 h-4" />,
+      },
+    ],
+  },
+  {
+    name: "AI & Analysis",
+    icon: <Search className="w-4 h-4" />,
+    submenu: [
+      { 
+        name: "OCR (Text Recognition)", 
+        href: "/ocr", 
+        icon: <Search className="w-4 h-4" /> 
+      },
+      {
+        name: "Advanced OCR",
+        href: "/tools/advanced-ocr",
+        icon: <Search className="w-4 h-4" />,
+      },
       {
         name: "Legal Document Analyzer",
         href: "/legal-analyzer",
@@ -141,6 +205,42 @@ export const toolCategories = [
         name: "Medical Document Analyzer",
         href: "/medical-analyzer",
         icon: <FileBadge className="w-4 h-4" />,
+      },
+    ],
+  },
+  {
+    name: "Advanced PDF Tools",
+    icon: <FileBadge2 className="w-4 h-4" />,
+    submenu: [
+      {
+        name: "PDF Metadata Editor",
+        href: "/tools/pdf-metadata-editor",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Bookmark Manager",
+        href: "/tools/pdf-bookmark-manager",
+        icon: <ListOrdered className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Table Extractor",
+        href: "/tools/pdf-table-extractor",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Accessibility Checker",
+        href: "/tools/pdf-accessibility-checker",
+        icon: <Search className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Version Comparison",
+        href: "/tools/pdf-version-comparison",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Batch Processor",
+        href: "/tools/pdf-batch-processor",
+        icon: <FileBadge2 className="w-4 h-4" />,
       },
     ],
   },

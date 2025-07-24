@@ -24,8 +24,11 @@ const footerLinks = [
       { name: "OCR", href: "/ocr" },
       { name: "Sign/Annotate PDF", href: "/sign" },
       { name: "PDF Form Filler", href: "/form-filler" },
-
-
+      { name: "Certificate Generator", href: "/certificate-generator" },
+      { name: "Invoice Generator", href: "/invoice-generator" },
+      { name: "Portfolio Creator", href: "/portfolio-creator" },
+      { name: "QR Generator", href: "/qr-generator" },
+      { name: "Report Generator", href: "/report-generator" },
       { name: "Legal Document Analyzer", href: "/legal-analyzer" },
       { name: "Medical Document Analyzer", href: "/medical-analyzer" },
     ],
