@@ -415,9 +415,8 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
 export const generatePerformanceHints = () => {
   return {
     preload: [
-      { href: "/fonts/inter-var.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
-      { href: "/_next/static/chunks/main.js", as: "script" },
-      { href: "/icon.png", as: "image" }
+      // Removed problematic preloads that cause unused resource warnings
+      // Icon will be loaded naturally when needed
     ],
     prefetch: [
       { href: "/merge", as: "document" },

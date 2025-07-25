@@ -12,7 +12,10 @@ import { Toaster } from "sonner";
 
 // Temporarily disable service worker registration
 function registerServiceWorker() {
-  // Service worker registration disabled for build
+  // Service worker registration disabled for development
+  if (process.env.NODE_ENV === 'development') {
+    return;
+  }
   console.log("Service worker registration disabled");
 }
 

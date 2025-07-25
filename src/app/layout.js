@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
         <link rel="dns-prefetch" href="https://vercel.live" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="format-detection" content="telephone=no" />
-        <meta name="theme-color" content="#3b82f6" />
+        <meta name="theme-color" content="#000000" />
         <meta name="color-scheme" content="light dark" />
         <meta name="HandheldFriendly" content="true" />
         <meta name="MobileOptimized" content="320" />
@@ -59,7 +59,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased bg-black">
         <ClientLayout>{children}</ClientLayout>
         <SpeedInsights />
         <Analytics />

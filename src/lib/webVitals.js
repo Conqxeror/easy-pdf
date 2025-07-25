@@ -19,23 +19,8 @@ export const initializePerformanceOptimizations = () => {
     lazyImages.forEach(img => imageObserver.observe(img));
   }
 
-  // Preload critical resources
-  const preloadLink = (href, as, type = null) => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = href;
-    link.as = as;
-    if (type) link.type = type;
-    if (as === 'script') link.crossOrigin = 'anonymous';
-    document.head.appendChild(link);
-  };
-
-  // Preload critical assets
-  try {
-    preloadLink('/fonts/inter-var.woff2', 'font', 'font/woff2');
-  } catch (e) {
-    console.log('Font preload failed:', e);
-  }
+  // Preload critical assets - removed to prevent unused resource warnings
+  // Font loading handled by Tailwind CSS system font stack
 
   // Monitor Core Web Vitals if available
   if ('PerformanceObserver' in window && window.gtag) {

@@ -43,6 +43,10 @@ export default function Home() {
       event.preventDefault();
       setInstallPrompt(event);
       setShowInstallButton(true);
+      // Console message to indicate proper handling (development only)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('PWA install prompt captured and ready');
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
