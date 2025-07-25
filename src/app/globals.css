@@ -4,8 +4,8 @@
 /* Enhanced Design System - Theme Variables */
 :root {
   /* Core Colors - Light Theme */
-  --background: 255 255 255;
-  --foreground: 15 23 42;
+  --background: 0 0 0;
+  --foreground: 248 250 252;
   --card: 255 255 255;
   --card-foreground: 15 23 42;
   --popover: 255 255 255;
@@ -154,7 +154,6 @@
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 /* Enhanced Design System - Base Layer */
@@ -165,12 +164,12 @@
   
   html {
     scroll-behavior: smooth;
+    background-color: #000000;
   }
   
   body {
-    background-color: hsl(var(--background, 0 0% 100%));
-    color: hsl(var(--foreground, 222 84% 4.9%));
-    transition: background-color 0.3s ease, color 0.3s ease;
+    background-color: hsl(var(--background, 0 0% 0%));
+    color: hsl(var(--foreground, 248 250 252));
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

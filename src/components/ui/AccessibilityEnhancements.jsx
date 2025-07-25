@@ -261,7 +261,9 @@ export const usePerformanceMonitoring = () => {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === 'largest-contentful-paint') {
-            console.log('LCP:', entry.startTime);
+            if (process.env.NODE_ENV === 'development') {
+              console.log('LCP:', entry.startTime);
+            }
           }
         }
       });
