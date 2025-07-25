@@ -24,7 +24,7 @@ const performanceHints = generatePerformanceHints();
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className="scroll-smooth" style={{ backgroundColor: '#000000' }}>
       <head>
         <link rel="manifest" href="/site.webmanifest" />
         
@@ -52,7 +52,7 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="easy-pdf" />
         <meta name="application-name" content="easy-pdf" />
-        <meta name="msapplication-TileColor" content="#1f2937" />
+        <meta name="msapplication-TileColor" content="#000000" />
         
         <script
           type="application/ld+json"
