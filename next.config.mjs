@@ -156,6 +156,10 @@ const nextConfig = {
         loaders: ['@svgr/webpack'],
         as: '*.js',
       },
+      '**/*.ttf': {
+        loaders: ['file-loader'],
+        as: '',
+      },
     },
   },
 

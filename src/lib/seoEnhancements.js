@@ -110,19 +110,12 @@ export const generateEnhancedMetadata = ({
       countryName: "India",
       images: [
         {
-          url: ogImage || "/og-image.jpg",
+          url: `${metadataBaseUrl}/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
           width: 1200,
           height: 630,
           alt: `${toolName || title} - Free PDF Tool | easy-pdf`,
-          type: "image/jpeg",
+          type: "image/png",
         },
-        {
-          url: ogImage || "/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${toolName || title} - Privacy-First PDF Processing`,
-          type: "image/jpeg",
-        }
       ],
       ...(pageType === 'article' && {
         publishedTime: lastModified || new Date().toISOString(),
