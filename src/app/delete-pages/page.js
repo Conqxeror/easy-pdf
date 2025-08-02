@@ -193,13 +193,46 @@ export default function DeletePagesPage() {
   };
 
   return (
-    <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        {" "}
-        {/* Added flex utilities and standard responsive padding */}
+    <ToolPageContent
+      toolName="Delete PDF Pages"
+      toolDescription="Easily remove unwanted pages from your PDF documents with our free online tool. Select specific pages or a range of pages to delete, and create a new, cleaner PDF in seconds. All processing is done securely in your browser, ensuring your files remain private."
+      steps={[
+        "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+        "You will see a list of page numbers. Click on the page numbers you wish to remove. Selected pages will be highlighted.",
+        "Alternatively, use the 'Enter Page Range' input to specify pages for deletion (e.g., '1-5, 8, 10').",
+        "Click the 'Download PDF (Pages Deleted)' button to process and save your new PDF without the selected pages.",
+      ]}
+      faqs={[
+        {
+          question: "Is it free to delete pages from a PDF?",
+          answer:
+            "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations.",
+        },
+        {
+          question: "Are my files secure when deleting pages?",
+          answer:
+            "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+        },
+        {
+          question: "Can I delete multiple pages at once?",
+          answer:
+            "Yes, you can select multiple individual pages or specify a range of pages to delete simultaneously. Our tool is designed for efficient bulk deletion.",
+        },
+        {
+          question: "What happens if I accidentally delete a page?",
+          answer:
+            "Our tool creates a new PDF with the selected pages removed. Your original PDF remains untouched on your device. If you make a mistake, simply re-upload the original PDF and try again.",
+        },
+        {
+          question: "Is there a file size limit for deleting pages?",
+          answer:
+            "Yes, the maximum file size for a PDF to be processed is 50MB. For larger files, processing might be slower due to client-side operations.",
+        },
+      ]}
+      currentTool="delete-pages"
+    >
+      <div className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
         <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
-          {" "}
-          {/* Removed mx-auto, ensured w-full and max-w-4xl */}
           <CardHeader>
             <CardTitle className="text-3xl font-bold text-center text-gray-100">
               Delete PDF Pages
@@ -210,20 +243,18 @@ export default function DeletePagesPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* FileDropzone component for PDF upload */}
             <FileDropzone
               accept="application/pdf"
-              multiple={false} // Only allow single file upload
-              onFiles={handleFiles} // Callback for file selection
-              error={error} // Pass current error state
-              setError={setError} // Pass setter for error state
+              multiple={false}
+              onFiles={handleFiles}
+              error={error}
+              setError={setError}
               label="Upload PDF"
               description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024} // Example: 50MB max file size
-              isLoading={isProcessing} // Show loading state in dropzone if processing
+              maxSize={50 * 1024 * 1024}
+              isLoading={isProcessing}
             />
 
-            {/* Section to display page selection buttons once a PDF is loaded */}
             {numPages > 0 && (
               <div className="my-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
                 <h2 className="font-semibold text-xl mb-3 text-gray-100">
@@ -234,7 +265,6 @@ export default function DeletePagesPage() {
                   will be highlighted in red.
                 </p>
 
-                {/* Page Range Input */}
                 <div className="mb-4">
                   <Label
                     htmlFor="page-range"
@@ -255,7 +285,7 @@ export default function DeletePagesPage() {
                     />
                     <Button
                       onClick={applyPageRange}
-                      variant="default" // Changed to default for blue color
+                      variant="default"
                       className="px-4 py-2"
                       disabled={isProcessing || !pageRangeInput.trim()}
                     >
@@ -270,24 +300,19 @@ export default function DeletePagesPage() {
                 </div>
 
                 <ul
-                  className="flex flex-wrap gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar" // Added custom-scrollbar for styling overflow
+                  className="flex flex-wrap gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar"
                   aria-label="Select pages to delete"
-                  // Adding data-test attributes for easier testing if needed
                   data-test-id="page-selection-list"
                 >
-                  {/* Generate a button for each page in the PDF */}
                   {Array.from({ length: numPages }, (_, i) => (
                     <li key={i}>
                       <Button
                         size="sm"
-                        // Change variant based on whether the page is selected for deletion
-                        // Use "success" for green unselected buttons
                         variant={
                           selected.includes(i) ? "destructive" : "success"
                         }
                         aria-label={`Toggle delete for page ${i + 1}`}
                         onClick={() => togglePage(i)}
-                        // Removed fixed width and explicit background color as variants handle styling
                         className="w-20"
                       >
                         Page {i + 1}
@@ -298,18 +323,15 @@ export default function DeletePagesPage() {
               </div>
             )}
 
-            {/* Display error messages */}
             {error && (
               <Alert variant="destructive" className="mt-4">
                 {error}
               </Alert>
             )}
 
-            {/* Button to trigger the deletion process */}
             <Button
               className="mt-6 w-full max-w-xs mx-auto block bg-blue-700 text-white"
               onClick={handleDelete}
-              // Disable button if processing, no PDF loaded, or no pages selected for deletion
               disabled={isProcessing || numPages === 0 || selected.length === 0}
               aria-label="Download PDF with pages deleted"
               data-test-id="delete-pages-button"
@@ -318,44 +340,7 @@ export default function DeletePagesPage() {
             </Button>
           </CardContent>
         </Card>
-        <ToolPageContent
-          toolName="Delete PDF Pages"
-          toolDescription="Easily remove unwanted pages from your PDF documents with our free online tool. Select specific pages or a range of pages to delete, and create a new, cleaner PDF in seconds. All processing is done securely in your browser, ensuring your files remain private."
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "You will see a list of page numbers. Click on the page numbers you wish to remove. Selected pages will be highlighted.",
-            "Alternatively, use the 'Enter Page Range' input to specify pages for deletion (e.g., '1-5, 8, 10').",
-            "Click the 'Download PDF (Pages Deleted)' button to process and save your new PDF without the selected pages.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to delete pages from a PDF?",
-              answer:
-                "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations.",
-            },
-            {
-              question: "Are my files secure when deleting pages?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "Can I delete multiple pages at once?",
-              answer:
-                "Yes, you can select multiple individual pages or specify a range of pages to delete simultaneously. Our tool is designed for efficient bulk deletion.",
-            },
-            {
-              question: "What happens if I accidentally delete a page?",
-              answer:
-                "Our tool creates a new PDF with the selected pages removed. Your original PDF remains untouched on your device. If you make a mistake, simply re-upload the original PDF and try again.",
-            },
-            {
-              question: "Is there a file size limit for deleting pages?",
-              answer:
-                "Yes, the maximum file size for a PDF to be processed is 50MB. For larger files, processing might be slower due to client-side operations.",
-            },
-          ]}
-        />
-      </main>
-    </>
+      </div>
+    </ToolPageContent>
   );
 }

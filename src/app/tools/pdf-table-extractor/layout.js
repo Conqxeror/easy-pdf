@@ -22,9 +22,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "PDF Table Extractor",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "PDF Table Extractor", url: "https://easy-pdf-murex.vercel.app/tools/pdf-table-extractor" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "PDF Table Extractor", url: "/tools/pdf-table-extractor" }
   ]
 });
 

@@ -1,42 +1,35 @@
 import React from 'react'
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react';
+import { toolCategories } from '@/lib/toolCategories';
 
 const RelatedTools = ({ currentTool, tools }) => {
   // Get related tools based on categories and functionality
   const getRelatedTools = () => {
-    const currentToolData = tools.find(tool => tool.href === `/${currentTool}`)
-    if (!currentToolData) return []
-
-    // Define tool relationships
-    const relationships = {
-      merge: ['split', 'compress', 'watermark', 'protect'],
-      split: ['merge', 'pdf-to-jpg', 'compress', 'delete-pages'],
-      compress: ['merge', 'split', 'pdf-to-jpg', 'organize'],
-      'jpg-to-pdf': ['pdf-to-jpg', 'merge', 'compress', 'watermark'],
-      'pdf-to-jpg': ['jpg-to-pdf', 'split', 'compress', 'rotate'],
-      protect: ['unlock', 'watermark', 'sign', 'compress'],
-      unlock: ['protect', 'merge', 'split', 'compress'],
-      watermark: ['protect', 'sign', 'merge', 'compress'],
-      sign: ['watermark', 'protect', 'merge', 'form-filler'],
-      rotate: ['split', 'merge', 'compress', 'organize'],
-      'delete-pages': ['split', 'merge', 'organize', 'reorder'],
-      'page-numbers': ['watermark', 'merge', 'organize', 'compress'],
-      'reorder': ['organize', 'delete-pages', 'merge', 'split'],
-      'organize': ['reorder', 'delete-pages', 'merge', 'split'],
-      'html-to-pdf': ['merge', 'compress', 'watermark', 'protect'],
-      'ocr': ['form-filler', 'sign', 'merge', 'compress'],
-      'form-filler': ['sign', 'ocr', 'protect', 'merge'],
-
-
-      'legal-analyzer': ['ocr', 'form-filler', 'protect', 'sign'],
-      'medical-analyzer': ['ocr', 'form-filler', 'protect', 'sign']
+    let currentToolCategory = null;
+    // Find the category of the current tool from toolCategories
+    for (const category of toolCategories) {
+      if (category.submenu.some(item => item.href === `/${currentTool}`)) {
+        currentToolCategory = category.name;
+        break;
+      }
     }
 
-    const relatedNames = relationships[currentTool] || []
+    if (!currentToolCategory) return [];
+
     return tools
-      .filter(tool => relatedNames.includes(tool.href.replace('/', '')) && tool.href !== `/${currentTool}`)
-      .slice(0, 4) // Show max 4 related tools
+      .filter(tool => {
+        // Find the category of the tool being filtered
+        let toolCategory = null;
+        for (const category of toolCategories) {
+          if (category.submenu.some(item => item.href === tool.href)) {
+            toolCategory = category.name;
+            break;
+          }
+        }
+        return toolCategory === currentToolCategory && tool.href !== `/${currentTool}`;
+      })
+      .slice(0, 4);
   }
 
   const relatedTools = getRelatedTools()

@@ -22,9 +22,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "PDF Digital Signature",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "PDF Digital Signature", url: "https://easy-pdf-murex.vercel.app/tools/pdf-digital-signature" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "PDF Digital Signature", url: "/tools/pdf-digital-signature" }
   ]
 });
 

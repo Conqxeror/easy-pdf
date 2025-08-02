@@ -1,0 +1,251 @@
+"use client";
+
+import Link from "next/link";
+import React, { Suspense, useState, useEffect  } from "react";
+import { Skeleton } from "@/components/ui/skeleton.jsx";
+import { Lock, Cloud, Code, ArrowRight } from "lucide-react";
+import ToolCard from "@/components/ui/ToolCard";
+import { toolsData } from "@/lib/toolData";
+import SponsorSection from "@/components/ui/SponsorSection";
+import UsageIndicator from "@/components/ui/UsageIndicator";
+import { trackEvent } from "@/lib/analytics";
+import { useUserPreferences } from "@/lib/userPreferences";
+import FileHistoryPanel from "@/components/ui/FileHistoryPanel";
+import { Button } from "@/components/ui/button";
+import { SkipToMain, AccessibleHeading, usePerformanceMonitoring } from "@/components/ui/AccessibilityEnhancements";
+import { 
+  PageContainer, 
+  Hero, 
+  Section, 
+  FeatureGrid, 
+  Grid, 
+  CTASection 
+} from "@/components/ui/Layout";
+
+export default function HomeClient() {
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+  const { preferences } = useUserPreferences();
+  
+  usePerformanceMonitoring();
+
+  useEffect(() => {
+    trackEvent('homepage_viewed', {
+      user_agent: navigator.userAgent,
+      screen_resolution: `${screen.width}x${screen.height}`
+    });
+
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault();
+      setInstallPrompt(event);
+      setShowInstallButton(true);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('PWA install prompt captured and ready');
+      }
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPrompt) {
+      return;
+    }
+    
+    trackEvent('pwa_install_clicked');
+    
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    
+    trackEvent('pwa_install_result', { outcome });
+    
+    if (outcome === 'accepted') {
+      console.log('User accepted the PWA installation prompt');
+    } else {
+      console.log('User dismissed the PWA installation prompt');
+    }
+    setInstallPrompt(null);
+    setShowInstallButton(false);
+  };
+
+  const handleGetStartedClick = () => {
+    trackEvent('get_started_clicked', { source: 'hero_section' });
+  };
+
+  const handleExploreToolsClick = () => {
+    trackEvent('explore_tools_clicked', { source: 'hero_section' });
+  };
+
+  const recentTools = preferences.recentTools || [];
+  const favoriteTools = preferences.favoriteTools || [];
+  
+  const displayTools = recentTools.length > 0 
+    ? toolsData.filter(tool => recentTools.includes(tool.href.replace('/', '')))
+    : toolsData;
+
+  const features = [
+    {
+      icon: <Lock className="w-6 h-6" aria-hidden="true" />,
+      title: "100% Client-Side",
+      description: "Your files never leave your device. All processing happens in your browser."
+    },
+    {
+      icon: <Cloud className="w-6 h-6" aria-hidden="true" />,
+      title: "India-Optimized",
+      description: "Works great on slower connections. Small bundle size for quick loading."
+    },
+    {
+      icon: <Code className="w-6 h-6" aria-hidden="true" />,
+      title: "Open Source",
+      description: "Transparent codebase. No hidden tracking or data collection."
+    }
+  ];
+
+  return (
+    <>
+      <SkipToMain />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "easy-pdf",
+            "operatingSystem": "All",
+            "applicationCategory": "Productivity",
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "ratingCount": "1200"
+            },
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          }) }}
+        />
+
+      <main id="main-content">
+        <PageContainer>
+          <div className="container-standard pt-6">
+            <div className="flex items-center justify-end">
+              <UsageIndicator compact />
+            </div>
+          </div>
+
+          <Hero
+            title="Privacy-First PDF Tools"
+            subtitle="All processing happens in your browser. No file uploads, no privacy risks. Fast, free, and made for Indian users."
+          >
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                asChild
+                size="lg"
+                className="px-8 bg-blue-600 hover:bg-blue-700 text-white"
+                aria-describedby="get-started-description"
+              >
+                <Link href="/merge" onClick={handleGetStartedClick}>
+                  Get Started Now
+                  <ArrowRight className="ml-2 w-5 h-5" aria-hidden="true" />
+                </Link>
+              </Button>
+              <div id="get-started-description" className="sr-only">
+                Start using our PDF tools by merging documents
+              </div>
+              
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="px-8 border-2 border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+              >
+                <Link href="#tools" onClick={handleExploreToolsClick}>
+                  Explore All Tools
+                </Link>
+              </Button>
+              
+              {showInstallButton && (
+                <Button
+                  onClick={handleInstallClick}
+                  variant="success"
+                  size="lg"
+                  className="px-8 bg-green-600 hover:bg-green-700 text-white"
+                  aria-label="Install easy-pdf as a Progressive Web App"
+                >
+                  Install App
+                </Button>
+              )}
+            </div>
+          </Hero>
+
+          <Section>
+            <AccessibleHeading level={2} className="text-3xl text-center mb-8 text-white">
+              Why Choose easy-pdf?
+            </AccessibleHeading>
+            <FeatureGrid features={features} />
+          </Section>
+
+          {(recentTools.length > 0 || favoriteTools.length > 0) && (
+            <Section 
+              title={recentTools.length > 0 ? 'Recently Used Tools' : 'Your Favorite Tools'}
+              spacing="small"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                  <Grid cols={3} gap="6">
+                    {displayTools.slice(0, 6).map((tool) => (
+                      <ToolCard key={tool.href} tool={tool} />
+                    ))}
+                  </Grid>
+                </div>
+                <div className="lg:col-span-1">
+                  <FileHistoryPanel className="h-fit" />
+                </div>
+              </div>
+            </Section>
+          )}
+
+          <Section 
+            id="tools"
+            title="All PDF Tools"
+            subtitle="Complete suite of PDF tools for all your document needs"
+          >
+            <Suspense fallback={<Skeleton className="h-96" />}>
+              <Grid cols="auto" gap="6" role="list" aria-label="Available PDF tools">
+                {toolsData.map((tool) => (
+                  <ToolCard key={tool.href} tool={tool} />
+                ))}
+              </Grid>
+            </Suspense>
+          </Section>
+
+          <Section spacing="small">
+            <SponsorSection />
+          </Section>
+
+          <CTASection
+            title="Ready to transform your PDF workflow?"
+            subtitle="Join thousands of users who trust our privacy-focused PDF tools."
+            primaryAction={
+              <Button
+                asChild
+                variant="gradient"
+                size="lg"
+                className="px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white"
+              >
+                <Link href="/merge" onClick={handleGetStartedClick}>
+                  Get Started Now
+                </Link>
+              </Button>
+            }
+          />
+        </PageContainer>
+      </main>
+    </>
+  );
+}

@@ -22,9 +22,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "Advanced OCR with AI",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "Advanced OCR with AI", url: "https://easy-pdf-murex.vercel.app/tools/advanced-ocr" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "Advanced OCR with AI", url: "/tools/advanced-ocr" }
   ]
 });
 

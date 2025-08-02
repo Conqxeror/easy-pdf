@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Progress } from '@/components/ui/progress';
 import { Upload, Download, Layers, FileText, Trash2, Play, Settings, CheckCircle, AlertCircle } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFBatchProcessor() {
   const [files, setFiles] = useState([]);
@@ -228,207 +229,241 @@ export default function PDFBatchProcessor() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Layers className="h-8 w-8" />
-          PDF Batch Processor
-        </h1>
-        <p className="text-muted-foreground">
-          Process multiple PDF files at once with various operations. All processing happens locally in your browser.
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="PDF Batch Processor"
+      toolDescription="Process multiple PDF files at once with various operations including merge, compress, split, and rotate. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-batch-processor"
+      steps={[
+        "Upload multiple PDF files by dragging them into the dropzone or clicking to select them from your device.",
+        "Choose the batch operation you want to perform: merge all PDFs, compress all PDFs, split all PDFs by page, or rotate all PDFs.",
+        "Click 'Start Processing' to begin the batch operation. You can monitor the progress in real-time.",
+        "Once processing is complete, download all the processed files individually or use 'Download All Files' to get everything at once."
+      ]}
+      faqs={[
+        {
+          question: "What types of batch operations are available?",
+          answer: "The PDF Batch Processor supports four main operations: merge (combine all PDFs into one), compress (reduce file sizes), split (separate each PDF by page), and rotate (rotate all pages 90 degrees)."
+        },
+        {
+          question: "Is there a limit to how many files I can process?",
+          answer: "You can upload multiple PDF files, but for best performance, we recommend processing up to 20 files at once. Each file should be under 50MB for optimal results."
+        },
+        {
+          question: "Are my files secure during batch processing?",
+          answer: "Absolutely! All processing happens locally in your browser. Your files never leave your device, ensuring complete privacy and security for your sensitive documents."
+        },
+        {
+          question: "Can I process different operations on different files?",
+          answer: "Currently, the batch processor applies the same operation to all uploaded files. For different operations, you'll need to process files in separate batches."
+        },
+        {
+          question: "What happens if one file fails during processing?",
+          answer: "If a file fails during processing, the tool will continue with the remaining files. Failed files will be logged in the console, and you'll still receive the successfully processed files."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Layers className="h-8 w-8" />
+            PDF Batch Processor
+          </h1>
+          <p className="text-muted-foreground">
+            Process multiple PDF files at once with various operations. All processing happens locally in your browser.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Upload Files</CardTitle>
-            <CardDescription>
-              Add multiple PDF files for batch processing
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div
-              {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
-                isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
-              }`}
-            >
-              <input {...getInputProps()} />
-              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-              {isDragActive ? (
-                <p>Drop the PDF files here...</p>
-              ) : (
-                <div>
-                  <p className="mb-1">Drag & drop PDF files here, or click to select</p>
-                  <p className="text-sm text-muted-foreground">Multiple files supported</p>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Operation Settings</CardTitle>
-            <CardDescription>
-              Choose the operation to perform on all files
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Batch Operation</label>
-              <Select value={operation} onValueChange={setOperation}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="merge">Merge All PDFs</SelectItem>
-                  <SelectItem value="compress">Compress All PDFs</SelectItem>
-                  <SelectItem value="split">Split All PDFs (by page)</SelectItem>
-                  <SelectItem value="rotate">Rotate All PDFs (90°)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="flex gap-2">
-              <Button 
-                onClick={processBatch} 
-                disabled={files.length === 0 || isProcessing}
-                className="flex-1"
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Upload Files</CardTitle>
+              <CardDescription>
+                Add multiple PDF files for batch processing
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div
+                {...getRootProps()}
+                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                  isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
+                }`}
               >
-                <Play className="h-4 w-4 mr-2" />
-                {isProcessing ? 'Processing...' : 'Start Processing'}
+                <input {...getInputProps()} />
+                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                {isDragActive ? (
+                  <p>Drop the PDF files here...</p>
+                ) : (
+                  <div>
+                    <p className="mb-1">Drag & drop PDF files here, or click to select</p>
+                    <p className="text-sm text-muted-foreground">Multiple files supported</p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Operation Settings</CardTitle>
+              <CardDescription>
+                Choose the operation to perform on all files
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="text-sm font-medium mb-2 block">Batch Operation</label>
+                <Select value={operation} onValueChange={setOperation}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="merge">Merge All PDFs</SelectItem>
+                    <SelectItem value="compress">Compress All PDFs</SelectItem>
+                    <SelectItem value="split">Split All PDFs (by page)</SelectItem>
+                    <SelectItem value="rotate">Rotate All PDFs (90°)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex gap-2">
+                <Button 
+                  onClick={processBatch} 
+                  disabled={files.length === 0 || isProcessing}
+                  className="flex-1"
+                >
+                  <Play className="h-4 w-4 mr-2" />
+                  {isProcessing ? 'Processing...' : 'Start Processing'}
+                </Button>
+                <Button variant="outline" onClick={clearAll} disabled={isProcessing}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {files.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Files Queue ({files.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-60 overflow-y-auto">
+                {files.map((file) => (
+                  <div key={file.id} className="flex items-center justify-between p-2 border rounded">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      <span className="text-sm">{file.file.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatFileSize(file.file.size)}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => removeFile(file.id)}
+                      disabled={isProcessing}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {isProcessing && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5 animate-spin" />
+                Processing...
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Progress value={progress} className="mb-2" />
+              <p className="text-sm text-muted-foreground">
+                {progress.toFixed(1)}% complete
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {processingStatus === 'completed' && results.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500" />
+                Processing Complete
+              </CardTitle>
+              <CardDescription>
+                {results.length} file(s) ready for download
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 mb-4 max-h-60 overflow-y-auto">
+                {results.map((result, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 border rounded">
+                    <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" />
+                      <span className="text-sm">{result.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {formatFileSize(result.size)}
+                      </span>
+                      {result.compressionRatio && (
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                          -{result.compressionRatio}%
+                        </span>
+                      )}
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = result.url;
+                        link.download = result.name;
+                        link.click();
+                      }}
+                    >
+                      <Download className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              
+              <Button onClick={downloadAll} className="w-full">
+                <Download className="h-4 w-4 mr-2" />
+                Download All Files
               </Button>
-              <Button variant="outline" onClick={clearAll} disabled={isProcessing}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {processingStatus === 'error' && (
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-red-600">
+                <AlertCircle className="h-5 w-5" />
+                <span>An error occurred during processing. Please try again.</span>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Layers className="h-4 w-4" />
+              <span>All processing happens locally in your browser. Your files never leave your device.</span>
             </div>
           </CardContent>
         </Card>
       </div>
-
-      {files.length > 0 && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Files Queue ({files.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 max-h-60 overflow-y-auto">
-              {files.map((file) => (
-                <div key={file.id} className="flex items-center justify-between p-2 border rounded">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    <span className="text-sm">{file.file.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatFileSize(file.file.size)}
-                    </span>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => removeFile(file.id)}
-                    disabled={isProcessing}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {isProcessing && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5 animate-spin" />
-              Processing...
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Progress value={progress} className="mb-2" />
-            <p className="text-sm text-muted-foreground">
-              {progress.toFixed(1)}% complete
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {processingStatus === 'completed' && results.length > 0 && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" />
-              Processing Complete
-            </CardTitle>
-            <CardDescription>
-              {results.length} file(s) ready for download
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 mb-4 max-h-60 overflow-y-auto">
-              {results.map((result, index) => (
-                <div key={index} className="flex items-center justify-between p-2 border rounded">
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    <span className="text-sm">{result.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatFileSize(result.size)}
-                    </span>
-                    {result.compressionRatio && (
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
-                        -{result.compressionRatio}%
-                      </span>
-                    )}
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = result.url;
-                      link.download = result.name;
-                      link.click();
-                    }}
-                  >
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-            
-            <Button onClick={downloadAll} className="w-full">
-              <Download className="h-4 w-4 mr-2" />
-              Download All Files
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
-      {processingStatus === 'error' && (
-        <Card className="mb-6">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 text-red-600">
-              <AlertCircle className="h-5 w-5" />
-              <span>An error occurred during processing. Please try again.</span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Layers className="h-4 w-4" />
-            <span>All processing happens locally in your browser. Your files never leave your device.</span>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+    </ToolPageContent>
   );
 }

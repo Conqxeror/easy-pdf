@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Download, CheckCircle, AlertTriangle, Key, FileText, Lock } from "lucide-react";
 import { PDFDocument, rgb } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFDigitalSignature() {
   const [file, setFile] = useState(null);
@@ -168,13 +169,46 @@ export default function PDFDigitalSignature() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <Shield className="mx-auto h-12 w-12 text-blue-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Digital Signature</h1>
-          <p className="text-gray-600">Add legally binding digital signatures with certificate management</p>
-        </div>
+    <ToolPageContent
+      toolName="PDF Digital Signature"
+      toolDescription="Add legally binding digital signatures to your PDF documents with certificate management. Create secure, tamper-evident signatures that provide authentication, integrity, and non-repudiation. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-digital-signature"
+      steps={[
+        "Upload your PDF document that you want to digitally sign.",
+        "Configure your digital certificate information including name, email, organization, and country.",
+        "Set the signature position and appearance on the document, including custom signature text if desired.",
+        "Add the digital signature to create a legally binding, tamper-evident document and download the signed PDF."
+      ]}
+      faqs={[
+        {
+          question: "What is a digital signature and how is it different from a regular signature?",
+          answer: "A digital signature is a cryptographic technique that provides authentication, integrity, and non-repudiation. Unlike a regular signature, it's mathematically linked to the document content, making it impossible to alter the document without invalidating the signature. It also provides proof of who signed the document and when."
+        },
+        {
+          question: "Are digital signatures legally binding?",
+          answer: "Yes, digital signatures are legally binding in most countries. They comply with regulations like the ESIGN Act in the US and eIDAS in the EU. Digital signatures provide the same legal validity as handwritten signatures when properly implemented with certificate authority validation."
+        },
+        {
+          question: "What information is included in a digital signature?",
+          answer: "A digital signature includes the signer's identity, timestamp, certificate information, and a cryptographic hash of the document content. This ensures the document hasn't been altered since signing and provides proof of the signer's identity."
+        },
+        {
+          question: "Can I validate a digitally signed PDF?",
+          answer: "Yes, you can validate digital signatures to verify their authenticity. The validation process checks the certificate validity, document integrity, and timestamp. Our tool includes signature validation features to help you verify signed documents."
+        },
+        {
+          question: "Do I need special software to view digitally signed PDFs?",
+          answer: "Most modern PDF readers can display digital signatures, including Adobe Reader, browsers, and mobile PDF apps. The signature information is embedded in the PDF and can be viewed in the signature panel of compatible PDF readers."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <Shield className="mx-auto h-12 w-12 text-blue-600 mb-4" />
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Digital Signature</h1>
+            <p className="text-gray-600">Add legally binding digital signatures with certificate management</p>
+          </div>
 
         <Tabs defaultValue="sign" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
@@ -467,5 +501,6 @@ export default function PDFDigitalSignature() {
         </Card>
       </div>
     </div>
+    </ToolPageContent>
   );
 }

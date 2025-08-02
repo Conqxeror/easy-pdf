@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload, Download, Bookmark, FileText, Plus, Edit, Trash2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFBookmarkManager() {
   const [file, setFile] = useState(null);
@@ -210,16 +211,49 @@ export default function PDFBookmarkManager() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Bookmark className="h-8 w-8" />
-          PDF Bookmark Manager
-        </h1>
-        <p className="text-muted-foreground">
-          Add, edit, and organize PDF bookmarks to improve navigation. All processing happens locally in your browser.
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="PDF Bookmark Manager"
+      toolDescription="Add, edit, and organize PDF bookmarks to improve document navigation. Create hierarchical bookmark structures, edit bookmark titles and page numbers, and export bookmark lists. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-bookmark-manager"
+      steps={[
+        "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+        "Add new bookmarks by entering a title, page number, and hierarchy level (0 for main bookmarks, higher numbers for sub-bookmarks).",
+        "Edit existing bookmarks by clicking the edit button, or reorganize them using the up/down arrows.",
+        "Export your bookmark list as JSON or save the PDF with the bookmark structure applied."
+      ]}
+      faqs={[
+        {
+          question: "What are PDF bookmarks and why are they useful?",
+          answer: "PDF bookmarks are clickable navigation links that help users quickly jump to specific sections or pages in a document. They create a table of contents that appears in the PDF viewer's bookmark panel, making it easier to navigate through long documents."
+        },
+        {
+          question: "Can I create hierarchical bookmarks?",
+          answer: "Yes, you can create hierarchical bookmark structures using the level field. Level 0 creates main bookmarks, while higher levels (1, 2, 3, etc.) create sub-bookmarks that are indented under their parent bookmarks."
+        },
+        {
+          question: "How do I edit existing bookmarks?",
+          answer: "Click the edit button (pencil icon) next to any bookmark to modify its title, page number, or level. You can also use the up/down arrows to reorder bookmarks in the list."
+        },
+        {
+          question: "Can I export my bookmark list?",
+          answer: "Yes, you can export your bookmark list as a JSON file, which includes all bookmark information including titles, page numbers, and hierarchy levels. This is useful for backing up your bookmark structure or importing it into other documents."
+        },
+        {
+          question: "Will the bookmarks work in all PDF viewers?",
+          answer: "Bookmarks created with this tool will be compatible with most PDF viewers including Adobe Reader, browsers, and mobile PDF apps. The bookmark panel can usually be accessed through the viewer's navigation menu."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Bookmark className="h-8 w-8" />
+            PDF Bookmark Manager
+          </h1>
+          <p className="text-muted-foreground">
+            Add, edit, and organize PDF bookmarks to improve navigation. All processing happens locally in your browser.
+          </p>
+        </div>
 
       {!file ? (
         <Card>
@@ -370,5 +404,6 @@ export default function PDFBookmarkManager() {
         </div>
       )}
     </div>
+    </ToolPageContent>
   );
 }

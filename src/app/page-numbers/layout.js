@@ -1,9 +1,8 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Add Page Numbers to PDF – Easy PDF Tool",
-  description:
-    "Add page numbers, headers, and footers to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF numbering. No uploads required.",
+  description: "Add page numbers, headers, and footers to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF numbering. No uploads required.",
   keywords: [
     "Add page numbers PDF",
     "PDF numbering",
@@ -18,9 +17,26 @@ export const metadata = generateMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "Add Page Numbers to PDF",
+  description: "Add page numbers, headers, and footers to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF numbering. No uploads required.",
+  url: "/page-numbers",
+  features: [
+    "Add page numbers to PDF",
+    "Add headers and footers",
+    "Customize position, font, and color",
+    "Instant processing"
+  ]
+});
 
 export default function PageNumbersLayout({ children }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }
-

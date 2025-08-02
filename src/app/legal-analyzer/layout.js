@@ -1,10 +1,8 @@
-// Server component layout for /legal-analyzer route to provide SEO metadata
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Legal Analyzer for PDF – Easy PDF Tool",
-  description:
-    "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
+  description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
   keywords: [
     "Legal analyzer PDF",
     "Analyze PDF clauses",
@@ -18,8 +16,26 @@ export const metadata = generateMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "Legal Analyzer for PDF",
+  description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
+  url: "/legal-analyzer",
+  features: [
+    "AI-powered analysis",
+    "Clause extraction",
+    "Risk assessment",
+    "Legal insights"
+  ]
+});
 
 export default function LegalAnalyzerLayout({ children }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }

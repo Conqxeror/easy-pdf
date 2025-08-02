@@ -11,9 +11,9 @@ export const metadata = generateEnhancedMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   pageType: "article",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Sponsors", url: "https://easy-pdf-murex.vercel.app/sponsors" },
-    { name: "Dashboard", url: "https://easy-pdf-murex.vercel.app/sponsor-dashboard" }
+    { name: "Home", url: "/" },
+    { name: "Sponsors", url: "/sponsors" },
+    { name: "Dashboard", url: "/sponsor-dashboard" }
   ]
 });
 

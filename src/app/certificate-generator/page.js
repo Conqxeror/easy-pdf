@@ -371,23 +371,24 @@ export default function CertificateGeneratorPage() {
 
   return (
     <ToolPageContent
-  toolName="Certificate Generator"
-  toolDescription="Create professional certificates for courses, training, achievements, and more with customizable templates."
-  steps={[
-    "Enter the recipient's name and certificate details.",
-    "Select a certificate template and customize the design.",
-    "Fill in course/program and organization information.",
-    "Add signatory details and any optional description.",
-    "Click 'Generate Certificate PDF' to download your certificate."
-  ]}
-  faqs={[
-    { question: "Can I customize the certificate design?", answer: "Yes, you can choose templates, colors, and styles to match your needs." },
-    { question: "Will my data be saved online?", answer: "No, all processing happens locally in your browser for privacy." },
-    { question: "Can I add a digital signature?", answer: "You can add signatory details, and digital signature support is available in some templates." },
-    { question: "Is the PDF print-quality?", answer: "Yes, certificates are generated as high-quality, print-ready PDFs." }
-  ]}
-  toolConfig={toolConfig}
->
+      toolName="Certificate Generator"
+      toolDescription="Create professional certificates for courses, training, achievements, and more with customizable templates."
+      currentTool="certificate-generator"
+      steps={[
+        "Enter the recipient's name and certificate details.",
+        "Select a certificate template and customize the design.",
+        "Fill in course/program and organization information.",
+        "Add signatory details and any optional description.",
+        "Click 'Generate Certificate PDF' to download your certificate."
+      ]}
+      faqs={[
+        { question: "Can I customize the certificate design?", answer: "Yes, you can choose templates, colors, and styles to match your needs." },
+        { question: "Will my data be saved online?", answer: "No, all processing happens locally in your browser for privacy." },
+        { question: "Can I add a digital signature?", answer: "You can add signatory details, and digital signature support is available in some templates." },
+        { question: "Is the PDF print-quality?", answer: "Yes, certificates are generated as high-quality, print-ready PDFs." }
+      ]}
+      toolConfig={toolConfig}
+    >
       <div className="space-y-6">
         {/* Template Selection */}
         <Card>

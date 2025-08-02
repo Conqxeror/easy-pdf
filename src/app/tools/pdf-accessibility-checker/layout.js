@@ -22,9 +22,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "PDF Accessibility Checker",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "PDF Accessibility Checker", url: "https://easy-pdf-murex.vercel.app/tools/pdf-accessibility-checker" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "PDF Accessibility Checker", url: "/tools/pdf-accessibility-checker" }
   ]
 });
 

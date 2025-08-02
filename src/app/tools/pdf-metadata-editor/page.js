@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, Download, Settings, FileText, Calendar, User, BookOpen, Tag } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFMetadataEditor() {
   const [file, setFile] = useState(null);
@@ -133,16 +134,49 @@ export default function PDFMetadataEditor() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Settings className="h-8 w-8" />
-          PDF Metadata Editor
-        </h1>
-        <p className="text-muted-foreground">
-          Edit PDF metadata including title, author, subject, keywords, and dates. All processing happens locally in your browser.
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="PDF Metadata Editor"
+      toolDescription="Edit PDF metadata including title, author, subject, keywords, creator, producer, and dates. View and modify document properties to improve organization and searchability. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-metadata-editor"
+      steps={[
+        "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+        "The tool will automatically extract and display the current metadata from your PDF.",
+        "Edit the metadata fields including title, author, subject, keywords, creator, producer, and dates.",
+        "Click 'Save Changes' to download the PDF with updated metadata, or 'Reset to Original' to revert changes."
+      ]}
+      faqs={[
+        {
+          question: "What is PDF metadata and why is it important?",
+          answer: "PDF metadata contains information about the document such as title, author, subject, keywords, creation date, and modification date. This information helps with document organization, searchability, and provides context about the document's origin and purpose."
+        },
+        {
+          question: "What metadata fields can I edit?",
+          answer: "You can edit title, author, subject, keywords, creator (the application that created the document), producer (the application that produced the PDF), creation date, and modification date. Keywords can be comma-separated for better searchability."
+        },
+        {
+          question: "Will editing metadata affect the PDF content?",
+          answer: "No, editing metadata only changes the document properties and does not affect the actual content, text, or layout of the PDF. The visual appearance and content remain exactly the same."
+        },
+        {
+          question: "Can I view the original metadata before making changes?",
+          answer: "Yes, when you upload a PDF, the tool automatically extracts and displays all existing metadata. You can use the 'Reset to Original' button to revert any changes back to the original metadata."
+        },
+        {
+          question: "Is there a limit to how much metadata I can add?",
+          answer: "While there are no strict limits, it's recommended to keep metadata concise and relevant. Very long titles or excessive keywords may not display properly in all PDF viewers."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Settings className="h-8 w-8" />
+            PDF Metadata Editor
+          </h1>
+          <p className="text-muted-foreground">
+            Edit PDF metadata including title, author, subject, keywords, and dates. All processing happens locally in your browser.
+          </p>
+        </div>
 
       {!file ? (
         <Card>
@@ -352,5 +386,6 @@ export default function PDFMetadataEditor() {
         </div>
       )}
     </div>
+    </ToolPageContent>
   );
 }

@@ -22,9 +22,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "PDF Bookmark Manager",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "PDF Bookmark Manager", url: "https://easy-pdf-murex.vercel.app/tools/pdf-bookmark-manager" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "PDF Bookmark Manager", url: "/tools/pdf-bookmark-manager" }
   ]
 });
 

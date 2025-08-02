@@ -1,0 +1,154 @@
+{
+  "/": {
+    "title": "easy-pdf - Free Online PDF Tools",
+    "description": "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser. Privacy-first, secure, and completely free."
+  },
+  "/certificate-generator": {
+    "title": "Certificate Generator - Create Professional Certificates PDF",
+    "description": "Generate professional certificates for courses, training, achievements with customizable templates and styling options."
+  },
+  "/compress": {
+    "title": "Free PDF Compressor - Reduce PDF File Size Online",
+    "description": "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels."
+  },
+  "/delete-pages": {
+    "title": "Free PDF Page Deleter - Remove Pages from PDF Online",
+    "description": "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool."
+  },
+  "/form-filler": {
+    "title": "Free PDF Form Filler - Complete PDF Forms Online",
+    "description": "Fill out PDF forms online with text, checkboxes, and signatures. Free PDF form completion tool with save functionality."
+  },
+  "/html-to-pdf": {
+    "title": "Free HTML to PDF Converter - Convert Web Content to PDF",
+    "description": "Convert HTML code and web content to PDF format. Free online HTML to PDF converter with styling preservation."
+  },
+  "/invoice-generator": {
+    "title": "PDF Invoice Generator - Create Professional Invoices Online",
+    "description": "Generate professional PDF invoices with GST support, multiple currencies, and customizable templates. Perfect for businesses and freelancers."
+  },
+  "/jpg-to-pdf": {
+    "title": "Free JPG to PDF Converter - Convert Images to PDF Online",
+    "description": "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing."
+  },
+  "/excel-to-pdf": {
+    "title": "Free Excel to PDF Converter - Convert Excel to PDF Online",
+    "description": "Convert Excel files to PDF format. Free online converter with batch processing and custom page sizing."
+  },
+  "/legal-analyzer": {
+    "title": "AI Legal Document Analyzer - Review Contracts Online",
+    "description": "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts."
+  },
+  "/medical-analyzer": {
+    "title": "AI Medical Document Analyzer - Review Medical Records",
+    "description": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records."
+  },
+  "/merge-pdf": {
+    "title": "Free PDF Merger - Combine Multiple PDFs Online",
+    "description": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required."
+  },
+  "/merge": {
+    "title": "Free PDF Merger - Combine Multiple PDFs Online",
+    "description": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required."
+  },
+  "/ocr": {
+    "title": "Free PDF OCR Tool - Extract Text from Scanned PDFs",
+    "description": "Extract editable text from scanned PDFs and images using OCR technology. Free online optical character recognition tool."
+  },
+  "/organize": {
+    "title": "Free PDF Organizer - Manage PDF Pages Online",
+    "description": "Organize PDF pages by reordering, deleting, and managing content. Complete PDF organization tool with visual interface."
+  },
+  "/page-numbers": {
+    "title": "Free PDF Page Number Tool - Add Page Numbers Online",
+    "description": "Add page numbers, headers, and footers to PDF documents. Customize format, position, and styling with our free online tool."
+  },
+  "/pdf-to-jpg": {
+    "title": "Free PDF to JPG Converter - Convert PDF to Images Online",
+    "description": "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing."
+  },
+  "/portfolio-creator": {
+    "title": "Portfolio Creator - Create Professional PDF Portfolios",
+    "description": "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects."
+  },
+  "/protect": {
+    "title": "Free PDF Password Protection - Secure PDF Files Online",
+    "description": "Protect PDF files with password encryption. Add security to sensitive documents with our free online PDF protection tool."
+  },
+  "/qr-generator": {
+    "title": "QR Code Generator - Create QR Codes for PDF Online",
+    "description": "Generate QR codes for URLs, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality."
+  },
+  "/reorder": {
+    "title": "Free PDF Page Reorder Tool - Rearrange PDF Pages Online",
+    "description": "Reorder and rearrange PDF pages with drag-and-drop interface. Organize your PDF documents with our free online tool."
+  },
+  "/report-generator": {
+    "title": "Report Generator - Create Professional Business Reports PDF",
+    "description": "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting."
+  },
+  "/rotate": {
+    "title": "Free PDF Rotator - Rotate PDF Pages Online",
+    "description": "Rotate PDF pages by 90, 180, or 270 degrees. Fix document orientation with our free online PDF rotation tool."
+  },
+  "/sign": {
+    "title": "Free PDF Signature Tool - Sign PDF Documents Online",
+    "description": "Sign PDF documents with digital signatures and annotations. Free online PDF signing tool with drawing and typing options."
+  },
+  "/split": {
+    "title": "Free PDF Splitter - Extract Pages from PDF Online",
+    "description": "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing."
+  },
+  "/tools/advanced-ocr": {
+    "title": "Advanced OCR with AI",
+    "description": "Extract text from PDFs and images with AI-powered enhancement and formatting"
+  },
+  "/tools/pdf-accessibility-checker": {
+    "title": "PDF Accessibility Checker",
+    "description": "Check PDF documents for accessibility compliance and WCAG standards"
+  },
+  "/tools/pdf-annotation-collaboration": {
+    "title": "PDF Annotation Collaboration",
+    "description": "Collaborate on PDF annotations with team members and export shared comments"
+  },
+  "/tools/pdf-batch-processor": {
+    "title": "PDF Batch Processor",
+    "description": "Process multiple PDF files at once with various operations like merge, split, compress"
+  },
+  "/tools/pdf-bookmark-manager": {
+    "title": "PDF Bookmark Manager",
+    "description": "Add, edit, and organize PDF bookmarks and navigation structure"
+  },
+  "/tools/pdf-digital-signature": {
+    "title": "PDF Digital Signature",
+    "description": "Add legally binding digital signatures with certificate management and validation"
+  },
+  "/tools/pdf-form-creator": {
+    "title": "PDF Form Creator",
+    "description": "Create interactive PDF forms with various field types including text, checkboxes, and signatures"
+  },
+  "/tools/pdf-metadata-editor": {
+    "title": "PDF Metadata Editor",
+    "description": "Edit PDF metadata including title, author, subject, keywords, and creation date"
+  },
+  "/tools/pdf-redaction": {
+    "title": "PDF Redaction Tool",
+    "description": "Permanently remove sensitive information from PDF documents with verification"
+  },
+  "/tools/pdf-table-extractor": {
+    "title": "PDF Table Extractor",
+    "description": "Extract and export tables from PDF documents to CSV, Excel, or JSON format"
+  },
+  "/tools/pdf-version-comparison": {
+    "title": "PDF Version Comparison",
+    "description": "Compare different versions of PDF documents with visual diff highlighting"
+  },
+  "/unlock": {
+    "title": "Free PDF Unlocker - Remove PDF Password Online",
+    "description": "Remove password protection from PDF files. Unlock encrypted PDFs with our free online PDF password removal tool."
+  },
+  "/watermark": {
+    "title": "Free PDF Watermark Tool - Add Watermarks to PDF Online",
+    "description": "Add text or image watermarks to PDF documents. Customize position, opacity, and rotation with our free online watermarking tool."
+  },
+}

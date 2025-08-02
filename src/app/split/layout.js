@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Split PDF Pages Online – Easy PDF Tool",
   description:
     "Split PDF files into separate pages instantly. 100% client-side, privacy-first, fast, and secure PDF splitter for everyone. No uploads required.",

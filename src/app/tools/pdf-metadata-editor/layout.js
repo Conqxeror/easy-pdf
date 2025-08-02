@@ -13,9 +13,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "PDF Metadata Editor",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "PDF Metadata Editor", url: "https://easy-pdf-murex.vercel.app/tools/pdf-metadata-editor" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "PDF Metadata Editor", url: "/tools/pdf-metadata-editor" }
   ]
 });
 

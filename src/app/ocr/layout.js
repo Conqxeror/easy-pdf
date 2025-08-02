@@ -1,9 +1,8 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "OCR PDF (Extract Text) – Easy PDF Tool",
-  description:
-    "Extract text from PDF using OCR instantly. 100% client-side, privacy-first, fast, and secure PDF OCR tool. No uploads required.",
+  description: "Extract text from PDF using OCR instantly. 100% client-side, privacy-first, fast, and secure PDF OCR tool. No uploads required.",
   keywords: [
     "OCR PDF",
     "Extract text PDF",
@@ -18,9 +17,26 @@ export const metadata = generateMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "OCR PDF (Extract Text) – Easy PDF Tool",
+  description: "Extract text from PDF using OCR instantly. 100% client-side, privacy-first, fast, and secure PDF OCR tool. No uploads required.",
+  url: "/ocr",
+  features: [
+    "Extract text from PDF",
+    "Multiple languages supported",
+    "Instant processing",
+    "Secure and private"
+  ]
+});
 
 export default function OcrLayout({ children }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }
-

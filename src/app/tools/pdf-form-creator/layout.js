@@ -22,9 +22,9 @@ export const metadata = generateEnhancedMetadata({
   toolName: "PDF Form Creator",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
-    { name: "PDF Form Creator", url: "https://easy-pdf-murex.vercel.app/tools/pdf-form-creator" }
+    { name: "Home", url: "/" },
+    { name: "Tools", url: "/#tools" },
+    { name: "PDF Form Creator", url: "/tools/pdf-form-creator" }
   ]
 });
 

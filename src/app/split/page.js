@@ -370,6 +370,10 @@ export default function SplitPdfPage() {
           { question: "Can I extract non-consecutive pages?", answer: "This tool currently supports extracting a range or all pages. For custom selection, split in multiple steps." },
           { question: "What format will my split files be in?", answer: "You will receive standard PDF files, or a ZIP archive if extracting all pages." }
         ]}
+        relatedLinks={[
+          { name: "Merge PDF", url: "/merge" },
+          { name: "Compress PDF", url: "/compress" }
+        ]}
       />
     </>
   );

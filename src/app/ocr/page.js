@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist";
@@ -407,7 +408,43 @@ export default function OcrPage() {
   };
 
   return (
-    <>
+    <ToolPageContent
+      toolName="OCR (Text Recognition)"
+      toolDescription="Extract readable text from scanned PDF documents and image files using advanced OCR technology. Convert scanned documents, images, and PDFs into editable text with high accuracy. All processing happens locally in your browser for complete privacy and security."
+      currentTool="ocr"
+      steps={[
+        "Upload your PDF document or image file by dragging it into the dropzone or clicking to select.",
+        "Choose your OCR scope: all pages, a single page, or a specific page range for multi-page documents.",
+        "Click 'Extract Text' to start the text recognition process. The OCR engine will analyze your document.",
+        "Once processing is complete, the extracted text will appear in the text area. You can copy it to your clipboard or save it for further use."
+      ]}
+      faqs={[
+        {
+          question: "What is OCR and how does it work?",
+          answer: "OCR (Optical Character Recognition) is a technology that converts scanned documents, images, and PDFs into editable text. Our tool uses advanced AI algorithms to recognize and extract text from various file formats, making scanned documents searchable and editable."
+        },
+        {
+          question: "What file types does the OCR tool support?",
+          answer: "Our OCR tool supports PDF documents and various image formats including JPG, PNG, TIFF, and BMP. For best results, ensure your documents have clear, high-quality text and good contrast."
+        },
+        {
+          question: "How accurate is the text recognition?",
+          answer: "The accuracy depends on the quality of your source document. Clear, well-scanned documents with good contrast typically achieve 95%+ accuracy. Handwritten text or low-quality scans may have lower accuracy."
+        },
+        {
+          question: "Are my files secure during OCR processing?",
+          answer: "Absolutely! All OCR processing happens locally in your browser. Your files are never uploaded to our servers, ensuring complete privacy and security for your sensitive documents."
+        },
+        {
+          question: "Can I extract text from specific pages of a multi-page PDF?",
+          answer: "Yes, you can choose to extract text from all pages, a single page, or a specific range of pages. This is useful for large documents where you only need text from certain sections."
+        },
+        {
+          question: "What languages does the OCR tool support?",
+          answer: "Currently, our OCR tool supports English text recognition. For documents in other languages, the accuracy may vary depending on the text quality and character complexity."
+        }
+      ]}
+    >
       <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
         <div className="max-w-4xl w-full">
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
@@ -599,6 +636,6 @@ export default function OcrPage() {
           )}
         </div>
       </div>
-    </>
+    </ToolPageContent>
   );
 }

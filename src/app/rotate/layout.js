@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Rotate PDF Pages Online – Easy PDF Tool",
   description:
     "Rotate PDF pages instantly and securely, 100% client-side. Fast, privacy-first PDF rotation tool. No uploads required.",

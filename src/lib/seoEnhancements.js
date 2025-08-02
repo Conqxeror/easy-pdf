@@ -1,7 +1,7 @@
 // Enhanced SEO utilities for comprehensive optimization
 export const generateEnhancedMetadata = ({ 
-  title, 
-  description, 
+  title = 'easy-pdf', 
+  description = 'Privacy-first PDF tools for secure document processing.', 
   keywords, 
   canonicalUrl, 
   metadataBaseUrl, 

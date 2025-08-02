@@ -770,6 +770,7 @@ export default function PageNumbersPage() {
         <ToolPageContent
           toolName="Add Page Numbers / Header / Footer to PDF"
           toolDescription="Easily add customizable page numbers, headers, or footers to your PDF documents. Our tool offers flexible options for position, font size, color, and numbering format (e.g., 'Page X of Y'). Enhance your documents for professional or personal use, all while ensuring your files remain private with client-side processing."
+          currentTool="page-numbers"
           steps={[
             "Upload your PDF file by dragging it into the dropzone or clicking to select.",
             "Configure your additions: Choose to add a header, a footer, or dynamic page numbers. You can use placeholders like {NUM} for the current page and {TOTAL} for the total page count.",

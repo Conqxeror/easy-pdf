@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, memo, useMemo } from 'react';
+import { toolsData } from '@/lib/toolData';import React, { Suspense, lazy, memo, useMemo } from 'react';
 
 // Lazy load heavy components with error boundaries
 const LazyBreadcrumb = lazy(() => import('@/components/Breadcrumb').catch(() => ({ default: () => null })));
@@ -100,18 +100,7 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
   }, [currentTool, faqs]);
 
   // Memoize tools data for related tools
-  const toolsData = useMemo(() => {
-    try {
-      if (currentTool) {
-        const { toolsData } = require('@/lib/toolData');
-        return toolsData;
-      }
-      return null;
-    } catch (error) {
-      console.warn('Failed to load tools data:', error);
-      return null;
-    }
-  }, [currentTool]);
+
 
   return (
     <div className="bg-gray-900 text-gray-200 py-12 px-4 sm:px-6 lg:px-8">
@@ -181,7 +170,7 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
         </div>
 
         {/* Related Tools Section with lazy loading */}
-        {currentTool && toolsData && (
+        {currentTool && (
           <Suspense fallback={<RelatedToolsSkeleton />}>
             <div className="mb-8">
               <LazyRelatedTools currentTool={currentTool} tools={toolsData} />

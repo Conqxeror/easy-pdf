@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Add Watermark to PDF – Easy PDF Tool",
   description:
     "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",

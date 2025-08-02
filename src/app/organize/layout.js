@@ -1,9 +1,8 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Organize PDF Pages Online – Easy PDF Tool",
-  description:
-    "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
+  description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
   keywords: [
     "Organize PDF",
     "PDF organizer",
@@ -18,9 +17,26 @@ export const metadata = generateMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "Organize PDF Pages Online",
+  description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
+  url: "/organize",
+  features: [
+    "Reorder pages",
+    "Delete pages",
+    "Rotate pages",
+    "Instant processing"
+  ]
+});
 
 export default function OrganizeLayout({ children }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }
-

@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Reorder PDF Pages Online – Easy PDF Tool",
   description:
     "Reorder pages in your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page organizer. No uploads required.",

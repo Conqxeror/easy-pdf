@@ -5,9 +5,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = generateEnhancedMetadata({
-  title: "easy-pdf - Free Online PDF Tools",
-  description:
-    "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser. Privacy-first, secure, and completely free.",
+
+
   keywords: [
     "PDF tools", "Merge PDF", "Split PDF", "Compress PDF", "JPG to PDF", "PDF to JPG", 
     "Free PDF Tools", "India", "Privacy-first", "Client-side processing", "Secure PDF tools",
@@ -27,6 +26,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth" style={{ backgroundColor: '#000000' }}>
       <head>
         <link rel="manifest" href="/site.webmanifest" />
+        <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         
         {/* Performance Optimizations */}
         {performanceHints.preconnect.map((hint, index) => (

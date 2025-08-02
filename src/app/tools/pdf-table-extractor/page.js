@@ -6,6 +6,7 @@ import { getDocument } from 'pdfjs-dist';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Upload, Download, FileText, Table } from 'lucide-react';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 // Configure PDF.js worker
 if (typeof window !== 'undefined') {
@@ -114,15 +115,48 @@ export default function PDFTableExtractor() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-          PDF Table Extractor
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          Extract tables from PDF documents and export to CSV format
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="PDF Table Extractor"
+      toolDescription="Extract tables from PDF documents and export them to CSV format for further analysis. Automatically detect table structures in your PDFs and convert them to spreadsheet-compatible formats. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-table-extractor"
+      steps={[
+        "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+        "The tool will automatically scan all pages and detect table-like structures in the document.",
+        "Review the extracted tables that are displayed with their page numbers and content.",
+        "Export individual tables or all tables to CSV format for use in spreadsheets or data analysis tools."
+      ]}
+      faqs={[
+        {
+          question: "How does the table extraction work?",
+          answer: "The tool uses advanced text analysis to detect table-like structures in PDF documents. It identifies patterns of aligned text that form rows and columns, then extracts the data while preserving the table structure."
+        },
+        {
+          question: "What types of tables can be extracted?",
+          answer: "The tool can extract various types of tables including data tables, comparison tables, and structured information. It works best with clearly formatted tables that have consistent row and column alignment."
+        },
+        {
+          question: "Can I export the extracted tables?",
+          answer: "Yes, you can export individual tables or all tables at once to CSV format. The CSV files can be opened in Excel, Google Sheets, or any spreadsheet application for further analysis."
+        },
+        {
+          question: "What if no tables are found in my PDF?",
+          answer: "If no tables are detected, it may be because the document doesn't contain structured table data, or the tables are in image format rather than text. The tool works best with text-based tables."
+        },
+        {
+          question: "Is there a limit to the number of tables that can be extracted?",
+          answer: "There's no limit to the number of tables that can be extracted. The tool will process all pages in your PDF and extract every table-like structure it finds."
+        }
+      ]}
+    >
+      <div className="max-w-6xl mx-auto p-6 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+            PDF Table Extractor
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Extract tables from PDF documents and export to CSV format
+          </p>
+        </div>
 
       {/* Upload Section */}
       <Card>
@@ -260,5 +294,6 @@ export default function PDFTableExtractor() {
         </Card>
       )}
     </div>
+    </ToolPageContent>
   );
 }

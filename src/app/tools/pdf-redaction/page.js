@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EyeOff, Download, CheckCircle, AlertTriangle, Search, Trash2, Shield, FileText } from "lucide-react";
 import { PDFDocument, rgb } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFRedactionTool() {
   const [file, setFile] = useState(null);
@@ -203,352 +204,386 @@ export default function PDFRedactionTool() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <EyeOff className="mx-auto h-12 w-12 text-red-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Redaction Tool</h1>
-          <p className="text-gray-600">Permanently remove sensitive information from PDF documents</p>
-        </div>
+    <ToolPageContent
+      toolName="PDF Redaction Tool"
+      toolDescription="Permanently remove sensitive information from PDF documents with our secure redaction tool. Search for specific terms, define manual redaction areas, and clean metadata for complete document sanitization."
+      currentTool="tools/pdf-redaction"
+      steps={[
+        "Upload your PDF document that contains sensitive information you want to redact.",
+        "Use the search function to find specific terms or phrases that need redaction, or add manual redaction areas for custom regions.",
+        "Select which terms or areas you want to redact and configure redaction settings like color and metadata cleaning.",
+        "Apply the redactions to permanently remove the sensitive content and download your secure, redacted PDF."
+      ]}
+      faqs={[
+        {
+          question: "What is PDF redaction and why is it important?",
+          answer: "PDF redaction is the process of permanently removing sensitive information from documents. Unlike simply covering text with black boxes, redaction completely removes the underlying data, making it impossible to recover. This is crucial for legal documents, medical records, and any sensitive information that needs to be shared securely."
+        },
+        {
+          question: "Is redaction permanent and secure?",
+          answer: "Yes, our redaction tool permanently removes the selected content from the PDF. The redacted information cannot be recovered, even with advanced PDF recovery tools. We also offer metadata cleaning to remove any hidden information that might contain sensitive data."
+        },
+        {
+          question: "Can I redact both text and images?",
+          answer: "Yes, you can redact both text content and images. The tool allows you to define specific areas on the page where you want to apply redaction, regardless of whether it contains text, images, or other content."
+        },
+        {
+          question: "What types of sensitive information should I redact?",
+          answer: "Common items to redact include Social Security numbers, credit card numbers, bank account details, personal addresses, phone numbers, email addresses, medical information, legal case numbers, and any other personally identifiable information (PII)."
+        },
+        {
+          question: "Does the tool work with scanned PDFs?",
+          answer: "The search functionality works best with text-based PDFs. For scanned PDFs, you'll need to use the manual redaction areas feature to define specific regions for redaction."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <EyeOff className="mx-auto h-12 w-12 text-red-600 mb-4" />
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Redaction Tool</h1>
+            <p className="text-gray-600">Permanently remove sensitive information from PDF documents</p>
+          </div>
 
-        <Tabs defaultValue="upload" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="upload">Upload</TabsTrigger>
-            <TabsTrigger value="search">Search & Mark</TabsTrigger>
-            <TabsTrigger value="manual">Manual Areas</TabsTrigger>
-            <TabsTrigger value="redact">Apply Redaction</TabsTrigger>
-          </TabsList>
+          <Tabs defaultValue="upload" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="upload">Upload</TabsTrigger>
+              <TabsTrigger value="search">Search & Mark</TabsTrigger>
+              <TabsTrigger value="manual">Manual Areas</TabsTrigger>
+              <TabsTrigger value="redact">Apply Redaction</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="upload" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Upload PDF Document
-                </CardTitle>
-                <CardDescription>
-                  Select a PDF document to redact sensitive information
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+            <TabsContent value="upload" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <FileText className="h-5 w-5" />
+                    Upload PDF Document
+                  </CardTitle>
+                  <CardDescription>
+                    Select a PDF document to redact sensitive information
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="file-upload">PDF File</Label>
+                      <Input
+                        id="file-upload"
+                        type="file"
+                        accept=".pdf"
+                        onChange={handleFileUpload}
+                        ref={fileInputRef}
+                      />
+                    </div>
+                    
+                    {file && (
+                      <Alert>
+                        <CheckCircle className="h-4 w-4" />
+                        <AlertDescription>
+                          File loaded: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                        </AlertDescription>
+                      </Alert>
+                    )}
+
+                    <Alert>
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertDescription>
+                        <strong>Warning:</strong> Redaction permanently removes information. Ensure you have a backup of the original document.
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="search" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Search className="h-5 w-5" />
+                    Search for Sensitive Content
+                  </CardTitle>
+                  <CardDescription>
+                    Find text patterns that need redaction
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                   <div>
-                    <Label htmlFor="file-upload">PDF File</Label>
-                    <Input
-                      id="file-upload"
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleFileUpload}
-                      ref={fileInputRef}
+                    <Label htmlFor="search-terms">Search Terms (comma-separated)</Label>
+                    <Textarea
+                      id="search-terms"
+                      placeholder="SSN, credit card, email@domain.com, phone numbers, etc."
+                      value={searchTerms}
+                      onChange={(e) => setSearchTerms(e.target.value)}
+                      rows={3}
                     />
                   </div>
-                  
-                  {file && (
+
+                  <Button 
+                    onClick={searchForTerms} 
+                    disabled={!file || isProcessing}
+                    className="w-full"
+                  >
+                    <Search className="mr-2 h-4 w-4" />
+                    {isProcessing ? 'Searching...' : 'Search for Terms'}
+                  </Button>
+
+                  {isProcessing && (
+                    <div className="space-y-2">
+                      <Progress value={progress} />
+                      <p className="text-sm text-gray-600 text-center">
+                        Searching document... {progress}%
+                      </p>
+                    </div>
+                  )}
+
+                  {foundTerms.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-semibold">Found Terms ({foundTerms.length})</h4>
+                      <div className="max-h-60 overflow-y-auto space-y-2">
+                        {foundTerms.map((term) => (
+                          <div key={term.id} className="flex items-center space-x-3 p-2 border rounded">
+                            <Checkbox
+                              checked={selectedTerms.has(term.id)}
+                              onCheckedChange={() => toggleTermSelection(term.id)}
+                            />
+                            <div className="flex-1">
+                              <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+                                {term.text}
+                              </span>
+                              <span className="text-sm text-gray-500 ml-2">
+                                Page {term.page} at ({term.x}, {term.y})
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setSelectedTerms(new Set(foundTerms.map(t => t.id)))}
+                          size="sm"
+                        >
+                          Select All
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          onClick={() => setSelectedTerms(new Set())}
+                          size="sm"
+                        >
+                          Select None
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="manual" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Trash2 className="h-5 w-5" />
+                    Manual Redaction Areas
+                  </CardTitle>
+                  <CardDescription>
+                    Define specific areas to redact manually
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button onClick={addManualRedactionArea} className="w-full">
+                    Add Redaction Area
+                  </Button>
+
+                  {redactionAreas.length > 0 && (
+                    <div className="space-y-4">
+                      <h4 className="font-semibold">Redaction Areas ({redactionAreas.length})</h4>
+                      <div className="max-h-60 overflow-y-auto space-y-3">
+                        {redactionAreas.map((area) => (
+                          <div key={area.id} className="p-3 border rounded space-y-2">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <Label>Page</Label>
+                                <Input
+                                  type="number"
+                                  value={area.page}
+                                  onChange={(e) => updateRedactionArea(area.id, { page: parseInt(e.target.value) })}
+                                  min="1"
+                                />
+                              </div>
+                              <div>
+                                <Label>Reason</Label>
+                                <Input
+                                  value={area.reason}
+                                  onChange={(e) => updateRedactionArea(area.id, { reason: e.target.value })}
+                                  placeholder="Redaction reason"
+                                />
+                              </div>
+                            </div>
+                            <div className="grid grid-cols-4 gap-2">
+                              <div>
+                                <Label>X</Label>
+                                <Input
+                                  type="number"
+                                  value={area.x}
+                                  onChange={(e) => updateRedactionArea(area.id, { x: parseInt(e.target.value) })}
+                                />
+                              </div>
+                              <div>
+                                <Label>Y</Label>
+                                <Input
+                                  type="number"
+                                  value={area.y}
+                                  onChange={(e) => updateRedactionArea(area.id, { y: parseInt(e.target.value) })}
+                                />
+                              </div>
+                              <div>
+                                <Label>Width</Label>
+                                <Input
+                                  type="number"
+                                  value={area.width}
+                                  onChange={(e) => updateRedactionArea(area.id, { width: parseInt(e.target.value) })}
+                                />
+                              </div>
+                              <div>
+                                <Label>Height</Label>
+                                <Input
+                                  type="number"
+                                  value={area.height}
+                                  onChange={(e) => updateRedactionArea(area.id, { height: parseInt(e.target.value) })}
+                                />
+                              </div>
+                            </div>
+                            <Button 
+                              variant="destructive" 
+                              size="sm"
+                              onClick={() => removeRedactionArea(area.id)}
+                            >
+                              Remove Area
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="redact" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="h-5 w-5" />
+                    Apply Redactions
+                  </CardTitle>
+                  <CardDescription>
+                    Configure and apply redactions to the document
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="clean-metadata"
+                        checked={cleanMetadata}
+                        onCheckedChange={setCleanMetadata}
+                      />
+                      <Label htmlFor="clean-metadata">
+                        Clean document metadata (recommended)
+                      </Label>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="redaction-color">Redaction Color</Label>
+                      <Input
+                        id="redaction-color"
+                        type="color"
+                        value={redactionColor}
+                        onChange={(e) => setRedactionColor(e.target.value)}
+                        className="w-20"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-gray-50 rounded-lg">
+                    <h4 className="font-semibold mb-2">Redaction Summary:</h4>
+                    <ul className="text-sm space-y-1">
+                      <li>• Selected search terms: {selectedTerms.size}</li>
+                      <li>• Manual redaction areas: {redactionAreas.length}</li>
+                      <li>• Metadata cleaning: {cleanMetadata ? 'Enabled' : 'Disabled'}</li>
+                    </ul>
+                  </div>
+
+                  <Button 
+                    onClick={applyRedactions} 
+                    disabled={!file || isProcessing || (selectedTerms.size === 0 && redactionAreas.length === 0)}
+                    className="w-full"
+                  >
+                    <EyeOff className="mr-2 h-4 w-4" />
+                    {isProcessing ? 'Applying Redactions...' : 'Apply Redactions'}
+                  </Button>
+
+                  {isProcessing && (
+                    <div className="space-y-2">
+                      <Progress value={progress} />
+                      <p className="text-sm text-gray-600 text-center">
+                        Processing redactions... {progress}%
+                      </p>
+                    </div>
+                  )}
+
+                  {redactedPdf && (
                     <Alert>
                       <CheckCircle className="h-4 w-4" />
-                      <AlertDescription>
-                        File loaded: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      <AlertDescription className="flex items-center justify-between">
+                        <span>Redaction completed successfully!</span>
+                        <Button onClick={downloadRedactedPdf} size="sm">
+                          <Download className="mr-2 h-4 w-4" />
+                          Download
+                        </Button>
                       </AlertDescription>
                     </Alert>
                   )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
 
-                  <Alert>
-                    <AlertTriangle className="h-4 w-4" />
-                    <AlertDescription>
-                      <strong>Warning:</strong> Redaction permanently removes information. Ensure you have a backup of the original document.
-                    </AlertDescription>
-                  </Alert>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="search" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Search className="h-5 w-5" />
-                  Search for Sensitive Content
-                </CardTitle>
-                <CardDescription>
-                  Find text patterns that need redaction
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Redaction Security Features
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <Label htmlFor="search-terms">Search Terms (comma-separated)</Label>
-                  <Textarea
-                    id="search-terms"
-                    placeholder="SSN, credit card, email@domain.com, phone numbers, etc."
-                    value={searchTerms}
-                    onChange={(e) => setSearchTerms(e.target.value)}
-                    rows={3}
-                  />
-                </div>
-
-                <Button 
-                  onClick={searchForTerms} 
-                  disabled={!file || isProcessing}
-                  className="w-full"
-                >
-                  <Search className="mr-2 h-4 w-4" />
-                  {isProcessing ? 'Searching...' : 'Search for Terms'}
-                </Button>
-
-                {isProcessing && (
-                  <div className="space-y-2">
-                    <Progress value={progress} />
-                    <p className="text-sm text-gray-600 text-center">
-                      Searching document... {progress}%
-                    </p>
-                  </div>
-                )}
-
-                {foundTerms.length > 0 && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold">Found Terms ({foundTerms.length})</h4>
-                    <div className="max-h-60 overflow-y-auto space-y-2">
-                      {foundTerms.map((term) => (
-                        <div key={term.id} className="flex items-center space-x-3 p-2 border rounded">
-                          <Checkbox
-                            checked={selectedTerms.has(term.id)}
-                            onCheckedChange={() => toggleTermSelection(term.id)}
-                          />
-                          <div className="flex-1">
-                            <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
-                              {term.text}
-                            </span>
-                            <span className="text-sm text-gray-500 ml-2">
-                              Page {term.page} at ({term.x}, {term.y})
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setSelectedTerms(new Set(foundTerms.map(t => t.id)))}
-                        size="sm"
-                      >
-                        Select All
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setSelectedTerms(new Set())}
-                        size="sm"
-                      >
-                        Select None
-                      </Button>
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="manual" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trash2 className="h-5 w-5" />
-                  Manual Redaction Areas
-                </CardTitle>
-                <CardDescription>
-                  Define specific areas to redact manually
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button onClick={addManualRedactionArea} className="w-full">
-                  Add Redaction Area
-                </Button>
-
-                {redactionAreas.length > 0 && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold">Redaction Areas ({redactionAreas.length})</h4>
-                    <div className="max-h-60 overflow-y-auto space-y-3">
-                      {redactionAreas.map((area) => (
-                        <div key={area.id} className="p-3 border rounded space-y-2">
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <Label>Page</Label>
-                              <Input
-                                type="number"
-                                value={area.page}
-                                onChange={(e) => updateRedactionArea(area.id, { page: parseInt(e.target.value) })}
-                                min="1"
-                              />
-                            </div>
-                            <div>
-                              <Label>Reason</Label>
-                              <Input
-                                value={area.reason}
-                                onChange={(e) => updateRedactionArea(area.id, { reason: e.target.value })}
-                                placeholder="Redaction reason"
-                              />
-                            </div>
-                          </div>
-                          <div className="grid grid-cols-4 gap-2">
-                            <div>
-                              <Label>X</Label>
-                              <Input
-                                type="number"
-                                value={area.x}
-                                onChange={(e) => updateRedactionArea(area.id, { x: parseInt(e.target.value) })}
-                              />
-                            </div>
-                            <div>
-                              <Label>Y</Label>
-                              <Input
-                                type="number"
-                                value={area.y}
-                                onChange={(e) => updateRedactionArea(area.id, { y: parseInt(e.target.value) })}
-                              />
-                            </div>
-                            <div>
-                              <Label>Width</Label>
-                              <Input
-                                type="number"
-                                value={area.width}
-                                onChange={(e) => updateRedactionArea(area.id, { width: parseInt(e.target.value) })}
-                              />
-                            </div>
-                            <div>
-                              <Label>Height</Label>
-                              <Input
-                                type="number"
-                                value={area.height}
-                                onChange={(e) => updateRedactionArea(area.id, { height: parseInt(e.target.value) })}
-                              />
-                            </div>
-                          </div>
-                          <Button 
-                            variant="destructive" 
-                            size="sm"
-                            onClick={() => removeRedactionArea(area.id)}
-                          >
-                            Remove Area
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="redact" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  Apply Redactions
-                </CardTitle>
-                <CardDescription>
-                  Configure and apply redactions to the document
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="clean-metadata"
-                      checked={cleanMetadata}
-                      onCheckedChange={setCleanMetadata}
-                    />
-                    <Label htmlFor="clean-metadata">
-                      Clean document metadata (recommended)
-                    </Label>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="redaction-color">Redaction Color</Label>
-                    <Input
-                      id="redaction-color"
-                      type="color"
-                      value={redactionColor}
-                      onChange={(e) => setRedactionColor(e.target.value)}
-                      className="w-20"
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">Redaction Summary:</h4>
-                  <ul className="text-sm space-y-1">
-                    <li>• Selected search terms: {selectedTerms.size}</li>
-                    <li>• Manual redaction areas: {redactionAreas.length}</li>
-                    <li>• Metadata cleaning: {cleanMetadata ? 'Enabled' : 'Disabled'}</li>
+                  <h4 className="font-semibold mb-2">Security Measures</h4>
+                  <ul className="space-y-1 text-sm text-gray-600">
+                    <li>• Permanent content removal</li>
+                    <li>• Metadata sanitization</li>
+                    <li>• Visual verification</li>
+                    <li>• Secure deletion process</li>
                   </ul>
                 </div>
-
-                <Button 
-                  onClick={applyRedactions} 
-                  disabled={!file || isProcessing || (selectedTerms.size === 0 && redactionAreas.length === 0)}
-                  className="w-full"
-                >
-                  <EyeOff className="mr-2 h-4 w-4" />
-                  {isProcessing ? 'Applying Redactions...' : 'Apply Redactions'}
-                </Button>
-
-                {isProcessing && (
-                  <div className="space-y-2">
-                    <Progress value={progress} />
-                    <p className="text-sm text-gray-600 text-center">
-                      Processing redactions... {progress}%
-                    </p>
-                  </div>
-                )}
-
-                {redactedPdf && (
-                  <Alert>
-                    <CheckCircle className="h-4 w-4" />
-                    <AlertDescription className="flex items-center justify-between">
-                      <span>Redaction completed successfully!</span>
-                      <Button onClick={downloadRedactedPdf} size="sm">
-                        <Download className="mr-2 h-4 w-4" />
-                        Download
-                      </Button>
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
-              Redaction Security Features
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-semibold mb-2">Security Measures</h4>
-                <ul className="space-y-1 text-sm text-gray-600">
-                  <li>• Permanent content removal</li>
-                  <li>• Metadata sanitization</li>
-                  <li>• Visual verification</li>
-                  <li>• Secure deletion process</li>
-                </ul>
+                <div>
+                  <h4 className="font-semibold mb-2">Compliance Features</h4>
+                  <ul className="space-y-1 text-sm text-gray-600">
+                    <li>• GDPR data protection</li>
+                    <li>• HIPAA compliance ready</li>
+                    <li>• Legal document redaction</li>
+                    <li>• Audit trail support</li>
+                  </ul>
+                </div>
               </div>
-              <div>
-                <h4 className="font-semibold mb-2">Compliance Features</h4>
-                <ul className="space-y-1 text-sm text-gray-600">
-                  <li>• GDPR data protection</li>
-                  <li>• HIPAA compliance ready</li>
-                  <li>• Legal document redaction</li>
-                  <li>• Audit trail support</li>
-                </ul>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </ToolPageContent>
   );
 }

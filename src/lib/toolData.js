@@ -12,7 +12,8 @@ export const toolsData = [
     seoTitle: "Free PDF Merger - Combine Multiple PDFs Online",
     seoDescription: "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
     features: ["Drag & drop multiple files", "Reorder before merging", "No file size limits", "100% secure processing"],
-    relatedTools: ["/split", "/organize", "/compress"]
+    relatedTools: ["/split", "/organize", "/compress"],
+    category: "Organize & Edit"
   },
   {
     href: "/split",
@@ -24,7 +25,8 @@ export const toolsData = [
     seoTitle: "Free PDF Splitter - Extract Pages from PDF Online",
     seoDescription: "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing.",
     features: ["Extract specific pages", "Split by page ranges", "Preview before splitting", "Download as ZIP"],
-    relatedTools: ["/merge", "/delete-pages", "/organize"]
+    relatedTools: ["/merge", "/delete-pages", "/organize"],
+    category: "Organize & Edit"
   },
   {
     href: "/compress",
@@ -36,7 +38,8 @@ export const toolsData = [
     seoTitle: "Free PDF Compressor - Reduce PDF File Size Online",
     seoDescription: "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels.",
     features: ["Multiple compression levels", "Quality preservation", "Batch processing", "Size preview"],
-    relatedTools: ["/merge", "/optimize", "/convert"]
+    relatedTools: ["/merge", "/split", "/watermark", "/protect"],
+    category: "Security & Privacy"
   },
   {
     href: "/jpg-to-pdf",
@@ -48,7 +51,8 @@ export const toolsData = [
     seoTitle: "Free JPG to PDF Converter - Convert Images to PDF Online",
     seoDescription: "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing.",
     features: ["Multiple image formats", "Batch conversion", "Custom page sizes", "Image ordering"],
-    relatedTools: ["/pdf-to-jpg", "/merge", "/compress"]
+    relatedTools: ["/pdf-to-jpg", "/merge", "/compress", "/html-to-pdf"],
+    category: "Convert & Create"
   },
   {
     href: "/pdf-to-jpg",
@@ -60,7 +64,8 @@ export const toolsData = [
     seoTitle: "Free PDF to JPG Converter - Convert PDF to Images Online",
     seoDescription: "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
     features: ["High-quality output", "Custom resolution", "Batch processing", "Multiple formats"],
-    relatedTools: ["/jpg-to-pdf", "/split", "/extract"]
+    relatedTools: ["/jpg-to-pdf", "/split", "/compress", "/ocr"],
+    category: "Convert & Create"
   },
   {
     href: "/rotate",
@@ -72,7 +77,8 @@ export const toolsData = [
     seoTitle: "Free PDF Rotator - Rotate PDF Pages Online",
     seoDescription: "Rotate PDF pages by 90, 180, or 270 degrees. Fix document orientation with our free online PDF rotation tool.",
     features: ["Multiple rotation angles", "Page-specific rotation", "Batch rotation", "Preview changes"],
-    relatedTools: ["/organize", "/reorder", "/split"]
+    relatedTools: ["/organize", "/reorder", "/delete-pages", "/split"],
+    category: "Organize & Edit"
   },
   {
     href: "/watermark",
@@ -84,7 +90,8 @@ export const toolsData = [
     seoTitle: "Free PDF Watermark Tool - Add Watermarks to PDF Online",
     seoDescription: "Add text or image watermarks to PDF documents. Customize position, opacity, and rotation with our free online watermarking tool.",
     features: ["Text & image watermarks", "Custom positioning", "Opacity control", "Rotation options"],
-    relatedTools: ["/protect", "/sign", "/page-numbers"]
+    relatedTools: ["/protect", "/sign", "/page-numbers", "/compress"],
+    category: "Security & Privacy"
   },
   {
     href: "/protect",
@@ -96,7 +103,8 @@ export const toolsData = [
     seoTitle: "Free PDF Password Protection - Secure PDF Files Online",
     seoDescription: "Protect PDF files with password encryption. Add security to sensitive documents with our free online PDF protection tool.",
     features: ["Password encryption", "User permissions", "Print restrictions", "Copy protection"],
-    relatedTools: ["/unlock", "/watermark", "/sign"]
+    relatedTools: ["/unlock", "/watermark", "/sign", "/compress"],
+    category: "Security & Privacy"
   },
   {
     href: "/unlock",
@@ -108,7 +116,8 @@ export const toolsData = [
     seoTitle: "Free PDF Unlocker - Remove PDF Password Online",
     seoDescription: "Remove password protection from PDF files. Unlock encrypted PDFs with our free online PDF password removal tool.",
     features: ["Password removal", "Quick processing", "Secure unlocking", "No data retention"],
-    relatedTools: ["/protect", "/merge", "/split"]
+    relatedTools: ["/protect", "/merge", "/split", "/compress"],
+    category: "Security & Privacy"
   },
   {
     href: "/delete-pages",
@@ -120,7 +129,8 @@ export const toolsData = [
     seoTitle: "Free PDF Page Deleter - Remove Pages from PDF Online",
     seoDescription: "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool.",
     features: ["Select specific pages", "Page range deletion", "Preview before deletion", "Instant processing"],
-    relatedTools: ["/split", "/organize", "/reorder"]
+    relatedTools: ["/split", "/organize", "/reorder", "/merge"],
+    category: "Organize & Edit"
   },
   {
     href: "/reorder",
@@ -132,7 +142,8 @@ export const toolsData = [
     seoTitle: "Free PDF Page Reorder Tool - Rearrange PDF Pages Online",
     seoDescription: "Reorder and rearrange PDF pages with drag-and-drop interface. Organize your PDF documents with our free online tool.",
     features: ["Drag & drop interface", "Visual page preview", "Instant reordering", "Download organized PDF"],
-    relatedTools: ["/organize", "/delete-pages", "/split"]
+    relatedTools: ["/organize", "/delete-pages", "/split", "/merge"],
+    category: "Organize & Edit"
   },
   {
     href: "/organize",
@@ -144,7 +155,8 @@ export const toolsData = [
     seoTitle: "Free PDF Organizer - Manage PDF Pages Online",
     seoDescription: "Organize PDF pages by reordering, deleting, and managing content. Complete PDF organization tool with visual interface.",
     features: ["Page reordering", "Page deletion", "Visual management", "Complete organization"],
-    relatedTools: ["/reorder", "/delete-pages", "/merge"]
+    relatedTools: ["/reorder", "/delete-pages", "/merge", "/split"],
+    category: "Organize & Edit"
   },
   {
     href: "/page-numbers",
@@ -156,7 +168,8 @@ export const toolsData = [
     seoTitle: "Free PDF Page Number Tool - Add Page Numbers Online",
     seoDescription: "Add page numbers, headers, and footers to PDF documents. Customize format, position, and styling with our free online tool.",
     features: ["Custom numbering formats", "Header & footer options", "Position control", "Font customization"],
-    relatedTools: ["/watermark", "/organize", "/merge"]
+    relatedTools: ["/watermark", "/organize", "/merge", "/sign"],
+    category: "Security & Privacy"
   },
   {
     href: "/html-to-pdf",
@@ -168,7 +181,8 @@ export const toolsData = [
     seoTitle: "Free HTML to PDF Converter - Convert Web Content to PDF",
     seoDescription: "Convert HTML code and web content to PDF format. Free online HTML to PDF converter with styling preservation.",
     features: ["HTML code conversion", "CSS styling support", "Web content capture", "Custom page sizes"],
-    relatedTools: ["/merge", "/compress", "/watermark"]
+    relatedTools: ["/merge", "/compress", "/watermark", "/jpg-to-pdf"],
+    category: "Convert & Create"
   },
   {
     href: "/ocr",
@@ -180,7 +194,8 @@ export const toolsData = [
     seoTitle: "Free PDF OCR Tool - Extract Text from Scanned PDFs",
     seoDescription: "Extract editable text from scanned PDFs and images using OCR technology. Free online optical character recognition tool.",
     features: ["Text extraction", "Multiple languages", "Image processing", "Editable output"],
-    relatedTools: ["/form-filler", "/search", "/convert"]
+    relatedTools: ["/form-filler", "/pdf-to-text", "/advanced-ocr", "/medical-analyzer"],
+    category: "AI & Analysis"
   },
   {
     href: "/sign",
@@ -192,7 +207,8 @@ export const toolsData = [
     seoTitle: "Free PDF Signature Tool - Sign PDF Documents Online",
     seoDescription: "Sign PDF documents with digital signatures and annotations. Free online PDF signing tool with drawing and typing options.",
     features: ["Digital signatures", "Drawing tools", "Text annotations", "Signature placement"],
-    relatedTools: ["/form-filler", "/protect", "/watermark"]
+    relatedTools: ["/form-filler", "/protect", "/watermark", "/pdf-digital-signature"],
+    category: "Forms & Documents"
   },
   {
     href: "/form-filler",
@@ -204,7 +220,8 @@ export const toolsData = [
     seoTitle: "Free PDF Form Filler - Complete PDF Forms Online",
     seoDescription: "Fill out PDF forms online with text, checkboxes, and signatures. Free PDF form completion tool with save functionality.",
     features: ["Form field detection", "Text input", "Checkbox support", "Form saving"],
-    relatedTools: ["/sign", "/ocr", "/protect"]
+    relatedTools: ["/sign", "/ocr", "/protect", "/pdf-form-creator"],
+    category: "Forms & Documents"
   },
 
 
@@ -218,7 +235,8 @@ export const toolsData = [
     seoTitle: "AI Legal Document Analyzer - Review Contracts Online",
     seoDescription: "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts.",
     features: ["AI-powered analysis", "Clause extraction", "Risk assessment", "Legal insights"],
-    relatedTools: ["/medical-analyzer", "/ocr", "/form-filler"]
+    relatedTools: ["/medical-analyzer", "/ocr", "/form-filler"],
+    category: "AI & Analysis"
   },
   {
     href: "/medical-analyzer",
@@ -230,7 +248,8 @@ export const toolsData = [
     seoTitle: "AI Medical Document Analyzer - Review Medical Records",
     seoDescription: "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records.",
     features: ["Medical AI analysis", "Patient data extraction", "Diagnosis identification", "Health insights"],
-    relatedTools: ["/legal-analyzer", "/ocr", "/form-filler"]
+    relatedTools: ["/legal-analyzer", "/ocr", "/form-filler"],
+    category: "AI & Analysis"
   },
   {
     id: 23,
@@ -240,6 +259,8 @@ export const toolsData = [
     href: "/tools/pdf-metadata-editor",
     category: "Edit",
     features: ["Edit title, author, subject", "Modify keywords and creation date", "Preserve document structure", "Client-side processing"],
+    relatedTools: ["/protect", "/unlock", "/sign", "/watermark"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -250,6 +271,8 @@ export const toolsData = [
     href: "/tools/pdf-bookmark-manager",
     category: "Edit",
     features: ["Add custom bookmarks", "Edit existing bookmarks", "Organize bookmark hierarchy", "Export bookmark list"],
+    relatedTools: ["/organize", "/reorder", "/page-numbers", "/split"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -260,6 +283,8 @@ export const toolsData = [
     href: "/tools/pdf-table-extractor",
     category: "Convert",
     features: ["Extract tables automatically", "Export to CSV/Excel/JSON", "Preview extracted data", "Handle complex table structures"],
+    relatedTools: ["/ocr", "/pdf-to-excel", "/excel-to-pdf", "/pdf-to-text"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -270,6 +295,8 @@ export const toolsData = [
     href: "/tools/pdf-batch-processor",
     category: "Utility",
     features: ["Batch merge multiple PDFs", "Bulk compression", "Mass watermarking", "Batch operations"],
+    relatedTools: ["/merge", "/compress", "/split", "/watermark"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -280,6 +307,8 @@ export const toolsData = [
     href: "/tools/pdf-form-creator",
     category: "Create",
     features: ["Text input fields", "Checkboxes and radio buttons", "Dropdown menus", "Signature fields"],
+    relatedTools: ["/form-filler", "/sign", "/pdf-digital-signature", "/invoice-generator"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -290,6 +319,8 @@ export const toolsData = [
     href: "/tools/advanced-ocr",
     category: "AI Tools",
     features: ["AI-enhanced text extraction", "Multiple language support", "Format preservation", "Confidence scoring"],
+    relatedTools: ["/ocr", "/legal-analyzer", "/medical-analyzer", "/pdf-to-text"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -300,6 +331,8 @@ export const toolsData = [
     href: "/tools/pdf-accessibility-checker",
     category: "Utility",
     features: ["WCAG compliance check", "Alt text validation", "Reading order analysis", "Color contrast testing"],
+    relatedTools: ["/pdf-redaction", "/pdf-version-comparison", "/pdf-digital-signature", "/sign"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -310,6 +343,8 @@ export const toolsData = [
     href: "/tools/pdf-digital-signature",
     category: "Security",
     features: ["Digital certificates", "Signature validation", "Timestamp authority", "Legal compliance"],
+    relatedTools: ["/sign", "/protect", "/unlock", "/form-filler"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -320,6 +355,8 @@ export const toolsData = [
     href: "/tools/pdf-redaction",
     category: "Security",
     features: ["Content removal", "Metadata cleaning", "Visual verification", "Secure deletion"],
+    relatedTools: ["/protect", "/unlock", "/pdf-accessibility-checker", "/sign"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -330,6 +367,8 @@ export const toolsData = [
     href: "/tools/pdf-version-comparison",
     category: "Analysis",
     features: ["Visual diff", "Text comparison", "Layout changes", "Version tracking"],
+    relatedTools: ["/pdf-accessibility-checker", "/ocr", "/legal-analyzer", "/medical-analyzer"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -340,6 +379,8 @@ export const toolsData = [
     href: "/tools/pdf-annotation-collaboration",
     category: "Collaboration",
     features: ["Team annotations", "Comment threads", "Export annotations", "Review workflows"],
+    relatedTools: ["/sign", "/form-filler", "/pdf-digital-signature", "/pdf-batch-processor"],
+    category: "Advanced PDF Tools",
     isNew: true
   },
   {
@@ -353,7 +394,7 @@ export const toolsData = [
     seoDescription: "Generate professional PDF invoices with GST support, multiple currencies, and customizable templates. Perfect for businesses and freelancers.",
     features: ["Professional invoice templates", "GST and tax calculations", "Multiple currency support", "Client and company management"],
     relatedTools: ["/form-filler", "/sign", "/watermark"],
-    category: "Business",
+    category: "Business Tools",
     isNew: true
   },
   {
@@ -367,7 +408,7 @@ export const toolsData = [
     seoDescription: "Generate QR codes for URLs, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality.",
     features: ["Multiple QR code types", "Customizable size and quality", "WiFi and vCard support", "PNG and PDF export"],
     relatedTools: ["/watermark", "/merge", "/form-filler"],
-    category: "Generate",
+    category: "Convert & Create",
     isNew: true
   },
   {
@@ -381,7 +422,7 @@ export const toolsData = [
     seoDescription: "Generate professional certificates for courses, training, achievements with customizable templates and styling options.",
     features: ["Multiple certificate templates", "Customizable colors and styles", "Professional layouts", "Automatic certificate IDs"],
     relatedTools: ["/sign", "/watermark", "/form-filler"],
-    category: "Create",
+    category: "Business Tools",
     isNew: true
   },
   {
@@ -395,7 +436,7 @@ export const toolsData = [
     seoDescription: "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
     features: ["Professional portfolio templates", "Multiple customizable sections", "Experience and education tracking", "Skills and projects showcase"],
     relatedTools: ["/certificate-generator", "/invoice-generator", "/form-filler"],
-    category: "Create",
+    category: "Business Tools",
     isNew: true
   },
   {
@@ -409,7 +450,7 @@ export const toolsData = [
     seoDescription: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting.",
     features: ["Multiple report templates", "Key metrics dashboard", "Customizable sections", "Professional formatting"],
     relatedTools: ["/portfolio-creator", "/invoice-generator", "/certificate-generator"],
-    category: "Business",
+    category: "Business Tools",
     isNew: true
   }
 ];

@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, Download, CheckCircle, AlertTriangle, FileText, Eye, BarChart3, Clock } from "lucide-react";
 import { PDFDocument } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFVersionComparison() {
   const [file1, setFile1] = useState(null);
@@ -200,13 +201,46 @@ export default function PDFVersionComparison() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <GitCompare className="mx-auto h-12 w-12 text-blue-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Version Comparison</h1>
-          <p className="text-gray-600">Compare different versions of PDF documents with detailed analysis</p>
-        </div>
+    <ToolPageContent
+      toolName="PDF Version Comparison"
+      toolDescription="Compare different versions of PDF documents with detailed analysis. Identify changes, track modifications, and generate comprehensive comparison reports. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-version-comparison"
+      steps={[
+        "Upload two PDF files: the original version and the updated version you want to compare.",
+        "Choose your comparison type: visual diff, text-only analysis, or metadata comparison.",
+        "Run the comparison analysis to detect differences between the documents.",
+        "Review detailed differences, statistics, and export comparison reports for documentation."
+      ]}
+      faqs={[
+        {
+          question: "What types of differences can the tool detect?",
+          answer: "The tool can detect text changes (additions, deletions, modifications), formatting changes, image updates, layout modifications, and metadata differences between PDF versions."
+        },
+        {
+          question: "How accurate is the comparison analysis?",
+          answer: "The comparison provides high accuracy for text-based changes and visual differences. The tool uses advanced algorithms to identify even subtle modifications between document versions."
+        },
+        {
+          question: "Can I export the comparison results?",
+          answer: "Yes, you can export detailed comparison reports in JSON format, including all detected differences, statistics, and analysis metadata for record-keeping or further processing."
+        },
+        {
+          question: "What comparison methods are available?",
+          answer: "The tool offers three comparison methods: Visual Diff (side-by-side visual comparison), Text Only (focuses on textual content changes), and Metadata (compares document properties and structure)."
+        },
+        {
+          question: "Is there a limit to file sizes for comparison?",
+          answer: "For optimal performance, we recommend comparing PDFs under 50MB each. Larger files may take longer to process but are still supported by the tool."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <GitCompare className="mx-auto h-12 w-12 text-blue-600 mb-4" />
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Version Comparison</h1>
+            <p className="text-gray-600">Compare different versions of PDF documents with detailed analysis</p>
+          </div>
 
         <Tabs defaultValue="upload" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
@@ -564,5 +598,6 @@ export default function PDFVersionComparison() {
         </Card>
       </div>
     </div>
+    </ToolPageContent>
   );
 }

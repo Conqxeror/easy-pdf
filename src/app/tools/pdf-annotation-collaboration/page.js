@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MessageSquare, Download, CheckCircle, AlertTriangle, FileText, Users, Send, Reply, Edit3, Highlighter } from "lucide-react";
 import { PDFDocument, rgb } from 'pdf-lib';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFAnnotationCollaboration() {
   const [file, setFile] = useState(null);
@@ -312,13 +313,47 @@ export default function PDFAnnotationCollaboration() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <MessageSquare className="mx-auto h-12 w-12 text-blue-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Annotation Collaboration</h1>
-          <p className="text-gray-600">Collaborate on PDF annotations with team members</p>
-        </div>
+    <ToolPageContent
+      toolName="PDF Annotation Collaboration"
+      toolDescription="Collaborate on PDF annotations with team members in real-time. Add comments, highlights, and notes to documents, manage team permissions, and track review progress. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-annotation-collaboration"
+      steps={[
+        "Upload your PDF document to start collaborative annotation and review.",
+        "Add annotations including comments, highlights, and notes with specific positioning on pages.",
+        "Invite team members with different roles (Reviewer, Editor, Approver) and manage collaboration.",
+        "Review annotation status, add replies to discussions, and track progress through the review process.",
+        "Export annotated PDFs or annotation data for record-keeping and further collaboration."
+      ]}
+      faqs={[
+        {
+          question: "What types of annotations can I add to PDFs?",
+          answer: "You can add comments, text highlights, sticky notes, and drawing annotations. Each annotation can be positioned precisely on specific pages and includes author information, timestamps, and discussion threads."
+        },
+        {
+          question: "How does team collaboration work?",
+          answer: "Team members can be assigned different roles (Reviewer, Editor, Approver) with appropriate permissions. Everyone can view annotations, add replies to discussions, and track the status of review items in real-time."
+        },
+        {
+          question: "Can I track the status of annotations?",
+          answer: "Yes, each annotation has a status (Open, In Progress, Resolved) and priority level (High, Medium, Low). You can update statuses as you work through the review process and track progress across the entire document."
+        },
+        {
+          question: "What export options are available?",
+          answer: "You can export the annotated PDF with visual markers, export annotation data as JSON for record-keeping, and generate review summaries. This helps maintain documentation of the collaboration process."
+        },
+        {
+          question: "Is real-time collaboration supported?",
+          answer: "The tool supports collaborative annotation where team members can see each other's comments and replies. While not fully real-time, it provides a comprehensive collaboration environment for document review."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <MessageSquare className="mx-auto h-12 w-12 text-blue-600 mb-4" />
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Annotation Collaboration</h1>
+            <p className="text-gray-600">Collaborate on PDF annotations with team members</p>
+          </div>
 
         <Tabs defaultValue="upload" className="space-y-6">
           <TabsList className="grid w-full grid-cols-5">
@@ -762,5 +797,6 @@ export default function PDFAnnotationCollaboration() {
         </Card>
       </div>
     </div>
+    </ToolPageContent>
   );
 }

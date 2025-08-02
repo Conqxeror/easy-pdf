@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Unlock PDF (Remove Password) – Easy PDF Tool",
   description:
     "Remove password from PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF unlocker. No uploads required.",

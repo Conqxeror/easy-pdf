@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Protect PDF with Password – Easy PDF Tool",
   description:
     "Add password protection to your PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF protection. No uploads required.",

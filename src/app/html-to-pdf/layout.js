@@ -1,10 +1,8 @@
-// Server component layout for /html-to-pdf route to provide SEO metadata
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "HTML to PDF Converter – Easy PDF Tool",
-  description:
-    "Convert HTML to PDF instantly, 100% client-side. Fast, secure, privacy-first HTML to PDF converter. No uploads required.",
+  description: "Convert HTML to PDF instantly, 100% client-side. Fast, secure, privacy-first HTML to PDF converter. No uploads required.",
   keywords: [
     "HTML to PDF",
     "Convert HTML",
@@ -19,8 +17,26 @@ export const metadata = generateMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "HTML to PDF Converter",
+  description: "Convert HTML to PDF instantly, 100% client-side. Fast, secure, privacy-first HTML to PDF converter. No uploads required.",
+  url: "/html-to-pdf",
+  features: [
+    "Convert HTML to PDF",
+    "Preserve styling",
+    "Custom page sizes",
+    "Instant conversion"
+  ]
+});
 
 export default function HtmlToPdfLayout({ children }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }

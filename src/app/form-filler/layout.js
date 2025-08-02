@@ -1,10 +1,8 @@
-// Server component layout for /form-filler route to provide SEO metadata
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "PDF Form Filler Online – Easy PDF Tool",
-  description:
-    "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
+  description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
   keywords: [
     "PDF form filler",
     "Fill PDF forms",
@@ -19,8 +17,26 @@ export const metadata = generateMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF Form Filler Online",
+  description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
+  url: "/form-filler",
+  features: [
+    "Add text to any PDF",
+    "Adjust font size and color",
+    "Precisely position text",
+    "Secure and private"
+  ]
+});
 
 export default function FormFillerLayout({ children }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }

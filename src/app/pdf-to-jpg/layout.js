@@ -1,6 +1,6 @@
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "PDF to JPG Converter – Easy PDF Tool",
   description:
     "Convert PDF pages to JPG images instantly, 100% client-side. Fast, secure, privacy-first PDF to JPG converter. No uploads required.",

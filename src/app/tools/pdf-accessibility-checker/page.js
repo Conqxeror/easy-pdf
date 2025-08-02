@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
@@ -377,16 +378,49 @@ export default function PDFAccessibilityChecker() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Shield className="h-8 w-8" />
-          PDF Accessibility Checker
-        </h1>
-        <p className="text-muted-foreground">
-          Check your PDF documents for accessibility compliance and WCAG standards. Ensure your content is accessible to all users.
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="PDF Accessibility Checker"
+      toolDescription="Check your PDF documents for accessibility compliance and WCAG standards. Ensure your content is accessible to all users with comprehensive accessibility analysis."
+      currentTool="tools/pdf-accessibility-checker"
+      steps={[
+        "Upload your PDF document by dragging it into the dropzone or clicking to select it.",
+        "Click 'Start Analysis' to begin the comprehensive accessibility check.",
+        "Review the detailed analysis results including accessibility score, passed checks, and identified issues.",
+        "Download the accessibility report for documentation or share with your team."
+      ]}
+      faqs={[
+        {
+          question: "What accessibility standards does this tool check?",
+          answer: "The tool checks for WCAG 2.1 compliance, including document structure, image alt text, color contrast, reading order, form accessibility, and proper tagging for screen readers."
+        },
+        {
+          question: "What does the accessibility score mean?",
+          answer: "The accessibility score (0-100) indicates how well your PDF meets accessibility standards. Scores 80+ are good, 60-79 need improvement, and below 60 require significant accessibility enhancements."
+        },
+        {
+          question: "Can I fix accessibility issues with this tool?",
+          answer: "This tool identifies accessibility issues and provides recommendations, but you'll need to use other PDF editing tools to implement the fixes. The tool helps you understand what needs to be improved."
+        },
+        {
+          question: "What types of accessibility issues are most critical?",
+          answer: "Critical issues include missing document titles, untagged PDFs, missing image alt text, and unlabeled form fields. These prevent screen readers from properly interpreting your content."
+        },
+        {
+          question: "Is the accessibility analysis secure?",
+          answer: "Yes, all analysis happens locally in your browser. Your PDF files are never uploaded to our servers, ensuring complete privacy and security for your sensitive documents."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Shield className="h-8 w-8" />
+            PDF Accessibility Checker
+          </h1>
+          <p className="text-muted-foreground">
+            Check your PDF documents for accessibility compliance and WCAG standards. Ensure your content is accessible to all users.
+          </p>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <Card className="lg:col-span-2">
@@ -720,5 +754,6 @@ export default function PDFAccessibilityChecker() {
         </CardContent>
       </Card>
     </div>
+    </ToolPageContent>
   );
 }

@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Unused
 import { Upload, Download, FileBadge2, Type, CheckSquare, Circle, ChevronDown, PenTool, Trash2, Plus, Eye } from 'lucide-react';
 import { PDFDocument, rgb } from 'pdf-lib'; // Removed unused PDF form components
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 export default function PDFFormCreator() {
   const [templateFile, setTemplateFile] = useState(null);
@@ -222,16 +223,49 @@ export default function PDFFormCreator() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <FileBadge2 className="h-8 w-8" />
-          PDF Form Creator
-        </h1>
-        <p className="text-muted-foreground">
-          Create interactive PDF forms with various field types. Start with a blank form or use an existing PDF as template.
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="PDF Form Creator"
+      toolDescription="Create interactive PDF forms with various field types including text fields, checkboxes, radio buttons, dropdowns, and signature fields. Start with a blank form or use an existing PDF as template. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/pdf-form-creator"
+      steps={[
+        "Choose to create a new blank form or upload an existing PDF as a template.",
+        "Add form fields using the field tools: text fields, checkboxes, radio buttons, dropdowns, or signature fields.",
+        "Configure each field's properties including position, size, label, and validation requirements.",
+        "Preview your form to see how it will look, then download the interactive PDF form."
+      ]}
+      faqs={[
+        {
+          question: "What types of form fields can I create?",
+          answer: "You can create text fields (single or multiline), checkboxes, radio buttons, dropdown menus, and signature fields. Each field type can be customized with labels, validation, and positioning."
+        },
+        {
+          question: "Can I use an existing PDF as a template?",
+          answer: "Yes, you can upload an existing PDF document and add form fields to it. This is useful for converting static documents into interactive forms."
+        },
+        {
+          question: "Are the created forms fillable?",
+          answer: "Yes, the PDF forms you create are fully interactive and can be filled out using any PDF reader that supports form fields, including Adobe Reader, browsers, and mobile PDF apps."
+        },
+        {
+          question: "Can I make fields required?",
+          answer: "Yes, you can mark any field as required. When someone tries to fill out the form, they will be prompted to complete required fields before the form can be submitted."
+        },
+        {
+          question: "Is there a limit to how many fields I can add?",
+          answer: "There's no strict limit, but for best performance and usability, we recommend keeping forms to a reasonable number of fields (under 50) for optimal user experience."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <FileBadge2 className="h-8 w-8" />
+            PDF Form Creator
+          </h1>
+          <p className="text-muted-foreground">
+            Create interactive PDF forms with various field types. Start with a blank form or use an existing PDF as template.
+          </p>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left Panel - Tools */}
@@ -515,5 +549,6 @@ export default function PDFFormCreator() {
         </CardContent>
       </Card>
     </div>
+    </ToolPageContent>
   );
 }

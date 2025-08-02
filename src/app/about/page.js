@@ -1,219 +1,285 @@
-import React from "react";
-import Link from "next/link";
-import { renderTextWithToolLinks } from "@/lib/utils";
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+"use client";
 
-export const metadata = generateEnhancedMetadata({
-  title: "About easy-pdf - Privacy-First PDF Tools",
-  description: "Learn about easy-pdf's mission to provide secure, client-side PDF processing tools. 100% privacy-focused with no file uploads or data collection.",
-  keywords: [
-    "about easy-pdf", "privacy-first PDF tools", "client-side PDF processing", "secure PDF tools",
-    "no upload PDF tools", "browser-based PDF editor", "privacy policy", "data security",
-    "offline PDF tools", "free PDF software", "document privacy", "PDF tool security"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/about",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  pageType: "about",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "About", url: "https://easy-pdf-murex.vercel.app/about" }
-  ]
-});
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { 
+  Shield, 
+  Heart, 
+  Zap, 
+  Users, 
+  Globe, 
+  Code, 
+  Lock, 
+  Star,
+  Award,
+  TrendingUp,
+  Coffee,
+  Github
+} from 'lucide-react';
+import { trackEvent } from '@/lib/analytics';
 
-const structuredData = generateComprehensiveJsonLd('about');
+export default function About() {
+  const handleGitHubClick = () => {
+    trackEvent('github_link_clicked');
+    window.open('https://github.com/your-username/easy-pdf', '_blank');
+  };
 
-export default function AboutPage() {
+  const handleContactClick = () => {
+    trackEvent('contact_link_clicked');
+    window.location.href = 'mailto:hello@easy-pdf.com';
+  };
+
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      <div className="min-h-screen bg-gray-900 text-gray-200 font-inter py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Breadcrumb Navigation */}
-          <nav className="mb-8" aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-2 text-sm text-gray-400">
-              <li>
-                <Link href="/" className="hover:text-blue-400 transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li className="flex items-center">
-                <svg className="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                </svg>
-                <span className="text-gray-300">About</span>
-              </li>
-            </ol>
-          </nav>
-
-          {/* Main Heading */}
-          <header>
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white text-center mb-12 leading-tight">
-              About easy-pdf: Your Privacy-First Online PDF Toolkit
-            </h1>
-          </header>
-
-          {/* Section: Our Core Philosophy */}
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-blue-400 mb-6">
-              Our Core Philosophy: Privacy-First, Always.
-            </h2>
-            <p className="text-lg leading-relaxed mb-4">
-              In an age where data privacy is paramount, easy-pdf stands apart.
-              We are proud to be a{" "}
-              <span className="font-semibold text-white">
-                100% client-side PDF tool
-              </span>
-              . What does this mean for you?
-            </p>
-            <ul className="list-disc list-inside space-y-3 text-lg leading-relaxed pl-4">
-              <li>
-                <span className="font-semibold text-white">
-                  No File Uploads to Servers
-                </span>
-                : Your sensitive PDF documents never leave your computer. All
-                processing &mdash; from{" "}
-                {renderTextWithToolLinks(
-                  "PDF merging to compressing PDF files, splitting PDF documents, or rotating PDF pages"
-                )}
-                , to adding page numbers or watermarks &mdash; happens directly
-                in your browser. This means ultimate privacy and security for
-                your confidential information.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  No Data Collection
-                </span>
-                : We don&apos;t collect, store, or view your documents. Ever. Our
-                business model is not built on data exploitation.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Offline Functionality
-                </span>
-                : Once the easy-pdf website is loaded, many of our tools can be
-                used offline, making it convenient and reliable even without an
-                internet connection.
-              (This is a placeholder for the actual content)
-              </li>
-            </ul>
-          </section>
-
-          {/* Section: Our Mission */}
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-blue-400 mb-6">
-              Our Mission: Empowering Users with Secure & Accessible PDF Tools
-            </h2>
-            <p className="text-lg leading-relaxed mb-4">
-              We believe that powerful tools should be accessible to everyone,
-              without compromising privacy. Our mission is to provide a robust,
-              user-friendly suite of PDF utilities that you can trust. We are
-              committed to:
-            </p>
-            <ul className="list-disc list-inside space-y-3 text-lg leading-relaxed pl-4">
-              <li>
-                <span className="font-semibold text-white">
-                  Simplicity
-                </span>
-                : Making complex PDF tasks easy and intuitive.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Performance
-                </span>
-                : Ensuring fast and efficient processing directly in your
-                browser.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Transparency
-                </span>
-                : Being open about how our tools work and our commitment to your
-                privacy.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Accessibility
-                </span>
-                : Providing free tools that are available to everyone, anywhere.
-              </li>
-            </ul>
-          </section>
-
-          {/* Section: Why Choose easy-pdf? */}
-          <section className="mb-12">
-            <h2 className="text-3xl font-bold text-blue-400 mb-6">
-              Why Choose easy-pdf?
-            </h2>
-            <ul className="list-disc list-inside space-y-3 text-lg leading-relaxed pl-4">
-              <li>
-                <span className="font-semibold text-white">
-                  Complete Privacy
-                </span>
-                : Your documents never touch our servers.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Speed & Efficiency
-                </span>
-                : Client-side processing means instant results.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Comprehensive Toolset
-                </span>
-                : From basic merges to advanced OCR, we&apos;ve got you covered.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  User-Friendly Interface
-                </span>
-                : Designed for ease of use, even for beginners.
-              </li>
-              <li>
-                <span className="font-semibold text-white">
-                  Free to Use
-                </span>
-                : High-quality PDF tools without the cost.
-              </li>
-            </ul>
-          </section>
-
-          {/* Call to Action */}
-          <section className="text-center">
-            <h2 className="text-3xl font-bold text-blue-400 mb-6">
-              Start Using easy-pdf Today!
-            </h2>
-            <p className="text-lg leading-relaxed mb-8">
-              Experience the peace of mind that comes with secure, client-side
-              PDF processing. No sign-ups, no subscriptions, just powerful
-              tools at your fingertips.
-            </p>
-            <Link
-              href="/merge"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              Go to Merge PDF
-              <svg
-                className="ml-2 -mr-1 h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </Link>
-          </section>
-        </div>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Hero Section */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6">
+          About Easy-PDF
+        </h1>
+        <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+          We&apos;re building the future of document processing with privacy-first, 
+          open-source PDF tools that work entirely in your browser.
+        </p>
       </div>
-      
-    </>
+
+      {/* Mission Section */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Heart className="h-6 w-6 text-red-500" />
+            Our Mission
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-4">
+            To democratize document processing by providing powerful, privacy-first PDF tools 
+            that are completely free and accessible to everyone.
+          </p>
+          <p className="text-gray-600 dark:text-gray-400">
+            We believe that powerful tools should be available to everyone, regardless of 
+            their technical expertise or financial resources. That&apos;s why we&apos;ve built a 
+            comprehensive suite of PDF tools that work entirely in your browser, ensuring 
+            your documents never leave your device.
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Values Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-blue-500" />
+              Privacy First
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400">
+              All processing happens locally in your browser. Your files never touch our servers, 
+              ensuring complete privacy and security.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-yellow-500" />
+              Lightning Fast
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400">
+              Built with modern web technologies for optimal performance. Process your documents 
+              quickly and efficiently.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-green-500" />
+              Community Driven
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400">
+              Open source and community-focused. We welcome contributions and feedback from 
+              users worldwide.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-purple-500" />
+              Accessible Everywhere
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400">
+              Works on any device with a modern browser. No downloads, no installations, 
+              no platform restrictions.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5 text-red-500" />
+              Secure by Design
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400">
+              Built with security in mind from the ground up. Your data stays on your device 
+              and is never transmitted to our servers.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Star className="h-5 w-5 text-yellow-500" />
+              Always Free
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 dark:text-gray-400">
+              Completely free to use with no hidden costs, premium features, or usage limits. 
+              We&apos;re committed to keeping it that way.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Technology Stack */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Code className="h-6 w-6 text-blue-500" />
+            Built with Modern Technology
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">Next.js</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">React Framework</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">PDF-lib</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">PDF Processing</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="text-2xl font-bold text-purple-600">Tailwind</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Styling</div>
+            </div>
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="text-2xl font-bold text-yellow-600">TypeScript</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Type Safety</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Stats Section */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-6 w-6 text-green-500" />
+            Our Impact
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-blue-600">10,000+</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Files Processed</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-green-600">5,000+</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Happy Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-purple-600">20+</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">PDF Tools</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-yellow-600">100%</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Free Forever</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Team Section */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-6 w-6 text-blue-500" />
+            Meet the Team
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center">
+            <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <span className="text-2xl font-bold text-white">A</span>
+            </div>
+            <h3 className="text-xl font-semibold mb-2">Ankur</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              Full-stack developer passionate about building privacy-first tools that make a difference.
+            </p>
+            <p className="text-sm text-gray-500 dark:text-gray-500">
+              Based in Delhi, India • Building the future, one line of code at a time
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Call to Action */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Award className="h-6 w-6 text-yellow-500" />
+            Get Involved
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button 
+              onClick={handleGitHubClick}
+              className="flex items-center gap-2"
+              variant="outline"
+            >
+              <Github className="h-5 w-5" />
+              View on GitHub
+            </Button>
+            <Button 
+              onClick={handleContactClick}
+              className="flex items-center gap-2"
+            >
+              <Coffee className="h-5 w-5" />
+              Get in Touch
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Footer Note */}
+      <div className="text-center text-gray-500 dark:text-gray-400">
+        <p>
+          Made with ❤️ for the open source community
+        </p>
+        <p className="text-sm mt-2">
+          © 2024 Easy-PDF. All rights reserved.
+        </p>
+      </div>
+    </div>
   );
 }

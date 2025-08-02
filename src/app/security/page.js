@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
@@ -82,21 +82,7 @@ export default function SecurityPage() {
       />
       <main className="container max-w-4xl py-8 mx-auto">
         {/* Breadcrumb Navigation */}
-        <nav className="mb-8" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-sm text-gray-400">
-            <li>
-              <Link href="/" className="hover:text-blue-400 transition-colors">
-                Home
-              </Link>
-            </li>
-            <li className="flex items-center">
-              <svg className="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-              </svg>
-              <span className="text-gray-300">Security</span>
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb items={[{ name: "Security", url: "/security" }]} />
         
         <ToolPageContent
           toolName="Security & Privacy Policy"

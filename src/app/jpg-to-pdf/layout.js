@@ -1,7 +1,7 @@
 // Server component layout for /jpg-to-pdf route to provide SEO metadata
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "JPG to PDF Converter – Easy PDF Tool",
   description:
     "Convert JPG images to PDF instantly, 100% client-side. Fast, secure, privacy-first JPG to PDF converter. No uploads required.",

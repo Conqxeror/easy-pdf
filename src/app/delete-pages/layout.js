@@ -1,7 +1,7 @@
 // Server component layout for /delete-pages route to provide SEO metadata
-import { generateMetadata } from "@/lib/metadata";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
-export const metadata = generateMetadata({
+export const metadata = generateEnhancedMetadata({
   title: "Delete PDF Pages Online – Easy PDF Tool",
   description:
     "Delete pages from your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF page remover. No uploads required.",

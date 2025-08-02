@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, Search, FileText, Image as ImageIcon, Brain, Copy, Zap, Globe, CheckCircle, AlertCircle } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist';
 import { createWorker } from 'tesseract.js';
+import ToolPageContent from '@/components/ui/ToolPageContent';
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
@@ -266,16 +267,50 @@ export default function AdvancedOCR() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-          <Search className="h-8 w-8" />
-          Advanced OCR with AI
-        </h1>
-        <p className="text-muted-foreground">
-          Extract text from PDFs and images with AI-powered enhancement. Supports multiple languages and formats.
-        </p>
-      </div>
+    <ToolPageContent
+      toolName="Advanced OCR with AI"
+      toolDescription="Extract text from PDFs and images with AI-powered enhancement. Supports multiple languages and advanced processing modes including standard OCR, enhanced processing, and AI-powered text improvement. All processing happens locally in your browser for complete privacy and security."
+      currentTool="tools/advanced-ocr"
+      steps={[
+        "Upload PDF files or images (PNG, JPG, JPEG, GIF, BMP, TIFF) for text extraction.",
+        "Select the language of your document from the supported language options.",
+        "Choose your OCR mode: Standard OCR, Enhanced Processing, or AI-Powered Enhancement for better results.",
+        "Click 'Extract Text' to process your files and view the extracted text with confidence scores.",
+        "Copy or download the extracted text, with options for both original and AI-enhanced versions."
+      ]}
+      faqs={[
+        {
+          question: "What languages does the Advanced OCR tool support?",
+          answer: "The tool supports 12 languages including English, Spanish, French, German, Italian, Portuguese, Russian, Chinese (Simplified), Japanese, Korean, Arabic, and Hindi. Select the appropriate language for best recognition accuracy."
+        },
+        {
+          question: "What are the different OCR modes available?",
+          answer: "Standard OCR provides basic text extraction. Enhanced Processing includes better text cleaning and formatting. AI-Powered Enhancement uses advanced algorithms to improve text quality, fix spacing issues, and boost confidence scores."
+        },
+        {
+          question: "How accurate is the text extraction?",
+          answer: "Accuracy depends on image quality and text clarity. The tool provides confidence scores for each extraction. High-quality scans typically achieve 90%+ accuracy, while AI enhancement can improve results by 10-15%."
+        },
+        {
+          question: "Can I process multiple files at once?",
+          answer: "Yes, you can upload and process multiple PDF files and images simultaneously. The tool will process them in sequence and provide individual results for each file with separate confidence scores."
+        },
+        {
+          question: "What file formats are supported?",
+          answer: "The tool supports PDF documents and various image formats including PNG, JPG, JPEG, GIF, BMP, and TIFF. For PDFs, it extracts text from all pages and provides page-by-page results."
+        }
+      ]}
+    >
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Search className="h-8 w-8" />
+            Advanced OCR with AI
+          </h1>
+          <p className="text-muted-foreground">
+            Extract text from PDFs and images with AI-powered enhancement. Supports multiple languages and formats.
+          </p>
+        </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <Card className="lg:col-span-2">
@@ -597,5 +632,6 @@ export default function AdvancedOCR() {
         </CardContent>
       </Card>
     </div>
+    </ToolPageContent>
   );
 }
