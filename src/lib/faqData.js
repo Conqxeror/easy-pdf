@@ -88,6 +88,8 @@ export const toolSpecificFAQs = {
     }
   ],
 
+  
+
   "pdf-to-jpg": [
     {
       question: "What resolution will the JPG images be?",

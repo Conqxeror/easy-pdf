@@ -11,7 +11,6 @@ import {
   Eraser,
   ListOrdered,
   PlusCircle,
-  FileCode,
   Search,
   Signature,
   FileBadge,
@@ -41,11 +40,7 @@ export const toolCategories = [
         href: "/pdf-to-jpg",
         icon: <FileImage className="w-4 h-4" />,
       },
-      {
-        name: "HTML to PDF",
-        href: "/html-to-pdf",
-        icon: <FileCode className="w-4 h-4" />,
-      },
+      
       {
         name: "QR Code Generator",
         href: "/qr-generator",

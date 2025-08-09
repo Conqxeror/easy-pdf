@@ -13,6 +13,7 @@ const removals = [
   { file: 'src/app/compress/page.js', remove: 'import { Loader } from "lucide-react";\n' },
   { file: 'src/app/jpg-to-pdf/page.js', remove: ', rgb' },
   { file: 'src/app/jpg-to-pdf/page.js', remove: 'import { Loader } from "lucide-react";\n' },
+  
   { file: 'src/app/page.js', remove: 'import Image from "next/image";\n' },
   { file: 'src/app/pdf-to-jpg/page.js', remove: 'import { Loader } from "lucide-react";\n' },
   { file: 'src/app/pricing/page.js', remove: 'import { trackEvent } from "@/lib/analytics";\n' },

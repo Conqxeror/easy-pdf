@@ -6,6 +6,7 @@
 declare -A tools=(
     ["compress"]="Compress PDF"
     ["jpg-to-pdf"]="JPG to PDF"
+    ["jpg-to-pdf"]="JPG to PDF"
     ["pdf-to-jpg"]="PDF to JPG"
     ["protect"]="Protect PDF"
     ["unlock"]="Unlock PDF"
@@ -17,7 +18,7 @@ declare -A tools=(
     ["reorder"]="Reorder Pages"
 
 
-    ["html-to-pdf"]="HTML to PDF"
+    
     ["organize"]="Organize PDF"
     ["ocr"]="OCR PDF"
     ["form-filler"]="Fill PDF Forms"

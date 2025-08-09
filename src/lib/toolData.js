@@ -51,9 +51,10 @@ export const toolsData = [
     seoTitle: "Free JPG to PDF Converter - Convert Images to PDF Online",
     seoDescription: "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing.",
     features: ["Multiple image formats", "Batch conversion", "Custom page sizes", "Image ordering"],
-    relatedTools: ["/pdf-to-jpg", "/merge", "/compress", "/html-to-pdf"],
+    relatedTools: ["/pdf-to-jpg", "/merge", "/compress"],
     category: "Convert & Create"
   },
+  
   {
     href: "/pdf-to-jpg",
     title: "PDF to JPG",
@@ -171,19 +172,7 @@ export const toolsData = [
     relatedTools: ["/watermark", "/organize", "/merge", "/sign"],
     category: "Security & Privacy"
   },
-  {
-    href: "/html-to-pdf",
-    title: "HTML to PDF",
-    description: "Convert HTML code or web content into a PDF document.",
-    icon: <FileText className="w-8 h-8 text-blue-400" />,
-    comingSoon: false,
-    keywords: ["html to pdf", "convert html", "web to pdf", "html converter", "webpage to pdf"],
-    seoTitle: "Free HTML to PDF Converter - Convert Web Content to PDF",
-    seoDescription: "Convert HTML code and web content to PDF format. Free online HTML to PDF converter with styling preservation.",
-    features: ["HTML code conversion", "CSS styling support", "Web content capture", "Custom page sizes"],
-    relatedTools: ["/merge", "/compress", "/watermark", "/jpg-to-pdf"],
-    category: "Convert & Create"
-  },
+  
   {
     href: "/ocr",
     title: "OCR (Text Recognition)",
@@ -194,7 +183,7 @@ export const toolsData = [
     seoTitle: "Free PDF OCR Tool - Extract Text from Scanned PDFs",
     seoDescription: "Extract editable text from scanned PDFs and images using OCR technology. Free online optical character recognition tool.",
     features: ["Text extraction", "Multiple languages", "Image processing", "Editable output"],
-    relatedTools: ["/form-filler", "/pdf-to-text", "/advanced-ocr", "/medical-analyzer"],
+    relatedTools: ["/form-filler", "/advanced-ocr", "/medical-analyzer"],
     category: "AI & Analysis"
   },
   {
@@ -283,7 +272,7 @@ export const toolsData = [
     href: "/tools/pdf-table-extractor",
     category: "Convert",
     features: ["Extract tables automatically", "Export to CSV/Excel/JSON", "Preview extracted data", "Handle complex table structures"],
-    relatedTools: ["/ocr", "/pdf-to-excel", "/excel-to-pdf", "/pdf-to-text"],
+    relatedTools: ["/ocr"],
     category: "Advanced PDF Tools",
     isNew: true
   },
@@ -319,7 +308,7 @@ export const toolsData = [
     href: "/tools/advanced-ocr",
     category: "AI Tools",
     features: ["AI-enhanced text extraction", "Multiple language support", "Format preservation", "Confidence scoring"],
-    relatedTools: ["/ocr", "/legal-analyzer", "/medical-analyzer", "/pdf-to-text"],
+    relatedTools: ["/ocr", "/legal-analyzer", "/medical-analyzer"],
     category: "Advanced PDF Tools",
     isNew: true
   },

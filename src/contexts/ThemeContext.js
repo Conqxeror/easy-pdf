@@ -20,29 +20,17 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = localStorage.getItem('theme');
-    const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      setTheme(systemPreference);
-    }
+    setTheme('dark'); // Always set to dark
   }, []);
 
   useEffect(() => {
     if (mounted) {
-      localStorage.setItem('theme', theme);
-      document.documentElement.classList.remove('light', 'dark');
-      document.documentElement.classList.add(theme);
+      localStorage.setItem('theme', theme); // Still store 'dark'
+      document.documentElement.classList.add('dark'); // Only add dark
+      document.documentElement.classList.remove('light'); // Ensure light is removed
     }
   }, [theme, mounted]);
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-  };
-
-  const setLightTheme = () => setTheme('light');
   const setDarkTheme = () => setTheme('dark');
 
   if (!mounted) {
@@ -52,11 +40,8 @@ export const ThemeProvider = ({ children }) => {
   return (
     <ThemeContext.Provider value={{
       theme,
-      toggleTheme,
-      setLightTheme,
       setDarkTheme,
-      isDark: theme === 'dark',
-      isLight: theme === 'light'
+      isDark: true,
     }}>
       {children}
     </ThemeContext.Provider>

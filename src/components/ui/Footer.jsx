@@ -20,7 +20,7 @@ const footerLinks = [
       { name: "Reorder PDF Pages", href: "/reorder" },
       { name: "Organize PDF", href: "/organize" },
       { name: "Add Page Numbers", href: "/page-numbers" },
-      { name: "HTML to PDF", href: "/html-to-pdf" },
+      
       { name: "OCR", href: "/ocr" },
       { name: "Sign/Annotate PDF", href: "/sign" },
       { name: "PDF Form Filler", href: "/form-filler" },

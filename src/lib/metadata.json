@@ -19,10 +19,7 @@
     "title": "Free PDF Form Filler - Complete PDF Forms Online",
     "description": "Fill out PDF forms online with text, checkboxes, and signatures. Free PDF form completion tool with save functionality."
   },
-  "/html-to-pdf": {
-    "title": "Free HTML to PDF Converter - Convert Web Content to PDF",
-    "description": "Convert HTML code and web content to PDF format. Free online HTML to PDF converter with styling preservation."
-  },
+  
   "/invoice-generator": {
     "title": "PDF Invoice Generator - Create Professional Invoices Online",
     "description": "Generate professional PDF invoices with GST support, multiple currencies, and customizable templates. Perfect for businesses and freelancers."
@@ -31,10 +28,11 @@
     "title": "Free JPG to PDF Converter - Convert Images to PDF Online",
     "description": "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing."
   },
-  "/excel-to-pdf": {
-    "title": "Free Excel to PDF Converter - Convert Excel to PDF Online",
-    "description": "Convert Excel files to PDF format. Free online converter with batch processing and custom page sizing."
+  "/jpg-to-pdf": {
+    "title": "Free JPG to PDF Converter - Convert Images to PDF Online",
+    "description": "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing."
   },
+  
   "/legal-analyzer": {
     "title": "AI Legal Document Analyzer - Review Contracts Online",
     "description": "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts."

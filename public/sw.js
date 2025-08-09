@@ -22,6 +22,7 @@ const TOOL_PAGES = [
   '/compress',
   '/pdf-to-jpg',
   '/jpg-to-pdf',
+  
 
   '/protect',
   '/unlock',

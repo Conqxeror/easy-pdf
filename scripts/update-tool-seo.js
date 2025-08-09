@@ -61,6 +61,7 @@ const toolLayouts = [
       'Instant conversion'
     ]
   },
+  
   {
     path: 'src/app/pdf-to-jpg/layout.js',
     title: 'PDF to JPG Converter – Easy PDF Tool',

@@ -27,6 +27,7 @@ const fixes = [
     search: 'import { Loader } from "lucide-react";',
     replace: ''
   },
+  
   {
     file: 'src/app/pdf-to-jpg/page.js',
     search: 'import { Loader } from "lucide-react";',

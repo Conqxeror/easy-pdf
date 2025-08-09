@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUp } from "lucide-react";
 import React, { useState, useEffect  } from "react";
 import { initializePerformanceOptimizations } from "@/lib/webVitals";
 import UserPreferencesProvider from "@/lib/userPreferences";
@@ -126,6 +126,26 @@ export default function RootLayout({ children }) {
     });
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const skipButton = document.getElementById('skip-to-content-btn');
+      if (skipButton) {
+        if (window.scrollY > 100) { // Adjust this threshold as needed
+          skipButton.classList.remove('opacity-0', 'pointer-events-none');
+          skipButton.classList.add('opacity-100');
+        } else {
+          skipButton.classList.remove('opacity-100');
+          skipButton.classList.add('opacity-0', 'pointer-events-none');
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    // Initial check in case page is loaded with scroll
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <ThemeProvider>
       <UserPreferencesProvider>
@@ -133,9 +153,11 @@ export default function RootLayout({ children }) {
         {/* Skip Navigation Link */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-md z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          id="skip-to-content-btn"
+          className="fixed bottom-4 right-4 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center z-50 shadow-lg transition-opacity duration-300 opacity-0 pointer-events-none"
+          aria-label="Scroll to top"
         >
-          Skip to main content
+          <ArrowUp className="h-6 w-6" />
         </a>
         <Navbar />
         <main id="main-content" className="min-h-screen pt-24" aria-label="Main content">
