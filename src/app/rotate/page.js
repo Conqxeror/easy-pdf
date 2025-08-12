@@ -5,7 +5,7 @@ import React, { useState, useEffect  } from "react";
 
 
 import FileDropzone from "@/components/ui/FileDropzone";
-import { PDFDocument, Rotation } from "pdf-lib"; // Import Rotation enum
+import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 // import Loader from "@/components/ui/Loader"; // Removed Loader for consistency
@@ -110,17 +110,23 @@ export default function RotatePdfPage() {
         return;
       }
 
+      // Parse the rotation angle
       const rotationAngle = parseInt(angle, 10);
+
+      // Validate that rotationAngle is one of the allowed values
+      const validAngles = [0, 90, 180, 270];
+      const normalizedAngle = validAngles.includes(rotationAngle) 
+        ? rotationAngle 
+        : validAngles.reduce((prev, curr) => 
+            Math.abs(curr - rotationAngle) < Math.abs(prev - rotationAngle) ? curr : prev
+          );
 
       // Loop through the selected pages (0-based for pdf-lib)
       for (let i = start - 1; i < end; i++) {
         const page = pdfDoc.getPage(i);
-        // Add the new rotation angle to the existing rotation angle
-        // pdf-lib's setRotation takes a Rotation object.
-        // Rotation.of() is used directly as it's the most robust way to set rotation.
-        page.setRotation(
-          Rotation.of((page.getRotation().angle + rotationAngle) % 360)
-        );
+        
+        // Try to set rotation with the normalized angle (in degrees)
+        page.setRotation(normalizedAngle);
       }
 
       const pdfBytes = await pdfDoc.save();

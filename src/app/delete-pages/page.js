@@ -2,7 +2,7 @@
 
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
 import { PDFDocument } from "pdf-lib";
@@ -30,6 +30,17 @@ export default function DeletePagesPage() {
   const [selected, setSelected] = useState([]);
   const [pageRangeInput, setPageRangeInput] = useState(""); // New state for page range input
   const [pageRangeError, setPageRangeError] = useState(""); // New state for page range error
+  const [deletedPdfUrl, setDeletedPdfUrl] = useState(null); // New state for the result PDF URL
+  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
+
+  // Cleanup function for object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (deletedPdfUrl) {
+        URL.revokeObjectURL(deletedPdfUrl);
+      }
+    };
+  }, [deletedPdfUrl]); // Run when deletedPdfUrl changes or component unmounts
 
   /**
    * Handles the selection of PDF files.
@@ -166,20 +177,10 @@ export default function DeletePagesPage() {
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       // Create a URL for the Blob, allowing it to be downloaded
       const url = URL.createObjectURL(blob);
-
-      // Create a temporary anchor element to trigger the download
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "deleted-pages.pdf"; // Suggest a filename for the download
-
-      // Append the link to the document body, click it, and then remove it
-      // This is necessary to trigger downloads in some browsers/environments
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // Revoke the object URL to free up memory
-      URL.revokeObjectURL(url);
+      
+      // Set the URL for preview/download instead of auto-downloading
+      setDeletedPdfUrl(url);
+      setDownloadFileName(`deleted-pages-${new Date().toISOString().slice(0, 10)}.pdf`);
 
       setError(""); // Clear error on successful operation
     } catch (e) {
@@ -333,11 +334,39 @@ export default function DeletePagesPage() {
               className="mt-6 w-full max-w-xs mx-auto block bg-blue-700 text-white"
               onClick={handleDelete}
               disabled={isProcessing || numPages === 0 || selected.length === 0}
-              aria-label="Download PDF with pages deleted"
+              aria-label="Delete selected pages"
               data-test-id="delete-pages-button"
             >
-              {isProcessing ? "Processing..." : "Download PDF (Pages Deleted)"}
+              {isProcessing ? "Processing..." : "Delete Selected Pages"}
             </Button>
+
+            {deletedPdfUrl && !isProcessing && (
+              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
+                <div className="w-full text-center space-y-4 text-gray-100">
+                  <h3 className="text-2xl font-semibold flex items-center justify-center">
+                    Pages Deleted Successfully
+                  </h3>
+                  <p className="text-gray-400">
+                    {selected.length} page(s) have been removed from your document.
+                  </p>
+                </div>
+
+                <div className="flex justify-center">
+                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                    <a
+                      href={deletedPdfUrl}
+                      download={downloadFileName}
+                      className="text-center flex items-center"
+                    >
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                      </svg>
+                      Download Modified PDF
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

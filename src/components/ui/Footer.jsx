@@ -74,9 +74,37 @@ export default function Footer() {
             easy-pdf is a blazing-fast, privacy-first PDF toolkit for India and
             the world. 100% client-side, open-source, and SEO-optimized.
           </p>
+          <div className="flex space-x-4 mt-2">
+            <a
+              href="mailto:kadriwalimohammad@gmail.com"
+              aria-label="Email"
+              className="text-gray-400 hover:text-red-400 transition-colors"
+            >
+              <Mail size={20} />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/walimohammadkadri/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn Profile"
+              className="text-gray-400 hover:text-blue-500 transition-colors"
+            >
+              <Linkedin size={20} />
+            </a>
+            <a
+              href="https://github.com/Conqxeror"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub Profile"
+              className="text-gray-400 hover:text-gray-300 transition-colors"
+            >
+              <Github size={20} />
+            </a>
+          </div>
         </div>
 
-        {/* Dynamic Footer Links Sections (Tools & Company) */}
+        {/* Dynamic Footer Links Sections (Tools & Company) */
+        }
         {footerLinks.map((section) => (
           <div
             key={section.section}
@@ -95,7 +123,7 @@ export default function Footer() {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-blue-400 transition-colors text-base"
+                      className="text-gray-400 hover:text-blue-400 transition-colors text-base hover:underline"
                     >
                       {link.name}
                     </Link>
@@ -109,7 +137,7 @@ export default function Footer() {
                     {link.external ? (
                       <a
                         href={link.href}
-                        className="text-gray-400 hover:text-blue-400 transition-colors text-base break-all"
+                        className="text-gray-400 hover:text-blue-400 transition-colors text-base break-all hover:underline"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label={link.name}
@@ -119,68 +147,28 @@ export default function Footer() {
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-gray-400 hover:text-blue-400 transition-colors text-base"
+                        className="text-gray-400 hover:text-blue-400 transition-colors text-base hover:underline"
                       >
                         {link.name}
                       </Link>
                     )}
                   </li>
                 ))}
-
-                {/* New Contact Section */}
-                <div className="flex flex-col gap-3 col-span-full md:col-span-1 pt-4">
-                  {" "}
-                  {/* This will naturally sit after Company if Tools is col-span-2 */}
-                  <h2 className="text-xl font-semibold mb-3 text-white">
-                    Contact:
-                  </h2>
-                  <ul className="space-y-2">
-                    <li>
-                      <a
-                        href="mailto:kadriwalimohammad@gmail.com"
-                        aria-label="Email"
-                        className="text-gray-400 hover:text-red-400 transition-colors text-base flex items-center gap-2"
-                      >
-                        <Mail size={18} /> kadriwalimohammad@gmail.com
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.linkedin.com/in/walimohammadkadri/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="LinkedIn Profile"
-                        className="text-gray-400 hover:text-blue-500 transition-colors text-base flex items-center gap-2"
-                      >
-                        <Linkedin size={18} /> LinkedIn Profile
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href="https://github.com/Conqxeror"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="GitHub Profile"
-                        className="text-gray-400 hover:text-gray-300 transition-colors text-base flex items-center gap-2"
-                      >
-                        <Github size={18} /> GitHub Profile
-                      </a>
-                    </li>
-                  </ul>
-                </div>
               </ul>
             )}
           </div>
         ))}
       </div>
 
-      {/* Copyright and Bottom Info */}
+      {/* Copyright and Bottom Info */
+      }
       <div className="max-w-7xl mx-auto border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
         <span>&copy; {currentYear} easy-pdf. All rights reserved.</span>
         <span className="text-gray-600">Made with &hearts; in India.</span>
       </div>
 
-      {/* SEO: Organization structured data */}
+      {/* SEO: Organization structured data */
+      }
       <script
         type="application/ld+json"
         suppressHydrationWarning

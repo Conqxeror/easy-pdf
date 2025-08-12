@@ -27,6 +27,8 @@ export default function SignPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [numPages, setNumPages] = useState(0); // Total pages in uploaded PDF
   const [currentPageIdx, setCurrentPageIdx] = useState(0); // 0-based index of PDF page being previewed
+  const [signedPdfUrl, setSignedPdfUrl] = useState(null); // New state for the result PDF URL
+  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
 
   // Signature Drawing States & Refs
   const signatureCanvasRef = useRef(null);
@@ -218,8 +220,12 @@ export default function SignPage() {
         console.log("Previous PDF document proxy destroyed.");
       }
       // renderTaskRef cleanup is already handled inside renderPdfPreview or when a new file is loaded.
+      // Revoke object URL to prevent memory leaks
+      if (signedPdfUrl) {
+        URL.revokeObjectURL(signedPdfUrl);
+      }
     };
-  }, [pdfDocProxy]); // Only triggers when pdfDocProxy state changes
+  }, [pdfDocProxy, signedPdfUrl]); // Only triggers when pdfDocProxy or signedPdfUrl state changes
 
   // --- File Handling ---
   const handleFiles = async (newFiles) => {
@@ -420,13 +426,8 @@ export default function SignPage() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `signed_${files[0].name || "document"}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      setSignedPdfUrl(url);
+      setDownloadFileName(`signed_${files[0].name || "document"}.pdf`);
 
       setError("");
     } catch (e) {
@@ -615,10 +616,38 @@ export default function SignPage() {
               !signatureDataUrl ||
               numPages === 0
             }
-            aria-label="Sign and Download PDF"
+            aria-label="Sign PDF"
           >
-            {isProcessing ? "Processing..." : "Sign & Download PDF"}
+            {isProcessing ? "Processing..." : "Sign PDF"}
           </Button>
+
+          {signedPdfUrl && !isProcessing && (
+            <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
+              <div className="w-full text-center space-y-4 text-gray-100">
+                <h3 className="text-2xl font-semibold flex items-center justify-center">
+                  PDF Signed Successfully
+                </h3>
+                <p className="text-gray-400">
+                  Your signature has been applied to the PDF document.
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                  <a
+                    href={signedPdfUrl}
+                    download={downloadFileName}
+                    className="text-center flex items-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Signed PDF
+                  </a>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
         <ToolPageContent
           toolName="Sign / Annotate PDF"

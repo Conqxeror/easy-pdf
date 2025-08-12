@@ -105,7 +105,7 @@
   
   html {
     scroll-behavior: smooth;
-    background-color: rgb(var(--background)); /* Ensure this uses the variable */
+    background-color: rgb(var(--background));
   }
   
   body {
@@ -177,15 +177,16 @@
   .card-standard {
     background-color: rgb(var(--card));
     color: rgb(var(--card-foreground));
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     border: 1px solid rgb(var(--border));
     box-shadow: var(--shadow-md);
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease;
   }
   
   .card-standard:hover {
     box-shadow: var(--shadow-lg);
     border-color: rgb(var(--primary));
+    transform: translateY(-2px);
   }
   
   /* Standard Button Reset */
@@ -201,7 +202,7 @@
   /* Focus Styles */
   .focus-ring {
     outline: none;
-    box-shadow: 0 0 0 2px rgb(var(--ring) / 0.5);
+    box-shadow: 0 0 0 3px rgb(var(--ring) / 0.5);
   }
   
   /* Standard Section Spacing */
@@ -247,8 +248,8 @@
   }
   
   .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-track {
@@ -257,7 +258,7 @@
   
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgb(var(--muted-foreground) / 0.5);
-    border-radius: 3px;
+    border-radius: 4px;
   }
   
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -283,6 +284,26 @@
   .status-info {
     color: rgb(var(--info));
     background-color: rgb(var(--info) / 0.1);
+  }
+  
+  /* Input Styles */
+  .input-standard {
+    background-color: rgb(var(--card));
+    color: rgb(var(--card-foreground));
+    border: 1px solid rgb(var(--border));
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+    transition: all 0.2s ease;
+  }
+  
+  .input-standard:focus {
+    outline: none;
+    border-color: rgb(var(--primary));
+    box-shadow: 0 0 0 3px rgb(var(--primary) / 0.2);
+  }
+  
+  .input-standard::placeholder {
+    color: rgb(var(--muted-foreground));
   }
 }
 
@@ -313,6 +334,10 @@
     animation: scaleIn 0.3s ease-out;
   }
   
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+  }
+  
   /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;
@@ -321,6 +346,28 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Line clamp utilities */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 }
 
@@ -353,6 +400,17 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

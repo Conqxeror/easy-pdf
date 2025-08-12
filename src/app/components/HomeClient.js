@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { Suspense, useState, useEffect  } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
-import { Lock, Cloud, Code, ArrowRight } from "lucide-react";
+import { Lock, Cloud, Code, ArrowRight, Zap, Globe, Heart } from "lucide-react";
 import ToolCard from "@/components/ui/ToolCard";
 import { toolsData } from "@/lib/toolData";
 import SponsorSection from "@/components/ui/SponsorSection";
@@ -105,6 +105,12 @@ export default function HomeClient() {
     }
   ];
 
+  const stats = [
+    { icon: <Zap className="w-5 h-5" />, value: "100%", label: "Free to Use" },
+    { icon: <Globe className="w-5 h-5" />, value: "50+", label: "PDF Tools" },
+    { icon: <Heart className="w-5 h-5" />, value: "10K+", label: "Happy Users" },
+  ];
+
   return (
     <>
       <SkipToMain />
@@ -146,7 +152,7 @@ export default function HomeClient() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 bg-blue-600 hover:bg-blue-700 text-white"
+                className="px-8 bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl"
                 aria-describedby="get-started-description"
               >
                 <Link href="/merge" onClick={handleGetStartedClick}>
@@ -162,7 +168,7 @@ export default function HomeClient() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 border-2 border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                className="px-8 border-2 border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 shadow-md"
               >
                 <Link href="#tools" onClick={handleExploreToolsClick}>
                   Explore All Tools
@@ -174,7 +180,7 @@ export default function HomeClient() {
                   onClick={handleInstallClick}
                   variant="success"
                   size="lg"
-                  className="px-8 bg-green-600 hover:bg-green-700 text-white"
+                  className="px-8 bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl"
                   aria-label="Install easy-pdf as a Progressive Web App"
                 >
                   Install App
@@ -182,6 +188,21 @@ export default function HomeClient() {
               )}
             </div>
           </Hero>
+
+          {/* Stats Section */}
+          <Section spacing="small" className="py-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {stats.map((stat, index) => (
+                <div key={index} className="bg-gray-800/50 rounded-xl p-6 text-center border border-gray-700 hover:border-blue-500 transition-colors">
+                  <div className="flex justify-center mb-3 text-blue-400">
+                    {stat.icon}
+                  </div>
+                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-gray-400">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </Section>
 
           <Section>
             <AccessibleHeading level={2} className="text-3xl text-center mb-8 text-white">
@@ -236,7 +257,7 @@ export default function HomeClient() {
                 asChild
                 variant="gradient"
                 size="lg"
-                className="px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white"
+                className="px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl"
               >
                 <Link href="/merge" onClick={handleGetStartedClick}>
                   Get Started Now

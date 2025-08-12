@@ -37,6 +37,8 @@ export default function FormFillerPage() {
   const [fontSize, setFontSize] = useState(12); // Default font size
   const [color, setColor] = useState("#000000"); // Default black color
   const [numPages, setNumPages] = useState(0); // Total number of pages in the PDF
+  const [filledPdfUrl, setFilledPdfUrl] = useState(null); // New state for the result PDF URL
+  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
   const canvasRef = useRef(null); // Ref for the main visible canvas element
   const [pdfDocProxy, setPdfDocProxy] = useState(null); // Stores PDFDocumentProxy from pdfjs
 
@@ -179,8 +181,12 @@ export default function FormFillerPage() {
         pdfImageRef.current.close();
         pdfImageRef.current = null;
       }
+      // Revoke object URL to prevent memory leaks
+      if (filledPdfUrl) {
+        URL.revokeObjectURL(filledPdfUrl);
+      }
     };
-  }, [pdfDocProxy]);
+  }, [pdfDocProxy, filledPdfUrl]);
 
   // Load PDF and set number of pages
   const handleFiles = async (newFiles) => {
@@ -334,13 +340,8 @@ export default function FormFillerPage() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `filled_form_${files[0].name || "document"}.pdf`; // Dynamic filename
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url); // Revoke the object URL
+      setFilledPdfUrl(url);
+      setDownloadFileName(`filled_form_${files[0].name || "document"}.pdf`);
 
       setError(""); // Clear error on success
     } catch (err) {
@@ -543,10 +544,10 @@ export default function FormFillerPage() {
             </Alert>
           )}
 
-          <Button
+                    <Button
             className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                       bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
-                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
+                       bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
+                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900"
             onClick={handleFormFill}
             disabled={
               isProcessing ||
@@ -556,8 +557,36 @@ export default function FormFillerPage() {
             }
             aria-label="Fill PDF Form"
           >
-            {isProcessing ? "Processing..." : "Fill Form & Download"}
+            {isProcessing ? "Processing..." : "Fill Form"}
           </Button>
+
+          {filledPdfUrl && !isProcessing && (
+            <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
+              <div className="w-full text-center space-y-4 text-gray-100">
+                <h3 className="text-2xl font-semibold flex items-center justify-center">
+                  Form Filled Successfully
+                </h3>
+                <p className="text-gray-400">
+                  Your text has been added to the PDF document.
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                  <a
+                    href={filledPdfUrl}
+                    download={downloadFileName}
+                    className="text-center flex items-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Filled PDF
+                  </a>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
         <ToolPageContent
           toolName="PDF Form Filler"

@@ -41,9 +41,14 @@ const StepsList = memo(({ steps }) => {
     return null;
   }
   return (
-    <ol className="list-decimal list-inside space-y-4 text-gray-300">
+    <ol className="space-y-4 text-gray-300">
       {(steps || []).map((step, index) => (
-        <li key={index} className="leading-relaxed">{step}</li>
+        <li key={index} className="flex items-start">
+          <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-blue-500 text-white text-xs font-bold mr-3 mt-0.5">
+            {index + 1}
+          </span>
+          <span className="leading-relaxed">{step}</span>
+        </li>
       ))}
     </ol>
   );
@@ -52,29 +57,37 @@ const StepsList = memo(({ steps }) => {
 // Memoized features grid
 const FeaturesGrid = memo(({ toolName: _toolName }) => (
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
-    <div>
-      <h4 className="text-lg font-semibold text-white mb-3">🔒 100% Secure & Private</h4>
+    <div className="p-5 bg-gray-700/50 rounded-lg border border-gray-600 hover:border-blue-500 transition-colors">
+      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+        <span className="mr-2">🔒</span> 100% Secure & Private
+      </h4>
       <p className="leading-relaxed">
         All processing happens in your browser. Your files never leave your device, 
         ensuring complete privacy and security for your sensitive documents.
       </p>
     </div>
-    <div>
-      <h4 className="text-lg font-semibold text-white mb-3">⚡ Fast & Efficient</h4>
+    <div className="p-5 bg-gray-700/50 rounded-lg border border-gray-600 hover:border-blue-500 transition-colors">
+      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+        <span className="mr-2">⚡</span> Fast & Efficient
+      </h4>
       <p className="leading-relaxed">
         Our optimized algorithms process your PDFs quickly without compromising quality. 
         No waiting times or server delays.
       </p>
     </div>
-    <div>
-      <h4 className="text-lg font-semibold text-white mb-3">💰 Completely Free</h4>
+    <div className="p-5 bg-gray-700/50 rounded-lg border border-gray-600 hover:border-blue-500 transition-colors">
+      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+        <span className="mr-2">💰</span> Completely Free
+      </h4>
       <p className="leading-relaxed">
         No hidden costs, subscriptions, or limitations. All tools are free to use 
         with unlimited access and no watermarks.
       </p>
     </div>
-    <div>
-      <h4 className="text-lg font-semibold text-white mb-3">🌐 Works Everywhere</h4>
+    <div className="p-5 bg-gray-700/50 rounded-lg border border-gray-600 hover:border-blue-500 transition-colors">
+      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+        <span className="mr-2">🌐</span> Works Everywhere
+      </h4>
       <p className="leading-relaxed">
         Compatible with all modern browsers and devices. Works on Windows, Mac, Linux, 
         iOS, and Android without any downloads.

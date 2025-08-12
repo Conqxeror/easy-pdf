@@ -12,7 +12,7 @@ export default function DesktopNav({ closeAllMenus }) {
 
   return (
     <div className="hidden md:block h-full">
-      <div className="ml-10 flex items-center space-x-4 h-full">
+      <div className="ml-10 flex items-center space-x-2 h-full">
         {toolCategories.map((category) => (
           <div
             key={category.name}
@@ -22,12 +22,12 @@ export default function DesktopNav({ closeAllMenus }) {
           >
             <button
               className={clsx(
-                "px-3 py-2 rounded-md text-sm font-medium flex items-center h-full",
+                "px-3 py-2 rounded-lg text-sm font-medium flex items-center h-full transition-colors duration-200",
                 desktopSubmenuOpen === category.name ||
                   category.submenu.some((i) => pathname === i.href)
                   ? "bg-gray-800 text-white"
                   : "text-gray-300 hover:bg-gray-800 hover:text-white",
-                "transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
               )}
               aria-expanded={desktopSubmenuOpen === category.name}
               aria-haspopup="true"
@@ -44,24 +44,22 @@ export default function DesktopNav({ closeAllMenus }) {
             </button>
 
             {desktopSubmenuOpen === category.name && (
-              <div className="absolute z-10 left-0 top-full mt-0 w-56 rounded-md shadow-lg bg-gray-800 border border-gray-700 animate-fade-in-up">
-                {" "}
-                <div className="py-1">
+              <div className="absolute z-10 left-0 top-full mt-2 w-56 rounded-xl shadow-xl bg-gray-800 border border-gray-700 animate-fade-in-up">
+                <div className="py-2">
                   {category.submenu.map((subItem) => (
                     <Link
                       key={subItem.name}
                       href={subItem.href}
                       onClick={closeAllMenus}
                       className={clsx(
-                        "px-4 py-2 text-sm flex items-center gap-2",
+                        "px-4 py-3 text-sm flex items-center gap-3 transition-colors duration-200",
                         pathname === subItem.href
-                          ? "bg-blue-600 text-white"
+                          ? "bg-blue-600/20 text-white border-r-2 border-blue-500"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "transition-colors duration-200"
                       )}
                     >
-                      {subItem.icon}
-                      {subItem.name}
+                      <span className="flex-shrink-0">{subItem.icon}</span>
+                      <span>{subItem.name}</span>
                     </Link>
                   ))}
                 </div>

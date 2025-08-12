@@ -207,7 +207,7 @@ export const FeatureGrid = ({ features, className, ...props }) => {
       {features.map((feature, index) => (
         <Card 
           key={index} 
-          className="text-center group animate-slide-up"
+          className="text-center group animate-slide-up border-2 border-transparent hover:border-primary transition-all duration-300"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
           {feature.icon && (

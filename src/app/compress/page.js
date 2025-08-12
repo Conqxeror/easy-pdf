@@ -1,12 +1,9 @@
 "use client";
 
-
-
 import React, { useState, useCallback  } from "react";
-
-
 import { PDFDocument } from "pdf-lib";
-import * as pdfjs from "pdfjs-dist"; // Import pdfjs-dist
+import * as pdfjs from "pdfjs-dist";
+import { Download, FileText, Zap } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -23,7 +20,7 @@ export default function CompressPDFs() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   const [compressedPdfUrl, setCompressedPdfUrl] = useState(null);
-  const [compressionLevel, setCompressionLevel] = useState("balanced"); // Renamed from compressionMode for clarity
+  const [compressionLevel, setCompressionLevel] = useState("balanced");
   const [compressionPercentage, setCompressionPercentage] = useState(null);
   const [originalSize, setOriginalSize] = useState(0);
   const [compressedSize, setCompressedSize] = useState(0);
@@ -31,12 +28,8 @@ export default function CompressPDFs() {
   const [processingMessage, setProcessingMessage] = useState("");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
-  const [imageQuality, setImageQuality] = useState(75); // New state for image quality, default 75%
+  const [imageQuality, setImageQuality] = useState(75);
 
-  /**
-   * Handles file selection from the dropzone.
-   * @param {File[]} files - An array of selected files.
-   */
   const handleFiles = (files) => {
     const selectedFile = files[0];
     setFile(selectedFile);
@@ -46,14 +39,9 @@ export default function CompressPDFs() {
     setCompressionPercentage(null);
     setCompressedSize(0);
     setError("");
-    setProgress(0); // Reset progress on new file selection
+    setProgress(0);
   };
 
-  /**
-   * Formats file size into a human-readable string (e.g., KB, MB).
-   * @param {number} bytes - The size in bytes.
-   * @returns {string} Formatted size string.
-   */
   const formatFileSize = useCallback((bytes) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -62,11 +50,6 @@ export default function CompressPDFs() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }, []);
 
-  /**
-   * Compresses the uploaded PDF file.
-   * This function renders each PDF page to a canvas, converts it to a JPEG image
-   * with a specified quality, and then creates a new PDF from these compressed images.
-   */
   const compressPDF = async () => {
     if (!file) {
       setError("Please upload a PDF file first.");
@@ -77,27 +60,21 @@ export default function CompressPDFs() {
     setIsCompressing(true);
     setProcessingMessage("Loading PDF document...");
     setProgress(0);
-    setCompressedPdfUrl(null); // Clear previous URL
+    setCompressedPdfUrl(null);
 
     try {
-      // Step 1: Load the PDF using pdfjs-dist
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       const numPages = pdf.numPages;
-      setProgress(10); // Initial progress after loading document
+      setProgress(10);
       setProcessingMessage("Processing pages...");
 
-      const newPdfDoc = await PDFDocument.create(); // Create a new PDF document
-
-      // The jpegQuality is now directly taken from imageQuality state,
-      // which is set by the slider or by selecting a compression level preset.
+      const newPdfDoc = await PDFDocument.create();
       const finalJpegQuality = imageQuality;
 
-      // Step 2: Iterate through each page, render to canvas, and convert to JPEG
       for (let i = 1; i <= numPages; i++) {
         setProcessingMessage(`Compressing page ${i} of ${numPages}...`);
         const page = await pdf.getPage(i);
-        // Scale for rendering quality - higher scale means better quality image for compression
         const viewport = page.getViewport({ scale: 1.5 });
 
         const canvas = document.createElement("canvas");
@@ -105,24 +82,18 @@ export default function CompressPDFs() {
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
-        // Render PDF page to canvas
         await page.render({
           canvasContext: context,
           viewport: viewport,
         }).promise;
 
-        // Convert canvas to JPEG data URL with specified quality
-        // `finalJpegQuality / 100` converts percentage to a 0-1 quality factor
         const imageDataUrl = canvas.toDataURL(
           "image/jpeg",
           finalJpegQuality / 100
         );
 
-        // Step 3: Embed the compressed JPEG into the new PDF
-        // Use embedJpg as the canvas output is JPEG
         const embeddedImage = await newPdfDoc.embedJpg(imageDataUrl);
 
-        // Add a new page to the new PDF document with the embedded image
         const newPage = newPdfDoc.addPage([
           embeddedImage.width,
           embeddedImage.height,
@@ -134,25 +105,22 @@ export default function CompressPDFs() {
           height: embeddedImage.height,
         });
 
-        // Update progress
-        setProgress(10 + Math.round((i / numPages) * 80)); // 10% for load, 80% for page processing
+        setProgress(10 + Math.round((i / numPages) * 80));
       }
 
       setProcessingMessage("Saving compressed PDF...");
 
-      // Step 4: Save the new PDF and create a download URL
       const compressedPdfBytes = await newPdfDoc.save();
       const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       setCompressedPdfUrl(url);
 
-      // Calculate compression percentage
       const newSize = blob.size;
       setCompressedSize(newSize);
       const reduction = ((originalSize - newSize) / originalSize) * 100;
-      setCompressionPercentage(Math.max(0, Math.round(reduction))); // Ensure non-negative
+      setCompressionPercentage(Math.max(0, Math.round(reduction)));
 
-      setProgress(100); // Complete
+      setProgress(100);
       setProcessingMessage("Compression complete!");
     } catch (error) {
       console.error("Error compressing PDF:", error);
@@ -167,14 +135,16 @@ export default function CompressPDFs() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-8 md:py-12 px-4">
         <div className="max-w-4xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-            Compress PDF
-          </h1>
-          <p className="mb-8 text-lg text-gray-300 text-center">
-            Reduce the file size of your PDF documents with powerful client-side compression.
-          </p>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+              Compress PDF
+            </h1>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Reduce the file size of your PDF documents with powerful client-side compression.
+            </p>
+          </div>
 
           <div className="space-y-6">
             <FileDropzone
@@ -190,105 +160,119 @@ export default function CompressPDFs() {
             />
 
             {fileName && (
-              <div className="space-y-2 text-gray-200">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">File:</span>
-                  <span className="font-medium">{fileName}</span>
+              <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <div className="flex items-center mb-3">
+                  <div className="p-2 rounded-lg bg-blue-500/10 mr-3">
+                    <FileText className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-100">{fileName}</h3>
+                    <p className="text-sm text-gray-400">
+                      {formatFileSize(originalSize)}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">Original Size:</span>
-                  <span className="font-medium">
-                    {formatFileSize(originalSize)}
-                  </span>
-                </div>
+                
                 {compressedSize > 0 && !isCompressing && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-300">Compressed Size:</span>
-                    <span className="font-medium text-green-400">
-                      {formatFileSize(compressedSize)} ({compressionPercentage}%
-                      smaller)
-                    </span>
+                  <div className="mt-4 pt-4 border-t border-gray-700">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-300">Original Size:</span>
+                      <span className="font-medium">
+                        {formatFileSize(originalSize)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-300">Compressed Size:</span>
+                      <span className="font-medium text-green-400">
+                        {formatFileSize(compressedSize)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300">Reduction:</span>
+                      <span className="font-medium text-blue-400">
+                        {compressionPercentage}% smaller
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>
             )}
 
-            <div className="space-y-4">
-              <Label className="text-gray-200">Compression Level</Label>
-              <RadioGroup
-                value={compressionLevel}
-                onValueChange={(value) => {
-                  setCompressionLevel(value);
-                  // Update imageQuality based on selected compression level
-                  if (value === "mild") {
-                    setImageQuality(85);
-                  } else if (value === "balanced") {
-                    setImageQuality(75);
-                  } else if (value === "aggressive") {
-                    setImageQuality(50);
-                  }
-                }}
-                className="grid grid-cols-3 gap-4"
-              >
-                <div>
-                  <RadioGroupItem
-                    value="mild"
-                    id="mild"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="mild"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100"
-                  >
-                    <span>Mild</span>
-                    <span className="text-xs text-gray-400">
-                      Good Quality (85%)
-                    </span>{" "}
-                    {/* Added percentage */}
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="balanced"
-                    id="balanced"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="balanced"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100"
-                  >
-                    <span>Balanced</span>
-                    <span className="text-xs text-gray-400">
-                      Recommended (75%)
-                    </span>{" "}
-                    {/* Added percentage */}
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="aggressive"
-                    id="aggressive"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="aggressive"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100"
-                  >
-                    <span>Aggressive</span>
-                    <span className="text-xs text-gray-400">
-                      Smallest Size (50%)
-                    </span>{" "}
-                    {/* Added percentage */}
-                  </Label>
-                </div>
-              </RadioGroup>
+            <div className="space-y-5">
+              <div>
+                <Label className="text-gray-200 mb-3 block">Compression Level</Label>
+                <RadioGroup
+                  value={compressionLevel}
+                  onValueChange={(value) => {
+                    setCompressionLevel(value);
+                    if (value === "mild") {
+                      setImageQuality(85);
+                    } else if (value === "balanced") {
+                      setImageQuality(75);
+                    } else if (value === "aggressive") {
+                      setImageQuality(50);
+                    }
+                  }}
+                  className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+                >
+                  <div>
+                    <RadioGroupItem
+                      value="mild"
+                      id="mild"
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor="mild"
+                      className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100 cursor-pointer transition-colors"
+                    >
+                      <span className="font-medium">Mild</span>
+                      <span className="text-xs text-gray-400 mt-1">
+                        Good Quality (85%)
+                      </span>
+                    </Label>
+                  </div>
+                  <div>
+                    <RadioGroupItem
+                      value="balanced"
+                      id="balanced"
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor="balanced"
+                      className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100 cursor-pointer transition-colors"
+                    >
+                      <span className="font-medium">Balanced</span>
+                      <span className="text-xs text-gray-400 mt-1">
+                        Recommended (75%)
+                      </span>
+                    </Label>
+                  </div>
+                  <div>
+                    <RadioGroupItem
+                      value="aggressive"
+                      id="aggressive"
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor="aggressive"
+                      className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100 cursor-pointer transition-colors"
+                    >
+                      <span className="font-medium">Aggressive</span>
+                      <span className="text-xs text-gray-400 mt-1">
+                        Smallest Size (50%)
+                      </span>
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
 
-              {/* Slider for image quality, now always shown */}
-              <div className="space-y-2">
-                <Label className="text-gray-200">
-                  Image Quality for Compression: {imageQuality}%
-                </Label>{" "}
-                {/* Clarified label */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <Label className="text-gray-200">
+                    Image Quality: {imageQuality}%
+                  </Label>
+                  <Zap className="w-4 h-4 text-yellow-400" />
+                </div>
                 <Slider
                   value={[imageQuality]}
                   onValueChange={([value]) => setImageQuality(value)}
@@ -296,17 +280,19 @@ export default function CompressPDFs() {
                   max={100}
                   step={1}
                   className="w-full"
-                  // Add styles to slider components if needed to match theme
-                  // E.g., track-background, thumb-color
                 />
+                <div className="flex justify-between text-xs text-gray-400">
+                  <span>Smaller File</span>
+                  <span>Better Quality</span>
+                </div>
               </div>
             </div>
 
             {isCompressing && (
-              <div className="space-y-2">
+              <div className="space-y-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
                 <Progress
                   value={progress}
-                  className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
+                  className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-500 rounded-full"
                 />
                 <p className="text-sm text-center text-gray-400">
                   {processingMessage || `Compressing PDF... ${progress}%`}
@@ -316,52 +302,68 @@ export default function CompressPDFs() {
 
             {error && <Alert variant="destructive">{error}</Alert>}
 
-            <Button
-              onClick={compressPDF}
-              disabled={isCompressing || !file}
-              className="w-full bg-blue-700 text-white"
-              size="lg"
-            >
-              {isCompressing ? "Compressing..." : "Compress PDF"}
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                onClick={compressPDF}
+                disabled={isCompressing || !file}
+                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+                size="lg"
+              >
+                {isCompressing ? (
+                  <span className="flex items-center">
+                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                    Compressing...
+                  </span>
+                ) : (
+                  "Compress PDF"
+                )}
+              </Button>
+            </div>
 
             {compressedPdfUrl && !isCompressing && (
-              <div className="flex flex-col gap-4 border-t border-gray-700 pt-6">
-                <div className="w-full text-center space-y-2 text-gray-100">
-                  <h3 className="text-xl font-semibold">Compression Results</h3>
-                  <div className="flex justify-between max-w-md mx-auto text-sm">
-                    <div className="text-gray-400">
-                      Original:{" "}
-                      <span className="font-medium">
-                        {formatFileSize(originalSize)}
-                      </span>
+              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+                <div className="w-full text-center space-y-4 text-gray-100">
+                  <h3 className="text-2xl font-semibold flex items-center justify-center">
+                    <Download className="w-6 h-6 mr-2 text-green-400" />
+                    Compression Complete
+                  </h3>
+                  
+                  <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="text-center p-3 bg-gray-800 rounded-lg">
+                        <div className="text-gray-400 text-sm">Original Size</div>
+                        <div className="font-medium">{formatFileSize(originalSize)}</div>
+                      </div>
+                      <div className="text-center p-3 bg-gray-800 rounded-lg">
+                        <div className="text-gray-400 text-sm">Compressed Size</div>
+                        <div className="font-medium text-green-400">{formatFileSize(compressedSize)}</div>
+                      </div>
+                      <div className="text-center p-3 bg-gray-800 rounded-lg">
+                        <div className="text-gray-400 text-sm">Saved</div>
+                        <div className="font-medium text-blue-400">{compressionPercentage}%</div>
+                      </div>
                     </div>
-                    <div className="text-green-400">
-                      Compressed:{" "}
-                      <span className="font-medium">
-                        {formatFileSize(compressedSize)}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text-blue-400 font-medium">
-                    Reduced by {compressionPercentage}%
                   </div>
                 </div>
 
-                <Button asChild variant="success" className="w-full">
-                  <a
-                    href={compressedPdfUrl}
-                    download={`compressed_${fileName}`}
-                    className="text-center"
-                  >
-                    Download Compressed PDF
-                  </a>
-                </Button>
+                <div className="flex justify-center">
+                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                    <a
+                      href={compressedPdfUrl}
+                      download={`compressed_${fileName}`}
+                      className="text-center flex items-center"
+                    >
+                      <Download className="w-5 h-5 mr-2" />
+                      Download Compressed PDF
+                    </a>
+                  </Button>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
+      
       <ToolPageContent
         toolName="Compress PDF"
         toolDescription="Reduce the file size of your PDF documents with our free online tool. Our PDF compressor is fast, easy to use, and preserves the quality of your files. Choose from different compression levels to find the perfect balance between file size and document quality. All processing is done securely in your browser, ensuring your files remain private."

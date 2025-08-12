@@ -25,13 +25,13 @@ const FAQ = ({ faqs }) => {
       {faqs.map((faq, index) => (
         <div
           key={index}
-          className="border border-gray-600 rounded-lg overflow-hidden"
+          className="border border-gray-600 rounded-lg overflow-hidden transition-all duration-200 hover:border-gray-500"
           itemScope
           itemType="https://schema.org/Question"
         >
           <button
             onClick={() => toggleItem(index)}
-            className="w-full px-4 py-3 text-left bg-gray-700 hover:bg-gray-600 transition-colors duration-200 flex items-center justify-between"
+            className="w-full px-5 py-4 text-left bg-gray-700 hover:bg-gray-600 transition-colors duration-200 flex items-center justify-between"
             aria-expanded={openItems.has(index)}
           >
             <h4 
@@ -48,7 +48,7 @@ const FAQ = ({ faqs }) => {
           </button>
           {openItems.has(index) && (
             <div 
-              className="px-4 py-3 bg-gray-800 border-t border-gray-600"
+              className="px-5 py-4 bg-gray-800 border-t border-gray-600 animate-fade-in"
               itemScope
               itemType="https://schema.org/Answer"
             >

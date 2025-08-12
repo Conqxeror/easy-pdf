@@ -23,6 +23,8 @@ export default function ReorderPage() {
   // pageOrder stores the 0-based indices of pages in their current display order
   const [pageOrder, setPageOrder] = useState([]);
   const [numPages, setNumPages] = useState(0);
+  const [reorderedPdfUrl, setReorderedPdfUrl] = useState(null); // New state for the result PDF URL
+  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
 
   // pdf.js document proxy for rendering thumbnails
   const [pdfDocProxy, setPdfDocProxy] = useState(null);
@@ -41,13 +43,16 @@ export default function ReorderPage() {
       if (pdfDocProxy) {
         pdfDocProxy.destroy();
       }
-      // Cancel any ongoing render tasks
+      // Cancel any ongoing render tasks to prevent errors on unmount
       Object.values(renderTaskRefs.current).forEach((task) => {
         if (task) task.cancel();
       });
-      renderTaskRefs.current = {};
+      // Revoke object URL to prevent memory leaks
+      if (reorderedPdfUrl) {
+        URL.revokeObjectURL(reorderedPdfUrl);
+      }
     };
-  }, [pdfDocProxy]);
+  }, [pdfDocProxy, reorderedPdfUrl]); // Only re-run when pdfDocProxy or reorderedPdfUrl changes
 
   // Function to render a specific PDF page thumbnail to a canvas
   // This useCallback depends only on pdfDocProxy because the canvas node is passed directly.
@@ -238,13 +243,8 @@ export default function ReorderPage() {
       const pdfBytes = await newDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `reordered_${files[0].name || "document"}.pdf`;
-      document.body.appendChild(link); // Append link to body before clicking
-      link.click();
-      document.body.removeChild(link); // Remove link after clicking
-      URL.revokeObjectURL(url); // Revoke the object URL to release memory
+      setReorderedPdfUrl(url);
+      setDownloadFileName(`reordered_${files[0].name || "document"}.pdf`);
 
       setError(""); // Clear error on success
     } catch (e) {
@@ -343,10 +343,38 @@ export default function ReorderPage() {
                        text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
             onClick={handleReorder}
             disabled={isProcessing || numPages === 0}
-            aria-label="Download reordered PDF"
+            aria-label="Reorder pages"
           >
-            {isProcessing ? "Processing..." : "Download Reordered PDF"}
+            {isProcessing ? "Processing..." : "Reorder Pages"}
           </Button>
+
+          {reorderedPdfUrl && !isProcessing && (
+            <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
+              <div className="w-full text-center space-y-4 text-gray-100">
+                <h3 className="text-2xl font-semibold flex items-center justify-center">
+                  Pages Reordered Successfully
+                </h3>
+                <p className="text-gray-400">
+                  Your PDF pages have been rearranged according to your preferences.
+                </p>
+              </div>
+
+              <div className="flex justify-center">
+                <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                  <a
+                    href={reorderedPdfUrl}
+                    download={downloadFileName}
+                    className="text-center flex items-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Reordered PDF
+                  </a>
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
         <ToolPageContent
           toolName="Reorder PDF Pages"

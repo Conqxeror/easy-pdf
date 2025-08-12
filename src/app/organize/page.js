@@ -31,6 +31,8 @@ export default function OrganizePage() {
   const [numPages, setNumPages] = useState(0);
   // selected stores the 0-based indices of pages marked for exclusion/removal
   const [selected, setSelected] = useState([]);
+  const [organizedPdfUrl, setOrganizedPdfUrl] = useState(null); // New state for the result PDF URL
+  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
 
   // pdf.js document proxy for rendering thumbnails
   const [pdfDocProxy, setPdfDocProxy] = useState(null);
@@ -54,8 +56,12 @@ export default function OrganizePage() {
         if (task) task.cancel();
       });
       renderTaskRefs.current = {};
+      // Revoke object URL to prevent memory leaks
+      if (organizedPdfUrl) {
+        URL.revokeObjectURL(organizedPdfUrl);
+      }
     };
-  }, [pdfDocProxy]);
+  }, [pdfDocProxy, organizedPdfUrl]);
 
   // Function to render a specific PDF page thumbnail to a canvas
   // This useCallback depends only on pdfDocProxy because the canvas node is passed directly.
@@ -255,13 +261,8 @@ export default function OrganizePage() {
       const pdfBytes = await newDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `organized_${files[0].name || "document"}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url); // Revoke the object URL
+      setOrganizedPdfUrl(url);
+      setDownloadFileName(`organized_${files[0].name || "document"}.pdf`);
 
       setError(""); // Clear error on success
     } catch (e) {
@@ -448,10 +449,38 @@ export default function OrganizePage() {
                 numPages === 0 ||
                 (numPages > 0 && selected.length === numPages)
               } // Disable if all pages are removed
-              aria-label="Download organized PDF"
+              aria-label="Organize pages"
             >
-              {isProcessing ? "Processing..." : "Download Organized PDF"}
+              {isProcessing ? "Processing..." : "Organize Pages"}
             </Button>
+
+            {organizedPdfUrl && !isProcessing && (
+              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
+                <div className="w-full text-center space-y-4 text-gray-100">
+                  <h3 className="text-2xl font-semibold flex items-center justify-center">
+                    Pages Organized Successfully
+                  </h3>
+                  <p className="text-gray-400">
+                    Your PDF has been organized with the selected pages removed.
+                  </p>
+                </div>
+
+                <div className="flex justify-center">
+                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                    <a
+                      href={organizedPdfUrl}
+                      download={downloadFileName}
+                      className="text-center flex items-center"
+                    >
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                      </svg>
+                      Download Organized PDF
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
         <ToolPageContent

@@ -1,46 +1,39 @@
 "use client";
 
 import React, { useState, useEffect  } from "react";
-
 import { PDFDocument } from "pdf-lib";
+import { Download, FileText, Split } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-// import Loader from "@/components/ui/Loader"; // Replaced with progress bar
 import PageRangeInput from "@/components/ui/PageRangeInput";
-import { Label } from "@/components/ui/label"; // Import Label
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"; // Import RadioGroup components
-import { Progress } from "@/components/ui/progress"; // Import Progress
-import JSZip from "jszip"; // Assuming JSZip is installed (npm install jszip)
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Progress } from "@/components/ui/progress";
+import JSZip from "jszip";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
-  const [pdfUrl, setPdfUrl] = useState(null); // URL for the resulting PDF or ZIP
+  const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false); // Renamed from 'loading' for consistency
-  const [startPage, setStartPage] = useState(""); // 1-based string
-  const [endPage, setEndPage] = useState(""); // 1-based string
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [startPage, setStartPage] = useState("");
+  const [endPage, setEndPage] = useState("");
   const [totalPages, setTotalPages] = useState(0);
-  const [splitMode, setSplitMode] = useState("range"); // "range" or "all-pages"
+  const [splitMode, setSplitMode] = useState("range");
   const [downloadFileName, setDownloadFileName] = useState("");
-  const [progress, setProgress] = useState(0); // For conversion progress
+  const [progress, setProgress] = useState(0);
 
-  // Cleanup function for object URLs to prevent memory leaks
   useEffect(() => {
     return () => {
       if (pdfUrl) {
         URL.revokeObjectURL(pdfUrl);
       }
     };
-  }, [pdfUrl]); // Run when pdfUrl changes or component unmounts
+  }, [pdfUrl]);
 
-  /**
-   * Handles file selection from the dropzone.
-   * Loads the PDF to get total pages.
-   * @param {File[]} selectedFiles - An array containing the selected PDF file.
-   */
   const handleFile = async (selectedFiles) => {
     if (selectedFiles.length === 0) {
       setError("Please select a PDF file.");
@@ -49,7 +42,7 @@ export default function SplitPdfPage() {
       setPdfUrl(null);
       setTotalPages(0);
       setDownloadFileName("");
-      setProgress(0); // Reset progress
+      setProgress(0);
       return;
     }
 
@@ -61,14 +54,13 @@ export default function SplitPdfPage() {
     setStartPage("");
     setEndPage("");
     setTotalPages(0);
-    setIsProcessing(true); // Indicate loading of PDF, not yet splitting
+    setIsProcessing(true);
 
     try {
       const arrayBuffer = await selectedFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const num = pdfDoc.getPageCount();
       setTotalPages(num);
-      // Automatically set default range to all pages when PDF is loaded
       setStartPage("1");
       setEndPage(String(num));
     } catch (err) {
@@ -81,13 +73,10 @@ export default function SplitPdfPage() {
       setFileName("");
       setTotalPages(0);
     } finally {
-      setIsProcessing(false); // Done loading PDF
+      setIsProcessing(false);
     }
   };
 
-  /**
-   * Splits the uploaded PDF based on the selected mode (range or all pages).
-   */
   const splitPDF = async () => {
     if (!file) {
       setError("Please upload a PDF first.");
@@ -95,10 +84,10 @@ export default function SplitPdfPage() {
     }
 
     setIsProcessing(true);
-    setPdfUrl(null); // Clear previous output URL
+    setPdfUrl(null);
     setError("");
     setDownloadFileName("");
-    setProgress(0); // Reset progress for splitting operation
+    setProgress(0);
 
     try {
       const arrayBuffer = await file.arrayBuffer();
@@ -112,8 +101,8 @@ export default function SplitPdfPage() {
           setIsProcessing(false);
           return;
         }
-        const start = parseInt(startPage); // 1-based
-        const end = parseInt(endPage); // 1-based
+        const start = parseInt(startPage);
+        const end = parseInt(endPage);
 
         if (
           isNaN(start) ||
@@ -131,7 +120,6 @@ export default function SplitPdfPage() {
         }
 
         const newPdfDoc = await PDFDocument.create();
-        // Convert to 0-based indices for pdf-lib
         const pageIndicesToCopy = Array.from(
           { length: end - start + 1 },
           (_, i) => start - 1 + i
@@ -160,13 +148,12 @@ export default function SplitPdfPage() {
           singlePageDoc.addPage(copiedPage);
 
           const pdfBytes = await singlePageDoc.save();
-          const pageNumber = i + 1; // 1-based for filename
+          const pageNumber = i + 1;
           zip.file(
             `${fileName.replace(/\.pdf$/i, "")}_page_${pageNumber}.pdf`,
             pdfBytes
           );
 
-          // Update progress
           setProgress(Math.round(((i + 1) / numPages) * 100));
         }
 
@@ -183,7 +170,6 @@ export default function SplitPdfPage() {
     }
   };
 
-  // Helper to determine if the split button should be disabled
   const isSplitButtonDisabled =
     isProcessing ||
     !file ||
@@ -192,14 +178,16 @@ export default function SplitPdfPage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
+      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-8 md:py-12 px-4">
         <div className="max-w-4xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-            Split PDF
-          </h1>
-          <p className="mb-8 text-lg text-gray-300 text-center">
-            Extract specific pages or ranges, or separate all pages. All processing is 100% client-side.
-          </p>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
+              Split PDF
+            </h1>
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+              Extract specific pages or ranges, or separate all pages. All processing is 100% client-side.
+            </p>
+          </div>
 
           <div className="space-y-6">
             <FileDropzone
@@ -210,148 +198,191 @@ export default function SplitPdfPage() {
               label="Upload PDF"
               description="Drag & drop or click to select a PDF file (Max 50MB)"
               maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing && !file} // Show loading for file upload (initial processing)
+              isLoading={isProcessing && !file}
             />
 
             {fileName && (
-              <div className="text-center text-gray-300 text-sm">
-                Selected file:{" "}
-                <span className="font-semibold text-gray-100">{fileName}</span>
+              <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                <div className="flex items-center">
+                  <div className="p-2 rounded-lg bg-blue-500/10 mr-3">
+                    <FileText className="w-5 h-5 text-blue-400" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-100">{fileName}</h3>
+                    <p className="text-sm text-gray-400">
+                      {totalPages} pages
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
             {totalPages > 0 && (
-              <>
-                <div className="w-full flex flex-col items-center space-y-4">
-                  <Label className="text-lg font-semibold text-gray-100">
+              <div className="space-y-5">
+                <div>
+                  <Label className="text-lg font-semibold text-gray-100 mb-3 block">
                     Split Options:
                   </Label>
                   <RadioGroup
                     value={splitMode}
                     onValueChange={setSplitMode}
-                    className="flex gap-4 p-2 rounded-md bg-gray-700 border border-gray-600"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3"
                   >
-                    <Label
-                      htmlFor="split-range"
-                      className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-gray-600 has-[input:checked]:bg-blue-600 has-[input:checked]:text-white transition-colors"
-                    >
+                    <div>
                       <RadioGroupItem
                         value="range"
                         id="split-range"
-                        className="peer sr-only" // Hidden radio button
+                        className="peer sr-only"
                       />
-                      <div className="w-4 h-4 rounded-full border-2 border-gray-400 peer-data-[state=checked]:bg-white peer-data-[state=checked]:border-blue-600 flex items-center justify-center">
-                        <div className="w-2 h-2 rounded-full bg-blue-600 peer-data-[state=checked]:bg-white"></div>
-                      </div>
-                      <span className="ml-2 text-gray-300 peer-data-[state=checked]:text-white">
-                        By Page Range
-                      </span>
-                    </Label>
-                    <Label
-                      htmlFor="split-all-pages"
-                      className="flex items-center space-x-2 cursor-pointer p-2 rounded-md hover:bg-gray-600 has-[input:checked]:bg-blue-600 has-[input:checked]:text-white transition-colors"
-                    >
+                      <Label
+                        htmlFor="split-range"
+                        className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
+                      >
+                        <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
+                          <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-100">By Page Range</span>
+                          <p className="text-xs text-gray-400 mt-1">Extract specific pages</p>
+                        </div>
+                      </Label>
+                    </div>
+                    <div>
                       <RadioGroupItem
                         value="all-pages"
                         id="split-all-pages"
-                        className="peer sr-only" // Hidden radio button
+                        className="peer sr-only"
                       />
-                      <div className="w-4 h-4 rounded-full border-2 border-gray-400 peer-data-[state=checked]:bg-white peer-data-[state=checked]:border-blue-600 flex items-center justify-center">
-                        <div className="w-2 h-2 rounded-full bg-blue-600 peer-data-[state=checked]:bg-white"></div>
-                      </div>
-                      <span className="ml-2 text-gray-300 peer-data-[state=checked]:text-white">
-                        Extract All Pages
-                      </span>
-                    </Label>
+                      <Label
+                        htmlFor="split-all-pages"
+                        className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
+                      >
+                        <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
+                          <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
+                        </div>
+                        <div>
+                          <span className="font-medium text-gray-100">Extract All Pages</span>
+                          <p className="text-xs text-gray-400 mt-1">Get each page as separate PDF</p>
+                        </div>
+                      </Label>
+                    </div>
                   </RadioGroup>
                 </div>
 
                 {splitMode === "range" && (
-                  <div className="mt-4 w-full flex justify-center">
+                  <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                    <Label className="text-gray-200 mb-3 block flex items-center">
+                      <Split className="w-4 h-4 mr-2" />
+                      Page Range
+                    </Label>
                     <PageRangeInput
                       startPage={startPage}
                       endPage={endPage}
                       setStartPage={setStartPage}
                       setEndPage={setEndPage}
                       totalPages={totalPages}
-                      className="w-full max-w-xs" // Apply consistent width
+                      className="w-full"
                     />
                   </div>
                 )}
-              </>
+              </div>
             )}
 
             {isProcessing &&
-              file && ( // Show progress only when splitting (file is loaded)
-                <div className="space-y-2 w-full max-w-xs text-center mx-auto">
+              file && (
+                <div className="space-y-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
                   <Progress
                     value={progress}
-                    className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
+                    className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-500 rounded-full"
                   />
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-center text-gray-400">
                     Splitting PDF... {progress}%
                   </p>
                 </div>
               )}
 
             {error && (
-              <Alert variant="destructive" className="mt-4 text-center">
+              <Alert variant="destructive" className="text-center">
                 {error}
               </Alert>
             )}
 
-            <Button
-              onClick={splitPDF}
-              className="mt-6 w-full max-w-xs mx-auto block bg-blue-700 text-white" // Consistent styling
-              variant="default" // Using default variant
-              size="lg"
-              disabled={isSplitButtonDisabled}
-              aria-label="Split PDF"
-            >
-              {isProcessing && file ? "Splitting..." : "Split PDF"}
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                onClick={splitPDF}
+                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+                variant="default"
+                size="lg"
+                disabled={isSplitButtonDisabled}
+                aria-label="Split PDF"
+              >
+                {isProcessing && file ? (
+                  <span className="flex items-center">
+                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                    Splitting...
+                  </span>
+                ) : (
+                  "Split PDF"
+                )}
+              </Button>
+            </div>
 
             {pdfUrl && !isProcessing && (
-              <div className="flex flex-col items-center mt-6 border-t border-gray-700 pt-6">
-                <h2 className="text-xl font-semibold mb-4 text-gray-100">
-                  Result:
-                </h2>
-                {splitMode === "range" && (
-                  <iframe
-                    src={pdfUrl}
-                    width="100%"
-                    height="500px"
-                    className="border border-gray-600 rounded-md mb-4 shadow-inner"
-                    title="PDF Preview"
-                  ></iframe>
-                )}
-                {splitMode === "all-pages" && (
-                  <p className="text-gray-300 mb-4 text-center">
-                    Your PDF has been split into individual pages and compressed
-                    into a ZIP file.
-                  </p>
-                )}
-                <Button asChild variant="success" className="w-full max-w-xs">
-                  {" "}
-                  {/* Consistent styling */}
-                  <a
-                    href={pdfUrl}
-                    download={downloadFileName}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span>
-                      {" "}
-                      {/* Added span to wrap children */}
+              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+                <div className="w-full text-center space-y-4 text-gray-100">
+                  <h3 className="text-2xl font-semibold flex items-center justify-center">
+                    <Download className="w-6 h-6 mr-2 text-green-400" />
+                    Split Complete
+                  </h3>
+                  
+                  {splitMode === "range" && (
+                    <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+                      <p className="text-gray-300 mb-3">Pages {startPage} to {endPage} extracted</p>
+                      <iframe
+                        src={pdfUrl}
+                        width="100%"
+                        height="400px"
+                        className="border border-gray-600 rounded-md shadow-inner"
+                        title="PDF Preview"
+                      ></iframe>
+                    </div>
+                  )}
+                  
+                  {splitMode === "all-pages" && (
+                    <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 text-center">
+                      <p className="text-gray-300 mb-4">
+                        Your PDF has been split into individual pages and compressed into a ZIP file.
+                      </p>
+                      <div className="inline-flex items-center justify-center p-3 rounded-full bg-blue-500/10 mb-4">
+                        <FileText className="w-8 h-8 text-blue-400" />
+                      </div>
+                      <p className="text-gray-400 text-sm">
+                        {totalPages} individual PDF files
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-center">
+                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                    <a
+                      href={pdfUrl}
+                      download={downloadFileName}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center"
+                    >
+                      <Download className="w-5 h-5 mr-2" />
                       Download {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
-                    </span>
-                  </a>
-                </Button>
+                    </a>
+                  </Button>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
+      
       <ToolPageContent
         toolName="Split PDF"
         toolDescription="Easily split your PDF documents into multiple files. Extract specific pages or ranges, or separate every page into its own PDF. Our online PDF splitter is fast, secure, and processes all your files directly in your browser, ensuring your privacy. Perfect for creating smaller documents, reorganizing content, or sharing only relevant sections."

@@ -37,30 +37,30 @@ const RelatedTools = ({ currentTool, tools }) => {
   if (relatedTools.length === 0) return null
 
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 shadow-sm">
+    <div className="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
       <h3 className="text-lg font-semibold text-gray-100 mb-4 flex items-center">
         <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
         Related PDF Tools
       </h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {relatedTools.map((tool) => (
           <Link
             key={tool.href}
             href={tool.href}
-            className="group flex items-start p-3 rounded-lg border border-gray-600 hover:border-blue-500 hover:bg-gray-700 transition-all duration-200"
+            className="group flex items-start p-4 rounded-lg border border-gray-600 hover:border-blue-500 hover:bg-gray-700/50 transition-all duration-200"
           >
             <div className="flex items-start w-full">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-500 transition-colors flex-shrink-0">
-                <span className="text-white text-sm font-medium">
+              <div className="w-10 h-10 bg-blue-600/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-600/20 transition-colors flex-shrink-0">
+                <span className="text-blue-400 text-base font-medium">
                   📄
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-100 group-hover:text-blue-400 transition-colors text-sm leading-tight">
+                <h4 className="font-medium text-gray-100 group-hover:text-blue-400 transition-colors text-sm leading-tight mb-1">
                   {tool.title}
                 </h4>
-                <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                <p className="text-xs text-gray-400 leading-relaxed line-clamp-2">
                   {tool.description}
                 </p>
               </div>
@@ -70,13 +70,13 @@ const RelatedTools = ({ currentTool, tools }) => {
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-gray-700">
+      <div className="mt-6 pt-4 border-t border-gray-700">
         <Link
           href="/"
-          className="text-sm text-blue-400 hover:text-blue-300 font-medium inline-flex items-center"
+          className="text-sm text-blue-400 hover:text-blue-300 font-medium inline-flex items-center group"
         >
           View all PDF tools
-          <ChevronRight className="w-3 h-3 ml-1" />
+          <ChevronRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
         </Link>
       </div>
     </div>
