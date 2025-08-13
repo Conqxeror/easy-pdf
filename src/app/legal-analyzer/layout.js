@@ -1,34 +1,46 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Legal Analyzer for PDF – Easy PDF Tool",
-  description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
+  title: "Legal Document Analyzer – Easy PDF Tool",
+  description: "AI-powered tool for legal document review and clause extraction. Free online legal document analysis tool with risk assessment.",
   keywords: [
-    "Legal analyzer PDF",
-    "Analyze PDF clauses",
-    "PDF legal tool",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload legal analyzer",
-    "Wali Mohammad Kadri",
-  ],
+  "Legal document analyzer",
+  "Contract review",
+  "Legal AI",
+  "Document analysis",
+  "Clause extraction",
+  "AI document processing",
+  "Legal analysis",
+  "Contract analysis",
+  "Document review"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/legal-analyzer",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Legal Analyzer for PDF",
-  description: "Analyze legal clauses in PDF files instantly. 100% client-side, privacy-first, fast, and secure legal analyzer. No uploads required.",
-  url: "/legal-analyzer",
-  features: [
-    "AI-powered analysis",
-    "Clause extraction",
-    "Risk assessment",
-    "Legal insights"
+  toolName: "Legal Document Analyzer",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "Legal Document Analyzer", url: "https://easy-pdf-murex.vercel.app/legal-analyzer" }
   ]
 });
 
-export default function LegalAnalyzerLayout({ children }) {
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "Legal Document Analyzer",
+  description: "AI-powered tool for legal document review and clause extraction. Free online legal document analysis tool with risk assessment.",
+  url: "/legal-analyzer",
+  features: [
+  "AI-powered analysis",
+  "Clause extraction",
+  "Risk assessment",
+  "Legal insights"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "Legal Document Analyzer", url: "https://easy-pdf-murex.vercel.app/legal-analyzer" }
+  ]
+});
+
+export default function Layout({ children }) {
   return (
     <>
       <script

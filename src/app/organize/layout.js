@@ -1,35 +1,46 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Organize PDF Pages Online – Easy PDF Tool",
-  description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
+  title: "Organize PDF Online – Easy PDF Tool",
+  description: "Combine reordering and deletion to organize your PDF pages. Complete suite of PDF organization tools with visual interface.",
   keywords: [
-    "Organize PDF",
-    "PDF organizer",
-    "Reorder PDF",
-    "PDF editor",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF organize",
-    "Wali Mohammad Kadri",
-  ],
+  "Organize PDF",
+  "PDF organizer",
+  "Manage PDF pages",
+  "PDF page management",
+  "Restructure PDF",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF organize",
+  "Wali Mohammad Kadri"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/organize",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Organize PDF Pages Online",
-  description: "Organize, reorder, and manage your PDF pages instantly. 100% client-side, privacy-first, fast, and secure PDF organizer. No uploads required.",
-  url: "/organize",
-  features: [
-    "Reorder pages",
-    "Delete pages",
-    "Rotate pages",
-    "Instant processing"
+  toolName: "PDF Organizer",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Organizer", url: "https://easy-pdf-murex.vercel.app/organize" }
   ]
 });
 
-export default function OrganizeLayout({ children }) {
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF Organizer",
+  description: "Combine reordering and deletion to organize your PDF pages. Complete suite of PDF organization tools with visual interface.",
+  url: "/organize",
+  features: [
+  "Page reordering",
+  "Page deletion",
+  "Visual management",
+  "Complete organization"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Organizer", url: "https://easy-pdf-murex.vercel.app/organize" }
+  ]
+});
+
+export default function Layout({ children }) {
   return (
     <>
       <script

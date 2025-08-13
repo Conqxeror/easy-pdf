@@ -1,35 +1,46 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "OCR PDF (Extract Text) – Easy PDF Tool",
-  description: "Extract text from PDF using OCR instantly. 100% client-side, privacy-first, fast, and secure PDF OCR tool. No uploads required.",
+  title: "OCR (Text Recognition) PDF – Easy PDF Tool",
+  description: "Extract editable text from scanned PDFs and images. Free online OCR tool with multiple language support and high accuracy.",
   keywords: [
-    "OCR PDF",
-    "Extract text PDF",
-    "PDF OCR",
-    "Text recognition PDF",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF OCR",
-    "Wali Mohammad Kadri",
-  ],
+  "OCR PDF",
+  "Extract text",
+  "PDF text recognition",
+  "Scan to text",
+  "PDF OCR online",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF OCR",
+  "Wali Mohammad Kadri"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/ocr",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "OCR PDF (Extract Text) – Easy PDF Tool",
-  description: "Extract text from PDF using OCR instantly. 100% client-side, privacy-first, fast, and secure PDF OCR tool. No uploads required.",
-  url: "/ocr",
-  features: [
-    "Extract text from PDF",
-    "Multiple languages supported",
-    "Instant processing",
-    "Secure and private"
+  toolName: "PDF OCR Tool",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF OCR Tool", url: "https://easy-pdf-murex.vercel.app/ocr" }
   ]
 });
 
-export default function OcrLayout({ children }) {
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF OCR Tool",
+  description: "Extract editable text from scanned PDFs and images. Free online OCR tool with multiple language support and high accuracy.",
+  url: "/ocr",
+  features: [
+  "Text extraction",
+  "Multiple languages",
+  "Image processing",
+  "Editable output"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF OCR Tool", url: "https://easy-pdf-murex.vercel.app/ocr" }
+  ]
+});
+
+export default function Layout({ children }) {
   return (
     <>
       <script

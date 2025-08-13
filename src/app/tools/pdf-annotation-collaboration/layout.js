@@ -4,27 +4,26 @@ export const metadata = generateEnhancedMetadata({
   title: "PDF Annotation Collaboration - Team Review Tool",
   description: "Collaborate on PDF annotations with team members and export shared comments. Perfect for document review workflows.",
   keywords: [
-    "PDF collaboration",
-    "document review",
-    "team annotations",
-    "collaborative editing",
-    "PDF comments",
-    "document workflow",
-    "review process",
-    "annotation sharing",
-    "team collaboration",
-    "document feedback",
-    "collaborative review",
-    "shared annotations"
+  "PDF collaboration",
+  "document review",
+  "team annotations",
+  "collaborative editing",
+  "PDF comments",
+  "document workflow",
+  "review process",
+  "annotation sharing",
+  "team collaboration",
+  "document feedback",
+  "collaborative review",
+  "shared annotations"
 ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/tools/pdf-annotation-collaboration",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "PDF Annotation Collaboration",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "/" },
-    { name: "Tools", url: "/#tools" },
-    { name: "PDF Annotation Collaboration", url: "/tools/pdf-annotation-collaboration" }
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Annotation Collaboration", url: "https://easy-pdf-murex.vercel.app/tools/pdf-annotation-collaboration" }
   ]
 });
 
@@ -33,16 +32,13 @@ const structuredData = generateComprehensiveJsonLd('tool', {
   description: "Collaborate on PDF annotations with team members and export shared comments. Perfect for document review workflows.",
   url: "/tools/pdf-annotation-collaboration",
   features: [
-    "Team annotations",
-    "Comment threads",
-    "Export annotations",
-    "Review workflows",
-    "Collaborative editing",
-    "Shared feedback"
+  "Team annotations",
+  "Comment threads",
+  "Export annotations",
+  "Review workflows"
 ],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
     { name: "PDF Annotation Collaboration", url: "https://easy-pdf-murex.vercel.app/tools/pdf-annotation-collaboration" }
   ]
 });

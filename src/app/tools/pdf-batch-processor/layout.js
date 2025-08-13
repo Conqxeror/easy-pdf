@@ -4,27 +4,26 @@ export const metadata = generateEnhancedMetadata({
   title: "PDF Batch Processor - Bulk PDF Operations",
   description: "Process multiple PDF files at once with various operations like merge, split, compress. Efficient bulk PDF processing tool.",
   keywords: [
-    "PDF batch processing",
-    "bulk PDF operations",
-    "mass PDF processing",
-    "batch converter",
-    "bulk merge PDF",
-    "batch compression",
-    "mass watermarking",
-    "automated PDF processing",
-    "bulk PDF tools",
-    "batch operations",
-    "multiple file processing",
-    "PDF automation"
+  "PDF batch processing",
+  "bulk PDF operations",
+  "mass PDF processing",
+  "batch converter",
+  "bulk merge PDF",
+  "batch compression",
+  "mass watermarking",
+  "automated PDF processing",
+  "bulk PDF tools",
+  "batch operations",
+  "multiple file processing",
+  "PDF automation"
 ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/tools/pdf-batch-processor",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "PDF Batch Processor",
   pageType: "tool",
   breadcrumbs: [
-    { name: "Home", url: "/" },
-    { name: "Tools", url: "/#tools" },
-    { name: "PDF Batch Processor", url: "/tools/pdf-batch-processor" }
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Batch Processor", url: "https://easy-pdf-murex.vercel.app/tools/pdf-batch-processor" }
   ]
 });
 
@@ -33,16 +32,13 @@ const structuredData = generateComprehensiveJsonLd('tool', {
   description: "Process multiple PDF files at once with various operations like merge, split, compress. Efficient bulk PDF processing tool.",
   url: "/tools/pdf-batch-processor",
   features: [
-    "Batch merge multiple PDFs",
-    "Bulk compression",
-    "Mass watermarking",
-    "Batch operations",
-    "Automated processing",
-    "Multiple file handling"
+  "Batch merge multiple PDFs",
+  "Bulk compression",
+  "Mass watermarking",
+  "Batch operations"
 ],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Tools", url: "https://easy-pdf-murex.vercel.app/#tools" },
     { name: "PDF Batch Processor", url: "https://easy-pdf-murex.vercel.app/tools/pdf-batch-processor" }
   ]
 });

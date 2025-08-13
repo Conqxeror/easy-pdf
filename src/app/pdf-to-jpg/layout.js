@@ -1,26 +1,52 @@
-import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
   title: "PDF to JPG Converter – Easy PDF Tool",
-  description:
-    "Convert PDF pages to JPG images instantly, 100% client-side. Fast, secure, privacy-first PDF to JPG converter. No uploads required.",
+  description: "Convert PDF pages into high-quality JPG image files. Free online tool with customizable quality settings and batch processing.",
   keywords: [
-    "PDF to JPG",
-    "PDF to Image",
-    "Convert PDF",
-    "Extract PDF images",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF to JPG",
-    "Wali Mohammad Kadri",
-  ],
+  "PDF to JPG",
+  "PDF to PNG",
+  "Convert PDF to image",
+  "PDF to photo",
+  "Extract images",
+  "PDF image converter",
+  "Document to image",
+  "Free PDF converter"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/pdf-to-jpg",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  toolName: "PDF to Image Converter",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF to Image Converter", url: "https://easy-pdf-murex.vercel.app/pdf-to-jpg" }
+  ]
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF to Image Converter",
+  description: "Convert PDF pages into high-quality JPG image files. Free online tool with customizable quality settings and batch processing.",
+  url: "/pdf-to-jpg",
+  features: [
+  "High-quality output",
+  "Custom resolution",
+  "Batch processing",
+  "Multiple formats"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF to Image Converter", url: "https://easy-pdf-murex.vercel.app/pdf-to-jpg" }
+  ]
+});
 
-export default function PdfToJpgLayout({ children }) {
-  return children;
+export default function Layout({ children }) {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }
-

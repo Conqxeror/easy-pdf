@@ -1,35 +1,46 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Sign PDF Online – Easy PDF Tool",
-  description: "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
+  title: "Sign / Annotate PDF Online – Easy PDF Tool",
+  description: "Draw, type, or upload your signature and place it on your PDF. Free online PDF signing tool with drawing and typing options.",
   keywords: [
-    "Sign PDF",
-    "Annotate PDF",
-    "PDF signature",
-    "PDF signing tool",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF sign",
-    "Wali Mohammad Kadri",
-  ],
+  "Sign PDF",
+  "PDF signature",
+  "Annotate PDF",
+  "Digital signature",
+  "PDF signing tool",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF sign",
+  "Wali Mohammad Kadri"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/sign",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Sign PDF Online",
-  description: "Sign and annotate PDF files instantly. 100% client-side, privacy-first, fast, and secure PDF signing tool. No uploads required.",
-  url: "/sign",
-  features: [
-    "Draw, type, or upload signature",
-    "Place signature anywhere on the page",
-    "Instant processing",
-    "Secure and private"
+  toolName: "PDF Signature Tool",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Signature Tool", url: "https://easy-pdf-murex.vercel.app/sign" }
   ]
 });
 
-export default function SignLayout({ children }) {
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF Signature Tool",
+  description: "Draw, type, or upload your signature and place it on your PDF. Free online PDF signing tool with drawing and typing options.",
+  url: "/sign",
+  features: [
+  "Digital signatures",
+  "Drawing tools",
+  "Text annotations",
+  "Signature placement"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Signature Tool", url: "https://easy-pdf-murex.vercel.app/sign" }
+  ]
+});
+
+export default function Layout({ children }) {
   return (
     <>
       <script

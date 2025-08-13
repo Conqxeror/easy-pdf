@@ -2,34 +2,45 @@ import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seo
 
 export const metadata = generateEnhancedMetadata({
   title: "PDF Form Filler Online – Easy PDF Tool",
-  description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
+  description: "Add text, checkmarks, or other inputs to any PDF form. Free online PDF form completion tool with save functionality.",
   keywords: [
-    "PDF form filler",
-    "Fill PDF forms",
-    "Add text PDF",
-    "PDF editor",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF form",
-    "Wali Mohammad Kadri",
-  ],
+  "Fill PDF form",
+  "PDF form filler",
+  "Complete PDF forms",
+  "PDF input",
+  "Form completion",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF form",
+  "Wali Mohammad Kadri"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/form-filler",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Form Filler Online",
-  description: "Fill PDF forms and add text instantly. 100% client-side, privacy-first, fast, and secure PDF form filler. No uploads required.",
-  url: "/form-filler",
-  features: [
-    "Add text to any PDF",
-    "Adjust font size and color",
-    "Precisely position text",
-    "Secure and private"
+  toolName: "PDF Form Filler",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Form Filler", url: "https://easy-pdf-murex.vercel.app/form-filler" }
   ]
 });
 
-export default function FormFillerLayout({ children }) {
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF Form Filler",
+  description: "Add text, checkmarks, or other inputs to any PDF form. Free online PDF form completion tool with save functionality.",
+  url: "/form-filler",
+  features: [
+  "Form field detection",
+  "Text input",
+  "Checkbox support",
+  "Form saving"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Form Filler", url: "https://easy-pdf-murex.vercel.app/form-filler" }
+  ]
+});
+
+export default function Layout({ children }) {
   return (
     <>
       <script

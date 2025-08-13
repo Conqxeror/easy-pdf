@@ -2,34 +2,45 @@ import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seo
 
 export const metadata = generateEnhancedMetadata({
   title: "Add Page Numbers to PDF – Easy PDF Tool",
-  description: "Add page numbers, headers, and footers to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF numbering. No uploads required.",
+  description: "Insert customizable page numbers, headers, or footers into your PDF. Free online tool with header/footer options and custom numbering.",
   keywords: [
-    "Add page numbers PDF",
-    "PDF numbering",
-    "Header footer PDF",
-    "PDF editor",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF numbering",
-    "Wali Mohammad Kadri",
-  ],
+  "Add page numbers",
+  "PDF page numbers",
+  "Number PDF pages",
+  "PDF headers footers",
+  "Paginate PDF",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF numbering",
+  "Wali Mohammad Kadri"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/page-numbers",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Add Page Numbers to PDF",
-  description: "Add page numbers, headers, and footers to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF numbering. No uploads required.",
-  url: "/page-numbers",
-  features: [
-    "Add page numbers to PDF",
-    "Add headers and footers",
-    "Customize position, font, and color",
-    "Instant processing"
+  toolName: "PDF Page Number Tool",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Page Number Tool", url: "https://easy-pdf-murex.vercel.app/page-numbers" }
   ]
 });
 
-export default function PageNumbersLayout({ children }) {
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF Page Number Tool",
+  description: "Insert customizable page numbers, headers, or footers into your PDF. Free online tool with header/footer options and custom numbering.",
+  url: "/page-numbers",
+  features: [
+  "Custom numbering formats",
+  "Header & footer options",
+  "Position control",
+  "Font customization"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Page Number Tool", url: "https://easy-pdf-murex.vercel.app/page-numbers" }
+  ]
+});
+
+export default function Layout({ children }) {
   return (
     <>
       <script

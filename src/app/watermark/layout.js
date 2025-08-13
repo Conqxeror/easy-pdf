@@ -1,27 +1,53 @@
-import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Add Watermark to PDF – Easy PDF Tool",
-  description:
-    "Add text or image watermark to your PDF instantly. 100% client-side, privacy-first, fast, and secure PDF watermarking. No uploads required.",
+  title: "Watermark PDF Online – Easy PDF Tool",
+  description: "Add custom text or image watermarks to your PDF documents. Free online watermarking tool with position control and opacity adjustment.",
   keywords: [
-    "Watermark PDF",
-    "Add watermark",
-    "PDF watermarking",
-    "Text watermark",
-    "Image watermark",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF watermark",
-    "Wali Mohammad Kadri",
-  ],
+  "Watermark PDF",
+  "Add watermark",
+  "PDF branding",
+  "Document protection",
+  "PDF stamp",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF watermark",
+  "Wali Mohammad Kadri"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/watermark",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  toolName: "PDF Watermarker",
+  pageType: "tool",
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Watermarker", url: "https://easy-pdf-murex.vercel.app/watermark" }
+  ]
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
+const structuredData = generateComprehensiveJsonLd('tool', {
+  title: "PDF Watermarker",
+  description: "Add custom text or image watermarks to your PDF documents. Free online watermarking tool with position control and opacity adjustment.",
+  url: "/watermark",
+  features: [
+  "Text & image watermarks",
+  "Custom positioning",
+  "Opacity control",
+  "Rotation options"
+],
+  breadcrumbs: [
+    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
+    { name: "PDF Watermarker", url: "https://easy-pdf-murex.vercel.app/watermark" }
+  ]
+});
 
-export default function WatermarkLayout({ children }) {
-  return children;
+export default function Layout({ children }) {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      {children}
+    </>
+  );
 }
-

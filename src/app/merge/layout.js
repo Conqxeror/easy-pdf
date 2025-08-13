@@ -1,45 +1,51 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Merge PDF Files Online – Easy PDF Tool",
-  description:
-    "Merge multiple PDF files into one, 100% client-side, privacy-first. Fast, free, and secure PDF merger for everyone. No uploads, instant processing.",
+  title: "Merge PDF Online – Easy PDF Tool",
+  description: "Combine multiple PDF files into one seamlessly. Free online PDF merger with 100% client-side processing. Fast, secure, and privacy-first.",
   keywords: [
-    "Merge PDF", "Combine PDF", "PDF merger", "Join PDF", "PDF tools", "Client-side PDF",
-    "Privacy PDF tool", "No upload PDF merger", "Free PDF merger", "Secure PDF merge",
-    "Browser PDF merge", "Offline PDF merge", "PDF combiner", "Document merger"
-  ],
+  "Merge PDF",
+  "Combine PDF",
+  "PDF merger",
+  "Join PDF",
+  "PDF tools",
+  "Client-side PDF",
+  "Privacy PDF tool",
+  "No upload PDF merger",
+  "Free PDF merger",
+  "Secure PDF merge",
+  "Browser PDF merge",
+  "Offline PDF merge",
+  "PDF combiner",
+  "Document merger"
+],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/merge",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "PDF Merger",
   pageType: "tool",
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Merge PDF", url: "https://easy-pdf-murex.vercel.app/merge" }
+    { name: "PDF Merger", url: "https://easy-pdf-murex.vercel.app/merge" }
   ]
 });
 
 const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Merge PDF Files Online",
-  description: "Combine multiple PDF files into one seamless document with drag-and-drop functionality",
+  title: "PDF Merger",
+  description: "Combine multiple PDF files into one seamlessly. Free online PDF merger with 100% client-side processing. Fast, secure, and privacy-first.",
   url: "/merge",
   features: [
-    "Drag & drop multiple files",
-    "Reorder before merging", 
-    "No file size limits",
-    "100% secure processing",
-    "Instant preview",
-    "Download merged PDF"
-  ],
+  "Drag & drop multiple files",
+  "Reorder before merging",
+  "No file size limits",
+  "100% secure processing"
+],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Merge PDF", url: "https://easy-pdf-murex.vercel.app/merge" }
+    { name: "PDF Merger", url: "https://easy-pdf-murex.vercel.app/merge" }
   ]
 });
 
-export const viewport = "width=device-width, initial-scale=1, viewport-fit=cover, color-scheme: dark";
-
-export default function MergeLayout({ children }) {
+export default function Layout({ children }) {
   return (
     <>
       <script
@@ -50,5 +56,3 @@ export default function MergeLayout({ children }) {
     </>
   );
 }
-
-
