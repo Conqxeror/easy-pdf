@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { PDFDocument } from "pdf-lib";
-import * as pdfjs from "pdfjs-dist";
 import { FileText, Download, Move, Trash2 } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -10,7 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Dynamically import heavy PDF libraries only when needed
+import { usePDFLib, usePDFJS } from "@/lib/pdfUtils";
 
 export default function MergeClient() {
   const [files, setFiles] = useState([]);
@@ -23,6 +22,10 @@ export default function MergeClient() {
   const mergedPdfPreviewCanvasRef = useRef(null);
   const [mergedPdfDocProxy, setMergedPdfDocProxy] = useState(null);
   const renderTaskRef = useRef(null);
+
+  // Load PDF libraries dynamically
+  const { PDFLib, loading: pdfLibLoading, error: pdfLibError } = usePDFLib();
+  const { pdfjs, loading: pdfjsLoading, error: pdfjsError } = usePDFJS();
 
   useEffect(() => {
     return () => {
@@ -40,7 +43,7 @@ export default function MergeClient() {
 
   const renderMergedPdfPreview = useCallback(async () => {
     const canvas = mergedPdfPreviewCanvasRef.current;
-    if (!canvas || !mergedPdfDocProxy) {
+    if (!canvas || !mergedPdfDocProxy || !pdfjs) {
       if (canvas) {
         const context = canvas.getContext("2d");
         context.clearRect(0, 0, canvas.width, canvas.height);
@@ -77,7 +80,7 @@ export default function MergeClient() {
         setError("Failed to render PDF preview.");
       }
     }
-  }, [mergedPdfDocProxy]);
+  }, [mergedPdfDocProxy, pdfjs]);
 
   useEffect(() => {
     renderMergedPdfPreview();
@@ -150,31 +153,30 @@ export default function MergeClient() {
       setError("Please upload at least one PDF file.");
       return;
     }
+    
+    if (!PDFLib) {
+      setError("PDF library not loaded. Please try again.");
+      return;
+    }
+    
     setIsMerging(true);
     setError("");
     setProgress(0);
+    
     try {
-      const mergedPdf = await PDFDocument.create();
-      const totalFiles = files.length;
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const arrayBuffer = await file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach((page) => mergedPdf.addPage(page));
-        setProgress(Math.round(((i + 1) / totalFiles) * 90));
-      }
-      setProgress(95);
-      const pdfBytes = await mergedPdf.save();
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = await import('@/lib/pdfUtils').then(utils => 
+        utils.mergePDFs(files, setProgress)
+      );
+      
       setMergedPdfUrl(url);
-      setProgress(100);
-      try {
-        const pdfDoc = await pdfjs.getDocument(url).promise;
-        setMergedPdfDocProxy(pdfDoc);
-      } catch (previewError) {
-        console.error("Error loading merged PDF for preview:", previewError);
+      
+      if (pdfjs) {
+        try {
+          const pdfDoc = await pdfjs.getDocument(url).promise;
+          setMergedPdfDocProxy(pdfDoc);
+        } catch (previewError) {
+          console.error("Error loading merged PDF for preview:", previewError);
+        }
       }
     } catch (error) {
       console.error("Error merging PDFs:", error);
@@ -198,17 +200,30 @@ export default function MergeClient() {
           </div>
           
           <div className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Choose PDF Files"
-              description="Drag & drop or click to select PDF files. You can select multiple."
-              maxSize={50 * 1024 * 1024}
-              isLoading={isMerging}
-            />
+            {(pdfLibLoading || pdfjsLoading) ? (
+              <div className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-xl border border-gray-700">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+                <p className="text-gray-300">Loading PDF processing tools...</p>
+              </div>
+            ) : (
+              <FileDropzone
+                accept="application/pdf"
+                multiple
+                onFiles={handleFiles}
+                error={error}
+                setError={setError}
+                label="Choose PDF Files"
+                description="Drag & drop or click to select PDF files. You can select multiple."
+                maxSize={50 * 1024 * 1024}
+                isLoading={isMerging}
+              />
+            )}
+            
+            {(pdfLibError || pdfjsError) && (
+              <Alert variant="destructive" className="mt-4">
+                Error loading PDF processing tools. Please refresh the page.
+              </Alert>
+            )}
             
             {files.length > 0 && (
               <div className="mt-4 p-5 bg-gray-800 rounded-xl shadow-lg border border-gray-700 space-y-4">

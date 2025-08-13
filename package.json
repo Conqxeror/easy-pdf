@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "lint:strict": "next lint --max-warnings 0",
@@ -54,11 +55,13 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.4.6",
     "@tailwindcss/postcss": "^4.1.10",
     "@types/node": "24.0.13",
     "@types/react": "18.3.23",
     "@types/react-dom": "^18.3.5",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "eslint-plugin-react": "^7.37.2",

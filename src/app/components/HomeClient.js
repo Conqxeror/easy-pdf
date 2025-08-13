@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import React, { Suspense, useState, useEffect  } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton.jsx";
 import { Lock, Cloud, Code, ArrowRight, Zap, Globe, Heart } from "lucide-react";
-import ToolCard from "@/components/ui/ToolCard";
+import dynamic from 'next/dynamic';
 import { toolsData } from "@/lib/toolData";
 import SponsorSection from "@/components/ui/SponsorSection";
 import UsageIndicator from "@/components/ui/UsageIndicator";
@@ -13,6 +13,7 @@ import { useUserPreferences } from "@/lib/userPreferences";
 import FileHistoryPanel from "@/components/ui/FileHistoryPanel";
 import { Button } from "@/components/ui/button";
 import { SkipToMain, AccessibleHeading, usePerformanceMonitoring } from "@/components/ui/AccessibilityEnhancements";
+import { useWebVitals } from "@/hooks/useWebVitals";
 import { 
   PageContainer, 
   Hero, 
@@ -28,6 +29,13 @@ export default function HomeClient() {
   const { preferences } = useUserPreferences();
   
   usePerformanceMonitoring();
+  useWebVitals();
+
+  // Lazy load ToolCard component
+  const ToolCard = dynamic(() => import('@/components/ui/ToolCard'), {
+    loading: () => <Skeleton className="h-48" />,
+    ssr: false
+  });
 
   useEffect(() => {
     trackEvent('homepage_viewed', {

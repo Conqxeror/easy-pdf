@@ -1,6 +1,11 @@
 // next.config.mjs
 import path from "path";
 import { fileURLToPath } from "url";
+import withBundleAnalyzer from '@next/bundle-analyzer';
+
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 // Helper to get __dirname equivalent in ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -67,9 +72,33 @@ const nextConfig = {
               priority: 15,
               reuseExistingChunk: true,
             },
+            // Split heavy libraries into separate chunks
+            tesseract: {
+              test: /[\\/]node_modules[\\/](tesseract.js)[\\/]/,
+              name: 'tesseract',
+              priority: 18,
+              reuseExistingChunk: true,
+            },
+            html2canvas: {
+              test: /[\\/]node_modules[\\/](html2canvas)[\\/]/,
+              name: 'html2canvas',
+              priority: 17,
+              reuseExistingChunk: true,
+            },
+            canvas: {
+              test: /[\\/]node_modules[\\/](canvas)[\\/]/,
+              name: 'canvas',
+              priority: 16,
+              reuseExistingChunk: true,
+            },
           },
         },
+        // Minimize JavaScript
+        minimize: true,
       };
+      
+      // Add module concatenation for smaller bundles
+      config.optimization.concatenateModules = true;
     }
     
     // Handle PDF.js worker
@@ -77,6 +106,9 @@ const nextConfig = {
       ...config.resolve.alias,
       'pdfjs-dist/build/pdf.worker.js': 'pdfjs-dist/build/pdf.worker.min.js',
     };
+    
+    // Add resolve extensions for better tree shaking
+    config.resolve.extensions = [...config.resolve.extensions, '.mjs', '.jsx'];
     
     return config;
   },
@@ -171,4 +203,4 @@ const nextConfig = {
 
 };
 
-export default nextConfig;
+export default bundleAnalyzer(nextConfig);

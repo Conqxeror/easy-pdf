@@ -1,12 +1,14 @@
+// Tool data with string icon names for dynamic loading
 import React from "react";
-import { FileText, Merge, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, Search, FileHeart, Settings, Bookmark, Table, Layers, CheckCircle, Shield, EyeOff, GitCompare, MessageSquare, Calculator, QrCode, Award, Briefcase } from "lucide-react";
+import { FileText, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, Search, FileHeart, Settings, Bookmark, Table, Layers, CheckCircle, Shield, EyeOff, GitCompare, MessageSquare, Calculator, QrCode, Award, Briefcase } from "lucide-react";
 
 export const toolsData = [
   {
     href: "/merge",
     title: "Merge PDF",
     description: "Combine multiple PDF files into one seamless document.",
-    icon: <Merge className="w-8 h-8 text-blue-500" />,
+    icon: "Merge",
+    iconClassName: "w-8 h-8 text-blue-500",
     comingSoon: false,
     keywords: ["merge pdf", "combine pdf", "join pdf files", "pdf merger", "unite pdf"],
     seoTitle: "Free PDF Merger - Combine Multiple PDFs Online",
