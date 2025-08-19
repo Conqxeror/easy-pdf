@@ -22,7 +22,7 @@ export default function DynamicOGTest() {
         <h1 className="text-3xl font-bold mb-4">Dynamic Open Graph Generation Test</h1>
         <p className="text-lg text-muted-foreground mb-6">
           This page demonstrates the new dynamic open-graph image generation feature. 
-          Each tool now generates custom social media preview images based on the tool's 
+          Each tool now generates custom social media preview images based on the tool&apos;s 
           category, title, and description.
         </p>
       </div>

@@ -79,8 +79,8 @@ export const generateHomepageOgImageUrl = (baseUrl = 'https://easy-pdf-murex.ver
 export const generateArticleOgImageUrl = ({
   title,
   description,
-  author,
-  publishDate,
+  _author,
+  _publishDate,
   baseUrl = 'https://easy-pdf-murex.vercel.app'
 }) => {
   return generateDynamicOgImageUrl({

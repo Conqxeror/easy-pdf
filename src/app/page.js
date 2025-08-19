@@ -11,6 +11,8 @@ export const metadata = generateEnhancedMetadata({
   ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  toolName: "easy-pdf",
+  toolCategory: "default",
   pageType: "homepage",
   lastModified: new Date().toISOString()
 });

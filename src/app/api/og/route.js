@@ -21,10 +21,11 @@ export async function GET(request) {
         'Security & Privacy': { primary: '#8B5CF6', secondary: '#F3E8FF', accent: '#7C3AED' },
         'Business Tools': { primary: '#F59E0B', secondary: '#FFFBEB', accent: '#D97706' },
         'AI & Analysis': { primary: '#EF4444', secondary: '#FEF2F2', accent: '#DC2626' },
+        'homepage': { primary: '#1F2937', secondary: '#F8FAFC', accent: '#0F172A' },
         default: { primary: '#1F2937', secondary: '#F9FAFB', accent: '#374151' }
       };
       
-      return themes[category] || themes.default;
+      return themes[category] || themes[theme] || themes.default;
     };
 
     const colors = getThemeColors(category, theme);
