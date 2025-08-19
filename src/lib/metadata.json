@@ -97,47 +97,47 @@
     "title": "Free PDF Splitter - Extract Pages from PDF Online",
     "description": "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing."
   },
-  "/tools/advanced-ocr": {
+  "/advanced-ocr": {
     "title": "Advanced OCR with AI",
     "description": "Extract text from PDFs and images with AI-powered enhancement and formatting"
   },
-  "/tools/pdf-accessibility-checker": {
+  "/pdf-accessibility-checker": {
     "title": "PDF Accessibility Checker",
     "description": "Check PDF documents for accessibility compliance and WCAG standards"
   },
-  "/tools/pdf-annotation-collaboration": {
+  "/pdf-annotation-collaboration": {
     "title": "PDF Annotation Collaboration",
     "description": "Collaborate on PDF annotations with team members and export shared comments"
   },
-  "/tools/pdf-batch-processor": {
+  "/pdf-batch-processor": {
     "title": "PDF Batch Processor",
     "description": "Process multiple PDF files at once with various operations like merge, split, compress"
   },
-  "/tools/pdf-bookmark-manager": {
+  "/pdf-bookmark-manager": {
     "title": "PDF Bookmark Manager",
     "description": "Add, edit, and organize PDF bookmarks and navigation structure"
   },
-  "/tools/pdf-digital-signature": {
+  "/pdf-digital-signature": {
     "title": "PDF Digital Signature",
     "description": "Add legally binding digital signatures with certificate management and validation"
   },
-  "/tools/pdf-form-creator": {
+  "/pdf-form-creator": {
     "title": "PDF Form Creator",
     "description": "Create interactive PDF forms with various field types including text, checkboxes, and signatures"
   },
-  "/tools/pdf-metadata-editor": {
+  "/pdf-metadata-editor": {
     "title": "PDF Metadata Editor",
     "description": "Edit PDF metadata including title, author, subject, keywords, and creation date"
   },
-  "/tools/pdf-redaction": {
+  "/pdf-redaction": {
     "title": "PDF Redaction Tool",
     "description": "Permanently remove sensitive information from PDF documents with verification"
   },
-  "/tools/pdf-table-extractor": {
+  "/pdf-table-extractor": {
     "title": "PDF Table Extractor",
     "description": "Extract and export tables from PDF documents to CSV, Excel, or JSON format"
   },
-  "/tools/pdf-version-comparison": {
+  "/pdf-version-comparison": {
     "title": "PDF Version Comparison",
     "description": "Compare different versions of PDF documents with visual diff highlighting"
   },

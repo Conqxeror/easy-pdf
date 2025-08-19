@@ -115,7 +115,7 @@ export const toolCategories = [
       },
       {
         name: "PDF Redaction",
-        href: "/tools/pdf-redaction",
+        href: "/pdf-redaction",
         icon: <Eraser className="w-4 h-4" />,
       },
     ],
@@ -131,7 +131,7 @@ export const toolCategories = [
       },
       {
         name: "PDF Form Creator",
-        href: "/tools/pdf-form-creator",
+        href: "/pdf-form-creator",
         icon: <PlusCircle className="w-4 h-4" />,
       },
       {
@@ -141,12 +141,12 @@ export const toolCategories = [
       },
       {
         name: "Digital Signature",
-        href: "/tools/pdf-digital-signature",
+        href: "/pdf-digital-signature",
         icon: <Signature className="w-4 h-4" />,
       },
       {
         name: "Annotation Collaboration",
-        href: "/tools/pdf-annotation-collaboration",
+        href: "/pdf-annotation-collaboration",
         icon: <Text className="w-4 h-4" />,
       },
     ],
@@ -188,7 +188,7 @@ export const toolCategories = [
       },
       {
         name: "Advanced OCR",
-        href: "/tools/advanced-ocr",
+        href: "/advanced-ocr",
         icon: <Search className="w-4 h-4" />,
       },
       {
@@ -209,32 +209,32 @@ export const toolCategories = [
     submenu: [
       {
         name: "PDF Metadata Editor",
-        href: "/tools/pdf-metadata-editor",
+        href: "/pdf-metadata-editor",
         icon: <FileText className="w-4 h-4" />,
       },
       {
         name: "PDF Bookmark Manager",
-        href: "/tools/pdf-bookmark-manager",
+        href: "/pdf-bookmark-manager",
         icon: <ListOrdered className="w-4 h-4" />,
       },
       {
         name: "PDF Table Extractor",
-        href: "/tools/pdf-table-extractor",
+        href: "/pdf-table-extractor",
         icon: <FileText className="w-4 h-4" />,
       },
       {
         name: "PDF Accessibility Checker",
-        href: "/tools/pdf-accessibility-checker",
+        href: "/pdf-accessibility-checker",
         icon: <Search className="w-4 h-4" />,
       },
       {
         name: "PDF Version Comparison",
-        href: "/tools/pdf-version-comparison",
+        href: "/pdf-version-comparison",
         icon: <FileText className="w-4 h-4" />,
       },
       {
         name: "PDF Batch Processor",
-        href: "/tools/pdf-batch-processor",
+        href: "/pdf-batch-processor",
         icon: <FileBadge2 className="w-4 h-4" />,
       },
     ],
