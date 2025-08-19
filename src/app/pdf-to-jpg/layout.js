@@ -16,6 +16,7 @@ export const metadata = generateEnhancedMetadata({
   canonicalUrl: "https://easy-pdf-murex.vercel.app/pdf-to-jpg",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "PDF to Image Converter",
+  toolCategory: "Convert & Create",
   pageType: "tool",
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },

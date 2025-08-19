@@ -17,6 +17,7 @@ export const metadata = generateEnhancedMetadata({
   canonicalUrl: "https://easy-pdf-murex.vercel.app/protect",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "PDF Protector",
+  toolCategory: "Security & Privacy",
   pageType: "tool",
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },

@@ -1,4 +1,6 @@
 // Enhanced SEO utilities for comprehensive optimization
+import { getOgImageUrl, getTwitterImageUrl } from './dynamicOgGeneration';
+
 export const generateEnhancedMetadata = ({ 
   title = 'easy-pdf', 
   description = 'Privacy-first PDF tools for secure document processing.', 
@@ -10,11 +12,27 @@ export const generateEnhancedMetadata = ({
   pageType = 'tool',
   breadcrumbs = [],
   lastModified,
-  author = "Wali Mohammad Kadri"
+  author = "Wali Mohammad Kadri",
+  toolCategory
 }) => {
   const baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
   const keywordArray = Array.isArray(keywords) ? keywords : [keywords]
+  
+  // Generate dynamic OG images if not provided
+  const dynamicOgImage = ogImage || getOgImageUrl({
+    title: baseTitle,
+    description: enhancedDescription,
+    tool: toolName,
+    category: toolCategory
+  }, metadataBaseUrl);
+
+  const dynamicTwitterImage = getTwitterImageUrl({
+    title: baseTitle,
+    description: enhancedDescription,
+    tool: toolName,
+    category: toolCategory
+  }, metadataBaseUrl);
   
   // Enhanced keywords with semantic variations
   const enhancedKeywords = [
@@ -110,14 +128,14 @@ export const generateEnhancedMetadata = ({
       countryName: "India",
       images: [
         {
-          url: ogImage || "/og-image.jpg",
+          url: dynamicOgImage,
           width: 1200,
           height: 630,
           alt: `${toolName || title} - Free PDF Tool | easy-pdf`,
           type: "image/jpeg",
         },
         {
-          url: ogImage || "/og-image.jpg",
+          url: dynamicOgImage,
           width: 1200,
           height: 630,
           alt: `${toolName || title} - Privacy-First PDF Processing`,
@@ -140,7 +158,7 @@ export const generateEnhancedMetadata = ({
       creator: "@_MR_WALI_",
       images: [
         {
-          url: ogImage || "/twitter-image.jpg",
+          url: dynamicTwitterImage,
           alt: `${toolName || title} - Free PDF Tool | easy-pdf`,
           width: 1200,
           height: 630,
@@ -174,7 +192,7 @@ export const generateEnhancedMetadata = ({
       'application-name': 'easy-pdf',
       'msapplication-TileColor': '#1f2937',
       'msapplication-config': '/browserconfig.xml',
-      'og:image:secure_url': ogImage || "/og-image.jpg",
+      'og:image:secure_url': dynamicOgImage,
       'og:image:type': 'image/jpeg',
       'og:image:width': '1200',
       'og:image:height': '630',

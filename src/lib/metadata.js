@@ -1,6 +1,23 @@
-export const generateMetadata = ({ title, description, keywords, canonicalUrl, metadataBaseUrl, toolName, ogImage }) => {
+import { getOgImageUrl, getTwitterImageUrl } from './dynamicOgGeneration';
+
+export const generateMetadata = ({ title, description, keywords, canonicalUrl, metadataBaseUrl, toolName, ogImage, toolCategory }) => {
   const baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
+  
+  // Generate dynamic OG image if not provided
+  const dynamicOgImage = ogImage || getOgImageUrl({
+    title: baseTitle,
+    description: enhancedDescription,
+    tool: toolName,
+    category: toolCategory
+  }, metadataBaseUrl);
+
+  const dynamicTwitterImage = getTwitterImageUrl({
+    title: baseTitle,
+    description: enhancedDescription,
+    tool: toolName,
+    category: toolCategory
+  }, metadataBaseUrl);
   
   return {
     metadataBase: new URL(metadataBaseUrl),
@@ -45,7 +62,7 @@ export const generateMetadata = ({ title, description, keywords, canonicalUrl, m
       siteName: "easy-pdf - Privacy-First PDF Tools",
       images: [
         {
-          url: ogImage || "/og-image.jpg",
+          url: dynamicOgImage,
           width: 1200,
           height: 630,
           alt: `${toolName || title} - Free PDF Tool`,
@@ -62,7 +79,7 @@ export const generateMetadata = ({ title, description, keywords, canonicalUrl, m
       description: enhancedDescription,
       site: "@_MR_WALI_",
       creator: "@_MR_WALI_",
-      images: [ogImage || "/og-image.jpg"],
+      images: [dynamicTwitterImage],
     },
     manifest: "/site.webmanifest",
     verification: {
