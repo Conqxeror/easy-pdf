@@ -23,3 +23,5 @@ Allow: /favicon.ico
 
 # Sitemap
 Sitemap: https://easy-pdf-murex.vercel.app/sitemap.xml
+
+Sitemap: https://easy-pdf-murex.vercel.app/sitemap-alt.xml

@@ -542,7 +542,9 @@ export default function PortfolioCreatorPage() {
       link.download = `Portfolio-${portfolioData.fullName.replace(/\s+/g, '-')}.pdf`;
       link.click();
 
-      URL.revokeObjectURL(url);
+        setTimeout(() => {
+          try { URL.revokeObjectURL(url); } catch { }
+        }, 500);
 
       trackEvent('portfolio_generated_successfully', {
         template: portfolioData.template,

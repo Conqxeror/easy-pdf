@@ -355,7 +355,9 @@ export default function LegalAnalyzerPage() {
                   a.href = url;
                   a.download = `legal-analysis-${file.name}.txt`;
                   a.click();
-                  URL.revokeObjectURL(url);
+                  setTimeout(() => {
+              try { URL.revokeObjectURL(url); } catch { }
+                  }, 500);
                 }}
                 aria-label="Download Report"
               >

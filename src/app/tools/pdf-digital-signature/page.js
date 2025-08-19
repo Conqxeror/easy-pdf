@@ -136,9 +136,10 @@ export default function PDFDigitalSignature() {
       setProgress(90);
 
       // Save the signed PDF
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      setSignedPdf(blob);
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  // Revoke previous signedPdf URL if we had one (we store blob instead, so just set)
+  setSignedPdf(blob);
 
       setProgress(100);
     } catch (error) {
@@ -160,8 +161,18 @@ export default function PDFDigitalSignature() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // Revoke after a short delay to ensure the browser started the download
+    setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }, 500);
   };
+
+  // Cleanup on unmount: revoke any created object URLs if we had stored them elsewhere
+  React.useEffect(() => {
+    return () => {
+      // nothing to revoke because we store blobs; downloads revoke their own URLs after use
+    };
+  }, []);
 
   const validateSignature = () => {
     // Mock signature validation
@@ -205,7 +216,7 @@ export default function PDFDigitalSignature() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <Shield className="mx-auto h-12 w-12 text-blue-600 mb-4" />
+            <Shield className="mx-auto h-12 w-12 text-blue-600 mb-4" aria-hidden="true" />
             <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Digital Signature</h1>
             <p className="text-gray-600">Add legally binding digital signatures with certificate management</p>
           </div>
@@ -221,7 +232,7 @@ export default function PDFDigitalSignature() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
+                  <FileText className="h-5 w-5" aria-hidden="true" />
                   Upload PDF Document
                 </CardTitle>
                 <CardDescription>
@@ -243,7 +254,7 @@ export default function PDFDigitalSignature() {
                   
                   {file && (
                     <Alert>
-                      <CheckCircle className="h-4 w-4" />
+                      <CheckCircle className="h-4 w-4" aria-hidden="true" />
                       <AlertDescription>
                         File loaded: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                       </AlertDescription>
@@ -317,7 +328,7 @@ export default function PDFDigitalSignature() {
                     disabled={isProcessing}
                     className="w-full"
                   >
-                    <Lock className="mr-2 h-4 w-4" />
+                    <Lock className="mr-2 h-4 w-4" aria-hidden="true" />
                     {isProcessing ? 'Adding Signature...' : 'Add Digital Signature'}
                   </Button>
 
@@ -332,11 +343,11 @@ export default function PDFDigitalSignature() {
 
                   {signedPdf && (
                     <Alert>
-                      <CheckCircle className="h-4 w-4" />
+            <CheckCircle className="h-4 w-4" aria-hidden="true" />
                       <AlertDescription className="flex items-center justify-between">
                         <span>Digital signature added successfully!</span>
                         <Button onClick={downloadSignedPdf} size="sm">
-                          <Download className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                           Download
                         </Button>
                       </AlertDescription>

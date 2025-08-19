@@ -112,7 +112,10 @@ export default function PDFBookmarkManager() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Delay revoke so browser can start download
+      setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+      }, 500);
 
       // Also export bookmark list as JSON
       exportBookmarkList();
@@ -140,14 +143,17 @@ export default function PDFBookmarkManager() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // Delay revoke so browser can start download
+    setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }, 500);
   };
 
   const BookmarkItem = ({ bookmark }) => (
     <div className={`border rounded-lg p-3 ${bookmark.level > 0 ? 'ml-6 border-l-4 border-l-primary' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 flex-1">
-          <Bookmark className="h-4 w-4 text-primary" />
+          <Bookmark className="h-4 w-4 text-primary" aria-hidden="true" />
           {editingBookmark === bookmark.id ? (
             <div className="flex gap-2 flex-1">
               <Input
@@ -196,14 +202,14 @@ export default function PDFBookmarkManager() {
             variant="ghost"
             onClick={() => setEditingBookmark(bookmark.id)}
           >
-            <Edit className="h-4 w-4" />
+            <Edit className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             size="sm"
             variant="ghost"
             onClick={() => deleteBookmark(bookmark.id)}
           >
-            <Trash2 className="h-4 w-4" />
+            <Trash2 className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>
@@ -247,7 +253,7 @@ export default function PDFBookmarkManager() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Bookmark className="h-8 w-8" />
+            <Bookmark className="h-8 w-8" aria-hidden="true" />
             PDF Bookmark Manager
           </h1>
           <p className="text-muted-foreground">
@@ -271,7 +277,7 @@ export default function PDFBookmarkManager() {
               }`}
             >
               <input {...getInputProps()} />
-              <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <Upload className="h-12 w-12 mx-auto mb-4 text-muted-foreground" aria-hidden="true" />
               {isDragActive ? (
                 <p className="text-lg">Drop the PDF file here...</p>
               ) : (
@@ -288,7 +294,7 @@ export default function PDFBookmarkManager() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
+                <FileText className="h-5 w-5" aria-hidden="true" />
                 {file.name}
               </CardTitle>
               <CardDescription>
@@ -301,7 +307,7 @@ export default function PDFBookmarkManager() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Plus className="h-5 w-5" />
+                  <Plus className="h-5 w-5" aria-hidden="true" />
                   Add New Bookmark
                 </CardTitle>
               </CardHeader>
@@ -342,7 +348,7 @@ export default function PDFBookmarkManager() {
                 </div>
                 
                 <Button onClick={addBookmark} className="w-full" disabled={!newBookmark.title.trim()}>
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
                   Add Bookmark
                 </Button>
               </CardContent>
@@ -351,14 +357,14 @@ export default function PDFBookmarkManager() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Bookmark className="h-5 w-5" />
+                  <Bookmark className="h-5 w-5" aria-hidden="true" />
                   Bookmark List ({bookmarks.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {bookmarks.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
-                    <Bookmark className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <Bookmark className="h-12 w-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
                     <p>No bookmarks added yet</p>
                     <p className="text-sm">Add your first bookmark to get started</p>
                   </div>
@@ -387,7 +393,7 @@ export default function PDFBookmarkManager() {
                 disabled={isProcessing}
                 className="flex items-center gap-2"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4" aria-hidden="true" />
                 {isProcessing ? 'Processing...' : 'Save PDF with Bookmarks'}
               </Button>
             </div>
@@ -396,7 +402,7 @@ export default function PDFBookmarkManager() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Bookmark className="h-4 w-4" />
+                <Bookmark className="h-4 w-4" aria-hidden="true" />
                 <span>All processing happens locally in your browser. Your files never leave your device.</span>
               </div>
             </CardContent>

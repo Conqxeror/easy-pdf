@@ -131,7 +131,15 @@ export default function RotatePdfPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      setRotatedUrl(URL.createObjectURL(blob));
+      const url = URL.createObjectURL(blob);
+      setRotatedUrl((prev) => {
+        try {
+          if (prev) URL.revokeObjectURL(prev);
+  } catch {
+          // ignore
+        }
+        return url;
+      });
     } catch (e) {
       setError(
         "Failed to rotate PDF. The file might be corrupted or cannot be processed."

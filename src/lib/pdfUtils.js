@@ -49,7 +49,7 @@ export const usePDFJS = () => {
         const pdfjsModule = await import('pdfjs-dist');
         if (isMounted) {
           // Set worker source
-          pdfjsModule.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsModule.version}/pdf.worker.min.js`;
+          pdfjsModule.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
           setPdfjs(pdfjsModule);
           setLoading(false);
         }

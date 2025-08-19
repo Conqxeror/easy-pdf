@@ -343,7 +343,9 @@ export default function InvoiceGeneratorPage() {
       link.download = `Invoice-${invoiceData.invoiceNumber}.pdf`;
       link.click();
 
-      URL.revokeObjectURL(url);
+      setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { }
+      }, 500);
 
       trackEvent('invoice_generated_successfully', {
         items_count: invoiceData.items.length,

@@ -118,7 +118,10 @@ export default function PDFMetadataEditor() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Delay revoke slightly so the browser can start the download
+      setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+      }, 500);
     } catch (error) {
       console.error('Error saving metadata:', error);
       alert('Error saving PDF with updated metadata');

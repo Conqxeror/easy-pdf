@@ -744,6 +744,12 @@ export default function WatermarkPdfPage() {
                 <a
                   href={watermarkedUrl}
                   download={`watermarked_${fileName || "document"}.pdf`}
+                  onClick={() => {
+                    const urlToRevoke = watermarkedUrl;
+                    setTimeout(() => {
+                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                    }, 500);
+                  }}
                 >
                   Download Watermarked PDF
                 </a>

@@ -19,8 +19,10 @@ import {
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Import pdfjs-dist for PDF rendering
-import * as pdfjs from "pdfjs-dist";
-pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
+if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+}
 
 export default function OcrPage() {
   const [files, setFiles] = useState([]);
@@ -29,6 +31,14 @@ export default function OcrPage() {
   const [processingMessage, setProcessingMessage] = useState("");
   const [result, setResult] = useState("");
   const [previewImageUrl, setPreviewImageUrl] = useState(null);
+  // Cleanup preview image object URLs on unmount/change
+  useEffect(() => {
+    return () => {
+      if (previewImageUrl && previewImageUrl.startsWith('blob:')) {
+  try { URL.revokeObjectURL(previewImageUrl); } catch { }
+      }
+    };
+  }, [previewImageUrl]);
   const previewCanvasRef = useRef(null);
   const [pdfDocProxy, setPdfDocProxy] = useState(null);
   const renderTaskRef = useRef(null);

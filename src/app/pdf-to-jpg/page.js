@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback  } from "react";
 
  // Added useEffect, useRef, useCallback
-import * as pdfjs from "pdfjs-dist";
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,9 @@ import Image from "next/image"; // Import Next.js Image component
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
 // Configure pdfjs worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+}
 
 export default function PdfToJpgPage() {
   const [file, setFile] = useState(null);
@@ -54,7 +56,11 @@ export default function PdfToJpgPage() {
     // This effect runs on component unmount or when `images` state changes
     return () => {
       images.forEach((img) => {
-        if (img.url) URL.revokeObjectURL(img.url);
+        try {
+          if (img && img.url) URL.revokeObjectURL(img.url);
+  } catch {
+          // ignore
+        }
       });
     };
   }, [images]); // Dependency array: run when `images` array changes
@@ -446,7 +452,16 @@ export default function PdfToJpgPage() {
                         variant="outline"
                         className="w-full mt-2" // Take full width below image
                       >
-                        <a href={image.url} download={image.fileName}>
+                        <a
+                          href={image.url}
+                          download={image.fileName}
+                          onClick={() => {
+                            // Revoke the object URL shortly after the download starts
+                            setTimeout(() => {
+                              try { URL.revokeObjectURL(image.url); } catch { /* ignore */ }
+                            }, 500);
+                          }}
+                        >
                           Download
                         </a>
                       </Button>
@@ -464,6 +479,12 @@ export default function PdfToJpgPage() {
                     <a
                       href={images.find((img) => img.isZip).url}
                       download={images.find((img) => img.isZip).fileName}
+                      onClick={() => {
+                        const zipUrl = images.find((img) => img.isZip)?.url;
+                        setTimeout(() => {
+                          try { if (zipUrl) URL.revokeObjectURL(zipUrl); } catch { /* ignore */ }
+                        }, 500);
+                      }}
                     >
                       Download All as ZIP
                     </a>

@@ -53,7 +53,7 @@ export async function extractTextFromFile(base64, name) {
           pdfjsLib.GlobalWorkerOptions.workerSrc = workerPath;
         } catch {
           // Fallback to CDN worker
-          pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+          pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
         }
       }
       

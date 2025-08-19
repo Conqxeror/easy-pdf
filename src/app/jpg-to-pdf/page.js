@@ -125,7 +125,10 @@ export default function JpgToPdfPage() {
         ? files[0].name.replace(/\.[^/.]+$/, ".pdf") 
         : "converted_images.pdf";
 
-      setPdfUrl(url);
+      setPdfUrl((prev) => {
+  try { if (prev) URL.revokeObjectURL(prev); } catch { }
+        return url;
+      });
       setPdfFileName(newFileName);
       setProcessingMessage("Conversion complete!");
     } catch (err) {
@@ -248,7 +251,14 @@ export default function JpgToPdfPage() {
                   variant="success"
                   className="w-full max-w-md mx-auto"
                 >
-                  <a href={pdfUrl} download={pdfFileName}>
+                  <a
+                    href={pdfUrl}
+                    download={pdfFileName}
+                    onClick={() => {
+                      const u = pdfUrl;
+                      setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                    }}
+                  >
                     Download Converted PDF
                   </a>
                 </Button>

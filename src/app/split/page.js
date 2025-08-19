@@ -133,7 +133,11 @@ export default function SplitPdfPage() {
         const pdfBytes = await newPdfDoc.save();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
-        setPdfUrl(url);
+        // Revoke previous URL if present to avoid leaks
+        setPdfUrl((prev) => {
+          try { if (prev) URL.revokeObjectURL(prev); } catch { }
+          return url;
+        });
         setDownloadFileName(
           `${fileName.replace(/\.pdf$/i, "")}_pages_${start}-${end}.pdf`
         );
@@ -159,7 +163,10 @@ export default function SplitPdfPage() {
 
         const zipBlob = await zip.generateAsync({ type: "blob" });
         const url = URL.createObjectURL(zipBlob);
-        setPdfUrl(url);
+        setPdfUrl((prev) => {
+          try { if (prev) URL.revokeObjectURL(prev); } catch { }
+          return url;
+        });
         setDownloadFileName(`${fileName.replace(/\.pdf$/i, "")}_pages.zip`);
       }
     } catch (err) {
@@ -371,6 +378,10 @@ export default function SplitPdfPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center"
+                      onClick={() => {
+                        const u = pdfUrl;
+                        setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                      }}
                     >
                       <Download className="w-5 h-5 mr-2" />
                       Download {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}

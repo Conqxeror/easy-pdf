@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback  } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -92,21 +92,32 @@ export default function PDFBatchProcessor() {
         const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
         pages.forEach(page => mergedPdf.addPage(page));
         
-        setProgress(((i + 1) / files.length) * 100);
-      } catch (error) {
-        console.error(`Error processing ${file.file.name}:`, error);
+      setProgress(((i + 1) / files.length) * 100);
+  } catch {
+    console.error(`Error processing ${file.file.name}:`);
       }
     }
 
     const pdfBytes = await mergedPdf.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
-    
-    setResults([{
-      name: 'merged_documents.pdf',
-      url,
-      size: pdfBytes.length
-    }]);
+
+    // Revoke any previous result URLs to avoid leaks
+    try {
+      results.forEach((r) => {
+        if (r && r.url) URL.revokeObjectURL(r.url);
+      });
+    } catch {
+      // ignore
+    }
+
+    setResults([
+      {
+        name: 'merged_documents.pdf',
+        url,
+        size: pdfBytes.length,
+      },
+    ]);
   };
 
   const processCompress = async () => {
@@ -123,7 +134,7 @@ export default function PDFBatchProcessor() {
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         
-        compressedResults.push({
+      compressedResults.push({
           name: file.file.name.replace('.pdf', '_compressed.pdf'),
           url,
           size: pdfBytes.length,
@@ -131,12 +142,20 @@ export default function PDFBatchProcessor() {
           compressionRatio: ((file.file.size - pdfBytes.length) / file.file.size * 100).toFixed(1)
         });
         
-        setProgress(((i + 1) / files.length) * 100);
-      } catch (error) {
-        console.error(`Error compressing ${file.file.name}:`, error);
+      setProgress(((i + 1) / files.length) * 100);
+  } catch {
+    console.error(`Error compressing ${file.file.name}:`);
       }
     }
     
+    // Revoke previous result URLs before setting new ones
+    try {
+      results.forEach((r) => {
+        if (r && r.url) URL.revokeObjectURL(r.url);
+      });
+    } catch {
+      // ignore
+    }
     setResults(compressedResults);
   };
 
@@ -166,12 +185,20 @@ export default function PDFBatchProcessor() {
           });
         }
         
-        setProgress(((i + 1) / files.length) * 100);
-      } catch (error) {
-        console.error(`Error splitting ${file.file.name}:`, error);
+      setProgress(((i + 1) / files.length) * 100);
+  } catch {
+    console.error(`Error splitting ${file.file.name}:`);
       }
     }
     
+    // Revoke previous result URLs before setting new ones
+    try {
+      results.forEach((r) => {
+        if (r && r.url) URL.revokeObjectURL(r.url);
+      });
+    } catch {
+      // ignore
+    }
     setResults(splitResults);
   };
 
@@ -194,23 +221,31 @@ export default function PDFBatchProcessor() {
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         
-        rotatedResults.push({
+      rotatedResults.push({
           name: file.file.name.replace('.pdf', '_rotated.pdf'),
           url,
           size: pdfBytes.length
         });
         
-        setProgress(((i + 1) / files.length) * 100);
-      } catch (error) {
-        console.error(`Error rotating ${file.file.name}:`, error);
+      setProgress(((i + 1) / files.length) * 100);
+  } catch {
+    console.error(`Error rotating ${file.file.name}:`);
       }
     }
     
+    // Revoke previous result URLs before setting new ones
+    try {
+      results.forEach((r) => {
+        if (r && r.url) URL.revokeObjectURL(r.url);
+      });
+  } catch {
+  // ignore
+    }
     setResults(rotatedResults);
   };
 
   const downloadAll = () => {
-    results.forEach(result => {
+    results.forEach((result) => {
       const link = document.createElement('a');
       link.href = result.url;
       link.download = result.name;
@@ -218,7 +253,30 @@ export default function PDFBatchProcessor() {
       link.click();
       document.body.removeChild(link);
     });
+    // Revoke result URLs shortly after download to free memory
+    setTimeout(() => {
+      try {
+        results.forEach((r) => {
+          if (r && r.url) URL.revokeObjectURL(r.url);
+        });
+  } catch {
+        // ignore
+      }
+    }, 1000);
   };
+
+  // Cleanup on unmount: revoke any created object URLs
+  useEffect(() => {
+    return () => {
+      try {
+        results.forEach((r) => {
+          if (r && r.url) URL.revokeObjectURL(r.url);
+        });
+    } catch {
+  // ignore
+      }
+    };
+  }, [results]);
 
   const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
@@ -265,7 +323,7 @@ export default function PDFBatchProcessor() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Layers className="h-8 w-8" />
+            <Layers className="h-8 w-8" aria-hidden="true" />
             PDF Batch Processor
           </h1>
           <p className="text-muted-foreground">
@@ -289,7 +347,7 @@ export default function PDFBatchProcessor() {
                 }`}
               >
                 <input {...getInputProps()} />
-                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
                 {isDragActive ? (
                   <p>Drop the PDF files here...</p>
                 ) : (
@@ -331,7 +389,7 @@ export default function PDFBatchProcessor() {
                   disabled={files.length === 0 || isProcessing}
                   className="flex-1"
                 >
-                  <Play className="h-4 w-4 mr-2" />
+                  <Play className="h-4 w-4 mr-2" aria-hidden="true" />
                   {isProcessing ? 'Processing...' : 'Start Processing'}
                 </Button>
                 <Button variant="outline" onClick={clearAll} disabled={isProcessing}>
@@ -367,7 +425,7 @@ export default function PDFBatchProcessor() {
                       onClick={() => removeFile(file.id)}
                       disabled={isProcessing}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </div>
                 ))}
@@ -380,7 +438,7 @@ export default function PDFBatchProcessor() {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Settings className="h-5 w-5 animate-spin" />
+                <Settings className="h-5 w-5 animate-spin" aria-hidden="true" />
                 Processing...
               </CardTitle>
             </CardHeader>
@@ -397,7 +455,7 @@ export default function PDFBatchProcessor() {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
                 Processing Complete
               </CardTitle>
               <CardDescription>
@@ -409,7 +467,7 @@ export default function PDFBatchProcessor() {
                 {results.map((result, index) => (
                   <div key={index} className="flex items-center justify-between p-2 border rounded">
                     <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4" />
+                      <FileText className="h-4 w-4" aria-hidden="true" />
                       <span className="text-sm">{result.name}</span>
                       <span className="text-xs text-muted-foreground">
                         {formatFileSize(result.size)}
@@ -427,17 +485,24 @@ export default function PDFBatchProcessor() {
                         const link = document.createElement('a');
                         link.href = result.url;
                         link.download = result.name;
+                        document.body.appendChild(link);
                         link.click();
+                        document.body.removeChild(link);
+                        // Revoke shortly after download starts
+                        const urlToRevoke = result.url;
+                        setTimeout(() => {
+                          try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                        }, 500);
                       }}
                     >
-                      <Download className="h-4 w-4" />
+                      <Download className="h-4 w-4" aria-hidden="true" />
                     </Button>
                   </div>
                 ))}
               </div>
               
               <Button onClick={downloadAll} className="w-full">
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-2" aria-hidden="true" />
                 Download All Files
               </Button>
             </CardContent>
@@ -448,7 +513,7 @@ export default function PDFBatchProcessor() {
           <Card className="mb-6">
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 text-red-600">
-                <AlertCircle className="h-5 w-5" />
+                <AlertCircle className="h-5 w-5" aria-hidden="true" />
                 <span>An error occurred during processing. Please try again.</span>
               </div>
             </CardContent>
@@ -458,7 +523,7 @@ export default function PDFBatchProcessor() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Layers className="h-4 w-4" />
+              <Layers className="h-4 w-4" aria-hidden="true" />
               <span>All processing happens locally in your browser. Your files never leave your device.</span>
             </div>
           </CardContent>

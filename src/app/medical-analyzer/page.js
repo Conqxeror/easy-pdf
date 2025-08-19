@@ -67,10 +67,13 @@ export default function MedicalAnalyzerPage() {
           // Dynamically import pdfjs-dist only if the file is a PDF
           if (file.type === "application/pdf") {
             try {
-              const pdfjsLib = await import("pdfjs-dist");
-              pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.js`;
-            } catch (pdfError) {
-              console.warn("PDF.js worker setup failed:", pdfError);
+              // Dynamically import the legacy pdfjs build for client-side rendering
+              const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
+              if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+              }
+            } catch {
+              console.warn("PDF.js worker setup failed");
             }
           }
 
@@ -358,7 +361,9 @@ export default function MedicalAnalyzerPage() {
                   a.href = url;
                   a.download = `medical-analysis-${file.name}.txt`;
                   a.click();
-                  URL.revokeObjectURL(url);
+                  setTimeout(() => {
+                    try { URL.revokeObjectURL(url); } catch { }
+                  }, 500);
                 }}
                 aria-label="Download Report"
               >

@@ -147,8 +147,8 @@ export default function ReportGeneratorPage() {
     link.click();
     setTimeout(() => {
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }, 0);
+  try { URL.revokeObjectURL(url); } catch { }
+    }, 500);
     setBanner({ type: 'success', message: 'Report exported as JSON.' });
   };
 

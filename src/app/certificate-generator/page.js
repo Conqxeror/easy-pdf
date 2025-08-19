@@ -337,7 +337,9 @@ export default function CertificateGeneratorPage() {
       link.download = `Certificate-${certificateData.recipientName.replace(/\s+/g, '-')}-${certificateData.certificateId}.pdf`;
       link.click();
 
-      URL.revokeObjectURL(url);
+      setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { }
+      }, 500);
 
       trackEvent('certificate_generated_successfully', {
         template: certificateData.template,

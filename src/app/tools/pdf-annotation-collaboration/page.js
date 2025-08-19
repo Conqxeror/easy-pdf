@@ -275,10 +275,10 @@ export default function PDFAnnotationCollaboration() {
     const a = document.createElement('a');
     a.href = url;
     a.download = `annotations_${Date.now()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => { try { URL.revokeObjectURL(url); } catch { } }, 500);
   };
 
   const downloadAnnotatedPdf = () => {
@@ -288,10 +288,10 @@ export default function PDFAnnotationCollaboration() {
     const a = document.createElement('a');
     a.href = url;
     a.download = `${file.name.replace('.pdf', '')}_annotated.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => { try { URL.revokeObjectURL(url); } catch { } }, 500);
   };
 
   const getStatusColor = (status) => {
@@ -350,7 +350,7 @@ export default function PDFAnnotationCollaboration() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8">
-            <MessageSquare className="mx-auto h-12 w-12 text-blue-600 mb-4" />
+            <MessageSquare className="mx-auto h-12 w-12 text-blue-600 mb-4" aria-hidden="true" />
             <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Annotation Collaboration</h1>
             <p className="text-gray-600">Collaborate on PDF annotations with team members</p>
           </div>
@@ -368,7 +368,7 @@ export default function PDFAnnotationCollaboration() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
+                  <FileText className="h-5 w-5" aria-hidden="true" />
                   Upload PDF Document
                 </CardTitle>
                 <CardDescription>
@@ -390,7 +390,7 @@ export default function PDFAnnotationCollaboration() {
                   
                   {file && (
                     <Alert>
-                      <CheckCircle className="h-4 w-4" />
+                      <CheckCircle className="h-4 w-4" aria-hidden="true" />
                       <AlertDescription>
                         File loaded: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                         <br />
@@ -407,7 +407,7 @@ export default function PDFAnnotationCollaboration() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Edit3 className="h-5 w-5" />
+                  <Edit3 className="h-5 w-5" aria-hidden="true" />
                   Add New Annotation
                 </CardTitle>
                 <CardDescription>
@@ -424,7 +424,7 @@ export default function PDFAnnotationCollaboration() {
                         onClick={() => setNewAnnotation({...newAnnotation, type: "comment"})}
                         size="sm"
                       >
-                        <MessageSquare className="mr-2 h-4 w-4" />
+                        <MessageSquare className="mr-2 h-4 w-4" aria-hidden="true" />
                         Comment
                       </Button>
                       <Button
@@ -432,7 +432,7 @@ export default function PDFAnnotationCollaboration() {
                         onClick={() => setNewAnnotation({...newAnnotation, type: "highlight"})}
                         size="sm"
                       >
-                        <Highlighter className="mr-2 h-4 w-4" />
+                        <Highlighter className="mr-2 h-4 w-4" aria-hidden="true" />
                         Highlight
                       </Button>
                       <Button
@@ -440,7 +440,7 @@ export default function PDFAnnotationCollaboration() {
                         onClick={() => setNewAnnotation({...newAnnotation, type: "note"})}
                         size="sm"
                       >
-                        <FileText className="mr-2 h-4 w-4" />
+                        <FileText className="mr-2 h-4 w-4" aria-hidden="true" />
                         Note
                       </Button>
                     </div>
@@ -490,7 +490,7 @@ export default function PDFAnnotationCollaboration() {
                 </div>
 
                 <Button onClick={addAnnotation} disabled={!newAnnotation.text.trim()}>
-                  <MessageSquare className="mr-2 h-4 w-4" />
+                  <MessageSquare className="mr-2 h-4 w-4" aria-hidden="true" />
                   Add Annotation
                 </Button>
               </CardContent>
@@ -557,7 +557,7 @@ export default function PDFAnnotationCollaboration() {
                             size="sm"
                             onClick={() => setSelectedAnnotation(annotation.id)}
                           >
-                            <Reply className="mr-1 h-3 w-3" />
+                            <Reply className="mr-1 h-3 w-3" aria-hidden="true" />
                             Reply
                           </Button>
                           <Button
@@ -565,7 +565,7 @@ export default function PDFAnnotationCollaboration() {
                             size="sm"
                             onClick={() => updateAnnotationStatus(annotation.id, 'resolved')}
                           >
-                            <CheckCircle className="mr-1 h-3 w-3" />
+                            <CheckCircle className="mr-1 h-3 w-3" aria-hidden="true" />
                             Resolve
                           </Button>
                         </div>
@@ -583,7 +583,7 @@ export default function PDFAnnotationCollaboration() {
                               onClick={() => addReply(annotation.id)}
                               disabled={!replyText.trim()}
                             >
-                              <Send className="h-4 w-4" />
+                              <Send className="h-4 w-4" aria-hidden="true" />
                             </Button>
                           </div>
                         )}
@@ -720,7 +720,7 @@ export default function PDFAnnotationCollaboration() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Download className="h-5 w-5" />
+                  <Download className="h-5 w-5" aria-hidden="true" />
                   Export Options
                 </CardTitle>
                 <CardDescription>
@@ -730,17 +730,17 @@ export default function PDFAnnotationCollaboration() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <Button onClick={exportAnnotations} variant="outline">
-                    <Download className="mr-2 h-4 w-4" />
+                    <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                     Export Annotations (JSON)
                   </Button>
                   <Button onClick={downloadAnnotatedPdf} disabled={!annotatedPdf} variant="outline">
-                    <Download className="mr-2 h-4 w-4" />
+                    <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                     Download Annotated PDF
                   </Button>
                 </div>
 
                 <Alert>
-                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTriangle className="h-4 w-4" aria-hidden="true" />
                   <AlertDescription>
                     <strong>Export includes:</strong>
                     <ul className="list-disc list-inside mt-2 space-y-1">

@@ -173,6 +173,12 @@ export default function UnlockPdfPage() {
                   href={unlockedUrl}
                   download={`unlocked_${fileName || "document"}.pdf`}
                   className="text-center"
+                  onClick={() => {
+                    const urlToRevoke = unlockedUrl;
+                    setTimeout(() => {
+                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                    }, 500);
+                  }}
                 >
                   Download Unlocked PDF
                 </a>

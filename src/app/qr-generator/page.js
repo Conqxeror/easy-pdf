@@ -188,7 +188,9 @@ END:VCARD`;
       link.download = `qr-code-${qrCodeData.type}-${Date.now()}.pdf`;
       link.click();
 
-      URL.revokeObjectURL(url);
+      setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { }
+      }, 500);
 
       trackEvent('qr_code_downloaded', { type: qrCodeData.type, format: 'PDF' });
     } catch (error) {

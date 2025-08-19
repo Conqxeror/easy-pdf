@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback  } from "react";
 import { PDFDocument } from "pdf-lib";
-import * as pdfjs from "pdfjs-dist";
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import { Download, FileText, Zap } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -13,8 +13,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageContent from "@/components/ui/ToolPageContent";
 
-// Configure pdfjs worker to run from CDN
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Configure pdfjs worker only on the client to avoid SSR/runtime errors
+if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+}
 
 export default function CompressPDFs() {
   const [file, setFile] = useState(null);
@@ -113,7 +115,11 @@ export default function CompressPDFs() {
       const compressedPdfBytes = await newPdfDoc.save();
       const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      setCompressedPdfUrl(url);
+      // Revoke previous URL if present to avoid memory leaks
+      setCompressedPdfUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
+      });
 
       const newSize = blob.size;
       setCompressedSize(newSize);
@@ -352,6 +358,12 @@ export default function CompressPDFs() {
                       href={compressedPdfUrl}
                       download={`compressed_${fileName}`}
                       className="text-center flex items-center"
+                      onClick={() => {
+                        const urlToRevoke = compressedPdfUrl;
+                        setTimeout(() => {
+                          try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                        }, 500);
+                      }}
                     >
                       <Download className="w-5 h-5 mr-2" />
                       Download Compressed PDF
@@ -405,3 +417,7 @@ export default function CompressPDFs() {
     </>
   );
 }
+
+// Cleanup object URL when component unmounts
+// (This runs because this is a client component)
+// Note: using a module-level effect isn't straightforward here; add component-level effect

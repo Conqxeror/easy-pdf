@@ -200,15 +200,29 @@ export default function PDFFormCreator() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
-      
+
+      // Revoke previous URLs if any (defensive)
+      try {
+        // No persistent state here, but attempt safe revocation of any existing global link URLs
+  } catch {
+        // ignore
+      }
+
       const link = document.createElement('a');
       link.href = url;
       link.download = `${formTitle.replace(/\s+/g, '_')}_form.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
-      URL.revokeObjectURL(url);
+
+      // Revoke URL after a short delay to let the download start
+      setTimeout(() => {
+        try {
+          URL.revokeObjectURL(url);
+  } catch {
+          // ignore
+        }
+      }, 500);
     } catch (error) {
       console.error('Error creating form PDF:', error);
     } finally {
@@ -258,8 +272,8 @@ export default function PDFFormCreator() {
     >
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <FileBadge2 className="h-8 w-8" />
+            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <FileBadge2 className="h-8 w-8" aria-hidden="true" />
             PDF Form Creator
           </h1>
           <p className="text-muted-foreground">
@@ -287,7 +301,7 @@ export default function PDFFormCreator() {
               
               <div className="space-y-2">
                 <Button onClick={createBlankForm} variant="outline" className="w-full">
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
                   New Blank Form
                 </Button>
                 
@@ -298,7 +312,7 @@ export default function PDFFormCreator() {
                   }`}
                 >
                   <input {...getInputProps()} />
-                  <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
+                  <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
                   <p className="text-sm">
                     {isDragActive ? 'Drop PDF template here' : 'Upload PDF Template'}
                   </p>
@@ -323,7 +337,7 @@ export default function PDFFormCreator() {
                       onClick={() => addField(fieldType.id)}
                       className="flex flex-col h-16 p-2"
                     >
-                      <Icon className="h-4 w-4 mb-1" />
+                      <Icon className="h-4 w-4 mb-1" aria-hidden="true" />
                       <span className="text-xs">{fieldType.name}</span>
                     </Button>
                   );

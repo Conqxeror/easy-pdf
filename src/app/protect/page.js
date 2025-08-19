@@ -71,7 +71,7 @@ export default function ProtectPdfPage() {
       });
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      setProtectedUrl(URL.createObjectURL(blob));
+  setProtectedUrl(URL.createObjectURL(blob));
     } catch (e) {
       setError(
         "Failed to protect PDF. The file might be corrupted or already encrypted."
@@ -174,6 +174,12 @@ export default function ProtectPdfPage() {
                   href={protectedUrl}
                   download={`protected_${fileName || "document"}.pdf`}
                   className="text-center"
+                  onClick={() => {
+                    const urlToRevoke = protectedUrl;
+                    setTimeout(() => {
+                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { }
+                    }, 500);
+                  }}
                 >
                   Download Protected PDF
                 </a>

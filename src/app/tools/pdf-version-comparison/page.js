@@ -177,7 +177,10 @@ export default function PDFVersionComparison() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // Delay revoke so browser can start the download
+    setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }, 500);
   };
 
   const getSeverityColor = (severity) => {

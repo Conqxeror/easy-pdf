@@ -10,12 +10,14 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, Search, FileText, Image as ImageIcon, Brain, Copy, Zap, Globe, CheckCircle, AlertCircle } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import { createWorker } from 'tesseract.js';
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
-// Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+// Set up PDF.js worker (browser-only)
+if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+}
 
 export default function AdvancedOCR() {
   const [files, setFiles] = useState([]);
@@ -240,7 +242,10 @@ export default function AdvancedOCR() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // Delay revoke slightly so the browser can start the download
+    setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }, 500);
   };
 
   const downloadAllResults = () => {
@@ -257,7 +262,10 @@ export default function AdvancedOCR() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    // Delay revoke slightly so the browser can start the download
+    setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }, 500);
   };
 
   const getConfidenceColor = (confidence) => {
@@ -304,7 +312,7 @@ export default function AdvancedOCR() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Search className="h-8 w-8" />
+            <Search className="h-8 w-8" aria-hidden="true" />
             Advanced OCR with AI
           </h1>
           <p className="text-muted-foreground">
@@ -328,7 +336,7 @@ export default function AdvancedOCR() {
               }`}
             >
               <input {...getInputProps()} />
-              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
               {isDragActive ? (
                 <p>Drop the files here...</p>
               ) : (
@@ -361,7 +369,7 @@ export default function AdvancedOCR() {
                   {languages.map(lang => (
                     <SelectItem key={lang.code} value={lang.code}>
                       <div className="flex items-center gap-2">
-                        <Globe className="h-4 w-4" />
+                        <Globe className="h-4 w-4" aria-hidden="true" />
                         {lang.name}
                       </div>
                     </SelectItem>
@@ -378,20 +386,20 @@ export default function AdvancedOCR() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="standard">
-                    <div className="flex items-center gap-2">
-                      <FileText className="h-4 w-4" />
+                      <div className="flex items-center gap-2">
+                      <FileText className="h-4 w-4" aria-hidden="true" />
                       Standard OCR
                     </div>
                   </SelectItem>
                   <SelectItem value="enhanced">
-                    <div className="flex items-center gap-2">
-                      <Zap className="h-4 w-4" />
+                      <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4" aria-hidden="true" />
                       Enhanced Processing
                     </div>
                   </SelectItem>
                   <SelectItem value="ai-powered">
-                    <div className="flex items-center gap-2">
-                      <Brain className="h-4 w-4" />
+                      <div className="flex items-center gap-2">
+                      <Brain className="h-4 w-4" aria-hidden="true" />
                       AI-Powered Enhancement
                     </div>
                   </SelectItem>
@@ -404,7 +412,7 @@ export default function AdvancedOCR() {
               disabled={files.length === 0 || isProcessing}
               className="w-full"
             >
-              <Search className="h-4 w-4 mr-2" />
+              <Search className="h-4 w-4 mr-2" aria-hidden="true" />
               {isProcessing ? 'Processing...' : 'Extract Text'}
             </Button>
 
@@ -420,8 +428,8 @@ export default function AdvancedOCR() {
       {files.length > 0 && (
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
+              <CardTitle className="flex items-center gap-2">
+              <FileText className="h-5 w-5" aria-hidden="true" />
               Files Queue ({files.length})
             </CardTitle>
           </CardHeader>
@@ -431,9 +439,9 @@ export default function AdvancedOCR() {
                 <div key={fileData.id} className="flex items-center justify-between p-2 border rounded">
                   <div className="flex items-center gap-2">
                     {fileData.file.type === 'application/pdf' ? (
-                      <FileText className="h-4 w-4" />
+                      <FileText className="h-4 w-4" aria-hidden="true" />
                     ) : (
-                      <ImageIcon className="h-4 w-4" />
+                      <ImageIcon className="h-4 w-4" aria-hidden="true" />
                     )}
                     <span className="text-sm">{fileData.file.name}</span>
                   </div>
@@ -455,8 +463,8 @@ export default function AdvancedOCR() {
       {isProcessing && (
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Search className="h-5 w-5 animate-pulse" />
+              <CardTitle className="flex items-center gap-2">
+              <Search className="h-5 w-5 animate-pulse" aria-hidden="true" />
               Processing...
             </CardTitle>
           </CardHeader>
@@ -473,12 +481,12 @@ export default function AdvancedOCR() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
                 Extraction Complete
               </div>
-              <Button onClick={downloadAllResults} variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
+                <Button onClick={downloadAllResults} variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" aria-hidden="true" />
                 Download All
               </Button>
             </CardTitle>

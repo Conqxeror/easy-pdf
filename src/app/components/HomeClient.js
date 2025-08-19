@@ -123,26 +123,78 @@ export default function HomeClient() {
     <>
       <SkipToMain />
 
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "easy-pdf",
-            "operatingSystem": "All",
-            "applicationCategory": "Productivity",
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.9",
-              "ratingCount": "1200"
+      {/* SoftwareApplication structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "easy-pdf",
+          "operatingSystem": "All",
+          "applicationCategory": "Productivity",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "ratingCount": "1200"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        }) }}
+      />
+
+      {/* FAQ structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Are my PDF files safe and private?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All processing happens 100% client-side in your browser. Your files never leave your device."
+              }
             },
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "USD"
+            {
+              "@type": "Question",
+              "name": "Do I need to create an account to use easy-pdf?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No account or registration is required. All tools are free and available instantly."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What PDF tools are available?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can merge, split, compress, convert, protect, and edit PDFs, plus many more features."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is easy-pdf free to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, all PDF tools are completely free to use."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does easy-pdf work on mobile devices?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, easy-pdf is optimized for both desktop and mobile browsers."
+              }
             }
-          }) }}
-        />
+          ]
+        }) }}
+      />
 
       <main id="main-content">
         <PageContainer>

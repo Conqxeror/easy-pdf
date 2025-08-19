@@ -8,11 +8,13 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
-// Set up PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+// Configure pdf.js worker only on client and use CDN worker for compatibility
+if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+}
 
 export default function PDFAccessibilityChecker() {
   const [file, setFile] = useState(null);
@@ -414,7 +416,7 @@ export default function PDFAccessibilityChecker() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Shield className="h-8 w-8" />
+              <Shield className="h-8 w-8" aria-hidden="true" />
             PDF Accessibility Checker
           </h1>
           <p className="text-muted-foreground">
@@ -438,7 +440,7 @@ export default function PDFAccessibilityChecker() {
               }`}
             >
               <input {...getInputProps()} />
-              <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
               {isDragActive ? (
                 <p>Drop the PDF file here...</p>
               ) : (
@@ -454,7 +456,7 @@ export default function PDFAccessibilityChecker() {
             {file && (
               <div className="mt-4 p-3 border rounded-lg">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
+                  <FileText className="h-4 w-4" aria-hidden="true" />
                   <span className="text-sm font-medium">{file.name}</span>
                   <span className="text-xs text-muted-foreground">
                     ({(file.size / 1024 / 1024).toFixed(2)} MB)
@@ -490,7 +492,7 @@ export default function PDFAccessibilityChecker() {
               disabled={!file || isAnalyzing}
               className="w-full"
             >
-              <Shield className="h-4 w-4 mr-2" />
+              <Shield className="h-4 w-4 mr-2" aria-hidden="true" />
               {isAnalyzing ? 'Analyzing...' : 'Start Analysis'}
             </Button>
 
@@ -515,7 +517,7 @@ export default function PDFAccessibilityChecker() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 animate-pulse" />
+              <Shield className="h-5 w-5 animate-pulse" aria-hidden="true" />
               Analyzing Accessibility...
             </CardTitle>
           </CardHeader>
@@ -534,11 +536,11 @@ export default function PDFAccessibilityChecker() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
+                  <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
                   Analysis Complete
                 </CardTitle>
                 <Button onClick={downloadReport} variant="outline" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
+                  <Download className="h-4 w-4 mr-2" aria-hidden="true" />
                   Download Report
                 </Button>
               </div>
@@ -629,14 +631,14 @@ export default function PDFAccessibilityChecker() {
                             check.passed ? 'bg-green-100' : 'bg-red-100'
                           }`}>
                             {check.passed ? (
-                              <CheckCircle className="h-4 w-4 text-green-600" />
+                              <CheckCircle className="h-4 w-4 text-green-600" aria-hidden="true" />
                             ) : (
-                              <XCircle className="h-4 w-4 text-red-600" />
+                              <XCircle className="h-4 w-4 text-red-600" aria-hidden="true" />
                             )}
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <Icon className="h-4 w-4" />
+                              <Icon className="h-4 w-4" aria-hidden="true" />
                               <h4 className="font-medium text-sm">{check.name}</h4>
                               {!check.passed && getSeverityBadge(check.severity)}
                             </div>
@@ -664,7 +666,7 @@ export default function PDFAccessibilityChecker() {
                     <Card key={index}>
                       <CardContent className="pt-4">
                         <div className="flex items-start gap-3">
-                          <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" />
+          <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" aria-hidden="true" />
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
                               {getSeverityBadge(issue.severity)}
@@ -685,7 +687,7 @@ export default function PDFAccessibilityChecker() {
               ) : (
                 <Card>
                   <CardContent className="pt-6 text-center">
-                    <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+        <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" aria-hidden="true" />
                     <h3 className="font-medium mb-2">No Issues Found</h3>
                     <p className="text-sm text-muted-foreground">
                       Your PDF passed all accessibility checks!
@@ -708,7 +710,7 @@ export default function PDFAccessibilityChecker() {
                           <CheckCircle className={`h-4 w-4 ${
                             rec.priority === 'high' ? 'text-red-600' :
                             rec.priority === 'medium' ? 'text-yellow-600' : 'text-green-600'
-                          }`} />
+                          }`} aria-hidden="true" />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
@@ -748,7 +750,7 @@ export default function PDFAccessibilityChecker() {
       <Card>
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4" />
+            <Shield className="h-4 w-4" aria-hidden="true" />
             <span>All accessibility analysis happens locally in your browser. Your files never leave your device.</span>
           </div>
         </CardContent>

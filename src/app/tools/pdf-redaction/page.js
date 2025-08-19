@@ -190,7 +190,10 @@ export default function PDFRedactionTool() {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // Delay revoke slightly so the browser can start the download
+    setTimeout(() => {
+  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
+    }, 500);
   };
 
   const toggleTermSelection = (termId) => {
@@ -240,7 +243,7 @@ export default function PDFRedactionTool() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <EyeOff className="mx-auto h-12 w-12 text-red-600 mb-4" />
+              <EyeOff className="mx-auto h-12 w-12 text-red-600 mb-4" aria-hidden="true" />
             <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Redaction Tool</h1>
             <p className="text-gray-600">Permanently remove sensitive information from PDF documents</p>
           </div>
@@ -279,7 +282,7 @@ export default function PDFRedactionTool() {
                     
                     {file && (
                       <Alert>
-                        <CheckCircle className="h-4 w-4" />
+                          <CheckCircle className="h-4 w-4" aria-hidden="true" />
                         <AlertDescription>
                           File loaded: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
                         </AlertDescription>
@@ -287,7 +290,7 @@ export default function PDFRedactionTool() {
                     )}
 
                     <Alert>
-                      <AlertTriangle className="h-4 w-4" />
+                        <AlertTriangle className="h-4 w-4" aria-hidden="true" />
                       <AlertDescription>
                         <strong>Warning:</strong> Redaction permanently removes information. Ensure you have a backup of the original document.
                       </AlertDescription>
@@ -325,7 +328,7 @@ export default function PDFRedactionTool() {
                     disabled={!file || isProcessing}
                     className="w-full"
                   >
-                    <Search className="mr-2 h-4 w-4" />
+                      <Search className="mr-2 h-4 w-4" aria-hidden="true" />
                     {isProcessing ? 'Searching...' : 'Search for Terms'}
                   </Button>
 
@@ -385,7 +388,7 @@ export default function PDFRedactionTool() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Trash2 className="h-5 w-5" />
+                      <Trash2 className="h-5 w-5" aria-hidden="true" />
                     Manual Redaction Areas
                   </CardTitle>
                   <CardDescription>
@@ -476,7 +479,7 @@ export default function PDFRedactionTool() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5" />
+                      <Shield className="h-5 w-5" aria-hidden="true" />
                     Apply Redactions
                   </CardTitle>
                   <CardDescription>
@@ -522,7 +525,7 @@ export default function PDFRedactionTool() {
                     disabled={!file || isProcessing || (selectedTerms.size === 0 && redactionAreas.length === 0)}
                     className="w-full"
                   >
-                    <EyeOff className="mr-2 h-4 w-4" />
+                      <EyeOff className="mr-2 h-4 w-4" aria-hidden="true" />
                     {isProcessing ? 'Applying Redactions...' : 'Apply Redactions'}
                   </Button>
 
@@ -537,11 +540,11 @@ export default function PDFRedactionTool() {
 
                   {redactedPdf && (
                     <Alert>
-                      <CheckCircle className="h-4 w-4" />
+              <CheckCircle className="h-4 w-4" aria-hidden="true" />
                       <AlertDescription className="flex items-center justify-between">
                         <span>Redaction completed successfully!</span>
                         <Button onClick={downloadRedactedPdf} size="sm">
-                          <Download className="mr-2 h-4 w-4" />
+                <Download className="mr-2 h-4 w-4" aria-hidden="true" />
                           Download
                         </Button>
                       </AlertDescription>
@@ -555,7 +558,7 @@ export default function PDFRedactionTool() {
           <Card className="mt-8">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
+                <Shield className="h-5 w-5" aria-hidden="true" />
                 Redaction Security Features
               </CardTitle>
             </CardHeader>
