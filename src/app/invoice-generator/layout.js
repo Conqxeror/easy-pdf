@@ -1,20 +1,30 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "PDF Invoice Generator - Create Professional Invoices Online",
-  description: "Create professional invoices with GST support, multiple currencies, and customizable templates. Free online invoice maker for businesses.",
+  title: "PDF Invoice Generator - Create Professional Invoices Online | easy-pdf",
+  description: "Create professional invoices with GST support, multiple currencies, and customizable templates. Free online invoice maker for businesses. 100% client-side with no uploads.",
   keywords: [
-  "PDF invoice generator",
-  "create invoice",
-  "invoice maker",
-  "business invoice",
-  "GST invoice",
-  "professional invoice",
-  "invoice template",
-  "business billing",
-  "invoice creation",
-  "GST billing"
-],
+    "PDF invoice generator",
+    "create invoice",
+    "invoice maker",
+    "business invoice",
+    "GST invoice",
+    "professional invoice",
+    "invoice template",
+    "business billing",
+    "invoice creation",
+    "GST billing",
+    "free invoice generator",
+    "online invoice maker",
+    "PDF invoice creator",
+    "custom invoice design",
+    "invoice printing tool",
+    "business invoice generator",
+    "invoice design tool",
+    "batch invoice creation",
+    "invoice customization",
+    "secure invoice generator"
+  ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/invoice-generator",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "PDF Invoice Generator",
@@ -30,11 +40,11 @@ const structuredData = generateComprehensiveJsonLd('tool', {
   description: "Create professional invoices with GST support, multiple currencies, and customizable templates. Free online invoice maker for businesses.",
   url: "/invoice-generator",
   features: [
-  "Professional invoice templates",
-  "GST and tax calculations",
-  "Multiple currency support",
-  "Client and company management"
-],
+    "Professional invoice templates",
+    "GST and tax calculations",
+    "Multiple currency support",
+    "Client and company management"
+  ],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
     { name: "PDF Invoice Generator", url: "https://easy-pdf-murex.vercel.app/invoice-generator" }

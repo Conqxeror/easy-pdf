@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
-import { Upload, Download, Layers, FileText, Trash2, Play, Settings, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload, Download, Layers, FileText, Trash2, Play, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
@@ -389,8 +389,11 @@ export default function PDFBatchProcessor() {
                   disabled={files.length === 0 || isProcessing}
                   className="flex-1"
                 >
-                  <Play className="h-4 w-4 mr-2" aria-hidden="true" />
-                  {isProcessing ? 'Processing...' : 'Start Processing'}
+                  {isProcessing ? (
+                    <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</span>
+                  ) : (
+                    <><Play className="h-4 w-4 mr-2" aria-hidden="true" />Start Processing</>
+                  )}
                 </Button>
                 <Button variant="outline" onClick={clearAll} disabled={isProcessing}>
                   <Trash2 className="h-4 w-4" />
@@ -438,7 +441,7 @@ export default function PDFBatchProcessor() {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Settings className="h-5 w-5 animate-spin" aria-hidden="true" />
+                <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                 Processing...
               </CardTitle>
             </CardHeader>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef  } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageSquare, Download, CheckCircle, AlertTriangle, FileText, Users, Send, Reply, Edit3, Highlighter } from "lucide-react";
+import { MessageSquare, Download, CheckCircle, AlertTriangle, FileText, Users, Send, Reply, Edit3, Highlighter, Loader2 } from "lucide-react";
 import { PDFDocument, rgb } from 'pdf-lib';
 import ToolPageContent from '@/components/ui/ToolPageContent';
+import FileDropzone from '@/components/ui/FileDropzone';
 
 export default function PDFAnnotationCollaboration() {
   const [file, setFile] = useState(null);
@@ -37,82 +38,13 @@ export default function PDFAnnotationCollaboration() {
   const [newCollaborator, setNewCollaborator] = useState({ email: "", role: "Reviewer" });
   const [selectedAnnotation, setSelectedAnnotation] = useState(null);
   const [replyText, setReplyText] = useState("");
-  const fileInputRef = useRef(null);
-
-  const handleFileUpload = (event) => {
-    const uploadedFile = event.target.files[0];
+  const handleFileUpload = (acceptedFiles) => {
+    const uploadedFile = acceptedFiles[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       setFile(uploadedFile);
       setAnnotatedPdf(null);
-      loadMockAnnotations();
+      setAnnotations([]);
     }
-  };
-
-  const loadMockAnnotations = () => {
-    const mockAnnotations = [
-      {
-        id: 1,
-        type: "comment",
-        text: "This section needs clarification on the implementation details.",
-        page: 1,
-        x: 150,
-        y: 200,
-        author: "John Doe",
-        timestamp: new Date(Date.now() - 86400000).toISOString(),
-        replies: [
-          {
-            id: 11,
-            text: "I agree. We should add more technical specifications here.",
-            author: "Jane Smith",
-            timestamp: new Date(Date.now() - 43200000).toISOString()
-          }
-        ],
-        status: "open",
-        priority: "high"
-      },
-      {
-        id: 2,
-        type: "highlight",
-        text: "Important security consideration",
-        page: 1,
-        x: 100,
-        y: 300,
-        width: 200,
-        height: 20,
-        author: "Mike Johnson",
-        timestamp: new Date(Date.now() - 172800000).toISOString(),
-        replies: [],
-        status: "resolved",
-        priority: "medium"
-      },
-      {
-        id: 3,
-        type: "note",
-        text: "Consider adding a diagram here to illustrate the workflow",
-        page: 2,
-        x: 250,
-        y: 150,
-        author: "Jane Smith",
-        timestamp: new Date(Date.now() - 259200000).toISOString(),
-        replies: [
-          {
-            id: 31,
-            text: "Good idea! I'll work on creating a flowchart.",
-            author: "John Doe",
-            timestamp: new Date(Date.now() - 172800000).toISOString()
-          },
-          {
-            id: 32,
-            text: "The diagram is now added. Please review.",
-            author: "John Doe",
-            timestamp: new Date(Date.now() - 86400000).toISOString()
-          }
-        ],
-        status: "in_progress",
-        priority: "low"
-      }
-    ];
-    setAnnotations(mockAnnotations);
   };
 
   const addAnnotation = () => {
@@ -377,16 +309,14 @@ export default function PDFAnnotationCollaboration() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="file-upload">PDF File</Label>
-                    <Input
-                      id="file-upload"
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleFileUpload}
-                      ref={fileInputRef}
-                    />
-                  </div>
+                  <FileDropzone
+                    accept="application/pdf"
+                    onFiles={handleFileUpload}
+                    label="Choose PDF"
+                    description="Drag & drop or click to select a PDF file (Max 50MB)"
+                    maxSize={50 * 1024 * 1024}
+                    isLoading={isProcessing && !file}
+                  />
                   
                   {file && (
                     <Alert>
@@ -687,8 +617,11 @@ export default function PDFAnnotationCollaboration() {
                 </div>
 
                 <Button onClick={applyAnnotations} disabled={!file || isProcessing} className="w-full">
-                  <Edit3 className="mr-2 h-4 w-4" />
-                  {isProcessing ? 'Applying Annotations...' : 'Apply Annotations to PDF'}
+                  {isProcessing ? (
+                    <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Applying Annotations...</span>
+                  ) : (
+                    <><Edit3 className="mr-2 h-4 w-4" />Apply Annotations to PDF</>
+                  )}
                 </Button>
 
                 {isProcessing && (

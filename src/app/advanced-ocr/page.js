@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback  } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -56,14 +56,7 @@ export default function AdvancedOCR() {
     }))]);
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff']
-    },
-    multiple: true
-  });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const removeFile = (id) => {
     setFiles(files.filter(file => file.id !== id));
@@ -76,156 +69,88 @@ export default function AdvancedOCR() {
     setProcessingStatus('idle');
   };
 
-  const processImageWithOCR = async (imageFile, worker) => {
-    try {
-      const { data: { text, confidence } } = await worker.recognize(imageFile);
-      return { text, confidence };
-    } catch (error) {
-      console.error('OCR processing error:', error);
-      return { text: '', confidence: 0 };
-    }
-  };
-
-  const processPDFPages = async (pdfFile) => {
-    const arrayBuffer = await pdfFile.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    const results = [];
-
-    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const viewport = page.getViewport({ scale: 2.0 });
-      
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
-
-      await page.render({
-        canvasContext: context,
-        viewport: viewport
-      }).promise;
-
-      // Convert canvas to blob for OCR
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      
-      const worker = await createWorker(selectedLanguage);
-      const { text, confidence } = await processImageWithOCR(blob, worker);
-      await worker.terminate();
-
-      results.push({
-        page: pageNum,
-        text: text.trim(),
-        confidence: Math.round(confidence)
-      });
-
-      setProgress((pageNum / pdf.numPages) * 100);
-    }
-
-    return results;
-  };
-
-  const enhanceTextWithAI = (text, confidence) => {
-    // Simulated AI enhancement - in a real app, this would call an AI service
-    let enhancedText = text;
-    
-    // Basic text cleaning and formatting
-    enhancedText = enhancedText
-      .replace(/\s+/g, ' ') // Normalize whitespace
-      .replace(/([.!?])\s*([A-Z])/g, '$1 $2') // Fix sentence spacing
-      .replace(/([a-z])([A-Z])/g, '$1 $2') // Fix word spacing
-      .trim();
-
-    // Simulate confidence boost with AI
-    const aiConfidence = Math.min(100, confidence + 15);
-    
-    return {
-      originalText: text,
-      enhancedText,
-      confidence: aiConfidence,
-      improvements: [
-        'Normalized whitespace',
-        'Fixed sentence spacing',
-        'Corrected word boundaries',
-        'AI confidence boost'
-      ]
-    };
-  };
-
   const processFiles = async () => {
     if (files.length === 0) return;
-
     setIsProcessing(true);
     setProcessingStatus('processing');
     setProgress(0);
     setResults([]);
 
+    const worker = await createWorker(selectedLanguage, 1, {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          setProgress(m.progress * 100);
+        }
+      }
+    });
+
     try {
       const processedResults = [];
-
       for (let i = 0; i < files.length; i++) {
         const fileData = files[i];
         const { file } = fileData;
 
         if (file.type === 'application/pdf') {
-          const pdfResults = await processPDFPages(file);
-          const combinedText = pdfResults.map(r => r.text).join('\n\n');
-          const avgConfidence = Math.round(
-            pdfResults.reduce((sum, r) => sum + r.confidence, 0) / pdfResults.length
-          );
+          const loadingTask = pdfjsLib.getDocument(URL.createObjectURL(file));
+          const pdf = await loadingTask.promise;
+          let pdfText = '';
+          let pageResults = [];
 
-          let finalResult = {
+          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+            const page = await pdf.getPage(pageNum);
+            const viewport = page.getViewport({ scale: 2.0 });
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+            const { data: { text, confidence } } = await worker.recognize(canvas);
+            pdfText += text + '\n\n';
+            pageResults.push({ page: pageNum, text, confidence: confidence.toFixed(2) });
+          }
+          processedResults.push({
             fileName: file.name,
             type: 'pdf',
-            pages: pdfResults.length,
-            text: combinedText,
-            confidence: avgConfidence,
-            pageResults: pdfResults
-          };
-
-          if (ocrMode === 'ai-powered' || ocrMode === 'enhanced') {
-            const enhanced = enhanceTextWithAI(combinedText, avgConfidence);
-            finalResult = {
-              ...finalResult,
-              ...enhanced
-            };
-          }
-
-          processedResults.push(finalResult);
-        } else {
-          // Process image file
-          const worker = await createWorker(selectedLanguage);
-          const { text, confidence } = await processImageWithOCR(file, worker);
-          await worker.terminate();
-
-          let finalResult = {
+            text: pdfText,
+            confidence: (pageResults.reduce((sum, p) => sum + parseFloat(p.confidence), 0) / pageResults.length).toFixed(2),
+            pages: pdf.numPages,
+            pageResults: pageResults
+          });
+        } else if (file.type.startsWith('image/')) {
+          const { data: { text, confidence } } = await worker.recognize(file);
+          processedResults.push({
             fileName: file.name,
             type: 'image',
-            text: text.trim(),
-            confidence: Math.round(confidence)
-          };
-
-          if (ocrMode === 'ai-powered' || ocrMode === 'enhanced') {
-            const enhanced = enhanceTextWithAI(text, confidence);
-            finalResult = {
-              ...finalResult,
-              ...enhanced
-            };
-          }
-
-          processedResults.push(finalResult);
+            text,
+            confidence: confidence.toFixed(2)
+          });
         }
-
-        setProgress(((i + 1) / files.length) * 100);
       }
-
       setResults(processedResults);
       setProcessingStatus('completed');
     } catch (error) {
-      console.error('Processing error:', error);
+      console.error("OCR Error:", error);
       setProcessingStatus('error');
     } finally {
+      await worker.terminate();
       setIsProcessing(false);
     }
+  };
+
+  const downloadAllResults = () => {
+    if (results.length === 0) return;
+    const allText = results.map(r => `--- ${r.fileName} ---
+${r.text}`).join('\n\n');
+    const blob = new Blob([allText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'all_ocr_results.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const copyToClipboard = (text) => {
@@ -233,45 +158,21 @@ export default function AdvancedOCR() {
   };
 
   const downloadText = (result) => {
-    const text = result.enhancedText || result.text;
-    const blob = new Blob([text], { type: 'text/plain' });
+    const blob = new Blob([result.text], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${result.fileName}_extracted.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    // Delay revoke slightly so the browser can start the download
-    setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-    }, 500);
-  };
-
-  const downloadAllResults = () => {
-    const allText = results.map(result => {
-      const text = result.enhancedText || result.text;
-      return `=== ${result.fileName} ===\n${text}\n\n`;
-    }).join('');
-    
-    const blob = new Blob([allText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'all_extracted_text.txt';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    // Delay revoke slightly so the browser can start the download
-    setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-    }, 500);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${result.fileName}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   const getConfidenceColor = (confidence) => {
-    if (confidence >= 90) return 'bg-green-100 text-green-800';
-    if (confidence >= 70) return 'bg-yellow-100 text-yellow-800';
-    return 'bg-red-100 text-red-800';
+    if (confidence > 90) return 'bg-green-500';
+    if (confidence > 80) return 'bg-yellow-500';
+    return 'bg-red-500';
   };
 
   return (
@@ -331,9 +232,7 @@ export default function AdvancedOCR() {
           <CardContent>
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
-                isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
-              }`}
+              className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${ isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'}`}
             >
               <input {...getInputProps()} />
               <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
@@ -526,7 +425,7 @@ export default function AdvancedOCR() {
                         <Textarea
                           value={result.text}
                           readOnly
-                          className="min-h-[200px] font-mono text-sm"
+                          className="min-h-[200px] font-mono text-sm border border-gray-200 rounded-md p-2"
                         />
                         <div className="flex gap-2">
                           <Button
@@ -553,7 +452,7 @@ export default function AdvancedOCR() {
                           <Textarea
                             value={result.enhancedText}
                             readOnly
-                            className="min-h-[200px] font-mono text-sm"
+                            className="min-h-[200px] font-mono text-sm border border-gray-200 rounded-md p-2"
                           />
                           {result.improvements && (
                             <div className="text-sm text-muted-foreground">
@@ -588,9 +487,9 @@ export default function AdvancedOCR() {
 
                       {result.pageResults && (
                         <TabsContent value="pages">
-                          <div className="space-y-3 max-h-[300px] overflow-y-auto">
+                          <div className="space-y-3 max-h-[300px] overflow-y-auto p-2 border border-gray-200 rounded-md">
                             {result.pageResults.map((pageResult, pageIndex) => (
-                              <Card key={pageIndex}>
+                              <Card key={pageIndex} className="bg-white shadow-sm">
                                 <CardHeader className="pb-2">
                                   <div className="flex items-center justify-between">
                                     <CardTitle className="text-sm">Page {pageResult.page}</CardTitle>
@@ -603,7 +502,7 @@ export default function AdvancedOCR() {
                                   <Textarea
                                     value={pageResult.text}
                                     readOnly
-                                    className="min-h-[100px] text-sm"
+                                    className="min-h-[100px] text-sm border border-gray-100 rounded-md p-1"
                                   />
                                 </CardContent>
                               </Card>
@@ -639,7 +538,7 @@ export default function AdvancedOCR() {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
     </ToolPageContent>
   );
 }

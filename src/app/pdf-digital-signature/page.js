@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef  } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,9 +8,10 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Download, CheckCircle, AlertTriangle, Key, FileText, Lock } from "lucide-react";
+import { Shield, Download, CheckCircle, AlertTriangle, Key, FileText, Lock, Loader2 } from "lucide-react";
 import { PDFDocument, rgb } from 'pdf-lib';
 import ToolPageContent from '@/components/ui/ToolPageContent';
+import FileDropzone from '@/components/ui/FileDropzone';
 
 export default function PDFDigitalSignature() {
   const [file, setFile] = useState(null);
@@ -32,10 +33,8 @@ export default function PDFDigitalSignature() {
     height: 50
   });
   const [signatureText, setSignatureText] = useState("");
-  const fileInputRef = useRef(null);
-
-  const handleFileUpload = (event) => {
-    const uploadedFile = event.target.files[0];
+  const handleFileUpload = (acceptedFiles) => {
+    const uploadedFile = acceptedFiles[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       setFile(uploadedFile);
       setSignedPdf(null);
@@ -241,16 +240,14 @@ export default function PDFDigitalSignature() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="file-upload">PDF File</Label>
-                    <Input
-                      id="file-upload"
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleFileUpload}
-                      ref={fileInputRef}
-                    />
-                  </div>
+                  <FileDropzone
+                    accept="application/pdf"
+                    onFiles={handleFileUpload}
+                    label="Choose PDF"
+                    description="Drag & drop or click to select a PDF file (Max 50MB)"
+                    maxSize={50 * 1024 * 1024}
+                    isLoading={isProcessing && !file}
+                  />
                   
                   {file && (
                     <Alert>
@@ -328,8 +325,11 @@ export default function PDFDigitalSignature() {
                     disabled={isProcessing}
                     className="w-full"
                   >
-                    <Lock className="mr-2 h-4 w-4" aria-hidden="true" />
-                    {isProcessing ? 'Adding Signature...' : 'Add Digital Signature'}
+                    {isProcessing ? (
+                      <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Adding Signature...</span>
+                    ) : (
+                      <><Lock className="mr-2 h-4 w-4" aria-hidden="true" />Add Digital Signature</>
+                    )}
                   </Button>
 
                   {isProcessing && (

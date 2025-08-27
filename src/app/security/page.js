@@ -4,12 +4,13 @@ import ToolPageContent from "@/components/ui/ToolPageContent";
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Security & Privacy Policy - easy-pdf",
-  description: "Learn about easy-pdf's commitment to your privacy and data security. All processing is client-side, ensuring your files never leave your device. Complete transparency and security.",
+  title: "Security & Privacy Policy - easy-pdf | 100% Client-Side PDF Tools",
+  description: "Learn about easy-pdf's commitment to your privacy and data security. All processing is client-side, ensuring your files never leave your device. Complete transparency and security with no file uploads.",
   keywords: [
     "PDF security", "privacy policy", "client-side processing", "data protection", "online PDF tools security",
     "document privacy", "file security", "no upload PDF tools", "browser-based security", "GDPR compliant",
-    "secure PDF processing", "privacy-first tools", "data encryption", "document confidentiality"
+    "secure PDF processing", "privacy-first tools", "data encryption", "document confidentiality",
+    "zero data collection", "PDF privacy protection", "browser-based PDF security", "secure document processing"
   ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/security",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",

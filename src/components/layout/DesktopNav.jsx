@@ -62,6 +62,18 @@ export default function DesktopNav({ closeAllMenus }) {
                       <span>{subItem.name}</span>
                     </Link>
                   ))}
+                  <div className="border-t border-gray-700 mt-2 pt-2">
+                    <Link
+                      href="/tools"
+                      onClick={closeAllMenus}
+                      className="px-4 py-2 text-sm text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors duration-200"
+                    >
+                      <span>View all {category.name.toLowerCase()} tools</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}

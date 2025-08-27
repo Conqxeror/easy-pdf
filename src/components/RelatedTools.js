@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react';
 import { toolCategories } from '@/lib/toolCategories';
+import { Card } from '@/components/ui/Layout';
 
 const RelatedTools = ({ currentTool, tools }) => {
   // Get related tools based on categories and functionality
@@ -37,8 +38,8 @@ const RelatedTools = ({ currentTool, tools }) => {
   if (relatedTools.length === 0) return null
 
   return (
-    <div className="bg-gray-800 rounded-xl border border-gray-700 p-6 shadow-lg">
-      <h3 className="text-lg font-semibold text-gray-100 mb-4 flex items-center">
+    <Card className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl border border-gray-700 p-6 shadow-xl">
+      <h3 className="text-xl font-bold text-white mb-6 flex items-center">
         <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
         Related PDF Tools
       </h3>
@@ -52,12 +53,10 @@ const RelatedTools = ({ currentTool, tools }) => {
           >
             <div className="flex items-start w-full">
               <div className="w-10 h-10 bg-blue-600/10 rounded-lg flex items-center justify-center mr-3 group-hover:bg-blue-600/20 transition-colors flex-shrink-0">
-                <span className="text-blue-400 text-base font-medium">
-                  📄
-                </span>
+                {tool.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-100 group-hover:text-blue-400 transition-colors text-sm leading-tight mb-1">
+                <h4 className="font-medium text-white group-hover:text-blue-400 transition-colors text-sm leading-tight mb-1">
                   {tool.title}
                 </h4>
                 <p className="text-xs text-gray-400 leading-relaxed line-clamp-2">
@@ -79,7 +78,7 @@ const RelatedTools = ({ currentTool, tools }) => {
           <ChevronRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 transition-transform" />
         </Link>
       </div>
-    </div>
+    </Card>
   )
 }
 

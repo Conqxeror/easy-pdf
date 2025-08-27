@@ -3,9 +3,9 @@
 import React, { useState, useCallback  } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { getDocument } from 'pdfjs-dist';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Upload, Download, FileText, Table } from 'lucide-react';
+import { Upload, Download, FileText, Table, Loader2, AlertCircle } from 'lucide-react';
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
 // Configure PDF.js worker
@@ -149,49 +149,51 @@ export default function PDFTableExtractor() {
       ]}
     >
       <div className="max-w-6xl mx-auto p-6 space-y-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+            <Table className="h-8 w-8" aria-hidden="true" />
             PDF Table Extractor
           </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Extract tables from PDF documents and export to CSV format
+          <p className="text-muted-foreground">
+            Extract tables from PDF documents and export to CSV format for further analysis.
           </p>
         </div>
 
       {/* Upload Section */}
-      <Card>
+      <Card className="lg:col-span-2">
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Upload className="w-5 h-5 mr-2" />
+          <CardTitle className="flex items-center gap-2">
+            <Upload className="w-5 h-5" />
             Upload PDF
           </CardTitle>
+          <CardDescription>
+            Select a PDF file to extract tables from
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div
             {...getRootProps()}
             className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
               isDragActive
-                ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20'
-                : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
+                ? 'border-primary bg-primary/5'
+                : 'border-muted-foreground/25'
             }`}
           >
             <input {...getInputProps()} />
-            <FileText className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+            <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
             {isDragActive ? (
-              <p className="text-blue-600 dark:text-blue-400">Drop the PDF file here...</p>
+              <p className="text-lg">Drop the PDF file here...</p>
             ) : (
               <div>
-                <p className="text-gray-600 dark:text-gray-400 mb-2">
-                  Drag and drop a PDF file here, or click to select
-                </p>
-                <p className="text-sm text-gray-500">Supports PDF files up to 50MB</p>
+                <p className="text-lg mb-2">Drag and drop a PDF file here, or click to select</p>
+                <p className="text-sm text-muted-foreground">Only PDF files are supported</p>
               </div>
             )}
           </div>
           
           {file && (
-            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm text-muted-foreground">
                 Selected: {file.name} ({Math.round(file.size / 1024)} KB)
               </p>
             </div>
@@ -203,17 +205,20 @@ export default function PDFTableExtractor() {
       {loading && (
         <Card>
           <CardContent className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">Extracting tables from PDF...</p>
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-muted-foreground">Extracting tables from PDF...</p>
           </CardContent>
         </Card>
       )}
 
       {/* Error State */}
       {error && (
-        <Card className="border-red-200 dark:border-red-800">
+        <Card className="border-red-200 bg-red-50">
           <CardContent className="text-center py-8">
-            <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+            <div className="flex items-center justify-center gap-2 text-red-600">
+              <AlertCircle className="h-5 w-5" />
+              <p>Error: {error}</p>
+            </div>
           </CardContent>
         </Card>
       )}
@@ -223,8 +228,8 @@ export default function PDFTableExtractor() {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center">
-                <Table className="w-5 h-5 mr-2" />
+              <CardTitle className="flex items-center gap-2">
+                <Table className="w-5 h-5" />
                 Extracted Tables ({tables.length})
               </CardTitle>
               <Button onClick={exportAllToCSV} className="flex items-center">
@@ -236,7 +241,7 @@ export default function PDFTableExtractor() {
           <CardContent>
             <div className="space-y-6">
               {tables.map((table, index) => (
-                <div key={index} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                <div key={index} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold">
                       Table from Page {table.page}
@@ -253,14 +258,14 @@ export default function PDFTableExtractor() {
                   </div>
                   
                   <div className="overflow-x-auto">
-                    <table className="min-w-full border-collapse border border-gray-300 dark:border-gray-600">
+                    <table className="min-w-full border-collapse border border-gray-300">
                       <tbody>
                         {table.rows.slice(0, 10).map((row, rowIndex) => (
                           <tr key={rowIndex}>
                             {row.map((cell, cellIndex) => (
                               <td 
                                 key={cellIndex}
-                                className="border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm"
+                                className="border border-gray-300 px-3 py-2 text-sm"
                               >
                                 {cell}
                               </td>
@@ -270,7 +275,7 @@ export default function PDFTableExtractor() {
                       </tbody>
                     </table>
                     {table.rows.length > 10 && (
-                      <p className="text-sm text-gray-500 mt-2">
+                      <p className="text-sm text-muted-foreground mt-2">
                         Showing first 10 rows of {table.rows.length} total rows
                       </p>
                     )}
@@ -286,8 +291,8 @@ export default function PDFTableExtractor() {
       {!loading && !error && file && tables.length === 0 && (
         <Card>
           <CardContent className="text-center py-8">
-            <Table className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-            <p className="text-gray-600 dark:text-gray-400">
+            <Table className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-muted-foreground">
               No tables found in this PDF. The document may not contain structured table data.
             </p>
           </CardContent>

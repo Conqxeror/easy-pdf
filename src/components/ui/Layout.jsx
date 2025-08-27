@@ -85,9 +85,11 @@ export const Section = ({
       <div className="container-standard">
         {title && (
           <div className="text-center mb-12">
-            <h2 className="text-h2 font-bold mb-4">{title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              {title}
+            </h2>
             {subtitle && (
-              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              <p className="text-lg text-gray-400 max-w-3xl mx-auto">
                 {subtitle}
               </p>
             )}
@@ -116,7 +118,7 @@ export const Card = ({
   return (
     <div 
       className={cn(
-        "card-standard",
+        "card-standard bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl border border-gray-700",
         hover && "hover:scale-[1.02] transition-transform duration-200",
         paddingClass,
         className
@@ -143,12 +145,15 @@ export const Grid = ({
     auto: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
   }[cols];
 
+  // Convert gap number to proper Tailwind class
+  const gapClass = typeof gap === 'number' ? `gap-${gap}` : `gap-${gap}`;
+
   return (
     <div 
       className={cn(
         "grid",
         colsClass,
-        `gap-${gap}`,
+        gapClass,
         className
       )} 
       {...props}
@@ -178,16 +183,16 @@ export const Hero = ({
       {...props}
     >
       {overlay && backgroundImage && (
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-gray-900/90 backdrop-blur-sm" />
       )}
       <div className="relative container-standard">
         {title && (
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 gradient-text animate-slide-up">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent animate-slide-up">
             {title}
           </h1>
         )}
         {subtitle && (
-          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
             {subtitle}
           </p>
         )}
@@ -203,20 +208,20 @@ export const Hero = ({
 
 export const FeatureGrid = ({ features, className, ...props }) => {
   return (
-    <Grid cols={3} gap="8" className={cn("mt-12", className)} {...props}>
+    <Grid cols={2} gap="6" className={cn("mt-8", className)} {...props}>
       {features.map((feature, index) => (
         <Card 
           key={index} 
-          className="text-center group animate-slide-up border-2 border-transparent hover:border-primary transition-all duration-300"
+          className="text-center group animate-slide-up border-2 border-transparent hover:border-blue-500 transition-all duration-300 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
           {feature.icon && (
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-primary/10 text-primary mb-4 mx-auto group-hover:scale-110 transition-transform">
+            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600/10 text-blue-400 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
               {feature.icon}
             </div>
           )}
-          <h3 className="text-h4 font-semibold mb-2">{feature.title}</h3>
-          <p className="text-muted-foreground">{feature.description}</p>
+          <h3 className="text-h4 font-semibold mb-2 text-white">{feature.title}</h3>
+          <p className="text-gray-400">{feature.description}</p>
         </Card>
       ))}
     </Grid>
@@ -232,10 +237,10 @@ export const CTASection = ({
   ...props 
 }) => {
   return (
-    <Section className={cn("bg-gradient-to-r from-primary/10 to-primary-light/10 rounded-2xl", className)} {...props}>
+    <Section className={cn("bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-2xl border border-gray-700", className)} {...props}>
       <div className="text-center">
-        {title && <h2 className="text-h2 font-bold mb-4">{title}</h2>}
-        {subtitle && <p className="text-lg text-muted-foreground mb-8">{subtitle}</p>}
+        {title && <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>}
+        {subtitle && <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">{subtitle}</p>}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           {primaryAction}
           {secondaryAction}

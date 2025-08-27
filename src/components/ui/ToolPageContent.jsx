@@ -43,11 +43,11 @@ const StepsList = memo(({ steps }) => {
   return (
     <ol className="space-y-4 text-gray-300">
       {(steps || []).map((step, index) => (
-        <li key={index} className="flex items-start">
-          <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-blue-500 text-white text-xs font-bold mr-3 mt-0.5">
+        <li key={index} className="flex items-start group">
+          <span className="flex-shrink-0 flex items-center justify-center h-8 w-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-sm font-bold mr-4 mt-0.5 group-hover:scale-110 transition-transform duration-200">
             {index + 1}
           </span>
-          <span className="leading-relaxed">{step}</span>
+          <span className="leading-relaxed text-lg">{step}</span>
         </li>
       ))}
     </ol>
@@ -134,10 +134,10 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
 
         {/* Header section - critical content, no lazy loading */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
             {`How to ${toolName} Online for Free`}
           </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
             {toolDescription}
           </p>
         </div>
@@ -146,9 +146,9 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
         {/* Main content grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Steps section - critical content */}
-          <div className="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-700 hover:border-blue-500 transition-all duration-300">
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-              <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
                 1
               </span>
               How to {toolName}
@@ -157,9 +157,9 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
           </div>
 
           {/* FAQ section with lazy loading */}
-          <div className="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-700 hover:border-green-500 transition-all duration-300">
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center">
-              <span className="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+              <span className="bg-gradient-to-r from-green-600 to-emerald-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
                 ?
               </span>
               Frequently Asked Questions
@@ -182,6 +182,14 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
           </div>
         </div>
 
+        {/* Features section */}
+        <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 md:p-8 rounded-2xl shadow-xl border border-gray-700 hover:border-purple-500 transition-all duration-300">
+          <h2 className="text-2xl font-bold text-white mb-6">
+            Why Choose Our {toolName} Tool?
+          </h2>
+          <FeaturesGrid toolName={toolName} />
+        </div>
+
         {/* Related Tools Section with lazy loading */}
         {currentTool && (
           <Suspense fallback={<RelatedToolsSkeleton />}>
@@ -190,14 +198,6 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool, 
             </div>
           </Suspense>
         )}
-
-        {/* Features section */}
-        <div className="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg border border-gray-700">
-          <h2 className="text-2xl font-bold text-white mb-6">
-            Why Choose Our {toolName} Tool?
-          </h2>
-          <FeaturesGrid toolName={toolName} />
-        </div>
       </div>
     </div>
   );

@@ -1,18 +1,30 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Report Generator - Create Professional Business Reports PDF",
-  description: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting.",
+  title: "Report Generator - Create Professional Business Reports PDF | easy-pdf",
+  description: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting. Free online report maker with no uploads.",
   keywords: [
-  "report generator",
-  "business report",
-  "PDF report",
-  "professional report",
-  "report maker",
-  "business analysis",
-  "report template",
-  "professional reporting"
-],
+    "report generator",
+    "business report",
+    "PDF report",
+    "professional report",
+    "report maker",
+    "business analysis",
+    "report template",
+    "professional reporting",
+    "free report generator",
+    "online report maker",
+    "PDF report creator",
+    "custom report design",
+    "report printing tool",
+    "business report generator",
+    "report design tool",
+    "batch report creation",
+    "report customization",
+    "secure report generator",
+    "privacy-first report tool",
+    "comprehensive report maker"
+  ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/report-generator",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "Report Generator",
@@ -28,11 +40,11 @@ const structuredData = generateComprehensiveJsonLd('tool', {
   description: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting.",
   url: "/report-generator",
   features: [
-  "Multiple report templates",
-  "Key metrics dashboard",
-  "Customizable sections",
-  "Professional formatting"
-],
+    "Multiple report templates",
+    "Key metrics dashboard",
+    "Customizable sections",
+    "Professional formatting"
+  ],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
     { name: "Report Generator", url: "https://easy-pdf-murex.vercel.app/report-generator" }

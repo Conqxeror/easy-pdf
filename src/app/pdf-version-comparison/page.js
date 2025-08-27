@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useRef  } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { GitCompare, Download, CheckCircle, AlertTriangle, FileText, Eye, BarChart3, Clock } from "lucide-react";
+import { GitCompare, Download, CheckCircle, AlertTriangle, FileText, Eye, BarChart3, Clock, Loader2 } from "lucide-react";
 import { PDFDocument } from 'pdf-lib';
 import ToolPageContent from '@/components/ui/ToolPageContent';
+import FileDropzone from '@/components/ui/FileDropzone';
 
 export default function PDFVersionComparison() {
   const [file1, setFile1] = useState(null);
@@ -22,26 +22,19 @@ export default function PDFVersionComparison() {
   const [comparisonType, setComparisonType] = useState("visual");
   const [differences, setDifferences] = useState([]);
   const [statistics, setStatistics] = useState(null);
-  const file1InputRef = useRef(null);
-  const file2InputRef = useRef(null);
-
-  const handleFile1Upload = (event) => {
-    const uploadedFile = event.target.files[0];
+    const handleFile1Upload = (acceptedFiles) => {
+    const uploadedFile = acceptedFiles[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       setFile1(uploadedFile);
       setComparisonResult(null);
-      setDifferences([]);
-      setStatistics(null);
     }
   };
 
-  const handleFile2Upload = (event) => {
-    const uploadedFile = event.target.files[0];
+  const handleFile2Upload = (acceptedFiles) => {
+    const uploadedFile = acceptedFiles[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       setFile2(uploadedFile);
       setComparisonResult(null);
-      setDifferences([]);
-      setStatistics(null);
     }
   };
 
@@ -267,16 +260,14 @@ export default function PDFVersionComparison() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="file1-upload">PDF File (Version 1)</Label>
-                      <Input
-                        id="file1-upload"
-                        type="file"
-                        accept=".pdf"
-                        onChange={handleFile1Upload}
-                        ref={file1InputRef}
-                      />
-                    </div>
+                    <FileDropzone
+                      accept="application/pdf"
+                      onFiles={handleFile1Upload}
+                      label="Choose Original PDF"
+                      description="Drag & drop or click to select the original PDF file (Max 50MB)"
+                      maxSize={50 * 1024 * 1024}
+                      isLoading={isProcessing && !file1}
+                    />
                     
                     {file1 && (
                       <Alert>
@@ -302,16 +293,14 @@ export default function PDFVersionComparison() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="file2-upload">PDF File (Version 2)</Label>
-                      <Input
-                        id="file2-upload"
-                        type="file"
-                        accept=".pdf"
-                        onChange={handleFile2Upload}
-                        ref={file2InputRef}
-                      />
-                    </div>
+                    <FileDropzone
+                      accept="application/pdf"
+                      onFiles={handleFile2Upload}
+                      label="Choose Revised PDF"
+                      description="Drag & drop or click to select the revised PDF file (Max 50MB)"
+                      maxSize={50 * 1024 * 1024}
+                      isLoading={isProcessing && !file2}
+                    />
                     
                     {file2 && (
                       <Alert>
@@ -379,13 +368,16 @@ export default function PDFVersionComparison() {
                 </div>
 
                 <Button 
-                  onClick={compareDocuments} 
-                  disabled={!file1 || !file2 || isProcessing}
-                  className="w-full"
-                >
-                  <GitCompare className="mr-2 h-4 w-4" />
-                  {isProcessing ? 'Comparing Documents...' : 'Start Comparison'}
-                </Button>
+              onClick={compareDocuments} 
+              disabled={!file1 || !file2 || isProcessing}
+              className="w-full"
+            >
+              {isProcessing ? (
+                <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Comparing Documents...</span>
+              ) : (
+                <><GitCompare className="mr-2 h-4 w-4" />Start Comparison</>
+              )}
+            </Button>
 
                 {isProcessing && (
                   <div className="space-y-2">

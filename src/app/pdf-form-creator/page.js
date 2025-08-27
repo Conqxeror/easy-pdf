@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'; // Unused
 import { Textarea } from '@/components/ui/textarea';
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Unused
-import { Upload, Download, FileBadge2, Type, CheckSquare, Circle, ChevronDown, PenTool, Trash2, Plus, Eye } from 'lucide-react';
+import { Upload, Download, FileBadge2, Type, CheckSquare, Circle, ChevronDown, PenTool, Trash2, Plus, Eye, Loader2 } from 'lucide-react';
 import { PDFDocument, rgb } from 'pdf-lib'; // Removed unused PDF form components
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
@@ -464,8 +464,11 @@ export default function PDFFormCreator() {
                     onClick={createFormPDF}
                     disabled={formFields.length === 0 || isCreating}
                   >
-                    <Download className="h-4 w-4 mr-2" />
-                    {isCreating ? 'Creating...' : 'Download Form'}
+                    {isCreating ? (
+                      <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating...</span>
+                    ) : (
+                      <><Download className="h-4 w-4 mr-2" />Download Form</>
+                    )}
                   </Button>
                 </div>
               </div>

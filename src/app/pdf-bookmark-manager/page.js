@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Upload, Download, Bookmark, FileText, Plus, Edit, Trash2 } from 'lucide-react';
+import { Upload, Download, Bookmark, FileText, Plus, Edit, Trash2, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
@@ -250,7 +250,7 @@ export default function PDFBookmarkManager() {
         }
       ]}
     >
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <Bookmark className="h-8 w-8" aria-hidden="true" />
@@ -262,7 +262,7 @@ export default function PDFBookmarkManager() {
         </div>
 
       {!file ? (
-        <Card>
+        <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Upload PDF File</CardTitle>
             <CardDescription>
@@ -393,8 +393,11 @@ export default function PDFBookmarkManager() {
                 disabled={isProcessing}
                 className="flex items-center gap-2"
               >
-                <Download className="h-4 w-4" aria-hidden="true" />
-                {isProcessing ? 'Processing...' : 'Save PDF with Bookmarks'}
+                {isProcessing ? (
+                  <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</span>
+                ) : (
+                  <><Download className="h-4 w-4 mr-2" aria-hidden="true" />Save PDF with Bookmarks</>
+                )}
               </Button>
             </div>
           )}

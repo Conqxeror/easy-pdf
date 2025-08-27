@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield } from 'lucide-react';
+import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield, Loader2 } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import ToolPageContent from '@/components/ui/ToolPageContent';
 
@@ -492,8 +492,11 @@ export default function PDFAccessibilityChecker() {
               disabled={!file || isAnalyzing}
               className="w-full"
             >
-              <Shield className="h-4 w-4 mr-2" aria-hidden="true" />
-              {isAnalyzing ? 'Analyzing...' : 'Start Analysis'}
+              {isAnalyzing ? (
+                <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...</span>
+              ) : (
+                <><Shield className="h-4 w-4 mr-2" aria-hidden="true" />Start Analysis</>
+              )}
             </Button>
 
             {file && (
@@ -517,7 +520,7 @@ export default function PDFAccessibilityChecker() {
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 animate-pulse" aria-hidden="true" />
+              <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
               Analyzing Accessibility...
             </CardTitle>
           </CardHeader>

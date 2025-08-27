@@ -1,22 +1,30 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
-  title: "Advanced OCR with AI - Smart Text Recognition",
-  description: "Extract text from PDFs and images with AI-powered enhancement and formatting. Multi-language support and high accuracy.",
+  title: "Advanced OCR with AI - Smart Text Recognition | easy-pdf",
+  description: "Extract text from PDFs and images with AI-powered enhancement and formatting. Multi-language support and high accuracy. Free online advanced OCR tool with no uploads.",
   keywords: [
-  "advanced OCR",
-  "AI text recognition",
-  "smart OCR",
-  "text extraction",
-  "AI-powered OCR",
-  "multi-language OCR",
-  "intelligent text recognition",
-  "OCR enhancement",
-  "document digitization",
-  "text mining",
-  "AI document processing",
-  "smart text extraction"
-],
+    "advanced OCR",
+    "AI text recognition",
+    "smart OCR",
+    "text extraction",
+    "AI-powered OCR",
+    "multi-language OCR",
+    "intelligent text recognition",
+    "OCR enhancement",
+    "document digitization",
+    "text mining",
+    "AI document processing",
+    "smart text extraction",
+    "free advanced OCR",
+    "online AI OCR tool",
+    "PDF text recognition",
+    "image to text converter",
+    "professional OCR tool",
+    "batch OCR processing",
+    "accurate text extraction",
+    "secure OCR processing"
+  ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app/advanced-ocr",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   toolName: "Advanced OCR with AI",
@@ -32,11 +40,11 @@ const structuredData = generateComprehensiveJsonLd('tool', {
   description: "Extract text from PDFs and images with AI-powered enhancement and formatting. Multi-language support and high accuracy.",
   url: "/advanced-ocr",
   features: [
-  "AI-enhanced text extraction",
-  "Multiple language support",
-  "Format preservation",
-  "Confidence scoring"
-],
+    "AI-enhanced text extraction",
+    "Multiple language support",
+    "Format preservation",
+    "Confidence scoring"
+  ],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
     { name: "Advanced OCR with AI", url: "https://easy-pdf-murex.vercel.app/advanced-ocr" }

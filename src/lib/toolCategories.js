@@ -23,6 +23,15 @@ import {
   Award,
   User,
   BarChart3,
+  Settings,
+  Bookmark,
+  Table,
+  Layers,
+  CheckCircle,
+  Shield,
+  EyeOff,
+  GitCompare,
+  MessageSquare
 } from "lucide-react";
 
 export const toolCategories = [
@@ -40,7 +49,6 @@ export const toolCategories = [
         href: "/pdf-to-jpg",
         icon: <FileImage className="w-4 h-4" />,
       },
-      
       {
         name: "QR Code Generator",
         href: "/qr-generator",
@@ -210,32 +218,47 @@ export const toolCategories = [
       {
         name: "PDF Metadata Editor",
         href: "/pdf-metadata-editor",
-        icon: <FileText className="w-4 h-4" />,
+        icon: <Settings className="w-4 h-4" />,
       },
       {
         name: "PDF Bookmark Manager",
         href: "/pdf-bookmark-manager",
-        icon: <ListOrdered className="w-4 h-4" />,
+        icon: <Bookmark className="w-4 h-4" />,
       },
       {
         name: "PDF Table Extractor",
         href: "/pdf-table-extractor",
-        icon: <FileText className="w-4 h-4" />,
+        icon: <Table className="w-4 h-4" />,
       },
       {
         name: "PDF Accessibility Checker",
         href: "/pdf-accessibility-checker",
-        icon: <Search className="w-4 h-4" />,
+        icon: <CheckCircle className="w-4 h-4" />,
       },
       {
         name: "PDF Version Comparison",
         href: "/pdf-version-comparison",
-        icon: <FileText className="w-4 h-4" />,
+        icon: <GitCompare className="w-4 h-4" />,
       },
       {
         name: "PDF Batch Processor",
         href: "/pdf-batch-processor",
-        icon: <FileBadge2 className="w-4 h-4" />,
+        icon: <Layers className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Annotation Collaboration",
+        href: "/pdf-annotation-collaboration",
+        icon: <MessageSquare className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Digital Signature",
+        href: "/pdf-digital-signature",
+        icon: <Shield className="w-4 h-4" />,
+      },
+      {
+        name: "PDF Redaction Tool",
+        href: "/pdf-redaction",
+        icon: <EyeOff className="w-4 h-4" />,
       },
     ],
   },
