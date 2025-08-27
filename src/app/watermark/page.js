@@ -1,28 +1,18 @@
 "use client";
 
 import React, { useState, useRef, useEffect  } from "react";
-
-
-import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib"; // Added StandardFonts
+import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription, // Added CardDescription
-} from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { HexColorPicker } from "react-colorful"; // Assuming this is installed
-import Image from "next/image"; // Import Next.js Image component
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import { HexColorPicker } from "react-colorful";
+import Image from "next/image";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function WatermarkPdfPage() {
   const [file, setFile] = useState(null);
@@ -348,384 +338,427 @@ export default function WatermarkPdfPage() {
     }
   };
 
+  const toolName = "Add Watermark to PDF";
+  const toolDescription = "Protect your PDF documents or add important information by applying custom text or image watermarks. Our online tool allows you to easily add a watermark with adjustable position, opacity, rotation, and font settings (for text watermarks). Enhance document security and branding, all while keeping your files private with client-side processing.";
+  const steps = [
+    "Upload your PDF file by dragging it into the dropzone or clicking to select it from your device.",
+    "Choose between a 'Text Watermark' or 'Image Watermark'.",
+    "For text watermarks: Enter your desired text, select font size, color, and rotation.",
+    "For image watermarks: Upload your image (PNG or JPG recommended), and adjust its rotation.",
+    "Select the desired position for your watermark (e.g., center, diagonal, tiled, corners) and set its overall opacity.",
+    "Click the 'Add Watermark' button to apply the watermark to your PDF.",
+    "Preview your watermarked PDF and then download the file to your computer.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to add a watermark to a PDF?",
+      answer:
+        "Yes, our PDF watermark tool is completely free to use. You can add watermarks to as many PDF files as you need without any hidden costs or limitations." },
+    {
+      question: "Are my files secure when adding a watermark?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All PDF processing, including watermarking, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential." },
+    {
+      question: "Can I use an image as a watermark?",
+      answer:
+        "Yes, you can upload an image (PNG or JPG) to use as a watermark. For best results, especially with transparency, we recommend using a PNG image." },
+    {
+      question: "Can I adjust the transparency of the watermark?",
+      answer:
+        "Yes, our tool provides an opacity slider that allows you to control the transparency level of your text or image watermark, from nearly invisible to fully opaque." },
+    {
+      question: "What positions can I place the watermark in?",
+      answer:
+        "You can choose from various positions including top-left, top-right, center, bottom-left, bottom-right, diagonal, or even a tiled pattern across all pages." },
+  ];
+
   return (
-    <>
-      <main className="container max-w-4xl py-8 mx-auto">
-        {" "}
-        {/* Centering the main card */}
-        <Card className="bg-gray-800 border-gray-700 w-full">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Add Watermark to PDF
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Apply custom text or image watermarks to your PDF documents
-              securely in your browser.
-            </CardDescription>
-          </CardHeader>
+    <ToolPageLayout
+      title="Add Watermark to PDF"
+      subtitle="Apply custom text or image watermarks to your PDF documents securely in your browser."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="watermark"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Watermark', href: '/watermark' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Choose a PDF File"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Choose a PDF File"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing} // Use isProcessing for FileDropzone isLoading state
-            />
+        {fileName && (
+          <div className="flex justify-between items-center text-gray-200">
+            <span className="text-gray-300">Selected file:</span>
+            <span className="font-medium">{fileName}</span>
+          </div>
+        )}
 
-            {fileName && (
-              <div className="flex justify-between items-center text-gray-200">
-                <span className="text-gray-300">Selected file:</span>
-                <span className="font-medium">{fileName}</span>
-              </div>
-            )}
-
-            <Tabs
-              defaultValue="text"
-              className="w-full bg-gray-900 rounded-md p-4 border border-gray-700"
+        <Tabs
+          defaultValue="text"
+          className="w-full bg-gray-900 rounded-md p-4 border border-gray-700"
+        >
+          <TabsList className="grid w-full grid-cols-2 bg-gray-700">
+            <TabsTrigger
+              value="text"
+              onClick={() => setWatermarkType("text")}
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-700 data-[state=inactive]:text-gray-300 transition-colors"
             >
-              <TabsList className="grid w-full grid-cols-2 bg-gray-700">
-                <TabsTrigger
-                  value="text"
-                  onClick={() => setWatermarkType("text")}
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-700 data-[state=inactive]:text-gray-300 transition-colors"
-                >
-                  Text Watermark
-                </TabsTrigger>
-                <TabsTrigger
-                  value="image"
-                  onClick={() => setWatermarkType("image")}
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-700 data-[state=inactive]:text-gray-300 transition-colors"
-                >
-                  Image Watermark
-                </TabsTrigger>
-              </TabsList>
+              Text Watermark
+            </TabsTrigger>
+            <TabsTrigger
+              value="image"
+              onClick={() => setWatermarkType("image")}
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-700 data-[state=inactive]:text-gray-300 transition-colors"
+            >
+              Image Watermark
+            </TabsTrigger>
+          </TabsList>
 
-              <TabsContent value="text" className="space-y-4 mt-4">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="watermarkText"
-                    className="text-sm font-medium text-gray-200"
-                  >
-                    Watermark Text
-                  </Label>
-                  <Input
-                    id="watermarkText"
-                    type="text"
-                    value={watermarkText}
-                    onChange={(e) => setWatermarkText(e.target.value)}
-                    placeholder="Enter watermark text"
-                    className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-200">
-                    Text Color
-                  </Label>
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-md border border-gray-600 cursor-pointer shadow-md"
-                      style={{ backgroundColor: color }}
-                      onClick={() => setShowColorPicker(!showColorPicker)}
-                      aria-label="Toggle color picker"
-                    />
-                    <span className="text-sm text-gray-300">{color}</span>
-                  </div>
-                  {showColorPicker && (
-                    <div className="p-4 border border-gray-600 rounded-md bg-gray-700 mt-2">
-                      <HexColorPicker
-                        color={color}
-                        onChange={handleColorChange}
-                        className="w-full"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="fontSizeSlider"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Font Size: {fontSize}px
-                    </Label>
-                    <Slider
-                      id="fontSizeSlider"
-                      value={[fontSize]}
-                      onValueChange={([value]) => setFontSize(value)}
-                      min={12}
-                      max={120}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="rotationSlider"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Rotation: {rotation}°
-                    </Label>
-                    <Slider
-                      id="rotationSlider"
-                      value={[rotation]}
-                      onValueChange={([value]) => setRotation(value)}
-                      min={-180}
-                      max={180}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="image" className="space-y-4 mt-4">
-                {watermarkImage ? (
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-gray-200">
-                      Watermark Image
-                    </Label>
-                    <div className="flex items-center gap-4">
-                      {/* Replaced <img> with <Image> from next/image */}
-                      <Image
-                        src={watermarkImage}
-                        alt="Watermark preview"
-                        width={80} // Specify appropriate width
-                        height={80} // Specify appropriate height
-                        className="object-contain border border-gray-600 rounded-md shadow-md"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src =
-                            "https://placehold.co/80x80/333/FFF?text=Error";
-                        }}
-                      />
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setWatermarkImage(null);
-                          if (fileInputRef.current)
-                            fileInputRef.current.value = "";
-                        }}
-                        className="text-gray-200 border-gray-600 hover:bg-gray-600 hover:text-white"
-                      >
-                        Change Image
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="imageUpload"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Upload Watermark Image
-                    </Label>
-                    <Input
-                      id="imageUpload"
-                      type="file"
-                      ref={fileInputRef}
-                      accept="image/jpeg,image/png" // Only allow JPG and PNG
-                      onChange={handleImageUpload}
-                      className="cursor-pointer bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                    <p className="text-sm text-gray-400">
-                      Recommended: Transparent PNG, JPEG (Max 5MB)
-                    </p>
-                  </div>
-                )}
-                {/* Opacity and Rotation sliders also apply to images */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="imageOpacitySlider"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Image Opacity: {opacity}%
-                    </Label>
-                    <Slider
-                      id="imageOpacitySlider"
-                      value={[opacity]}
-                      onValueChange={([value]) => setOpacity(value)}
-                      min={5}
-                      max={100}
-                      step={5}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="imageRotationSlider"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Image Rotation: {rotation}°
-                    </Label>
-                    <Slider
-                      id="imageRotationSlider"
-                      value={[rotation]}
-                      onValueChange={([value]) => setRotation(value)}
-                      min={-180}
-                      max={180}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-
-            <div className="space-y-4">
-              <Label className="text-sm font-medium text-gray-200">
-                Watermark Position
-              </Label>
-              <RadioGroup
-                value={position}
-                onValueChange={setPosition}
-                className="grid grid-cols-3 gap-2 p-2 rounded-md bg-gray-700 border border-gray-600"
-              >
-                <div>
-                  <RadioGroupItem
-                    value="top-left"
-                    id="top-left"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="top-left"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Top Left
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="top-right"
-                    id="top-right"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="top-right"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Top Right
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="center"
-                    id="center"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="center"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Center
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="bottom-left"
-                    id="bottom-left"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="bottom-left"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Bottom Left
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="bottom-right"
-                    id="bottom-right"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="bottom-right"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Bottom Right
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="diagonal"
-                    id="diagonal"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="diagonal"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Diagonal
-                  </Label>
-                </div>
-                <div>
-                  <RadioGroupItem
-                    value="tiled"
-                    id="tiled"
-                    className="peer sr-only"
-                  />
-                  <Label
-                    htmlFor="tiled"
-                    className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
-                  >
-                    Tiled
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
+          <TabsContent value="text" className="space-y-4 mt-4">
             <div className="space-y-2">
               <Label
-                htmlFor="opacitySlider"
+                htmlFor="watermarkText"
                 className="text-sm font-medium text-gray-200"
               >
-                Overall Watermark Opacity: {opacity}%
+                Watermark Text
               </Label>
-              <Slider
-                id="opacitySlider"
-                value={[opacity]}
-                onValueChange={([value]) => setOpacity(value)}
-                min={5}
-                max={100}
-                step={5}
-                className="w-full"
+              <Input
+                id="watermarkText"
+                type="text"
+                value={watermarkText}
+                onChange={(e) => setWatermarkText(e.target.value)}
+                placeholder="Enter watermark text"
+                className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
 
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium text-gray-200">
+                Text Color
+              </Label>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-md border border-gray-600 cursor-pointer shadow-md"
+                  style={{ backgroundColor: color }}
+                  onClick={() => setShowColorPicker(!showColorPicker)}
+                  aria-label="Toggle color picker"
+                />
+                <span className="text-sm text-gray-300">{color}</span>
+              </div>
+              {showColorPicker && (
+                <div className="p-4 border border-gray-600 rounded-md bg-gray-700 mt-2">
+                  <HexColorPicker
+                    color={color}
+                    onChange={handleColorChange}
+                    className="w-full"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="fontSizeSlider"
+                  className="text-sm font-medium text-gray-200"
+                >
+                  Font Size: {fontSize}px
+                </Label>
+                <Slider
+                  id="fontSizeSlider"
+                  value={[fontSize]}
+                  onValueChange={([value]) => setFontSize(value)}
+                  min={12}
+                  max={120}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="rotationSlider"
+                  className="text-sm font-medium text-gray-200"
+                >
+                  Rotation: {rotation}°
+                </Label>
+                <Slider
+                  id="rotationSlider"
+                  value={[rotation]}
+                  onValueChange={([value]) => setRotation(value)}
+                  min={-180}
+                  max={180}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="image" className="space-y-4 mt-4">
+            {watermarkImage ? (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-200">
+                  Watermark Image
+                </Label>
+                <div className="flex items-center gap-4">
+                  <Image
+                    src={watermarkImage}
+                    alt="Watermark preview"
+                    width={80}
+                    height={80}
+                    className="object-contain border border-gray-600 rounded-md shadow-md"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src =
+                        "https://placehold.co/80x80/333/FFF?text=Error";
+                    }}
+                  />
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setWatermarkImage(null);
+                      if (fileInputRef.current)
+                        fileInputRef.current.value = "";
+                    }}
+                    className="text-gray-200 border-gray-600 hover:bg-gray-600 hover:text-white"
+                  >
+                    Change Image
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="imageUpload"
+                  className="text-sm font-medium text-gray-200"
+                >
+                  Upload Watermark Image
+                </Label>
+                <Input
+                  id="imageUpload"
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/jpeg,image/png"
+                  onChange={handleImageUpload}
+                  className="cursor-pointer bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                />
+                <p className="text-sm text-gray-400">
+                  Recommended: Transparent PNG, JPEG (Max 5MB)
+                </p>
+              </div>
             )}
+            {/* Opacity and Rotation sliders also apply to images */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="imageOpacitySlider"
+                  className="text-sm font-medium text-gray-200"
+                >
+                  Image Opacity: {opacity}%
+                </Label>
+                <Slider
+                  id="imageOpacitySlider"
+                  value={[opacity]}
+                  onValueChange={([value]) => setOpacity(value)}
+                  min={5}
+                  max={100}
+                  step={5}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label
+                  htmlFor="imageRotationSlider"
+                  className="text-sm font-medium text-gray-200"
+                >
+                  Image Rotation: {rotation}°
+                </Label>
+                <Slider
+                  id="imageRotationSlider"
+                  value={[rotation]}
+                  onValueChange={([value]) => setRotation(value)}
+                  min={-180}
+                  max={180}
+                  step={1}
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
 
-            <Button
-              onClick={addWatermark}
-              disabled={
-                isProcessing ||
-                !file ||
-                (watermarkType === "text" && !watermarkText.trim()) || // Ensure text is not just whitespace
-                (watermarkType === "image" && !watermarkImage)
-              }
-              className="w-full max-w-xs mx-auto block" // Consistent styling
-              variant="default" // Using default variant
-              size="lg"
-              aria-label="Add watermark to PDF"
-            >
-              {isProcessing ? "Processing..." : "Add Watermark"}
-            </Button>
-          </CardContent>
+        <div className="space-y-4">
+          <Label className="text-sm font-medium text-gray-200">
+            Watermark Position
+          </Label>
+          <RadioGroup
+            value={position}
+            onValueChange={setPosition}
+            className="grid grid-cols-3 gap-2 p-2 rounded-md bg-gray-700 border border-gray-600"
+          >
+            <div>
+              <RadioGroupItem
+                value="top-left"
+                id="top-left"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="top-left"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Top Left
+              </Label>
+            </div>
+            <div>
+              <RadioGroupItem
+                value="top-right"
+                id="top-right"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="top-right"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Top Right
+              </Label>
+            </div>
+            <div>
+              <RadioGroupItem
+                value="center"
+                id="center"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="center"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Center
+              </Label>
+            </div>
+            <div>
+              <RadioGroupItem
+                value="bottom-left"
+                id="bottom-left"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="bottom-left"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Bottom Left
+              </Label>
+            </div>
+            <div>
+              <RadioGroupItem
+                value="bottom-right"
+                id="bottom-right"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="bottom-right"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Bottom Right
+              </Label>
+            </div>
+            <div>
+              <RadioGroupItem
+                value="diagonal"
+                id="diagonal"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="diagonal"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Diagonal
+              </Label>
+            </div>
+            <div>
+              <RadioGroupItem
+                value="tiled"
+                id="tiled"
+                className="peer sr-only"
+              />
+              <Label
+                htmlFor="tiled"
+                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+              >
+                Tiled
+              </Label>
+            </div>
+          </RadioGroup>
+        </div>
 
-          {watermarkedUrl && !isProcessing && (
-            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
-              <h3 className="text-xl font-semibold text-center text-gray-100">
+        <div className="space-y-2">
+          <Label
+            htmlFor="opacitySlider"
+            className="text-sm font-medium text-gray-200"
+          >
+            Overall Watermark Opacity: {opacity}%
+          </Label>
+          <Slider
+            id="opacitySlider"
+            value={[opacity]}
+            onValueChange={([value]) => setOpacity(value)}
+            min={5}
+            max={100}
+            step={5}
+            className="w-full"
+          />
+        </div>
+
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            onClick={addWatermark}
+            disabled={
+              isProcessing ||
+              !file ||
+              (watermarkType === "text" && !watermarkText.trim()) || // Ensure text is not just whitespace
+              (watermarkType === "image" && !watermarkImage)
+            }
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            variant="default"
+            size="lg"
+            aria-label="Add watermark to PDF"
+          >
+            {isProcessing ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Processing...
+              </span>
+            ) : (
+              "Add Watermark"
+            )}
+          </Button>
+        </div>
+
+        {watermarkedUrl && !isProcessing && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+            <div className="w-full text-center space-y-4 text-gray-100">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 Watermarked PDF Ready
               </h3>
               <iframe
@@ -735,10 +768,14 @@ export default function WatermarkPdfPage() {
                 className="border border-gray-600 rounded-md shadow-inner"
                 title="PDF Preview"
               />
+            </div>
+
+            <div className="flex justify-center">
               <Button
                 asChild
                 variant="success"
-                className="w-full max-w-xs mx-auto block"
+                size="lg"
+                className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
                 aria-label="Download watermarked PDF"
               >
                 <a
@@ -751,49 +788,16 @@ export default function WatermarkPdfPage() {
                     }, 500);
                   }}
                 >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
                   Download Watermarked PDF
                 </a>
               </Button>
-            </CardFooter>
-          )}
-        </Card>
-        <ToolPageContent
-          toolName="Add Watermark to PDF"
-          toolDescription="Protect your PDF documents or add important information by applying custom text or image watermarks. Our online tool allows you to easily add a watermark with adjustable position, opacity, rotation, and font settings (for text watermarks). Enhance document security and branding, all while keeping your files private with client-side processing."
-          currentTool="watermark"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select it from your device.",
-            "Choose between a 'Text Watermark' or 'Image Watermark'.",
-            "For text watermarks: Enter your desired text, select font size, color, and rotation.",
-            "For image watermarks: Upload your image (PNG or JPG recommended), and adjust its rotation.",
-            "Select the desired position for your watermark (e.g., center, diagonal, tiled, corners) and set its overall opacity.",
-            "Click the 'Add Watermark' button to apply the watermark to your PDF.",
-            "Preview your watermarked PDF and then download the file to your computer.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to add a watermark to a PDF?",
-              answer:
-                "Yes, our PDF watermark tool is completely free to use. You can add watermarks to as many PDF files as you need without any hidden costs or limitations." },
-            {
-              question: "Are my files secure when adding a watermark?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including watermarking, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential." },
-            {
-              question: "Can I use an image as a watermark?",
-              answer:
-                "Yes, you can upload an image (PNG or JPG) to use as a watermark. For best results, especially with transparency, we recommend using a PNG image." },
-            {
-              question: "Can I adjust the transparency of the watermark?",
-              answer:
-                "Yes, our tool provides an opacity slider that allows you to control the transparency level of your text or image watermark, from nearly invisible to fully opaque." },
-            {
-              question: "What positions can I place the watermark in?",
-              answer:
-                "You can choose from various positions including top-left, top-right, center, bottom-left, bottom-right, diagonal, or even a tiled pattern across all pages." },
-          ]}
-        />
-      </main>
-    </>
+            </div>
+          </div>
+        )}
+      </div>
+    </ToolPageLayout>
   );
 }

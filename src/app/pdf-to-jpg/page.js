@@ -1,22 +1,12 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback  } from "react";
-
- // Added useEffect, useRef, useCallback
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription,
-} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -25,8 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import JSZip from "jszip";
-import Image from "next/image"; // Import Next.js Image component
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import Image from "next/image";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Configure pdfjs worker
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -289,114 +279,159 @@ export default function PdfToJpgPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }, []);
 
+  const toolName = "PDF to JPG Converter";
+  const toolDescription = "Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file. Our tool ensures excellent image quality while processing your files securely in your browser, keeping your documents private.";
+  const steps = [
+    "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+    "Choose which pages to convert: all pages, or a specific page number.",
+    "Click the 'Convert to JPG' button to start the conversion process.",
+    "Download your JPG images. If you converted multiple pages, they will be provided in a convenient ZIP archive.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to convert PDF to JPG?",
+      answer:
+        "Yes, our PDF to JPG converter is completely free to use. You can convert as many PDF files as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure when converting PDF to JPG?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All PDF to JPG conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
+    {
+      question: "Can I convert multiple pages at once?",
+      answer:
+        "Yes, you can convert all pages of a PDF to JPG at once. If you choose this option, all individual JPG images will be bundled into a single ZIP file for easy download.",
+    },
+    {
+      question: "What quality are the output JPG images?",
+    answer:
+      "Our tool converts PDF pages to JPG images with high quality (90% compression) to balance file size and visual fidelity. This ensures your images look great without being excessively large.",
+    },
+    {
+      question: "Is there a file size limit for PDF to JPG conversion?",
+    answer:
+      "Yes, the maximum file size for a PDF to be converted to JPG is 50MB. For larger files, processing might be slower due to client-side operations.",
+    },
+  ];
+
   return (
-    <>
-      <main className="container max-w-4xl py-8 mx-auto">
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              PDF to JPG Converter
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Convert your PDF document into high-quality JPG images. Process
-              specific pages or the entire document.
-            </CardDescription>
-          </CardHeader>
+    <ToolPageLayout
+      title="PDF to JPG Converter"
+      subtitle="Convert your PDF document into high-quality JPG images. Process specific pages or the entire document."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="pdf-to-jpg"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'PDF to JPG', href: '/pdf-to-jpg' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Choose a PDF File"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Choose a PDF File"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing} // Use isProcessing from general state
+        {fileName && (
+          <div className="space-y-4 text-gray-200">
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-gray-300">Selected file:</span>
+              <span className="font-medium">{fileName}</span>
+            </div>
+            {totalPages > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="pagesToConvert"
+                    className="text-sm font-medium text-gray-200"
+                  >
+                    Pages to Convert
+                  </Label>
+                  <Select
+                    value={selectedPages}
+                    onValueChange={setSelectedPages}
+                  >
+                    <SelectTrigger
+                      id="pagesToConvert"
+                      className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                    >
+                      <SelectValue placeholder="Select pages" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
+                      <SelectItem value="all">
+                        All Pages ({totalPages})
+                      </SelectItem>
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <SelectItem key={i + 1} value={`${i + 1}`}>
+                          Page {i + 1}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {/* Removed Image Quality Slider and its Label */}
+              </div>
+            )}
+          </div>
+        )}
+
+        {isProcessing && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-300">
+                {processingMessage ||
+                  `Converting page ${currentConvertingPage} of ${totalConvertingPages}`}
+              </span>
+              <span className="font-medium text-gray-100">
+                {currentProgress}%
+              </span>
+            </div>
+            <Progress
+              value={currentProgress}
+              className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
             />
+          </div>
+        )}
 
-            {fileName && (
-              <div className="space-y-4 text-gray-200">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-300">Selected file:</span>
-                  <span className="font-medium">{fileName}</span>
-                </div>
-                {totalPages > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="pagesToConvert"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Pages to Convert
-                      </Label>
-                      <Select
-                        value={selectedPages}
-                        onValueChange={setSelectedPages}
-                      >
-                        <SelectTrigger
-                          id="pagesToConvert"
-                          className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        >
-                          <SelectValue placeholder="Select pages" />
-                        </SelectTrigger>
-                        <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
-                          <SelectItem value="all">
-                            All Pages ({totalPages})
-                          </SelectItem>
-                          {Array.from({ length: totalPages }, (_, i) => (
-                            <SelectItem key={i + 1} value={`${i + 1}`}>
-                              Page {i + 1}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    {/* Removed Image Quality Slider and its Label */}
-                  </div>
-                )}
-              </div>
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            onClick={convertToJpg}
+            disabled={isProcessing || !file || totalPages === 0}
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            variant="default"
+            size="lg"
+          >
+            {isProcessing ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Converting...
+              </span>
+            ) : (
+              "Convert to JPG"
             )}
+          </Button>
+        </div>
 
-            {isProcessing && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">
-                    {processingMessage ||
-                      `Converting page ${currentConvertingPage} of ${totalConvertingPages}`}
-                  </span>
-                  <span className="font-medium text-gray-100">
-                    {currentProgress}%
-                  </span>
-                </div>
-                <Progress
-                  value={currentProgress}
-                  className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
-                />
-              </div>
-            )}
-
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              onClick={convertToJpg}
-              disabled={isProcessing || !file || totalPages === 0}
-              className="w-full max-w-xs mx-auto block bg-blue-700 text-white"
-              variant="default" // Consistent styling for action button
-              size="lg"
-            >
-              {isProcessing ? "Converting..." : "Convert to JPG"}
-            </Button>
-          </CardContent>
-
-          {images.length > 0 && (
-            <CardFooter className="flex flex-col gap-6 border-t border-gray-700 pt-6">
-              <h3 className="text-xl font-semibold text-center text-gray-100">
+        {images.length > 0 && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+            <div className="w-full text-center space-y-4 text-gray-100">
+              <h3 className="text-2xl font-semibold flex items-center justify-center">
                 {images.filter((img) => !img.isZip).length > 1
                   ? "Converted Images"
                   : "Converted Image"}
@@ -418,18 +453,16 @@ export default function PdfToJpgPage() {
                   .filter((img) => !img.isZip)
                   .map((image, _index) => (
                     <div
-                      key={image.fileName} // Use fileName as key (should be unique)
+                      key={image.fileName}
                       className="border border-gray-600 rounded-md p-3 bg-gray-700 text-gray-100 flex flex-col items-center text-center"
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        {/* Replaced <img> with <Image> from next/image */}
                         <Image
                           src={image.url}
                           alt={`Page ${image.pageNumber}`}
-                          width={64} // Specify appropriate width
-                          height={64} // Specify appropriate height
+                          width={64}
+                          height={64}
                           className="object-cover rounded shadow"
-                          // Fallback in case image fails to load
                           onError={(e) => {
                             e.target.onerror = null;
                             e.target.src =
@@ -437,7 +470,6 @@ export default function PdfToJpgPage() {
                           }}
                         />
                         <div className="flex flex-col items-start">
-                          {" "}
                           <p className="font-medium text-white">
                             {image.fileName}
                           </p>
@@ -450,13 +482,12 @@ export default function PdfToJpgPage() {
                         aria-label={`Download ${image.fileName}`}
                         asChild
                         variant="outline"
-                        className="w-full mt-2" // Take full width below image
+                        className="w-full mt-2"
                       >
                         <a
                           href={image.url}
                           download={image.fileName}
                           onClick={() => {
-                            // Revoke the object URL shortly after the download starts
                             setTimeout(() => {
                               try { URL.revokeObjectURL(image.url); } catch { /* ignore */ }
                             }, 500);
@@ -470,15 +501,17 @@ export default function PdfToJpgPage() {
               </div>
 
               {images.find((img) => img.isZip) && (
-                <div className="w-full text-center mt-4">
+                <div className="flex justify-center mt-4">
                   <Button
                     asChild
                     variant="success"
-                    className="w-full max-w-md mx-auto"
+                    size="lg"
+                    className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
                   >
                     <a
                       href={images.find((img) => img.isZip).url}
                       download={images.find((img) => img.isZip).fileName}
+                      className="text-center flex items-center"
                       onClick={() => {
                         const zipUrl = images.find((img) => img.isZip)?.url;
                         setTimeout(() => {
@@ -486,53 +519,18 @@ export default function PdfToJpgPage() {
                         }, 500);
                       }}
                     >
+                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                      </svg>
                       Download All as ZIP
                     </a>
                   </Button>
                 </div>
               )}
-            </CardFooter>
-          )}
-        </Card>
-        <ToolPageContent
-          toolName="PDF to JPG Converter"
-          toolDescription="Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file. Our tool ensures excellent image quality while processing your files securely in your browser, keeping your documents private."
-          currentTool="pdf-to-jpg"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Choose which pages to convert: all pages, or a specific page number.",
-            "Click the 'Convert to JPG' button to start the conversion process.",
-            "Download your JPG images. If you converted multiple pages, they will be provided in a convenient ZIP archive.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to convert PDF to JPG?",
-              answer:
-                "Yes, our PDF to JPG converter is completely free to use. You can convert as many PDF files as you need without any hidden costs or limitations.",
-            },
-            {
-              question: "Are my files secure when converting PDF to JPG?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All PDF to JPG conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "Can I convert multiple pages at once?",
-              answer:
-                "Yes, you can convert all pages of a PDF to JPG at once. If you choose this option, all individual JPG images will be bundled into a single ZIP file for easy download.",
-            },
-            {
-              question: "What quality are the output JPG images?",
-            answer:
-              "Our tool converts PDF pages to JPG images with high quality (90% compression) to balance file size and visual fidelity. This ensures your images look great without being excessively large.",
-            },
-            {
-              question: "Is there a file size limit for PDF to JPG conversion?",
-            answer:
-              "Yes, the maximum file size for a PDF to be converted to JPG is 50MB. For larger files, processing might be slower due to client-side operations.",
-            },
-          ]}
-        />
-      </main>
-    </>
+            </div>
+          </div>
+        )}
+      </div>
+    </ToolPageLayout>
   );
 }

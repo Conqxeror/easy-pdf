@@ -6,17 +6,8 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription,
-} from "@/components/ui/card";
 import Image from "next/image";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function JpgToPdfPage() {
   const [files, setFiles] = useState([]);
@@ -151,160 +142,180 @@ export default function JpgToPdfPage() {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   }, []);
 
+  const toolName = "JPG to PDF Converter";
+  const toolDescription = "Convert your JPG, PNG, and other image files into a single PDF document with our free online tool. Our converter processes your images directly in your browser, ensuring your privacy and providing instant results. Combine multiple images into one PDF quickly and securely.";
+  const steps = [
+    "Upload your image files (JPG, PNG, GIF, WEBP) by dragging them into the dropzone or clicking to select files.",
+    "Review the selected images. You can remove any unwanted images before conversion.",
+    "Click the 'Convert to PDF' button to start the conversion process.",
+    "Download your newly created PDF document containing all your images.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to convert JPG to PDF?",
+      answer:
+        "Yes, our JPG to PDF converter is completely free to use. You can convert as many image files as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure when converting JPG to PDF?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All JPG to PDF conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
+    {
+      question: "What image formats are supported?",
+      answer:
+        "Our tool supports JPG, PNG, GIF, and WEBP image formats. You can combine different image types into a single PDF.",
+    },
+    {
+      question: "Can I combine multiple images into one PDF?",
+      answer:
+        "Yes, you can upload multiple image files, and our tool will combine them into a single PDF document, with each image appearing on a new page.",
+    },
+    {
+      question: "Is there a file size limit for JPG to PDF conversion?",
+      answer:
+        "While there isn't a strict limit on the number of images, the total size of all uploaded images should ideally not exceed 50MB for optimal performance, as all processing occurs client-side.",
+    },
+  ];
+
   return (
-    <>
-      <main className="container max-w-4xl py-8 mx-auto">
-        <Card className="bg-gray-800 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              JPG to PDF Converter
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Convert your JPG, PNG, and other image files into a single PDF document.
-            </CardDescription>
-          </CardHeader>
+    <ToolPageLayout
+      title="JPG to PDF Converter"
+      subtitle="Convert your JPG, PNG, and other image files into a single PDF document."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="jpg-to-pdf"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'JPG to PDF', href: '/jpg-to-pdf' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="image/jpeg, image/png, image/gif, image/webp"
+          multiple={true}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Choose Image Files"
+          description="Drag & drop or click to select JPG, PNG, GIF, or WEBP files (Max 50MB total)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="image/jpeg, image/png, image/gif, image/webp"
-              multiple={true}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Choose Image Files"
-              description="Drag & drop or click to select JPG, PNG, GIF, or WEBP files (Max 50MB total)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing}
+        {files.length > 0 && (
+          <div className="space-y-4 text-gray-200">
+            <h3 className="text-xl font-semibold text-gray-100">Selected Images:</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {files.map((file) => (
+                <div key={file.name} className="border border-gray-600 rounded-md p-3 bg-gray-700 flex flex-col items-center text-center relative">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-2 right-2"
+                    onClick={() => removeFile(file.name)}
+                  >
+                    X
+                  </Button>
+                  <Image
+                    src={file.objectURL}
+                    alt={file.name}
+                    width={100}
+                    height={100}
+                    className="object-cover rounded shadow mb-2"
+                  />
+                  <p className="font-medium text-white text-sm break-all">{file.name}</p>
+                  <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {isProcessing && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-300">
+                {processingMessage}
+              </span>
+              <span className="font-medium text-gray-100">
+                {currentProgress}%
+              </span>
+            </div>
+            <Progress
+              value={currentProgress}
+              className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
             />
+          </div>
+        )}
 
-            {files.length > 0 && (
-              <div className="space-y-4 text-gray-200">
-                <h3 className="text-xl font-semibold text-gray-100">Selected Images:</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {files.map((file) => (
-                    <div key={file.name} className="border border-gray-600 rounded-md p-3 bg-gray-700 flex flex-col items-center text-center relative">
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="absolute top-2 right-2"
-                        onClick={() => removeFile(file.name)}
-                      >
-                        X
-                      </Button>
-                      <Image
-                        src={file.objectURL}
-                        alt={file.name}
-                        width={100}
-                        height={100}
-                        className="object-cover rounded shadow mb-2"
-                      />
-                      <p className="font-medium text-white text-sm break-all">{file.name}</p>
-                      <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            onClick={convertToPdf}
+            disabled={isProcessing || files.length === 0}
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            variant="default"
+            size="lg"
+          >
+            {isProcessing ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Converting...
+              </span>
+            ) : (
+              "Convert to PDF"
             )}
+          </Button>
+        </div>
 
-            {isProcessing && (
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-300">
-                    {processingMessage}
-                  </span>
-                  <span className="font-medium text-gray-100">
-                    {currentProgress}%
-                  </span>
-                </div>
-                <Progress
-                  value={currentProgress}
-                  className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
-                />
-              </div>
-            )}
-
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              onClick={convertToPdf}
-              disabled={isProcessing || files.length === 0}
-              className="w-full max-w-xs mx-auto block bg-blue-700 text-white"
-              variant="default"
-              size="lg"
-            >
-              {isProcessing ? "Converting..." : "Convert to PDF"}
-            </Button>
-          </CardContent>
-
-          {pdfUrl && (
-            <CardFooter className="flex flex-col gap-6 border-t border-gray-700 pt-6">
-              <h3 className="text-xl font-semibold text-center text-gray-100">
+        {pdfUrl && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+            <div className="w-full text-center space-y-4 text-gray-100">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 Conversion Complete!
               </h3>
-              <div className="w-full text-center">
-                <Button
-                  asChild
-                  variant="success"
-                  className="w-full max-w-md mx-auto"
+              <p className="text-gray-300">
+                Your images have been successfully converted to a PDF document.
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <Button
+                asChild
+                variant="success"
+                size="lg"
+                className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
+              >
+                <a
+                  href={pdfUrl}
+                  download={pdfFileName}
+                  className="text-center flex items-center"
+                  onClick={() => {
+                    const u = pdfUrl;
+                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                  }}
                 >
-                  <a
-                    href={pdfUrl}
-                    download={pdfFileName}
-                    onClick={() => {
-                      const u = pdfUrl;
-                      setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                    }}
-                  >
-                    Download Converted PDF
-                  </a>
-                </Button>
-              </div>
-            </CardFooter>
-          )}
-        </Card>
-        <ToolPageContent
-          toolName="JPG to PDF Converter"
-          toolDescription="Convert your JPG, PNG, and other image files into a single PDF document with our free online tool. Our converter processes your images directly in your browser, ensuring your privacy and providing instant results. Combine multiple images into one PDF quickly and securely."
-          currentTool="jpg-to-pdf"
-          steps={[
-            "Upload your image files (JPG, PNG, GIF, WEBP) by dragging them into the dropzone or clicking to select files.",
-            "Review the selected images. You can remove any unwanted images before conversion.",
-            "Click the 'Convert to PDF' button to start the conversion process.",
-            "Download your newly created PDF document containing all your images.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to convert JPG to PDF?",
-              answer:
-                "Yes, our JPG to PDF converter is completely free to use. You can convert as many image files as you need without any hidden costs or limitations.",
-            },
-            {
-              question: "Are my files secure when converting JPG to PDF?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All JPG to PDF conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "What image formats are supported?",
-              answer:
-                "Our tool supports JPG, PNG, GIF, and WEBP image formats. You can combine different image types into a single PDF.",
-            },
-            {
-              question: "Can I combine multiple images into one PDF?",
-              answer:
-                "Yes, you can upload multiple image files, and our tool will combine them into a single PDF document, with each image appearing on a new page.",
-            },
-            {
-              question: "Is there a file size limit for JPG to PDF conversion?",
-              answer:
-                "While there isn't a strict limit on the number of images, the total size of all uploaded images should ideally not exceed 50MB for optimal performance, as all processing occurs client-side.",
-            },
-          ]}
-        />
-      </main>
-    </>
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  Download Converted PDF
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </ToolPageLayout>
   );
 }

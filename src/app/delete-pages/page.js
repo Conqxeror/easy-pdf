@@ -1,25 +1,13 @@
 "use client";
 
-
-
 import React, { useState, useEffect } from "react";
-
-
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import { Input } from "@/components/ui/input"; // Import Input component
-import { Label } from "@/components/ui/label"; // Import Label component
-import ToolPageContent from "@/components/ui/ToolPageContent";
-
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card"; // Import Card components
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function DeletePagesPage() {
   const [files, setFiles] = useState([]);
@@ -193,187 +181,197 @@ export default function DeletePagesPage() {
     }
   };
 
+  const toolName = "Delete PDF Pages";
+  const toolDescription = "Easily remove unwanted pages from your PDF documents with our free online tool. Select specific pages or a range of pages to delete, and create a new, cleaner PDF in seconds. All processing is done securely in your browser, ensuring your files remain private.";
+  const steps = [
+    "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+    "You will see a list of page numbers. Click on the page numbers you wish to remove. Selected pages will be highlighted.",
+    "Alternatively, use the 'Enter Page Range' input to specify pages for deletion (e.g., '1-5, 8, 10').",
+    "Click the 'Download PDF (Pages Deleted)' button to process and save your new PDF without the selected pages.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to delete pages from a PDF?",
+      answer:
+        "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure when deleting pages?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
+    {
+      question: "Can I delete multiple pages at once?",
+      answer:
+        "Yes, you can select multiple individual pages or specify a range of pages to delete simultaneously. Our tool is designed for efficient bulk deletion.",
+    },
+    {
+      question: "What happens if I accidentally delete a page?",
+      answer:
+        "Our tool creates a new PDF with the selected pages removed. Your original PDF remains untouched on your device. If you make a mistake, simply re-upload the original PDF and try again.",
+    },
+    {
+      question: "Is there a file size limit for deleting pages?",
+      answer:
+        "Yes, the maximum file size for a PDF to be processed is 50MB. For larger files, processing might be slower due to client-side operations.",
+    },
+  ];
+
   return (
-    <ToolPageContent
-      toolName="Delete PDF Pages"
-      toolDescription="Easily remove unwanted pages from your PDF documents with our free online tool. Select specific pages or a range of pages to delete, and create a new, cleaner PDF in seconds. All processing is done securely in your browser, ensuring your files remain private."
-      steps={[
-        "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-        "You will see a list of page numbers. Click on the page numbers you wish to remove. Selected pages will be highlighted.",
-        "Alternatively, use the 'Enter Page Range' input to specify pages for deletion (e.g., '1-5, 8, 10').",
-        "Click the 'Download PDF (Pages Deleted)' button to process and save your new PDF without the selected pages.",
-      ]}
-      faqs={[
-        {
-          question: "Is it free to delete pages from a PDF?",
-          answer:
-            "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations.",
-        },
-        {
-          question: "Are my files secure when deleting pages?",
-          answer:
-            "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-        },
-        {
-          question: "Can I delete multiple pages at once?",
-          answer:
-            "Yes, you can select multiple individual pages or specify a range of pages to delete simultaneously. Our tool is designed for efficient bulk deletion.",
-        },
-        {
-          question: "What happens if I accidentally delete a page?",
-          answer:
-            "Our tool creates a new PDF with the selected pages removed. Your original PDF remains untouched on your device. If you make a mistake, simply re-upload the original PDF and try again.",
-        },
-        {
-          question: "Is there a file size limit for deleting pages?",
-          answer:
-            "Yes, the maximum file size for a PDF to be processed is 50MB. For larger files, processing might be slower due to client-side operations.",
-        },
-      ]}
+    <ToolPageLayout
+      title="Delete PDF Pages"
+      subtitle="Effortlessly remove specific pages from your PDF documents directly in your browser. Your files stay private."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
       currentTool="delete-pages"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Delete Pages', href: '/delete-pages' }
+      ]}
     >
-      <div className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Delete PDF Pages
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Effortlessly remove specific pages from your PDF documents
-              directly in your browser. Your files stay private.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Upload PDF"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing}
-            />
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Upload PDF"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-            {numPages > 0 && (
-              <div className="my-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
-                <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                  Select Pages to Delete ({selected.length} selected)
-                </h2>
-                <p className="text-sm text-gray-400 mb-4">
-                  Click on the page numbers you wish to remove. Selected pages
-                  will be highlighted in red.
-                </p>
+        {numPages > 0 && (
+          <div className="my-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
+            <h2 className="font-semibold text-xl mb-3 text-gray-100">
+              Select Pages to Delete ({selected.length} selected)
+            </h2>
+            <p className="text-sm text-gray-400 mb-4">
+              Click on the page numbers you wish to remove. Selected pages
+              will be highlighted in red.
+            </p>
 
-                <div className="mb-4">
-                  <Label
-                    htmlFor="page-range"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Enter Page Range (e.g., 1-5, 8, 10):{" "}
-                    {numPages ? `/ ${numPages} pages` : ""}
-                  </Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="page-range"
-                      type="text"
-                      value={pageRangeInput}
-                      onChange={(e) => setPageRangeInput(e.target.value)}
-                      placeholder="e.g., 1-3, 5, 7-9"
-                      className="flex-grow bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
-                      disabled={isProcessing}
-                    />
-                    <Button
-                      onClick={applyPageRange}
-                      variant="default"
-                      className="px-4 py-2"
-                      disabled={isProcessing || !pageRangeInput.trim()}
-                    >
-                      Apply
-                    </Button>
-                  </div>
-                  {pageRangeError && (
-                    <p className="text-red-400 text-sm mt-2">
-                      {pageRangeError}
-                    </p>
-                  )}
-                </div>
-
-                <ul
-                  className="flex flex-wrap gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar"
-                  aria-label="Select pages to delete"
-                  data-test-id="page-selection-list"
+            <div className="mb-4">
+              <Label
+                htmlFor="page-range"
+                className="block text-sm font-medium text-gray-300 mb-2"
+              >
+                Enter Page Range (e.g., 1-5, 8, 10):{" "}
+                {numPages ? `/ ${numPages} pages` : ""}
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="page-range"
+                  type="text"
+                  value={pageRangeInput}
+                  onChange={(e) => setPageRangeInput(e.target.value)}
+                  placeholder="e.g., 1-3, 5, 7-9"
+                  className="flex-grow bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                  disabled={isProcessing}
+                />
+                <Button
+                  onClick={applyPageRange}
+                  variant="default"
+                  className="px-4 py-2"
+                  disabled={isProcessing || !pageRangeInput.trim()}
                 >
-                  {Array.from({ length: numPages }, (_, i) => (
-                    <li key={i}>
-                      <Button
-                        size="sm"
-                        variant={
-                          selected.includes(i) ? "destructive" : "success"
-                        }
-                        aria-label={`Toggle delete for page ${i + 1}`}
-                        onClick={() => togglePage(i)}
-                        className="w-20"
-                      >
-                        Page {i + 1}
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
+                  Apply
+                </Button>
               </div>
-            )}
+              {pageRangeError && (
+                <p className="text-red-400 text-sm mt-2">
+                  {pageRangeError}
+                </p>
+              )}
+            </div>
 
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              className="mt-6 w-full max-w-xs mx-auto block bg-blue-700 text-white"
-              onClick={handleDelete}
-              disabled={isProcessing || numPages === 0 || selected.length === 0}
-              aria-label="Delete selected pages"
-              data-test-id="delete-pages-button"
+            <ul
+              className="flex flex-wrap gap-3 max-h-60 overflow-y-auto pr-2 custom-scrollbar"
+              aria-label="Select pages to delete"
+              data-test-id="page-selection-list"
             >
-              {isProcessing ? "Processing..." : "Delete Selected Pages"}
-            </Button>
-
-            {deletedPdfUrl && !isProcessing && (
-              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
-                <div className="w-full text-center space-y-4 text-gray-100">
-                  <h3 className="text-2xl font-semibold flex items-center justify-center">
-                    Pages Deleted Successfully
-                  </h3>
-                  <p className="text-gray-400">
-                    {selected.length} page(s) have been removed from your document.
-                  </p>
-                </div>
-
-                <div className="flex justify-center">
-                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
-                    <a
-                      href={deletedPdfUrl}
-                      download={downloadFileName}
-                      className="text-center flex items-center"
-                      onClick={() => {
-                        const u = deletedPdfUrl;
-                        setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                      }}
-                    >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                      </svg>
-                      Download Modified PDF
-                    </a>
+              {Array.from({ length: numPages }, (_, i) => (
+                <li key={i}>
+                  <Button
+                    size="sm"
+                    variant={
+                      selected.includes(i) ? "destructive" : "success"
+                    }
+                    aria-label={`Toggle delete for page ${i + 1}`}
+                    onClick={() => togglePage(i)}
+                    className="w-20"
+                  >
+                    Page {i + 1}
                   </Button>
-                </div>
-              </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            onClick={handleDelete}
+            disabled={isProcessing || numPages === 0 || selected.length === 0}
+            aria-label="Delete selected pages"
+            data-test-id="delete-pages-button"
+          >
+            {isProcessing ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Processing...
+              </span>
+            ) : (
+              "Delete Selected Pages"
             )}
-          </CardContent>
-        </Card>
+          </Button>
+        </div>
+
+        {deletedPdfUrl && !isProcessing && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+            <div className="w-full text-center space-y-4 text-gray-100">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Pages Deleted Successfully
+              </h3>
+              <p className="text-gray-400">
+                {selected.length} page(s) have been removed from your document.
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                <a
+                  href={deletedPdfUrl}
+                  download={downloadFileName}
+                  className="text-center flex items-center"
+                  onClick={() => {
+                    const u = deletedPdfUrl;
+                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                  }}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  Download Modified PDF
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

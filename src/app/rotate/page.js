@@ -1,32 +1,20 @@
 "use client";
 
-
 import React, { useState, useEffect  } from "react";
-
-
 import FileDropzone from "@/components/ui/FileDropzone";
 import { PDFDocument } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-// import Loader from "@/components/ui/Loader"; // Removed Loader for consistency
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription, // Import CardDescription
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label"; // Import Label
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Import Select components
-import PageRangeInput from "@/components/ui/PageRangeInput"; // Assuming this component is themed correctly
-import ToolPageContent from "@/components/ui/ToolPageContent";
+} from "@/components/ui/select";
+import PageRangeInput from "@/components/ui/PageRangeInput";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function RotatePdfPage() {
   const [file, setFile] = useState(null);
@@ -150,158 +138,173 @@ export default function RotatePdfPage() {
     }
   };
 
+  const toolName = "Rotate PDF";
+  const toolDescription = "Easily rotate pages in your PDF documents. Whether you need to adjust the orientation of a single page, a specific range, or the entire document, our online tool allows you to rotate by 90, 180, or 270 degrees. All processing is done securely in your browser, ensuring your files remain private.";
+  const steps = [
+    "Upload your PDF file by dragging it into the dropzone or clicking to select.",
+    "Specify the page range you want to rotate. You can choose to rotate all pages, or a custom range (e.g., pages 5-10).",
+    "Select the rotation angle: 90° clockwise, 180°, or 270° clockwise (90° counter-clockwise).",
+    "Click the 'Rotate PDF' button to apply the changes.",
+    "Download your newly rotated PDF file.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to rotate PDF pages?",
+      answer:
+        "Yes, our Rotate PDF tool is completely free to use. You can rotate as many PDF files as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure when rotating PDFs?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All PDF processing, including rotation, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
+    {
+      question: "Can I rotate only specific pages?",
+      answer:
+        "Yes, you can specify a custom page range to rotate. This allows you to precisely control which pages are affected by the rotation.",
+    },
+    {
+      question: "What rotation angles are supported?",
+      answer:
+        "You can choose from 90 degrees clockwise, 180 degrees, or 270 degrees clockwise (which is equivalent to 90 degrees counter-clockwise).",
+    },
+    {
+      question: "Does rotating affect the quality of my PDF?",
+      answer:
+        "No, rotating your PDF pages with our tool does not affect the quality of your document. The content remains sharp and clear.",
+    },
+  ];
+
   return (
-    <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8 mx-auto max-w-4xl">
-        {" "}
-        {/* Centering the main content */}
-        <Card className="bg-gray-800 border-gray-700 w-full">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Rotate PDF
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Rotate specific pages or the entire PDF document by 90, 180, or
-              270 degrees.
-            </CardDescription>
-          </CardHeader>
+    <ToolPageLayout
+      title="Rotate PDF"
+      subtitle="Rotate specific pages or the entire PDF document by 90, 180, or 270 degrees."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="rotate"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Rotate PDF', href: '/rotate' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Choose a PDF File"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isRotating}
+        />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Choose a PDF File"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isRotating} // Use isRotating for FileDropzone isLoading state
-            />
+        {fileName && (
+          <div className="text-center text-gray-300 text-sm">
+            Selected:{" "}
+            <span className="font-medium text-gray-100">{fileName}</span>
+          </div>
+        )}
 
-            {fileName && (
-              <div className="text-center text-gray-300 text-sm">
-                Selected:{" "}
-                <span className="font-medium text-gray-100">{fileName}</span>
-              </div>
+        {totalPages !== null && (
+          <PageRangeInput
+            startPage={startPage}
+            endPage={endPage}
+            setStartPage={setStartPage}
+            setEndPage={setEndPage}
+            totalPages={totalPages}
+          />
+        )}
+
+        <div className="space-y-2">
+          <Label
+            htmlFor="angle"
+            className="text-sm font-medium text-gray-200"
+          >
+            Rotate by:
+          </Label>
+          <Select value={angle} onValueChange={setAngle}>
+            <SelectTrigger
+              id="angle"
+              className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+            >
+              <SelectValue placeholder="Select angle" />
+            </SelectTrigger>
+            <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
+              <SelectItem value="90">90° Clockwise</SelectItem>
+              <SelectItem value="180">180°</SelectItem>
+              <SelectItem value="270">
+                270° Clockwise (90° Counter-Clockwise)
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            onClick={rotatePDF}
+            disabled={isRotating || !file || totalPages === null}
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            variant="default"
+            size="lg"
+            aria-label="Rotate PDF"
+          >
+            {isRotating ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Rotating...
+              </span>
+            ) : (
+              "Rotate PDF"
             )}
+          </Button>
+        </div>
 
-            {totalPages !== null && (
-              <PageRangeInput
-                startPage={startPage}
-                endPage={endPage}
-                setStartPage={setStartPage}
-                setEndPage={setEndPage}
-                totalPages={totalPages}
-              />
-            )}
-
-            <div className="space-y-2">
-              <Label
-                htmlFor="angle"
-                className="text-sm font-medium text-gray-200"
-              >
-                Rotate by:
-              </Label>
-              <Select value={angle} onValueChange={setAngle}>
-                <SelectTrigger
-                  id="angle"
-                  className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <SelectValue placeholder="Select angle" />
-                </SelectTrigger>
-                <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
-                  <SelectItem value="90">90° Clockwise</SelectItem>
-                  <SelectItem value="180">180°</SelectItem>
-                  <SelectItem value="270">
-                    270° Clockwise (90° Counter-Clockwise)
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+        {rotatedUrl && !isRotating && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+            <div className="w-full text-center space-y-4 text-gray-100">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                PDF Rotated!
+              </h3>
+              <p className="text-gray-300">
+                Your PDF has been successfully rotated.
+              </p>
             </div>
 
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              onClick={rotatePDF}
-              disabled={isRotating || !file || totalPages === null} // Disable if file not loaded
-              className="w-full max-w-xs mx-auto block"
-              variant="default" // Consistent styling for action button
-              size="lg"
-              aria-label="Rotate PDF"
-            >
-              {isRotating ? "Rotating..." : "Rotate PDF"}
-            </Button>
-          </CardContent>
-
-          {rotatedUrl && !isRotating && (
-            <CardFooter className="flex flex-col gap-4 border-t border-gray-700 pt-6">
-              <div className="w-full text-center space-y-2 text-gray-100">
-                <h3 className="text-xl font-semibold">PDF Rotated!</h3>
-                <p className="text-sm text-gray-400">
-                  Your PDF has been successfully rotated.
-                </p>
-              </div>
+            <div className="flex justify-center">
               <Button
                 asChild
                 variant="success"
-                className="w-full max-w-xs mx-auto block"
+                size="lg"
+                className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
               >
                 <a
                   href={rotatedUrl}
                   download={`rotated_${fileName || "document"}.pdf`}
-                  className="text-center"
+                  className="text-center flex items-center"
                 >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
                   Download Rotated PDF
                 </a>
               </Button>
-            </CardFooter>
-          )}
-        </Card>
-      </main>
-      <ToolPageContent
-        toolName="Rotate PDF"
-        toolDescription="Easily rotate pages in your PDF documents. Whether you need to adjust the orientation of a single page, a specific range, or the entire document, our online tool allows you to rotate by 90, 180, or 270 degrees. All processing is done securely in your browser, ensuring your files remain private."
-        currentTool="rotate"
-        steps={[
-          "Upload your PDF file by dragging it into the dropzone or clicking to select.",
-          "Specify the page range you want to rotate. You can choose to rotate all pages, or a custom range (e.g., pages 5-10).",
-          "Select the rotation angle: 90° clockwise, 180°, or 270° clockwise (90° counter-clockwise).",
-          "Click the 'Rotate PDF' button to apply the changes.",
-          "Download your newly rotated PDF file.",
-        ]}
-        faqs={[
-          {
-            question: "Is it free to rotate PDF pages?",
-            answer:
-              "Yes, our Rotate PDF tool is completely free to use. You can rotate as many PDF files as you need without any hidden costs or limitations.",
-          },
-          {
-            question: "Are my files secure when rotating PDFs?",
-            answer:
-              "Absolutely. Your privacy is our top priority. All PDF processing, including rotation, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-          },
-          {
-            question: "Can I rotate only specific pages?",
-            answer:
-              "Yes, you can specify a custom page range to rotate. This allows you to precisely control which pages are affected by the rotation.",
-          },
-          {
-            question: "What rotation angles are supported?",
-            answer:
-              "You can choose from 90 degrees clockwise, 180 degrees, or 270 degrees clockwise (which is equivalent to 90 degrees counter-clockwise).",
-          },
-          {
-            question: "Does rotating affect the quality of my PDF?",
-            answer:
-              "No, rotating your PDF pages with our tool does not affect the quality of your document. The content remains sharp and clear.",
-          },
-        ]}
-      />
-    </>
+            </div>
+          </div>
+        )}
+      </div>
+    </ToolPageLayout>
   );
 }
