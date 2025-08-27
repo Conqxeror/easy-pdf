@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageContainer, PageHeader, PageContent } from '@/components/ui/Layout';
 import ToolPageContent from '@/components/ui/ToolPageContent';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import Breadcrumb from '@/components/Breadcrumb';
 import { Card } from '@/components/ui/card';
 
 export const StandardToolLayout = ({ 

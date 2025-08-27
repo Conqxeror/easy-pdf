@@ -305,7 +305,6 @@ export default function RotatePdfPage() {
           </div>
         )}
       </div>
-    </div>
     </StandardToolLayout>
   );
 }
