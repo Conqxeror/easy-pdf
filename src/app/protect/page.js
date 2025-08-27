@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function ProtectPdfPage() {
   const [file, setFile] = useState(null);
@@ -108,7 +108,7 @@ export default function ProtectPdfPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Protect PDF"
       subtitle="Add password protection to your PDF documents. Keep your files secure and private."
       toolName={toolName}
@@ -230,6 +230,6 @@ export default function ProtectPdfPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

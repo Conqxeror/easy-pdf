@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function UnlockPdfPage() {
   const [file, setFile] = useState(null);
@@ -102,7 +102,7 @@ export default function UnlockPdfPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Unlock PDF"
       subtitle="Remove password protection from your PDF documents securely in your browser."
       toolName={toolName}
@@ -224,6 +224,6 @@ export default function UnlockPdfPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

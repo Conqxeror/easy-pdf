@@ -7,7 +7,7 @@ import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import Image from "next/image";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function JpgToPdfPage() {
   const [files, setFiles] = useState([]);
@@ -179,7 +179,7 @@ export default function JpgToPdfPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="JPG to PDF Converter"
       subtitle="Convert your JPG, PNG, and other image files into a single PDF document."
       toolName={toolName}
@@ -316,6 +316,6 @@ export default function JpgToPdfPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

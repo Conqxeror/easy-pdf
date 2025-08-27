@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 // Configure pdfjs worker only on the client to avoid SSR/runtime errors
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -176,7 +176,7 @@ export default function CompressPDFs() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Compress PDF"
       subtitle="Reduce the file size of your PDF documents with powerful client-side compression."
       toolName={toolName}
@@ -410,7 +410,7 @@ export default function CompressPDFs() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }
 

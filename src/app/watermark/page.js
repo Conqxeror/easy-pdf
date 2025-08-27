@@ -12,7 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HexColorPicker } from "react-colorful";
 import Image from "next/image";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function WatermarkPdfPage() {
   const [file, setFile] = useState(null);
@@ -373,7 +373,7 @@ export default function WatermarkPdfPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Add Watermark to PDF"
       subtitle="Apply custom text or image watermarks to your PDF documents securely in your browser."
       toolName={toolName}
@@ -798,6 +798,6 @@ export default function WatermarkPdfPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

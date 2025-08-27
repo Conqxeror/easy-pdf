@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function DeletePagesPage() {
   const [files, setFiles] = useState([]);
@@ -218,7 +218,7 @@ export default function DeletePagesPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Delete PDF Pages"
       subtitle="Effortlessly remove specific pages from your PDF documents directly in your browser. Your files stay private."
       toolName={toolName}
@@ -372,6 +372,6 @@ export default function DeletePagesPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

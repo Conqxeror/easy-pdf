@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PageRangeInput from "@/components/ui/PageRangeInput";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function RotatePdfPage() {
   const [file, setFile] = useState(null);
@@ -176,7 +176,7 @@ export default function RotatePdfPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Rotate PDF"
       subtitle="Rotate specific pages or the entire PDF document by 90, 180, or 270 degrees."
       toolName={toolName}
@@ -305,6 +305,7 @@ export default function RotatePdfPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </div>
+    </StandardToolLayout>
   );
 }

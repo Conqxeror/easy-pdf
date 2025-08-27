@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import JSZip from "jszip";
 import Image from "next/image";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 // Configure pdfjs worker
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -316,7 +316,7 @@ export default function PdfToJpgPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="PDF to JPG Converter"
       subtitle="Convert your PDF document into high-quality JPG images. Process specific pages or the entire document."
       toolName={toolName}
@@ -531,6 +531,6 @@ export default function PdfToJpgPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

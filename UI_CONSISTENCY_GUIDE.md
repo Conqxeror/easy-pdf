@@ -51,9 +51,9 @@ export default function ToolPage() {
 
 ## Key Changes Made
 
-1. **Replaced `ToolPageContent` with `ToolPageLayout`**: 
-   - `ToolPageContent` is now a child component of `ToolPageLayout`
-   - `ToolPageLayout` provides the consistent page structure and styling
+1. **Replaced `ToolPageContent` with `StandardToolLayout`**: 
+   - `ToolPageContent` is now a child component of `StandardToolLayout`
+   - `StandardToolLayout` provides the consistent page structure and styling
 
 2. **Standardized page structure**:
    - Consistent spacing using `space-y-6` classes
@@ -80,8 +80,8 @@ export default function ToolPage() {
 
 ## Updated Components
 
-### ToolPageLayout.jsx
-Located at `src/components/ui/ToolPageLayout.jsx`, this component provides:
+### StandardToolLayout.jsx
+Located at `src/components/ui/StandardToolLayout.jsx`, this component provides:
 - Standardized page container with consistent background and text colors
 - Page header with title and subtitle
 - Breadcrumb navigation
@@ -105,7 +105,7 @@ To update an existing tool page:
    import ToolPageContent from "@/components/ui/ToolPageContent";
    
    // New
-   import ToolPageLayout from "@/components/ui/ToolPageLayout";
+   import StandardToolLayout from "@/components/ui/StandardToolLayout";
    ```
 
 2. Extract tool content into constants:
@@ -126,10 +126,10 @@ To update an existing tool page:
    ];
    ```
 
-3. Wrap the page content with `ToolPageLayout`:
+3. Wrap the page content with `StandardToolLayout`:
    ```jsx
    return (
-     <ToolPageLayout
+     <StandardToolLayout
        title="Tool Name"
        subtitle="Brief description of what the tool does"
        toolName={toolName}
@@ -143,7 +143,7 @@ To update an existing tool page:
        ]}
      >
        {/* Tool-specific UI components go here */}
-     </ToolPageLayout>
+     </StandardToolLayout>
    );
    ```
 

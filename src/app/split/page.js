@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
@@ -201,7 +201,7 @@ export default function SplitPdfPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Split PDF"
       subtitle="Extract specific pages or ranges, or separate all pages. All processing is 100% client-side."
       toolName={toolName}
@@ -409,6 +409,6 @@ export default function SplitPdfPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

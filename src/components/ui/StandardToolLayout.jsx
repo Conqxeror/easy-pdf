@@ -4,7 +4,7 @@ import ToolPageContent from '@/components/ui/ToolPageContent';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Card } from '@/components/ui/card';
 
-export const ToolPageLayout = ({ 
+export const StandardToolLayout = ({ 
   title, 
   subtitle, 
   toolName,
@@ -48,4 +48,4 @@ export const ToolPageLayout = ({
   );
 };
 
-export default ToolPageLayout;
+export default StandardToolLayout;

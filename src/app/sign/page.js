@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue } from "@/components/ui/select";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 // Import pdfjs-dist legacy build for PDF rendering (safer with bundlers)
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -480,7 +480,7 @@ export default function SignPage() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Sign / Annotate PDF"
       subtitle="Draw your signature or annotation and place it directly onto any page of your PDF document."
       toolName={toolName}
@@ -709,6 +709,6 @@ export default function SignPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }

@@ -6,7 +6,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import StandardToolLayout from "@/components/ui/StandardToolLayout";
 
 // Dynamically import heavy PDF libraries only when needed
 import { usePDFLib, usePDFJS } from "@/lib/pdfUtils";
@@ -218,7 +218,7 @@ export default function MergeClient() {
   ];
 
   return (
-    <ToolPageLayout
+    <StandardToolLayout
       title="Merge PDFs"
       subtitle="Combine multiple PDF files into one seamless document. Drag and drop to arrange their order."
       toolName={toolName}
@@ -395,6 +395,6 @@ export default function MergeClient() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </StandardToolLayout>
   );
 }
