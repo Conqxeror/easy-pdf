@@ -13,7 +13,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue } from "@/components/ui/select";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Import pdfjs-dist legacy build for PDF rendering (safer with bundlers)
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -22,14 +22,16 @@ if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
   pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 }
 
-export default function SignPage() {
+export default function SignPdfPage() {
   const [files, setFiles] = useState([]);
+  const [fileName, setFileName] = useState(""); // Used in the component
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [numPages, setNumPages] = useState(0); // Total pages in uploaded PDF
-  const [currentPageIdx, setCurrentPageIdx] = useState(0); // 0-based index of PDF page being previewed
-  const [signedPdfUrl, setSignedPdfUrl] = useState(null); // New state for the result PDF URL
-  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
+  const [processingMessage, setProcessingMessage] = useState(""); // Used in the component
+  const [signedPdfUrl, setSignedPdfUrl] = useState(null);
+  const [downloadFileName, setDownloadFileName] = useState("");
+  const [currentPageIdx, setCurrentPageIdx] = useState(0); // Current page index (0-based)
+  const [numPages, setNumPages] = useState(0); // Total number of pages in the PDF
 
   // Signature Drawing States & Refs
   const signatureCanvasRef = useRef(null);
@@ -64,6 +66,12 @@ export default function SignPage() {
 
   // --- Helper Functions ---
   // Helper to convert hex color to RGB for pdf-lib
+  const hexToRgb = (hex) => { // eslint-disable-line no-unused-vars
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+    return { r, g, b };
+  };
   
 
   // --- Signature Drawing Canvas Handlers ---
@@ -232,8 +240,8 @@ export default function SignPage() {
   const handleFiles = async (newFiles) => {
     setFiles(newFiles);
     setError("");
-    setNumPages(0);
-    setCurrentPageIdx(0); // Reset to first page
+    setSignedPdfUrl(null); // Clear previous URL on new file selection
+    setDownloadFileName(""); // Clear previous filename on new file selection
 
     // Clear previous states
     setSignatureDataUrl(null);
@@ -253,12 +261,15 @@ export default function SignPage() {
     setPdfDocProxy(null); // This will also trigger the useEffect cleanup for the old state value (if any)
 
     if (newFiles.length === 0) {
+      setFileName("");
       return;
     }
 
+    const selectedFile = newFiles[0];
+    setFileName(selectedFile ? selectedFile.name : "");
+
     try {
-      const file = newFiles[0];
-      const arrayBuffer = await file.arrayBuffer();
+      const arrayBuffer = await selectedFile.arrayBuffer();
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
 
       activePdfDocProxyRef.current = pdf; // Set the ref directly
@@ -270,6 +281,7 @@ export default function SignPage() {
       setFiles([]);
       setPdfDocProxy(null); // Ensure state is null on error
       activePdfDocProxyRef.current = null; // Ensure ref is null on error
+      setFileName("");
     }
   };
 
@@ -400,6 +412,7 @@ export default function SignPage() {
     }
 
     setIsProcessing(true);
+    setProcessingMessage("Signing PDF document...");
     setError("");
 
     try {
@@ -429,60 +442,63 @@ export default function SignPage() {
       const url = URL.createObjectURL(blob);
       // Revoke previous signed PDF URL if present to avoid memory leaks
       setSignedPdfUrl((prev) => {
-        try {
-          if (prev) URL.revokeObjectURL(prev);
-  } catch {
-          // ignore
-        }
+  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
       setDownloadFileName(`signed_${files[0].name || "document"}.pdf`);
 
+      setProcessingMessage("PDF signed successfully!");
       setError("");
     } catch (e) {
       setError("Failed to sign PDF. Please try again.");
       console.error("Sign PDF error:", e);
     } finally {
       setIsProcessing(false);
+      setTimeout(() => setProcessingMessage(""), 2000);
     }
   };
 
-  const toolName = "Sign / Annotate PDF";
-  const toolDescription = "Add your digital signature or annotations to any PDF document with our intuitive drawing tool. Perfect for signing contracts, forms, or adding personal notes to documents. All processing happens securely in your browser, ensuring your documents remain private.";
+  const toolName = "Sign PDF";
+  const toolDescription = "Add your digital signature to any PDF document with our intuitive drawing tool. Perfect for signing contracts, forms, or adding personal notes to documents. All processing happens securely in your browser, ensuring your files remain private. Create professional-looking signatures with customizable pen color and stroke width.";
   const steps = [
-    "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
-    "Use the signature canvas to draw your signature or annotation with customizable pen color and stroke width.",
+    "Upload your PDF file by dragging it into the dropzone or clicking to select it from your device.",
+    "Use the signature canvas to draw your signature with customizable pen color and stroke width.",
     "Select the page where you want to place your signature and adjust its size if needed.",
     "Click and drag your signature on the PDF preview to position it exactly where you want it.",
-    "Click 'Sign & Download PDF' to apply your signature and download the signed document.",
+    "Click the 'Sign PDF' button to apply your signature and download the signed document.",
   ];
   const faqs = [
     {
       question: "Is it free to sign PDF documents?",
       answer:
-        "Yes, our PDF signing tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or limitations." },
+        "Yes, our PDF signing tool is completely free to use. You can sign as many PDF documents as you need without any hidden costs or limitations.",
+    },
     {
-      question: "Are my documents secure when signing?",
+      question: "Are my files secure when signing?",
       answer:
-        "Absolutely. Your privacy is our top priority. All PDF processing, including signature placement, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential." },
+        "Absolutely. Your privacy is our top priority. All PDF processing, including signature placement, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
     {
       question: "Can I add multiple signatures to one document?",
       answer:
-        "Currently, you can add one signature per session. To add multiple signatures, you would need to repeat the process with the previously signed PDF." },
+        "Currently, you can add one signature per session. To add multiple signatures, you would need to repeat the process with the previously signed PDF.",
+    },
     {
       question: "What signature formats are supported?",
       answer:
-        "You can draw freehand signatures using your mouse, trackpad, or touch screen. The tool supports customizable pen colors and stroke widths for personalized signatures." },
+        "You can draw freehand signatures using your mouse, trackpad, or touch screen. The tool supports customizable pen colors and stroke widths for personalized signatures.",
+    },
     {
       question: "Can I sign on any page of the PDF?",
       answer:
-        "Yes, you can select any page of your PDF document to place your signature. Use the page selector to choose the specific page where you want to add your signature." },
+        "Yes, you can select any page of your PDF document to place your signature. Use the page selector to choose the specific page where you want to add your signature.",
+    },
   ];
 
   return (
-    <StandardToolLayout
-      title="Sign / Annotate PDF"
-      subtitle="Draw your signature or annotation and place it directly onto any page of your PDF document."
+    <ToolPageLayout
+      title="Sign PDF"
+      subtitle="Add your digital signature to any PDF document. Draw your signature and place it directly on any page."
       toolName={toolName}
       toolDescription={toolDescription}
       steps={steps}
@@ -490,7 +506,7 @@ export default function SignPage() {
       currentTool="sign"
       breadcrumbs={[
         { label: 'Home', href: '/' },
-        { label: 'Sign', href: '/sign' }
+        { label: 'Sign PDF', href: '/sign' }
       ]}
     >
       <div className="space-y-6">
@@ -709,6 +725,6 @@ export default function SignPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }
