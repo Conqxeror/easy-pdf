@@ -1,9 +1,6 @@
 "use client";
 
-
-
 import React, { useState, useRef, useEffect, useCallback } from "react";
-
 
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
@@ -19,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -41,10 +38,13 @@ export default function FormFillerPage() {
   const [numPages, setNumPages] = useState(0); // Total number of pages in the PDF
   const [filledPdfUrl, setFilledPdfUrl] = useState(null); // New state for the result PDF URL
   const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
-  const canvasRef = useRef(null); // Ref for the main visible canvas element
-  const [pdfDocProxy, setPdfDocProxy] = useState(null); // Stores PDFDocumentProxy from pdfjs
 
-  // New state for dragging functionality
+  // Refs for canvas and PDF rendering
+  const canvasRef = useRef(null);
+  const [pdfDocProxy, setPdfDocProxy] = useState(null); // Stores PDFDocumentProxy from pdfjs
+  const renderTaskRef = useRef(null); // To manage pdf.js render tasks
+
+  // Dragging state for text positioning
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0); // Mouse X when drag starts (canvas pixels)
   const [dragStartY, setDragStartY] = useState(0); // Mouse Y when drag starts (canvas pixels)
@@ -53,156 +53,122 @@ export default function FormFillerPage() {
   const [pdfPageDimensions, setPdfPageDimensions] = useState({
     width: 0,
     height: 0,
-  }); // Dimensions of the PDF page in PDF units (from pdf.js viewport)
+  }); // Current PDF page dimensions in PDF units
 
-  // Ref to store the pre-rendered PDF page as an ImageBitmap (for fast drawing)
-  const pdfImageRef = useRef(null);
-
-  // Helper function to convert hex color to RGB (0-1 range for pdf-lib)
-  const hexToRgbNormalized = (hex) => {
-    const r = parseInt(hex.substring(1, 3), 16) / 255;
-    const g = parseInt(hex.substring(3, 5), 16) / 255;
-    const b = parseInt(hex.substring(5, 7), 16) / 255;
-    return rgb(r, g, b);
-  };
-
-  // 1. Function to render PDF background to an offscreen buffer (ImageBitmap)
-  // This is a heavy operation, only triggered when PDF file or page changes.
-  const renderPdfBackgroundToImage = useCallback(async () => {
-    if (!pdfDocProxy || numPages === 0) {
-      if (pdfImageRef.current) {
-        pdfImageRef.current.close(); // Release ImageBitmap memory
-        pdfImageRef.current = null;
-      }
-      setPdfPageDimensions({ width: 0, height: 0 });
-      return;
-    }
-
-    try {
-      const page = await pdfDocProxy.getPage(pageIdx + 1); // pdfjs pages are 1-based
-      const viewport = page.getViewport({ scale: 1 }); // Get original PDF page dimensions
-
-      // Create an offscreen canvas for rendering
-      const offscreenCanvas = document.createElement("canvas");
-      const offscreenContext = offscreenCanvas.getContext("2d");
-
-      // Set offscreen canvas dimensions based on a fixed width for consistent quality
-      const renderWidth = 800; // This matches the main canvas width
-      const renderScale = renderWidth / viewport.width;
-      const renderScaledViewport = page.getViewport({ scale: renderScale });
-
-      offscreenCanvas.width = renderScaledViewport.width;
-      offscreenCanvas.height = renderScaledViewport.height;
-
-      const renderContext = {
-        canvasContext: offscreenContext,
-        viewport: renderScaledViewport,
-      };
-
-      // Perform the PDF rendering to the offscreen canvas
-      await page.render(renderContext).promise;
-
-      // Create an ImageBitmap from the offscreen canvas for fast drawing
-      if (pdfImageRef.current) {
-        pdfImageRef.current.close(); // Close previous ImageBitmap if exists
-      }
-      pdfImageRef.current = await createImageBitmap(offscreenCanvas);
-
-      // Store the actual PDF page dimensions for coordinate calculations later
-      setPdfPageDimensions({ width: viewport.width, height: viewport.height });
-    } catch (e) {
-      console.error("Error rendering PDF background to image:", e);
-      setError("Failed to render PDF preview.");
-      if (pdfImageRef.current) {
-        pdfImageRef.current.close();
-        pdfImageRef.current = null;
-      }
-      setPdfPageDimensions({ width: 0, height: 0 });
-    }
-  }, [pdfDocProxy, pageIdx, numPages]); // Dependencies: only re-render background when PDF or page changes
-
-  // 2. Function to draw the entire live preview (background + text) onto the main canvas
-  // This is a fast operation, triggered by any text/position/style changes.
-  const drawLivePreview = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas || !pdfImageRef.current || !pdfPageDimensions.width) {
-      // Clear canvas if no PDF image is ready or dimensions are missing
-      if (canvas) {
-        const context = canvas.getContext("2d");
-        context.clearRect(0, 0, canvas.width, canvas.height);
-      }
-      return;
-    }
-
-    const context = canvas.getContext("2d");
-    const pdfImage = pdfImageRef.current; // The pre-rendered PDF background ImageBitmap
-
-    // Set main canvas dimensions based on the pre-rendered image's aspect ratio
-    // The main canvas width is fixed at 800px as before
-    const canvasWidth = 800;
-    const canvasHeight = (pdfImage.height / pdfImage.width) * canvasWidth;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
-
-    // Clear and draw the pre-rendered PDF background
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(pdfImage, 0, 0, canvas.width, canvas.height);
-
-    // Draw the text preview on top
-    if (text.trim()) {
-      // Scale based on the original PDF page dimensions to canvas width
-            const canvasScale = canvas.width / pdfPageDimensions.width;
-      context.font = `${fontSize * canvasScale}px Helvetica`; // Scale font size
-      context.fillStyle = color;
-
-      // Convert PDF Y coordinate (bottom-left origin) to Canvas Y coordinate (top-left origin)
-      const canvasX = x * canvasScale;
-      const canvasY = canvas.height - y * canvasScale;
-
-      context.fillText(text, canvasX, canvasY);
-    }
-  }, [text, x, y, fontSize, color, pdfPageDimensions]); // Dependencies for live text drawing and preview
-
-  // Effect to trigger rendering of PDF background to offscreen buffer
-  useEffect(() => {
-    renderPdfBackgroundToImage();
-  }, [renderPdfBackgroundToImage]);
-
-  // Effect to trigger drawing of the live preview (after background is ready or text/pos changes)
-  useEffect(() => {
-    drawLivePreview();
-  }, [drawLivePreview]);
-
-  // Effect to clean up the PDF document proxy and ImageBitmap
+  // Cleanup function for pdf.js document and render tasks
   useEffect(() => {
     return () => {
       if (pdfDocProxy) {
         pdfDocProxy.destroy();
       }
-      if (pdfImageRef.current) {
-        pdfImageRef.current.close();
-        pdfImageRef.current = null;
+      // Cancel any ongoing render task
+      if (renderTaskRef.current) {
+        renderTaskRef.current.cancel();
       }
       // Revoke object URL to prevent memory leaks
       if (filledPdfUrl) {
-        URL.revokeObjectURL(filledPdfUrl);
+        try { URL.revokeObjectURL(filledPdfUrl); } catch { /* ignore */ }
       }
     };
   }, [pdfDocProxy, filledPdfUrl]);
 
-  // Load PDF and set number of pages
+  // Function to render the PDF background to an image for use with pdf-lib
+  const renderPdfBackgroundToImage = useCallback(async () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !pdfDocProxy) {
+      return null;
+    }
+
+    // Cancel any ongoing render task to prevent conflicts
+    if (renderTaskRef.current) {
+      renderTaskRef.current.cancel();
+      renderTaskRef.current = null;
+    }
+
+    try {
+      const page = await pdfDocProxy.getPage(pageIdx + 1); // pdf.js pages are 1-based
+      const viewport = page.getViewport({ scale: 1 }); // Get original PDF page dimensions
+
+      // Set canvas dimensions to match PDF page
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      
+      // Update PDF page dimensions state
+      setPdfPageDimensions({ width: viewport.width, height: viewport.height });
+
+      // Render the PDF page to the canvas
+      const renderContext = {
+        canvasContext: canvas.getContext("2d"),
+        viewport: viewport,
+      };
+
+      renderTaskRef.current = page.render(renderContext);
+      await renderTaskRef.current.promise;
+      renderTaskRef.current = null;
+
+      // Convert canvas to image data URL
+      return canvas.toDataURL("image/png");
+    } catch (e) {
+      if (e.name === "RenderingCancelledException") {
+        console.log("PDF rendering cancelled during background render:", e);
+      } else {
+        console.error("Error rendering PDF background:", e);
+        setError("Failed to render PDF background.");
+      }
+      return null;
+    }
+  }, [pdfDocProxy, pageIdx]); // Dependencies: only re-render background when PDF or page changes
+
+  // Function to draw the live text preview on the canvas
+  const drawLivePreview = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || pdfPageDimensions.width === 0) {
+      return;
+    }
+
+    const context = canvas.getContext("2d");
+    const canvasScale = canvas.width / pdfPageDimensions.width;
+
+    // Clear the canvas
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw the text at the specified position
+    if (text) {
+      context.fillStyle = color;
+      context.font = `${fontSize * canvasScale}px Helvetica`; // Scale font size
+      context.fillText(text, x * canvasScale, canvas.height - y * canvasScale);
+    }
+  }, [text, x, y, fontSize, color, pdfPageDimensions]); // Dependencies for live text drawing and preview
+
+  // Effect to trigger live preview drawing
+  useEffect(() => {
+    drawLivePreview();
+  }, [drawLivePreview]);
+
+  // Effect to trigger PDF background rendering
+  useEffect(() => {
+    renderPdfBackgroundToImage();
+  }, [renderPdfBackgroundToImage]);
+
+  // Effect to draw live preview after PDF background is rendered
+  useEffect(() => {
+    if (pdfDocProxy && !filledPdfUrl) {
+      drawLivePreview();
+    }
+  }, [pdfDocProxy, filledPdfUrl, drawLivePreview]);
+
+  // Load PDF and set page count
   const handleFiles = async (newFiles) => {
     setFiles(newFiles);
     setError("");
-    setNumPages(0);
-    setPageIdx(0);
+    setNumPages(0); // Reset page count
+    setFilledPdfUrl(null); // Clear previous result
+
     if (pdfDocProxy) {
       // Destroy previous PDF if exists
       pdfDocProxy.destroy();
       setPdfDocProxy(null);
     }
-    // `renderPdfBackgroundToImage` will handle clearing pdfImageRef and dimensions
-    // when pdfDocProxy becomes null.
 
     if (newFiles.length === 0) return;
 
@@ -210,12 +176,9 @@ export default function FormFillerPage() {
       const file = newFiles[0];
       const arrayBuffer = await file.arrayBuffer();
       const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
-      const pdf = await loadingTask.promise;
-      setPdfDocProxy(pdf);
+      const pdf = await loadingTask.promise; // Load PDF with pdfjs-dist
+      setPdfDocProxy(pdf); // Store the PDFDocumentProxy
       setNumPages(pdf.numPages);
-
-      // The pdfPageDimensions will be set by renderPdfBackgroundToImage
-      // after the first page is successfully loaded and rendered to ImageBitmap.
     } catch (e) {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
       console.error("PDF loading error:", e);
@@ -223,196 +186,192 @@ export default function FormFillerPage() {
     }
   };
 
-  // --- Dragging Handlers ---
-  const handleMouseDown = useCallback(
-    (e) => {
-      // Only allow dragging if a PDF is loaded and text is present
-      if (
-        !canvasRef.current ||
-        !pdfImageRef.current ||
-        !text.trim() ||
-        pdfPageDimensions.width === 0
-      ) {
-        return;
-      }
+  // Drag and Drop Handlers for text positioning
+  const handleMouseDown = (e) => {
+    if (!text) return;
+    setIsDragging(true);
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    setDragStartX(e.clientX - rect.left);
+    setDragStartY(e.clientY - rect.top);
+    setInitialTextX(x);
+    setInitialTextY(y);
+  };
 
-      e.preventDefault(); // Prevent default browser behavior (e.g., text selection)
-      e.stopPropagation(); // Prevent event from bubbling up
+  const handleMouseMove = (e) => {
+    if (!isDragging || !text) return;
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    const canvasScale = canvas.width / pdfPageDimensions.width;
+    const deltaX = (currentX - dragStartX) / canvasScale;
+    const deltaY = (currentY - dragStartY) / canvasScale;
+    setX(Math.max(0, initialTextX + deltaX));
+    setY(Math.max(0, initialTextY - deltaY));
+  };
 
-      const canvas = canvasRef.current;
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      // Calculate current canvas scale relative to PDF units
-      
-      // Set dragging state and initial positions
-      setIsDragging(true);
-      setDragStartX(mouseX);
-      setDragStartY(mouseY);
-      setInitialTextX(x); // Store current text's PDF X
-      setInitialTextY(y); // Store current text's PDF Y
-    },
-    [pdfPageDimensions, text, x, y]
-  );
-
-  const handleMouseMove = useCallback(
-    (e) => {
-      if (!isDragging || !canvasRef.current || !pdfPageDimensions.width) {
-        return;
-      }
-
-      e.preventDefault(); // Prevent default browser behavior
-      e.stopPropagation(); // Prevent event from bubbling up
-
-      const canvas = canvasRef.current;
-      const rect = canvas.getBoundingClientRect();
-      const currentMouseX = e.clientX - rect.left;
-      const currentMouseY = e.clientY - rect.top;
-
-      // Calculate current canvas scale relative to PDF units
-      
-      // Calculate delta in canvas pixels
-      const deltaCanvasX = currentMouseX - dragStartX;
-      const deltaCanvasY = currentMouseY - dragStartY;
-
-      // Convert canvas pixel delta to PDF unit delta
-      const deltaPdfX = deltaCanvasX / (canvas.width / pdfPageDimensions.width);
-      const deltaPdfY = -deltaCanvasY / (canvas.width / pdfPageDimensions.width); // Y is inverted in PDF vs Canvas
-
-      // Calculate new PDF coordinates
-      let newX = initialTextX + deltaPdfX;
-      let newY = initialTextY + deltaPdfY;
-
-      // Clamp values to stay within page bounds
-      newX = Math.max(0, Math.min(newX, pdfPageDimensions.width));
-      newY = Math.max(0, Math.min(newY, pdfPageDimensions.height));
-
-      setX(Math.round(newX)); // Round to nearest integer for cleaner input values
-      setY(Math.round(newY));
-    },
-    [
-      isDragging,
-      dragStartX,
-      dragStartY,
-      initialTextX,
-      initialTextY,
-      pdfPageDimensions,
-    ]
-  );
-
-  const handleMouseUp = useCallback(() => {
+  const handleMouseUp = () => {
     setIsDragging(false);
-  }, []); // No dependencies as it just sets a boolean
+  };
 
+  // Main function to fill the form and generate the PDF
   const handleFormFill = async () => {
     if (files.length === 0) {
-      setError("Please upload a PDF file to fill forms.");
+      setError("Please upload a PDF file.");
       return;
     }
     if (!text.trim()) {
-      setError("Please enter text to add to the PDF.");
+      setError("Please enter text to add.");
       return;
     }
+
     setIsProcessing(true);
-    setError(""); // Clear previous errors
+    setError("");
 
     try {
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-      const pages = pdfDoc.getPages();
+      const srcDoc = await PDFDocument.load(arrayBuffer); // Load original PDF
+      const pages = srcDoc.getPages();
 
-      if (pageIdx >= pages.length || pageIdx < 0) {
+      if (pageIdx < 0 || pageIdx >= pages.length) {
         setError("Selected page is out of bounds.");
+        setIsProcessing(false);
         return;
       }
 
       const page = pages[pageIdx];
 
+      // Embed the font
+      const font = await srcDoc.embedFont(StandardFonts.Helvetica);
+
+      // Convert hex color to RGB for pdf-lib
+      const r = parseInt(color.slice(1, 3), 16) / 255;
+      const g = parseInt(color.slice(3, 5), 16) / 255;
+      const b = parseInt(color.slice(5, 7), 16) / 255;
+      const textColor = rgb(r, g, b);
+
+      // Draw the text on the selected page
       page.drawText(text, {
-        x: Number(x),
-        y: Number(y),
-        size: Number(fontSize),
-        font,
-        color: hexToRgbNormalized(color), // Use the helper function
+        x: x,
+        y: y,
+        size: fontSize,
+        font: font,
+        color: textColor,
       });
 
-      const pdfBytes = await pdfDoc.save();
+      const pdfBytes = await srcDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      setFilledPdfUrl(url);
+      setFilledPdfUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
+      });
       setDownloadFileName(`filled_form_${files[0].name || "document"}.pdf`);
 
-      setError(""); // Clear error on success
+      setError("");
     } catch (err) {
-      setError(
-        "An error occurred while filling the form. Please check your inputs."
-      );
+      setError("Failed to fill form. Please try again.");
       console.error("Form fill error:", err);
     } finally {
       setIsProcessing(false);
     }
   };
 
+  const toolName = "PDF Form Filler";
+  const toolDescription = "Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document. Our intuitive tool allows you to easily add text, select font size and color, and precisely position your input on any page. All processing is done securely in your browser, ensuring your sensitive information remains private.";
+  const steps = [
+    "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+    "Enter the text you wish to add in the 'Text to Add' field.",
+    "Adjust the font size and color of the text. You can also select the page where you want to add the text.",
+    "Drag the text box directly on the PDF preview to position it precisely, or use the X and Y coordinate inputs for fine-tuning.",
+    "Click the 'Fill Form & Download' button to apply your text and save the updated PDF.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to fill out PDF forms online?",
+      answer:
+        "Yes, our PDF Form Filler tool is completely free to use. You can add text to as many PDF forms as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure when filling forms?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All PDF processing, including adding text to forms, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
+    {
+      question: "Can I add multiple text fields to a PDF?",
+      answer:
+        "Currently, our tool allows you to add one text field at a time. To add multiple fields, you would need to repeat the process for each text entry.",
+    },
+    {
+      question: "Can I add signatures or images with this tool?",
+      answer:
+        "This tool is primarily designed for adding text. For adding signatures, please use our dedicated 'Sign PDF' tool. For adding images, you might consider converting your image to PDF first and then merging it.",
+    },
+    {
+      question: "Does this tool work with interactive PDF forms?",
+      answer:
+        "Our tool adds text as a new layer on top of the PDF. While it works on all PDFs, it does not interact with pre-existing interactive form fields (AcroForm fields) within the PDF. It's best for adding text to non-fillable PDFs or adding additional text to existing forms.",
+    },
+  ];
+
   return (
-    <>
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
-        <div className="max-w-4xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-            PDF Form Filler
-          </h1>
-          <p className="mb-8 text-lg text-gray-300 text-center">
-            Add text anywhere on your PDF documents. Upload, specify text,
-            position, and style for quick form filling.
-          </p>
-          
-          <FileDropzone
-            accept="application/pdf"
-            multiple={false}
-            onFiles={handleFiles}
-            error={error}
-            setError={setError}
-            label="Upload PDF"
-            description="Drag & drop or click to select a PDF file (Max 50MB)"
-            maxSize={50 * 1024 * 1024}
-            isLoading={isProcessing}
-          />
+    <ToolPageLayout
+      title="PDF Form Filler"
+      subtitle="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="form-filler"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Form Filler', href: '/form-filler' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Upload PDF"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-          {files.length > 0 && numPages > 0 && (
-            <form
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleFormFill();
-              }}
-              aria-label="Form Filler Controls"
-            >
-              <div className="space-y-4">
-                <div>
-                  <Label
-                    htmlFor="textToAdd"
-                    className="text-sm font-medium text-gray-200"
-                  >
-                    Text to Add
-                  </Label>
-                  <Input
-                    id="textToAdd"
-                    type="text"
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    placeholder="Enter text to add to PDF"
-                    aria-label="Text to add"
-                    required
-                    className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
+        {numPages > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Text Input Controls */}
+            <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 space-y-4">
+              <h2 className="font-semibold text-xl mb-3 text-gray-100">
+                Text Settings
+              </h2>
+              <div>
+                <Label
+                  htmlFor="textToAdd"
+                  className="text-sm font-medium text-gray-200"
+                >
+                  Text to Add
+                </Label>
+                <Input
+                  id="textToAdd"
+                  type="text"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  placeholder="Enter text to add to PDF"
+                  className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label
                     htmlFor="pageSelect"
-                    className="text-sm font-medium text-gray-200"
+                    className="text-sm font-medium text-gray-700"
                   >
                     Page
                   </Label>
@@ -423,11 +382,11 @@ export default function FormFillerPage() {
                   >
                     <SelectTrigger
                       id="pageSelect"
-                      className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                      className="w-full mt-1 bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                     >
-                      <SelectValue placeholder="Select a page" />
+                      <SelectValue placeholder="Select page" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-700 text-gray-100 border-gray-100">
+                    <SelectContent className="bg-white text-gray-800 border-gray-300">
                       {Array.from({ length: numPages }, (_, i) => (
                         <SelectItem key={i} value={String(i)}>
                           Page {i + 1}
@@ -437,203 +396,183 @@ export default function FormFillerPage() {
                   </Select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label
-                      htmlFor="xPosition"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      X Position (PDF Units)
-                    </Label>
-                    <Input
-                      id="xPosition"
-                      type="number"
-                      value={x}
-                      onChange={(e) => setX(Number(e.target.value))}
-                      aria-label="X position"
-                      min={0}
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <Label
-                      htmlFor="yPosition"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Y Position (PDF Units)
-                    </Label>
-                    <Input
-                      id="yPosition"
-                      type="number"
-                      value={y}
-                      onChange={(e) => setY(Number(e.target.value))}
-                      aria-label="Y position"
-                      min={0}
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
-
                 <div>
                   <Label
                     htmlFor="fontSize"
-                    className="text-sm font-medium text-gray-200"
+                    className="text-sm font-medium text-gray-700"
                   >
-                    Font Size
+                    Font Size: {fontSize}px
                   </Label>
                   <Input
                     id="fontSize"
-                    type="number"
+                    type="range"
+                    min="6"
+                    max="72"
                     value={fontSize}
                     onChange={(e) => setFontSize(Number(e.target.value))}
-                    aria-label="Font size"
-                    min={6}
-                    max={72}
-                    className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                  />
-                </div>
-
-                <div>
-                  <Label
-                    htmlFor="textColor"
-                    className="text-sm font-medium text-gray-200"
-                  >
-                    Text Color
-                  </Label>
-                  <Input
-                    id="textColor"
-                    type="color"
-                    value={color}
-                    onChange={(e) => setColor(e.target.value)}
-                    aria-label="Text color"
-                    className="w-16 h-8 p-0 border-none mt-1"
+                    className="mt-1"
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col items-center justify-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative">
-                {pdfImageRef.current ? ( // Check pdfImageRef.current instead of pdfDocProxy for rendering
-                  <canvas
-                    ref={canvasRef}
-                    className={`w-full h-full object-contain ${
-                      isDragging ? "cursor-grabbing" : "cursor-grab"
-                    }`}
-                    width="800"
-                    onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp} // Important: stop dragging if mouse leaves
-                  ></canvas>
-                ) : (
-                  <div className="text-gray-400 text-center p-4">
-                    Upload a PDF to see the preview and place text.
-                  </div>
-                )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label
+                    htmlFor="xPosition"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    X Position: {x.toFixed(0)}
+                  </Label>
+                  <Input
+                    id="xPosition"
+                    type="number"
+                    value={x}
+                    onChange={(e) => setX(Number(e.target.value))}
+                    min={0}
+                    className="mt-1 bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="yPosition"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Y Position: {y.toFixed(0)}
+                  </Label>
+                  <Input
+                    id="yPosition"
+                    type="number"
+                    value={y}
+                    onChange={(e) => setY(Number(e.target.value))}
+                    min={0}
+                    className="mt-1 bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label
+                  htmlFor="textColor"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Text Color
+                </Label>
+                <Input
+                  id="textColor"
+                  type="color"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  className="mt-1 h-10 p-1 bg-white border-gray-300"
+                />
+              </div>
+            </div>
+
+            {/* PDF Preview */}
+            <div className="p-4 bg-white rounded-lg shadow-inner border border-gray-200">
+              <h2 className="font-semibold text-xl mb-3 text-gray-800">
+                PDF Preview
+              </h2>
+              <div className="w-full flex justify-center items-center overflow-hidden relative">
+                <canvas
+                  ref={canvasRef}
+                  className={`max-w-full h-auto border border-gray-300 rounded-md shadow-lg ${
+                    isDragging ? "cursor-grabbing" : "cursor-crosshair"
+                  }`}
+                  onMouseDown={handleMouseDown}
+                  onMouseMove={handleMouseMove}
+                  onMouseUp={handleMouseUp}
+                  onMouseLeave={handleMouseUp} // Important: stop dragging if mouse leaves
+                ></canvas>
                 {isDragging && (
                   <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-sm rounded-full shadow-lg pointer-events-none z-10">
-                    {" "}
-                    {/* Subtle "DRAGGING" banner */}
                     DRAGGING
                   </div>
                 )}
               </div>
-            </form>
-          )}
-
-          {error && (
-            <Alert variant="destructive" className="mt-2">
-              {error}
-            </Alert>
-          )}
-
-                    <Button
-            className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                       bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
-                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-gray-900"
-            onClick={handleFormFill}
-            disabled={
-              isProcessing ||
-              !text.trim() ||
-              files.length === 0 ||
-              numPages === 0
-            }
-            aria-label="Fill PDF Form"
-          >
-            {isProcessing ? "Processing..." : "Fill Form"}
-          </Button>
-
-          {filledPdfUrl && !isProcessing && (
-            <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
-              <div className="w-full text-center space-y-4 text-gray-100">
-                <h3 className="text-2xl font-semibold flex items-center justify-center">
-                  Form Filled Successfully
-                </h3>
-                <p className="text-gray-400">
-                  Your text has been added to the PDF document.
-                </p>
-              </div>
-
-              <div className="flex justify-center">
-                <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
-                  <a
-                    href={filledPdfUrl}
-                    download={downloadFileName}
-                    className="text-center flex items-center"
-                    onClick={() => {
-                      const u = filledPdfUrl;
-                      setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                    }}
-                  >
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                    </svg>
-                    Download Filled PDF
-                  </a>
-                </Button>
-              </div>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                Click and drag on the preview to position your text
+              </p>
             </div>
-          )}
+          </div>
+        )}
+
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <div className="flex justify-center">
+          <Button
+            onClick={handleFormFill}
+            disabled={isProcessing || files.length === 0 || !text.trim()}
+            aria-label="Fill form and download PDF"
+          >
+            {isProcessing ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Processing...
+              </span>
+            ) : (
+              "Fill Form & Download"
+            )}
+          </Button>
         </div>
-        <ToolPageContent
-          toolName="PDF Form Filler"
-          toolDescription="Fill out your PDF forms online for free. Add text, checkmarks, and signatures to any PDF document. Our intuitive tool allows you to easily add text, select font size and color, and precisely position your input on any page. All processing is done securely in your browser, ensuring your sensitive information remains private."
-          currentTool="form-filler"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Enter the text you wish to add in the 'Text to Add' field.",
-            "Adjust the font size and color of the text. You can also select the page where you want to add the text.",
-            "Drag the text box directly on the PDF preview to position it precisely, or use the X and Y coordinate inputs for fine-tuning.",
-            "Click the 'Fill Form & Download' button to apply your text and save the updated PDF.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to fill out PDF forms online?",
-              answer:
-                "Yes, our PDF Form Filler tool is completely free to use. You can add text to as many PDF forms as you need without any hidden costs or limitations.",
-            },
-            {
-              question: "Are my files secure when filling forms?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including adding text to forms, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "Can I add multiple text fields to a PDF?",
-              answer:
-                "Currently, our tool allows you to add one text field at a time. To add multiple fields, you would need to repeat the process for each text entry.",
-            },
-            {
-              question: "Can I add signatures or images with this tool?",
-              answer:
-                "This tool is primarily designed for adding text. For adding signatures, please use our dedicated 'Sign PDF' tool. For adding images, you might consider converting your image to PDF first and then merging it.",
-            },
-            {
-              question: "Does this tool work with interactive PDF forms?",
-              answer:
-                "Our tool adds text as a new layer on top of the PDF. While it works on all PDFs, it does not interact with pre-existing interactive form fields (AcroForm fields) within the PDF. It's best for adding text to non-fillable PDFs or adding additional text to existing forms.",
-            },
-          ]}
-        />
+
+        {filledPdfUrl && !isProcessing && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200 mt-6">
+            <div className="w-full text-center space-y-4 text-gray-800">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Form Filled Successfully
+              </h3>
+              <p className="text-gray-500">
+                Your PDF form has been filled with the added text.
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <Button
+                asChild
+                variant="success"
+                size="lg"
+              >
+                <a
+                  href={filledPdfUrl}
+                  download={downloadFileName}
+                  className="text-center flex items-center"
+                  onClick={() => {
+                    const u = filledPdfUrl;
+                    setTimeout(() => {
+                      try {
+                        if (u) URL.revokeObjectURL(u);
+                      } catch {}
+                    }, 500);
+                  }}
+                >
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    ></path>
+                  </svg>
+                  Download Filled PDF
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </ToolPageLayout>
   );
 }

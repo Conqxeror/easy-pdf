@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,12 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Trash2, Download, FileText, Calculator } from "lucide-react";
+import { Plus, Trash2, Download, FileText } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function InvoiceGeneratorPage() {
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); // eslint-disable-line no-unused-vars
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: `INV-${Date.now()}`,
     date: new Date().toISOString().split('T')[0],
@@ -49,6 +49,22 @@ export default function InvoiceGeneratorPage() {
     notes: '',
     terms: 'Payment is due within 30 days of invoice date.'
   });
+
+  const [error, setError] = useState(""); // eslint-disable-line no-unused-vars
+  const [invoiceUrl, setInvoiceUrl] = useState(null);
+  const [downloadFileName, setDownloadFileName] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingMessage, setProcessingMessage] = useState(""); // eslint-disable-line no-unused-vars
+  const [progress, setProgress] = useState(0); // eslint-disable-line no-unused-vars
+
+  // Cleanup function for object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (invoiceUrl) {
+        try { URL.revokeObjectURL(invoiceUrl); } catch { /* ignore */ }
+      }
+    };
+  }, [invoiceUrl]);
 
   const addItem = () => {
     setInvoiceData(prev => ({
@@ -108,12 +124,16 @@ export default function InvoiceGeneratorPage() {
 
   const generateInvoicePDF = async () => {
     if (!invoiceData.companyName || !invoiceData.clientName) {
-      alert('Please fill in company and client names');
+      setError("Please fill in company and client names");
       return;
     }
 
-    setIsGenerating(true);
-    trackEvent('invoice_generation_started');
+    setIsProcessing(true);
+    setProcessingMessage("Creating invoice PDF...");
+    setError("");
+    setInvoiceUrl(null);
+    setDownloadFileName("");
+    setProgress(0);
 
     try {
       const pdfDoc = await PDFDocument.create();
@@ -335,69 +355,81 @@ export default function InvoiceGeneratorPage() {
       }
 
       const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Invoice-${invoiceData.invoiceNumber}.pdf`;
-      link.click();
-
-      setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { }
-      }, 500);
-
-      trackEvent('invoice_generated_successfully', {
-        items_count: invoiceData.items.length,
-        total_amount: invoiceData.total,
-        currency: invoiceData.currency
+      setInvoiceUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
       });
+      setDownloadFileName(`Invoice-${invoiceData.invoiceNumber}.pdf`);
 
+      setProcessingMessage("Invoice created successfully!");
+      setError("");
     } catch (error) {
-      console.error('Error generating invoice:', error);
-      alert('Error generating invoice. Please try again.');
-      trackEvent('invoice_generation_failed', { error: error.message });
+      console.error("Error generating invoice:", error);
+      setError("Failed to generate invoice. Please try again.");
+      trackEvent("invoice_generation_failed", { error: error.message });
     } finally {
-      setIsGenerating(false);
+      setIsProcessing(false);
+      setTimeout(() => {
+        setProcessingMessage("");
+        setProgress(0);
+      }, 2000);
     }
   };
 
-  const toolConfig = {
-    title: "PDF Invoice Generator",
-    description: "Create professional invoices with GST support, multiple currencies, and customizable templates.",
-    icon: <Calculator className="w-8 h-8 text-green-500" />,
-    features: [
-      "Professional invoice templates",
-      "GST and tax calculations", 
-      "Multiple currency support",
-      "Client and company management",
-      "Automatic calculations",
-      "PDF download"
-    ],
-    relatedTools: ["/form-filler", "/sign", "/watermark"]
-  };
+  const toolName = "Invoice Generator";
+  const toolDescription = "Create professional invoices for your business with our free online tool. Customize templates with your company details, client information, and line items. Generate PDF invoices instantly with no uploads required. Perfect for freelancers, consultants, and small businesses looking for a simple, secure way to create invoices.";
+  const steps = [
+    "Enter your company information including name, address, and contact details.",
+    "Add client information such as name, address, and email.",
+    "Create line items for your products or services with descriptions, quantities, and prices.",
+    "Customize invoice details like invoice number, date, due date, and payment terms.",
+    "Click the 'Generate Invoice' button to create your PDF document.",
+    "Download your professionally designed invoice as a PDF file."
+  ];
+  const faqs = [
+    {
+      question: "Is it free to generate invoices?",
+      answer:
+        "Yes, our Invoice Generator tool is completely free to use. You can create as many invoices as you need without any hidden costs or limitations."
+    },
+    {
+      question: "Are my invoices secure and private?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All invoice generation happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
+    },
+    {
+      question: "Can I customize the invoice template?",
+      answer:
+        "Yes, you can customize various aspects of the invoice including company details, client information, line items, and payment terms. You can also add your company logo for a professional appearance."
+    },
+    {
+      question: "What currencies are supported?",
+      answer:
+        "Our tool supports multiple currencies including USD, EUR, GBP, INR, and many others. You can select your preferred currency when creating an invoice."
+    },
+    {
+      question: "Is there a limit to how many line items I can add?",
+      answer:
+        "No, you can add as many line items as needed to your invoice. The tool will automatically calculate subtotals and totals."
+    }
+  ];
 
   return (
-    <ToolPageContent
-  toolName="Invoice Generator"
-  toolDescription="Create professional PDF invoices with customizable fields, tax/GST calculations, multiple currencies, and ready-to-download output."
-  currentTool="invoice-generator"
-  steps={[
-    "Fill in your company and client details.",
-    "Add line items with quantities and rates.",
-    "Select tax/GST rate and currency as needed.",
-    "Add optional notes or terms.",
-    "Click 'Generate Invoice PDF' to download your invoice."
-  ]}
-  faqs={[
-    { question: "Is the invoice generator free?", answer: "Yes, you can generate unlimited invoices for free with no hidden charges." },
-    { question: "Is my invoice data stored?", answer: "No, all data is processed client-side and never stored or uploaded." },
-    { question: "Can I customize the template?", answer: "Yes, you can adjust fields, tax rate, currency, and notes before generating the PDF." },
-    { question: "Does it support GST and other taxes?", answer: "Yes, GST and custom tax rates are supported and automatically calculated." },
-    { question: "Can I generate invoices for international clients?", answer: "Absolutely, select from multiple currencies (INR, USD, EUR, GBP) for your invoices." }
-  ]}
-  toolConfig={toolConfig}
->
+    <ToolPageLayout
+      title="Invoice Generator"
+      subtitle="Create professional invoices for your business with our free online tool. Customize templates with your company details, client information, and line items."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="invoice-generator"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Invoice Generator', href: '/invoice-generator' }
+      ]}
+    >
       <div className="space-y-6">
         {/* Invoice Header */}
         <Card>
@@ -614,7 +646,7 @@ export default function InvoiceGeneratorPage() {
                       <Input
                         value={`${invoiceData.currency} ${item.amount.toFixed(2)}`}
                         readOnly
-                        className="bg-gray-50"
+                        className="bg-gray-100"
                       />
                     </div>
                     {invoiceData.items.length > 1 && (
@@ -706,22 +738,53 @@ export default function InvoiceGeneratorPage() {
             onClick={generateInvoicePDF}
             disabled={isGenerating || !invoiceData.companyName || !invoiceData.clientName}
             size="lg"
-            className="bg-green-600 hover:bg-green-700"
           >
             {isGenerating ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
                 Generating Invoice...
-              </>
+              </span>
             ) : (
-              <>
-                <Download className="w-4 h-4 mr-2" />
-                Generate Invoice PDF
-              </>
+              "Generate Invoice PDF"
             )}
           </Button>
         </div>
+
+        {invoiceUrl && !isProcessing && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+            <div className="w-full text-center space-y-4 text-gray-800">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Invoice Generated Successfully
+              </h3>
+              <p className="text-gray-500">
+                Your invoice has been successfully created.
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <Button asChild variant="success" size="lg">
+                <a
+                  href={invoiceUrl}
+                  download={downloadFileName}
+                  className="text-center flex items-center"
+                  onClick={() => {
+                    const u = invoiceUrl;
+                    setTimeout(() => {
+                      try { if (u) URL.revokeObjectURL(u); } catch { }
+                    }, 500);
+                  }}
+                >
+                  <Download className="w-5 h-5 mr-2" />
+                  Download Invoice PDF
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

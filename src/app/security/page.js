@@ -1,6 +1,5 @@
 import React from "react";
-import Breadcrumb from "@/components/ui/Breadcrumb";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
@@ -75,29 +74,35 @@ export default function SecurityPage() {
     },
   ];
 
+  const steps = [
+    "All PDF processing happens directly in your browser - no server uploads required.",
+    "Your files remain on your device throughout the entire process.",
+    "No data collection, storage, or transmission of your documents.",
+    "Open source codebase available for transparency and verification.",
+  ];
+
+  const toolName = "Security & Privacy Policy";
+  const toolDescription = "Your privacy and data security are our top priorities. Learn how easy-pdf protects your sensitive documents with 100% client-side processing, ensuring your files never leave your device.";
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <main className="container max-w-4xl py-8 mx-auto">
-        {/* Breadcrumb Navigation */}
-        <Breadcrumb items={[{ name: "Security", url: "/security" }]} />
-        
-        <ToolPageContent
-          toolName="Security & Privacy Policy"
-          toolDescription="Your privacy and data security are our top priorities. Learn how easy-pdf protects your sensitive documents with 100% client-side processing, ensuring your files never leave your device."
-          currentTool="security"
-          steps={[
-            "All PDF processing happens directly in your browser - no server uploads required.",
-            "Your files remain on your device throughout the entire process.",
-            "No data collection, storage, or transmission of your documents.",
-            "Open source codebase available for transparency and verification.",
-          ]}
-          faqs={faqs}
-        />
-      </main>
+      <ToolPageLayout
+        title="Security & Privacy Policy"
+        subtitle="Your privacy and data security are our top priorities. Learn how easy-pdf protects your sensitive documents with 100% client-side processing."
+        toolName={toolName}
+        toolDescription={toolDescription}
+        steps={steps}
+        faqs={faqs}
+        currentTool="security"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Security', href: '/security' }
+        ]}
+      />
     </>
   );
 }

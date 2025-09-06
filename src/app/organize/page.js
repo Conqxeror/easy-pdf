@@ -1,22 +1,12 @@
 "use client";
 
-
-
 import React, { useState, useRef, useEffect, useCallback } from "react";
-
 
 import { PDFDocument } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Import pdfjs legacy build for PDF rendering
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -276,249 +266,240 @@ export default function OrganizePage() {
   };
 
   return (
-    <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Organize PDF
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Reorder, remove, and arrange pages in your PDF document with a
-              simple drag-and-drop interface.
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Upload PDF"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing}
-            />
-
-            {numPages > 0 && (
-              <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
-                <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                  Page Order & Selection
-                </h2>
-                <p className="text-sm text-gray-400 mb-4">
-                  Drag and drop pages to reorder them. Click &quot;Exclude&quot;
-                  to remove pages from the final PDF.
-                </p>
-                <ul
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto max-h-[500px] p-2 custom-scrollbar"
-                  aria-label="Page order and selection list"
-                >
-                  {pageOrder.map((originalPageIndex, displayIndex) => (
-                    <li
-                      key={originalPageIndex} // Use originalPageIndex as key for stable identity
-                      draggable="true"
-                      onDragStart={(e) => handleDragStart(e, displayIndex)}
-                      onDragEnter={(e) => handleDragEnter(e, displayIndex)}
-                      onDragOver={handleDragOver}
-                      onDrop={handleDrop}
-                      onDragEnd={handleDragEnd}
-                      className={`relative flex flex-col items-center p-2 border rounded-md group
-                                  ${
-                                    selected.includes(originalPageIndex)
-                                      ? "border-destructive bg-red-900/20 opacity-70"
-                                      : "border-gray-600 bg-gray-700"
-                                  }
-                                  hover:border-blue-500 transition-all duration-200 cursor-grab
-                                  ${
-                                    dragItem.current === displayIndex
-                                      ? "shadow-lg opacity-50 border-blue-500"
-                                      : ""
-                                  }
-                                  ${
-                                    dragOverItem.current === displayIndex &&
-                                    dragItem.current !== displayIndex
-                                      ? "border-blue-500 shadow-md scale-105"
-                                      : ""
-                                  }
-                                `}
-                      // Add aria attributes for accessibility of drag-and-drop
-                      aria-grabbed={
-                        dragItem.current === displayIndex ? "true" : "false"
-                      }
-                      aria-dropeffect="move"
-                    >
-                      <span
-                        className={`text-sm font-medium mb-2 text-gray-100 ${
-                          selected.includes(originalPageIndex)
-                            ? "line-through"
-                            : ""
-                        }`}
-                      >
-                        Page {originalPageIndex + 1}
-                      </span>
-                      <canvas
-                        ref={(node) => {
-                          // Store the canvas node reference
-                          canvasRefs.current[originalPageIndex] = node;
-                        }}
-                        className="w-full h-auto max-w-[150px] border border-gray-600 rounded-sm bg-white" // Fixed width for thumbnail consistency
-                      ></canvas>
-
-                      <div className="flex gap-1 mt-2">
-                        <Button
-                          size="sm"
-                          variant={
-                            selected.includes(originalPageIndex)
-                              ? "destructive"
-                              : "secondary"
-                          }
-                          onClick={() => togglePage(originalPageIndex)}
-                          aria-label={
-                            selected.includes(originalPageIndex)
-                              ? `Re-include page ${originalPageIndex + 1}`
-                              : `Exclude page ${originalPageIndex + 1}`
-                          }
-                          className="w-auto flex-1"
-                        >
-                          {selected.includes(originalPageIndex)
-                            ? "Include"
-                            : "Exclude"}
-                        </Button>
-                      </div>
-                      {/* Optional: Add small arrows for accessibility/alternative reorder for non-drag users */}
-                      <div className="absolute top-1 right-1 flex flex-col gap-0.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button
-                          size="xs" // Smaller size for these buttons
-                          variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            movePage(displayIndex, displayIndex - 1);
-                          }}
-                          disabled={displayIndex === 0}
-                          aria-label={`Move page ${originalPageIndex + 1} up`}
-                          className="p-1 h-auto"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="size-4"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                          >
-                            <path d="M12 4l-8 8h6v8h4v-8h6z" />
-                          </svg>
-                        </Button>
-                        <Button
-                          size="xs"
-                          variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            movePage(displayIndex, displayIndex + 1);
-                          }}
-                          disabled={displayIndex === pageOrder.length - 1}
-                          aria-label={`Move page ${originalPageIndex + 1} down`}
-                          className="p-1 h-auto"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="size-4"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                          >
-                            <path d="M12 20l8-8h-6V4h-4v8H4z" />
-                          </svg>
-                        </Button>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              variant="success"
-              className="mt-4 w-full max-w-xs mx-auto block"
-              onClick={handleOrganize}
-              disabled={
-                isProcessing ||
-                numPages === 0 ||
-                (numPages > 0 && selected.length === numPages)
-              } // Disable if all pages are removed
-              aria-label="Organize pages"
-            >
-              {isProcessing ? "Processing..." : "Organize Pages"}
-            </Button>
-
-            {organizedPdfUrl && !isProcessing && (
-              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
-                <div className="w-full text-center space-y-4 text-gray-100">
-                  <h3 className="text-2xl font-semibold flex items-center justify-center">
-                    Pages Organized Successfully
-                  </h3>
-                  <p className="text-gray-400">
-                    Your PDF has been organized with the selected pages removed.
-                  </p>
-                </div>
-
-                <div className="flex justify-center">
-                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
-                    <a
-                      href={organizedPdfUrl}
-                      download={downloadFileName}
-                      className="text-center flex items-center"
-                      onClick={() => {
-                        const u = organizedPdfUrl;
-                        setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                      }}
-                    >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                      </svg>
-                      Download Organized PDF
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        <ToolPageContent
-          toolName="Organize PDF"
-          toolDescription="Reorder, delete, and rotate pages in your PDF files with our free online tool. Organize your PDFs exactly the way you want."
-          currentTool="organize"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-            "Drag and drop the pages to reorder them.",
-            "Click on a page to rotate it or delete it.",
-            "Click the \"Organize PDF\" button to apply the changes.",
-            "Download your organized PDF file.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to organize PDF files?",
-              answer:
-                "Yes, our tool is completely free to use. You can organize as many PDF files as you like without any hidden costs.",
-            },
-            {
-              question: "Is my data secure?",
-              answer:
-                "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
-            },
-            {
-              question: "Can I rotate pages in my PDF?",
-              answer:
-                "Yes, you can rotate pages in your PDF by clicking on them. Each click will rotate the page 90 degrees clockwise.",
-            },
-          ]}
+    <ToolPageLayout
+      title="Organize PDF"
+      subtitle="Reorder, remove, and arrange pages in your PDF document with a simple drag-and-drop interface."
+      toolName="Organize PDF"
+      toolDescription="Reorder, delete, and rotate pages in your PDF files with our free online tool. Organize your PDFs exactly the way you want."
+      steps={[
+        "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
+        "Drag and drop the pages to reorder them.",
+        "Click on a page to rotate it or delete it.",
+        "Click the \"Organize PDF\" button to apply the changes.",
+        "Download your organized PDF file.",
+      ]}
+      faqs={[
+        {
+          question: "Is it free to organize PDF files?",
+          answer:
+            "Yes, our tool is completely free to use. You can organize as many PDF files as you like without any hidden costs.",
+        },
+        {
+          question: "Is my data secure?",
+          answer:
+            "We prioritize your privacy and security. All files are processed on the client-side, meaning your files are never uploaded to our servers.",
+        },
+        {
+          question: "Can I rotate pages in my PDF?",
+          answer:
+            "Yes, you can rotate pages in your PDF by clicking on them. Each click will rotate the page 90 degrees clockwise.",
+        },
+      ]}
+      currentTool="organize"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Organize PDF', href: '/organize' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Upload PDF"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
         />
-      </main>
-    </>
+
+        {numPages > 0 && (
+          <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 space-y-4">
+            <h2 className="font-semibold text-xl mb-3">
+              Page Order & Selection
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Drag and drop pages to reorder them. Click &quot;Exclude&quot;
+              to remove pages from the final PDF.
+            </p>
+            <ul
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto max-h-[500px] p-2 custom-scrollbar"
+              aria-label="Page order and selection list"
+            >
+              {pageOrder.map((originalPageIndex, displayIndex) => (
+                <li
+                  key={originalPageIndex} // Use originalPageIndex as key for stable identity
+                  draggable="true"
+                  onDragStart={(e) => handleDragStart(e, displayIndex)}
+                  onDragEnter={(e) => handleDragEnter(e, displayIndex)}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  onDragEnd={handleDragEnd}
+                  className={`relative flex flex-col items-center p-2 border rounded-md group
+                              ${
+                                selected.includes(originalPageIndex)
+                                  ? "border-destructive bg-red-100 opacity-70"
+                                  : "border-gray-300 bg-white"
+                              }
+                              hover:border-blue-500 transition-all duration-200 cursor-grab
+                              ${
+                                dragItem.current === displayIndex
+                                  ? "shadow-lg opacity-50 border-blue-500"
+                                  : ""
+                              }
+                              ${
+                                dragOverItem.current === displayIndex &&
+                                dragItem.current !== displayIndex
+                                  ? "border-blue-500 shadow-md scale-105"
+                                  : ""
+                              }
+                            `}
+                  // Add aria attributes for accessibility of drag-and-drop
+                  aria-grabbed={
+                    dragItem.current === displayIndex ? "true" : "false"
+                  }
+                  aria-dropeffect="move"
+                >
+                  <span
+                    className={`text-sm font-medium mb-2 ${
+                      selected.includes(originalPageIndex)
+                        ? "line-through"
+                        : ""
+                    }`}
+                  >
+                    Page {originalPageIndex + 1}
+                  </span>
+                  <canvas
+                    ref={(node) => {
+                      // Store the canvas node reference
+                      canvasRefs.current[originalPageIndex] = node;
+                    }}
+                    className="w-full h-auto max-w-[150px] border border-gray-300 rounded-sm bg-white" // Fixed width for thumbnail consistency
+                  ></canvas>
+
+                  <div className="flex gap-1 mt-2">
+                    <Button
+                      size="sm"
+                      variant={
+                        selected.includes(originalPageIndex)
+                          ? "destructive"
+                          : "secondary"
+                      }
+                      onClick={() => togglePage(originalPageIndex)}
+                      aria-label={
+                        selected.includes(originalPageIndex)
+                          ? `Re-include page ${originalPageIndex + 1}`
+                          : `Exclude page ${originalPageIndex + 1}`
+                      }
+                      className="w-auto flex-1"
+                    >
+                      {selected.includes(originalPageIndex)
+                        ? "Include"
+                        : "Exclude"}
+                    </Button>
+                  </div>
+                  {/* Optional: Add small arrows for accessibility/alternative reorder for non-drag users */}
+                  <div className="absolute top-1 right-1 flex flex-col gap-0.5 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      size="xs" // Smaller size for these buttons
+                      variant="ghost"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        movePage(displayIndex, displayIndex - 1);
+                      }}
+                      disabled={displayIndex === 0}
+                      aria-label={`Move page ${originalPageIndex + 1} up`}
+                      className="p-1 h-auto"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="size-4"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 4l-8 8h6v8h4v-8h6z" />
+                      </svg>
+                    </Button>
+                    <Button
+                      size="xs"
+                      variant="ghost"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        movePage(displayIndex, displayIndex + 1);
+                      }}
+                      disabled={displayIndex === pageOrder.length - 1}
+                      aria-label={`Move page ${originalPageIndex + 1} down`}
+                      className="p-1 h-auto"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="size-4"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 20l8-8h-6V4h-4v8H4z" />
+                      </svg>
+                    </Button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <Button
+          variant="success"
+          className="mt-4 w-full max-w-xs mx-auto block"
+          onClick={handleOrganize}
+          disabled={
+            isProcessing ||
+            numPages === 0 ||
+            (numPages > 0 && selected.length === numPages)
+          } // Disable if all pages are removed
+          aria-label="Organize pages"
+        >
+          {isProcessing ? "Processing..." : "Organize Pages"}
+        </Button>
+
+        {organizedPdfUrl && !isProcessing && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200 mt-6">
+            <div className="w-full text-center space-y-4">
+              <h3 className="text-2xl font-semibold flex items-center justify-center">
+                Pages Organized Successfully
+              </h3>
+              <p className="text-gray-500">
+                Your PDF has been organized with the selected pages removed.
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <Button asChild variant="success" size="lg">
+                <a
+                  href={organizedPdfUrl}
+                  download={downloadFileName}
+                  className="text-center flex items-center"
+                  onClick={() => {
+                    const u = organizedPdfUrl;
+                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                  }}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  Download Organized PDF
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </ToolPageLayout>
   );
 }

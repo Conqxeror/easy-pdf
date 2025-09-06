@@ -4,7 +4,7 @@ This document provides instructions for updating tool pages to use the new stand
 
 ## Overview
 
-We've created a new standardized layout component called `StandardToolLayout` to ensure consistency across all tool pages in the easy-pdf application. This replaces the previous approach of using `ToolPageContent` directly in each page.
+We've created a new standardized layout component called `ToolPageLayout` to ensure consistency across all tool pages in the easy-pdf application. This replaces the previous approach of using `UnifiedToolLayout` directly in each page.
 
 ## Migration Process
 
@@ -12,12 +12,12 @@ We've created a new standardized layout component called `StandardToolLayout` to
 
 Replace the old import:
 ```jsx
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import UnifiedToolLayout from "@/components/ui/UnifiedToolLayout";
 ```
 
 With the new import:
 ```jsx
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 ```
 
 ### 2. Update Component Usage
@@ -25,6 +25,25 @@ import StandardToolLayout from "@/components/ui/StandardToolLayout";
 Replace the component wrapper:
 
 **Old:**
+```jsx
+<UnifiedToolLayout
+  title="Tool Name"
+  subtitle="Brief description"
+  toolName={toolName}
+  toolDescription={toolDescription}
+  steps={steps}
+  faqs={faqs}
+  currentTool="tool-identifier"
+  breadcrumbs={[
+    { label: 'Home', href: '/' },
+    { label: 'Tool Name', href: '/tool-identifier' }
+  ]}
+>
+  {/* Page content */}
+</UnifiedToolLayout>
+```
+
+**New:**
 ```jsx
 <ToolPageLayout
   title="Tool Name"
@@ -43,60 +62,40 @@ Replace the component wrapper:
 </ToolPageLayout>
 ```
 
-**New:**
-```jsx
-<StandardToolLayout
-  title="Tool Name"
-  subtitle="Brief description"
-  toolName={toolName}
-  toolDescription={toolDescription}
-  steps={steps}
-  faqs={faqs}
-  currentTool="tool-identifier"
-  breadcrumbs={[
-    { label: 'Home', href: '/' },
-    { label: 'Tool Name', href: '/tool-identifier' }
-  ]}
->
-  {/* Page content */}
-</StandardToolLayout>
-```
-
 ### 3. Update Closing Tag
 
 Make sure to update the closing tag as well:
 ```jsx
-</StandardToolLayout>
+</ToolPageLayout>
 ```
 
 ## Files That Have Been Updated
 
-The following files have already been updated to use the new `StandardToolLayout`:
+The following files have already been updated to use the new `ToolPageLayout`:
 
-1. `src/app/merge/components/MergeClient.js`
-2. `src/app/compress/page.js`
-3. `src/app/split/page.js`
-4. `src/app/protect/page.js`
-5. `src/app/unlock/page.js`
-6. `src/app/rotate/page.js`
-7. `src/app/jpg-to-pdf/page.js`
-8. `src/app/pdf-to-jpg/page.js`
-9. `src/app/delete-pages/page.js`
+1. `src/app/delete-pages/page.js`
+2. `src/app/merge/components/MergeClient.js`
+3. `src/app/compress/page.js`
+4. `src/app/split/page.js`
+5. `src/app/protect/page.js`
+6. `src/app/unlock/page.js`
+7. `src/app/rotate/page.js`
+8. `src/app/jpg-to-pdf/page.js`
+9. `src/app/pdf-to-jpg/page.js`
 10. `src/app/watermark/page.js`
 11. `src/app/sign/page.js`
+12. `src/app/advanced-ocr/page.js`
+13. `src/app/certificate-generator/page.js`
+14. `src/app/form-filler/page.js`
+15. `src/app/invoice-generator/page.js`
+16. `src/app/ocr/page.js`
+17. `src/app/merge/page.js`
 
 ## Components Updated
 
 The following components have been updated or created:
 
-1. `src/components/ui/StandardToolLayout.jsx` - New layout component
-2. `src/components/ui/ToolPageContent.jsx` - Updated to work with new layout system
-
-## Files Removed
-
-The following files have been removed:
-
-1. `src/components/ui/ToolPageLayout.jsx` - Replaced with StandardToolLayout
+1. `src/components/ui/ToolPageLayout.jsx` - New layout component
 
 ## Testing
 
@@ -112,10 +111,10 @@ After updating a tool page:
 ## Common Issues and Solutions
 
 ### Issue: Module not found error for ToolPageLayout
-**Solution:** Make sure you've updated the import to use `StandardToolLayout` instead.
+**Solution:** Make sure you've updated the import to use `ToolPageLayout` instead of `UnifiedToolLayout`.
 
 ### Issue: Component not found error
-**Solution:** Verify that the opening and closing tags match (`StandardToolLayout`).
+**Solution:** Verify that the opening and closing tags match (`ToolPageLayout`).
 
 ### Issue: Styling inconsistencies
-**Solution:** Check that you're passing all required props to `StandardToolLayout` and that your page content follows the standardized structure.
+**Solution:** Check that you're passing all required props to `ToolPageLayout` and that your page content follows the standardized structure.

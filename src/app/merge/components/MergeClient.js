@@ -6,7 +6,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Dynamically import heavy PDF libraries only when needed
 import { usePDFLib, usePDFJS } from "@/lib/pdfUtils";
@@ -218,7 +218,7 @@ export default function MergeClient() {
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Merge PDFs"
       subtitle="Combine multiple PDF files into one seamless document. Drag and drop to arrange their order."
       toolName={toolName}
@@ -233,9 +233,9 @@ export default function MergeClient() {
     >
       <div className="space-y-6">
         {(pdfLibLoading || pdfjsLoading) ? (
-          <div className="flex flex-col items-center justify-center p-8 bg-gray-800 rounded-xl border border-gray-700">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-            <p className="text-gray-300">Loading PDF processing tools...</p>
+          <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl border border-gray-200">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
+            <p>Loading PDF processing tools...</p>
           </div>
         ) : (
           <FileDropzone
@@ -258,13 +258,13 @@ export default function MergeClient() {
         )}
         
         {files.length > 0 && (
-          <div className="mt-4 p-5 bg-gray-800 rounded-xl shadow-lg border border-gray-700 space-y-4">
+          <div className="mt-4 p-5 bg-white rounded-xl shadow-lg border border-gray-200 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-xl text-gray-100 flex items-center">
-                <Move className="w-5 h-5 mr-2 text-blue-400" />
+              <h2 className="font-semibold text-xl flex items-center">
+                <Move className="w-5 h-5 mr-2 text-blue-600" />
                 Files to Merge (Drag to Reorder)
               </h2>
-              <span className="text-sm text-gray-400">{files.length} files</span>
+              <span className="text-sm text-gray-500">{files.length} files</span>
             </div>
             
             <ul
@@ -281,24 +281,24 @@ export default function MergeClient() {
                   onDrop={handleDrop}
                   onDragEnd={handleDragEnd}
                   onDragLeave={handleDragLeave}
-                  className={`file-item flex items-center justify-between p-4 rounded-lg border-2 border-gray-600 bg-gray-700/50 text-gray-100 cursor-grab transition-all duration-200 ${
+                  className={`file-item flex items-center justify-between p-4 rounded-lg border-2 border-gray-300 bg-gray-100 cursor-grab transition-all duration-200 ${
                     dragItem.current === index ? "opacity-75 shadow-lg ring-2 ring-blue-500" : ""
                   } ${
                     dragOverItem.current === index &&
                     dragItem.current !== index
-                      ? "scale-[1.02] border-blue-500 bg-blue-500/10"
+                      ? "scale-[1.02] border-blue-500 bg-blue-50"
                       : ""
                   }`}
                   aria-grabbed={dragItem.current === index ? "true" : "false"}
                   aria-roledescription="Draggable file item"
                 >
                   <div className="flex items-center">
-                    <div className="p-2 rounded-lg bg-blue-500/10 mr-3">
-                      <FileText className="w-5 h-5 text-blue-400" />
+                    <div className="p-2 rounded-lg bg-blue-100 mr-3">
+                      <FileText className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
                       <span className="font-medium line-clamp-1">{file.name}</span>
-                      <span className="text-xs text-gray-400 block">
+                      <span className="text-xs text-gray-500 block">
                         {(file.size / 1024 / 1024).toFixed(2)} MB
                       </span>
                     </div>
@@ -323,7 +323,7 @@ export default function MergeClient() {
           <div className="space-y-3">
             <Progress
               value={progress}
-              className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-500 rounded-full"
+              className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-600 rounded-full"
             />
             <p className="text-sm text-center text-gray-400">
               Merging PDFs... {progress}%
@@ -340,7 +340,6 @@ export default function MergeClient() {
         <div className="flex justify-center">
           <Button
             onClick={mergePDFs}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
             disabled={isMerging || files.length === 0}
@@ -358,17 +357,17 @@ export default function MergeClient() {
         </div>
         
         {mergedPdfUrl && !isMerging && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
-            <div className="w-full text-center space-y-4 text-gray-100">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+            <div className="w-full text-center space-y-4">
               <h3 className="text-2xl font-semibold flex items-center justify-center">
-                <Download className="w-6 h-6 mr-2 text-green-400" />
+                <Download className="w-6 h-6 mr-2 text-green-600" />
                 Merged PDF Ready
               </h3>
               
-              <div className="w-full flex justify-center items-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative p-4">
+              <div className="w-full flex justify-center items-center bg-gray-200 rounded-lg border border-gray-300 overflow-hidden relative p-4">
                 <canvas
                   ref={mergedPdfPreviewCanvasRef}
-                  className="max-w-full h-auto border border-gray-600 rounded-md shadow-lg"
+                  className="max-w-full h-auto border border-gray-300 rounded-md shadow-lg"
                   style={{ maxWidth: "100%", height: "auto" }}
                   aria-label="Merged PDF preview"
                 ></canvas>
@@ -380,7 +379,6 @@ export default function MergeClient() {
                 asChild
                 variant="success"
                 size="lg"
-                className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
               >
                 <a
                   href={mergedPdfUrl}
@@ -395,6 +393,6 @@ export default function MergeClient() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

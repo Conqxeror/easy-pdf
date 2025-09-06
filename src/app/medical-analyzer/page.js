@@ -13,7 +13,7 @@ import {
   Calendar,
   FlaskConical,
 } from "lucide-react";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import EnhancedErrorBoundary from "@/components/ui/EnhancedErrorBoundary";
 
 export default function MedicalAnalyzerPage() {
@@ -158,21 +158,64 @@ export default function MedicalAnalyzerPage() {
     }
   };
 
-  return (
-    <EnhancedErrorBoundary>
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
-        <div className="max-w-2xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-            Medical Document AI Analyzer
-          </h1>
-          <p className="mb-8 text-lg text-gray-300 text-center">
-            Upload your medical document (PDF, Word, or image). Our AI will
-            extract key patient information, diagnoses, medications, and more.
-            <b className="text-pink-300">
-              Your document content is sent to an external AI service for
-              analysis and is not stored by easy-pdf.
-            </b>
-          </p>
+    return (
+    <ToolPageLayout
+      title="Medical Document AI Analyzer"
+      subtitle="Leverage the power of AI to quickly analyze your medical documents. Our tool provides a concise summary, identifies key patient information, diagnoses, medications, lab results, and offers recommendations."
+      toolName="Medical Document AI Analyzer"
+      toolDescription="Leverage the power of AI to quickly analyze your medical documents. Our tool provides a concise summary, identifies key patient information, diagnoses, medications, lab results, and offers recommendations. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
+      steps={[
+        "Upload your medical document (PDF, Word, or image format) using the drag-and-drop zone or by clicking to select a file.",
+        "Click the 'Analyze Document' button. Our AI will process the content to extract relevant information.",
+        "Review the comprehensive analysis report, which includes a summary, patient information, diagnoses, medications, lab results, and recommendations.",
+        "Optionally, download the full analysis report as a text file for your records.",
+      ]}
+      faqs={[
+        {
+          question:
+            "Is this tool a substitute for professional medical advice?",
+          answer:
+            "No, this AI Medical Document Analyzer is for informational purposes only and should not be considered a substitute for professional medical advice. Always consult with a qualified medical professional for specific medical guidance.",
+        },
+        {
+          question: "How secure are my documents during analysis?",
+          answer:
+            "Your privacy and data security are our top priorities. All document processing and AI analysis are performed securely, and your documents are never stored on our servers. They are processed in a temporary, isolated environment.",
+        },
+        {
+          question: "What types of medical documents can I analyze?",
+          answer:
+            "You can analyze a wide range of medical documents, including patient records, lab results, prescriptions, and more. The tool supports PDF, Microsoft Word (.doc, .docx), and common image formats (JPG, PNG).",
+        },
+        {
+          question: "What kind of insights does the AI provide?",
+          answer:
+            "The AI provides a concise summary of the document, identifies key patient information (like name, age, gender), lists diagnoses, medications, lab results, and provides recommendations based on its analysis.",
+        },
+        {
+          question: "Is there a limit to the document size or length?",
+          answer:
+            "While there isn't a strict page limit, very large or complex documents may take longer to process. The maximum file size for upload is 50MB. For optimal performance, we recommend documents of reasonable length.",
+        },
+      ]}
+      currentTool="medical-analyzer"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Medical Analyzer', href: '/medical-analyzer' }
+      ]}
+    >
+      <EnhancedErrorBoundary>
+        <div className="space-y-6">
+          <div className="text-center">
+            <p className="text-lg text-gray-300">
+              Upload your medical document (PDF, Word, or image). Our AI will
+              extract key patient information, diagnoses, medications, and more.
+              <b className="text-pink-300">
+                Your document content is sent to an external AI service for
+                analysis and is not stored by easy-pdf.
+              </b>
+            </p>
+          </div>
           <FileDropzone
             accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
             onFiles={handleFile}
@@ -340,17 +383,33 @@ export default function MedicalAnalyzerPage() {
                 onClick={() => {
                   const blob = new Blob(
                     [
-                      `Summary:\n${
+                      `Summary:
+${
                         result.summary
-                      }\n\nPatient Information:\n${result.patientInfo?.join(
+                      }
+
+Patient Information:
+${result.patientInfo?.join(
                         "\n"
-                      )}\n\nDiagnoses:\n${result.diagnoses?.join(
+                      )}
+
+Diagnoses:
+${result.diagnoses?.join(
                         "\n"
-                      )}\n\nMedications:\n${result.medications?.join(
+                      )}
+
+Medications:
+${result.medications?.join(
                         "\n"
-                      )}\n\nLab Results:\n${result.labResults?.join(
+                      )}
+
+Lab Results:
+${result.labResults?.join(
                         "\n"
-                      )}\n\nRecommendations:\n${result.recommendations?.join(
+                      )}
+
+Recommendations:
+${result.recommendations?.join(
                         "\n"
                       )}`,
                     ],
@@ -381,46 +440,7 @@ export default function MedicalAnalyzerPage() {
             </div>
           </Alert>
         </div>
-        <ToolPageContent
-          toolName="Medical Document AI Analyzer"
-          toolDescription="Leverage the power of AI to quickly analyze your medical documents. Our tool provides a concise summary, identifies key patient information, diagnoses, medications, lab results, and offers recommendations. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
-          currentTool="medical-analyzer"
-          steps={[
-            "Upload your medical document (PDF, Word, or image format) using the drag-and-drop zone or by clicking to select a file.",
-            "Click the 'Analyze Document' button. Our AI will process the content to extract relevant information.",
-            "Review the comprehensive analysis report, which includes a summary, patient information, diagnoses, medications, lab results, and recommendations.",
-            "Optionally, download the full analysis report as a text file for your records.",
-          ]}
-          faqs={[
-            {
-              question:
-                "Is this tool a substitute for professional medical advice?",
-              answer:
-                "No, this AI Medical Document Analyzer is for informational purposes only and should not be considered a substitute for professional medical advice. Always consult with a qualified medical professional for specific medical guidance.",
-            },
-            {
-              question: "How secure are my documents during analysis?",
-              answer:
-                "Your privacy and data security are our top priorities. All document processing and AI analysis are performed securely, and your documents are never stored on our servers. They are processed in a temporary, isolated environment.",
-            },
-            {
-              question: "What types of medical documents can I analyze?",
-              answer:
-                "You can analyze a wide range of medical documents, including patient records, lab results, prescriptions, and more. The tool supports PDF, Microsoft Word (.doc, .docx), and common image formats (JPG, PNG).",
-            },
-            {
-              question: "What kind of insights does the AI provide?",
-              answer:
-                "The AI provides a concise summary of the document, identifies key patient information (like name, age, gender), lists diagnoses, medications, lab results, and provides recommendations based on its analysis.",
-            },
-            {
-              question: "Is there a limit to the document size or length?",
-              answer:
-                "While there isn't a strict page limit, very large or complex documents may take longer to process. The maximum file size for upload is 50MB. For optimal performance, we recommend documents of reasonable length.",
-            },
-          ]}
-        />
-      </div>
-    </EnhancedErrorBoundary>
+      </EnhancedErrorBoundary>
+    </ToolPageLayout>
   );
 }

@@ -20,6 +20,7 @@ import {
 import { trackEvent } from '@/lib/analytics';
 
 export default function About() {
+
   const handleGitHubClick = () => {
     trackEvent('github_link_clicked');
     window.open('https://github.com/your-username/easy-pdf', '_blank');
@@ -44,9 +45,9 @@ export default function About() {
       </div>
 
       {/* Mission Section */}
-      <Card className="mb-8">
+      <Card className="mb-8 bg-white dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Heart className="h-6 w-6 text-red-500" />
             Our Mission
           </CardTitle>
@@ -67,9 +68,9 @@ export default function About() {
 
       {/* Values Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Shield className="h-5 w-5 text-blue-500" />
               Privacy First
             </CardTitle>
@@ -82,9 +83,9 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Zap className="h-5 w-5 text-yellow-500" />
               Lightning Fast
             </CardTitle>
@@ -97,9 +98,9 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Users className="h-5 w-5 text-green-500" />
               Community Driven
             </CardTitle>
@@ -112,9 +113,9 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Globe className="h-5 w-5 text-purple-500" />
               Accessible Everywhere
             </CardTitle>
@@ -127,9 +128,9 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Lock className="h-5 w-5 text-red-500" />
               Secure by Design
             </CardTitle>
@@ -142,9 +143,9 @@ export default function About() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Star className="h-5 w-5 text-yellow-500" />
               Always Free
             </CardTitle>
@@ -159,39 +160,40 @@ export default function About() {
       </div>
 
       {/* Technology Stack */}
-      <Card className="mb-8">
+      <Card className="mb-8 bg-white dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Code className="h-6 w-6 text-blue-500" />
             Built with Modern Technology
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="text-2xl font-bold text-blue-600">Next.js</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">React Framework</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="text-2xl font-bold text-green-600">PDF-lib</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">PDF Processing</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="text-2xl font-bold text-purple-600">Tailwind</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Styling</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <div className="text-2xl font-bold text-yellow-600">TypeScript</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Type Safety</div>
             </div>
+.
           </div>
         </CardContent>
       </Card>
 
       {/* Stats Section */}
-      <Card className="mb-8">
+      <Card className="mb-8 bg-white dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <TrendingUp className="h-6 w-6 text-green-500" />
             Our Impact
           </CardTitle>
@@ -219,9 +221,9 @@ export default function About() {
       </Card>
 
       {/* Team Section */}
-      <Card className="mb-8">
+      <Card className="mb-8 bg-white dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Users className="h-6 w-6 text-blue-500" />
             Meet the Team
           </CardTitle>
@@ -231,7 +233,7 @@ export default function About() {
             <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
               <span className="text-2xl font-bold text-white">A</span>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Ankur</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Ankur</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               Full-stack developer passionate about building privacy-first tools that make a difference.
             </p>
@@ -243,9 +245,9 @@ export default function About() {
       </Card>
 
       {/* Call to Action */}
-      <Card className="mb-8">
+      <Card className="mb-8 bg-white dark:bg-gray-800">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Award className="h-6 w-6 text-yellow-500" />
             Get Involved
           </CardTitle>

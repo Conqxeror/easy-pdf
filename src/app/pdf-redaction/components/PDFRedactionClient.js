@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { EyeOff, Download, CheckCircle, AlertTriangle, Search, Trash2, Shield, FileText, Loader2 } from "lucide-react";
 import { PDFDocument } from 'pdf-lib';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
 
 export default function PDFRedactionClient() {
@@ -555,7 +555,7 @@ export default function PDFRedactionClient() {
         </div>
       </div>
       
-      <ToolPageContent
+      <ToolPageLayout
         toolName="PDF Redaction"
         toolDescription="Securely remove sensitive information from PDF documents with our advanced redaction tool. Permanently delete text, images, and metadata to ensure compliance with privacy regulations. Our client-side processing keeps your documents completely private - they never leave your device."
         currentTool="pdf-redaction"
@@ -579,14 +579,6 @@ export default function PDFRedactionClient() {
           {
             question: "Can I redact images?",
             answer: "Yes, you can define manual redaction areas to cover images or any other visual content in your PDF documents."
-          },
-          {
-            question: "Does the tool clean metadata?",
-            answer: "Yes, you can enable metadata cleaning to remove hidden document information like author names, creation dates, and editing history."
-          },
-          {
-            question: "What file formats are supported?",
-            answer: "The tool works with standard PDF files. The maximum file size is 50MB for optimal performance."
           }
         ]}
       />

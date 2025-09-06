@@ -14,14 +14,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import PageRangeInput from "@/components/ui/PageRangeInput";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { RotateCw } from "lucide-react";
 
 export default function RotatePdfPage() {
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState("");
   const [error, setError] = useState("");
   const [rotatedUrl, setRotatedUrl] = useState(null);
-  const [isRotating, setIsRotating] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [startPage, setStartPage] = useState(""); // 1-based string
   const [endPage, setEndPage] = useState(""); // 1-based string
   const [angle, setAngle] = useState("90"); // Store as string to match Select value
@@ -31,7 +32,7 @@ export default function RotatePdfPage() {
   useEffect(() => {
     return () => {
       if (rotatedUrl) {
-        URL.revokeObjectURL(rotatedUrl);
+        try { URL.revokeObjectURL(rotatedUrl); } catch { /* ignore */ }
       }
     };
   }, [rotatedUrl]); // Run when rotatedUrl changes or component unmounts
@@ -44,7 +45,7 @@ export default function RotatePdfPage() {
   const handleFiles = async (files) => {
     const selectedFile = files[0];
     setFile(selectedFile);
-    setFileName(selectedFile ? selectedFile.name : "");
+    setFileName(selectedFile ? selectedFile.name : ""); // Handle case where selectedFile might be null
     setError("");
     setRotatedUrl(null);
     setStartPage(""); // Reset page range
@@ -79,7 +80,7 @@ export default function RotatePdfPage() {
       setError("Please upload a PDF file.");
       return;
     }
-    setIsRotating(true);
+    setIsProcessing(true);
 
     try {
       const arrayBuffer = await file.arrayBuffer();
@@ -94,7 +95,7 @@ export default function RotatePdfPage() {
         setError(
           "Invalid page range. Please ensure start page is less than or equal to end page, and within total pages."
         );
-        setIsRotating(false);
+        setIsProcessing(false);
         return;
       }
 
@@ -121,11 +122,7 @@ export default function RotatePdfPage() {
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       setRotatedUrl((prev) => {
-        try {
-          if (prev) URL.revokeObjectURL(prev);
-  } catch {
-          // ignore
-        }
+  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
     } catch (e) {
@@ -134,7 +131,7 @@ export default function RotatePdfPage() {
       );
       console.error("Rotate PDF error:", e);
     } finally {
-      setIsRotating(false);
+      setIsProcessing(false);
     }
   };
 
@@ -176,7 +173,7 @@ export default function RotatePdfPage() {
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Rotate PDF"
       subtitle="Rotate specific pages or the entire PDF document by 90, 180, or 270 degrees."
       toolName={toolName}
@@ -192,56 +189,55 @@ export default function RotatePdfPage() {
       <div className="space-y-6">
         <FileDropzone
           accept="application/pdf"
-          multiple={false}
           onFiles={handleFiles}
           error={error}
           setError={setError}
-          label="Choose a PDF File"
+          label="Upload PDF"
           description="Drag & drop or click to select a PDF file (Max 50MB)"
           maxSize={50 * 1024 * 1024}
-          isLoading={isRotating}
+          isLoading={isProcessing}
         />
 
         {fileName && (
           <div className="text-center text-gray-300 text-sm">
-            Selected:{" "}
-            <span className="font-medium text-gray-100">{fileName}</span>
+            Selected: <span className="font-medium text-gray-100">{fileName}</span>
           </div>
         )}
 
-        {totalPages !== null && (
-          <PageRangeInput
-            startPage={startPage}
-            endPage={endPage}
-            setStartPage={setStartPage}
-            setEndPage={setEndPage}
-            totalPages={totalPages}
-          />
-        )}
+        {totalPages > 0 && (
+          <div className="space-y-5">
+            <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+              <Label className="text-gray-200 mb-3 block flex items-center">
+                <RotateCw className="w-4 h-4 mr-2" />
+                Page Range
+              </Label>
+              <PageRangeInput
+                startPage={startPage}
+                endPage={endPage}
+                setStartPage={setStartPage}
+                setEndPage={setEndPage}
+                totalPages={totalPages}
+                className="w-full"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label
-            htmlFor="angle"
-            className="text-sm font-medium text-gray-200"
-          >
-            Rotate by:
-          </Label>
-          <Select value={angle} onValueChange={setAngle}>
-            <SelectTrigger
-              id="angle"
-              className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-            >
-              <SelectValue placeholder="Select angle" />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
-              <SelectItem value="90">90° Clockwise</SelectItem>
-              <SelectItem value="180">180°</SelectItem>
-              <SelectItem value="270">
-                270° Clockwise (90° Counter-Clockwise)
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+            <div>
+              <Label htmlFor="angle" className="text-gray-200 mb-3 block">
+                Rotation Angle
+              </Label>
+              <Select value={angle} onValueChange={setAngle}>
+                <SelectTrigger className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500">
+                  <SelectValue placeholder="Select angle" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="90">90° Clockwise</SelectItem>
+                  <SelectItem value="180">180°</SelectItem>
+                  <SelectItem value="270">270° Clockwise (90° Counter-Clockwise)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )}
 
         {error && (
           <Alert variant="destructive" className="mt-4">
@@ -252,13 +248,13 @@ export default function RotatePdfPage() {
         <div className="flex justify-center">
           <Button
             onClick={rotatePDF}
-            disabled={isRotating || !file || totalPages === null}
+            disabled={isProcessing || !file}
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
             aria-label="Rotate PDF"
           >
-            {isRotating ? (
+            {isProcessing ? (
               <span className="flex items-center">
                 <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
                 Rotating...
@@ -269,17 +265,17 @@ export default function RotatePdfPage() {
           </Button>
         </div>
 
-        {rotatedUrl && !isRotating && (
+        {rotatedUrl && !isProcessing && (
           <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                PDF Rotated!
+                PDF Rotated Successfully!
               </h3>
               <p className="text-gray-300">
-                Your PDF has been successfully rotated.
+                Your PDF has been successfully rotated by {angle} degrees.
               </p>
             </div>
 
@@ -292,8 +288,14 @@ export default function RotatePdfPage() {
               >
                 <a
                   href={rotatedUrl}
-                  download={`rotated_${fileName || "document"}.pdf`}
+                  download={`rotated_${fileName}`}
                   className="text-center flex items-center"
+                  onClick={() => {
+                    const urlToRevoke = rotatedUrl;
+                    setTimeout(() => {
+                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { }
+                    }, 500);
+                  }}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -305,6 +307,6 @@ export default function RotatePdfPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

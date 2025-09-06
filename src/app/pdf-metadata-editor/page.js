@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, Download, Settings, FileText, Calendar, User, BookOpen, Tag, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 export default function PDFMetadataEditor() {
   const [file, setFile] = useState(null);
@@ -137,10 +137,12 @@ export default function PDFMetadataEditor() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Metadata Editor"
+      subtitle="Edit PDF metadata including title, author, subject, keywords, and dates"
       toolName="PDF Metadata Editor"
       toolDescription="Edit PDF metadata including title, author, subject, keywords, creator, producer, and dates. View and modify document properties to improve organization and searchability. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-metadata-editor"
+      currentTool="pdf-metadata-editor"
       steps={[
         "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
         "The tool will automatically extract and display the current metadata from your PDF.",
@@ -393,6 +395,6 @@ export default function PDFMetadataEditor() {
         </div>
       )}
     </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

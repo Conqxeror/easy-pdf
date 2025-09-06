@@ -6,7 +6,7 @@ import { getDocument } from 'pdfjs-dist';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Upload, Download, FileText, Table, Loader2, AlertCircle } from 'lucide-react';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 // Configure PDF.js worker
 if (typeof window !== 'undefined') {
@@ -115,10 +115,12 @@ export default function PDFTableExtractor() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Table Extractor"
+      subtitle="Extract and export tables from PDF documents to CSV, Excel, or JSON format"
       toolName="PDF Table Extractor"
-      toolDescription="Extract tables from PDF documents and export them to CSV format for further analysis. Automatically detect table structures in your PDFs and convert them to spreadsheet-compatible formats. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-table-extractor"
+      toolDescription="Extract and export tables from PDF documents to CSV, Excel, or JSON format. Automatically detect table structures and convert them to editable formats. All processing happens locally in your browser for complete privacy and security."
+      currentTool="pdf-table-extractor"
       steps={[
         "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
         "The tool will automatically scan all pages and detect table-like structures in the document.",
@@ -299,6 +301,6 @@ export default function PDFTableExtractor() {
         </Card>
       )}
     </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

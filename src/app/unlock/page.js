@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { Unlock } from "lucide-react";
 
 export default function UnlockPdfPage() {
   const [file, setFile] = useState(null);
@@ -21,7 +22,7 @@ export default function UnlockPdfPage() {
   useEffect(() => {
     return () => {
       if (unlockedUrl) {
-        URL.revokeObjectURL(unlockedUrl);
+        try { URL.revokeObjectURL(unlockedUrl); } catch { /* ignore */ }
       }
     };
   }, [unlockedUrl]); // Runs when unlockedUrl changes or component unmounts
@@ -32,6 +33,7 @@ export default function UnlockPdfPage() {
     setFileName(selectedFile ? selectedFile.name : ""); // Handle case where selectedFile might be null
     setError("");
     setUnlockedUrl(null); // Clear previous URL on new file selection
+    setPassword(""); // Clear password on new file selection
   };
 
   const unlockPDF = async () => {
@@ -51,13 +53,17 @@ export default function UnlockPdfPage() {
       // Simply save it to get an unencrypted version.
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      setUnlockedUrl(URL.createObjectURL(blob));
+      const url = URL.createObjectURL(blob);
+      setUnlockedUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
+      });
     } catch (e) {
       console.error("Unlock PDF error:", e);
       // More specific error messages for better UX
-      if (e.message.includes("Incorrect password")) {
+      if (e.message && e.message.includes("Incorrect password")) {
         setError("Failed to unlock PDF. The password provided is incorrect.");
-      } else if (e.message.includes("encrypted")) {
+      } else if (e.message && e.message.includes("encrypted")) {
         setError(
           "Failed to unlock PDF. This PDF is encrypted and requires a valid password."
         );
@@ -73,7 +79,7 @@ export default function UnlockPdfPage() {
   const toolName = "Unlock PDF";
   const toolDescription = "Remove password protection from your PDF documents quickly and securely. Our online Unlock PDF tool allows you to decrypt password-protected PDFs directly in your browser, ensuring your files remain private. Simply upload your file, enter the correct password, and download the unlocked version instantly.";
   const steps = [
-    "Upload your password-protected PDF file by dragging it into the dropzone or clicking to select.",
+    "Upload your password-protected PDF file by dragging it into the dropzone or clicking to select it from your device.",
     "Enter the correct password for the PDF in the provided input field.",
     "Click the 'Unlock PDF' button to remove the password protection.",
     "Once processed, your unlocked PDF will be available for preview and download.",
@@ -82,7 +88,7 @@ export default function UnlockPdfPage() {
     {
       question: "Is it free to unlock a PDF?",
       answer:
-        "Yes, our Unlock PDF tool is completely free to use. You can remove password protection from as many PDF files as you need without any hidden costs.",
+        "Yes, our Unlock PDF tool is completely free to use. You can remove password protection from as many PDF files as you need without any hidden costs or limitations.",
     },
     {
       question: "Are my files secure when unlocking a PDF?",
@@ -102,7 +108,7 @@ export default function UnlockPdfPage() {
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Unlock PDF"
       subtitle="Remove password protection from your PDF documents securely in your browser."
       toolName={toolName}
@@ -130,16 +136,16 @@ export default function UnlockPdfPage() {
 
         {fileName && (
           <div className="text-center text-gray-300 text-sm">
-            Selected:{" "}
-            <span className="font-medium text-gray-100">{fileName}</span>
+            Selected: <span className="font-medium text-gray-100">{fileName}</span>
           </div>
         )}
 
         <div className="space-y-2">
           <Label
             htmlFor="password"
-            className="text-sm font-medium text-gray-200"
+            className="text-sm font-medium text-gray-200 flex items-center"
           >
+            <Unlock className="w-4 h-4 mr-2" />
             Enter Password
           </Label>
           <Input
@@ -147,12 +153,12 @@ export default function UnlockPdfPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter the password to unlock"
+            placeholder="Enter the password to unlock this PDF"
             className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-            aria-label="Password for PDF protection"
+            aria-label="Password for PDF unlocking"
           />
           <p className="text-xs text-gray-400 mt-1">
-            This is the password required to open the uploaded PDF.
+            This password will be used to unlock the protected PDF.
           </p>
         </div>
 
@@ -169,7 +175,7 @@ export default function UnlockPdfPage() {
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
-            aria-label="Unlock PDF"
+            aria-label="Unlock PDF with password"
           >
             {isProcessing ? (
               <span className="flex items-center">
@@ -205,12 +211,12 @@ export default function UnlockPdfPage() {
               >
                 <a
                   href={unlockedUrl}
-                  download={`unlocked_${fileName || "document"}.pdf`}
+                  download={`unlocked_${fileName}`}
                   className="text-center flex items-center"
                   onClick={() => {
                     const urlToRevoke = unlockedUrl;
                     setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { }
                     }, 500);
                   }}
                 >
@@ -224,6 +230,6 @@ export default function UnlockPdfPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

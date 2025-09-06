@@ -8,7 +8,7 @@ const Breadcrumb = ({ items }) => {
 
   return (
     <nav 
-      className="flex items-center space-x-2 text-sm text-gray-400"
+      className="flex items-center space-x-2 text-sm text-gray-400 container-standard"
       aria-label="Breadcrumb"
       itemScope
       itemType="https://schema.org/BreadcrumbList"

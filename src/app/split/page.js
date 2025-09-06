@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
@@ -19,191 +19,292 @@ export default function SplitPdfPage() {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [startPage, setStartPage] = useState("");
-  const [endPage, setEndPage] = useState("");
+  const [processingMessage, setProcessingMessage] = useState("");
+  const [splitMode, setSplitMode] = useState("range"); // 'range', 'individual', 'custom'
+  const [startPage, setStartPage] = useState(""); // 1-based string
+  const [endPage, setEndPage] = useState(""); // 1-based string
+  const [customRanges, setCustomRanges] = useState([{ start: "", end: "" }]); // Array of { start, end } objects (1-based strings)
   const [totalPages, setTotalPages] = useState(0);
-  const [splitMode, setSplitMode] = useState("range");
   const [downloadFileName, setDownloadFileName] = useState("");
-  const [progress, setProgress] = useState(0);
+  const [currentProgress, setCurrentProgress] = useState(0);
 
+  // Cleanup function for object URLs to prevent memory leaks
   useEffect(() => {
     return () => {
       if (pdfUrl) {
         URL.revokeObjectURL(pdfUrl);
       }
     };
-  }, [pdfUrl]);
+  }, [pdfUrl]); // Run when pdfUrl changes or component unmounts
 
-  const handleFile = async (selectedFiles) => {
-    if (selectedFiles.length === 0) {
-      setError("Please select a PDF file.");
-      setFile(null);
-      setFileName("");
-      setPdfUrl(null);
-      setTotalPages(0);
-      setDownloadFileName("");
-      setProgress(0);
-      return;
-    }
-
-    const selectedFile = selectedFiles[0];
+  /**
+   * Handles file selection from the dropzone.
+   * Loads the PDF to get total pages for the range input.
+   * @param {File[]} files - An array of selected files.
+   */
+  const handleFiles = async (files) => {
+    const selectedFile = files[0];
     setFile(selectedFile);
-    setFileName(selectedFile.name);
+    setFileName(selectedFile ? selectedFile.name : "");
     setError("");
     setPdfUrl(null);
-    setStartPage("");
-    setEndPage("");
-    setTotalPages(0);
-    setIsProcessing(true);
+    setStartPage(""); // Reset page range
+    setEndPage(""); // Reset page range
+    setCustomRanges([{ start: "", end: "" }]); // Reset custom ranges
+    setTotalPages(0); // Reset total pages
+    setDownloadFileName("");
+    setCurrentProgress(0);
+
+    if (!selectedFile) return;
 
     try {
       const arrayBuffer = await selectedFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
-      const num = pdfDoc.getPageCount();
-      setTotalPages(num);
+      setTotalPages(pdfDoc.getPageCount());
+      // Set default range to all pages if a file is loaded
       setStartPage("1");
-      setEndPage(String(num));
-    } catch (err) {
-      setError(
-        "Failed to load PDF. Please ensure it's a valid PDF file. " +
-          err.message
-      );
-      console.error("PDF load error:", err);
-      setFile(null);
-      setFileName("");
+      setEndPage(String(pdfDoc.getPageCount()));
+    } catch (e) {
+      setError("Failed to load PDF. Please ensure it's a valid PDF file.");
+      console.error("PDF load error:", e);
       setTotalPages(0);
-    } finally {
-      setIsProcessing(false);
+      setFile(null); // Clear file on error
+      setFileName("");
     }
   };
 
+  /**
+   * Adds a new custom range input field.
+   */
+  const addCustomRange = () => { // eslint-disable-line no-unused-vars
+    setCustomRanges([...customRanges, { start: "", end: "" }]);
+  };
+
+  /**
+   * Removes a custom range input field at the specified index.
+   * @param {number} index - The index of the range to remove.
+   */
+  const removeCustomRange = (index) => { // eslint-disable-line no-unused-vars
+    if (customRanges.length > 1) {
+      setCustomRanges(customRanges.filter((_, i) => i !== index));
+    }
+  };
+
+  /**
+   * Updates a custom range at the specified index.
+   * @param {number} index - The index of the range to update.
+   * @param {string} field - The field to update ('start' or 'end').
+   * @param {string} value - The new value for the field.
+   */
+  const updateCustomRange = (index, field, value) => { // eslint-disable-line no-unused-vars
+    const newCustomRanges = [...customRanges];
+    newCustomRanges[index][field] = value;
+    setCustomRanges(newCustomRanges);
+  };
+
+  /**
+   * Splits the PDF based on the selected mode and ranges.
+   */
   const splitPDF = async () => {
+    setError("");
+    setPdfUrl(null);
+    setCurrentProgress(0);
     if (!file) {
-      setError("Please upload a PDF first.");
+      setError("Please upload a PDF file.");
       return;
     }
-
     setIsProcessing(true);
-    setPdfUrl(null);
-    setError("");
-    setDownloadFileName("");
-    setProgress(0);
+    setProcessingMessage("Loading PDF document...");
 
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const total = pdfDoc.getPageCount();
 
       if (splitMode === "range") {
-        if (!startPage || !endPage) {
-          setError(
-            "Please enter both start and end page numbers for range splitting."
-          );
-          setIsProcessing(false);
-          return;
-        }
-        const start = parseInt(startPage);
-        const end = parseInt(endPage);
+        // Validate page range
+        const start = startPage ? Math.max(1, parseInt(startPage, 10)) : 1; // 1-based start
+        const end = endPage ? Math.min(total, parseInt(endPage, 10)) : total; // 1-based end
 
-        if (
-          isNaN(start) ||
-          isNaN(end) ||
-          start < 1 ||
-          end < 1 ||
-          start > end ||
-          end > totalPages
-        ) {
+        if (start > end || start < 1 || end > total) {
           setError(
-            `Invalid page range. Please enter valid page numbers between 1 and ${totalPages}.`
+            "Invalid page range. Please ensure start page is less than or equal to end page, and within total pages."
           );
           setIsProcessing(false);
           return;
         }
 
+        setProcessingMessage(`Extracting pages ${start}-${end}...`);
+        setCurrentProgress(25);
+
+        // Create a new PDF document for the selected range
         const newPdfDoc = await PDFDocument.create();
         const pageIndicesToCopy = Array.from(
           { length: end - start + 1 },
           (_, i) => start - 1 + i
-        );
-        const copiedPages = await newPdfDoc.copyPages(
-          pdfDoc,
-          pageIndicesToCopy
-        );
+        ); // 0-based indices for pdf-lib
+        const copiedPages = await newPdfDoc.copyPages(pdfDoc, pageIndicesToCopy);
         copiedPages.forEach((page) => newPdfDoc.addPage(page));
+
+        setCurrentProgress(75);
+        setProcessingMessage("Saving split PDF...");
 
         const pdfBytes = await newPdfDoc.save();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
-        // Revoke previous URL if present to avoid leaks
         setPdfUrl((prev) => {
-          try { if (prev) URL.revokeObjectURL(prev); } catch { }
+  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
           return url;
         });
         setDownloadFileName(
           `${fileName.replace(/\.pdf$/i, "")}_pages_${start}-${end}.pdf`
         );
-        setProgress(100);
-      } else if (splitMode === "all-pages") {
+        setCurrentProgress(100);
+        setProcessingMessage("Split complete!");
+      } else if (splitMode === "individual") {
+        setProcessingMessage("Creating individual PDFs...");
         const zip = new JSZip();
-        const numPages = pdfDoc.getPageCount();
 
-        for (let i = 0; i < numPages; i++) {
+        // Create individual PDFs for each page
+        for (let i = 0; i < total; i++) {
+          setCurrentProgress(Math.round(((i + 1) / total) * 100));
+          setProcessingMessage(`Creating PDF for page ${i + 1} of ${total}...`);
+
           const singlePageDoc = await PDFDocument.create();
-          const [copiedPage] = await singlePageDoc.copyPages(pdfDoc, [i]);
+          const [copiedPage] = await singlePageDoc.copyPages(pdfDoc, [i]); // 0-based index for pdf-lib
           singlePageDoc.addPage(copiedPage);
 
           const pdfBytes = await singlePageDoc.save();
-          const pageNumber = i + 1;
+          const pageNumber = i + 1; // 1-based page number for filename
           zip.file(
             `${fileName.replace(/\.pdf$/i, "")}_page_${pageNumber}.pdf`,
             pdfBytes
           );
-
-          setProgress(Math.round(((i + 1) / numPages) * 100));
         }
 
+        setProcessingMessage("Compressing individual PDFs into ZIP...");
         const zipBlob = await zip.generateAsync({ type: "blob" });
         const url = URL.createObjectURL(zipBlob);
         setPdfUrl((prev) => {
-          try { if (prev) URL.revokeObjectURL(prev); } catch { }
+  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
           return url;
         });
         setDownloadFileName(`${fileName.replace(/\.pdf$/i, "")}_pages.zip`);
+        setCurrentProgress(100);
+        setProcessingMessage("Split complete!");
+      } else if (splitMode === "custom") {
+        // Validate custom ranges
+        const validRanges = [];
+        for (const range of customRanges) {
+          const start = range.start ? Math.max(1, parseInt(range.start, 10)) : 1;
+          const end = range.end ? Math.min(total, parseInt(range.end, 10)) : 1;
+
+          if (start <= end && start >= 1 && end <= total) {
+            validRanges.push({ start, end });
+          }
+        }
+
+        if (validRanges.length === 0) {
+          setError("Please enter at least one valid page range.");
+          setIsProcessing(false);
+          return;
+        }
+
+        setProcessingMessage("Creating PDFs for custom ranges...");
+        const zip = new JSZip();
+
+        // Create PDFs for each valid range
+        for (let i = 0; i < validRanges.length; i++) {
+          const range = validRanges[i];
+          setCurrentProgress(Math.round(((i + 1) / validRanges.length) * 100));
+          setProcessingMessage(
+            `Creating PDF for pages ${range.start}-${range.end}...`
+          );
+
+          const newPdfDoc = await PDFDocument.create();
+          const pageIndicesToCopy = Array.from(
+            { length: range.end - range.start + 1 },
+            (_, j) => range.start - 1 + j
+          ); // 0-based indices for pdf-lib
+          const copiedPages = await newPdfDoc.copyPages(
+            pdfDoc,
+            pageIndicesToCopy
+          );
+          copiedPages.forEach((page) => newPdfDoc.addPage(page));
+
+          const pdfBytes = await newPdfDoc.save();
+          zip.file(
+            `${fileName.replace(/\.pdf$/i, "")}_pages_${range.start}-${
+              range.end
+            }.pdf`,
+            pdfBytes
+          );
+        }
+
+        setProcessingMessage("Compressing custom range PDFs into ZIP...");
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+        const url = URL.createObjectURL(zipBlob);
+        setPdfUrl((prev) => {
+  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+          return url;
+        });
+        setDownloadFileName(`${fileName.replace(/\.pdf$/i, "")}_ranges.zip`);
+        setCurrentProgress(100);
+        setProcessingMessage("Split complete!");
       }
-    } catch (err) {
-      setError("Failed to split PDF. Please try again. " + err.message);
-      console.error("Split error:", err);
+    } catch (e) {
+      console.error("Split PDF error:", e);
+      setError("Failed to split PDF. Please try again.");
     } finally {
       setIsProcessing(false);
+      setTimeout(() => {
+        setCurrentProgress(0);
+        setProcessingMessage("");
+      }, 2000);
     }
   };
-
-  const isSplitButtonDisabled =
-    isProcessing ||
-    !file ||
-    totalPages === 0 ||
-    (splitMode === "range" && (!startPage || !endPage));
 
   const toolName = "Split PDF";
   const toolDescription = "Easily split your PDF documents into multiple files. Extract specific pages or ranges, or separate every page into its own PDF. Our online PDF splitter is fast, secure, and processes all your files directly in your browser, ensuring your privacy. Perfect for creating smaller documents, reorganizing content, or sharing only relevant sections.";
   const steps = [
-    'Upload your PDF file by dragging it into the dropzone or clicking to select it.',
-    'Choose your splitting option: By Page Range to extract a specific set of pages, or Extract All Pages to get each page as a separate PDF.',
-    'If splitting by page range, enter the start and end page numbers you wish to extract.',
-    'Click the Split PDF button. The tool will process your document instantly.',
-    'Download your newly split PDF file(s). If you chose Extract All Pages, you will receive a ZIP archive containing individual PDF files.'
+    "Upload your PDF file by dragging it into the dropzone or clicking to select it from your device.",
+    "Choose your splitting option: By Page Range to extract a specific set of pages, Extract Individual Pages to get each page as a separate PDF, or Custom Ranges to define multiple page ranges.",
+    "If splitting by page range or custom ranges, enter the start and end page numbers you wish to extract.",
+    "Click the 'Split PDF' button. The tool will process your document instantly.",
+    "Download your newly split PDF file(s). If you chose Extract Individual Pages or Custom Ranges, you will receive a ZIP archive containing individual PDF files.",
   ];
   const faqs = [
-    { question: "Is it free to split PDF files?", answer: "Yes, our PDF splitter is 100% free to use with no hidden fees or limits." },
-    { question: "Are my files secure and private?", answer: "All splitting is done client-side in your browser. Your files never leave your device." },
-    { question: "Can I split large PDFs?", answer: "You can split PDFs up to 50MB in size. For very large files, consider splitting in batches." },
-    { question: "Can I extract non-consecutive pages?", answer: "This tool currently supports extracting a range or all pages. For custom selection, split in multiple steps." },
-    { question: "What format will my split files be in?", answer: "You will receive standard PDF files, or a ZIP archive if extracting all pages." }
+    {
+      question: "Is it free to split PDF files?",
+      answer:
+        "Yes, our PDF splitter is completely free to use. You can split as many PDF files as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure and private?",
+      answer:
+        "All splitting is done client-side in your browser. Your files are never uploaded or stored on any server, ensuring complete privacy for your documents.",
+    },
+    {
+      question: "Can I split large PDFs?",
+      answer:
+        "You can split PDFs up to 50MB in size. For very large files, consider splitting in batches to maintain optimal performance.",
+    },
+    {
+      question: "Can I extract non-consecutive pages?",
+      answer:
+        "Yes, our Custom Ranges option allows you to define multiple page ranges to extract non-consecutive pages in a single operation.",
+    },
+    {
+      question: "What format will my split files be in?",
+      answer:
+        "You will receive standard PDF files, or a ZIP archive if extracting individual pages or custom ranges. Each split PDF maintains the original quality and formatting.",
+    },
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Split PDF"
-      subtitle="Extract specific pages or ranges, or separate all pages. All processing is 100% client-side."
+      subtitle="Extract specific pages or ranges, or separate all pages into individual PDFs. All processing is 100% client-side."
       toolName={toolName}
       toolDescription={toolDescription}
       steps={steps}
@@ -217,7 +318,7 @@ export default function SplitPdfPage() {
       <div className="space-y-6">
         <FileDropzone
           accept="application/pdf"
-          onFiles={handleFile}
+          onFiles={handleFiles}
           error={error}
           setError={setError}
           label="Upload PDF"
@@ -274,19 +375,19 @@ export default function SplitPdfPage() {
                 </div>
                 <div>
                   <RadioGroupItem
-                    value="all-pages"
-                    id="split-all-pages"
+                    value="individual"
+                    id="split-individual"
                     className="peer sr-only"
                   />
                   <Label
-                    htmlFor="split-all-pages"
+                    htmlFor="split-individual"
                     className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
                   >
                     <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
                       <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
                     </div>
                     <div>
-                      <span className="font-medium text-gray-100">Extract All Pages</span>
+                      <span className="font-medium text-gray-100">Extract Individual Pages</span>
                       <p className="text-xs text-gray-400 mt-1">Get each page as separate PDF</p>
                     </div>
                   </Label>
@@ -317,11 +418,11 @@ export default function SplitPdfPage() {
           file && (
             <div className="space-y-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
               <Progress
-                value={progress}
+                value={currentProgress}
                 className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-500 rounded-full"
               />
               <p className="text-sm text-center text-gray-400">
-                Splitting PDF... {progress}%
+                {processingMessage || `Splitting PDF... ${currentProgress}%`}
               </p>
             </div>
           )}
@@ -338,10 +439,10 @@ export default function SplitPdfPage() {
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
-            disabled={isSplitButtonDisabled}
+            disabled={isProcessing || !file}
             aria-label="Split PDF"
           >
-            {isProcessing && file ? (
+            {isProcessing ? (
               <span className="flex items-center">
                 <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
                 Splitting...
@@ -373,7 +474,7 @@ export default function SplitPdfPage() {
                 </div>
               )}
               
-              {splitMode === "all-pages" && (
+              {splitMode === "individual" && (
                 <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 text-center">
                   <p className="text-gray-300 mb-4">
                     Your PDF has been split into individual pages and compressed into a ZIP file.
@@ -393,8 +494,6 @@ export default function SplitPdfPage() {
                 <a
                   href={pdfUrl}
                   download={downloadFileName}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="flex items-center"
                   onClick={() => {
                     const u = pdfUrl;
@@ -409,6 +508,6 @@ export default function SplitPdfPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

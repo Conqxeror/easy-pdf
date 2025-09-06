@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, Download, CheckCircle, AlertTriangle, FileText, Eye, BarChart3, Clock, Loader2 } from "lucide-react";
 import { PDFDocument } from 'pdf-lib';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
 
 export default function PDFVersionComparison() {
@@ -197,10 +197,12 @@ export default function PDFVersionComparison() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Version Comparison"
+      subtitle="Compare different versions of PDF documents with detailed analysis"
       toolName="PDF Version Comparison"
       toolDescription="Compare different versions of PDF documents with detailed analysis. Identify changes, track modifications, and generate comprehensive comparison reports. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-version-comparison"
+      currentTool="pdf-version-comparison"
       steps={[
         "Upload two PDF files: the original version and the updated version you want to compare.",
         "Choose your comparison type: visual diff, text-only analysis, or metadata comparison.",
@@ -230,14 +232,7 @@ export default function PDFVersionComparison() {
         }
       ]}
     >
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <GitCompare className="mx-auto h-12 w-12 text-blue-600 mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Version Comparison</h1>
-            <p className="text-gray-600">Compare different versions of PDF documents with detailed analysis</p>
-          </div>
-
+      <div className="space-y-6">
         <Tabs defaultValue="upload" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="upload">Upload Files</TabsTrigger>
@@ -592,7 +587,6 @@ export default function PDFVersionComparison() {
           </CardContent>
         </Card>
       </div>
-    </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

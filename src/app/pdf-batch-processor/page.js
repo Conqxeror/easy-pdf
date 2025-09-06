@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Progress } from '@/components/ui/progress';
 import { Upload, Download, Layers, FileText, Trash2, Play, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 export default function PDFBatchProcessor() {
   const [files, setFiles] = useState([]);
@@ -287,10 +287,12 @@ export default function PDFBatchProcessor() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Batch Processor"
+      subtitle="Process multiple PDF files at once with various operations"
       toolName="PDF Batch Processor"
       toolDescription="Process multiple PDF files at once with various operations including merge, compress, split, and rotate. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-batch-processor"
+      currentTool="pdf-batch-processor"
       steps={[
         "Upload multiple PDF files by dragging them into the dropzone or clicking to select them from your device.",
         "Choose the batch operation you want to perform: merge all PDFs, compress all PDFs, split all PDFs by page, or rotate all PDFs.",
@@ -320,17 +322,7 @@ export default function PDFBatchProcessor() {
         }
       ]}
     >
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <Layers className="h-8 w-8" aria-hidden="true" />
-            PDF Batch Processor
-          </h1>
-          <p className="text-muted-foreground">
-            Process multiple PDF files at once with various operations. All processing happens locally in your browser.
-          </p>
-        </div>
-
+      <div className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           <Card>
             <CardHeader>
@@ -525,13 +517,13 @@ export default function PDFBatchProcessor() {
 
         <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Layers className="h-4 w-4" aria-hidden="true" />
               <span>All processing happens locally in your browser. Your files never leave your device.</span>
             </div>
           </CardContent>
         </Card>
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

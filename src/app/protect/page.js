@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { Lock } from "lucide-react";
 
 export default function ProtectPdfPage() {
   const [file, setFile] = useState(null);
@@ -21,30 +22,34 @@ export default function ProtectPdfPage() {
   useEffect(() => {
     return () => {
       if (protectedUrl) {
-        URL.revokeObjectURL(protectedUrl);
+        try { URL.revokeObjectURL(protectedUrl); } catch { /* ignore */ }
       }
     };
-  }, [protectedUrl]); // Run when protectedUrl changes or component unmounts
+  }, [protectedUrl]);
 
-  const handleFiles = (files) => {
-    const selectedFile = files[0];
+  const handleFiles = (newFiles) => {
+    const selectedFile = newFiles[0];
     setFile(selectedFile);
     setFileName(selectedFile ? selectedFile.name : "");
     setError("");
-    setProtectedUrl(null); // Clear previous URL on new file selection
+    setProtectedUrl(null);
+    setPassword("");
   };
 
-  const protectPDF = async () => {
-    setError("");
-    setProtectedUrl(null);
+  const handleProtect = async () => {
     if (!file || !password) {
       setError("Please upload a PDF and enter a password.");
       return;
     }
+
     setIsProcessing(true);
+    setError("");
+    setProtectedUrl(null);
+
     try {
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
+      
       await pdfDoc.encrypt({
         userPassword: password,
         ownerPassword: password,
@@ -58,14 +63,20 @@ export default function ProtectPdfPage() {
           documentAssembly: false,
         },
       });
+
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      setProtectedUrl(URL.createObjectURL(blob));
+      const url = URL.createObjectURL(blob);
+
+      setProtectedUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
+      });
+
+      setError("");
     } catch (e) {
-      setError(
-        "Failed to protect PDF. The file might be corrupted or already encrypted."
-      );
       console.error("Protect PDF error:", e);
+      setError("Failed to protect PDF. The file might be corrupted or already encrypted.");
     } finally {
       setIsProcessing(false);
     }
@@ -82,33 +93,28 @@ export default function ProtectPdfPage() {
   const faqs = [
     {
       question: "Is it free to protect a PDF with a password?",
-      answer:
-        "Yes, our Protect PDF tool is completely free to use. You can add password protection to as many PDF files as you need without any hidden costs or limitations.",
+      answer: "Yes, our Protect PDF tool is completely free to use. You can add password protection to as many PDF files as you need without any hidden costs or limitations.",
     },
     {
       question: "Are my files secure when I protect them?",
-      answer:
-        "Absolutely. Your privacy is our top priority. All PDF processing, including encryption, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+      answer: "Absolutely. Your privacy is our top priority. All PDF processing, including encryption, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
     },
     {
       question: "What kind of password should I use?",
-      answer:
-        "We recommend using a strong, unique password that combines uppercase and lowercase letters, numbers, and symbols to maximize security.",
+      answer: "We recommend using a strong, unique password that combines uppercase and lowercase letters, numbers, and symbols to maximize security.",
     },
     {
       question: "Can I remove the password later?",
-      answer:
-        "Yes, you can use our 'Unlock PDF' tool to remove the password protection from your PDF, provided you know the correct password.",
+      answer: "Yes, you can use our 'Unlock PDF' tool to remove the password protection from your PDF, provided you know the correct password.",
     },
     {
       question: "Does protecting a PDF affect its content or quality?",
-      answer:
-        "No, adding password protection to your PDF does not alter its content or quality. It only encrypts the file, restricting access to unauthorized users.",
+      answer: "No, adding password protection to your PDF does not alter its content or quality. It only encrypts the file, restricting access to unauthorized users.",
     },
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Protect PDF"
       subtitle="Add password protection to your PDF documents. Keep your files secure and private."
       toolName={toolName}
@@ -136,16 +142,16 @@ export default function ProtectPdfPage() {
 
         {fileName && (
           <div className="text-center text-gray-300 text-sm">
-            Selected:{" "}
-            <span className="font-medium text-gray-100">{fileName}</span>
+            Selected: <span className="font-medium text-gray-100">{fileName}</span>
           </div>
         )}
 
         <div className="space-y-2">
           <Label
             htmlFor="password"
-            className="text-sm font-medium text-gray-200"
+            className="text-sm font-medium text-gray-200 flex items-center"
           >
+            <Lock className="w-4 h-4 mr-2" />
             Enter Password
           </Label>
           <Input
@@ -170,7 +176,7 @@ export default function ProtectPdfPage() {
 
         <div className="flex justify-center">
           <Button
-            onClick={protectPDF}
+            onClick={handleProtect}
             disabled={isProcessing || !file || password.length === 0}
             className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             variant="default"
@@ -230,6 +236,6 @@ export default function ProtectPdfPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

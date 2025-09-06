@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Unused
 import { Upload, Download, FileBadge2, Type, CheckSquare, Circle, ChevronDown, PenTool, Trash2, Plus, Eye, Loader2 } from 'lucide-react';
 import { PDFDocument, rgb } from 'pdf-lib'; // Removed unused PDF form components
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 export default function PDFFormCreator() {
   const [templateFile, setTemplateFile] = useState(null);
@@ -237,10 +237,12 @@ export default function PDFFormCreator() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Form Creator"
+      subtitle="Create interactive PDF forms with various field types"
       toolName="PDF Form Creator"
       toolDescription="Create interactive PDF forms with various field types including text fields, checkboxes, radio buttons, dropdowns, and signature fields. Start with a blank form or use an existing PDF as template. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-form-creator"
+      currentTool="pdf-form-creator"
       steps={[
         "Choose to create a new blank form or upload an existing PDF as a template.",
         "Add form fields using the field tools: text fields, checkboxes, radio buttons, dropdowns, or signature fields.",
@@ -270,18 +272,8 @@ export default function PDFFormCreator() {
         }
       ]}
     >
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        <div className="mb-8">
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-            <FileBadge2 className="h-8 w-8" aria-hidden="true" />
-            PDF Form Creator
-          </h1>
-          <p className="text-muted-foreground">
-            Create interactive PDF forms with various field types. Start with a blank form or use an existing PDF as template.
-          </p>
-        </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left Panel - Tools */}
         <div className="lg:col-span-1 space-y-4">
           <Card>
@@ -296,6 +288,7 @@ export default function PDFFormCreator() {
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
                   placeholder="Enter form title"
+                  className="bg-gray-800 border-gray-600 text-gray-200"
                 />
               </div>
               
@@ -307,14 +300,19 @@ export default function PDFFormCreator() {
                 
                 <div
                   {...getRootProps()}
-                  className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors ${
-                    isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
+                  className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                    isDragActive 
+                      ? 'border-blue-500 bg-blue-900/20' 
+                      : 'border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700/50'
                   }`}
                 >
                   <input {...getInputProps()} />
-                  <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
-                  <p className="text-sm">
-                    {isDragActive ? 'Drop PDF template here' : 'Upload PDF Template'}
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <p className="mt-2 text-sm text-gray-300">
+                    {isDragActive ? 'Drop the PDF here' : 'Drag & drop a PDF file, or click to select'}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    PDF files only (max 10MB)
                   </p>
                 </div>
               </div>
@@ -335,7 +333,7 @@ export default function PDFFormCreator() {
                       variant="outline"
                       size="sm"
                       onClick={() => addField(fieldType.id)}
-                      className="flex flex-col h-16 p-2"
+                      className="flex flex-col h-16 p-2 border-gray-600 bg-gray-800 text-gray-200 hover:bg-gray-700"
                     >
                       <Icon className="h-4 w-4 mb-1" aria-hidden="true" />
                       <span className="text-xs">{fieldType.name}</span>
@@ -357,6 +355,7 @@ export default function PDFFormCreator() {
                   <Input
                     value={selectedField.name}
                     onChange={(e) => updateField(selectedField.id, { name: e.target.value })}
+                    className="bg-gray-800 border-gray-600 text-gray-200"
                   />
                 </div>
                 
@@ -365,6 +364,7 @@ export default function PDFFormCreator() {
                   <Input
                     value={selectedField.label}
                     onChange={(e) => updateField(selectedField.id, { label: e.target.value })}
+                    className="bg-gray-800 border-gray-600 text-gray-200"
                   />
                 </div>
 
@@ -375,6 +375,7 @@ export default function PDFFormCreator() {
                       type="number"
                       value={selectedField.width}
                       onChange={(e) => updateField(selectedField.id, { width: parseInt(e.target.value) })}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -383,6 +384,7 @@ export default function PDFFormCreator() {
                       type="number"
                       value={selectedField.height}
                       onChange={(e) => updateField(selectedField.id, { height: parseInt(e.target.value) })}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -394,6 +396,7 @@ export default function PDFFormCreator() {
                       <Input
                         value={selectedField.placeholder}
                         onChange={(e) => updateField(selectedField.id, { placeholder: e.target.value })}
+                        className="bg-gray-800 border-gray-600 text-gray-200"
                       />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -416,7 +419,10 @@ export default function PDFFormCreator() {
                       onChange={(e) => updateField(selectedField.id, { 
                         options: e.target.value.split('\n').filter(opt => opt.trim()) 
                       })}
-                      placeholder="Option 1&#10;Option 2&#10;Option 3"
+                      placeholder={`Option 1
+Option 2
+Option 3`}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                 )}
@@ -474,29 +480,29 @@ export default function PDFFormCreator() {
               </div>
             </CardHeader>
             <CardContent className="h-full">
-              <div className="relative w-full h-full border-2 border-dashed border-gray-300 rounded-lg overflow-auto">
+              <div className="relative w-full h-full border-2 border-dashed border-gray-600 rounded-lg overflow-auto">
                 {templateFile ? (
                   <div className="p-4">
-                    <p className="text-center text-muted-foreground">
+                    <p className="text-center text-gray-400">
                       PDF Template: {templateFile.name}
                     </p>
-                    <p className="text-center text-sm text-muted-foreground mt-2">
+                    <p className="text-center text-sm text-gray-500 mt-2">
                       Click &quot;Add Field&quot; buttons to add form elements
                     </p>
                   </div>
                 ) : (
-                  <div className="relative w-full h-full bg-white">
+                  <div className="relative w-full h-full bg-gray-800">
                     {/* Simulated PDF page */}
-                    <div className="absolute inset-4 bg-white shadow-lg">
+                    <div className="absolute inset-4 bg-gray-900 shadow-lg border border-gray-700">
                       <div className="p-6">
-                        <h2 className="text-xl font-bold mb-4">{formTitle}</h2>
+                        <h2 className="text-xl font-bold mb-4 text-gray-100">{formTitle}</h2>
                         
                         {/* Render form fields */}
                         {formFields.map(field => (
                           <div
                             key={field.id}
                             className={`absolute border-2 cursor-pointer ${
-                              selectedField?.id === field.id ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                              selectedField?.id === field.id ? 'border-blue-500 bg-blue-900/20' : 'border-gray-600'
                             }`}
                             style={{
                               left: field.x,
@@ -510,7 +516,7 @@ export default function PDFFormCreator() {
                               <input
                                 type="text"
                                 placeholder={field.placeholder}
-                                className="w-full h-full px-2 text-sm border-none outline-none bg-transparent"
+                                className="w-full h-full px-2 text-sm border-none outline-none bg-transparent text-gray-200"
                                 disabled={!previewMode}
                               />
                             )}
@@ -522,19 +528,19 @@ export default function PDFFormCreator() {
                               />
                             )}
                             {field.type === 'dropdown' && (
-                              <select className="w-full h-full px-2 text-sm border-none outline-none bg-transparent" disabled={!previewMode}>
+                              <select className="w-full h-full px-2 text-sm border-none outline-none bg-gray-800 text-gray-200" disabled={!previewMode}>
                                 {field.options.map(option => (
                                   <option key={option} value={option}>{option}</option>
                                 ))}
                               </select>
                             )}
                             {field.type === 'signature' && (
-                              <div className="w-full h-full flex items-center justify-center text-xs text-gray-500">
+                              <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">
                                 Signature
                               </div>
                             )}
                             {!previewMode && (
-                              <div className="absolute -top-6 left-0 text-xs bg-blue-500 text-white px-2 py-1 rounded">
+                              <div className="absolute -top-6 left-0 text-xs bg-blue-600 text-white px-2 py-1 rounded">
                                 {field.label}
                               </div>
                             )}
@@ -542,7 +548,7 @@ export default function PDFFormCreator() {
                         ))}
                         
                         {formFields.length === 0 && (
-                          <div className="text-center text-muted-foreground mt-8">
+                          <div className="text-center text-gray-500 mt-8">
                             <FileBadge2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
                             <p>Add form fields using the tools on the left</p>
                           </div>
@@ -559,13 +565,13 @@ export default function PDFFormCreator() {
 
       <Card className="mt-6">
         <CardContent className="pt-6">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
             <FileBadge2 className="h-4 w-4" />
             <span>All form creation happens locally in your browser. Your files never leave your device.</span>
           </div>
         </CardContent>
       </Card>
     </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

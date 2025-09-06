@@ -37,7 +37,7 @@ export const AccessibleLoader = ({ message = "Loading...", size = "medium" }) =>
   return (
     <div className="flex items-center justify-center" role="status" aria-live="polite">
       <div
-        className={`animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 ${sizeClasses[size]}`}
+        className={`animate-spin rounded-full border-2 border-gray-600 border-t-blue-400 ${sizeClasses[size]}`}
         aria-hidden="true"
       />
       <span className="sr-only">{message}</span>
@@ -114,7 +114,7 @@ export const AccessibleInput = ({
         required={required}
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={errorId}
-        className={`block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white ${error ? 'border-red-500' : ''} ${className}`}
+        className={`block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-800 text-white ${error ? 'border-red-500' : ''} ${className}`}
         {...props}
       />
       {error && (
@@ -158,12 +158,12 @@ export const AccessibleModal = ({
     >
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         <div 
-          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+          className="fixed inset-0 transition-opacity bg-gray-900 bg-opacity-75"
           aria-hidden="true"
           onClick={onClose}
         />
         
-        <div className={`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl dark:bg-gray-800 ${className}`}>
+        <div className={`inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-gray-800 shadow-xl rounded-2xl ${className}`}>
           <h3 id="modal-title" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
             {title}
           </h3>

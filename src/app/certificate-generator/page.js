@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState  } from "react";
+import React, { useState } from "react";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Award, Download, User, Building } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function CertificateGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -356,56 +356,62 @@ export default function CertificateGeneratorPage() {
     }
   };
 
-  const toolConfig = {
-    title: "Certificate Generator",
-    description: "Create professional certificates for courses, training, achievements, and more with customizable templates.",
-    icon: <Award className="w-8 h-8 text-yellow-500" />,
-    features: [
-      "Multiple certificate templates",
-      "Customizable colors and styles",
-      "Professional layouts",
-      "Automatic certificate IDs",
-      "Digital signatures support",
-      "High-quality PDF output"
-    ],
-    relatedTools: ["/sign", "/watermark", "/form-filler"]
-  };
-
   return (
-    <ToolPageContent
-      toolName="Certificate Generator"
-      toolDescription="Create professional certificates for courses, training, achievements, and more with customizable templates."
+    <ToolPageLayout
+      title="PDF Certificate Generator"
+      subtitle="Create professional certificates with customizable templates"
+      toolName="PDF Certificate Generator"
+      toolDescription="Generate professional PDF certificates for courses, training, achievements, and more. Customize templates, add recipient information, and download as PDF."
       currentTool="certificate-generator"
       steps={[
-        "Enter the recipient's name and certificate details.",
-        "Select a certificate template and customize the design.",
-        "Fill in course/program and organization information.",
-        "Add signatory details and any optional description.",
-        "Click 'Generate Certificate PDF' to download your certificate."
+        "Select a certificate template from our professional collection.",
+        "Enter recipient details including name, course, date, and any additional information.",
+        "Customize the certificate with your organization's logo, signature, and colors.",
+        "Preview the certificate and make any final adjustments.",
+        "Generate and download the certificate as a high-quality PDF."
       ]}
       faqs={[
-        { question: "Can I customize the certificate design?", answer: "Yes, you can choose templates, colors, and styles to match your needs." },
-        { question: "Will my data be saved online?", answer: "No, all processing happens locally in your browser for privacy." },
-        { question: "Can I add a digital signature?", answer: "You can add signatory details, and digital signature support is available in some templates." },
-        { question: "Is the PDF print-quality?", answer: "Yes, certificates are generated as high-quality, print-ready PDFs." }
+        {
+          question: "Can I add my organization's logo to the certificate?",
+          answer: "Yes, you can upload your organization's logo which will be placed in the designated area of the certificate template."
+        },
+        {
+          question: "What file formats can I use for logos and signatures?",
+          answer: "You can use PNG, JPG, or SVG files for logos and signatures. For best results, use high-resolution images."
+        },
+        {
+          question: "Can I customize the colors of the certificate?",
+          answer: "Yes, you can customize the primary and accent colors to match your brand or organization's color scheme."
+        },
+        {
+          question: "Are the certificates printable?",
+          answer: "Yes, all certificates are generated as high-quality PDF files that are perfect for printing on standard paper or cardstock."
+        },
+        {
+          question: "Can I generate multiple certificates at once?",
+          answer: "Currently, you can generate one certificate at a time. For bulk certificate generation, consider using our Report Generator tool."
+        }
       ]}
-      toolConfig={toolConfig}
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Certificate Generator', href: '/certificate-generator' }
+      ]}
     >
       <div className="space-y-6">
         {/* Template Selection */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Award className="w-5 h-5" />
               Certificate Template
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Select value={certificateData.template} onValueChange={(value) => updateCertificateData('template', value)}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                 <SelectItem value="completion">Certificate of Completion</SelectItem>
                 <SelectItem value="achievement">Certificate of Achievement</SelectItem>
                 <SelectItem value="participation">Certificate of Participation</SelectItem>
@@ -413,165 +419,175 @@ export default function CertificateGeneratorPage() {
                 <SelectItem value="appreciation">Certificate of Appreciation</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
               {templates[certificateData.template]?.title} - {templates[certificateData.template]?.mainText}
             </p>
           </CardContent>
         </Card>
 
         {/* Recipient Information */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <User className="w-5 h-5" />
               Recipient Information
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="recipientName">Recipient Name *</Label>
+              <Label htmlFor="recipientName" className="text-gray-900 dark:text-gray-100">Recipient Name *</Label>
               <Input
                 id="recipientName"
                 value={certificateData.recipientName}
                 onChange={(e) => updateCertificateData('recipientName', e.target.value)}
                 placeholder="John Doe"
                 required
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div>
-              <Label htmlFor="certificateId">Certificate ID</Label>
+              <Label htmlFor="certificateId" className="text-gray-900 dark:text-gray-100">Certificate ID</Label>
               <Input
                 id="certificateId"
                 value={certificateData.certificateId}
                 onChange={(e) => updateCertificateData('certificateId', e.target.value)}
                 placeholder="CERT-001"
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Course/Program Information */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle>Course/Program Information</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-gray-100">Course/Program Information</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="courseName">Course/Program Name *</Label>
+              <Label htmlFor="courseName" className="text-gray-900 dark:text-gray-100">Course/Program Name *</Label>
               <Input
                 id="courseName"
                 value={certificateData.courseName}
                 onChange={(e) => updateCertificateData('courseName', e.target.value)}
                 placeholder="Advanced Web Development"
                 required
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="duration">Duration (Optional)</Label>
+                <Label htmlFor="duration" className="text-gray-900 dark:text-gray-100">Duration (Optional)</Label>
                 <Input
                   id="duration"
                   value={certificateData.duration}
                   onChange={(e) => updateCertificateData('duration', e.target.value)}
                   placeholder="40 hours"
+                  className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 />
               </div>
               <div>
-                <Label htmlFor="grade">Grade/Score (Optional)</Label>
+                <Label htmlFor="grade" className="text-gray-900 dark:text-gray-100">Grade/Score (Optional)</Label>
                 <Input
                   id="grade"
                   value={certificateData.grade}
                   onChange={(e) => updateCertificateData('grade', e.target.value)}
                   placeholder="A+ / 95%"
+                  className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 />
               </div>
               <div>
-                <Label htmlFor="issueDate">Issue Date</Label>
+                <Label htmlFor="issueDate" className="text-gray-900 dark:text-gray-100">Issue Date</Label>
                 <Input
                   id="issueDate"
                   type="date"
                   value={certificateData.issueDate}
                   onChange={(e) => updateCertificateData('issueDate', e.target.value)}
+                  className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
             <div>
-              <Label htmlFor="description">Description (Optional)</Label>
+              <Label htmlFor="description" className="text-gray-900 dark:text-gray-100">Description (Optional)</Label>
               <Textarea
                 id="description"
                 value={certificateData.description}
                 onChange={(e) => updateCertificateData('description', e.target.value)}
                 placeholder="Additional details about the course or achievement"
                 rows={3}
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Organization Information */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Building className="w-5 h-5" />
               Organization Information
             </CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="organizationName">Organization Name *</Label>
+              <Label htmlFor="organizationName" className="text-gray-900 dark:text-gray-100">Organization Name *</Label>
               <Input
                 id="organizationName"
                 value={certificateData.organizationName}
                 onChange={(e) => updateCertificateData('organizationName', e.target.value)}
                 placeholder="Tech Academy"
                 required
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div>
-              <Label htmlFor="signatoryName">Signatory Name</Label>
+              <Label htmlFor="signatoryName" className="text-gray-900 dark:text-gray-100">Signatory Name</Label>
               <Input
                 id="signatoryName"
                 value={certificateData.signatoryName}
                 onChange={(e) => updateCertificateData('signatoryName', e.target.value)}
                 placeholder="Dr. Jane Smith"
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div className="md:col-span-2">
-              <Label htmlFor="signatoryTitle">Signatory Title</Label>
+              <Label htmlFor="signatoryTitle" className="text-gray-900 dark:text-gray-100">Signatory Title</Label>
               <Input
                 id="signatoryTitle"
                 value={certificateData.signatoryTitle}
                 onChange={(e) => updateCertificateData('signatoryTitle', e.target.value)}
                 placeholder="Director of Education"
+                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Styling Options */}
-        <Card>
+        <Card className="bg-white dark:bg-gray-800">
           <CardHeader>
-            <CardTitle>Styling Options</CardTitle>
+            <CardTitle className="text-gray-900 dark:text-gray-100">Styling Options</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="primaryColor">Primary Color</Label>
+              <Label htmlFor="primaryColor" className="text-gray-900 dark:text-gray-100">Primary Color</Label>
               <Input
                 id="primaryColor"
                 type="color"
                 value={certificateData.primaryColor}
                 onChange={(e) => updateCertificateData('primaryColor', e.target.value)}
-                className="h-10"
+                className="h-10 bg-white dark:bg-gray-700"
               />
             </div>
             <div>
-              <Label htmlFor="secondaryColor">Secondary Color</Label>
+              <Label htmlFor="secondaryColor" className="text-gray-900 dark:text-gray-100">Secondary Color</Label>
               <Input
                 id="secondaryColor"
                 type="color"
                 value={certificateData.secondaryColor}
                 onChange={(e) => updateCertificateData('secondaryColor', e.target.value)}
-                className="h-10"
+                className="h-10 bg-white dark:bg-gray-700"
               />
             </div>
           </CardContent>
@@ -599,6 +615,6 @@ export default function CertificateGeneratorPage() {
           </Button>
         </div>
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

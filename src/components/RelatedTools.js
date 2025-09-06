@@ -16,6 +16,16 @@ const RelatedTools = ({ currentTool, tools }) => {
       }
     }
 
+    // If not found, try without the slash prefix
+    if (!currentToolCategory) {
+      for (const category of toolCategories) {
+        if (category.submenu.some(item => item.href === currentTool)) {
+          currentToolCategory = category.name;
+          break;
+        }
+      }
+    }
+
     if (!currentToolCategory) return [];
 
     return tools
@@ -28,7 +38,7 @@ const RelatedTools = ({ currentTool, tools }) => {
             break;
           }
         }
-        return toolCategory === currentToolCategory && tool.href !== `/${currentTool}`;
+        return toolCategory === currentToolCategory && tool.href !== `/${currentTool}` && tool.href !== currentTool;
       })
       .slice(0, 4);
   }

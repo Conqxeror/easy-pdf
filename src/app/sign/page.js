@@ -24,12 +24,12 @@ if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
 
 export default function SignPdfPage() {
   const [files, setFiles] = useState([]);
-  const [fileName, setFileName] = useState(""); // Used in the component
   const [error, setError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [processingMessage, setProcessingMessage] = useState(""); // Used in the component
   const [signedPdfUrl, setSignedPdfUrl] = useState(null);
   const [downloadFileName, setDownloadFileName] = useState("");
+  const [fileName, setFileName] = useState(""); // Add missing state variable
+  const [processingMessage, setProcessingMessage] = useState(""); // Add missing state variable
   const [currentPageIdx, setCurrentPageIdx] = useState(0); // Current page index (0-based)
   const [numPages, setNumPages] = useState(0); // Total number of pages in the PDF
 
@@ -524,6 +524,21 @@ export default function SignPdfPage() {
 
         {files.length > 0 && numPages > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* File Info */}
+            <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
+              <h2 className="font-semibold text-xl mb-3 text-gray-100">
+                File Information
+              </h2>
+              <p className="text-gray-300">
+                <span className="font-medium">File:</span> {fileName}
+              </p>
+              <p className="text-gray-300">
+                <span className="font-medium">Pages:</span> {numPages}
+              </p>
+              {processingMessage && (
+                <p className="text-blue-400 mt-2">{processingMessage}</p>
+              )}
+            </div>
             {/* Signature Drawing Controls */}
             <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
               <h2 className="font-semibold text-xl mb-3 text-gray-100">

@@ -14,13 +14,13 @@ const buttonVariants = cva(
         destructive:
           "bg-red-600 text-white shadow-md hover:bg-red-700 hover:shadow-lg active:scale-[0.98] focus-visible:ring-red-500",
         outline:
-          "border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-500 active:scale-[0.98] focus-visible:ring-blue-500",
+          "border border-gray-600 dark:border-gray-600 bg-gray-800 dark:bg-gray-800 text-gray-100 dark:text-gray-100 shadow-sm hover:bg-gray-700 dark:hover:bg-gray-700 hover:border-blue-500 active:scale-[0.98] focus-visible:ring-blue-500",
         secondary:
-          "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm hover:bg-gray-200 dark:hover:bg-gray-700 hover:shadow-md active:scale-[0.98] focus-visible:ring-gray-500",
+          "bg-gray-800 dark:bg-gray-800 text-gray-100 dark:text-gray-100 shadow-sm hover:bg-gray-700 dark:hover:bg-gray-700 hover:shadow-md active:scale-[0.98] focus-visible:ring-gray-500",
         ghost:
-          "text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 active:scale-[0.98] focus-visible:ring-gray-500",
+          "text-gray-100 dark:text-gray-100 hover:bg-gray-800 dark:hover:bg-gray-800 active:scale-[0.98] focus-visible:ring-gray-500",
         link: 
-          "text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline active:scale-[0.98] focus-visible:ring-blue-500",
+          "text-blue-400 dark:text-blue-400 underline-offset-4 hover:underline active:scale-[0.98] focus-visible:ring-blue-500",
         success:
           "bg-green-600 text-white shadow-md hover:bg-green-700 hover:shadow-lg active:scale-[0.98] focus-visible:ring-green-500",
         warning:

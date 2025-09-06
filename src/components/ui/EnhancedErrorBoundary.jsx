@@ -58,7 +58,7 @@ class EnhancedErrorBoundary extends React.Component {
       }
 
       return (
-        <div className="min-h-[400px] flex items-center justify-center bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
+        <div className="min-h-[400px] flex items-center justify-center bg-gray-900 rounded-lg border border-gray-700">
           <div className="text-center p-8 max-w-md">
             <div className="flex justify-center mb-4">
               <AlertTriangle className="w-12 h-12 text-red-500" />
@@ -81,7 +81,7 @@ class EnhancedErrorBoundary extends React.Component {
                 <summary className="cursor-pointer text-sm text-gray-500 hover:text-gray-700">
                   Error Details (Development)
                 </summary>
-                <pre className="mt-2 p-4 bg-gray-100 dark:bg-gray-800 rounded text-xs overflow-auto">
+                <pre className="mt-2 p-4 bg-gray-800 rounded text-xs overflow-auto">
                   {this.state.error && this.state.error.toString()}
                   {this.state.errorInfo && this.state.errorInfo.componentStack}
                 </pre>

@@ -213,7 +213,6 @@ export default function HomeClient() {
               <Button
                 asChild
                 size="lg"
-                className="px-8 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                 aria-describedby="get-started-description"
               >
                 <Link href="/merge" onClick={handleGetStartedClick}>
@@ -229,7 +228,6 @@ export default function HomeClient() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="px-8 border-2 border-blue-500 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
               >
                 <Link href="#tools" onClick={handleExploreToolsClick}>
                   Explore All Tools
@@ -241,7 +239,6 @@ export default function HomeClient() {
                   onClick={handleInstallClick}
                   variant="success"
                   size="lg"
-                  className="px-8 bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                   aria-label="Install easy-pdf as a Progressive Web App"
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -257,11 +254,11 @@ export default function HomeClient() {
           <Section spacing="small" className="py-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {stats.map((stat, index) => (
-                <div key={index} className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl p-6 text-center border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+                <div key={index} className="bg-gray-800 rounded-xl p-6 text-center border border-gray-700 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                   <div className="flex justify-center mb-3 text-blue-400">
                     {stat.icon}
                   </div>
-                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-3xl font-bold mb-1 text-gray-100">{stat.value}</div>
                   <div className="text-gray-400">{stat.label}</div>
                 </div>
               ))}
@@ -269,7 +266,7 @@ export default function HomeClient() {
           </Section>
 
           <Section>
-            <AccessibleHeading level={2} className="text-3xl text-center mb-8 text-white">
+            <AccessibleHeading level={2} className="text-3xl text-center mb-8">
               Why Choose easy-pdf?
             </AccessibleHeading>
             <FeatureGrid features={features} />
@@ -312,7 +309,6 @@ export default function HomeClient() {
                 asChild
                 variant="gradient"
                 size="lg"
-                className="px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
                 <Link href="/merge" onClick={handleGetStartedClick}>
                   Get Started Now

@@ -5,7 +5,6 @@ import Tesseract from "tesseract.js";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import Loader from "@/components/ui/Loader";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -16,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -362,12 +361,15 @@ export default function OcrPage() {
           const { data } = await worker.recognize(imageUrlToOcr);
           console.log(`Text recognition completed for page ${pageNum}`);
           
-          allExtractedText.push(`--- Page ${pageNum} ---\n${data.text.trim()}`);
+          allExtractedText.push(`--- Page ${pageNum} ---
+${data.text.trim()}`);
         }
       }
 
       console.log("OCR completed successfully");
-      setResult(allExtractedText.join("\n\n"));
+      setResult(allExtractedText.join(`
+
+`));
       setProcessingMessage("Text extraction complete!");
       
     } catch (e) {
@@ -417,235 +419,235 @@ export default function OcrPage() {
     }
   };
 
+  const toolName = "OCR (Text Recognition)";
+  const toolDescription = "Extract readable text from scanned PDF documents and image files using advanced OCR technology. Convert scanned documents, images, and PDFs into editable text with high accuracy. All processing happens locally in your browser for complete privacy and security.";
+  const steps = [
+    "Upload your PDF document or image file by dragging it into the dropzone or clicking to select.",
+    "Choose your OCR scope: all pages, a single page, or a specific page range for multi-page documents.",
+    "Click 'Extract Text' to start the text recognition process. The OCR engine will analyze your document.",
+    "Once processing is complete, the extracted text will appear in the text area. You can copy it to your clipboard or save it for further use."
+  ];
+  const faqs = [
+    {
+      question: "What is OCR and how does it work?",
+      answer: "OCR (Optical Character Recognition) is a technology that converts scanned documents, images, and PDFs into editable text. Our tool uses advanced AI algorithms to recognize and extract text from various file formats, making scanned documents searchable and editable."
+    },
+    {
+      question: "What file types does the OCR tool support?",
+      answer: "Our OCR tool supports PDF documents and various image formats including JPG, PNG, TIFF, and BMP. For best results, ensure your documents have clear, high-quality text and good contrast."
+    },
+    {
+      question: "How accurate is the text recognition?",
+      answer: "The accuracy depends on the quality of your source document. Clear, well-scanned documents with good contrast typically achieve 95%+ accuracy. Handwritten text or low-quality scans may have lower accuracy."
+    },
+    {
+      question: "Are my files secure during OCR processing?",
+      answer: "Absolutely! All OCR processing happens locally in your browser. Your files are never uploaded to our servers, ensuring complete privacy and security for your sensitive documents."
+    },
+    {
+      question: "Can I extract text from specific pages of a multi-page PDF?",
+      answer: "Yes, you can choose to extract text from all pages, a single page, or a specific range of pages. This is useful for large documents where you only need text from certain sections."
+    },
+    {
+      question: "What languages does the OCR tool support?",
+      answer: "Currently, our OCR tool supports English text recognition. For documents in other languages, the accuracy may vary depending on the text quality and character complexity."
+    }
+  ];
+
   return (
-    <ToolPageContent
-      toolName="OCR (Text Recognition)"
-      toolDescription="Extract readable text from scanned PDF documents and image files using advanced OCR technology. Convert scanned documents, images, and PDFs into editable text with high accuracy. All processing happens locally in your browser for complete privacy and security."
+    <ToolPageLayout
+      title="OCR (Text Recognition)"
+      subtitle="Extract readable text from scanned PDF documents and image files."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
       currentTool="ocr"
-      steps={[
-        "Upload your PDF document or image file by dragging it into the dropzone or clicking to select.",
-        "Choose your OCR scope: all pages, a single page, or a specific page range for multi-page documents.",
-        "Click 'Extract Text' to start the text recognition process. The OCR engine will analyze your document.",
-        "Once processing is complete, the extracted text will appear in the text area. You can copy it to your clipboard or save it for further use."
-      ]}
-      faqs={[
-        {
-          question: "What is OCR and how does it work?",
-          answer: "OCR (Optical Character Recognition) is a technology that converts scanned documents, images, and PDFs into editable text. Our tool uses advanced AI algorithms to recognize and extract text from various file formats, making scanned documents searchable and editable."
-        },
-        {
-          question: "What file types does the OCR tool support?",
-          answer: "Our OCR tool supports PDF documents and various image formats including JPG, PNG, TIFF, and BMP. For best results, ensure your documents have clear, high-quality text and good contrast."
-        },
-        {
-          question: "How accurate is the text recognition?",
-          answer: "The accuracy depends on the quality of your source document. Clear, well-scanned documents with good contrast typically achieve 95%+ accuracy. Handwritten text or low-quality scans may have lower accuracy."
-        },
-        {
-          question: "Are my files secure during OCR processing?",
-          answer: "Absolutely! All OCR processing happens locally in your browser. Your files are never uploaded to our servers, ensuring complete privacy and security for your sensitive documents."
-        },
-        {
-          question: "Can I extract text from specific pages of a multi-page PDF?",
-          answer: "Yes, you can choose to extract text from all pages, a single page, or a specific range of pages. This is useful for large documents where you only need text from certain sections."
-        },
-        {
-          question: "What languages does the OCR tool support?",
-          answer: "Currently, our OCR tool supports English text recognition. For documents in other languages, the accuracy may vary depending on the text quality and character complexity."
-        }
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'OCR', href: '/ocr' }
       ]}
     >
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
-        <div className="max-w-4xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-600">
-            OCR (Text Recognition)
-          </h1>
-          <p className="mb-8 text-lg text-gray-300 text-center">
-            Extract readable text from scanned PDF documents and image files.
-          </p>
-          
-          {/* OCR Engine Status */}
-          {(workerInitializing || processingMessage) && (
-            <div className="mb-6 p-4 bg-blue-900/30 border border-blue-500/50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <Loader className="w-5 h-5 text-blue-400" />
-                <span className="text-blue-300">
-                  {processingMessage || "Initializing OCR engine..."}
-                </span>
-              </div>
+      <div className="space-y-6">
+        {/* OCR Engine Status */}
+        {(workerInitializing || processingMessage) && (
+          <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
+              <span className="text-blue-800">
+                {processingMessage || "Initializing OCR engine..."}
+              </span>
             </div>
-          )}
-          
-          {workerReady && !workerInitializing && !processingMessage && (
-            <div className="mb-6 p-4 bg-green-900/30 border border-green-500/50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                <span className="text-green-300">OCR engine ready</span>
-              </div>
+          </div>
+        )}
+        
+        {workerReady && !workerInitializing && !processingMessage && (
+          <div className="p-4 bg-green-100 border border-green-200 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-green-800">OCR engine ready</span>
             </div>
-          )}
-          
-          <FileDropzone
-            accept="application/pdf,image/*"
-            multiple={false}
-            onFiles={handleFiles}
-            error={error}
-            setError={setError}
-            label="Upload PDF or Image"
-            description="Drag & drop or click to select a PDF or image file (Max 50MB)"
-            maxSize={50 * 1024 * 1024}
-          />
+          </div>
+        )}
+        
+        <FileDropzone
+          accept="application/pdf,image/*"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Upload PDF or Image"
+          description="Drag & drop or click to select a PDF or image file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+        />
 
-          {files.length > 0 && (
-            <>
-              <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 flex flex-col items-center">
-                <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                  File Preview
+        {files.length > 0 && (
+          <>
+            <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 flex flex-col items-center">
+              <h2 className="font-semibold text-xl mb-3">
+                File Preview
+              </h2>
+              <div className="w-full flex justify-center items-center overflow-hidden">
+                <canvas
+                  ref={previewCanvasRef}
+                  className="max-w-full h-auto border border-gray-300 rounded-md shadow-lg"
+                  style={{ maxWidth: "100%", height: "auto" }}
+                ></canvas>
+              </div>
+            </div>
+
+            {numPages > 0 && (
+              <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 space-y-4">
+                <h2 className="font-semibold text-xl mb-3">
+                  OCR Options
                 </h2>
-                <div className="w-full flex justify-center items-center overflow-hidden">
-                  <canvas
-                    ref={previewCanvasRef}
-                    className="max-w-full h-auto border border-gray-600 rounded-md shadow-lg"
-                    style={{ maxWidth: "100%", height: "auto" }}
-                  ></canvas>
+                <div>
+                  <Label htmlFor="ocrMode" className="text-sm font-medium">
+                    Select OCR Scope
+                  </Label>
+                  <Select
+                    value={ocrMode}
+                    onValueChange={(value) => setOcrMode(value)}
+                    disabled={files.length === 0}
+                  >
+                    <SelectTrigger className="w-full mt-1">
+                      <SelectValue placeholder="Choose OCR scope" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">
+                        All Pages ({numPages} page{numPages > 1 ? "s" : ""})
+                      </SelectItem>
+                      {numPages > 1 && (
+                        <>
+                          <SelectItem value="single">
+                            Single Page
+                          </SelectItem>
+                          <SelectItem value="range">
+                            Page Range
+                          </SelectItem>
+                        </>
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
 
-              {numPages > 0 && (
-                <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
-                  <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                    OCR Options
-                  </h2>
+                {ocrMode === "single" && numPages > 1 && (
                   <div>
-                    <Label htmlFor="ocrMode" className="text-sm font-medium text-gray-200">
-                      Select OCR Scope
-                    </Label>
-                    <Select
-                      value={ocrMode}
-                      onValueChange={(value) => setOcrMode(value)}
-                      disabled={files.length === 0}
-                    >
-                      <SelectTrigger className="w-full mt-1 bg-gray-700 border-gray-600 text-gray-100">
-                        <SelectValue placeholder="Choose OCR scope" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-700 border-gray-600">
-                        <SelectItem value="all" className="text-gray-100 hover:bg-gray-600">
-                          All Pages ({numPages} page{numPages > 1 ? "s" : ""})
-                        </SelectItem>
-                        {numPages > 1 && (
-                          <>
-                            <SelectItem value="single" className="text-gray-100 hover:bg-gray-600">
-                              Single Page
-                            </SelectItem>
-                            <SelectItem value="range" className="text-gray-100 hover:bg-gray-600">
-                              Page Range
-                            </SelectItem>
-                          </>
-                        )}
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="selectedPage" className="text-sm font-medium">
+                    Select Page (1-{numPages})
+                  </Label>
+                    <Input
+                      type="number"
+                      min="1"
+                      max={numPages}
+                      value={selectedOcrPage + 1}
+                      onChange={(e) => setSelectedOcrPage(Math.max(0, parseInt(e.target.value) - 1))}
+                      className="w-full mt-1"
+                    />
                   </div>
+                )}
 
-                  {ocrMode === "single" && numPages > 1 && (
+                {ocrMode === "range" && numPages > 1 && (
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="selectedPage" className="text-sm font-medium text-gray-200">
-                        Select Page (1-{numPages})
+                      <Label htmlFor="startPage" className="text-sm font-medium">
+                        Start Page
                       </Label>
                       <Input
                         type="number"
                         min="1"
                         max={numPages}
-                        value={selectedOcrPage + 1}
-                        onChange={(e) => setSelectedOcrPage(Math.max(0, parseInt(e.target.value) - 1))}
-                        className="w-full mt-1 bg-gray-700 border-gray-600 text-gray-100"
+                        value={pageRangeStart}
+                        onChange={(e) => setPageRangeStart(parseInt(e.target.value))}
+                        className="w-full mt-1"
                       />
                     </div>
-                  )}
-
-                  {ocrMode === "range" && numPages > 1 && (
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="startPage" className="text-sm font-medium text-gray-200">
-                          Start Page
-                        </Label>
-                        <Input
-                          type="number"
-                          min="1"
-                          max={numPages}
-                          value={pageRangeStart}
-                          onChange={(e) => setPageRangeStart(parseInt(e.target.value))}
-                          className="w-full mt-1 bg-gray-700 border-gray-600 text-gray-100"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="endPage" className="text-sm font-medium text-gray-200">
-                          End Page
-                        </Label>
-                        <Input
-                          type="number"
-                          min="1"
-                          max={numPages}
-                          value={pageRangeEnd}
-                          onChange={(e) => setPageRangeEnd(parseInt(e.target.value))}
-                          className="w-full mt-1 bg-gray-700 border-gray-600 text-gray-100"
-                        />
-                      </div>
+                    <div>
+                      <Label htmlFor="endPage" className="text-sm font-medium">
+                        End Page
+                      </Label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max={numPages}
+                        value={pageRangeEnd}
+                        onChange={(e) => setPageRangeEnd(parseInt(e.target.value))}
+                        className="w-full mt-1"
+                      />
                     </div>
-                  )}
-                </div>
-              )}
-
-              <div className="mt-6 flex justify-center">
-                <Button
-                  onClick={handleOcr}
-                  disabled={isProcessing || !workerReady || workerInitializing}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isProcessing ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader className="w-5 h-5" />
-                      <span>Processing...</span>
-                    </div>
-                  ) : !workerReady ? (
-                    <div className="flex items-center space-x-2">
-                      <Loader className="w-5 h-5" />
-                      <span>Loading OCR Engine...</span>
-                    </div>
-                  ) : (
-                    "Extract Text"
-                  )}
-                </Button>
+                  </div>
+                )}
               </div>
-            </>
-          )}
+            )}
 
-          {result && (
-            <div className="mt-6 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
-              <div className="flex justify-between items-center mb-3">
-                <h2 className="font-semibold text-xl text-gray-100">Extracted Text</h2>
-                <Button
-                  onClick={handleCopyText}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm"
-                >
-                  Copy Text
-                </Button>
-              </div>
-              <Textarea
-                value={result}
-                readOnly
-                className="w-full h-64 bg-gray-700 border-gray-600 text-gray-100 font-mono text-sm resize-none"
-                placeholder="Extracted text will appear here..."
-              />
+            <div className="flex justify-center">
+              <Button
+                onClick={handleOcr}
+                disabled={isProcessing || !workerReady || workerInitializing}
+              >
+                {isProcessing ? (
+                  <span className="flex items-center">
+                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                    Processing...
+                  </span>
+                ) : !workerReady ? (
+                  <span className="flex items-center">
+                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                    Loading OCR Engine...
+                  </span>
+                ) : (
+                  "Extract Text"
+                )}
+              </Button>
             </div>
-          )}
+          </>
+        )}
 
-          {error && (
-            <Alert className="mt-4 border-red-500 bg-red-900/30 text-red-300">
-              {error}
-            </Alert>
-          )}
-        </div>
+        {result && (
+          <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="font-semibold text-xl">Extracted Text</h2>
+              <Button
+                onClick={handleCopyText}
+              >
+                Copy Text
+              </Button>
+            </div>
+            <Textarea
+              value={result}
+              readOnly
+              className="w-full h-64 bg-white border-gray-300 font-mono text-sm resize-none"
+              placeholder="Extracted text will appear here..."
+            />
+          </div>
+        )}
+
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

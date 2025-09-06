@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload, Download, Bookmark, FileText, Plus, Edit, Trash2, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 export default function PDFBookmarkManager() {
   const [file, setFile] = useState(null);
@@ -217,10 +217,12 @@ export default function PDFBookmarkManager() {
   );
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Bookmark Manager"
+      subtitle="Add, edit, and organize PDF bookmarks to improve document navigation"
       toolName="PDF Bookmark Manager"
       toolDescription="Add, edit, and organize PDF bookmarks to improve document navigation. Create hierarchical bookmark structures, edit bookmark titles and page numbers, and export bookmark lists. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-bookmark-manager"
+      currentTool="pdf-bookmark-manager"
       steps={[
         "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
         "Add new bookmarks by entering a title, page number, and hierarchy level (0 for main bookmarks, higher numbers for sub-bookmarks).",
@@ -238,15 +240,15 @@ export default function PDFBookmarkManager() {
         },
         {
           question: "How do I edit existing bookmarks?",
-          answer: "Click the edit button (pencil icon) next to any bookmark to modify its title, page number, or level. You can also use the up/down arrows to reorder bookmarks in the list."
+          answer: "Click the edit button next to any bookmark to modify its title, page number, or hierarchy level. You can also delete bookmarks using the trash icon, or reorganize them using the up and down arrows."
         },
         {
-          question: "Can I export my bookmark list?",
-          answer: "Yes, you can export your bookmark list as a JSON file, which includes all bookmark information including titles, page numbers, and hierarchy levels. This is useful for backing up your bookmark structure or importing it into other documents."
+          question: "Can I import existing bookmarks?",
+          answer: "You can import bookmarks by loading a PDF that already contains bookmarks. The tool will automatically populate the bookmark list, which you can then edit, add to, or reorganize."
         },
         {
-          question: "Will the bookmarks work in all PDF viewers?",
-          answer: "Bookmarks created with this tool will be compatible with most PDF viewers including Adobe Reader, browsers, and mobile PDF apps. The bookmark panel can usually be accessed through the viewer's navigation menu."
+          question: "Are my PDF files secure when using this tool?",
+          answer: "Absolutely! All processing happens locally in your browser. Your PDF files never leave your device, ensuring complete privacy and security for your sensitive documents."
         }
       ]}
     >
@@ -262,7 +264,7 @@ export default function PDFBookmarkManager() {
         </div>
 
       {!file ? (
-        <Card className="lg:col-span-2">
+        <Card>
           <CardHeader>
             <CardTitle>Upload PDF File</CardTitle>
             <CardDescription>
@@ -404,7 +406,7 @@ export default function PDFBookmarkManager() {
 
           <Card>
             <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Bookmark className="h-4 w-4" aria-hidden="true" />
                 <span>All processing happens locally in your browser. Your files never leave your device.</span>
               </div>
@@ -413,6 +415,6 @@ export default function PDFBookmarkManager() {
         </div>
       )}
     </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

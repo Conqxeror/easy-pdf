@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, Download, FileText, BarChart3, TrendingUp, Save, UploadCloud } from "lucide-react";
 // import { trackEvent } from "@/lib/analytics"; // Commented out unused import
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import FileDropzone from "@/components/ui/FileDropzone";
 
 export default function ReportGeneratorPage() {
@@ -92,8 +92,9 @@ export default function ReportGeneratorPage() {
     }
   };
 
-  // Content for How-to and FAQ
-  const howToSteps = [
+  const toolName = "Report Generator";
+  const toolDescription = "Create professional business reports with sections, metrics, charts, and recommendations.";
+  const steps = [
     "Enter report information (title, author, date, etc.).",
     "Add an executive summary for quick insights.",
     "Input key metrics to highlight important data.",
@@ -153,12 +154,18 @@ export default function ReportGeneratorPage() {
   };
 
   return (
-    <ToolPageContent
-      toolName="Report Generator"
-      toolDescription="Create professional business reports with sections, metrics, charts, and recommendations."
-      steps={howToSteps}
+    <ToolPageLayout
+      title="Report Generator"
+      subtitle="Create professional business reports with sections, metrics, charts, and recommendations."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
       faqs={faqs}
       currentTool="report-generator"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Report Generator', href: '/report-generator' }
+      ]}
     >
       <div className="space-y-6">
         {banner.message && (
@@ -199,7 +206,7 @@ export default function ReportGeneratorPage() {
           </CardContent>
         </Card>
         {/* BEGIN RESTORED REPORT BUILDER UI */}
-        <Card className="mt-6 border border-gray-700">
+        <Card className="border border-gray-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="w-5 h-5" />
@@ -549,15 +556,14 @@ export default function ReportGeneratorPage() {
           <Button
             onClick={generateReportPDF}
             disabled={isGenerating || !reportData.title || !reportData.author}
-            size="lg"
-            className="bg-indigo-600 hover:bg-indigo-700"
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             aria-label="Generate Report PDF"
           >
             {isGenerating ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
                 Generating Report...
-              </>
+              </span>
             ) : (
               <>
                 <Download className="w-4 h-4 mr-2" />
@@ -568,6 +574,6 @@ export default function ReportGeneratorPage() {
         </div>
         {/* END RESTORED REPORT BUILDER UI */}
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

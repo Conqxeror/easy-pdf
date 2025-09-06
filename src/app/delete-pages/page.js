@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function DeletePagesPage() {
   const [files, setFiles] = useState([]);
@@ -18,209 +18,182 @@ export default function DeletePagesPage() {
   const [selected, setSelected] = useState([]);
   const [pageRangeInput, setPageRangeInput] = useState(""); // New state for page range input
   const [pageRangeError, setPageRangeError] = useState(""); // New state for page range error
-  const [deletedPdfUrl, setDeletedPdfUrl] = useState(null); // New state for the result PDF URL
-  const [downloadFileName, setDownloadFileName] = useState(""); // New state for download filename
+  const [deletedPdfUrl, setDeletedPdfUrl] = useState(null);
+  const [downloadFileName, setDownloadFileName] = useState("");
 
-  // Cleanup function for object URLs to prevent memory leaks
+  // Cleanup object URL on unmount or when deletedPdfUrl changes
   useEffect(() => {
     return () => {
       if (deletedPdfUrl) {
-        URL.revokeObjectURL(deletedPdfUrl);
+        try { URL.revokeObjectURL(deletedPdfUrl); } catch { /* ignore */ }
       }
     };
-  }, [deletedPdfUrl]); // Run when deletedPdfUrl changes or component unmounts
+  }, [deletedPdfUrl]);
 
-  /**
-   * Handles the selection of PDF files.
-   * Clears previous errors and resets page count and selected pages for a new file.
-   * @param {File[]} newFiles - An array containing the newly selected file.
-   */
   const handleFiles = async (newFiles) => {
-    setFiles(newFiles);
-    setError(""); // Clear any previous errors when new files are selected
-    setNumPages(0); // Reset page count
-    setSelected([]); // Reset selected pages
-    setPageRangeInput(""); // Reset page range input
-    setPageRangeError(""); // Reset page range error
+    setError("");
+    setNumPages(0);
+    setSelected([]);
+    setDeletedPdfUrl(null);
+    setPageRangeInput("");
+    setPageRangeError("");
 
     if (newFiles.length === 0) {
-      return; // No file selected, nothing to do
-    }
-
-    try {
-      const file = newFiles[0];
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
-      setNumPages(pdfDoc.getPageCount()); // Update total page count
-    } catch (e) {
-      // Catch and display error if PDF loading fails
-      setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF loading error:", e);
-    }
-  };
-
-  /**
-   * Toggles the selection state of a page.
-   * If the page is already selected, it's unselected. Otherwise, it's added to selected.
-   * @param {number} idx - The index of the page to toggle (0-based).
-   */
-  const togglePage = (idx) => {
-    setSelected((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
-  };
-
-  /**
-   * Applies the page range input to select/deselect pages.
-   * Parses input like "1-5, 8, 10" and updates the 'selected' state.
-   */
-  const applyPageRange = () => {
-    setPageRangeError(""); // Clear previous range errors
-    const newSelected = new Set();
-    const parts = pageRangeInput.split(",").map((part) => part.trim());
-
-    for (const part of parts) {
-      if (!part) continue;
-
-      if (part.includes("-")) {
-        const [startStr, endStr] = part.split("-");
-        const start = parseInt(startStr);
-        const end = parseInt(endStr);
-
-        if (
-          isNaN(start) ||
-          isNaN(end) ||
-          start < 1 ||
-          end < 1 ||
-          start > end ||
-          end > numPages
-        ) {
-          setPageRangeError(
-            "Invalid page range format or out of bounds. Example: 1-5, 8"
-          );
-          return;
-        }
-        for (let i = start - 1; i < end; i++) {
-          newSelected.add(i);
-        }
-      } else {
-        const pageNum = parseInt(part);
-        if (isNaN(pageNum) || pageNum < 1 || pageNum > numPages) {
-          setPageRangeError(
-            "Invalid page number or out of bounds. Example: 1, 3, 5"
-          );
-          return;
-        }
-        newSelected.add(pageNum - 1);
-      }
-    }
-    setSelected(Array.from(newSelected).sort((a, b) => a - b));
-  };
-
-  /**
-   * Handles the deletion process.
-   * Loads the original PDF, creates a new one, copies only the unselected pages,
-   * and triggers the download of the new PDF.
-   */
-  const handleDelete = async () => {
-    // Basic validation: ensure a file is uploaded
-    if (files.length === 0) {
-      setError("Please upload a PDF file.");
+      setFiles([]);
       return;
     }
 
-    // Additional validation: ensure at least one page is selected for deletion
-    // The button's disabled state already handles this from a UX perspective,
-    // but this adds an extra layer of safety.
+    const file = newFiles[0];
+    setFiles([file]);
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      setNumPages(pdfDoc.getPageCount());
+    } catch (err) {
+      setError("Failed to load PDF. Please ensure it's a valid PDF file.");
+      setFiles([]);
+      console.error("PDF load error:", err);
+    }
+  };
+
+  const togglePageSelection = (pageIndex) => {
+    setSelected(prev => 
+      prev.includes(pageIndex) 
+        ? prev.filter(i => i !== pageIndex) 
+        : [...prev, pageIndex]
+    );
+  };
+
+  const parseAndSelectPageRange = () => {
+    if (!pageRangeInput.trim()) {
+      setPageRangeError("Please enter a page range.");
+      return;
+    }
+
+    try {
+      const ranges = pageRangeInput.split(',').map(range => range.trim());
+      const selectedPages = new Set();
+
+      for (const range of ranges) {
+        if (range.includes('-')) {
+          const [startStr, endStr] = range.split('-');
+          const start = parseInt(startStr.trim());
+          const end = parseInt(endStr.trim());
+
+          if (isNaN(start) || isNaN(end) || start < 1 || end > numPages || start > end) {
+            setPageRangeError(`Invalid range: ${range}. Please enter valid page numbers between 1 and ${numPages}.`);
+            return;
+          }
+
+          for (let i = start; i <= end; i++) {
+            selectedPages.add(i - 1); // Convert to 0-based index
+          }
+        } else {
+          const pageNum = parseInt(range.trim());
+          if (isNaN(pageNum) || pageNum < 1 || pageNum > numPages) {
+            setPageRangeError(`Invalid page number: ${pageNum}. Please enter valid page numbers between 1 and ${numPages}.`);
+            return;
+          }
+          selectedPages.add(pageNum - 1); // Convert to 0-based index
+        }
+      }
+
+      setSelected(Array.from(selectedPages));
+      setPageRangeError("");
+    } catch (_error) { // eslint-disable-line no-unused-vars
+      setPageRangeError("Invalid page range format. Please use comma-separated numbers or ranges (e.g., 1,3,5-10).");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (files.length === 0) {
+      setError("Please upload a PDF file first.");
+      return;
+    }
     if (selected.length === 0) {
       setError("Please select at least one page to delete.");
       return;
     }
 
-    setIsProcessing(true); // Indicate that processing has started
-    setError(""); // Clear any previous errors
+    setIsProcessing(true);
+    setError("");
 
     try {
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
-      const srcDoc = await PDFDocument.load(arrayBuffer); // Load the source PDF
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
 
-      const newDoc = await PDFDocument.create(); // Create a new empty PDF document
+      // Create a new PDF document
+      const newPdfDoc = await PDFDocument.create();
 
-      // Iterate through all pages of the source document
-      for (let i = 0; i < srcDoc.getPageCount(); i++) {
-        // If the current page index is NOT in the 'selected' array (meaning it's not marked for deletion)
+      // Get all pages except the selected ones
+      const pagesToKeep = [];
+      for (let i = 0; i < numPages; i++) {
         if (!selected.includes(i)) {
-          // Copy the page from the source document to the new document
-          // copyPages returns an array, so we destructure to get the single copied page
-          const [copiedPage] = await newDoc.copyPages(srcDoc, [i]);
-          newDoc.addPage(copiedPage); // Add the copied page to the new document
+          pagesToKeep.push(i);
         }
       }
 
-      // Save the new PDF document to bytes
-      const pdfBytes = await newDoc.save();
+      // Copy pages to keep to the new document
+      const copiedPages = await newPdfDoc.copyPages(pdfDoc, pagesToKeep);
+      copiedPages.forEach(page => newPdfDoc.addPage(page));
 
-      // Create a Blob from the PDF bytes, specifying the MIME type
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      // Create a URL for the Blob, allowing it to be downloaded
+      // Save the new PDF
+      const newPdfBytes = await newPdfDoc.save();
+      const blob = new Blob([newPdfBytes], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
-      
-      // Set the URL for preview/download instead of auto-downloading
-      setDeletedPdfUrl(url);
-      setDownloadFileName(`deleted-pages-${new Date().toISOString().slice(0, 10)}.pdf`);
 
-      setError(""); // Clear error on successful operation
-    } catch (e) {
-      // Catch and display any errors during the deletion process
+      setDeletedPdfUrl((prev) => {
+  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+        return url;
+      });
+      setDownloadFileName(`modified_${file.name}`);
+
+      setError("");
+    } catch (err) {
+      console.error("Delete pages error:", err);
       setError("Failed to delete pages. Please try again.");
-      console.error("PDF deletion error:", e);
     } finally {
-      // Ensure processing state is reset, regardless of success or failure
       setIsProcessing(false);
     }
   };
 
   const toolName = "Delete PDF Pages";
-  const toolDescription = "Easily remove unwanted pages from your PDF documents with our free online tool. Select specific pages or a range of pages to delete, and create a new, cleaner PDF in seconds. All processing is done securely in your browser, ensuring your files remain private.";
+  const toolDescription = "Remove unwanted pages from your PDF documents with our free online tool. Select specific pages or page ranges to delete, and instantly get a clean, streamlined PDF. Our tool processes your files directly in your browser, ensuring complete privacy and security. Perfect for trimming documents, removing blank pages, or redacting sensitive content.";
   const steps = [
     "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
-    "You will see a list of page numbers. Click on the page numbers you wish to remove. Selected pages will be highlighted.",
-    "Alternatively, use the 'Enter Page Range' input to specify pages for deletion (e.g., '1-5, 8, 10').",
-    "Click the 'Download PDF (Pages Deleted)' button to process and save your new PDF without the selected pages.",
+    "View the document preview and select the pages you want to delete by clicking on them, or enter page numbers/ranges in the input field.",
+    "Click the 'Delete Selected Pages' button to process your document.",
+    "Download your newly modified PDF with the selected pages removed.",
   ];
   const faqs = [
     {
       question: "Is it free to delete pages from a PDF?",
-      answer:
-        "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations.",
+      answer: "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations."
     },
     {
       question: "Are my files secure when deleting pages?",
-      answer:
-        "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+      answer: "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
     },
     {
       question: "Can I delete multiple pages at once?",
-      answer:
-        "Yes, you can select multiple individual pages or specify a range of pages to delete simultaneously. Our tool is designed for efficient bulk deletion.",
+      answer: "Yes, you can select multiple individual pages or specify page ranges to delete. Simply click on the pages you want to remove or enter ranges like '1-5,8,10-15' in the input field."
     },
     {
-      question: "What happens if I accidentally delete a page?",
-      answer:
-        "Our tool creates a new PDF with the selected pages removed. Your original PDF remains untouched on your device. If you make a mistake, simply re-upload the original PDF and try again.",
+      question: "Can I undo page deletion?",
+      answer: "Once you've downloaded the modified PDF, the deleted pages are permanently removed. To recover them, you would need to use the original PDF file. We recommend keeping a backup of your original document."
     },
     {
-      question: "Is there a file size limit for deleting pages?",
-      answer:
-        "Yes, the maximum file size for a PDF to be processed is 50MB. For larger files, processing might be slower due to client-side operations.",
-    },
+      question: "Is there a limit to the number of pages I can delete?",
+      answer: "No, you can delete as many pages as you want from your PDF. The tool works with documents of any size, though processing speed may vary based on file complexity."
+    }
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Delete PDF Pages"
-      subtitle="Effortlessly remove specific pages from your PDF documents directly in your browser. Your files stay private."
+      subtitle="Remove unwanted pages from your PDF documents. Select specific pages or ranges to delete."
       toolName={toolName}
       toolDescription={toolDescription}
       steps={steps}
@@ -245,11 +218,11 @@ export default function DeletePagesPage() {
         />
 
         {numPages > 0 && (
-          <div className="my-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
-            <h2 className="font-semibold text-xl mb-3 text-gray-100">
+          <div className="my-4 p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200">
+            <h2 className="font-semibold text-xl mb-3 text-gray-800">
               Select Pages to Delete ({selected.length} selected)
             </h2>
-            <p className="text-sm text-gray-400 mb-4">
+            <p className="text-sm text-gray-500 mb-4">
               Click on the page numbers you wish to remove. Selected pages
               will be highlighted in red.
             </p>
@@ -257,7 +230,7 @@ export default function DeletePagesPage() {
             <div className="mb-4">
               <Label
                 htmlFor="page-range"
-                className="block text-sm font-medium text-gray-300 mb-2"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Enter Page Range (e.g., 1-5, 8, 10):{" "}
                 {numPages ? `/ ${numPages} pages` : ""}
@@ -269,11 +242,11 @@ export default function DeletePagesPage() {
                   value={pageRangeInput}
                   onChange={(e) => setPageRangeInput(e.target.value)}
                   placeholder="e.g., 1-3, 5, 7-9"
-                  className="flex-grow bg-gray-700 border-gray-600 text-gray-100 placeholder-gray-400"
+                  className="flex-grow bg-white border-gray-300 text-gray-800 placeholder-gray-400"
                   disabled={isProcessing}
                 />
                 <Button
-                  onClick={applyPageRange}
+                  onClick={parseAndSelectPageRange}
                   variant="default"
                   className="px-4 py-2"
                   disabled={isProcessing || !pageRangeInput.trim()}
@@ -282,7 +255,7 @@ export default function DeletePagesPage() {
                 </Button>
               </div>
               {pageRangeError && (
-                <p className="text-red-400 text-sm mt-2">
+                <p className="text-red-600 text-sm mt-2">
                   {pageRangeError}
                 </p>
               )}
@@ -301,7 +274,7 @@ export default function DeletePagesPage() {
                       selected.includes(i) ? "destructive" : "success"
                     }
                     aria-label={`Toggle delete for page ${i + 1}`}
-                    onClick={() => togglePage(i)}
+                    onClick={() => togglePageSelection(i)}
                     className="w-20"
                   >
                     Page {i + 1}
@@ -320,7 +293,6 @@ export default function DeletePagesPage() {
 
         <div className="flex justify-center">
           <Button
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             onClick={handleDelete}
             disabled={isProcessing || numPages === 0 || selected.length === 0}
             aria-label="Delete selected pages"
@@ -338,21 +310,21 @@ export default function DeletePagesPage() {
         </div>
 
         {deletedPdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
-            <div className="w-full text-center space-y-4 text-gray-100">
-              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+            <div className="w-full text-center space-y-4 text-gray-800">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 Pages Deleted Successfully
               </h3>
-              <p className="text-gray-400">
+              <p className="text-gray-500">
                 {selected.length} page(s) have been removed from your document.
               </p>
             </div>
 
             <div className="flex justify-center">
-              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+              <Button asChild variant="success" size="lg">
                 <a
                   href={deletedPdfUrl}
                   download={downloadFileName}
@@ -372,6 +344,6 @@ export default function DeletePagesPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

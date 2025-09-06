@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import JSZip from "jszip";
 import Image from "next/image";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Configure pdfjs worker
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -57,8 +57,8 @@ export default function PdfToJpgPage() {
 
   /**
    * Handles file selection from the dropzone.
-   * Loads the PDF and sets total pages.
-   * @param {File[]} files - An array of selected files.
+   * Loads the PDF and sets total pages for the range input.
+   * @param {File[]} files - An array of selected files (should be only one PDF).
    */
   const handleFiles = async (files) => {
     const selectedFile = files[0];
@@ -67,7 +67,7 @@ export default function PdfToJpgPage() {
     setFileName(selectedFile ? selectedFile.name : "");
     setError("");
     setImages([]);
-    setTotalPages(0); // Reset total pages
+    setTotalPages(0); // Reset page count
     setSelectedPages("all"); // Reset selected pages option
     setCurrentProgress(0);
     setCurrentConvertingPage(0);
@@ -83,78 +83,53 @@ export default function PdfToJpgPage() {
       setImages([]); // Clear the array
     }
 
-    if (!selectedFile) return;
-
-    // Temporarily set processing for PDF loading
-    setIsProcessing(true);
-
-    try {
-      const arrayBuffer = await selectedFile.arrayBuffer();
-      const pdf = await pdfjs.getDocument(arrayBuffer).promise;
-      setTotalPages(pdf.numPages);
-    } catch {
-      setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      setFile(null);
-      setFileName("");
-    } finally {
-      setIsProcessing(false); // End processing after PDF load attempt
-    }
-  };
-
-  /**
-   * Renders a single image to the preview canvas.
-   * @param {string} imageUrl - Data URL or Object URL of the image.
-   */
-  const renderImagePreview = useCallback((imageUrl) => {
-    const canvas = imagePreviewCanvasRef.current;
-    if (!canvas || !imageUrl) {
-      if (canvas) {
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.height = 0; // Collapse canvas if no image
-      }
+    if (files.length === 0) {
       return;
     }
 
-    const ctx = canvas.getContext("2d");
-    const img = new window.Image(); // Use window.Image to avoid conflict with next/image
-    img.onload = () => {
-      const aspectRatio = img.width / img.height;
-      const desiredWidth = 300; // Fixed width for preview
-      canvas.width = desiredWidth;
-      canvas.height = desiredWidth / aspectRatio;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    };
-    img.onerror = () => {
-      console.error("Failed to load image for preview.");
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "red";
-      ctx.fillText("Error loading image", 10, 20);
-    };
-    img.src = imageUrl;
-  }, []);
-
-  // Effect to update image preview when `images` changes and there's a single non-zip image
-  useEffect(() => {
-    if (images.length === 1 && !images[0].isZip) {
-      renderImagePreview(images[0].url);
+    const file = files[0];
+    console.log("Processing file:", file.name, "Type:", file.type, "Size:", file.size);
+    
+    if (file.type === "application/pdf") {
+      try {
+        console.log("Loading PDF document...");
+        const arrayBuffer = await file.arrayBuffer();
+        
+        const loadingTask = pdfjs.getDocument({
+          data: arrayBuffer,
+        });
+        
+        const pdf = await loadingTask.promise;
+        console.log("PDF loaded successfully. Pages:", pdf.numPages);
+        
+        setTotalPages(pdf.numPages);
+        
+      } catch (e) {
+        console.error("PDF loading error:", e);
+        setError("Failed to load PDF. Please ensure it's a valid PDF file.");
+      setFile(null);
+      }
+    } else if (file.type.startsWith("image/")) {
+      console.log("Processing image file");
+      setTotalPages(1);
     } else {
-      // Clear canvas if multiple or no images
-      renderImagePreview(null);
+      setError("Unsupported file type. Please upload a PDF or image file.");
+      setFile(null);
     }
-  }, [images, renderImagePreview]);
+  };
 
   /**
    * Converts the uploaded PDF file to JPG images.
    */
   const convertToJpg = async () => {
+    console.log("convertToJpg called");
+    
     if (!file) {
       setError("Please upload a PDF file first.");
       return;
     }
-
-    setError("");
+    
+    console.log("Starting conversion process...");
     setIsProcessing(true);
     setProcessingMessage("Loading PDF document...");
     setImages([]); // Clear previous images
@@ -164,7 +139,7 @@ export default function PdfToJpgPage() {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       const totalPdfPages = pdf.numPages;
 
       let pagesToConvert = [];
@@ -187,9 +162,7 @@ export default function PdfToJpgPage() {
 
       for (let i = 0; i < pagesToConvert.length; i++) {
         const pageNumber = pagesToConvert[i];
-        setProcessingMessage(
-          `Rendering page ${pageNumber} of ${pagesToConvert.length}...`
-        );
+        setProcessingMessage(`Rendering page ${pageNumber} of ${pagesToConvert.length}...`);
         const page = await pdf.getPage(pageNumber);
         const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better image quality
 
@@ -249,20 +222,16 @@ export default function PdfToJpgPage() {
       }
       setImages(convertedImages);
       setProcessingMessage("Conversion complete!");
-    } catch {
-      console.error("Conversion error:");
+      
+    } catch (e) {
+      console.error("Conversion error:", e);
       setError(
         "Failed to convert PDF to JPG. The file may be corrupted or password protected."
       );
     } finally {
+      // Always terminate the worker
       setIsProcessing(false);
-      // Reset progress after a short delay
-      setTimeout(() => {
-        setCurrentProgress(0);
-        setCurrentConvertingPage(0);
-        setTotalConvertingPages(0);
-        setProcessingMessage("");
-      }, 1000);
+      setTimeout(() => setProcessingMessage(""), 2000);
     }
   };
 
@@ -280,7 +249,7 @@ export default function PdfToJpgPage() {
   }, []);
 
   const toolName = "PDF to JPG Converter";
-  const toolDescription = "Convert your PDF files to high-quality JPG images with our free online tool. Select the pages you want to convert and download them as individual JPG files or as a single ZIP file. Our tool ensures excellent image quality while processing your files securely in your browser, keeping your documents private.";
+  const toolDescription = "Convert your PDF files to high-quality JPG images with our free online tool. Extract specific pages or convert the entire document. Our converter processes your files directly in your browser, ensuring privacy and providing instant results. Combine multiple PDF pages into JPG images quickly and securely.";
   const steps = [
     "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
     "Choose which pages to convert: all pages, or a specific page number.",
@@ -299,24 +268,24 @@ export default function PdfToJpgPage() {
         "Absolutely. Your privacy is our top priority. All PDF to JPG conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
     },
     {
-      question: "Can I convert multiple pages at once?",
+      question: "Can I extract text from specific pages of a multi-page PDF?",
       answer:
-        "Yes, you can convert all pages of a PDF to JPG at once. If you choose this option, all individual JPG images will be bundled into a single ZIP file for easy download.",
+        "Yes, you can choose to convert all pages, a single page, or a specific range of pages. This is useful for large documents where you only need images from certain sections.",
     },
     {
-      question: "What quality are the output JPG images?",
-    answer:
-      "Our tool converts PDF pages to JPG images with high quality (90% compression) to balance file size and visual fidelity. This ensures your images look great without being excessively large.",
+      question: "What file types does the PDF to JPG tool support?",
+      answer:
+        "Our tool supports PDF documents and various image formats including JPG, PNG, GIF, and BMP. For best results, ensure your documents have clear, high-quality text and good contrast.",
     },
     {
       question: "Is there a file size limit for PDF to JPG conversion?",
-    answer:
-      "Yes, the maximum file size for a PDF to be converted to JPG is 50MB. For larger files, processing might be slower due to client-side operations.",
+      answer:
+        "Yes, the maximum file size for a PDF to be converted to JPG is 50MB. For larger files, processing might be slower due to client-side operations.",
     },
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="PDF to JPG Converter"
       subtitle="Convert your PDF document into high-quality JPG images. Process specific pages or the entire document."
       toolName={toolName}
@@ -531,6 +500,6 @@ export default function PdfToJpgPage() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }

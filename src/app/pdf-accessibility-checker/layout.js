@@ -93,7 +93,7 @@ const faqStructuredData = {
   ]
 };
 
-export default function Layout({ children }) {
+export default function PDFAccessibilityCheckerLayout({ children }) {
   return (
     <>
       <script

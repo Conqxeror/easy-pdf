@@ -49,51 +49,17 @@ export default function ToolPage() {
 }
 ```
 
-## Key Changes Made
+## Key Components
 
-1. **Replaced `ToolPageContent` with `StandardToolLayout`**: 
-   - `ToolPageContent` is now a child component of `StandardToolLayout`
-   - `StandardToolLayout` provides the consistent page structure and styling
-
-2. **Standardized page structure**:
-   - Consistent spacing using `space-y-6` classes
-   - Consistent button styling with gradient backgrounds
-   - Consistent loading states with spinners
-   - Consistent success states with green accents
-   - Consistent error handling with Alert components
-
-3. **Improved component organization**:
-   - Moved FAQ content to the `faqs` prop
-   - Moved steps content to the `steps` prop
-   - Moved tool description to the `toolDescription` prop
-   - Moved tool name to the `toolName` prop
-
-4. **Added breadcrumbs**:
-   - All tool pages now include breadcrumb navigation
-   - Consistent breadcrumb structure across all pages
-
-5. **Standardized button styling**:
-   - Processing buttons now show spinners with "Processing..." text
-   - Success buttons use green gradients
-   - Action buttons use blue gradients
-   - Consistent padding and shadow effects
-
-## Updated Components
-
-### StandardToolLayout.jsx
-Located at `src/components/ui/StandardToolLayout.jsx`, this component provides:
+### ToolPageLayout.jsx
+Located at `src/components/ui/ToolPageLayout.jsx`, this is the main layout component that provides:
 - Standardized page container with consistent background and text colors
 - Page header with title and subtitle
 - Breadcrumb navigation
 - Main content area with consistent spacing
-- Integration with ToolPageContent for how-to and FAQ sections
-
-### ToolPageContent.jsx
-Located at `src/components/ui/ToolPageContent.jsx`, this component provides:
 - How-to sections with step-by-step instructions
 - FAQ sections with expandable questions
-- Feature highlights with consistent styling
-- Related tools section
+- Call-to-action section
 
 ## Migration Process
 
@@ -102,10 +68,10 @@ To update an existing tool page:
 1. Replace imports:
    ```jsx
    // Old
-   import ToolPageContent from "@/components/ui/ToolPageContent";
+   import UnifiedToolLayout from "@/components/ui/UnifiedToolLayout";
    
    // New
-   import StandardToolLayout from "@/components/ui/StandardToolLayout";
+   import ToolPageLayout from "@/components/ui/ToolPageLayout";
    ```
 
 2. Extract tool content into constants:
@@ -126,10 +92,10 @@ To update an existing tool page:
    ];
    ```
 
-3. Wrap the page content with `StandardToolLayout`:
+3. Wrap the page content with `ToolPageLayout`:
    ```jsx
    return (
-     <StandardToolLayout
+     <ToolPageLayout
        title="Tool Name"
        subtitle="Brief description of what the tool does"
        toolName={toolName}
@@ -143,7 +109,10 @@ To update an existing tool page:
        ]}
      >
        {/* Tool-specific UI components go here */}
-     </StandardToolLayout>
+       <div className="space-y-6">
+         {/* File dropzone, inputs, controls, etc. */}
+       </div>
+     </ToolPageLayout>
    );
    ```
 
@@ -191,6 +160,7 @@ To update an existing tool page:
 ## Tools Updated
 
 The following tool pages have been updated to use the new standardized structure:
+- Delete Pages
 - Merge PDFs
 - Compress PDF
 - Split PDF
@@ -199,13 +169,21 @@ The following tool pages have been updated to use the new standardized structure
 - Rotate PDF
 - JPG to PDF
 - PDF to JPG
-- Delete Pages
 - Watermark
-- Sign/Annotate PDF
+- Sign PDF
+- Advanced OCR
+- Certificate Generator
+- Form Filler
+- Invoice Generator
+- PDF to JPG
+- PDF to JPG
+- Invoice Generator
+- OCR
+- Invoice Generator
 
 ## Remaining Work
 
-There are approximately 30 more tool pages that need to be updated to use this new standardized structure. The process for each page is:
+There are approximately 40 more tool pages that need to be updated to use this new standardized structure. The process for each page is:
 1. Follow the migration process outlined above
 2. Test the page to ensure all functionality works correctly
 3. Verify consistent styling with other tool pages

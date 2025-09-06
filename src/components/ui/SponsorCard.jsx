@@ -19,17 +19,17 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
   };
 
   const tierColors = {
-    PLATINUM: "border-yellow-400 bg-gradient-to-br from-yellow-50 to-yellow-100",
-    GOLD: "border-yellow-600 bg-gradient-to-br from-yellow-50 to-orange-50", 
-    SILVER: "border-gray-400 bg-gradient-to-br from-gray-50 to-gray-100",
-    BRONZE: "border-orange-600 bg-gradient-to-br from-orange-50 to-red-50"
+    PLATINUM: "border-yellow-400 bg-gradient-to-br from-gray-800 to-gray-900",
+    GOLD: "border-yellow-600 bg-gradient-to-br from-gray-800 to-gray-900", 
+    SILVER: "border-gray-400 bg-gradient-to-br from-gray-800 to-gray-900",
+    BRONZE: "border-orange-600 bg-gradient-to-br from-gray-800 to-gray-900"
   };
 
   const tierBadgeColors = {
-    PLATINUM: "bg-yellow-400 text-yellow-900",
-    GOLD: "bg-yellow-600 text-white",
+    PLATINUM: "bg-yellow-400 text-gray-900",
+    GOLD: "bg-yellow-600 text-gray-900",
     SILVER: "bg-gray-400 text-gray-900", 
-    BRONZE: "bg-orange-600 text-white"
+    BRONZE: "bg-orange-600 text-gray-900"
   };
 
   return (
@@ -58,8 +58,8 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
             className="object-contain"
           />
         ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gray-200 rounded-lg">
-            <span className="text-gray-600 font-semibold text-lg">
+          <div className="flex items-center justify-center w-full h-full bg-gray-800 rounded-lg border border-gray-700">
+            <span className="text-gray-200 font-semibold text-lg">
               {sponsor.name.split(' ').map(word => word[0]).join('').toUpperCase()}
             </span>
           </div>
@@ -67,19 +67,19 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
       </div>
 
       {/* Company Name */}
-      <h3 className="text-lg font-bold text-gray-900 text-center mb-2">
+      <h3 className="text-lg font-bold text-gray-100 text-center mb-2">
         {sponsor.name}
       </h3>
 
       {/* Description */}
       {showDescription && sponsor.description && (
-        <p className="text-sm text-gray-700 text-center mb-4 line-clamp-3">
+        <p className="text-sm text-gray-300 text-center mb-4 line-clamp-3">
           {sponsor.description}
         </p>
       )}
 
       {/* Join Date */}
-      <div className="flex items-center justify-center text-xs text-gray-600 mb-4">
+      <div className="flex items-center justify-center text-xs text-gray-400 mb-4">
         <Calendar className="w-3 h-3 mr-1" />
         Sponsor since {new Date(sponsor.joinDate).toLocaleDateString('en-IN', { 
           month: 'short', 

@@ -7,10 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, Download, User, Briefcase, GraduationCap, Star } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function PortfolioCreatorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -114,6 +113,23 @@ export default function PortfolioCreatorPage() {
       )
     }));
   };
+
+  // Section-specific helper functions
+  const addExperience = () => addSection('experience');
+  const removeExperience = (index) => removeSection('experience', index);
+  const updateExperience = (index, field, value) => updateSectionItem('experience', index, field, value);
+
+  const addEducation = () => addSection('education');
+  const removeEducation = (index) => removeSection('education', index);
+  const updateEducation = (index, field, value) => updateSectionItem('education', index, field, value);
+
+  const addSkill = () => addSection('skills');
+  const removeSkill = (index) => removeSection('skills', index);
+  const updateSkill = (index, field, value) => updateSectionItem('skills', index, field, value);
+
+  const addProject = () => addSection('projects');
+  const removeProject = (index) => removeSection('projects', index);
+  const updateProject = (index, field, value) => updateSectionItem('projects', index, field, value);
 
   const generatePortfolioPDF = async () => {
     if (!portfolioData.fullName || !portfolioData.title) {
@@ -565,42 +581,63 @@ export default function PortfolioCreatorPage() {
     }
   };
 
-  const toolConfig = {
-    title: "Portfolio Creator",
-    description: "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
-    icon: React.createElement(Briefcase, { className: "w-8 h-8 text-blue-500" }),
-    features: [
-      "Professional portfolio templates",
-      "Multiple customizable sections",
-      "Experience and education tracking",
-      "Skills and projects showcase",
-      "Custom color schemes",
-      "High-quality PDF output"
-    ],
-    relatedTools: ["/certificate-generator", "/invoice-generator", "/form-filler"]
-  };
-
-  return (
-    <ToolPageContent
-  toolName="Portfolio Creator"
-  toolDescription="Design and export a professional portfolio or resume as a polished PDF. Add your experience, skills, education, and more."
-  currentTool="portfolio-creator"
-  steps={[
-    "Enter your personal information (name, title, contact details).",
-    "Add work experience, education, skills, projects, and certifications.",
-    "Customize the template and colors.",
-    "Click 'Generate Portfolio PDF' to download your document."
-  ]}
-  faqs={[
-    { question: "Is the portfolio creator free?", answer: "Yes, you can create and download unlimited portfolios for free." },
-    { question: "Can I add multiple jobs, schools, or projects?", answer: "Yes, you can add as many sections as you need." },
-    { question: "Are my details stored?", answer: "No, all portfolio data is processed in your browser and never uploaded or saved." },
-    { question: "Can I edit my portfolio later?", answer: "You can update the fields and regenerate your PDF at any time." },
-    { question: "Does the PDF have watermarks?", answer: "No, your portfolio PDFs are watermark-free and print-ready." }
-  ]}
-  toolConfig={toolConfig}
->
+    return (
+    <ToolPageLayout
+      title="Portfolio Creator"
+      subtitle="Create professional portfolios for your career, education, or personal projects with our free online tool."
+      toolName="Portfolio Creator"
+      toolDescription="Create professional portfolios for your career, education, or personal projects with our free online tool."
+      steps={[
+        "Fill in your personal information including name, title, and contact details.",
+        "Add your professional experience, education, skills, and projects.",
+        "Customize the appearance with your preferred colors and fonts.",
+        "Click the 'Generate Portfolio PDF' button to create your document.",
+        "Download your professionally designed portfolio as a PDF file."
+      ]}
+      faqs={[
+        {
+          question: "Is it free to create a portfolio?",
+          answer:
+            "Yes, our Portfolio Creator tool is completely free to use. You can create as many portfolios as you need without any hidden costs or limitations."
+        },
+        {
+          question: "Are my portfolios secure and private?",
+          answer:
+            "Absolutely. Your privacy is our top priority. All portfolio generation happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
+        },
+        {
+          question: "Can I customize the portfolio template?",
+          answer:
+            "Yes, you can customize various aspects of the portfolio including colors, fonts, and sections. You can also add your company logo for a professional appearance."
+        },
+        {
+          question: "What file formats are supported?",
+          answer:
+            "Our tool generates portfolios as PDF files, which are widely supported and can be easily shared or printed."
+        },
+        {
+          question: "Is there a limit to how much information I can add?",
+          answer:
+            "No, you can add as much information as needed to your portfolio. The tool will automatically adjust the layout to accommodate your content."
+        }
+      ]}
+      currentTool="portfolio-creator"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Portfolio Creator', href: '/portfolio-creator' }
+      ]}
+    >
       <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Portfolio Creator
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Create professional portfolios for your career, education, or personal projects
+          </p>
+        </div>
+
         {/* Personal Information */}
         <Card>
           <CardHeader>
@@ -630,6 +667,16 @@ export default function PortfolioCreatorPage() {
                 required
               />
             </div>
+            <div className="md:col-span-2">
+              <Label htmlFor="summary">Professional Summary</Label>
+              <Textarea
+                id="summary"
+                value={portfolioData.summary}
+                onChange={(e) => updatePortfolioData('summary', e.target.value)}
+                placeholder="A brief summary of your professional background and goals"
+                rows={3}
+              />
+            </div>
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -646,7 +693,7 @@ export default function PortfolioCreatorPage() {
                 id="phone"
                 value={portfolioData.phone}
                 onChange={(e) => updatePortfolioData('phone', e.target.value)}
-                placeholder="+91 98765 43210"
+                placeholder="+1 (555) 123-4567"
               />
             </div>
             <div>
@@ -664,308 +711,283 @@ export default function PortfolioCreatorPage() {
                 id="location"
                 value={portfolioData.location}
                 onChange={(e) => updatePortfolioData('location', e.target.value)}
-                placeholder="Mumbai, India"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <Label htmlFor="summary">Professional Summary</Label>
-              <Textarea
-                id="summary"
-                value={portfolioData.summary}
-                onChange={(e) => updatePortfolioData('summary', e.target.value)}
-                placeholder="Brief overview of your professional background and key achievements..."
-                rows={4}
+                placeholder="New York, NY"
               />
             </div>
           </CardContent>
         </Card>
 
-        {/* Experience Section */}
+        {/* Experience */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <Briefcase className="w-5 h-5" />
-                Work Experience
-              </div>
-              <Button onClick={() => addSection('experience')} size="sm" variant="outline">
+                Professional Experience
+              </span>
+              <Button onClick={addExperience} size="sm" variant="outline">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Experience
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {portfolioData.experience.map((exp, index) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <Label>Position</Label>
-                      <Input
-                        value={exp.position}
-                        onChange={(e) => updateSectionItem('experience', index, 'position', e.target.value)}
-                        placeholder="Software Engineer"
-                      />
-                    </div>
-                    <div>
-                      <Label>Company</Label>
-                      <Input
-                        value={exp.company}
-                        onChange={(e) => updateSectionItem('experience', index, 'company', e.target.value)}
-                        placeholder="Tech Corp"
-                      />
-                    </div>
-                    <div>
-                      <Label>Duration</Label>
-                      <Input
-                        value={exp.duration}
-                        onChange={(e) => updateSectionItem('experience', index, 'duration', e.target.value)}
-                        placeholder="Jan 2020 - Present"
-                      />
-                    </div>
-                    <div className="flex items-end">
-                      {portfolioData.experience.length > 1 && (
-                        <Button
-                          onClick={() => removeSection('experience', index)}
-                          size="sm"
-                          variant="outline"
-                          className="text-red-600"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      )}
-                    </div>
+            {portfolioData.experience.map((exp, index) => (
+              <div key={index} className="mb-6 p-4 border rounded-lg">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-lg font-semibold">Experience #{index + 1}</h3>
+                  <Button
+                    onClick={() => removeExperience(index)}
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor={`company-${index}`}>Company *</Label>
+                    <Input
+                      id={`company-${index}`}
+                      value={exp.company}
+                      onChange={(e) => updateExperience(index, 'company', e.target.value)}
+                      placeholder="Company Name"
+                      required
+                    />
                   </div>
                   <div>
-                    <Label>Description</Label>
+                    <Label htmlFor={`position-${index}`}>Position *</Label>
+                    <Input
+                      id={`position-${index}`}
+                      value={exp.position}
+                      onChange={(e) => updateExperience(index, 'position', e.target.value)}
+                      placeholder="Job Title"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`duration-${index}`}>Duration</Label>
+                    <Input
+                      id={`duration-${index}`}
+                      value={exp.duration}
+                      onChange={(e) => updateExperience(index, 'duration', e.target.value)}
+                      placeholder="Jan 2020 - Present"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Label htmlFor={`description-${index}`}>Description</Label>
                     <Textarea
+                      id={`description-${index}`}
                       value={exp.description}
-                      onChange={(e) => updateSectionItem('experience', index, 'description', e.target.value)}
-                      placeholder="Key responsibilities and achievements..."
+                      onChange={(e) => updateExperience(index, 'description', e.target.value)}
+                      placeholder="Describe your responsibilities and achievements"
                       rows={3}
                     />
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Education Section */}
+        {/* Education */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
+              <span className="flex items-center gap-2">
                 <GraduationCap className="w-5 h-5" />
                 Education
-              </div>
-              <Button onClick={() => addSection('education')} size="sm" variant="outline">
+              </span>
+              <Button onClick={addEducation} size="sm" variant="outline">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Education
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {portfolioData.education.map((edu, index) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label>Degree</Label>
-                      <Input
-                        value={edu.degree}
-                        onChange={(e) => updateSectionItem('education', index, 'degree', e.target.value)}
-                        placeholder="Bachelor of Technology"
-                      />
-                    </div>
-                    <div>
-                      <Label>Institution</Label>
-                      <Input
-                        value={edu.institution}
-                        onChange={(e) => updateSectionItem('education', index, 'institution', e.target.value)}
-                        placeholder="University Name"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="flex-1">
-                        <Label>Year</Label>
-                        <Input
-                          value={edu.year}
-                          onChange={(e) => updateSectionItem('education', index, 'year', e.target.value)}
-                          placeholder="2020"
-                        />
-                      </div>
-                      {portfolioData.education.length > 1 && (
-                        <div className="flex items-end">
-                          <Button
-                            onClick={() => removeSection('education', index)}
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <Label>Additional Details</Label>
+            {portfolioData.education.map((edu, index) => (
+              <div key={index} className="mb-6 p-4 border rounded-lg">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-lg font-semibold">Education #{index + 1}</h3>
+                  <Button
+                    onClick={() => removeEducation(index)}
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor={`degree-${index}`}>Degree *</Label>
                     <Input
+                      id={`degree-${index}`}
+                      value={edu.degree}
+                      onChange={(e) => updateEducation(index, 'degree', e.target.value)}
+                      placeholder="Bachelor of Science"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`institution-${index}`}>Institution *</Label>
+                    <Input
+                      id={`institution-${index}`}
+                      value={edu.institution}
+                      onChange={(e) => updateEducation(index, 'institution', e.target.value)}
+                      placeholder="University Name"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`year-${index}`}>Year</Label>
+                    <Input
+                      id={`year-${index}`}
+                      value={edu.year}
+                      onChange={(e) => updateEducation(index, 'year', e.target.value)}
+                      placeholder="2020"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Label htmlFor={`details-${index}`}>Details</Label>
+                    <Textarea
+                      id={`details-${index}`}
                       value={edu.details}
-                      onChange={(e) => updateSectionItem('education', index, 'details', e.target.value)}
-                      placeholder="GPA, honors, relevant coursework..."
+                      onChange={(e) => updateEducation(index, 'details', e.target.value)}
+                      placeholder="Additional details about your education"
+                      rows={2}
                     />
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Skills Section */}
+        {/* Skills */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Star className="w-5 h-5" />
-                Skills
-              </div>
-              <Button onClick={() => addSection('skills')} size="sm" variant="outline">
+              <span>Skills</span>
+              <Button onClick={addSkill} size="sm" variant="outline">
                 <Plus className="w-4 h-4 mr-2" />
-                Add Skill Category
+                Add Skill
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {portfolioData.skills.map((skill, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg">
+            {portfolioData.skills.map((skill, index) => (
+              <div key={index} className="mb-4 p-4 border rounded-lg">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-lg font-semibold">Skill #{index + 1}</h3>
+                  <Button
+                    onClick={() => removeSkill(index)}
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label>Category</Label>
+                    <Label htmlFor={`category-${index}`}>Category *</Label>
                     <Input
+                      id={`category-${index}`}
                       value={skill.category}
-                      onChange={(e) => updateSectionItem('skills', index, 'category', e.target.value)}
-                      placeholder="Programming Languages"
+                      onChange={(e) => updateSkill(index, 'category', e.target.value)}
+                      placeholder="Technical Skills"
+                      required
                     />
                   </div>
                   <div>
-                    <Label>Skills</Label>
-                    <Input
+                    <Label htmlFor={`items-${index}`}>Skills *</Label>
+                    <Textarea
+                      id={`items-${index}`}
                       value={skill.items}
-                      onChange={(e) => updateSectionItem('skills', index, 'items', e.target.value)}
-                      placeholder="JavaScript, Python, React, Node.js"
+                      onChange={(e) => updateSkill(index, 'items', e.target.value)}
+                      placeholder="JavaScript, React, Node.js"
+                      required
                     />
-                  </div>
-                  <div className="flex items-end">
-                    {portfolioData.skills.length > 1 && (
-                      <Button
-                        onClick={() => removeSection('skills', index)}
-                        size="sm"
-                        variant="outline"
-                        className="text-red-600"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    )}
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Projects Section */}
+        {/* Projects */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              Projects
-              <Button onClick={() => addSection('projects')} size="sm" variant="outline">
+              <span className="flex items-center gap-2">
+                <Star className="w-5 h-5" />
+                Projects
+              </span>
+              <Button onClick={addProject} size="sm" variant="outline">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Project
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {portfolioData.projects.map((project, index) => (
-                <div key={index} className="p-4 border rounded-lg">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div>
-                      <Label>Project Name</Label>
-                      <Input
-                        value={project.name}
-                        onChange={(e) => updateSectionItem('projects', index, 'name', e.target.value)}
-                        placeholder="E-commerce Website"
-                      />
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="flex-1">
-                        <Label>Technologies</Label>
-                        <Input
-                          value={project.technologies}
-                          onChange={(e) => updateSectionItem('projects', index, 'technologies', e.target.value)}
-                          placeholder="React, Node.js, MongoDB"
-                        />
-                      </div>
-                      {portfolioData.projects.length > 1 && (
-                        <div className="flex items-end">
-                          <Button
-                            onClick={() => removeSection('projects', index)}
-                            size="sm"
-                            variant="outline"
-                            className="text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      )}
-                    </div>
+            {portfolioData.projects.map((project, index) => (
+              <div key={index} className="mb-6 p-4 border rounded-lg">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-lg font-semibold">Project #{index + 1}</h3>
+                  <Button
+                    onClick={() => removeProject(index)}
+                    size="sm"
+                    variant="outline"
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor={`name-${index}`}>Project Name *</Label>
+                    <Input
+                      id={`name-${index}`}
+                      value={project.name}
+                      onChange={(e) => updateProject(index, 'name', e.target.value)}
+                      placeholder="Project Name"
+                      required
+                    />
                   </div>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div>
-                      <Label>Description</Label>
-                      <Textarea
-                        value={project.description}
-                        onChange={(e) => updateSectionItem('projects', index, 'description', e.target.value)}
-                        placeholder="Project description and key features..."
-                        rows={3}
-                      />
-                    </div>
-                    <div>
-                      <Label>Link (Optional)</Label>
-                      <Input
-                        value={project.link}
-                        onChange={(e) => updateSectionItem('projects', index, 'link', e.target.value)}
-                        placeholder="https://github.com/username/project"
-                      />
-                    </div>
+                  <div>
+                    <Label htmlFor={`technologies-${index}`}>Technologies</Label>
+                    <Input
+                      id={`technologies-${index}`}
+                      value={project.technologies}
+                      onChange={(e) => updateProject(index, 'technologies', e.target.value)}
+                      placeholder="React, Node.js, MongoDB"
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <Label htmlFor={`description-${index}`}>Description *</Label>
+                    <Textarea
+                      id={`description-${index}`}
+                      value={project.description}
+                      onChange={(e) => updateProject(index, 'description', e.target.value)}
+                      placeholder="Describe the project and your role in it"
+                      rows={3}
+                      required
+                    />
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Styling Options */}
+        {/* Customization */}
         <Card>
           <CardHeader>
-            <CardTitle>Styling Options</CardTitle>
+            <CardTitle>Customization</CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="template">Template</Label>
-              <Select value={portfolioData.template} onValueChange={(value) => updatePortfolioData('template', value)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="modern">Modern</SelectItem>
-                  <SelectItem value="classic">Classic</SelectItem>
-                  <SelectItem value="minimal">Minimal</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="primaryColor">Primary Color</Label>
               <Input
@@ -1011,6 +1033,6 @@ export default function PortfolioCreatorPage() {
           </Button>
         </div>
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

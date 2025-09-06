@@ -16,7 +16,7 @@ import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
   pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 }
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function ReorderPage() {
   const [files, setFiles] = useState([]);
@@ -257,165 +257,176 @@ export default function ReorderPage() {
     }
   };
 
+  const toolName = "Reorder PDF Pages";
+  const toolDescription = "Easily rearrange the pages of your PDF document with our intuitive drag-and-drop interface. Organize your content exactly how you need it, whether you're preparing a report, presentation, or simply tidying up a document. All processing is done securely in your browser, ensuring your files remain private.";
+  const steps = [
+    "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
+    "Once your PDF is loaded, you will see thumbnails of all its pages. Drag and drop the page thumbnails to change their order.",
+    "After arranging the pages to your satisfaction, click the 'Download Reordered PDF' button.",
+    "Your PDF with the new page order will be instantly available for download.",
+  ];
+  const faqs = [
+    {
+      question: "Is it free to reorder PDF pages?",
+      answer:
+        "Yes, our Reorder PDF Pages tool is completely free to use. You can rearrange pages in as many PDF files as you need without any hidden costs or limitations.",
+    },
+    {
+      question: "Are my files secure when reordering pages?",
+      answer:
+        "Absolutely. Your privacy is our top priority. All PDF processing, including reordering, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+    },
+    {
+      question: "Can I reorder pages from multiple PDFs?",
+      answer:
+        "This tool is designed to reorder pages within a single PDF document. If you need to combine pages from multiple PDFs, please use our 'Merge PDF' tool first, and then reorder the combined document.",
+    },
+    {
+      question: "Is there a limit to the number of pages I can reorder?",
+      answer:
+        "While there isn't a strict limit on the number of pages, very large PDFs (e.g., hundreds of pages) might take longer to load and process due to client-side operations. We recommend keeping file sizes manageable for optimal performance.",
+    },
+  ];
+
   return (
-    <>
-      <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col items-center py-12 md:py-20 px-4">
-        <div className="max-w-4xl w-full">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-pink-500">
-            Reorder PDF Pages
-          </h1>
-          <p className="mb-8 text-lg text-gray-300 text-center">
-            Visually reorder pages in your PDF document using drag-and-drop.
-          </p>
-          
-          <FileDropzone
-            accept="application/pdf"
-            multiple={false}
-            onFiles={handleFiles}
-            error={error}
-            setError={setError}
-            label="Upload PDF"
-            description="Drag & drop or click to select a PDF file (Max 50MB)"
-            maxSize={50 * 1024 * 1024}
-            isLoading={isProcessing}
-          />
+    <ToolPageLayout
+      title="Reorder PDF Pages"
+      subtitle="Visually reorder pages in your PDF document using drag-and-drop."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="reorder"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Reorder PDF', href: '/reorder' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          multiple={false}
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Upload PDF"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-          {numPages > 0 && (
-            <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
-              <h2 className="font-semibold text-xl mb-3 text-gray-100">
-                Page Order
-              </h2>
-              <p className="text-sm text-gray-400 mb-4">
-                Drag and drop page thumbnails to change their order.
-              </p>
-              <ul
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto max-h-[500px] p-2 custom-scrollbar"
-                aria-label="Page order list"
-              >
-                {pageOrder.map((originalPageIndex, displayIndex) => (
-                  <li
-                    key={originalPageIndex} // Use originalPageIndex as key for stable identity
-                    draggable="true"
-                    onDragStart={(e) => handleDragStart(e, displayIndex)}
-                    onDragEnter={(e) => handleDragEnter(e, displayIndex)}
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                    onDragEnd={handleDragEnd}
-                    onDragLeave={handleDragLeave} // Added drag leave handler
-                    className={`relative flex flex-col items-center p-2 border rounded-md group
-                                border-gray-600 bg-gray-700
-                                hover:border-blue-500 transition-all duration-200 cursor-grab
-                                ${
-                                  dragItem.current === displayIndex
-                                    ? "shadow-lg opacity-50 border-blue-500"
-                                    : ""
-                                }
-                              `}
-                    // ARIA attributes for drag and drop
-                    aria-grabbed={
-                      dragItem.current === displayIndex ? "true" : "false"
-                    }
-                    aria-dropeffect="move"
-                  >
-                    <span className="text-sm font-medium mb-2 text-gray-100">
-                      Page {originalPageIndex + 1}
-                    </span>
-                    <canvas
-                      ref={(node) => {
-                        // Store the canvas node reference
-                        canvasRefs.current[originalPageIndex] = node;
-                      }}
-                      className="w-full h-auto max-w-[150px] border border-gray-600 rounded-sm bg-white" // Fixed width for thumbnail consistency
-                    ></canvas>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+        {numPages > 0 && (
+          <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
+            <h2 className="font-semibold text-xl mb-3 text-gray-100">
+              Page Order
+            </h2>
+            <p className="text-sm text-gray-400 mb-4">
+              Drag and drop page thumbnails to change their order.
+            </p>
+            <ul
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto max-h-[500px] p-2 custom-scrollbar"
+              aria-label="Page order list"
+            >
+              {pageOrder.map((originalPageIndex, displayIndex) => (
+                <li
+                  key={originalPageIndex} // Use originalPageIndex as key for stable identity
+                  draggable="true"
+                  onDragStart={(e) => handleDragStart(e, displayIndex)}
+                  onDragEnter={(e) => handleDragEnter(e, displayIndex)}
+                  onDragOver={handleDragOver}
+                  onDrop={handleDrop}
+                  onDragEnd={handleDragEnd}
+                  onDragLeave={handleDragLeave} // Added drag leave handler
+                  className={`relative flex flex-col items-center p-2 border rounded-md group
+                              border-gray-600 bg-gray-700
+                              hover:border-blue-500 transition-all duration-200 cursor-grab
+                              ${
+                                dragItem.current === displayIndex
+                                  ? "shadow-lg opacity-50 border-blue-500"
+                                  : ""
+                              }
+                            `}
+                  // ARIA attributes for drag and drop
+                  aria-grabbed={
+                    dragItem.current === displayIndex ? "true" : "false"
+                  }
+                  aria-dropeffect="move"
+                >
+                  <span className="text-sm font-medium mb-2 text-gray-100">
+                    Page {originalPageIndex + 1}
+                  </span>
+                  <canvas
+                    ref={(node) => {
+                      // Store the canvas node reference
+                      canvasRefs.current[originalPageIndex] = node;
+                    }}
+                    className="w-full h-auto max-w-[150px] border border-gray-600 rounded-sm bg-white" // Fixed width for thumbnail consistency
+                  ></canvas>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-          {error && (
-            <Alert variant="destructive" className="mt-4">
-              {error}
-            </Alert>
-          )}
+        {error && (
+          <Alert variant="destructive" className="mt-4">
+            {error}
+          </Alert>
+        )}
 
+        <div className="flex justify-center">
           <Button
-            className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                       bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
-                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             onClick={handleReorder}
             disabled={isProcessing || numPages === 0}
             aria-label="Reorder pages"
           >
-            {isProcessing ? "Processing..." : "Reorder Pages"}
+            {isProcessing ? (
+              <span className="flex items-center">
+                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                Processing...
+              </span>
+            ) : (
+              "Reorder Pages"
+            )}
           </Button>
-
-          {reorderedPdfUrl && !isProcessing && (
-            <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
-              <div className="w-full text-center space-y-4 text-gray-100">
-                <h3 className="text-2xl font-semibold flex items-center justify-center">
-                  Pages Reordered Successfully
-                </h3>
-                <p className="text-gray-400">
-                  Your PDF pages have been rearranged according to your preferences.
-                </p>
-              </div>
-
-              <div className="flex justify-center">
-                <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
-                  <a
-                    href={reorderedPdfUrl}
-                    download={downloadFileName}
-                    className="text-center flex items-center"
-                    onClick={() => {
-                      const u = reorderedPdfUrl;
-                      setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                    }}
-                  >
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                    </svg>
-                    Download Reordered PDF
-                  </a>
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
-        <ToolPageContent
-          toolName="Reorder PDF Pages"
-          toolDescription="Easily rearrange the pages of your PDF document with our intuitive drag-and-drop interface. Organize your content exactly how you need it, whether you're preparing a report, presentation, or simply tidying up a document. All processing is done securely in your browser, ensuring your files remain private."
-          currentTool="reorder"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
-            "Once your PDF is loaded, you will see thumbnails of all its pages. Drag and drop the page thumbnails to change their order.",
-            "After arranging the pages to your satisfaction, click the 'Download Reordered PDF' button.",
-            "Your PDF with the new page order will be instantly available for download.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to reorder PDF pages?",
-              answer:
-                "Yes, our Reorder PDF Pages tool is completely free to use. You can rearrange pages in as many PDF files as you need without any hidden costs or limitations.",
-            },
-            {
-              question: "Are my files secure when reordering pages?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including reordering, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "Can I reorder pages from multiple PDFs?",
-              answer:
-                "This tool is designed to reorder pages within a single PDF document. If you need to combine pages from multiple PDFs, please use our 'Merge PDF' tool first, and then reorder the combined document.",
-            },
-            {
-              question: "Is there a limit to the number of pages I can reorder?",
-              answer:
-                "While there isn't a strict limit on the number of pages, very large PDFs (e.g., hundreds of pages) might take longer to load and process due to client-side operations. We recommend keeping file sizes manageable for optimal performance.",
-            },
-          ]}
-        />
+
+        {reorderedPdfUrl && !isProcessing && (
+          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+            <div className="w-full text-center space-y-4 text-gray-100">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Pages Reordered Successfully
+              </h3>
+              <p className="text-gray-400">
+                Your PDF pages have been rearranged according to your preferences.
+              </p>
+            </div>
+
+            <div className="flex justify-center">
+              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+                <a
+                  href={reorderedPdfUrl}
+                  download={downloadFileName}
+                  className="text-center flex items-center"
+                  onClick={() => {
+                    const u = reorderedPdfUrl;
+                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                  }}
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                  </svg>
+                  Download Reordered PDF
+                </a>
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </ToolPageLayout>
   );
 }

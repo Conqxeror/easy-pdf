@@ -250,31 +250,8 @@ export const CTASection = ({
   );
 };
 
-// Layout composition component for tool pages
-export const ToolPageLayout = ({ 
-  title, 
-  subtitle, 
-  children, 
-  relatedTools, 
-  className,
-  ...props 
-}) => {
-  return (
-    <PageContainer className={className} {...props}>
-      <PageHeader title={title} subtitle={subtitle} />
-      <PageContent>
-        {children}
-      </PageContent>
-      {relatedTools && (
-        <Section title="Related Tools" spacing="small">
-          <Grid cols="auto" gap="6">
-            {relatedTools}
-          </Grid>
-        </Section>
-      )}
-    </PageContainer>
-  );
-};
+// Removed duplicate ToolPageLayout component to avoid confusion
+// The ToolPageLayout component is now in its own file at @/components/ui/ToolPageLayout.jsx
 
 export default {
   PageContainer,
@@ -286,5 +263,4 @@ export default {
   Hero,
   FeatureGrid,
   CTASection,
-  ToolPageLayout,
 };

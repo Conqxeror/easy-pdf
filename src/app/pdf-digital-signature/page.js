@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Download, CheckCircle, AlertTriangle, Key, FileText, Lock, Loader2 } from "lucide-react";
+import { Shield, Download, CheckCircle, Key, FileText, Lock, Loader2 } from "lucide-react";
 import { PDFDocument, rgb } from 'pdf-lib';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
 
 export default function PDFDigitalSignature() {
@@ -179,10 +179,12 @@ export default function PDFDigitalSignature() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Digital Signature"
+      subtitle="Add legally binding digital signatures to your PDF documents"
       toolName="PDF Digital Signature"
-      toolDescription="Add legally binding digital signatures to your PDF documents with certificate management. Create secure, tamper-evident signatures that provide authentication, integrity, and non-repudiation. All processing happens locally in your browser for complete privacy and security."
-      currentTool="tools/pdf-digital-signature"
+      toolDescription="Add legally binding digital signatures to your PDF documents with certificate management and validation. Create tamper-evident documents with timestamp authority integration. All processing happens locally in your browser for complete privacy and security."
+      currentTool="pdf-digital-signature"
       steps={[
         "Upload your PDF document that you want to digitally sign.",
         "Configure your digital certificate information including name, email, organization, and country.",
@@ -212,14 +214,7 @@ export default function PDFDigitalSignature() {
         }
       ]}
     >
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <Shield className="mx-auto h-12 w-12 text-blue-600 mb-4" aria-hidden="true" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">PDF Digital Signature</h1>
-            <p className="text-gray-600">Add legally binding digital signatures with certificate management</p>
-          </div>
-
+      <div className="space-y-6">
         <Tabs defaultValue="sign" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="sign">Sign Document</TabsTrigger>
@@ -275,6 +270,7 @@ export default function PDFDigitalSignature() {
                       placeholder="Enter signature text or leave blank for default"
                       value={signatureText}
                       onChange={(e) => setSignatureText(e.target.value)}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
 
@@ -286,6 +282,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.x}
                         onChange={(e) => setSignaturePosition({...signaturePosition, x: parseInt(e.target.value)})}
+                        className="bg-gray-800 border-gray-600 text-gray-200"
                       />
                     </div>
                     <div>
@@ -295,6 +292,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.y}
                         onChange={(e) => setSignaturePosition({...signaturePosition, y: parseInt(e.target.value)})}
+                        className="bg-gray-800 border-gray-600 text-gray-200"
                       />
                     </div>
                   </div>
@@ -307,6 +305,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.width}
                         onChange={(e) => setSignaturePosition({...signaturePosition, width: parseInt(e.target.value)})}
+                        className="bg-gray-800 border-gray-600 text-gray-200"
                       />
                     </div>
                     <div>
@@ -316,6 +315,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.height}
                         onChange={(e) => setSignaturePosition({...signaturePosition, height: parseInt(e.target.value)})}
+                        className="bg-gray-800 border-gray-600 text-gray-200"
                       />
                     </div>
                   </div>
@@ -378,6 +378,7 @@ export default function PDFDigitalSignature() {
                       placeholder="John Doe"
                       value={certificateInfo.name}
                       onChange={(e) => setCertificateInfo({...certificateInfo, name: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -388,6 +389,7 @@ export default function PDFDigitalSignature() {
                       placeholder="john.doe@example.com"
                       value={certificateInfo.email}
                       onChange={(e) => setCertificateInfo({...certificateInfo, email: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -400,6 +402,7 @@ export default function PDFDigitalSignature() {
                       placeholder="Example Corporation"
                       value={certificateInfo.organization}
                       onChange={(e) => setCertificateInfo({...certificateInfo, organization: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -409,6 +412,7 @@ export default function PDFDigitalSignature() {
                       placeholder="US"
                       value={certificateInfo.country}
                       onChange={(e) => setCertificateInfo({...certificateInfo, country: e.target.value})}
+                      className="bg-gray-800 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -419,9 +423,9 @@ export default function PDFDigitalSignature() {
                 </Button>
 
                 {certificateInfo.validFrom && (
-                  <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-semibold mb-2">Certificate Details:</h4>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+                    <h4 className="font-semibold mb-2 text-gray-200">Certificate Details:</h4>
+                    <div className="grid grid-cols-2 gap-2 text-sm text-gray-300">
                       <div><strong>Name:</strong> {certificateInfo.name}</div>
                       <div><strong>Email:</strong> {certificateInfo.email}</div>
                       <div><strong>Organization:</strong> {certificateInfo.organization}</div>
@@ -453,6 +457,7 @@ export default function PDFDigitalSignature() {
                     id="validate-file"
                     type="file"
                     accept=".pdf"
+                    className="bg-gray-800 border-gray-600 text-gray-200 file:bg-gray-700 file:text-gray-200 file:border-0"
                   />
                 </div>
 
@@ -463,7 +468,6 @@ export default function PDFDigitalSignature() {
 
                 <div className="space-y-2">
                   <Alert>
-                    <AlertTriangle className="h-4 w-4" />
                     <AlertDescription>
                       <strong>Note:</strong> This is a demonstration tool. In production, signature validation requires:
                       <ul className="list-disc list-inside mt-2 space-y-1">
@@ -480,9 +484,9 @@ export default function PDFDigitalSignature() {
           </TabsContent>
         </Tabs>
 
-        <Card className="mt-8">
+        <Card className="mt-8 bg-gray-800 border-gray-700">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-gray-200">
               <Shield className="h-5 w-5" />
               Digital Signature Features
             </CardTitle>
@@ -490,8 +494,8 @@ export default function PDFDigitalSignature() {
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h4 className="font-semibold mb-2">Security Features</h4>
-                <ul className="space-y-1 text-sm text-gray-600">
+                <h4 className="font-semibold mb-2 text-gray-200">Security Features</h4>
+                <ul className="space-y-1 text-sm text-gray-300">
                   <li>• PKI-based digital certificates</li>
                   <li>• Document integrity protection</li>
                   <li>• Non-repudiation assurance</li>
@@ -511,7 +515,6 @@ export default function PDFDigitalSignature() {
           </CardContent>
         </Card>
       </div>
-    </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

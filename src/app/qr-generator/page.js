@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef  } from "react";
+import React, { useState, useRef, useEffect  } from "react";
 import { PDFDocument, rgb } from "pdf-lib";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { QrCode, Download, Link, Mail, Phone, Wifi, MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 export default function QRCodeGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -58,6 +58,15 @@ export default function QRCodeGeneratorPage() {
   const [qrCodeImage, setQRCodeImage] = useState(null);
   const canvasRef = useRef(null);
 
+  // Cleanup function for object URLs
+  useEffect(() => {
+    return () => {
+      if (qrCodeImage) {
+        try { URL.revokeObjectURL(qrCodeImage); } catch { /* ignore */ }
+      }
+    };
+  }, [qrCodeImage]);
+
   const generateQRCode = async () => {
     setIsGenerating(true);
     trackEvent('qr_code_generation_started', { type: qrCodeData.type });
@@ -93,7 +102,7 @@ TITLE:${qrCodeData.title}
 TEL:${qrCodeData.phoneNumber}
 EMAIL:${qrCodeData.emailAddress}
 URL:${qrCodeData.website}
-ADR:;;${qrCodeData.address};;;;
+ADR:;;${qrCodeData.address};;;;;
 END:VCARD`;
           break;
         default:
@@ -122,7 +131,10 @@ END:VCARD`;
 
       // Convert canvas to image
       const imageDataUrl = canvas.toDataURL('image/png');
-      setQRCodeImage(imageDataUrl);
+      setQRCodeImage((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return imageDataUrl;
+      });
 
       trackEvent('qr_code_generated_successfully', {
         type: qrCodeData.type,
@@ -441,42 +453,37 @@ END:VCARD`;
     }
   };
 
-  const toolConfig = {
-    title: "QR Code Generator",
-    description: "Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF.",
-    icon: <QrCode className="w-8 h-8 text-purple-500" />,
-    features: [
-      "Multiple QR code types",
-      "Customizable size and quality",
-      "WiFi and vCard support",
-      "PNG and PDF export",
-      "High-resolution output",
-      "Batch generation ready"
-    ],
-    relatedTools: ["/watermark", "/merge", "/form-filler"]
-  };
-
-  return (
-    <ToolPageContent
-  toolName="QR Code Generator"
-  toolDescription="Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF."
-  currentTool="qr-generator"
-  steps={[
+  const toolName = "QR Code Generator";
+  const toolDescription = "Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF.";
+  const steps = [
     "Choose the type of QR code you want to create (text, URL, email, WiFi, etc.).",
     "Enter the required content or details in the form.",
     "Customize size, margin, and error correction as needed.",
     "Click 'Generate QR Code' to see a preview.",
     "Download your QR code as PNG or PDF."
-  ]}
-  faqs={[
+  ];
+  const faqs = [
     { question: "Is the QR code generator free?", answer: "Yes, you can create and download unlimited QR codes for free." },
     { question: "Can I create QR codes for WiFi, email, or contacts?", answer: "Yes, our tool supports many QR code types including WiFi, email, vCard, phone, and more." },
     { question: "Are my QR code contents stored?", answer: "No, all generation is done in your browser. Your content is never uploaded or saved." },
     { question: "Can I customize the QR code's appearance?", answer: "You can adjust size, margin, and error correction level. Advanced styling coming soon." },
     { question: "Is there a limit to the number of QR codes I can generate?", answer: "No limits—generate as many as you need!" }
-  ]}
-  toolConfig={toolConfig}
->
+  ];
+
+  return (
+    <ToolPageLayout
+      title="QR Code Generator"
+      subtitle="Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF."
+      toolName={toolName}
+      toolDescription={toolDescription}
+      steps={steps}
+      faqs={faqs}
+      currentTool="qr-generator"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'QR Generator', href: '/qr-generator' }
+      ]}
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Configuration Panel */}
         <div className="space-y-6">
@@ -678,6 +685,6 @@ END:VCARD`;
           )}
         </div>
       </div>
-    </ToolPageContent>
+    </ToolPageLayout>
   );
 }

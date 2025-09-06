@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback  } from "react";
+import React, { useState, useCallback, useEffect  } from "react";
 import { PDFDocument } from "pdf-lib";
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import { Download, FileText, Zap } from "lucide-react";
@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
-import StandardToolLayout from "@/components/ui/StandardToolLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 
 // Configure pdfjs worker only on the client to avoid SSR/runtime errors
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -31,6 +31,15 @@ export default function CompressPDFs() {
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
   const [imageQuality, setImageQuality] = useState(75);
+
+  // Cleanup function for object URLs to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (compressedPdfUrl) {
+        try { URL.revokeObjectURL(compressedPdfUrl); } catch { /* ignore */ }
+      }
+    };
+  }, [compressedPdfUrl]);
 
   const handleFiles = (files) => {
     const selectedFile = files[0];
@@ -176,7 +185,7 @@ export default function CompressPDFs() {
   ];
 
   return (
-    <StandardToolLayout
+    <ToolPageLayout
       title="Compress PDF"
       subtitle="Reduce the file size of your PDF documents with powerful client-side compression."
       toolName={toolName}
@@ -205,7 +214,7 @@ export default function CompressPDFs() {
         {fileName && (
           <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
             <div className="flex items-center mb-3">
-              <div className="p-2 rounded-lg bg-blue-500/10 mr-3">
+              <div className="p-2 rounded-lg bg-blue-900/50 mr-3">
                 <FileText className="w-5 h-5 text-blue-400" />
               </div>
               <div>
@@ -233,7 +242,7 @@ export default function CompressPDFs() {
                 <div className="flex items-center justify-between">
                   <span className="text-gray-300">Reduction:</span>
                   <span className="font-medium text-blue-400">
-                    {compressionPercentage}% smaller
+                    {compressionPercentage}%
                   </span>
                 </div>
               </div>
@@ -266,7 +275,7 @@ export default function CompressPDFs() {
                 />
                 <Label
                   htmlFor="mild"
-                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-800 p-4 hover:bg-gray-700 peer-data-[state=checked]:border-blue-400 [&:has([data-state=checked])]:border-blue-400 text-gray-200 cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Mild</span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -282,7 +291,7 @@ export default function CompressPDFs() {
                 />
                 <Label
                   htmlFor="balanced"
-                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-800 p-4 hover:bg-gray-700 peer-data-[state=checked]:border-blue-400 [&:has([data-state=checked])]:border-blue-400 text-gray-200 cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Balanced</span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -298,7 +307,7 @@ export default function CompressPDFs() {
                 />
                 <Label
                   htmlFor="aggressive"
-                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-700 p-4 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-100 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-800 p-4 hover:bg-gray-700 peer-data-[state=checked]:border-blue-400 [&:has([data-state=checked])]:border-blue-400 text-gray-200 cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Aggressive</span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -335,9 +344,9 @@ export default function CompressPDFs() {
           <div className="space-y-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
             <Progress
               value={progress}
-              className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-500 rounded-full"
+              className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-600 rounded-full"
             />
-            <p className="text-sm text-center text-gray-400">
+            <p className="text-sm text-center text-gray-300">
               {processingMessage || `Compressing PDF... ${progress}%`}
             </p>
           </div>
@@ -349,7 +358,6 @@ export default function CompressPDFs() {
           <Button
             onClick={compressPDF}
             disabled={isCompressing || !file}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             size="lg"
           >
             {isCompressing ? (
@@ -365,13 +373,13 @@ export default function CompressPDFs() {
 
         {compressedPdfUrl && !isCompressing && (
           <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
-            <div className="w-full text-center space-y-4 text-gray-100">
-              <h3 className="text-2xl font-semibold flex items-center justify-center">
-                <Download className="w-6 h-6 mr-2 text-green-400" />
+            <div className="w-full text-center space-y-4 text-gray-200">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+                <Download className="w-6 h-6 mr-2" />
                 Compression Complete
               </h3>
               
-              <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+              <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="text-center p-3 bg-gray-800 rounded-lg">
                     <div className="text-gray-400 text-sm">Original Size</div>
@@ -410,7 +418,7 @@ export default function CompressPDFs() {
           </div>
         )}
       </div>
-    </StandardToolLayout>
+    </ToolPageLayout>
   );
 }
 

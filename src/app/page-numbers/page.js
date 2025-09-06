@@ -9,7 +9,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import ToolPageContent from "@/components/ui/ToolPageContent";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import {
   Card,
   CardHeader,
@@ -18,14 +18,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 // Import pdfjs legacy build for PDF rendering
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -454,395 +446,377 @@ export default function PageNumbersPage() {
   };
 
   return (
-    <>
-      <main className="flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
-        <Card className="bg-gray-800 border-gray-700 w-full max-w-4xl">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-gray-100">
-              Add Page Numbers / Header / Footer
-            </CardTitle>
-            <CardDescription className="text-lg text-gray-300 text-center mt-2">
-              Customize and add dynamic page numbers, headers, or footers to
-              your PDF documents easily.
-            </CardDescription>
-          </CardHeader>
+    <ToolPageLayout
+      title="Add Page Numbers, Header & Footer to PDF"
+      subtitle="Add page numbers, headers, or footers to your PDF documents with our free online tool. Customize the text, position, and appearance."
+      toolName="Add Page Numbers, Header & Footer to PDF"
+      toolDescription="Add page numbers, headers, or footers to your PDF documents with our free online tool. Customize the text, position, and appearance."
+      steps={[
+        "Upload your PDF file by dragging it into the dropzone or clicking to select.",
+        "Configure your additions: Choose to add a header, a footer, or dynamic page numbers. You can use placeholders like {NUM} for the current page and {TOTAL} for the total page count.",
+        "Customize the appearance: Select font size, text color, and the position (e.g., top-left, bottom-center).",
+        "Choose which pages to apply the changes to: all pages, a single page, or a specific page range.",
+        "Click the 'Download PDF with Additions' button to process and save your document.",
+      ]}
+      faqs={[
+        {
+          question: "Is it free to add page numbers or headers/footers?",
+          answer:
+            "Yes, our tool is completely free to use. You can add page numbers, headers, and footers to as many PDF files as you need without any hidden costs or limitations.",
+        },
+        {
+          question: "Are my files secure when adding these elements?",
+          answer:
+            "Absolutely. Your privacy is our top priority. All PDF processing, including adding page numbers, headers, and footers, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
+        },
+        {
+          question: "Can I customize the format of the page numbers?",
+          answer:
+            "Yes, you can use custom text with placeholders like {NUM} for the current page number and {TOTAL} for the total number of pages. For example, 'Page {NUM} of {TOTAL}' will display as 'Page 1 of 10'.",
+        },
+        {
+          question: "Can I add both a header and a footer?",
+          answer:
+            "Yes, you can add both a header and a footer simultaneously. You can also choose to apply them to all pages, a single page, or a custom range of pages.",
+        },
+        {
+          question: "Does adding page numbers affect the quality of my PDF?",
+          answer:
+            "No, adding page numbers, headers, or footers with our tool does not affect the quality of your document's existing content. The new elements are seamlessly integrated.",
+        },
+      ]}
+      currentTool="page-numbers"
+      breadcrumbs={[
+        { label: 'Home', href: '/' },
+        { label: 'Page Numbers', href: '/page-numbers' }
+      ]}
+    >
+      <div className="space-y-6">
+        <FileDropzone
+          accept="application/pdf"
+          onFiles={handleFiles}
+          error={error}
+          setError={setError}
+          label="Upload PDF"
+          description="Drag & drop or click to select a PDF file (Max 50MB)"
+          maxSize={50 * 1024 * 1024}
+          isLoading={isProcessing}
+        />
 
-          <CardContent className="space-y-6">
-            <FileDropzone
-              accept="application/pdf"
-              multiple={false}
-              onFiles={handleFiles}
-              error={error}
-              setError={setError}
-              label="Upload PDF"
-              description="Drag & drop or click to select a PDF file (Max 50MB)"
-              maxSize={50 * 1024 * 1024}
-              isLoading={isProcessing}
-            />
+        {files.length > 0 && (
+          <div className="mt-4 p-4 bg-gray-100 rounded-lg border border-gray-200">
+            <div className="flex justify-between items-center">
+              <span>{files[0].name}</span>
+              <span className="text-sm text-gray-500">
+                {numPages} pages
+              </span>
+            </div>
+          </div>
+        )}
 
-            {files.length > 0 && numPages > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Controls Column */}
-                <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label
-                        htmlFor="fontSize"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Font Size
-                      </Label>
-                      <Input
-                        id="fontSize"
-                        type="number"
-                        value={fontSize}
-                        onChange={(e) =>
-                          setFontSize(
-                            Math.max(6, Math.min(Number(e.target.value), 72))
-                          )
+        {numPages > 0 && (
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold mb-4">
+              Page Preview
+            </h2>
+            <div className="flex flex-wrap gap-4">
+              {Array.from({ length: Math.min(5, numPages) }).map((_, index) => (
+                <div
+                  key={index}
+                  className="relative border-2 border-gray-600 rounded-lg p-2"
+                >
+                  <canvas
+                    ref={(el) => (previewCanvasRef.current = el)}
+                    className="w-32 h-40 bg-white border border-gray-300 rounded"
+                  />
+                  <div className="absolute top-1 left-1 bg-black/70 text-white text-xs px-1 rounded">
+                    {index + 1}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <Card className="bg-white border-gray-200">
+              <CardHeader>
+                <CardTitle>
+                  Add Page Numbers, Header & Footer
+                </CardTitle>
+                <CardDescription className="text-gray-600">
+                  Customize the appearance and position
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <Label className="mb-2 block">
+                    Add Page Numbers
+                  </Label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="addPageNumbers"
+                      checked={customText.includes("{NUM}") || customText.includes("{TOTAL}")}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setCustomText("Page {NUM} of {TOTAL}");
+                        } else {
+                          setCustomText("");
                         }
-                        min={6}
-                        max={72}
-                        className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                    </div>
-                    <div>
-                      <Label
-                        htmlFor="textColor"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Text Color
-                      </Label>
-                      <Input
-                        id="textColor"
+                      }}
+                      className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <label
+                      htmlFor="addPageNumbers"
+                      className="text-sm"
+                    >
+                      Enable page numbers
+                    </label>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="mb-2 block">
+                    Header Text
+                  </Label>
+                  <input
+                    type="text"
+                    value={headerText}
+                    onChange={(e) => setHeaderText(e.target.value)}
+                    placeholder="Enter header text (use {NUM} for page number, {TOTAL} for total pages)"
+                    className="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded"
+                  />
+                </div>
+
+                <div>
+                  <Label className="mb-2 block">
+                    Footer Text
+                  </Label>
+                  <input
+                    type="text"
+                    value={footerText}
+                    onChange={(e) => setFooterText(e.target.value)}
+                    placeholder="Enter footer text (use {NUM} for page number, {TOTAL} for total pages)"
+                    className="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="mb-2 block">
+                      Font Size
+                    </Label>
+                    <select
+                      value={fontSize}
+                      onChange={(e) => setFontSize(Number(e.target.value))}
+                      className="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded"
+                    >
+                      {[8, 10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
+                        <option key={size} value={size}>
+                          {size}px
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <Label className="mb-2 block">
+                      Text Color
+                    </Label>
+                    <div className="flex items-center space-x-2">
+                      <input
                         type="color"
                         value={textColor}
                         onChange={(e) => setTextColor(e.target.value)}
-                        className="w-full h-8 p-0 border-none mt-1"
+                        className="h-10 w-16 p-1 bg-gray-800 border border-gray-600 rounded"
                       />
+                      <span className="text-gray-300 text-sm">
+                        {textColor}
+                      </span>
                     </div>
                   </div>
+                </div>
 
-                  <div>
-                    <Label
-                      htmlFor="headerText"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Header Text
-                    </Label>
-                    <Input
-                      id="headerText"
-                      type="text"
-                      value={headerText}
-                      onChange={(e) => setHeaderText(e.target.value)}
-                      placeholder="e.g., Confidential Document"
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="footerText"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Footer Text (replaces Page Numbers if set)
-                    </Label>
-                    <Input
-                      id="footerText"
-                      type="text"
-                      value={footerText}
-                      onChange={(e) => setFooterText(e.target.value)}
-                      placeholder="e.g., Copyright 2024"
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="customText"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Page Number Format
-                    </Label>
-                    <Input
-                      id="customText"
-                      type="text"
-                      value={customText}
-                      onChange={(e) => setCustomText(e.target.value)}
-                      placeholder="e.g., Page {NUM} of {TOTAL}"
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                    <p className="text-xs text-gray-400 mt-1">
-                      Use <code>{`{NUM}`}</code> for current page,{" "}
-                      <code>{`{TOTAL}`}</code> for total pages.
-                    </p>
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="startNumber"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Start Number
-                    </Label>
-                    <Input
-                      id="startNumber"
-                      type="number"
-                      value={startNumber}
-                      onChange={(e) =>
-                        setStartNumber(Math.max(0, Number(e.target.value)))
-                      }
-                      min={0}
-                      className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <Label
-                      htmlFor="position"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Position
-                    </Label>
-                    <Select value={position} onValueChange={setPosition}>
-                      <SelectTrigger
-                        id="position"
-                        className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                <div>
+                  <Label className="mb-2 block">
+                    Position
+                  </Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      "top-left",
+                      "top-center",
+                      "top-right",
+                      "bottom-left",
+                      "bottom-center",
+                      "bottom-right",
+                    ].map((pos) => (
+                      <button
+                        key={pos}
+                        onClick={() => setPosition(pos)}
+                        className={`p-2 text-xs rounded border ${
+                          position === pos
+                            ? "bg-blue-600 border-blue-500 text-white"
+                            : "bg-white border-gray-300 text-gray-800 hover:bg-gray-100"
+                        }`}
                       >
-                        <SelectValue placeholder="Select position" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
-                        <SelectItem value="top-left">Top Left</SelectItem>
-                        <SelectItem value="top-center">Top Center</SelectItem>
-                        <SelectItem value="top-right">Top Right</SelectItem>
-                        <SelectItem value="bottom-left">Bottom Left</SelectItem>
-                        <SelectItem value="bottom-center">
-                          Bottom Center
-                        </SelectItem>
-                        <SelectItem value="bottom-right">
-                          Bottom Right
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                        {pos.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
+                      </button>
+                    ))}
                   </div>
+                </div>
 
-                  <div>
-                    <Label
-                      htmlFor="applyToMode"
-                      className="text-sm font-medium text-gray-200"
-                    >
-                      Apply To
-                    </Label>
-                    <Select value={applyToMode} onValueChange={setApplyToMode}>
-                      <SelectTrigger
-                        id="applyToMode"
-                        className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                <div>
+                  <Label className="mb-2 block">
+                    Apply to Pages
+                  </Label>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="allPages"
+                        name="pageRange"
+                        checked={applyToMode === "all"}
+                        onChange={() => setApplyToMode("all")}
+                        className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor="allPages"
+                        className="text-sm"
                       >
-                        <SelectValue placeholder="Apply to..." />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
-                        <SelectItem value="all">All Pages</SelectItem>
-                        <SelectItem value="single">Single Page</SelectItem>
-                        <SelectItem value="range">Page Range</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {applyToMode === "single" && (
-                    <div>
-                      <Label
-                        htmlFor="singlePage"
-                        className="text-sm font-medium text-gray-200"
-                      >
-                        Page Number (1 to {numPages})
-                      </Label>
-                      <Input
+                        All pages
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
                         id="singlePage"
+                        name="pageRange"
+                        checked={applyToMode === "single"}
+                        onChange={() => setApplyToMode("single")}
+                        className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor="singlePage"
+                        className="text-sm"
+                      >
+                        Single page:
+                      </label>
+                      <input
                         type="number"
+                        min="1"
+                        max={numPages}
                         value={singlePageIdx + 1}
                         onChange={(e) =>
-                          setSinglePageIdx(
-                            Math.max(
-                              0,
-                              Math.min(Number(e.target.value) - 1, numPages - 1)
-                            )
-                          )
+                          setSinglePageIdx(Math.max(0, Math.min(numPages - 1, Number(e.target.value) - 1)))
                         }
-                        min={1}
-                        max={numPages}
-                        className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                        className="w-16 p-1 bg-white text-gray-800 border border-gray-300 rounded text-sm"
+                        disabled={applyToMode !== "single"}
                       />
                     </div>
-                  )}
-
-                  {applyToMode === "range" && (
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label
-                          htmlFor="rangeStart"
-                          className="text-sm font-medium text-gray-200"
-                        >
-                          Start Page (1 to {numPages})
-                        </Label>
-                        <Input
-                          id="rangeStart"
-                          type="number"
-                          value={rangeStart}
-                          onChange={(e) =>
-                            setPageRangeStart(
-                              Math.max(
-                                1,
-                                Math.min(Number(e.target.value), numPages)
-                              )
-                            )
-                          }
-                          min={1}
-                          max={numPages}
-                          className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </div>
-                      <div>
-                        <Label
-                          htmlFor="rangeEnd"
-                          className="text-sm font-medium text-gray-200"
-                        >
-                          End Page (1 to {numPages})
-                        </Label>
-                        <Input
-                          id="rangeEnd"
-                          type="number"
-                          value={rangeEnd}
-                          onChange={(e) =>
-                            setPageRangeEnd(
-                              Math.max(
-                                1,
-                                Math.min(Number(e.target.value), numPages)
-                              )
-                            )
-                          }
-                          min={1}
-                          max={numPages}
-                          className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                        />
-                      </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="pageRange"
+                        name="pageRange"
+                        checked={applyToMode === "range"}
+                        onChange={() => setApplyToMode("range")}
+                        className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                      />
+                      <label
+                        htmlFor="pageRange"
+                        className="text-sm"
+                      >
+                        Page range:
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max={numPages}
+                        value={rangeStart}
+                        onChange={(e) =>
+                          setPageRangeStart(Math.max(1, Math.min(numPages, Number(e.target.value))))
+                        }
+                        className="w-16 p-1 bg-white text-gray-800 border border-gray-300 rounded text-sm"
+                        disabled={applyToMode !== "range"}
+                      />
+                      <span className="text-sm">to</span>
+                      <input
+                        type="number"
+                        min="1"
+                        max={numPages}
+                        value={rangeEnd}
+                        onChange={(e) =>
+                          setPageRangeEnd(Math.max(1, Math.min(numPages, Number(e.target.value))))
+                        }
+                        className="w-16 p-1 bg-white text-gray-800 border border-gray-300 rounded text-sm"
+                        disabled={applyToMode !== "range"}
+                      />
                     </div>
-                  )}
+                  </div>
                 </div>
 
-                {/* Preview Column */}
-                <div className="flex flex-col items-center justify-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative">
-                  {numPages > 0 ? (
-                    <canvas
-                      ref={previewCanvasRef}
-                      className="w-full h-auto max-w-full border border-gray-600 rounded-md shadow-lg"
-                      style={{ maxWidth: "100%", height: "auto" }}
-                    ></canvas>
-                  ) : (
-                    <div className="text-gray-400 text-center p-4">
-                      Upload a PDF to see the preview.
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                {error}
-              </Alert>
-            )}
-
-            <Button
-              variant="success"
-              className="mt-4 w-full max-w-xs mx-auto block"
-              onClick={handleAddNumbers}
-              disabled={
-                isProcessing ||
-                files.length === 0 ||
-                numPages === 0 ||
-                (!headerText.trim() &&
-                  !footerText.trim() &&
-                  !customText.includes("{NUM}") &&
-                  !customText.includes("{TOTAL}"))
-              }
-              aria-label="Add page numbers/header/footer"
-            >
-              {isProcessing ? "Processing..." : "Add Page Numbers/Header/Footer"}
-            </Button>
-
-            {numberedPdfUrl && !isProcessing && (
-              <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700 mt-6">
-                <div className="w-full text-center space-y-4 text-gray-100">
-                  <h3 className="text-2xl font-semibold flex items-center justify-center">
-                    Page Numbers Added Successfully
-                  </h3>
-                  <p className="text-gray-400">
-                    Your PDF has been enhanced with page numbers, headers, and/or footers.
-                  </p>
-                </div>
-
-                <div className="flex justify-center">
-                  <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
-                    <a
-                      href={numberedPdfUrl}
-                      download={downloadFileName}
-                      className="text-center flex items-center"
-                      onClick={() => {
-                        const u = numberedPdfUrl;
-                        setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                      }}
-                    >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                      </svg>
-                      Download Enhanced PDF
-                    </a>
+                <Button
+                    onClick={handleAddNumbers}
+                    disabled={isProcessing || !files.length}
+                    className="w-full py-3"
+                  >
+                    {isProcessing ? (
+                      <span className="flex items-center justify-center">
+                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                        Processing...
+                      </span>
+                    ) : (
+                      "Add Page Numbers/Header/Footer"
+                    )}
                   </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-        <ToolPageContent
-          toolName="Add Page Numbers / Header / Footer to PDF"
-          toolDescription="Easily add customizable page numbers, headers, or footers to your PDF documents. Our tool offers flexible options for position, font size, color, and numbering format (e.g., 'Page X of Y'). Enhance your documents for professional or personal use, all while ensuring your files remain private with client-side processing."
-          currentTool="page-numbers"
-          steps={[
-            "Upload your PDF file by dragging it into the dropzone or clicking to select.",
-            "Configure your additions: Choose to add a header, a footer, or dynamic page numbers. You can use placeholders like {NUM} for the current page and {TOTAL} for the total page count.",
-            "Customize the appearance: Select font size, text color, and the position (e.g., top-left, bottom-center).",
-            "Choose which pages to apply the changes to: all pages, a single page, or a specific page range.",
-            "Click the 'Download PDF with Additions' button to process and save your document.",
-          ]}
-          faqs={[
-            {
-              question: "Is it free to add page numbers or headers/footers?",
-              answer:
-                "Yes, our tool is completely free to use. You can add page numbers, headers, and footers to as many PDF files as you need without any hidden costs or limitations.",
-            },
-            {
-              question: "Are my files secure when adding these elements?",
-              answer:
-                "Absolutely. Your privacy is our top priority. All PDF processing, including adding page numbers, headers, and footers, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-            },
-            {
-              question: "Can I customize the format of the page numbers?",
-              answer:
-                "Yes, you can use custom text with placeholders like {NUM} for the current page number and {TOTAL} for the total number of pages. For example, 'Page {NUM} of {TOTAL}' will display as 'Page 1 of 10'.",
-            },
-            {
-              question: "Can I add both a header and a footer?",
-              answer:
-                "Yes, you can add both a header and a footer simultaneously. You can also choose to apply them to all pages, a single page, or a custom range of pages.",
-            },
-            {
-              question: "Does adding page numbers affect the quality of my PDF?",
-              answer:
-                "No, adding page numbers, headers, or footers with our tool does not affect the quality of your document's existing content. The new elements are seamlessly integrated.",
-            },
-          ]}
-        />
-      </main>
-    </>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div>
+            <Card className="mt-6 bg-white border-gray-200">
+              <CardHeader>
+                <CardTitle>Download</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  asChild
+                  variant="success"
+                  className="w-full py-3"
+                  disabled={!numberedPdfUrl}
+                >
+                  <a
+                    href={numberedPdfUrl || "#"}
+                    download={downloadFileName || `numbered_${files[0]?.name || "document"}.pdf`}
+                    onClick={(e) => {
+                      if (!numberedPdfUrl) {
+                        e.preventDefault();
+                        return;
+                      }
+                      setTimeout(() => {
+                        try {
+                          if (numberedPdfUrl)
+                            URL.revokeObjectURL(numberedPdfUrl);
+                        } catch {}
+                      }, 500);
+                    }}
+                  >
+                    Download PDF with Additions
+                  </a>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {error && (
+          <Alert variant="destructive" className="mt-6">
+            {error}
+          </Alert>
+        )}
+      </div>
+    </ToolPageLayout>
   );
 }

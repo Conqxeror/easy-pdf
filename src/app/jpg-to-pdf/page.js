@@ -206,11 +206,11 @@ export default function JpgToPdfPage() {
         />
 
         {files.length > 0 && (
-          <div className="space-y-4 text-gray-200">
-            <h3 className="text-xl font-semibold text-gray-100">Selected Images:</h3>
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold">Selected Images:</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {files.map((file) => (
-                <div key={file.name} className="border border-gray-600 rounded-md p-3 bg-gray-700 flex flex-col items-center text-center relative">
+                <div key={file.name} className="border border-gray-200 rounded-md p-3 bg-white flex flex-col items-center text-center relative">
                   <Button
                     variant="destructive"
                     size="sm"
@@ -226,8 +226,8 @@ export default function JpgToPdfPage() {
                     height={100}
                     className="object-cover rounded shadow mb-2"
                   />
-                  <p className="font-medium text-white text-sm break-all">{file.name}</p>
-                  <p className="text-xs text-gray-400">{formatFileSize(file.size)}</p>
+                  <p className="font-medium text-sm break-all">{file.name}</p>
+                  <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
                 </div>
               ))}
             </div>
@@ -237,16 +237,16 @@ export default function JpgToPdfPage() {
         {isProcessing && (
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-300">
+              <span>
                 {processingMessage}
               </span>
-              <span className="font-medium text-gray-100">
+              <span className="font-medium">
                 {currentProgress}%
               </span>
             </div>
             <Progress
               value={currentProgress}
-              className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
+              className="h-2 bg-gray-200 [&::-webkit-progress-bar]:bg-gray-200 [&::-webkit-progress-value]:bg-blue-600"
             />
           </div>
         )}
@@ -261,7 +261,6 @@ export default function JpgToPdfPage() {
           <Button
             onClick={convertToPdf}
             disabled={isProcessing || files.length === 0}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
           >
@@ -277,15 +276,15 @@ export default function JpgToPdfPage() {
         </div>
 
         {pdfUrl && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
-            <div className="w-full text-center space-y-4 text-gray-100">
-              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+            <div className="w-full text-center space-y-4">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
                 Conversion Complete!
               </h3>
-              <p className="text-gray-300">
+              <p className="text-gray-600">
                 Your images have been successfully converted to a PDF document.
               </p>
             </div>
@@ -295,7 +294,6 @@ export default function JpgToPdfPage() {
                 asChild
                 variant="success"
                 size="lg"
-                className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
               >
                 <a
                   href={pdfUrl}

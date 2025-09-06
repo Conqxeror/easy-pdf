@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield, Loader2 } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import ToolPageContent from '@/components/ui/ToolPageContent';
+import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 // Configure pdf.js worker only on client and use CDN worker for compatibility
 if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
@@ -380,10 +380,12 @@ export default function PDFAccessibilityChecker() {
   };
 
   return (
-    <ToolPageContent
+    <ToolPageLayout
+      title="PDF Accessibility Checker"
+      subtitle="Check your PDF documents for accessibility compliance and WCAG standards"
       toolName="PDF Accessibility Checker"
       toolDescription="Check your PDF documents for accessibility compliance and WCAG standards. Ensure your content is accessible to all users with comprehensive accessibility analysis."
-      currentTool="tools/pdf-accessibility-checker"
+      currentTool="pdf-accessibility-checker"
       steps={[
         "Upload your PDF document by dragging it into the dropzone or clicking to select it.",
         "Click 'Start Analysis' to begin the comprehensive accessibility check.",
@@ -413,273 +415,310 @@ export default function PDFAccessibilityChecker() {
         }
       ]}
     >
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
-              <Shield className="h-8 w-8" aria-hidden="true" />
-            PDF Accessibility Checker
-          </h1>
-          <p className="text-muted-foreground">
-            Check your PDF documents for accessibility compliance and WCAG standards. Ensure your content is accessible to all users.
-          </p>
-        </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Upload PDF Document</CardTitle>
-            <CardDescription>
-              Upload a PDF file to analyze its accessibility compliance
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div
-              {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
-                isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
-              }`}
-            >
-              <input {...getInputProps()} />
-                <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
-              {isDragActive ? (
-                <p>Drop the PDF file here...</p>
-              ) : (
-                <div>
-                  <p className="mb-1">Drag & drop a PDF file here, or click to select</p>
-                  <p className="text-sm text-muted-foreground">
-                    Maximum file size: 50MB
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {file && (
-              <div className="mt-4 p-3 border rounded-lg">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" aria-hidden="true" />
-                  <span className="text-sm font-medium">{file.name}</span>
-                  <span className="text-xs text-muted-foreground">
-                    ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                  </span>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Analysis Options</CardTitle>
-            <CardDescription>
-              Configure accessibility analysis
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium">Checks Included:</h4>
-              <div className="text-xs text-muted-foreground space-y-1">
-                <div>• Document structure and tags</div>
-                <div>• Image alternative text</div>
-                <div>• Color contrast ratios</div>
-                <div>• Reading order validation</div>
-                <div>• Form accessibility</div>
-                <div>• WCAG 2.1 compliance</div>
-              </div>
-            </div>
-
-            <Button 
-              onClick={analyzeAccessibility} 
-              disabled={!file || isAnalyzing}
-              className="w-full"
-            >
-              {isAnalyzing ? (
-                <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...</span>
-              ) : (
-                <><Shield className="h-4 w-4 mr-2" aria-hidden="true" />Start Analysis</>
-              )}
-            </Button>
-
-            {file && (
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  setFile(null);
-                  setResults(null);
-                  setAnalysisStatus('idle');
-                }}
-                className="w-full"
-              >
-                Clear File
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {isAnalyzing && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-              Analyzing Accessibility...
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Progress value={progress} className="mb-2" />
-            <p className="text-sm text-muted-foreground">
-              {progress.toFixed(1)}% complete - Checking accessibility standards
-            </p>
-          </CardContent>
-        </Card>
-      )}
-
-      {analysisStatus === 'completed' && results && (
-        <div className="space-y-6">
-          <Card>
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <Card className="lg:col-span-2">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
-                  Analysis Complete
-                </CardTitle>
-                <Button onClick={downloadReport} variant="outline" size="sm">
-                  <Download className="h-4 w-4 mr-2" aria-hidden="true" />
-                  Download Report
-                </Button>
-              </div>
+              <CardTitle>Upload PDF Document</CardTitle>
+              <CardDescription>
+                Upload a PDF file to analyze its accessibility compliance
+              </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="text-center">
-                  <div className={`text-3xl font-bold ${getScoreColor(results.score)}`}>
-                    {results.score}/100
+              <div
+                {...getRootProps()}
+                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                  isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
+                }`}
+              >
+                <input {...getInputProps()} />
+                  <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
+                {isDragActive ? (
+                  <p>Drop the PDF file here...</p>
+                ) : (
+                  <div>
+                    <p className="mb-1">Drag & drop a PDF file here, or click to select</p>
+                    <p className="text-sm text-muted-foreground">
+                      Maximum file size: 50MB
+                    </p>
                   </div>
-                  <div className="text-sm text-muted-foreground">Accessibility Score</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-600">
-                    {results.checks.filter(c => c.passed).length}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Checks Passed</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-600">
-                    {results.issues.length}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Issues Found</div>
-                </div>
+                )}
               </div>
+
+              {file && (
+                <div className="mt-4 p-3 border rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" aria-hidden="true" />
+                    <span className="text-sm font-medium">{file.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                    </span>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="checks">Detailed Checks</TabsTrigger>
-              <TabsTrigger value="issues">Issues</TabsTrigger>
-              <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-            </TabsList>
+          <Card>
+            <CardHeader>
+              <CardTitle>Analysis Options</CardTitle>
+              <CardDescription>
+                Configure accessibility analysis
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium">Checks Included:</h4>
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <div>• Document structure and tags</div>
+                  <div>• Image alternative text</div>
+                  <div>• Color contrast ratios</div>
+                  <div>• Reading order validation</div>
+                  <div>• Form accessibility</div>
+                  <div>• WCAG 2.1 compliance</div>
+                </div>
+              </div>
 
-            <TabsContent value="overview" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Accessibility Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Document Information</h4>
-                      <div className="space-y-1 text-sm">
-                        <div>File: {results.fileName}</div>
-                        <div>Pages: {results.totalPages}</div>
-                        <div>Checks Performed: {results.checks.length}</div>
-                      </div>
+              <Button 
+                onClick={analyzeAccessibility} 
+                disabled={!file || isAnalyzing}
+                className="w-full"
+              >
+                {isAnalyzing ? (
+                  <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing...</span>
+                ) : (
+                  <><Shield className="h-4 w-4 mr-2" aria-hidden="true" />Start Analysis</>
+                )}
+              </Button>
+
+              {file && (
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setFile(null);
+                    setResults(null);
+                    setAnalysisStatus('idle');
+                  }}
+                  className="w-full"
+                >
+                  Clear File
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {isAnalyzing && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+                Analyzing Accessibility...
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Progress value={progress} className="mb-2" />
+              <p className="text-sm text-muted-foreground">
+                {progress.toFixed(1)}% complete - Checking accessibility standards
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {analysisStatus === 'completed' && results && (
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
+                    Analysis Complete
+                  </CardTitle>
+                  <Button onClick={downloadReport} variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" aria-hidden="true" />
+                    Download Report
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="text-center">
+                    <div className={`text-3xl font-bold ${getScoreColor(results.score)}`}>
+                      {results.score}/100
                     </div>
-                    <div>
-                      <h4 className="font-medium mb-2">Compliance Status</h4>
-                      <div className="space-y-2">
-                        {results.score >= 80 && (
-                          <Badge className="bg-green-100 text-green-800">
-                            Good Accessibility
-                          </Badge>
-                        )}
-                        {results.score >= 60 && results.score < 80 && (
-                          <Badge className="bg-yellow-100 text-yellow-800">
-                            Needs Improvement
-                          </Badge>
-                        )}
-                        {results.score < 60 && (
-                          <Badge className="bg-red-100 text-red-800">
-                            Poor Accessibility
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
+                    <div className="text-sm text-muted-foreground">Accessibility Score</div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-green-600">
+                      {results.checks.filter(c => c.passed).length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Checks Passed</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-red-600">
+                      {results.issues.length}
+                    </div>
+                    <div className="text-sm text-muted-foreground">Issues Found</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-            <TabsContent value="checks" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {results.checks.map((check, index) => {
-                  const checkInfo = accessibilityChecks.find(c => c.id === check.id);
-                  const Icon = checkInfo?.icon || CheckCircle;
-                  
-                  return (
+            <Tabs defaultValue="overview" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="checks">Detailed Checks</TabsTrigger>
+                <TabsTrigger value="issues">Issues</TabsTrigger>
+                <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="overview" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Accessibility Overview</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 className="font-medium mb-2">Document Information</h4>
+                        <div className="space-y-1 text-sm">
+                          <div>File: {results.fileName}</div>
+                          <div>Pages: {results.totalPages}</div>
+                          <div>Checks Performed: {results.checks.length}</div>
+                        </div>
+                      </div>
+                      <div>
+                        <h4 className="font-medium mb-2">Compliance Status</h4>
+                        <div className="space-y-2">
+                          {results.score >= 80 && (
+                            <Badge className="bg-green-100 text-green-800">
+                              Good Accessibility
+                            </Badge>
+                          )}
+                          {results.score >= 60 && results.score < 80 && (
+                            <Badge className="bg-yellow-100 text-yellow-800">
+                              Needs Improvement
+                            </Badge>
+                          )}
+                          {results.score < 60 && (
+                            <Badge className="bg-red-100 text-red-800">
+                              Poor Accessibility
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="checks" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {results.checks.map((check, index) => {
+                    const checkInfo = accessibilityChecks.find(c => c.id === check.id);
+                    const Icon = checkInfo?.icon || CheckCircle;
+                    
+                    return (
+                      <Card key={index}>
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+                            <div className={`p-2 rounded-full ${
+                              check.passed ? 'bg-green-100' : 'bg-red-100'
+                            }`}>
+                              {check.passed ? (
+                                <CheckCircle className="h-4 w-4 text-green-600" aria-hidden="true" />
+                              ) : (
+                                <XCircle className="h-4 w-4 text-red-600" aria-hidden="true" />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Icon className="h-4 w-4" aria-hidden="true" />
+                                <h4 className="font-medium text-sm">{check.name}</h4>
+                                {!check.passed && getSeverityBadge(check.severity)}
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">
+                                {check.message}
+                              </p>
+                              {check.recommendation && (
+                                <p className="text-xs text-blue-600 bg-blue-50 p-2 rounded">
+                                  {check.recommendation}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </TabsContent>
+
+              <TabsContent value="issues" className="space-y-4">
+                {results.issues.length > 0 ? (
+                  <div className="space-y-3">
+                    {results.issues.map((issue, index) => (
+                      <Card key={index}>
+                        <CardContent className="pt-4">
+                          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" aria-hidden="true" />
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                {getSeverityBadge(issue.severity)}
+                                <span className="text-sm text-muted-foreground">
+                                  {issue.category}
+                                </span>
+                              </div>
+                              <p className="font-medium text-sm mb-2">{issue.message}</p>
+                              <p className="text-sm text-muted-foreground">
+                                <strong>Recommendation:</strong> {issue.recommendation}
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <Card>
+                    <CardContent className="pt-6 text-center">
+          <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" aria-hidden="true" />
+                      <h3 className="font-medium mb-2">No Issues Found</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Your PDF passed all accessibility checks!
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+
+              <TabsContent value="recommendations" className="space-y-4">
+                <div className="space-y-3">
+                  {results.recommendations.map((rec, index) => (
                     <Card key={index}>
                       <CardContent className="pt-4">
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-full ${
-                            check.passed ? 'bg-green-100' : 'bg-red-100'
+                            rec.priority === 'high' ? 'bg-red-100' :
+                            rec.priority === 'medium' ? 'bg-yellow-100' : 'bg-green-100'
                           }`}>
-                            {check.passed ? (
-                              <CheckCircle className="h-4 w-4 text-green-600" aria-hidden="true" />
-                            ) : (
-                              <XCircle className="h-4 w-4 text-red-600" aria-hidden="true" />
-                            )}
+                            <CheckCircle className={`h-4 w-4 ${
+                              rec.priority === 'high' ? 'text-red-600' :
+                              rec.priority === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                            }`} aria-hidden="true" />
                           </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <Icon className="h-4 w-4" aria-hidden="true" />
-                              <h4 className="font-medium text-sm">{check.name}</h4>
-                              {!check.passed && getSeverityBadge(check.severity)}
-                            </div>
-                            <p className="text-sm text-muted-foreground mb-2">
-                              {check.message}
-                            </p>
-                            {check.recommendation && (
-                              <p className="text-xs text-blue-600 bg-blue-50 p-2 rounded">
-                                {check.recommendation}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="issues" className="space-y-4">
-              {results.issues.length > 0 ? (
-                <div className="space-y-3">
-                  {results.issues.map((issue, index) => (
-                    <Card key={index}>
-                      <CardContent className="pt-4">
-                        <div className="flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-orange-500 mt-0.5" aria-hidden="true" />
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              {getSeverityBadge(issue.severity)}
-                              <span className="text-sm text-muted-foreground">
-                                {issue.category}
-                              </span>
+                              <h4 className="font-medium text-sm">{rec.title}</h4>
+                              <Badge variant={
+                                rec.priority === 'high' ? 'destructive' :
+                                rec.priority === 'medium' ? 'secondary' : 'outline'
+                              }>
+                                {rec.priority} priority
+                              </Badge>
                             </div>
-                            <p className="font-medium text-sm mb-2">{issue.message}</p>
                             <p className="text-sm text-muted-foreground">
-                              <strong>Recommendation:</strong> {issue.recommendation}
+                              {rec.description}
                             </p>
                           </div>
                         </div>
@@ -687,78 +726,31 @@ export default function PDFAccessibilityChecker() {
                     </Card>
                   ))}
                 </div>
-              ) : (
-                <Card>
-                  <CardContent className="pt-6 text-center">
-        <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" aria-hidden="true" />
-                    <h3 className="font-medium mb-2">No Issues Found</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Your PDF passed all accessibility checks!
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
 
-            <TabsContent value="recommendations" className="space-y-4">
-              <div className="space-y-3">
-                {results.recommendations.map((rec, index) => (
-                  <Card key={index}>
-                    <CardContent className="pt-4">
-                      <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-full ${
-                          rec.priority === 'high' ? 'bg-red-100' :
-                          rec.priority === 'medium' ? 'bg-yellow-100' : 'bg-green-100'
-                        }`}>
-                          <CheckCircle className={`h-4 w-4 ${
-                            rec.priority === 'high' ? 'text-red-600' :
-                            rec.priority === 'medium' ? 'text-yellow-600' : 'text-green-600'
-                          }`} aria-hidden="true" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h4 className="font-medium text-sm">{rec.title}</h4>
-                            <Badge variant={
-                              rec.priority === 'high' ? 'destructive' :
-                              rec.priority === 'medium' ? 'secondary' : 'outline'
-                            }>
-                              {rec.priority} priority
-                            </Badge>
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {rec.description}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+        {analysisStatus === 'error' && (
+          <Card className="mb-6">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-red-600">
+                <XCircle className="h-5 w-5" />
+                <span>An error occurred during analysis. Please try again.</span>
               </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      )}
+            </CardContent>
+          </Card>
+        )}
 
-      {analysisStatus === 'error' && (
-        <Card className="mb-6">
+        <Card>
           <CardContent className="pt-6">
-            <div className="flex items-center gap-2 text-red-600">
-              <XCircle className="h-5 w-5" />
-              <span>An error occurred during analysis. Please try again.</span>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Shield className="h-4 w-4" aria-hidden="true" />
+              <span>All accessibility analysis happens locally in your browser. Your files never leave your device.</span>
             </div>
           </CardContent>
         </Card>
-      )}
-
-      <Card>
-        <CardContent className="pt-6">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Shield className="h-4 w-4" aria-hidden="true" />
-            <span>All accessibility analysis happens locally in your browser. Your files never leave your device.</span>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-    </ToolPageContent>
+      </div>
+    </ToolPageLayout>
   );
 }
