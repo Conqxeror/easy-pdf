@@ -29,7 +29,9 @@ export default function AboutLayout({ children }) {
       />
       <div className="mt-16 sm:mt-20">
         <div className="flex flex-col gap-8">
-          <Breadcrumb items={[{ name: "About Us", url: "/about" }]} />
+          <div className="container-standard mb-6">
+            <Breadcrumb items={[{ name: "About Us", url: "/about" }]} />
+          </div>
           {children}
         </div>
       </div>

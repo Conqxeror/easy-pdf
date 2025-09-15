@@ -324,7 +324,7 @@ const SponsorsPage = () => {
           <button
             onClick={() => {
               trackEvent('sponsor_inquiry_clicked');
-              window.location.href = 'mailto:sponsors@easy-pdf.com?subject=Sponsorship Inquiry';
+              window.location.href = 'mailto:kadriwalimohammad@gmail.com?subject=Sponsorship Inquiry';
             }}
             className="bg-white text-blue-600 font-semibold px-8 py-3 rounded-lg hover:bg-blue-50 transition-colors"
           >

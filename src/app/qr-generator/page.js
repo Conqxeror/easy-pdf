@@ -255,7 +255,7 @@ END:VCARD`;
                 type="email"
                 value={qrCodeData.email}
                 onChange={(e) => updateQRData('email', e.target.value)}
-                placeholder="contact@example.com"
+                placeholder="kadriwalimohammad@gmail.com"
               />
             </div>
             <div>
@@ -421,7 +421,7 @@ END:VCARD`;
                   type="email"
                   value={qrCodeData.emailAddress}
                   onChange={(e) => updateQRData('emailAddress', e.target.value)}
-                  placeholder="john@example.com"
+                  placeholder="kadriwalimohammad@gmail.com"
                 />
               </div>
             </div>

@@ -504,10 +504,10 @@ export default function PageNumbersPage() {
         />
 
         {files.length > 0 && (
-          <div className="mt-4 p-4 bg-gray-100 rounded-lg border border-gray-200">
+          <div className="mt-4 p-4 bg-gray-900 rounded-lg border border-gray-800">
             <div className="flex justify-between items-center">
               <span>{files[0].name}</span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-400">
                 {numPages} pages
               </span>
             </div>
@@ -516,7 +516,7 @@ export default function PageNumbersPage() {
 
         {numPages > 0 && (
           <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-4">
+            <h2 className="text-xl font-semibold mb-4 text-gray-100">
               Page Preview
             </h2>
             <div className="flex flex-wrap gap-4">
@@ -527,7 +527,7 @@ export default function PageNumbersPage() {
                 >
                   <canvas
                     ref={(el) => (previewCanvasRef.current = el)}
-                    className="w-32 h-40 bg-white border border-gray-300 rounded"
+                    className="w-32 h-40 bg-gray-800 border border-gray-700 rounded"
                   />
                   <div className="absolute top-1 left-1 bg-black/70 text-white text-xs px-1 rounded">
                     {index + 1}
@@ -540,12 +540,12 @@ export default function PageNumbersPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
-            <Card className="bg-white border-gray-200">
+            <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
                 <CardTitle>
                   Add Page Numbers, Header & Footer
                 </CardTitle>
-                <CardDescription className="text-gray-600">
+                <CardDescription className="text-gray-400">
                   Customize the appearance and position
                 </CardDescription>
               </CardHeader>
@@ -566,7 +566,7 @@ export default function PageNumbersPage() {
                           setCustomText("");
                         }
                       }}
-                      className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
+                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
                     />
                     <label
                       htmlFor="addPageNumbers"
@@ -586,7 +586,7 @@ export default function PageNumbersPage() {
                     value={headerText}
                     onChange={(e) => setHeaderText(e.target.value)}
                     placeholder="Enter header text (use {NUM} for page number, {TOTAL} for total pages)"
-                    className="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded"
+                    className="w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded"
                   />
                 </div>
 
@@ -599,7 +599,7 @@ export default function PageNumbersPage() {
                     value={footerText}
                     onChange={(e) => setFooterText(e.target.value)}
                     placeholder="Enter footer text (use {NUM} for page number, {TOTAL} for total pages)"
-                    className="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded"
+                    className="w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded"
                   />
                 </div>
 
@@ -611,7 +611,7 @@ export default function PageNumbersPage() {
                     <select
                       value={fontSize}
                       onChange={(e) => setFontSize(Number(e.target.value))}
-                      className="w-full p-2 bg-gray-800 text-gray-200 border border-gray-600 rounded"
+                      className="w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded"
                     >
                       {[8, 10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
                         <option key={size} value={size}>
@@ -630,7 +630,7 @@ export default function PageNumbersPage() {
                         type="color"
                         value={textColor}
                         onChange={(e) => setTextColor(e.target.value)}
-                        className="h-10 w-16 p-1 bg-gray-800 border border-gray-600 rounded"
+                        className="h-10 w-16 p-1 bg-gray-900 border border-gray-700 rounded"
                       />
                       <span className="text-gray-300 text-sm">
                         {textColor}
@@ -658,7 +658,7 @@ export default function PageNumbersPage() {
                         className={`p-2 text-xs rounded border ${
                           position === pos
                             ? "bg-blue-600 border-blue-500 text-white"
-                            : "bg-white border-gray-300 text-gray-800 hover:bg-gray-100"
+                            : "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
                         }`}
                       >
                         {pos.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
@@ -673,14 +673,14 @@ export default function PageNumbersPage() {
                   </Label>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="allPages"
-                        name="pageRange"
-                        checked={applyToMode === "all"}
-                        onChange={() => setApplyToMode("all")}
-                        className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
-                      />
+                                          <input
+                      type="radio"
+                      id="allPages"
+                      name="pageRange"
+                      checked={applyToMode === "all"}
+                      onChange={() => setApplyToMode("all")}
+                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                    />
                       <label
                         htmlFor="allPages"
                         className="text-sm"
@@ -689,14 +689,14 @@ export default function PageNumbersPage() {
                       </label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="singlePage"
-                        name="pageRange"
-                        checked={applyToMode === "single"}
-                        onChange={() => setApplyToMode("single")}
-                        className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
-                      />
+                                          <input
+                      type="radio"
+                      id="singlePage"
+                      name="pageRange"
+                      checked={applyToMode === "single"}
+                      onChange={() => setApplyToMode("single")}
+                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                    />
                       <label
                         htmlFor="singlePage"
                         className="text-sm"
@@ -711,19 +711,19 @@ export default function PageNumbersPage() {
                         onChange={(e) =>
                           setSinglePageIdx(Math.max(0, Math.min(numPages - 1, Number(e.target.value) - 1)))
                         }
-                        className="w-16 p-1 bg-white text-gray-800 border border-gray-300 rounded text-sm"
+                        className="w-16 p-1 bg-gray-900 text-gray-100 border border-gray-700 rounded text-sm"
                         disabled={applyToMode !== "single"}
                       />
                     </div>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="pageRange"
-                        name="pageRange"
-                        checked={applyToMode === "range"}
-                        onChange={() => setApplyToMode("range")}
-                        className="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500"
-                      />
+                                          <input
+                      type="radio"
+                      id="pageRange"
+                      name="pageRange"
+                      checked={applyToMode === "range"}
+                      onChange={() => setApplyToMode("range")}
+                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                    />
                       <label
                         htmlFor="pageRange"
                         className="text-sm"
@@ -738,7 +738,7 @@ export default function PageNumbersPage() {
                         onChange={(e) =>
                           setPageRangeStart(Math.max(1, Math.min(numPages, Number(e.target.value))))
                         }
-                        className="w-16 p-1 bg-white text-gray-800 border border-gray-300 rounded text-sm"
+                        className="w-16 p-1 bg-gray-900 text-gray-100 border border-gray-700 rounded text-sm"
                         disabled={applyToMode !== "range"}
                       />
                       <span className="text-sm">to</span>
@@ -750,7 +750,7 @@ export default function PageNumbersPage() {
                         onChange={(e) =>
                           setPageRangeEnd(Math.max(1, Math.min(numPages, Number(e.target.value))))
                         }
-                        className="w-16 p-1 bg-white text-gray-800 border border-gray-300 rounded text-sm"
+                        className="w-16 p-1 bg-gray-900 text-gray-100 border border-gray-700 rounded text-sm"
                         disabled={applyToMode !== "range"}
                       />
                     </div>
@@ -776,7 +776,7 @@ export default function PageNumbersPage() {
           </div>
 
           <div>
-            <Card className="mt-6 bg-white border-gray-200">
+            <Card className="mt-6 bg-gray-900 border-gray-800">
               <CardHeader>
                 <CardTitle>Download</CardTitle>
               </CardHeader>

@@ -280,7 +280,7 @@ export default function PDFRedactionClient() {
                       <Label htmlFor="search-terms">Search Terms (comma-separated)</Label>
                       <Textarea
                         id="search-terms"
-                        placeholder="SSN, credit card, email@domain.com, phone numbers, etc."
+                        placeholder="SSN, credit card, kadriwalimohammad@gmail.com, phone numbers, etc."
                         value={searchTerms}
                         onChange={(e) => setSearchTerms(e.target.value)}
                         rows={3}

@@ -8,7 +8,7 @@ import {
   Section, 
   CTASection 
 } from "@/components/ui/Layout";
-import { SkipToMain, AccessibleHeading } from "@/components/ui/AccessibilityEnhancements";
+import { AccessibleHeading } from "@/components/ui/AccessibilityEnhancements";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import Breadcrumb from "@/components/Breadcrumb";
@@ -45,7 +45,6 @@ export default function ToolPageLayout({
 
   return (
     <>
-      <SkipToMain />
       <main id="main-content">
         <PageContainer>
           <Hero
@@ -112,6 +111,18 @@ export default function ToolPageLayout({
             </Section>
           )}
           
+          {/* Related Tools Section - Moved above CTA */}
+          {currentTool && (
+            <Suspense fallback={<RelatedToolsSkeleton />}>
+              <div>
+                <LazyRelatedTools currentTool={currentTool} tools={toolsData} />
+              </div>
+            </Suspense>
+          )}
+          
+          {/* Additional spacing between Related Tools and CTA */}
+          <div className="py-8"></div>
+          
           <CTASection
             title="Ready to transform your PDF workflow?"
             subtitle="Join thousands of users who trust our privacy-focused PDF tools."
@@ -128,15 +139,6 @@ export default function ToolPageLayout({
               </Button>
             }
           />
-          
-          {/* Related Tools Section */}
-          {currentTool && (
-            <Suspense fallback={<RelatedToolsSkeleton />}>
-              <div>
-                <LazyRelatedTools currentTool={currentTool} tools={toolsData} />
-              </div>
-            </Suspense>
-          )}
         </PageContainer>
       </main>
     </>

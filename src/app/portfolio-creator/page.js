@@ -684,7 +684,7 @@ export default function PortfolioCreatorPage() {
                 type="email"
                 value={portfolioData.email}
                 onChange={(e) => updatePortfolioData('email', e.target.value)}
-                placeholder="john@example.com"
+                placeholder="kadriwalimohammad@gmail.com"
               />
             </div>
             <div>

@@ -31,9 +31,9 @@ export default function PDFAnnotationCollaboration() {
     author: "Current User"
   });
   const [collaborators, setCollaborators] = useState([
-    { id: 1, name: "John Doe", email: "john@example.com", avatar: "", role: "Reviewer", active: true },
-    { id: 2, name: "Jane Smith", email: "jane@example.com", avatar: "", role: "Editor", active: false },
-    { id: 3, name: "Mike Johnson", email: "mike@example.com", avatar: "", role: "Approver", active: true }
+    { id: 1, name: "John Doe", email: "kadriwalimohammad@gmail.com", avatar: "", role: "Reviewer", active: true },
+    { id: 2, name: "Jane Smith", email: "kadriwalimohammad@gmail.com", avatar: "", role: "Editor", active: false },
+    { id: 3, name: "Mike Johnson", email: "kadriwalimohammad@gmail.com", avatar: "", role: "Approver", active: true }
   ]);
   const [newCollaborator, setNewCollaborator] = useState({ email: "", role: "Reviewer" });
   const [selectedAnnotation, setSelectedAnnotation] = useState(null);

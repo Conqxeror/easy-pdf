@@ -10,13 +10,13 @@ const footerLinks = [
     links: [
       {
         name: "About easy-pdf",
-        href: "https://easy-pdf-murex.vercel.app/about",
-        external: true,
+        href: "/about",
+        external: false,
       },
       {
         name: "Sitemap",
         href: "/sitemap.xml",
-        external: true,
+        external: false,
       },
       {
         name: "Privacy Policy",

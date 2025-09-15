@@ -507,7 +507,7 @@ export default function InvoiceGeneratorPage() {
                 type="email"
                 value={invoiceData.companyEmail}
                 onChange={(e) => updateInvoiceData('companyEmail', e.target.value)}
-                placeholder="company@example.com"
+                placeholder="kadriwalimohammad@gmail.com"
               />
             </div>
             <div className="md:col-span-2">
@@ -564,7 +564,7 @@ export default function InvoiceGeneratorPage() {
                 type="email"
                 value={invoiceData.clientEmail}
                 onChange={(e) => updateInvoiceData('clientEmail', e.target.value)}
-                placeholder="client@example.com"
+                placeholder="kadriwalimohammad@gmail.com"
               />
             </div>
             <div className="md:col-span-2">

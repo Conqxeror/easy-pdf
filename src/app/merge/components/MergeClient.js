@@ -15,7 +15,6 @@ export default function MergeClient() {
   const [files, setFiles] = useState([]);
   const [mergedPdfUrl, setMergedPdfUrl] = useState(null);
   const [error, setError] = useState("");
-  const [isMerging, setIsMerging] = useState(false);
   const [progress, setProgress] = useState(0);
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
@@ -148,41 +147,50 @@ export default function MergeClient() {
 
   const handleDragLeave = () => {};
 
-  const mergePDFs = async () => {
+    const mergePDFs = async () => {
     if (files.length === 0) {
-      setError("Please upload at least one PDF file.");
+      setError("Please add at least one PDF file.");
       return;
     }
-    
-    if (!PDFLib) {
-      setError("PDF library not loaded. Please try again.");
-      return;
-    }
-    
-    setIsMerging(true);
+
     setError("");
     setProgress(0);
-    
+    setMergedPdfUrl(null);
+    if (mergedPdfDocProxy) {
+      mergedPdfDocProxy.destroy();
+      setMergedPdfDocProxy(null);
+    }
+
     try {
-      const url = await import('@/lib/pdfUtils').then(utils => 
-        utils.mergePDFs(files, setProgress)
-      );
-      
-      setMergedPdfUrl(url);
-      
-      if (pdfjs) {
-        try {
-          const pdfDoc = await pdfjs.getDocument(url).promise;
-          setMergedPdfDocProxy(pdfDoc);
-        } catch (previewError) {
-          console.error("Error loading merged PDF for preview:", previewError);
-        }
+      // Create a new PDF document
+      const mergedPdf = await PDFLib.PDFDocument.create();
+
+      // Process each file
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const arrayBuffer = await file.arrayBuffer();
+        const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+        const pages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+        pages.forEach(page => mergedPdf.addPage(page));
+
+        // Update progress
+        setProgress(((i + 1) / files.length) * 100);
       }
-    } catch (error) {
-      console.error("Error merging PDFs:", error);
-      setError("Failed to merge PDFs. Please try again.");
-    } finally {
-      setIsMerging(false);
+
+      // Save the merged PDF
+      const mergedPdfBytes = await mergedPdf.save();
+      const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      setMergedPdfUrl(url);
+
+      // Load the merged PDF for preview
+      if (pdfjs) {
+        const docProxy = await pdfjs.getDocument({ data: mergedPdfBytes }).promise;
+        setMergedPdfDocProxy(docProxy);
+      }
+    } catch (err) {
+      console.error("Error merging PDFs:", err);
+      setError("Failed to merge PDFs. Please try again with different files.");
     }
   };
 
@@ -247,7 +255,6 @@ export default function MergeClient() {
             label="Choose PDF Files"
             description="Drag & drop or click to select PDF files. You can select multiple."
             maxSize={50 * 1024 * 1024}
-            isLoading={isMerging}
           />
         )}
         
@@ -319,14 +326,14 @@ export default function MergeClient() {
           </div>
         )}
         
-        {isMerging && (
+        {progress > 0 && progress < 100 && (
           <div className="space-y-3">
             <Progress
               value={progress}
               className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-600 rounded-full"
             />
             <p className="text-sm text-center text-gray-400">
-              Merging PDFs... {progress}%
+              Merging PDFs... {Math.round(progress)}%
             </p>
           </div>
         )}
@@ -342,21 +349,14 @@ export default function MergeClient() {
             onClick={mergePDFs}
             variant="default"
             size="lg"
-            disabled={isMerging || files.length === 0}
+            disabled={files.length === 0}
             aria-label="Merge selected PDF files"
           >
-            {isMerging ? (
-              <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                Merging...
-              </span>
-            ) : (
-              "Merge PDFs"
-            )}
+            Merge PDFs
           </Button>
         </div>
         
-        {mergedPdfUrl && !isMerging && (
+        {mergedPdfUrl && (
           <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
             <div className="w-full text-center space-y-4">
               <h3 className="text-2xl font-semibold flex items-center justify-center">

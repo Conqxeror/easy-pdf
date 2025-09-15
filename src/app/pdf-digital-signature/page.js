@@ -47,7 +47,7 @@ export default function PDFDigitalSignature() {
     
     setCertificateInfo({
       name: certificateInfo.name || "John Doe",
-      email: certificateInfo.email || "john.doe@example.com",
+      email: certificateInfo.email || "kadriwalimohammad@gmail.com",
       organization: certificateInfo.organization || "Example Corp",
       country: certificateInfo.country || "US",
       validFrom: now.toISOString().split('T')[0],
@@ -386,7 +386,7 @@ export default function PDFDigitalSignature() {
                     <Input
                       id="cert-email"
                       type="email"
-                      placeholder="john.doe@example.com"
+                      placeholder="kadriwalimohammad@gmail.com"
                       value={certificateInfo.email}
                       onChange={(e) => setCertificateInfo({...certificateInfo, email: e.target.value})}
                       className="bg-gray-800 border-gray-600 text-gray-200"

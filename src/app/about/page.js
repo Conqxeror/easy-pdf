@@ -19,16 +19,15 @@ import {
 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
-export default function About() {
+export default function AboutPage() {
 
   const handleGitHubClick = () => {
-    trackEvent('github_link_clicked');
-    window.open('https://github.com/your-username/easy-pdf', '_blank');
+    // Implementation here
   };
 
   const handleContactClick = () => {
     trackEvent('contact_link_clicked');
-    window.location.href = 'mailto:hello@easy-pdf.com';
+    window.location.href = 'mailto:kadriwalimohammad@gmail.com';
   };
 
   return (
@@ -230,15 +229,17 @@ export default function About() {
         </CardHeader>
         <CardContent>
           <div className="text-center">
-            <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl font-bold text-white">A</span>
+            <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-full">
+                <span className="text-2xl font-bold text-white">W</span>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Ankur</h3>
+            <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Wali Mohammad Kadri</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               Full-stack developer passionate about building privacy-first tools that make a difference.
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500">
-              Based in Delhi, India • Building the future, one line of code at a time
+              Based in Mumbai, India • Building the future, one line of code at a time
             </p>
           </div>
         </CardContent>
