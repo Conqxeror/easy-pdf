@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Upload, Download, FileText, Table, Loader2, AlertCircle } from 'lucide-react';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 // Configure PDF.js worker
 if (typeof window !== 'undefined') {
@@ -100,14 +101,23 @@ export default function PDFTableExtractor() {
     ).join('\n');
     
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `table_page_${table.page}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    let url = null;
+    try {
+      url = safeCreateObjectURL(blob);
+      const link = document.createElement('a');
+      const safeName = `${sanitizeFileName(table.page ? `table_page_${table.page}` : 'table')}.csv`;
+      link.setAttribute('href', url || '');
+      link.setAttribute('download', safeName);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error('Failed to export CSV:', err);
+      alert('Failed to export CSV. Please try again.');
+    } finally {
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch {} }, 500);
+    }
   };
 
   const exportAllToCSV = () => {

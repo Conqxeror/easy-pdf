@@ -4,16 +4,16 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { toolCategories } from '@/lib/toolCategories';
 import { toolsData } from '@/lib/toolData';
+import { slugify } from '@/lib/slugify';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function CategoryClient() {
   const params = useParams();
   const categoryName = params.category;
-  const formattedCategoryName = categoryName.replace(/-/g, ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-  const category = toolCategories.find(cat => cat.name.toLowerCase() === formattedCategoryName.toLowerCase());
-  const tools = toolsData.filter(tool => tool.category?.toLowerCase() === formattedCategoryName.toLowerCase());
+  const normalized = slugify(categoryName);
+  const category = toolCategories.find(cat => slugify(cat.name) === normalized);
+  const tools = toolsData.filter(tool => slugify(tool.category || '') === normalized);
 
   if (!category) {
     return (

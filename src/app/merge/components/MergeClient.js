@@ -6,14 +6,16 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import ToolPageLayout from "@/components/ui/ToolPageLayout";
+// ToolPageLayout is provided by the parent page; this client component only renders the tool UI
 
 // Dynamically import heavy PDF libraries only when needed
 import { usePDFLib, usePDFJS } from "@/lib/pdfUtils";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function MergeClient() {
   const [files, setFiles] = useState([]);
   const [mergedPdfUrl, setMergedPdfUrl] = useState(null);
+  const [mergedDownloadName, setMergedDownloadName] = useState("merged.pdf");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
   const dragItem = useRef(null);
@@ -28,14 +30,18 @@ export default function MergeClient() {
 
   useEffect(() => {
     return () => {
-      if (mergedPdfUrl) {
-        URL.revokeObjectURL(mergedPdfUrl);
+      try {
+        if (mergedPdfUrl && typeof URL !== "undefined" && !String(mergedPdfUrl).startsWith("data:")) {
+          try { if (mergedPdfUrl && typeof URL !== 'undefined' && !String(mergedPdfUrl).startsWith('data:')) URL.revokeObjectURL(mergedPdfUrl); } catch {}
+        }
+      } catch {
+        // ignore
       }
       if (mergedPdfDocProxy) {
-        mergedPdfDocProxy.destroy();
+        try { mergedPdfDocProxy.destroy(); } catch { /* ignore */ }
       }
       if (renderTaskRef.current) {
-        renderTaskRef.current.cancel();
+        try { renderTaskRef.current.cancel(); } catch { /* ignore */ }
       }
     };
   }, [mergedPdfUrl, mergedPdfDocProxy]);
@@ -88,9 +94,11 @@ export default function MergeClient() {
   const handleFiles = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     setError("");
+    // revoke any previous merged URL
+    try { if (mergedPdfUrl && typeof URL !== 'undefined' && !String(mergedPdfUrl).startsWith('data:')) URL.revokeObjectURL(mergedPdfUrl); } catch { /* ignore */ }
     setMergedPdfUrl(null);
     if (mergedPdfDocProxy) {
-      mergedPdfDocProxy.destroy();
+      try { mergedPdfDocProxy.destroy(); } catch { /* ignore */ }
       setMergedPdfDocProxy(null);
     }
     setProgress(0);
@@ -99,14 +107,15 @@ export default function MergeClient() {
   const removeFile = useCallback(
     (indexToRemove) => {
       setFiles((prevFiles) => prevFiles.filter((_, i) => i !== indexToRemove));
+      try { if (mergedPdfUrl && typeof URL !== 'undefined' && !String(mergedPdfUrl).startsWith('data:')) URL.revokeObjectURL(mergedPdfUrl); } catch { /* ignore */ }
       setMergedPdfUrl(null);
       if (mergedPdfDocProxy) {
-        mergedPdfDocProxy.destroy();
+        try { mergedPdfDocProxy.destroy(); } catch { /* ignore */ }
         setMergedPdfDocProxy(null);
       }
       setProgress(0);
     },
-    [mergedPdfDocProxy]
+    [mergedPdfDocProxy, mergedPdfUrl]
   );
 
   const handleDragStart = (e, index) => {
@@ -177,11 +186,16 @@ export default function MergeClient() {
         setProgress(((i + 1) / files.length) * 100);
       }
 
-      // Save the merged PDF
-      const mergedPdfBytes = await mergedPdf.save();
-      const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      setMergedPdfUrl(url);
+    // Save the merged PDF
+    const mergedPdfBytes = await mergedPdf.save();
+    const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+    // revoke previous merged URL if present
+    try { safeRevokeObjectURL(mergedPdfUrl); } catch { /* ignore */ }
+    const url = safeCreateObjectURL(blob);
+    // set a safe download filename based on first source file
+  const baseName = files && files.length > 0 && files[0].name ? sanitizeFileName(String(files[0].name).replace(/\.[^/.]+$/, "")) : "merged";
+  setMergedDownloadName(`merged_${baseName}.pdf`);
+    setMergedPdfUrl(url);
 
       // Load the merged PDF for preview
       if (pdfjs) {
@@ -194,52 +208,11 @@ export default function MergeClient() {
     }
   };
 
-  const toolName = "Merge PDFs";
-  const toolDescription = "Effortlessly combine multiple PDF files into a single, organized document with our easy-to-use PDF merger. Whether you're assembling a report, archiving documents, or preparing a presentation, our tool simplifies the process. Drag and drop your files, reorder them as needed, and merge them in seconds—all for free and right in your browser.";
-  const steps = [
-    "Upload your PDF files by dragging them into the dropzone or by clicking to select them from your device.",
-    "Once uploaded, you can see a list of your files. Drag and drop the files to arrange them in the desired order for the final document.",
-    "Click the 'Merge PDFs' button. Our tool will instantly combine all the uploaded files into a single PDF.",
-    "A preview of the merged PDF will appear. You can then download the final, merged PDF to your device.",
-  ];
-  const faqs = [
-    {
-      question: "Is it free to merge PDF files?",
-      answer: "Yes, our PDF merger is completely free to use. You can combine as many PDF files as you want without any hidden fees or limits."
-    },
-    {
-      question: "Are my files secure when merging PDFs?",
-      answer: "Absolutely. All processing, including merging, happens in your browser. Your files are never uploaded or stored on any server."
-    },
-    {
-      question: "Can I reorder files before merging?",
-      answer: "Yes, you can drag and drop your uploaded files to arrange them in any order you prefer before merging."
-    },
-    {
-      question: "Is there a limit on the number or size of files?",
-      answer: "You can upload multiple files, up to 50MB each. For best performance, keep the total number of files reasonable."
-    },
-    {
-      question: "Will merging affect the quality of my PDFs?",
-      answer: "No, merging simply combines your files. The original quality and content of each PDF is preserved in the final document."
-    }
-  ];
+  // Tool metadata intentionally omitted here to avoid unused variable lint errors;
+  // descriptive content is provided at the parent ToolPageLayout where applicable.
 
   return (
-    <ToolPageLayout
-      title="Merge PDFs"
-      subtitle="Combine multiple PDF files into one seamless document. Drag and drop to arrange their order."
-      toolName={toolName}
-      toolDescription={toolDescription}
-      steps={steps}
-      faqs={faqs}
-      currentTool="merge"
-      breadcrumbs={[
-        { label: 'Home', href: '/' },
-        { label: 'Merge PDFs', href: '/merge' }
-      ]}
-    >
-      <div className="space-y-6">
+    <div className="space-y-6">
         {(pdfLibLoading || pdfjsLoading) ? (
           <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl border border-gray-200">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
@@ -382,8 +355,13 @@ export default function MergeClient() {
               >
                 <a
                   href={mergedPdfUrl}
-                  download="merged.pdf"
+                  download={mergedDownloadName}
                   className="text-center flex items-center"
+                  onClick={() => {
+                    const u = mergedPdfUrl;
+                    if (!u || String(u).startsWith("data:")) return;
+                    setTimeout(() => { try { if (typeof URL !== "undefined" && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { /* ignore */ } }, 500);
+                  }}
                 >
                   <Download className="w-5 h-5 mr-2" />
                   Download Merged PDF
@@ -393,6 +371,5 @@ export default function MergeClient() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
   );
 }

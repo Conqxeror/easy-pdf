@@ -1,5 +1,6 @@
 // PDF utilities with dynamic imports for better bundle splitting
 import React, { useEffect, useState } from 'react';
+import { safeCreateObjectURL } from './enhancedUX';
 
 // Hook to dynamically load PDFLib
 export const usePDFLib = () => {
@@ -90,8 +91,10 @@ export const mergePDFs = async (files, setProgress) => {
   setProgress(95);
   const pdfBytes = await mergedPdf.save();
   const blob = new Blob([pdfBytes], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
+  let url = null;
+  try { url = safeCreateObjectURL(blob); } catch (err) { console.error('Failed to create object URL for merged PDF:', err); url = null; }
   setProgress(100);
-  
+
+  // Return an object URL when available. Caller should revoke when appropriate.
   return url;
 };

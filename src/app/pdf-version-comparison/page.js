@@ -163,17 +163,28 @@ export default function PDFVersionComparison() {
     };
 
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `comparison_report_${Date.now()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    // Delay revoke so browser can start the download
-    setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-    }, 500);
+    let url = null;
+    try {
+      try {
+        if (typeof URL !== 'undefined' && typeof window !== 'undefined') {
+          try { url = URL.createObjectURL(blob); } catch { console.error('Failed to create comparison report URL'); url = null; }
+        }
+      } catch { url = null; }
+
+      const a = document.createElement('a');
+      a.href = url || '';
+      a.download = `comparison_report_${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Failed to export comparison report:', err);
+      alert('Failed to export comparison report. Please try again.');
+    } finally {
+      setTimeout(() => {
+        try { if (url && typeof URL !== 'undefined' && typeof window !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
+      }, 500);
+    }
   };
 
   const getSeverityColor = (severity) => {

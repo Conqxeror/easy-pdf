@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import PageRangeInput from "@/components/ui/PageRangeInput";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 import { RotateCw } from "lucide-react";
 
 export default function RotatePdfPage() {
@@ -32,7 +33,7 @@ export default function RotatePdfPage() {
   useEffect(() => {
     return () => {
       if (rotatedUrl) {
-        try { URL.revokeObjectURL(rotatedUrl); } catch { /* ignore */ }
+        try { if (typeof URL !== 'undefined' && !String(rotatedUrl).startsWith('data:')) URL.revokeObjectURL(rotatedUrl); } catch { /* ignore */ }
       }
     };
   }, [rotatedUrl]); // Run when rotatedUrl changes or component unmounts
@@ -115,14 +116,20 @@ export default function RotatePdfPage() {
         const page = pdfDoc.getPage(i);
         
         // Try to set rotation with the normalized angle (in degrees)
-        page.setRotation(normalizedAngle);
+        // pdf-lib accepts an object with angle property in some versions
+        try {
+          page.setRotation({ angle: normalizedAngle });
+        } catch {
+          // Fallback to numeric API if present
+          try { page.setRotation(normalizedAngle); } catch { /* ignore */ }
+        }
       }
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = safeCreateObjectURL(blob);
       setRotatedUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+        try { safeRevokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
     } catch (e) {
@@ -288,12 +295,12 @@ export default function RotatePdfPage() {
               >
                 <a
                   href={rotatedUrl}
-                  download={`rotated_${fileName}`}
+                  download={`rotated_${fileName ? fileName.replace(/\.[^/.]+$/, "") : "document"}.pdf`}
                   className="text-center flex items-center"
                   onClick={() => {
                     const urlToRevoke = rotatedUrl;
                     setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { }
+                      try { if (urlToRevoke && typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { }
                     }, 500);
                   }}
                 >

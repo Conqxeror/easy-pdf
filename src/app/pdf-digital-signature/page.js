@@ -152,18 +152,24 @@ export default function PDFDigitalSignature() {
 
   const downloadSignedPdf = () => {
     if (!signedPdf) return;
-
-    const url = URL.createObjectURL(signedPdf);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${file.name.replace('.pdf', '')}_signed.pdf`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    // Revoke after a short delay to ensure the browser started the download
-    setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-    }, 500);
+    let url = null;
+  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(signedPdf); } catch (err) { console.error('Error creating object URL for signed PDF:', err); url = null; }
+    try {
+      const a = document.createElement('a');
+      a.href = url;
+      const safeBase = file && file.name ? String(file.name).replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+      a.download = `${safeBase}_signed.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error initiating signed PDF download:', err);
+    } finally {
+      // Revoke after a short delay to ensure the browser started the download, skip data: URLs
+      setTimeout(() => {
+  try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
+      }, 500);
+    }
   };
 
   // Cleanup on unmount: revoke any created object URLs if we had stored them elsewhere

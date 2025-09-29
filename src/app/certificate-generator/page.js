@@ -330,16 +330,26 @@ export default function CertificateGeneratorPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Certificate-${certificateData.recipientName.replace(/\s+/g, '-')}-${certificateData.certificateId}.pdf`;
-      link.click();
-
-      setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { }
-      }, 500);
+      let url = null;
+      try {
+        try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch { url = null; }
+        const link = document.createElement('a');
+        link.href = url || '';
+        const safeName = (certificateData.recipientName || 'Certificate')
+          .replace(/\s+/g, '-')
+          .replace(/[^a-zA-Z0-9\-_.]/g, '');
+        link.download = `Certificate-${safeName}-${certificateData.certificateId}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (err) {
+        console.error('Certificate download failed:', err);
+        alert('Failed to download certificate. Please try again.');
+      } finally {
+        setTimeout(() => {
+          try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+        }, 500);
+      }
 
       trackEvent('certificate_generated_successfully', {
         template: certificateData.template,

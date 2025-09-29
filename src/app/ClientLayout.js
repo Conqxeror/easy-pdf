@@ -22,7 +22,9 @@ function registerServiceWorker() {
 import clsx from "clsx";
 import Footer from "@/components/ui/Footer";
 
-import VercelAnalytics from "./vercel-analytics";
+// VercelAnalytics is a small client-side wrapper; load it dynamically to avoid server-side bundling
+import dynamic from "next/dynamic";
+const VercelAnalytics = dynamic(() => import('./vercel-analytics'), { ssr: false });
 import DesktopNav from "@/components/layout/DesktopNav";
 import MobileNav from "@/components/layout/MobileNav";
 

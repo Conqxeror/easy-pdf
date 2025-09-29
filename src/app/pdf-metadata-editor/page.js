@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Upload, Download, Settings, FileText, Calendar, User, BookOpen, Tag, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function PDFMetadataEditor() {
   const [file, setFile] = useState(null);
@@ -110,18 +111,25 @@ export default function PDFMetadataEditor() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.name.replace('.pdf', '_metadata_edited.pdf');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      // Delay revoke slightly so the browser can start the download
-      setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-      }, 500);
+      let url = null;
+      try {
+        url = safeCreateObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url || '';
+        const safeName = sanitizeFileName(file?.name || 'document');
+        link.download = `${safeName}_metadata_edited.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error('Error initiating download:', err);
+        alert('Failed to download edited PDF. Please try again.');
+      } finally {
+        setTimeout(() => {
+          try { safeRevokeObjectURL(url); } catch { /* ignore */ }
+        }, 500);
+      }
     } catch (error) {
       console.error('Error saving metadata:', error);
       alert('Error saving PDF with updated metadata');

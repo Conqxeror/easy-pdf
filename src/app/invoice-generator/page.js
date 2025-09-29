@@ -61,7 +61,7 @@ export default function InvoiceGeneratorPage() {
   useEffect(() => {
     return () => {
       if (invoiceUrl) {
-        try { URL.revokeObjectURL(invoiceUrl); } catch { /* ignore */ }
+  try { if (invoiceUrl && typeof URL !== 'undefined' && !String(invoiceUrl).startsWith('data:')) URL.revokeObjectURL(invoiceUrl); } catch { /* ignore */ }
       }
     };
   }, [invoiceUrl]);
@@ -356,9 +356,10 @@ export default function InvoiceGeneratorPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+  let url = null;
+  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating invoice object URL:', err); url = null; }
       setInvoiceUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
+  try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch {}
         return url;
       });
       setDownloadFileName(`Invoice-${invoiceData.invoiceNumber}.pdf`);
@@ -773,7 +774,7 @@ export default function InvoiceGeneratorPage() {
                   onClick={() => {
                     const u = invoiceUrl;
                     setTimeout(() => {
-                      try { if (u) URL.revokeObjectURL(u); } catch { }
+                      try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { }
                     }, 500);
                   }}
                 >

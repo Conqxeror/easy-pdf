@@ -106,9 +106,10 @@ export default function PDFAccessibilityChecker() {
     setAnalysisStatus('analyzing');
     setProgress(0);
 
+    let pdf = null;
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       
       const analysisResults = {
         fileName: file.name,
@@ -152,6 +153,9 @@ export default function PDFAccessibilityChecker() {
 
       setResults(analysisResults);
       setAnalysisStatus('completed');
+
+  // Destroy pdf.js document proxy to free memory (best-effort)
+  try { if (pdf && typeof pdf.destroy === 'function') pdf.destroy(); } catch { /* ignore */ }
     } catch (error) {
       console.error('Analysis error:', error);
       setAnalysisStatus('error');
@@ -313,14 +317,15 @@ export default function PDFAccessibilityChecker() {
 
     const reportContent = generateAccessibilityReport(results);
     const blob = new Blob([reportContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
+  let url = null;
+  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for accessibility report:', err); url = null; }
     const link = document.createElement('a');
     link.href = url;
     link.download = `${results.fileName}_accessibility_report.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+  try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
   };
 
   const generateAccessibilityReport = (results) => {

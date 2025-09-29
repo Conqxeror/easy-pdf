@@ -3,7 +3,9 @@ import React from 'react';
 
 // Accessible heading component with proper hierarchy
 export const AccessibleHeading = ({ level = 1, children, className = '', id, ...props }) => {
-  const Tag = `h${level}`;
+  // Ensure heading level is within valid HTML range
+  const safeLevel = Math.min(6, Math.max(1, Number(level) || 1));
+  const Tag = `h${safeLevel}`;
   
   return (
     <Tag

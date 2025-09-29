@@ -1,8 +1,7 @@
 import React from "react";
 import ClientLayout from "./ClientLayout";
 import { generateEnhancedMetadata, generateComprehensiveJsonLd, generatePerformanceHints } from "@/lib/seoEnhancements";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { Analytics } from "@vercel/analytics/react";
+// Note: Analytics and SpeedInsights are client-side and are included in ClientLayout
 
 export const metadata = generateEnhancedMetadata({
 
@@ -60,9 +59,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="antialiased bg-black">
-        <ClientLayout>{children}</ClientLayout>
-        <SpeedInsights />
-        <Analytics />
+  <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

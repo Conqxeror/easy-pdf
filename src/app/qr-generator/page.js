@@ -12,6 +12,7 @@ import { Slider } from "@/components/ui/slider";
 import { QrCode, Download, Link, Mail, Phone, Wifi, MapPin } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function QRCodeGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -62,7 +63,9 @@ export default function QRCodeGeneratorPage() {
   useEffect(() => {
     return () => {
       if (qrCodeImage) {
-        try { URL.revokeObjectURL(qrCodeImage); } catch { /* ignore */ }
+        try {
+          safeRevokeObjectURL(qrCodeImage);
+        } catch {}
       }
     };
   }, [qrCodeImage]);
@@ -129,12 +132,9 @@ END:VCARD`;
         }
       });
 
-      // Convert canvas to image
+      // Convert canvas to image (data URL). Do not revoke data URLs.
       const imageDataUrl = canvas.toDataURL('image/png');
-      setQRCodeImage((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
-        return imageDataUrl;
-      });
+      setQRCodeImage(imageDataUrl);
 
       trackEvent('qr_code_generated_successfully', {
         type: qrCodeData.type,
@@ -151,13 +151,24 @@ END:VCARD`;
     }
   };
 
-  const downloadQRCode = () => {
+  const downloadQRCode = async () => {
     if (!qrCodeImage) return;
 
-    const link = document.createElement('a');
-    link.download = `qr-code-${qrCodeData.type}-${Date.now()}.png`;
-    link.href = qrCodeImage;
-    link.click();
+    let url = null;
+    try {
+      // Convert the data URL to a Blob then create an object URL for download
+      const blob = await (await fetch(qrCodeImage)).blob();
+      url = safeCreateObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url || '';
+      const safeName = sanitizeFileName(String(qrCodeData.type || 'qr'));
+      a.download = `${safeName}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } finally {
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch {} }, 500);
+    }
 
     trackEvent('qr_code_downloaded', { type: qrCodeData.type, format: 'PNG' });
   };
@@ -165,17 +176,18 @@ END:VCARD`;
   const downloadQRCodePDF = async () => {
     if (!qrCodeImage) return;
 
+    let url = null;
     try {
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
-      
+
       // Convert image to PDF
       const imageBytes = await fetch(qrCodeImage).then(res => res.arrayBuffer());
       const image = await pdfDoc.embedPng(imageBytes);
-      
+
       const { width, height } = page.getSize();
       const imageSize = Math.min(width - 100, height - 100, 400);
-      
+
       page.drawImage(image, {
         x: (width - imageSize) / 2,
         y: (height - imageSize) / 2,
@@ -193,21 +205,21 @@ END:VCARD`;
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-
+      url = safeCreateObjectURL(blob);
       const link = document.createElement('a');
-      link.href = url;
-      link.download = `qr-code-${qrCodeData.type}-${Date.now()}.pdf`;
+      link.href = url || '';
+      const safeName = sanitizeFileName(`qr-code-${String(qrCodeData.type || 'qr')}-${Date.now()}`);
+      link.download = `${safeName}.pdf`;
+      document.body.appendChild(link);
       link.click();
-
-      setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { }
-      }, 500);
+      link.remove();
 
       trackEvent('qr_code_downloaded', { type: qrCodeData.type, format: 'PDF' });
     } catch (error) {
       console.error('Error creating PDF:', error);
       alert('Error creating PDF. Please try again.');
+    } finally {
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch {} }, 500);
     }
   };
 

@@ -11,8 +11,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { HexColorPicker } from "react-colorful";
-import Image from "next/image";
+// use native <img> for data URLs / in-memory images (next/image is unsuitable for blobs/data URLs)
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 
 export default function WatermarkPdfPage() {
   const [file, setFile] = useState(null);
@@ -35,7 +36,11 @@ export default function WatermarkPdfPage() {
   useEffect(() => {
     return () => {
       if (watermarkedUrl) {
-        URL.revokeObjectURL(watermarkedUrl);
+        try {
+          if (typeof URL !== 'undefined' && !String(watermarkedUrl).startsWith('data:')) {
+            try { if (watermarkedUrl && typeof URL !== 'undefined' && !String(watermarkedUrl).startsWith('data:')) URL.revokeObjectURL(watermarkedUrl); } catch {}
+          }
+        } catch { /* ignore */ }
       }
       // If there's a watermark image, also revoke its URL if it was an object URL
       // (though it's a DataURL here, good practice to consider for future changes)
@@ -327,7 +332,11 @@ export default function WatermarkPdfPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      setWatermarkedUrl(URL.createObjectURL(blob));
+      // revoke any previous object URL to avoid leaks
+      try { safeRevokeObjectURL(watermarkedUrl); } catch { /* ignore */ }
+
+      const newUrl = safeCreateObjectURL(blob);
+      setWatermarkedUrl(newUrl);
     } catch (e) {
       console.error("Watermark error:", e);
       setError(
@@ -514,15 +523,17 @@ export default function WatermarkPdfPage() {
                   Watermark Image
                 </Label>
                 <div className="flex items-center gap-4">
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={watermarkImage}
                     alt="Watermark preview"
                     width={80}
                     height={80}
                     className="object-contain border border-gray-600 rounded-md shadow-md"
                     onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src =
+                      // fallback to placeholder on error
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src =
                         "https://placehold.co/80x80/333/FFF?text=Error";
                     }}
                   />
@@ -784,7 +795,7 @@ export default function WatermarkPdfPage() {
                   onClick={() => {
                     const urlToRevoke = watermarkedUrl;
                     setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                      try { if (urlToRevoke && typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
                     }, 500);
                   }}
                 >

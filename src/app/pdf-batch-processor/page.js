@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Upload, Download, Layers, FileText, Trash2, Play, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { PDFDocument } from 'pdf-lib';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function PDFBatchProcessor() {
   const [files, setFiles] = useState([]);
@@ -100,16 +101,10 @@ export default function PDFBatchProcessor() {
 
     const pdfBytes = await mergedPdf.save();
     const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
+    const url = safeCreateObjectURL(blob);
 
     // Revoke any previous result URLs to avoid leaks
-    try {
-      results.forEach((r) => {
-        if (r && r.url) URL.revokeObjectURL(r.url);
-      });
-    } catch {
-      // ignore
-    }
+    try { results.forEach((r) => { try { safeRevokeObjectURL(r.url); } catch {} }); } catch {}
 
     setResults([
       {
@@ -131,11 +126,11 @@ export default function PDFBatchProcessor() {
         
         // Basic compression by re-saving (pdf-lib automatically optimizes)
         const pdfBytes = await pdf.save();
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const url = safeCreateObjectURL(blob);
+
       compressedResults.push({
-          name: file.file.name.replace('.pdf', '_compressed.pdf'),
+          name: file.file.name.replace(/\.pdf$/i, '') + '_compressed.pdf',
           url,
           size: pdfBytes.length,
           originalSize: file.file.size,
@@ -148,14 +143,7 @@ export default function PDFBatchProcessor() {
       }
     }
     
-    // Revoke previous result URLs before setting new ones
-    try {
-      results.forEach((r) => {
-        if (r && r.url) URL.revokeObjectURL(r.url);
-      });
-    } catch {
-      // ignore
-    }
+    try { results.forEach((r) => { try { safeRevokeObjectURL(r.url); } catch {} }); } catch {}
     setResults(compressedResults);
   };
 
@@ -176,10 +164,10 @@ export default function PDFBatchProcessor() {
           
           const pdfBytes = await newPdf.save();
           const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-          const url = URL.createObjectURL(blob);
-          
+          const url = safeCreateObjectURL(blob);
+
           splitResults.push({
-            name: file.file.name.replace('.pdf', `_page_${pageNum + 1}.pdf`),
+            name: sanitizeFileName(file.file.name.replace(/\.pdf$/i, '')) + `_page_${pageNum + 1}.pdf`,
             url,
             size: pdfBytes.length
           });
@@ -191,14 +179,7 @@ export default function PDFBatchProcessor() {
       }
     }
     
-    // Revoke previous result URLs before setting new ones
-    try {
-      results.forEach((r) => {
-        if (r && r.url) URL.revokeObjectURL(r.url);
-      });
-    } catch {
-      // ignore
-    }
+    try { results.forEach((r) => { try { safeRevokeObjectURL(r.url); } catch {} }); } catch {}
     setResults(splitResults);
   };
 
@@ -219,10 +200,10 @@ export default function PDFBatchProcessor() {
         
         const pdfBytes = await pdf.save();
         const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        
+      const url = safeCreateObjectURL(blob);
+
       rotatedResults.push({
-          name: file.file.name.replace('.pdf', '_rotated.pdf'),
+          name: sanitizeFileName(file.file.name.replace(/\.pdf$/i, '')) + '_rotated.pdf',
           url,
           size: pdfBytes.length
         });
@@ -233,49 +214,33 @@ export default function PDFBatchProcessor() {
       }
     }
     
-    // Revoke previous result URLs before setting new ones
-    try {
-      results.forEach((r) => {
-        if (r && r.url) URL.revokeObjectURL(r.url);
-      });
-  } catch {
-  // ignore
-    }
+    try { results.forEach((r) => { try { safeRevokeObjectURL(r.url); } catch {} }); } catch {}
     setResults(rotatedResults);
   };
 
   const downloadAll = () => {
     results.forEach((result) => {
-      const link = document.createElement('a');
-      link.href = result.url;
-      link.download = result.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      try {
+        if (!result || !result.url) return;
+        const link = document.createElement('a');
+        link.href = result.url;
+        link.download = result.name;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (err) {
+        console.error('Error downloading result:', err);
+      }
     });
     // Revoke result URLs shortly after download to free memory
     setTimeout(() => {
-      try {
-        results.forEach((r) => {
-          if (r && r.url) URL.revokeObjectURL(r.url);
-        });
-  } catch {
-        // ignore
-      }
+      try { results.forEach((r) => { try { safeRevokeObjectURL(r.url); } catch {} }); } catch {}
     }, 1000);
   };
 
   // Cleanup on unmount: revoke any created object URLs
   useEffect(() => {
-    return () => {
-      try {
-        results.forEach((r) => {
-          if (r && r.url) URL.revokeObjectURL(r.url);
-        });
-    } catch {
-  // ignore
-      }
-    };
+    return () => { try { results.forEach((r) => { try { safeRevokeObjectURL(r.url); } catch {} }); } catch {} };
   }, [results]);
 
   const formatFileSize = (bytes) => {
@@ -477,17 +442,22 @@ export default function PDFBatchProcessor() {
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        const link = document.createElement('a');
-                        link.href = result.url;
-                        link.download = result.name;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        // Revoke shortly after download starts
-                        const urlToRevoke = result.url;
-                        setTimeout(() => {
-                          try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
-                        }, 500);
+                        try {
+                          const link = document.createElement('a');
+                          link.href = result.url;
+                          link.download = result.name;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                          // Revoke shortly after download starts (skip data: URLs)
+                          const urlToRevoke = result.url;
+                          if (!urlToRevoke || String(urlToRevoke).startsWith('data:')) return;
+                          setTimeout(() => {
+                            try { if (typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                          }, 500);
+                        } catch (err) {
+                          console.error('Error during download click:', err);
+                        }
                       }}
                     >
                       <Download className="h-4 w-4" aria-hidden="true" />

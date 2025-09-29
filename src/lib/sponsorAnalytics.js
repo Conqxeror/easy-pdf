@@ -2,6 +2,7 @@
 // Provides comprehensive metrics to demonstrate sponsor ROI
 
 import { trackEvent } from './analytics';
+import { safeCreateObjectURL, safeRevokeObjectURL } from './enhancedUX';
 
 class SponsorAnalytics {
   constructor() {
@@ -264,12 +265,28 @@ class SponsorAnalytics {
       type: 'application/json'
     });
 
-    const url = URL.createObjectURL(blob);
+    let url = null;
+    try { url = safeCreateObjectURL(blob); } catch { url = null; }
+
+    const fileName = `sponsor-analytics-${new Date().toISOString().split('T')[0]}.json`;
     const link = document.createElement('a');
-    link.href = url;
-    link.download = `sponsor-analytics-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    if (url) {
+      try {
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } finally {
+        setTimeout(() => { try { safeRevokeObjectURL(url); } catch { /* ignore */ } }, 500);
+      }
+    } else {
+      link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportData, null, 2));
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
     trackEvent('sponsor_data_exported', {
       total_sponsors: reports.length,

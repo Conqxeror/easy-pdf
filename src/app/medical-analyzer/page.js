@@ -415,14 +415,20 @@ ${result.recommendations?.join(
                     ],
                     { type: "text/plain" }
                   );
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = `medical-analysis-${file.name}.txt`;
-                  a.click();
-                  setTimeout(() => {
-                    try { URL.revokeObjectURL(url); } catch { }
-                  }, 500);
+                  let url = null;
+                  try {
+                    try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating medical analysis object URL:', err); url = null; }
+                    const a = document.createElement("a");
+                    a.href = url || '';
+                    a.download = `medical-analysis-${file.name}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                  } finally {
+                    setTimeout(() => {
+                      try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+                    }, 500);
+                  }
                 }}
                 aria-label="Download Report"
               >

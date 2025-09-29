@@ -104,18 +104,27 @@ export default function PDFBookmarkManager() {
       
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.name.replace('.pdf', '_with_bookmarks.pdf');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      // Delay revoke so browser can start download
-      setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-      }, 500);
+      let url;
+      try {
+  try { url = typeof URL !== 'undefined' ? URL.createObjectURL(blob) : null; } catch (err) { console.error('Error creating bookmarks export URL:', err); url = null; }
+        const safeBase = file && file.name ? file.name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+        const filename = `${safeBase}_with_bookmarks.pdf`;
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (err) {
+        console.error('Error creating download for PDF with bookmarks:', err);
+        alert('Unable to start PDF download');
+      } finally {
+        // Delay revoke so browser can start download
+        setTimeout(() => {
+      try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
+        }, 500);
+      }
 
       // Also export bookmark list as JSON
       exportBookmarkList();
@@ -135,18 +144,21 @@ export default function PDFBookmarkManager() {
     };
     
     const blob = new Blob([JSON.stringify(bookmarkData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = file.name.replace('.pdf', '_bookmarks.json');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    // Delay revoke so browser can start download
-    setTimeout(() => {
-  try { URL.revokeObjectURL(url); } catch { /* ignore */ }
-    }, 500);
+    let url = null;
+    try {
+      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating bookmarks export URL:', err); url = null; }
+      const safeBase = file && file.name ? file.name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+      const filename = `${safeBase}_bookmarks.json`;
+
+      const link = document.createElement('a');
+      link.href = url || '';
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } finally {
+      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch {} }, 500);
+    }
   };
 
   const BookmarkItem = ({ bookmark }) => (

@@ -1,5 +1,6 @@
 import React from 'react';
 import { toolsData } from '@/lib/toolData';
+import { slugify } from '@/lib/slugify';
 import ToolCard from '@/components/ui/ToolCard';
 import { 
   PageContainer, 
@@ -39,6 +40,7 @@ export async function generateMetadata({ params }) {
 
 const CategoryPage = ({ params }) => {
   const category = params.category;
+  const normalizedCategory = slugify(category);
   const formattedCategory = category
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -47,7 +49,7 @@ const CategoryPage = ({ params }) => {
   // Filter tools by category
   const categoryTools = toolsData.filter(tool => 
     tool.category && 
-    tool.category.toLowerCase().replace(/\s+/g, '-') === category
+    slugify(tool.category) === normalizedCategory
   );
 
   if (categoryTools.length === 0) {

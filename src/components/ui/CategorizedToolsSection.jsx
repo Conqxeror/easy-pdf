@@ -2,6 +2,7 @@ import React from 'react';
 import { Section, Grid } from '@/components/ui/Layout';
 import ToolCard from '@/components/ui/ToolCard';
 import { toolCategories } from '@/lib/toolCategories';
+import { slugify } from '@/lib/slugify';
 import { toolsData } from '@/lib/toolData';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
@@ -39,7 +40,7 @@ const CategorizedToolsSection = () => {
                   {category.name}
                 </h3>
                 <Link 
-                  href={`/categories/${category.name.toLowerCase().replace(/\s+/g, '-')}`}
+                  href={`/categories/${slugify(category.name)}`}
                   className="text-sm text-blue-400 hover:text-blue-300 font-medium inline-flex items-center group"
                 >
                   View all

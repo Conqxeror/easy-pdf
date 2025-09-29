@@ -88,7 +88,14 @@ export default function SecurityPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        dangerouslySetInnerHTML={{ __html: (() => {
+          try {
+            return JSON.stringify(structuredData, (_k, v) => (typeof v === 'function' ? undefined : v));
+          } catch {
+            // fallback to minimal structure
+            try { return JSON.stringify({ '@type': 'FAQPage' }); } catch { return '{}'; }
+          }
+        })() }}
       />
       <ToolPageLayout
         title="Security & Privacy Policy"

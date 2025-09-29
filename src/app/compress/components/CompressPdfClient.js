@@ -36,7 +36,7 @@ export default function CompressPdfClient() {
   useEffect(() => {
     return () => {
       if (compressedPdfUrl) {
-        try { URL.revokeObjectURL(compressedPdfUrl); } catch { /* ignore */ }
+  try { if (compressedPdfUrl && typeof URL !== 'undefined' && !String(compressedPdfUrl).startsWith('data:')) URL.revokeObjectURL(compressedPdfUrl); } catch { /* ignore */ }
       }
     };
   }, [compressedPdfUrl]);
@@ -123,10 +123,11 @@ export default function CompressPdfClient() {
 
       const compressedPdfBytes = await newPdfDoc.save();
       const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+  let url = null;
+  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating compressed PDF object URL:', err); url = null; }
       // Revoke previous URL if present to avoid memory leaks
       setCompressedPdfUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
+  try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch {}
         return url;
       });
 
@@ -358,7 +359,7 @@ export default function CompressPdfClient() {
                   onClick={() => {
                     const urlToRevoke = compressedPdfUrl;
                     setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                      try { if (urlToRevoke && typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
                     }, 500);
                   }}
                 >

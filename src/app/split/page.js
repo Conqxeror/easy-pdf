@@ -6,12 +6,14 @@ import { Download, FileText, Split } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import ToolActions from "@/components/ui/ToolActions";
 import PageRangeInput from "@/components/ui/PageRangeInput";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
@@ -31,8 +33,12 @@ export default function SplitPdfPage() {
   // Cleanup function for object URLs to prevent memory leaks
   useEffect(() => {
     return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
+      try {
+        if (pdfUrl && typeof URL !== 'undefined' && !String(pdfUrl).startsWith('data:')) {
+          try { if (pdfUrl && typeof URL !== 'undefined' && !String(pdfUrl).startsWith('data:')) URL.revokeObjectURL(pdfUrl); } catch {}
+        }
+      } catch {
+        // ignore
       }
     };
   }, [pdfUrl]); // Run when pdfUrl changes or component unmounts
@@ -76,7 +82,7 @@ export default function SplitPdfPage() {
   /**
    * Adds a new custom range input field.
    */
-  const addCustomRange = () => { // eslint-disable-line no-unused-vars
+  const addCustomRange = () => {
     setCustomRanges([...customRanges, { start: "", end: "" }]);
   };
 
@@ -84,7 +90,7 @@ export default function SplitPdfPage() {
    * Removes a custom range input field at the specified index.
    * @param {number} index - The index of the range to remove.
    */
-  const removeCustomRange = (index) => { // eslint-disable-line no-unused-vars
+  const removeCustomRange = (index) => {
     if (customRanges.length > 1) {
       setCustomRanges(customRanges.filter((_, i) => i !== index));
     }
@@ -96,11 +102,12 @@ export default function SplitPdfPage() {
    * @param {string} field - The field to update ('start' or 'end').
    * @param {string} value - The new value for the field.
    */
-  const updateCustomRange = (index, field, value) => { // eslint-disable-line no-unused-vars
+  const updateCustomRange = (index, field, value) => {
     const newCustomRanges = [...customRanges];
     newCustomRanges[index][field] = value;
     setCustomRanges(newCustomRanges);
   };
+
 
   /**
    * Splits the PDF based on the selected mode and ranges.
@@ -151,14 +158,12 @@ export default function SplitPdfPage() {
 
         const pdfBytes = await newPdfDoc.save();
         const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
+        const url = safeCreateObjectURL(blob);
         setPdfUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+          try { safeRevokeObjectURL(prev); } catch { /* ignore */ }
           return url;
         });
-        setDownloadFileName(
-          `${fileName.replace(/\.pdf$/i, "")}_pages_${start}-${end}.pdf`
-        );
+        setDownloadFileName(`${sanitizeFileName(String(fileName).replace(/\.[^/.]+$/, ''))}_pages_${start}-${end}.pdf`);
         setCurrentProgress(100);
         setProcessingMessage("Split complete!");
       } else if (splitMode === "individual") {
@@ -177,19 +182,19 @@ export default function SplitPdfPage() {
           const pdfBytes = await singlePageDoc.save();
           const pageNumber = i + 1; // 1-based page number for filename
           zip.file(
-            `${fileName.replace(/\.pdf$/i, "")}_page_${pageNumber}.pdf`,
+            `${sanitizeFileName(fileName.replace(/\.pdf$/i, ""))}_page_${pageNumber}.pdf`,
             pdfBytes
           );
         }
 
         setProcessingMessage("Compressing individual PDFs into ZIP...");
         const zipBlob = await zip.generateAsync({ type: "blob" });
-        const url = URL.createObjectURL(zipBlob);
+        const url = safeCreateObjectURL(zipBlob);
         setPdfUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+          try { safeRevokeObjectURL(prev); } catch { /* ignore */ }
           return url;
         });
-        setDownloadFileName(`${fileName.replace(/\.pdf$/i, "")}_pages.zip`);
+        setDownloadFileName(`${sanitizeFileName(String(fileName).replace(/\.[^/.]+$/, ''))}_pages.zip`);
         setCurrentProgress(100);
         setProcessingMessage("Split complete!");
       } else if (splitMode === "custom") {
@@ -234,21 +239,21 @@ export default function SplitPdfPage() {
 
           const pdfBytes = await newPdfDoc.save();
           zip.file(
-            `${fileName.replace(/\.pdf$/i, "")}_pages_${range.start}-${
-              range.end
-            }.pdf`,
-            pdfBytes
-          );
+              `${sanitizeFileName(fileName.replace(/\.pdf$/i, ""))}_pages_${range.start}-${
+                range.end
+              }.pdf`,
+              pdfBytes
+            );
         }
 
         setProcessingMessage("Compressing custom range PDFs into ZIP...");
         const zipBlob = await zip.generateAsync({ type: "blob" });
-        const url = URL.createObjectURL(zipBlob);
+        const url = safeCreateObjectURL(zipBlob);
         setPdfUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+          try { safeRevokeObjectURL(prev); } catch { /* ignore */ }
           return url;
         });
-        setDownloadFileName(`${fileName.replace(/\.pdf$/i, "")}_ranges.zip`);
+        setDownloadFileName(`${sanitizeFileName(String(fileName).replace(/\.[^/.]+$/, ''))}_ranges.zip`);
         setCurrentProgress(100);
         setProcessingMessage("Split complete!");
       }
@@ -392,6 +397,25 @@ export default function SplitPdfPage() {
                     </div>
                   </Label>
                 </div>
+                <div>
+                  <RadioGroupItem
+                    value="custom"
+                    id="split-custom"
+                    className="peer sr-only"
+                  />
+                  <Label
+                    htmlFor="split-custom"
+                    className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
+                  >
+                    <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
+                      <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
+                    </div>
+                    <div>
+                      <span className="font-medium text-gray-100">Custom Ranges</span>
+                      <p className="text-xs text-gray-400 mt-1">Define multiple page ranges</p>
+                    </div>
+                  </Label>
+                </div>
               </RadioGroup>
             </div>
 
@@ -409,6 +433,46 @@ export default function SplitPdfPage() {
                   totalPages={totalPages}
                   className="w-full"
                 />
+              </div>
+            )}
+            {splitMode === "custom" && (
+              <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 space-y-3">
+                <Label className="text-gray-200 mb-3 block flex items-center">
+                  <Split className="w-4 h-4 mr-2" />
+                  Custom Ranges
+                </Label>
+                {customRanges.map((range, idx) => (
+                  <div key={idx} className="flex items-center space-x-2">
+                    <input
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={range.start}
+                      onChange={(e) => updateCustomRange(idx, 'start', e.target.value)}
+                      placeholder="Start"
+                      className="w-24 px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-gray-100"
+                    />
+                    <span className="text-gray-400">to</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={range.end}
+                      onChange={(e) => updateCustomRange(idx, 'end', e.target.value)}
+                      placeholder="End"
+                      className="w-24 px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-gray-100"
+                    />
+                    <div className="ml-2 flex items-center space-x-2">
+                      <Button variant="ghost" onClick={() => addCustomRange()}>
+                        +
+                      </Button>
+                      <Button variant="ghost" onClick={() => removeCustomRange(idx)} disabled={customRanges.length <= 1}>
+                        -
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                <p className="text-sm text-gray-400">Enter one or more page ranges (e.g., 1-3, 5-7). Ranges are 1-based and must be within total pages.</p>
               </div>
             )}
           </div>
@@ -433,25 +497,11 @@ export default function SplitPdfPage() {
           </Alert>
         )}
 
-        <div className="flex justify-center">
-          <Button
-            onClick={splitPDF}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
-            variant="default"
-            size="lg"
-            disabled={isProcessing || !file}
-            aria-label="Split PDF"
-          >
-            {isProcessing ? (
-              <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                Splitting...
-              </span>
-            ) : (
-              "Split PDF"
-            )}
-          </Button>
-        </div>
+        <ToolActions
+          primary={{ label: isProcessing ? 'Processing...' : 'Split PDF', onClick: splitPDF, disabled: !file }}
+          download={pdfUrl ? { href: pdfUrl, label: downloadFileName || 'Download' } : null}
+          isProcessing={isProcessing}
+        />
 
         {pdfUrl && !isProcessing && (
           <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
@@ -490,20 +540,12 @@ export default function SplitPdfPage() {
             </div>
 
             <div className="flex justify-center">
-              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
-                <a
-                  href={pdfUrl}
-                  download={downloadFileName}
-                  className="flex items-center"
-                  onClick={() => {
-                    const u = pdfUrl;
-                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
-                  }}
-                >
+              <a href={pdfUrl} download={downloadFileName} className="inline-flex">
+                <Button variant="success" size="lg" className="px-8 py-3">
                   <Download className="w-5 h-5 mr-2" />
                   Download {splitMode === "range" ? "Split PDF" : "ZIP of Pages"}
-                </a>
-              </Button>
+                </Button>
+              </a>
             </div>
           </div>
         )}

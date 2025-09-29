@@ -24,9 +24,11 @@ export default function DeletePagesPage() {
   // Cleanup object URL on unmount or when deletedPdfUrl changes
   useEffect(() => {
     return () => {
-      if (deletedPdfUrl) {
-        try { URL.revokeObjectURL(deletedPdfUrl); } catch { /* ignore */ }
-      }
+      try {
+        if (deletedPdfUrl && typeof URL !== 'undefined' && !String(deletedPdfUrl).startsWith('data:')) {
+          try { if (deletedPdfUrl && typeof URL !== 'undefined' && !String(deletedPdfUrl).startsWith('data:')) URL.revokeObjectURL(deletedPdfUrl); } catch {}
+        }
+      } catch { /* ignore */ }
     };
   }, [deletedPdfUrl]);
 
@@ -142,13 +144,15 @@ export default function DeletePagesPage() {
       // Save the new PDF
       const newPdfBytes = await newPdfDoc.save();
       const blob = new Blob([newPdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      let url = null;
+      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for deleted PDF:', err); }
 
       setDeletedPdfUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+        try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
-      setDownloadFileName(`modified_${file.name}`);
+      const safeBase = file?.name ? file.name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+      setDownloadFileName(url ? `modified_${safeBase}.pdf` : `modified_document.pdf`);
 
       setError("");
     } catch (err) {
@@ -331,7 +335,7 @@ export default function DeletePagesPage() {
                   className="text-center flex items-center"
                   onClick={() => {
                     const u = deletedPdfUrl;
-                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                    setTimeout(() => { try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { } }, 500);
                   }}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

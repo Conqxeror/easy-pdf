@@ -66,9 +66,7 @@ export default function FormFillerPage() {
         renderTaskRef.current.cancel();
       }
       // Revoke object URL to prevent memory leaks
-      if (filledPdfUrl) {
-        try { URL.revokeObjectURL(filledPdfUrl); } catch { /* ignore */ }
-      }
+  try { if (filledPdfUrl && typeof URL !== 'undefined' && !String(filledPdfUrl).startsWith('data:')) URL.revokeObjectURL(filledPdfUrl); } catch { /* ignore */ }
     };
   }, [pdfDocProxy, filledPdfUrl]);
 
@@ -263,12 +261,21 @@ export default function FormFillerPage() {
 
       const pdfBytes = await srcDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      let url = null;
+      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for filled PDF:', err); }
+
       setFilledPdfUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
+        try {
+          if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) {
+            try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch {}
+          }
+        } catch {
+          /* ignore */
+        }
         return url;
       });
-      setDownloadFileName(`filled_form_${files[0].name || "document"}.pdf`);
+      const safeBase = files[0]?.name ? files[0].name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+      setDownloadFileName(url ? `filled_form_${safeBase}.pdf` : `filled_form_document.pdf`);
 
       setError("");
     } catch (err) {
@@ -548,7 +555,9 @@ export default function FormFillerPage() {
                     const u = filledPdfUrl;
                     setTimeout(() => {
                       try {
-                        if (u) URL.revokeObjectURL(u);
+                        if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) {
+                          try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { }
+                        }
                       } catch {}
                     }, 500);
                   }}

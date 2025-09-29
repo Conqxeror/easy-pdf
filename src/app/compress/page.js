@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import ToolActions from "@/components/ui/ToolActions";
 
 // Configure pdfjs worker only on the client to avoid SSR/runtime errors
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -35,8 +36,12 @@ export default function CompressPDFs() {
   // Cleanup function for object URLs to prevent memory leaks
   useEffect(() => {
     return () => {
-      if (compressedPdfUrl) {
-        try { URL.revokeObjectURL(compressedPdfUrl); } catch { /* ignore */ }
+      try {
+        if (compressedPdfUrl && typeof URL !== "undefined" && !String(compressedPdfUrl).startsWith("data:")) {
+            try { if (typeof URL !== "undefined" && compressedPdfUrl && !String(compressedPdfUrl).startsWith('data:')) URL.revokeObjectURL(compressedPdfUrl); } catch { /* ignore */ }
+        }
+      } catch {
+        // ignore
       }
     };
   }, [compressedPdfUrl]);
@@ -74,8 +79,9 @@ export default function CompressPDFs() {
     setCompressedPdfUrl(null);
 
     try {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjs.getDocument(arrayBuffer).promise;
+  const arrayBuffer = await file.arrayBuffer();
+  // Use getDocument with data property to avoid relying on blob URLs
+  const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       const numPages = pdf.numPages;
       setProgress(10);
       setProcessingMessage("Processing pages...");
@@ -123,17 +129,33 @@ export default function CompressPDFs() {
 
       const compressedPdfBytes = await newPdfDoc.save();
       const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      let url = null;
+      try {
+        if (typeof URL !== "undefined" && typeof window !== 'undefined') {
+          try { url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for compressed PDF:', err); url = null; }
+        }
+      } catch {
+        url = null;
+      }
       // Revoke previous URL if present to avoid memory leaks
       setCompressedPdfUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
+        try {
+          if (prev && typeof URL !== "undefined" && typeof window !== 'undefined' && !String(prev).startsWith('data:')) {
+            try { URL.revokeObjectURL(prev); } catch { /* ignore */ }
+          }
+        } catch { /* ignore */ }
         return url;
       });
 
       const newSize = blob.size;
       setCompressedSize(newSize);
-      const reduction = ((originalSize - newSize) / originalSize) * 100;
-      setCompressionPercentage(Math.max(0, Math.round(reduction)));
+      // Avoid division by zero when originalSize is 0
+      if (originalSize > 0) {
+        const reduction = ((originalSize - newSize) / originalSize) * 100;
+        setCompressionPercentage(Math.max(0, Math.round(reduction)));
+      } else {
+        setCompressionPercentage(0);
+      }
 
       setProgress(100);
       setProcessingMessage("Compression complete!");
@@ -354,22 +376,15 @@ export default function CompressPDFs() {
 
         {error && <Alert variant="destructive">{error}</Alert>}
 
-        <div className="flex justify-center">
-          <Button
-            onClick={compressPDF}
-            disabled={isCompressing || !file}
-            size="lg"
-          >
-            {isCompressing ? (
-              <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                Compressing...
-              </span>
-            ) : (
-              "Compress PDF"
-            )}
-          </Button>
-        </div>
+        <ToolActions
+          primary={{
+            label: isCompressing ? 'Compressing...' : 'Compress PDF',
+            onClick: compressPDF,
+            disabled: !file,
+          }}
+          download={compressedPdfUrl ? { href: compressedPdfUrl, label: `Download Compressed PDF` } : null}
+          isProcessing={isCompressing}
+        />
 
         {compressedPdfUrl && !isCompressing && (
           <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
@@ -401,12 +416,13 @@ export default function CompressPDFs() {
               <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
                 <a
                   href={compressedPdfUrl}
-                  download={`compressed_${fileName}`}
+                  download={`compressed_${String(fileName || 'file').replace(/\.[^/.]+$/, '').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-_.]/g,'')}.pdf`}
                   className="text-center flex items-center"
                   onClick={() => {
                     const urlToRevoke = compressedPdfUrl;
+                    if (!urlToRevoke || String(urlToRevoke).startsWith("data:")) return;
                     setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                      try { if (typeof URL !== "undefined" && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
                     }, 500);
                   }}
                 >

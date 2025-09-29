@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { trackEvent } from './analytics';
+import { safeCreateObjectURL, safeRevokeObjectURL } from './enhancedUX';
 
 const MAX_HISTORY_ITEMS = 50;
 const MAX_FAVORITES = 20;
@@ -183,19 +184,39 @@ export class FileHistoryManager {
       exportDate: new Date().toISOString(),
       version: '1.0'
     };
-
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: 'application/json'
     });
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `pdf-tools-history-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      const fileName = `pdf-tools-history-${new Date().toISOString().split('T')[0]}.json`;
+      const url = safeCreateObjectURL(blob);
+
+      if (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        try { safeRevokeObjectURL(url); } catch { /* ignore */ }
+      } else {
+        // Fallback to data URL
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUrl = reader.result;
+          const a = document.createElement('a');
+          a.href = dataUrl;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        };
+        reader.readAsDataURL(blob);
+      }
+    } catch (err) {
+      console.error('Error exporting history:', err);
+    }
 
     trackEvent('history_exported');
   }
@@ -204,7 +225,7 @@ export class FileHistoryManager {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       
-      reader.onload = (e) => {
+        reader.onload = (e) => {
         try {
           const data = JSON.parse(e.target.result);
           

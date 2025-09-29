@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 import { Unlock } from "lucide-react";
 
 export default function UnlockPdfPage() {
@@ -22,7 +23,7 @@ export default function UnlockPdfPage() {
   useEffect(() => {
     return () => {
       if (unlockedUrl) {
-        try { URL.revokeObjectURL(unlockedUrl); } catch { /* ignore */ }
+        try { if (unlockedUrl && typeof URL !== 'undefined' && !String(unlockedUrl).startsWith('data:')) URL.revokeObjectURL(unlockedUrl); } catch { /* ignore */ }
       }
     };
   }, [unlockedUrl]); // Runs when unlockedUrl changes or component unmounts
@@ -53,9 +54,9 @@ export default function UnlockPdfPage() {
       // Simply save it to get an unencrypted version.
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      const url = safeCreateObjectURL(blob);
       setUnlockedUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
+        try { safeRevokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
     } catch (e) {
@@ -106,6 +107,10 @@ export default function UnlockPdfPage() {
         "Yes, the maximum file size for a PDF to be unlocked is 50MB. For larger files, you might experience slower processing times or need to use a desktop application.",
     },
   ];
+
+  // Prepare a safe download filename when an unlocked PDF is available
+  const _baseName = fileName ? fileName.replace(/\.[^/.]+$/, "") : "document";
+  const unlockedDownloadName = `unlocked_${_baseName}.pdf`;
 
   return (
     <ToolPageLayout
@@ -209,17 +214,18 @@ export default function UnlockPdfPage() {
                 size="lg"
                 className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
               >
-                <a
-                  href={unlockedUrl}
-                  download={`unlocked_${fileName}`}
-                  className="text-center flex items-center"
-                  onClick={() => {
-                    const urlToRevoke = unlockedUrl;
-                    setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { }
-                    }, 500);
-                  }}
-                >
+                  <a
+                    href={unlockedUrl}
+                    download={unlockedDownloadName}
+                    className="text-center flex items-center"
+                    onClick={() => {
+                      const urlToRevoke = unlockedUrl;
+                      if (!urlToRevoke || String(urlToRevoke).startsWith('data:')) return;
+                      setTimeout(() => {
+                        try { if (typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { }
+                      }, 500);
+                    }}
+                  >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                   </svg>

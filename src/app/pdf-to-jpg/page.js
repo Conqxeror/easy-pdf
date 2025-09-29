@@ -15,8 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import JSZip from "jszip";
-import Image from "next/image";
+// Use native <img> for blob/object URLs (next/image optimizations don't apply to blob URLs)
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 // Configure pdfjs worker
 if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
@@ -46,14 +47,36 @@ export default function PdfToJpgPage() {
     // This effect runs on component unmount or when `images` state changes
     return () => {
       images.forEach((img) => {
-        try {
-          if (img && img.url) URL.revokeObjectURL(img.url);
-  } catch {
-          // ignore
-        }
+        try { safeRevokeObjectURL(img?.url); } catch { /* ignore */ }
       });
     };
   }, [images]); // Dependency array: run when `images` array changes
+
+  // Draw a preview into the canvas when a single converted image exists
+  useEffect(() => {
+    const nonZip = images.filter((img) => !img.isZip);
+    if (nonZip.length === 1 && imagePreviewCanvasRef.current) {
+      const previewImg = new window.Image();
+      previewImg.onload = () => {
+        const canvas = imagePreviewCanvasRef.current;
+        const ctx = canvas.getContext("2d");
+        // Resize the canvas to the image size for a crisp preview
+        canvas.width = previewImg.width;
+        canvas.height = previewImg.height;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(previewImg, 0, 0);
+      };
+      previewImg.src = nonZip[0].url;
+      return () => {
+        previewImg.onload = null;
+      };
+    } else if (imagePreviewCanvasRef.current) {
+      // Clear the canvas when there is no single preview
+      const canvas = imagePreviewCanvasRef.current;
+      const ctx = canvas.getContext("2d");
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }, [images]);
 
   /**
    * Handles file selection from the dropzone.
@@ -78,7 +101,13 @@ export default function PdfToJpgPage() {
     // if a new file is dropped quickly before old URLs are revoked.
     if (images.length > 0) {
       images.forEach((img) => {
-        if (img.url) URL.revokeObjectURL(img.url);
+        try {
+          if (img && img.url && typeof URL !== "undefined" && !String(img.url).startsWith("data:")) {
+            try { if (img.url && typeof URL !== 'undefined' && !String(img.url).startsWith('data:')) URL.revokeObjectURL(img.url); } catch {}
+          }
+        } catch {
+          /* ignore */
+        }
       });
       setImages([]); // Clear the array
     }
@@ -87,13 +116,13 @@ export default function PdfToJpgPage() {
       return;
     }
 
-    const file = files[0];
-    console.log("Processing file:", file.name, "Type:", file.type, "Size:", file.size);
+    const currentFile = selectedFile;
+    console.log("Processing file:", currentFile.name, "Type:", currentFile.type, "Size:", currentFile.size);
     
-    if (file.type === "application/pdf") {
+    if (currentFile.type === "application/pdf") {
       try {
         console.log("Loading PDF document...");
-        const arrayBuffer = await file.arrayBuffer();
+        const arrayBuffer = await currentFile.arrayBuffer();
         
         const loadingTask = pdfjs.getDocument({
           data: arrayBuffer,
@@ -109,7 +138,7 @@ export default function PdfToJpgPage() {
         setError("Failed to load PDF. Please ensure it's a valid PDF file.");
       setFile(null);
       }
-    } else if (file.type.startsWith("image/")) {
+    } else if (currentFile.type.startsWith("image/")) {
       console.log("Processing image file");
       setTotalPages(1);
     } else {
@@ -182,16 +211,16 @@ export default function PdfToJpgPage() {
         const imageData = canvas.toDataURL("image/jpeg", 0.9); // Fixed quality to 90%
         const blob = await (await fetch(imageData)).blob(); // Convert data URL to Blob
 
-        const imageName = `${fileName.replace(
-          ".pdf",
-          ""
-        )}_page_${pageNumber}.jpg`;
+        const imageName = `${sanitizeFileName(fileName)}_page_${pageNumber}.jpg`;
         // Add to zip (use Blob directly, JSZip handles it)
         zip.file(imageName, blob);
 
+        // Create an object URL for preview where possible. Fall back to data URL if creation fails.
+        const imgUrl = safeCreateObjectURL(blob) || imageData;
+
         convertedImages.push({
           pageNumber,
-          url: URL.createObjectURL(blob), // Create object URL for preview/individual download
+          url: imgUrl,
           fileName: imageName,
           size: blob.size,
         });
@@ -212,11 +241,12 @@ export default function PdfToJpgPage() {
           compression: "DEFLATE",
           compressionOptions: { level: 9 },
         });
-        const zipUrl = URL.createObjectURL(zipBlob);
+        const zipUrl = safeCreateObjectURL(zipBlob);
+
         convertedImages.push({
           isZip: true,
           url: zipUrl,
-          fileName: `${fileName.replace(".pdf", "")}_images.zip`,
+          fileName: `${sanitizeFileName(fileName)}_images.zip`,
           size: zipBlob.size,
         });
       }
@@ -426,16 +456,18 @@ export default function PdfToJpgPage() {
                       className="border border-gray-600 rounded-md p-3 bg-gray-700 text-gray-100 flex flex-col items-center text-center"
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <Image
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                           src={image.url}
                           alt={`Page ${image.pageNumber}`}
                           width={64}
                           height={64}
                           className="object-cover rounded shadow"
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src =
-                              "https://placehold.co/64x64/333/FFF?text=Error";
+                            onError={(e) => {
+                            const t = e.currentTarget;
+                            // @ts-ignore - currentTarget is HTMLImageElement
+                            t.onerror = null;
+                            t.src = "https://placehold.co/64x64/333/FFF?text=Error";
                           }}
                         />
                         <div className="flex flex-col items-start">
@@ -456,10 +488,15 @@ export default function PdfToJpgPage() {
                         <a
                           href={image.url}
                           download={image.fileName}
-                          onClick={() => {
-                            setTimeout(() => {
-                              try { URL.revokeObjectURL(image.url); } catch { /* ignore */ }
-                            }, 500);
+                            onClick={() => {
+                              const url = image.url;
+                              // Only attempt to revoke blob/object URLs (not data URLs)
+                              if (!url || String(url).startsWith("data:")) return;
+                              setTimeout(() => {
+                                try {
+                                  try { if (typeof URL !== "undefined" && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch {}
+                                } catch { /* ignore revoke errors */ }
+                              }, 500);
                           }}
                         >
                           Download
@@ -469,33 +506,51 @@ export default function PdfToJpgPage() {
                   ))}
               </div>
 
-              {images.find((img) => img.isZip) && (
-                <div className="flex justify-center mt-4">
-                  <Button
-                    asChild
-                    variant="success"
-                    size="lg"
-                    className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
-                  >
-                    <a
-                      href={images.find((img) => img.isZip).url}
-                      download={images.find((img) => img.isZip).fileName}
-                      className="text-center flex items-center"
-                      onClick={() => {
-                        const zipUrl = images.find((img) => img.isZip)?.url;
-                        setTimeout(() => {
-                          try { if (zipUrl) URL.revokeObjectURL(zipUrl); } catch { /* ignore */ }
-                        }, 500);
-                      }}
-                    >
-                      <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                      </svg>
-                      Download All as ZIP
-                    </a>
-                  </Button>
-                </div>
-              )}
+              {(() => {
+                const zipItem = images.find((img) => img.isZip);
+                if (!zipItem) return null;
+                return (
+                  <div className="flex justify-center mt-4">
+                    {zipItem.url ? (
+                      <Button
+                        asChild
+                        variant="success"
+                        size="lg"
+                        className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl"
+                      >
+                        <a
+                          href={zipItem.url}
+                          download={zipItem.fileName}
+                          className="text-center flex items-center"
+                          onClick={() => {
+                            const zipUrl = zipItem.url;
+                            if (!zipUrl || String(zipUrl).startsWith('data:')) return;
+                            setTimeout(() => {
+                              try {
+                                try { if (typeof URL !== "undefined" && !String(zipUrl).startsWith('data:')) URL.revokeObjectURL(zipUrl); } catch {}
+                              } catch { /* ignore */ }
+                            }, 500);
+                          }}
+                        >
+                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                          </svg>
+                          Download All as ZIP
+                        </a>
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="success"
+                        size="lg"
+                        disabled
+                        className="px-8 py-3 text-center"
+                      >
+                        ZIP not available for download
+                      </Button>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           </div>
         )}

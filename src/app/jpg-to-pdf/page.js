@@ -6,8 +6,8 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import Image from "next/image";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function JpgToPdfPage() {
   const [files, setFiles] = useState([]);
@@ -21,17 +21,16 @@ export default function JpgToPdfPage() {
   // Cleanup function for object URLs
   useEffect(() => {
     return () => {
-      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
-      files.forEach(file => {
-        if (file.objectURL) URL.revokeObjectURL(file.objectURL);
-      });
+      try { safeRevokeObjectURL(pdfUrl); } catch {}
+      files.forEach(file => { try { safeRevokeObjectURL(file.objectURL); } catch {} });
     };
   }, [pdfUrl, files]);
 
   const handleFiles = (acceptedFiles) => {
-    const newFiles = acceptedFiles.map(file => Object.assign(file, {
-      objectURL: URL.createObjectURL(file)
-    }));
+    const newFiles = acceptedFiles.map(file => {
+      const objUrl = safeCreateObjectURL(file);
+      return Object.assign(file, { objectURL: objUrl });
+    });
     setFiles(prevFiles => [...prevFiles, ...newFiles]);
     setError("");
     setPdfUrl(null);
@@ -40,7 +39,13 @@ export default function JpgToPdfPage() {
   };
 
   const removeFile = (fileName) => {
-    setFiles(prevFiles => prevFiles.filter(file => file.name !== fileName));
+    setFiles(prevFiles => {
+      const toRemove = prevFiles.find(file => file.name === fileName);
+      if (toRemove && toRemove.objectURL) {
+        try { safeRevokeObjectURL(toRemove.objectURL); } catch { /* ignore */ }
+      }
+      return prevFiles.filter(file => file.name !== fileName);
+    });
   };
 
   const convertToPdf = async () => {
@@ -110,16 +115,13 @@ export default function JpgToPdfPage() {
       setProcessingMessage("Saving PDF...");
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      
-      const newFileName = files.length === 1 
-        ? files[0].name.replace(/\.[^/.]+$/, ".pdf") 
-        : "converted_images.pdf";
+      const url = safeCreateObjectURL(blob);
 
-      setPdfUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { }
-        return url;
-      });
+      const newFileName = files.length === 1
+        ? sanitizeFileName(files[0].name) + ".pdf"
+        : `${sanitizeFileName("converted_images")}.pdf`;
+
+      setPdfUrl((prev) => { try { safeRevokeObjectURL(prev); } catch {} return url; });
       setPdfFileName(newFileName);
       setProcessingMessage("Conversion complete!");
     } catch (err) {
@@ -219,12 +221,19 @@ export default function JpgToPdfPage() {
                   >
                     X
                   </Button>
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={file.objectURL}
                     alt={file.name}
                     width={100}
                     height={100}
                     className="object-cover rounded shadow mb-2"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      // @ts-ignore
+                      t.onerror = null;
+                      t.src = "https://placehold.co/100x100/EEE/333?text=Error";
+                    }}
                   />
                   <p className="font-medium text-sm break-all">{file.name}</p>
                   <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
@@ -301,7 +310,13 @@ export default function JpgToPdfPage() {
                   className="text-center flex items-center"
                   onClick={() => {
                     const u = pdfUrl;
-                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                    setTimeout(() => {
+                      try {
+                        if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) {
+                          try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch {}
+                        }
+                      } catch {}
+                    }, 500);
                   }}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

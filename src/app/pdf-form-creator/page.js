@@ -199,30 +199,24 @@ export default function PDFFormCreator() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-
-      // Revoke previous URLs if any (defensive)
+      let url = null;
       try {
-        // No persistent state here, but attempt safe revocation of any existing global link URLs
-  } catch {
-        // ignore
+        try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for form PDF:', err); url = null; }
+        const link = document.createElement('a');
+        link.href = url || '';
+        const safeTitle = (formTitle || 'form').replace(/\s+/g, '_').replace(/[^a-zA-Z0-9\-_.]/g, '');
+        link.download = `${safeTitle}_form.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (err) {
+        console.error('Error creating form PDF download:', err);
+        alert('Failed to download form PDF. Please try again.');
+      } finally {
+        setTimeout(() => {
+          try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+        }, 500);
       }
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${formTitle.replace(/\s+/g, '_')}_form.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      // Revoke URL after a short delay to let the download start
-      setTimeout(() => {
-        try {
-          URL.revokeObjectURL(url);
-  } catch {
-          // ignore
-        }
-      }, 500);
     } catch (error) {
       console.error('Error creating form PDF:', error);
     } finally {

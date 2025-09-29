@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 // Import pdfjs-dist legacy build for PDF rendering (safer with bundlers)
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -225,13 +226,17 @@ export default function SignPdfPage() {
     const previousPdfDocProxy = pdfDocProxy; // Capture the value from the previous render
     return () => {
       if (previousPdfDocProxy) {
-        previousPdfDocProxy.destroy();
+        try { previousPdfDocProxy.destroy(); } catch { /* ignore */ }
         console.log("Previous PDF document proxy destroyed.");
       }
       // renderTaskRef cleanup is already handled inside renderPdfPreview or when a new file is loaded.
       // Revoke object URL to prevent memory leaks
       if (signedPdfUrl) {
-        URL.revokeObjectURL(signedPdfUrl);
+        try {
+          if (typeof URL !== 'undefined' && !String(signedPdfUrl).startsWith('data:')) {
+            try { if (signedPdfUrl && typeof URL !== 'undefined' && !String(signedPdfUrl).startsWith('data:')) URL.revokeObjectURL(signedPdfUrl); } catch {}
+          }
+        } catch { /* ignore */ }
       }
     };
   }, [pdfDocProxy, signedPdfUrl]); // Only triggers when pdfDocProxy or signedPdfUrl state changes
@@ -255,7 +260,7 @@ export default function SignPdfPage() {
     // Explicitly set pdfDocProxy to null first to ensure old one is cleared via useEffect cleanup
     // Also clear the activePdfDocProxyRef immediately
     if (activePdfDocProxyRef.current) {
-      activePdfDocProxyRef.current.destroy(); // Destroy the old instance immediately
+      try { activePdfDocProxyRef.current.destroy(); } catch { /* ignore */ }
       activePdfDocProxyRef.current = null;
     }
     setPdfDocProxy(null); // This will also trigger the useEffect cleanup for the old state value (if any)
@@ -439,13 +444,21 @@ export default function SignPdfPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
+      let url = null;
+      try {
+        url = safeCreateObjectURL(blob);
+      } catch {
+        url = null;
+      }
+
       // Revoke previous signed PDF URL if present to avoid memory leaks
-      setSignedPdfUrl((prev) => {
-  try { if (prev) URL.revokeObjectURL(prev); } catch { /* ignore */ }
-        return url;
-      });
-      setDownloadFileName(`signed_${files[0].name || "document"}.pdf`);
+      try {
+        safeRevokeObjectURL(signedPdfUrl);
+      } catch { /* ignore */ }
+
+      setSignedPdfUrl(url);
+  const safeBase = files[0] && files[0].name ? sanitizeFileName(files[0].name) : 'document';
+  setDownloadFileName(url ? `signed_${safeBase}.pdf` : `signed_document.pdf`);
 
       setProcessingMessage("PDF signed successfully!");
       setError("");
@@ -726,7 +739,11 @@ export default function SignPdfPage() {
                   onClick={() => {
                     const urlToRevoke = signedPdfUrl;
                     setTimeout(() => {
-                      try { if (urlToRevoke) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
+                      try {
+                        if (urlToRevoke && typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) {
+                          try { if (urlToRevoke && typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { }
+                        }
+                      } catch { /* ignore */ }
                     }, 500);
                   }}
                 >

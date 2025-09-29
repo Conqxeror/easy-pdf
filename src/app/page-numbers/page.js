@@ -74,7 +74,7 @@ export default function PageNumbersPage() {
 
     // Cancel any ongoing render task
     if (renderTaskRef.current) {
-      renderTaskRef.current.cancel();
+      try { renderTaskRef.current.cancel(); } catch { /* ignore */ }
       renderTaskRef.current = null;
     }
 
@@ -219,16 +219,16 @@ export default function PageNumbersPage() {
   useEffect(() => {
     return () => {
       if (pdfDocProxy) {
-        pdfDocProxy.destroy();
+        try { pdfDocProxy.destroy(); } catch { /* ignore */ }
         setPdfDocProxy(null); // Ensure state is cleared
       }
       if (renderTaskRef.current) {
-        renderTaskRef.current.cancel();
+        try { renderTaskRef.current.cancel(); } catch { /* ignore */ }
         renderTaskRef.current = null;
       }
       // Revoke object URL to prevent memory leaks
       if (numberedPdfUrl) {
-        URL.revokeObjectURL(numberedPdfUrl);
+  try { if (numberedPdfUrl && typeof URL !== 'undefined' && !String(numberedPdfUrl).startsWith('data:')) URL.revokeObjectURL(numberedPdfUrl); } catch { /* ignore */ }
       }
     };
   }, [pdfDocProxy, numberedPdfUrl]);
@@ -245,11 +245,11 @@ export default function PageNumbersPage() {
 
     if (pdfDocProxy) {
       // Destroy previous PDF if exists
-      pdfDocProxy.destroy();
+      try { pdfDocProxy.destroy(); } catch { /* ignore */ }
       setPdfDocProxy(null);
     }
     if (renderTaskRef.current) {
-      renderTaskRef.current.cancel();
+      try { renderTaskRef.current.cancel(); } catch { /* ignore */ }
       renderTaskRef.current = null;
     }
 
@@ -432,9 +432,13 @@ export default function PageNumbersPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      setNumberedPdfUrl(url);
-      setDownloadFileName(`numbered_${files[0].name || "document"}.pdf`);
+  // Revoke previous numbered URL if present
+  try { if (numberedPdfUrl && typeof URL !== 'undefined' && !String(numberedPdfUrl).startsWith('data:')) URL.revokeObjectURL(numberedPdfUrl); } catch { /* ignore */ }
+  let url = null;
+  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for numbered PDF:', err); url = null; }
+  setNumberedPdfUrl(url);
+  const baseName = files && files[0] && files[0].name ? files[0].name.replace(/\.[^/.]+$/, "") : "document";
+  setDownloadFileName(`numbered_${baseName}.pdf`);
 
       setError("");
     } catch (e) {
@@ -798,7 +802,7 @@ export default function PageNumbersPage() {
                       setTimeout(() => {
                         try {
                           if (numberedPdfUrl)
-                            URL.revokeObjectURL(numberedPdfUrl);
+                            try { if (numberedPdfUrl && typeof URL !== 'undefined' && !String(numberedPdfUrl).startsWith('data:')) URL.revokeObjectURL(numberedPdfUrl); } catch { }
                         } catch {}
                       }, 500);
                     }}

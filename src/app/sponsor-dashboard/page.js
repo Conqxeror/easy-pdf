@@ -15,11 +15,15 @@ const SponsorDashboardPage = () => {
   const [showLogin, setShowLogin] = useState(true);
 
   useEffect(() => {
-    // Check if already authorized
-    const authorized = sessionStorage.getItem('sponsor_dashboard_auth');
-    if (authorized === 'true') {
-      setIsAuthorized(true);
-      setShowLogin(false);
+    // Check if already authorized (guard storage access for SSR or restricted environments)
+    try {
+      const authorized = typeof window !== 'undefined' ? sessionStorage.getItem('sponsor_dashboard_auth') : null;
+      if (authorized === 'true') {
+        setIsAuthorized(true);
+        setShowLogin(false);
+      }
+    } catch {
+      // ignore storage access errors
     }
   }, []);
 
@@ -30,7 +34,7 @@ const SponsorDashboardPage = () => {
     if (password === 'sponsor2024' || password === 'demo') {
       setIsAuthorized(true);
       setShowLogin(false);
-      sessionStorage.setItem('sponsor_dashboard_auth', 'true');
+      try { sessionStorage.setItem('sponsor_dashboard_auth', 'true'); } catch { /* ignore */ }
       trackEvent('sponsor_dashboard_login', { success: true });
     } else {
       alert('Invalid password');

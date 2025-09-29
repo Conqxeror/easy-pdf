@@ -39,7 +39,8 @@ export default function ToolPageLayout({
   steps = [],
   faqs = [],
   currentTool,
-  breadcrumbs = []
+  breadcrumbs = [],
+  primaryActionHref
 }) {
   const { isDark } = useTheme();
 
@@ -69,9 +70,9 @@ export default function ToolPageLayout({
                   {toolDescription}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                {children}
-              </CardContent>
+                    <CardContent className="space-y-8">
+                      {children}
+                    </CardContent>
             </Card>
           </Section>
           
@@ -80,7 +81,7 @@ export default function ToolPageLayout({
               <AccessibleHeading level={2} className={`text-2xl text-center mb-8 ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 How to Use
               </AccessibleHeading>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {steps.map((step, index) => (
                   <div key={index} className={`${isDark ? 'bg-gray-800/50 border-gray-700 hover:border-blue-500' : 'bg-gray-800/50 border-gray-700 hover:border-blue-500'} p-6 rounded-xl border transition-all duration-300`}>
                     <div className={`text-blue-500 dark:text-blue-400 text-2xl font-bold mb-3`}>0{index + 1}</div>
@@ -133,7 +134,7 @@ export default function ToolPageLayout({
                 size="lg"
                 className="px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
-                <a href="/merge">
+                <a href={primaryActionHref || "/merge"}>
                   Get Started Now
                 </a>
               </Button>

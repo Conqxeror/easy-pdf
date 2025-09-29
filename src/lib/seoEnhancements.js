@@ -4,7 +4,7 @@ export const generateEnhancedMetadata = ({
   description = 'Privacy-first PDF tools for secure document processing.', 
   keywords, 
   canonicalUrl, 
-  metadataBaseUrl, 
+  metadataBaseUrl,
   toolName, 
   ogImage,
   pageType = 'tool',
@@ -12,9 +12,12 @@ export const generateEnhancedMetadata = ({
   lastModified,
   author = "Wali Mohammad Kadri"
 }) => {
+  // Prefer runtime environment value for base URL when available
+  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
+  const resolvedBase = metadataBaseUrl || (envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app')
   const baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
-  const keywordArray = Array.isArray(keywords) ? keywords : [keywords]
+  const keywordArray = Array.isArray(keywords) ? keywords : (keywords ? [keywords] : [])
   
   // Enhanced keywords with semantic variations
   const enhancedKeywords = [
@@ -31,14 +34,14 @@ export const generateEnhancedMetadata = ({
   ].filter(Boolean).join(', ')
 
   return {
-    metadataBase: new URL(metadataBaseUrl),
+  metadataBase: new URL(resolvedBase),
     title: {
       default: baseTitle,
       template: '%s | easy-pdf - Privacy-First PDF Tools'
     },
     description: enhancedDescription,
     keywords: enhancedKeywords,
-    authors: [{ name: author, url: metadataBaseUrl }],
+  authors: [{ name: author, url: String(resolvedBase) }],
     creator: author,
     publisher: "easy-pdf",
     applicationName: "easy-pdf",
@@ -75,11 +78,11 @@ export const generateEnhancedMetadata = ({
     },
     
     alternates: {
-      canonical: canonicalUrl,
+      canonical: canonicalUrl || resolvedBase,
       languages: {
-        'en-IN': canonicalUrl,
-        'en-US': canonicalUrl,
-        'en': canonicalUrl
+        'en-IN': canonicalUrl || resolvedBase,
+        'en-US': canonicalUrl || resolvedBase,
+        'en': canonicalUrl || resolvedBase
       }
     },
     
@@ -102,11 +105,11 @@ export const generateEnhancedMetadata = ({
     openGraph: {
       title: baseTitle,
       description: enhancedDescription,
-      url: canonicalUrl,
+  url: canonicalUrl || resolvedBase,
       siteName: "easy-pdf - Privacy-First PDF Tools",
       type: pageType === 'homepage' ? 'website' : 'article',
-      locale: "en_IN",
-      alternateLocale: ["en_US", "en"],
+  locale: "en-IN",
+    alternateLocale: ["en-US", "en"],
       countryName: "India",
       images: [
         {
@@ -182,7 +185,7 @@ export const generateEnhancedMetadata = ({
     
     // Additional metadata for better SEO
     category: 'Technology',
-    bookmarks: canonicalUrl,
+    bookmarks: canonicalUrl || resolvedBase,
     ...(breadcrumbs.length > 0 && {
       breadcrumb: breadcrumbs.map(crumb => crumb.name).join(' > ')
     })
@@ -191,7 +194,8 @@ export const generateEnhancedMetadata = ({
 
 // Generate comprehensive structured data
 export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
-  const baseUrl = 'https://easy-pdf-murex.vercel.app'
+  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
+  const baseUrl = envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app'
   
   const organizationSchema = {
     "@context": "https://schema.org",

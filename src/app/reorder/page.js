@@ -17,6 +17,7 @@ if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
   pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
 }
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function ReorderPage() {
   const [files, setFiles] = useState([]);
@@ -43,15 +44,15 @@ export default function ReorderPage() {
   useEffect(() => {
     return () => {
       if (pdfDocProxy) {
-        pdfDocProxy.destroy();
+        try { pdfDocProxy.destroy(); } catch { /* ignore */ }
       }
       // Cancel any ongoing render tasks to prevent errors on unmount
       Object.values(renderTaskRefs.current).forEach((task) => {
-        if (task) task.cancel();
+        try { if (task) task.cancel(); } catch { /* ignore */ }
       });
       // Revoke object URL to prevent memory leaks
       if (reorderedPdfUrl) {
-        URL.revokeObjectURL(reorderedPdfUrl);
+  try { if (reorderedPdfUrl && typeof URL !== 'undefined' && !String(reorderedPdfUrl).startsWith('data:')) URL.revokeObjectURL(reorderedPdfUrl); } catch { /* ignore */ }
       }
     };
   }, [pdfDocProxy, reorderedPdfUrl]); // Only re-run when pdfDocProxy or reorderedPdfUrl changes
@@ -128,12 +129,12 @@ export default function ReorderPage() {
 
     if (pdfDocProxy) {
       // Destroy previous PDF if exists
-      pdfDocProxy.destroy();
+      try { pdfDocProxy.destroy(); } catch { /* ignore */ }
       setPdfDocProxy(null);
     }
     // Clear all render task refs
     Object.values(renderTaskRefs.current).forEach((task) => {
-      if (task) task.cancel();
+      try { if (task) task.cancel(); } catch { /* ignore */ }
     });
     renderTaskRefs.current = {};
     canvasRefs.current = {}; // Clear canvas refs for new file
@@ -242,11 +243,13 @@ export default function ReorderPage() {
         newDoc.addPage(copiedPage);
       }
 
-      const pdfBytes = await newDoc.save();
-      const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      setReorderedPdfUrl(url);
-      setDownloadFileName(`reordered_${files[0].name || "document"}.pdf`);
+    const pdfBytes = await newDoc.save();
+    const blob = new Blob([pdfBytes], { type: "application/pdf" });
+    try { safeRevokeObjectURL(reorderedPdfUrl); } catch {}
+    const url = safeCreateObjectURL(blob);
+    setReorderedPdfUrl(url);
+    const baseName = files && files[0] && files[0].name ? sanitizeFileName(String(files[0].name).replace(/\.[^/.]+$/, "")) : "document";
+    setDownloadFileName(`reordered_${baseName}.pdf`);
 
       setError(""); // Clear error on success
     } catch (e) {
@@ -414,7 +417,7 @@ export default function ReorderPage() {
                   className="text-center flex items-center"
                   onClick={() => {
                     const u = reorderedPdfUrl;
-                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                    setTimeout(() => { try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { } }, 500);
                   }}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

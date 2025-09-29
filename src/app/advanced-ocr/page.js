@@ -91,8 +91,16 @@ export default function AdvancedOCR() {
         const { file } = fileData;
 
         if (file.type === 'application/pdf') {
-          const loadingTask = pdfjsLib.getDocument(URL.createObjectURL(file));
-          const pdf = await loadingTask.promise;
+          // Load PDF from ArrayBuffer instead of object URL to avoid blob URL pitfalls
+          let pdf;
+          try {
+            const arrayBuffer = await file.arrayBuffer();
+            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+            pdf = await loadingTask.promise;
+          } catch (err) {
+            console.error('Failed to load PDF in AdvancedOCR:', err);
+            throw err;
+          }
           let pdfText = '';
           let pageResults = [];
 
@@ -142,14 +150,21 @@ export default function AdvancedOCR() {
     if (results.length === 0) return;
     const allText = results.map(r => `--- ${r.fileName} ---\n${r.text}`).join('\n\n');
     const blob = new Blob([allText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'all_ocr_results.txt';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    let url = null;
+    try {
+      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Failed to create OCR results URL:', err); url = null; }
+      const a = document.createElement('a');
+      a.href = url || '';
+      a.download = 'all_ocr_results.txt';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error downloading all OCR results:', err);
+      alert('Unable to download OCR results');
+    } finally {
+      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch {} }, 500);
+    }
   };
 
   const copyToClipboard = (text) => {
@@ -158,14 +173,23 @@ export default function AdvancedOCR() {
 
   const downloadText = (result) => {
     const blob = new Blob([result.text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${result.fileName}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    let url = null;
+    try {
+      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Failed to create OCR text URL:', err); url = null; }
+      const a = document.createElement('a');
+      a.href = url || '';
+      // sanitize filename
+      const safeBase = result.fileName ? result.fileName.replace(/\.txt$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'result';
+      a.download = `${safeBase}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error downloading OCR text file:', err);
+      alert('Unable to download file');
+    } finally {
+      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch {} }, 500);
+    }
   };
 
   const getConfidenceColor = (confidence) => {

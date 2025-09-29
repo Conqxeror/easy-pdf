@@ -232,20 +232,49 @@ export const downloadFile = (blob, filename, options = {}) => {
       toast.loading('Preparing download...', { id: 'download' });
     }
 
-    const url = URL.createObjectURL(blob);
+    // Use safe helpers to create/revoke object URLs (handles SSR and browsers)
+    let url = null;
+    try {
+      // safeCreateObjectURL defined below
+      url = safeCreateObjectURL(blob);
+    } catch {
+      url = null;
+    }
+
     const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.style.display = 'none';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Cleanup
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-    }, 100);
+    if (url) {
+      try {
+        link.href = url;
+        link.download = filename;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        } finally {
+          // Cleanup (delay to allow download to start)
+          setTimeout(() => {
+            try { safeRevokeObjectURL(url); } catch { /* ignore */ }
+          }, 500);
+        }
+    } else {
+      // fallback: data URL via FileReader (avoid async/await here)
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          link.href = reader.result;
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch {
+          /* ignore */
+        }
+      };
+      reader.onerror = () => {
+        /* ignore */
+      };
+      reader.readAsDataURL(blob);
+    }
 
     if (showProgress) {
       toast.success('Download started!', { id: 'download' });
@@ -257,6 +286,37 @@ export const downloadFile = (blob, filename, options = {}) => {
   } catch (err) {
     handleError(err, 'file download');
     onError(err);
+  }
+};
+
+// Minimal filename sanitizer used across the app
+export const sanitizeFileName = (name) => {
+  if (!name) return 'download';
+  try {
+    return String(name).replace(/\.[^/.]+$/, '').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-_.]/g,'');
+  } catch {
+    return 'download';
+  }
+};
+
+// Safe Object URL helpers
+export const safeCreateObjectURL = (blob) => {
+  if (typeof window === 'undefined' || typeof URL === 'undefined') return null;
+  try {
+    return URL.createObjectURL(blob);
+  } catch (err) {
+    console.error('safeCreateObjectURL failed:', err);
+    return null;
+  }
+};
+
+export const safeRevokeObjectURL = (url) => {
+  if (!url) return;
+  if (typeof window === 'undefined' || typeof URL === 'undefined') return;
+  try {
+    if (!String(url).startsWith('data:')) URL.revokeObjectURL(url);
+  } catch {
+    // ignore
   }
 };
 

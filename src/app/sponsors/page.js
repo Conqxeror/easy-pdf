@@ -42,7 +42,39 @@ const SponsorsPage = () => {
 
   const handleSponsorClick = (sponsorId, url, placement = 'main_page') => {
     trackSponsorClick(sponsorId, placement);
-    window.open(url, '_blank', 'noopener,noreferrer');
+    if (typeof window === 'undefined') return;
+    try {
+      // Try to open in a new tab and defensively remove opener access
+      const newWin = window.open(url, '_blank', 'noopener,noreferrer');
+      try {
+        if (newWin) newWin.opener = null;
+      } catch {
+        // ignore inability to set opener
+      }
+    } catch {
+      // fallback: navigate (guarded)
+      try { window.location.href = url; } catch { }
+    }
+  };
+
+  // support keyboard accessibility for sponsor cards
+  const handleSponsorKey = (e, sponsor) => {
+    // Accept Enter and both common Space key identifiers for broad browser support
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      handleSponsorClick(sponsor.id, sponsor.url);
+    }
+  };
+
+  const handleSponsorInquiryClick = () => {
+    trackEvent('sponsor_inquiry_clicked');
+    if (typeof window === 'undefined') return;
+    try {
+      // mailto navigation is a simple location change; guard for non-browser contexts
+      window.location.href = 'mailto:kadriwalimohammad@gmail.com?subject=Sponsorship Inquiry';
+    } catch {
+      // ignore
+    }
   };
 
   const sponsors = [
@@ -128,6 +160,15 @@ const SponsorsPage = () => {
             These incredible partners make easy-pdf completely free for everyone. 
             Show them some love and check out their amazing services!
           </p>
+          <div className="mt-4">
+            <button
+              onClick={handleSponsorInquiryClick}
+              className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md"
+            >
+              <Coffee className="w-4 h-4 mr-2" />
+              Contact to Sponsor
+            </button>
+          </div>
           
           {/* App Stats */}
           {analytics && (
@@ -167,8 +208,11 @@ const SponsorsPage = () => {
           {sponsors.map((sponsor) => (
             <div
               key={sponsor.id}
+              role="button"
+              tabIndex={0}
               className="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-gray-600 transition-all duration-300 hover:scale-105 cursor-pointer group"
               onClick={() => handleSponsorClick(sponsor.id, sponsor.url)}
+              onKeyDown={(e) => handleSponsorKey(e, sponsor)}
               data-sponsor-id={sponsor.id}
               data-placement="main_grid"
             >

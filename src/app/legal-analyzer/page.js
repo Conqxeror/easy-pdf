@@ -379,26 +379,35 @@ export default function LegalAnalyzerPage() {
               onClick={() => {
                 const blob = new Blob(
                   [
-                    `Summary:\n${
-                      result.summary
-                    }\n\nKey Entities:\n${result.entities?.join(
-                      ", "
-                    )}\n\nDetected Clauses:\n${result.clauses?.join(
-                      ", "
-                    )}\n\nRisk Assessment:\n${
-                      result.risk
-                    }\n\nSuggestions:\n${result.suggestions?.join("\n")}`,
+                    `Summary:\n${result.summary}\n\nKey Entities:\n${result.entities?.join(", ")}\n\nDetected Clauses:\n${result.clauses?.join(", ")}\n\nRisk Assessment:\n${result.risk}\n\nSuggestions:\n${result.suggestions?.join("\n")}`,
                   ],
                   { type: "text/plain" }
                 );
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `legal-analysis-${file.name}.txt`;
-                a.click();
-                setTimeout(() => {
-            try { URL.revokeObjectURL(url); } catch { } 
-                }, 500);
+                  let url = null;
+                  try {
+                    try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.warn('Failed to create report object URL', err); url = null; }
+                    const a = document.createElement("a");
+                    a.href = url || '';
+                    const safeBase = String(file?.name || 'analysis').replace(/\s+/g, '-')
+                      .replace(/[^a-zA-Z0-9\-_.]/g, '');
+                    a.download = `legal-analysis-${safeBase}.txt`;
+                    // append to DOM to improve cross-browser behavior
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                  } catch (err) {
+                    console.error('Failed to start download:', err);
+                    alert('Failed to download report. Please try again.');
+                  } finally {
+                    // Revoke object URL after a short delay (only revoke non-data URLs)
+                    setTimeout(() => {
+                      try {
+                        if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url);
+                      } catch {
+                          // ignore
+                        }
+                    }, 500);
+                  }
               }}
               aria-label="Download Report"
             >

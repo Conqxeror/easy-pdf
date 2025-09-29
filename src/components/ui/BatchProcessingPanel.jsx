@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { advancedPdfProcessor } from '@/lib/advancedPdfProcessing';
 import { useUserPreferences } from '@/lib/userPreferences';
+import { sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 // Premium functionality removed - all features now free
 
 const BatchProcessingPanel = ({ className = '' }) => {
@@ -112,14 +113,34 @@ const BatchProcessingPanel = ({ className = '' }) => {
     results.forEach((result, index) => {
       if (result.data) {
         const blob = new Blob([result.data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
+        const url = safeCreateObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
-        a.download = `processed_${files[index]?.file.name || `file_${index + 1}.pdf`}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        const suggested = files[index]?.file.name || `file_${index + 1}.pdf`;
+        const safeName = sanitizeFileName(suggested) + '.pdf';
+        if (url) {
+          try {
+            a.href = url;
+            a.download = `processed_${safeName}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          } finally {
+            setTimeout(() => { try { safeRevokeObjectURL(url); } catch {} }, 500);
+          }
+        } else {
+          // fallback: data URL
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              a.href = reader.result;
+              a.download = `processed_${safeName}`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            } catch (err) { /* ignore */ }
+          };
+          reader.readAsDataURL(blob);
+        }
       }
     });
   };

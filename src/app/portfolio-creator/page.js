@@ -551,16 +551,29 @@ export default function PortfolioCreatorPage() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
+      let url;
+      try {
+  try { url = typeof URL !== 'undefined' ? URL.createObjectURL(blob) : null; } catch (err) { console.error('Error creating portfolio object URL:', err); url = null; }
 
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Portfolio-${portfolioData.fullName.replace(/\s+/g, '-')}.pdf`;
-      link.click();
+        const link = document.createElement('a');
+        link.href = url;
+        // sanitize filename: replace spaces and remove unsafe chars
+        const safeName = (portfolioData.fullName || 'Portfolio')
+          .replace(/\s+/g, '-')
+          .replace(/[^a-zA-Z0-9\-_.]/g, '');
+        link.download = `Portfolio-${safeName}.pdf`;
+        // append to DOM to ensure click works in all browsers
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
 
         setTimeout(() => {
-          try { URL.revokeObjectURL(url); } catch { }
+          try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
         }, 500);
+      } catch (err) {
+  try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+        throw err;
+      }
 
       trackEvent('portfolio_generated_successfully', {
         template: portfolioData.template,

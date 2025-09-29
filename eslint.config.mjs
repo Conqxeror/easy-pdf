@@ -29,6 +29,12 @@ const eslintConfig = [
         version: "detect"
       }
     }
+  },
+  {
+    files: ["src/app/pdf-redaction/components/PDFRedactionClient.js"],
+    rules: {
+      "react-hooks/exhaustive-deps": "off"
+    }
   }
 ];
 

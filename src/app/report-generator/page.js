@@ -12,6 +12,7 @@ import { Plus, Trash2, Download, FileText, BarChart3, TrendingUp, Save, UploadCl
 // import { trackEvent } from "@/lib/analytics"; // Commented out unused import
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import FileDropzone from "@/components/ui/FileDropzone";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function ReportGeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -140,16 +141,23 @@ export default function ReportGeneratorPage() {
   const handleExportJSON = () => {
     const json = JSON.stringify(reportData, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `Report-${reportData.title ? reportData.title.replace(/\s+/g, '-') : 'Untitled'}.json`;
-    document.body.appendChild(link);
-    link.click();
-    setTimeout(() => {
+    let url = null;
+    try {
+      url = safeCreateObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url || '';
+      const safeTitle = reportData.title ? sanitizeFileName(String(reportData.title)) : 'Untitled';
+      link.download = `Report-${safeTitle}.json`;
+      document.body.appendChild(link);
+      link.click();
       document.body.removeChild(link);
-  try { URL.revokeObjectURL(url); } catch { }
-    }, 500);
+    } catch (err) {
+      console.error('Export failed:', err);
+      setBanner({ type: 'error', message: 'Failed to export report.' });
+    } finally {
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch {} }, 500);
+    }
     setBanner({ type: 'success', message: 'Report exported as JSON.' });
   };
 

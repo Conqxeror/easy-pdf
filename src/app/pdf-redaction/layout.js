@@ -2,7 +2,7 @@ import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seo
 
 export const metadata = generateEnhancedMetadata({
   title: "PDF Redaction Tool - Remove Sensitive Information",
-  description: "Permanently remove sensitive information from PDF documents with secure redaction and verification. GDPR compliant and privacy-focused.",
+  description: "Securely redact sensitive information from PDF documents directly in your browser. Our redaction tool provides text and image removal, metadata sanitization, and audit-ready exports — all without uploading your files.",
   keywords: [
   "PDF redaction",
   "remove sensitive data",
@@ -29,14 +29,15 @@ export const metadata = generateEnhancedMetadata({
 
 const structuredData = generateComprehensiveJsonLd('tool', {
   title: "PDF Redaction Tool",
-  description: "Permanently remove sensitive information from PDF documents with secure redaction and verification. GDPR compliant and privacy-focused.",
+  description: "Permanently remove text, images, and metadata from PDFs. Our browser-based redaction tool offers automatic search-and-mark, manual area selection, metadata cleansing, and secure downloads — ideal for legal and compliance workflows.",
   url: "/pdf-redaction",
   features: [
-  "Content removal",
-  "Metadata cleaning",
-  "Visual verification",
-  "Secure deletion"
-],
+    "Automatic search & mark for sensitive terms",
+    "Manual rectangle redaction areas",
+    "Metadata sanitization and document cleaning",
+    "No server uploads — processing happens locally",
+    "Download audit-ready redacted PDFs"
+  ],
   breadcrumbs: [
     { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
     { name: "PDF Redaction Tool", url: "https://easy-pdf-murex.vercel.app/pdf-redaction" }

@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Tesseract from "tesseract.js";
 import FileDropzone from "@/components/ui/FileDropzone";
-import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -16,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import ToolActions from "@/components/ui/ToolActions";
 
 // Import pdfjs-dist for PDF rendering
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
@@ -33,8 +33,16 @@ export default function OcrPage() {
   // Cleanup preview image object URLs on unmount/change
   useEffect(() => {
     return () => {
-      if (previewImageUrl && previewImageUrl.startsWith('blob:')) {
-  try { URL.revokeObjectURL(previewImageUrl); } catch { }
+      try {
+        if (
+          previewImageUrl &&
+          typeof URL !== 'undefined' &&
+          !String(previewImageUrl).startsWith('data:')
+        ) {
+          try { if (previewImageUrl && typeof URL !== 'undefined' && !String(previewImageUrl).startsWith('data:')) URL.revokeObjectURL(previewImageUrl); } catch {}
+        }
+      } catch {
+        /* ignore */
       }
     };
   }, [previewImageUrl]);
@@ -161,22 +169,54 @@ export default function OcrPage() {
       } else if (file.type.startsWith("image/")) {
         console.log("Rendering image file...");
         const img = new Image();
+        let tmpUrl = null;
         img.onload = () => {
-          const aspectRatio = img.width / img.height;
-          canvas.width = desiredWidth;
-          canvas.height = desiredWidth / aspectRatio;
-          context.drawImage(img, 0, 0, canvas.width, canvas.height);
-          
-          const imageUrl = URL.createObjectURL(file);
-          setPreviewImageUrl(imageUrl);
-          console.log("Image preview rendered successfully");
+          try {
+            const aspectRatio = img.width / img.height;
+            canvas.width = desiredWidth;
+            canvas.height = desiredWidth / aspectRatio;
+            context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // Create an object URL only if we haven't already set a data URL from canvas
+            try {
+              try { tmpUrl = typeof URL !== 'undefined' ? URL.createObjectURL(file) : null; } catch (err) { console.error('Error creating preview object URL:', err); tmpUrl = null; }
+            } catch (err) {
+              console.error('Failed to create object URL for image preview:', err);
+              tmpUrl = null;
+            }
+
+            setPreviewImageUrl((prev) => {
+              try {
+                if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) {
+                  try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch {}
+                }
+              } catch {}
+              return tmpUrl || canvas.toDataURL('image/png');
+            });
+            console.log("Image preview rendered successfully");
+          } catch (err) {
+            console.error('Error during image onload processing:', err);
+            setError('Failed to load image for preview.');
+            setPreviewImageUrl(null);
+          }
         };
         img.onerror = (error) => {
           console.error("Failed to load image:", error);
           setError("Failed to load image for preview.");
           setPreviewImageUrl(null);
+          try {
+            if (tmpUrl && typeof URL !== 'undefined' && !String(tmpUrl).startsWith('data:')) {
+              try { if (tmpUrl && typeof URL !== 'undefined' && !String(tmpUrl).startsWith('data:')) URL.revokeObjectURL(tmpUrl); } catch {}
+            }
+          } catch {}
         };
-        img.src = URL.createObjectURL(file);
+        try {
+          try { if (typeof URL !== 'undefined') tmpUrl = URL.createObjectURL(file); else tmpUrl = null; } catch (err) { console.error('Failed to create preview object URL:', err); tmpUrl = null; }
+          img.src = tmpUrl;
+        } catch (err) {
+          console.error('Failed to set image src for preview:', err);
+          setError('Failed to load image for preview.');
+        }
       }
     } catch (e) {
       if (e.name === "RenderingCancelledException") {
@@ -600,26 +640,19 @@ ${data.text.trim()}`);
               </div>
             )}
 
-            <div className="flex justify-center">
-              <Button
-                onClick={handleOcr}
-                disabled={isProcessing || !workerReady || workerInitializing}
-              >
-                {isProcessing ? (
-                  <span className="flex items-center">
-                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                    Processing...
-                  </span>
-                ) : !workerReady ? (
-                  <span className="flex items-center">
-                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                    Loading OCR Engine...
-                  </span>
-                ) : (
-                  "Extract Text"
-                )}
-              </Button>
-            </div>
+            <ToolActions
+              primary={{
+                label: isProcessing
+                  ? "Processing..."
+                  : !workerReady
+                  ? "Loading OCR Engine..."
+                  : "Extract Text",
+                onClick: handleOcr,
+                disabled: isProcessing || !workerReady || workerInitializing,
+              }}
+              secondary={result ? { label: "Copy Text", onClick: handleCopyText } : null}
+              isProcessing={isProcessing || workerInitializing}
+            />
           </>
         )}
 
@@ -627,11 +660,6 @@ ${data.text.trim()}`);
           <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200">
             <div className="flex justify-between items-center mb-3">
               <h2 className="font-semibold text-xl">Extracted Text</h2>
-              <Button
-                onClick={handleCopyText}
-              >
-                Copy Text
-              </Button>
             </div>
             <Textarea
               value={result}

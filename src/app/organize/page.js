@@ -49,9 +49,11 @@ export default function OrganizePage() {
       });
       renderTaskRefs.current = {};
       // Revoke object URL to prevent memory leaks
-      if (organizedPdfUrl) {
-        URL.revokeObjectURL(organizedPdfUrl);
-      }
+      try {
+        if (organizedPdfUrl && typeof URL !== 'undefined' && !String(organizedPdfUrl).startsWith('data:')) {
+          try { if (organizedPdfUrl && typeof URL !== 'undefined' && !String(organizedPdfUrl).startsWith('data:')) URL.revokeObjectURL(organizedPdfUrl); } catch {}
+        }
+      } catch { /* ignore */ }
     };
   }, [pdfDocProxy, organizedPdfUrl]);
 
@@ -252,9 +254,21 @@ export default function OrganizePage() {
 
       const pdfBytes = await newDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      setOrganizedPdfUrl(url);
-      setDownloadFileName(`organized_${files[0].name || "document"}.pdf`);
+      let url = null;
+      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for organized PDF:', err); url = null; }
+
+      // Revoke previous URL if any and set the new one
+      setOrganizedPdfUrl((prev) => {
+        try {
+          if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) {
+            try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch {}
+          }
+        } catch { /* ignore */ }
+        return url;
+      });
+
+  const safeBase = files[0]?.name ? String(files[0].name).replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+  setDownloadFileName(url ? `organized_${safeBase}.pdf` : `organized_document.pdf`);
 
       setError(""); // Clear error on success
     } catch (e) {
@@ -487,7 +501,7 @@ export default function OrganizePage() {
                   className="text-center flex items-center"
                   onClick={() => {
                     const u = organizedPdfUrl;
-                    setTimeout(() => { try { if (u) URL.revokeObjectURL(u); } catch { } }, 500);
+                    setTimeout(() => { try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { } }, 500);
                   }}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

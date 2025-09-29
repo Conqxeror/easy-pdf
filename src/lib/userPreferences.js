@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, createContext, useContext  } from 'react';
 import { getUserPreference, setUserPreference, trackEvent } from '@/lib/analytics';
+import { safeCreateObjectURL, safeRevokeObjectURL } from './enhancedUX';
 
 const UserPreferencesContext = createContext();
 
@@ -139,12 +140,28 @@ export const UserPreferencesProvider = ({ children }) => {
       type: 'application/json'
     });
 
-    const url = URL.createObjectURL(blob);
+    let url = null;
+    try { url = safeCreateObjectURL(blob); } catch { url = null; }
+
     const link = document.createElement('a');
-    link.href = url;
-    link.download = 'easy-pdf-preferences.json';
-    link.click();
-    URL.revokeObjectURL(url);
+    if (url) {
+      try {
+        link.href = url;
+        link.download = 'easy-pdf-preferences.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } finally {
+        setTimeout(() => { try { safeRevokeObjectURL(url); } catch { /* ignore */ } }, 500);
+      }
+    } else {
+      // fallback: offer the JSON as a data URL
+      link.href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportData, null, 2));
+      link.download = 'easy-pdf-preferences.json';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
     trackEvent('preferences_exported');
   };

@@ -201,29 +201,44 @@ export default function PDFAnnotationCollaboration() {
         replies: annotation.replies || []
       }))
     };
-
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `annotations_${Date.now()}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => { try { URL.revokeObjectURL(url); } catch { } }, 500);
+    let url;
+    try {
+  try { url = typeof URL !== 'undefined' ? URL.createObjectURL(blob) : null; } catch (err) { console.error('Error creating object URL for annotations export:', err); url = null; }
+      const filename = `annotations_${Date.now()}.json`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      console.error('Error exporting annotations:', err);
+      alert('Unable to export annotations');
+    } finally {
+  setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
+    }
   };
 
   const downloadAnnotatedPdf = () => {
     if (!annotatedPdf) return;
-
-    const url = URL.createObjectURL(annotatedPdf);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${file.name.replace('.pdf', '')}_annotated.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => { try { URL.revokeObjectURL(url); } catch { } }, 500);
+    let url;
+    try {
+      try { url = typeof URL !== 'undefined' ? URL.createObjectURL(annotatedPdf) : null; } catch (err) { console.error('Error creating object URL for annotated PDF:', err); url = null; }
+      const safeBase = file && file.name ? String(file.name).replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
+      const filename = `${safeBase}_annotated.pdf`;
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      console.error('Error downloading annotated PDF:', err);
+      alert('Unable to download annotated PDF');
+    } finally {
+      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
+    }
   };
 
   const getStatusColor = (status) => {
