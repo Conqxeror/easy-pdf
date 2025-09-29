@@ -2,24 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Heart,
-  Star,
-  TrendingUp,
-  Users,
-  Globe,
-  Shield,
-  Zap,
-  Coffee,
-  Award,
-  ExternalLink,
-  BarChart3,
-  Target
-} from 'lucide-react';
-import { trackSponsorView, trackSponsorClick } from '@/lib/sponsorAnalytics';
+import { Heart, TrendingUp, Users, Globe, Shield, Zap, Coffee, BarChart3, Target } from 'lucide-react';
+import Image from 'next/image';
+import { trackSponsorView } from '@/lib/sponsorAnalytics';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
-import BmcButtonLoader from '@/components/ui/BmcButtonLoader';
 // Note: `sponsors` list intentionally not imported — we prefer an honest empty state
 // until real sponsors join. This prevents showing placeholder/mock companies.
 
@@ -36,28 +23,7 @@ export default function SponsorsClient() {
     trackSponsorView('sponsors_page', 'full_page');
   }, []);
 
-  const handleSponsorClick = (sponsorId, url, placement = 'main_page') => {
-    trackSponsorClick(sponsorId, placement);
-    window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
-  const getTierColor = (tier) => {
-    switch (tier) {
-      case 'platinum': return 'from-purple-500 to-pink-500';
-      case 'gold': return 'from-yellow-400 to-orange-500';
-      case 'silver': return 'from-gray-400 to-gray-600';
-      default: return 'from-blue-400 to-blue-600';
-    }
-  };
-
-  const getTierIcon = (tier) => {
-    switch (tier) {
-      case 'platinum': return <Award className="w-5 h-5" />;
-      case 'gold': return <Star className="w-5 h-5" />;
-      case 'silver': return <Target className="w-5 h-5" />;
-      default: return <Heart className="w-5 h-5" />;
-    }
-  };
+  // No sponsor click handler needed for the empty-state client. Reintroduce when sponsors exist.
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
@@ -133,7 +99,7 @@ export default function SponsorsClient() {
               {/* Buy Me A Coffee anchor + image */}
               <div className="inline-flex items-center px-6 py-3 bg-transparent rounded-md">
                 <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
-                  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style={{ height: '43px', width: '157px' }} />
+                  <Image src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
                 </a>
               </div>
 
@@ -147,9 +113,9 @@ export default function SponsorsClient() {
                       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                       try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch {}
                     }
-                  } catch (err) {
-                    window.location.href = '/#partnership-tiers';
-                  }
+                    } catch {
+                      window.location.href = '/#partnership-tiers';
+                    }
                 }}
                 className="inline-flex items-center px-6 py-3 border border-white/10 rounded-md text-white hover:bg-white/5 transition-colors"
               >

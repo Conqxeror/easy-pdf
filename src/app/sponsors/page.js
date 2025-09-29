@@ -21,7 +21,7 @@ import {
 import { trackSponsorView, trackSponsorClick, getAllSponsorReports } from '@/lib/sponsorAnalytics';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
-import BmcButtonLoader from '@/components/ui/BmcButtonLoader';
+import Image from 'next/image';
 
 const SponsorsPage = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -42,19 +42,13 @@ const SponsorsPage = () => {
   }, []);
 
   const handleSponsorClick = (sponsorId, url, placement = 'main_page') => {
-    trackSponsorClick(sponsorId, placement);
+    try { trackSponsorClick && trackSponsorClick(sponsorId, placement); } catch {}
     if (typeof window === 'undefined') return;
     try {
-      // Try to open in a new tab and defensively remove opener access
       const newWin = window.open(url, '_blank', 'noopener,noreferrer');
-      try {
-        if (newWin) newWin.opener = null;
-      } catch {
-        // ignore inability to set opener
-      }
+      try { if (newWin) newWin.opener = null; } catch {}
     } catch {
-      // fallback: navigate (guarded)
-      try { window.location.href = url; } catch { }
+      try { window.location.href = url; } catch {}
     }
   };
 
@@ -67,16 +61,7 @@ const SponsorsPage = () => {
     }
   };
 
-  const handleSponsorInquiryClick = () => {
-    trackEvent('sponsor_inquiry_clicked');
-    if (typeof window === 'undefined') return;
-    try {
-      // mailto navigation is a simple location change; guard for non-browser contexts
-      window.location.href = 'mailto:kadriwalimohammad@gmail.com?subject=Sponsorship Inquiry';
-    } catch {
-      // ignore
-    }
-  };
+  // handleSponsorInquiryClick removed; leave analytics event calls inline where needed.
 
   // We intentionally don't show placeholder sponsors. Instead show an honest
   // empty state that invites meaningful sponsorships and explains free access.
@@ -175,7 +160,7 @@ const SponsorsPage = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <div className="inline-flex items-center px-6 py-3 bg-transparent rounded-md">
                   <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
-                    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style={{ height: '43px', width: '157px' }} />
+                    <Image src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
                   </a>
                 </div>
 
@@ -189,7 +174,7 @@ const SponsorsPage = () => {
                         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch {}
                       }
-                    } catch (err) {
+                    } catch {
                       window.location.href = '/#partnership-tiers';
                     }
                   }}
