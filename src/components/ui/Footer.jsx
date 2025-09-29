@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Github, Linkedin, Mail } from "lucide-react";
+import FooterClient from './FooterClient';
 import { toolCategories } from "@/lib/toolCategories";
 
 // Define the footer links structure
@@ -73,6 +74,12 @@ export default function Footer() {
               <Github size={20} />
             </a>
           </div>
+
+          {/* Place the Buy Me A Coffee button below the social icons for better separation */}
+          <div className="mt-4">
+            <FooterClient />
+          </div>
+          
         </div>
 
         {/* Tools Section - Organized by Categories */}

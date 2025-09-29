@@ -47,124 +47,30 @@ export const sponsorTiers = {
 
 // Real sponsors - currently empty, add real sponsors here when they join
 export const currentSponsors = [
-  // Add real sponsors here when they join
-  // Example format:
-  // {
-  //   id: "sponsor-1",
-  //   name: "Company Name",
-  //   tier: "PLATINUM",
-  //   logo: "/sponsors/company-logo.svg",
-  //   website: "https://company.com",
-  //   description: "Company description",
-  //   joinDate: "2024-01-15",
-  //   featured: true
-  // }
+  // Real sponsors will be added here when they join.
+  // Keeping this array intentionally empty ensures the UI shows an honest
+  // "no sponsors yet" state rather than placeholder/mock content.
 ];
 
-// Mock/placeholder sponsors for demonstration purposes
-export const mockSponsors = [
-  // Platinum Sponsors
-  {
-    id: "placeholder-platinum-1",
-    name: "Your Company Here",
-    tier: "PLATINUM",
-    logo: "/placeholder-logo.svg",
-    website: "#",
-    description: "Be the first Platinum sponsor and get maximum visibility",
-    joinDate: "2024-01-15",
-    featured: true,
-    isPlaceholder: true
-  },
-  
-  // Gold Sponsors  
-  {
-    id: "placeholder-gold-1",
-    name: "Your Business",
-    tier: "GOLD", 
-    logo: "/placeholder-logo.svg",
-    website: "#",
-    description: "Join as a Gold sponsor for premium benefits",
-    joinDate: "2024-02-01",
-    featured: false,
-    isPlaceholder: true
-  },
-  {
-    id: "placeholder-gold-2", 
-    name: "Another Company",
-    tier: "GOLD",
-    logo: "/placeholder-logo.svg", 
-    website: "#",
-    description: "Gold sponsorship slot available",
-    joinDate: "2024-02-15",
-    featured: false,
-    isPlaceholder: true
-  },
-
-  // Silver Sponsors
-  {
-    id: "placeholder-silver-1",
-    name: "Startup Name",
-    tier: "SILVER",
-    logo: "/placeholder-logo.svg",
-    website: "#", 
-    description: "Silver sponsorship opportunity",
-    joinDate: "2024-03-01",
-    featured: false,
-    isPlaceholder: true
-  },
-  {
-    id: "placeholder-silver-2",
-    name: "Tech Company",
-    tier: "SILVER",
-    logo: "/placeholder-logo.svg",
-    website: "#",
-    description: "Support our platform as a Silver sponsor",
-    joinDate: "2024-03-10", 
-    featured: false,
-    isPlaceholder: true
-  },
-
-  // Bronze Supporters
-  {
-    id: "placeholder-bronze-1",
-    name: "Individual Supporter",
-    tier: "BRONZE",
-    logo: null,
-    website: "#",
-    description: "Bronze supporter slot available",
-    joinDate: "2024-03-20",
-    featured: false,
-    isPlaceholder: true
-  },
-  {
-    id: "placeholder-bronze-2", 
-    name: "Community Member",
-    tier: "BRONZE",
-    logo: null,
-    website: "#",
-    description: "Join our community of supporters",
-    joinDate: "2024-04-01",
-    featured: false,
-    isPlaceholder: true
-  }
-];
+// NOTE: we intentionally removed mock/placeholder sponsors. Showing real,
+// up-to-date sponsor information avoids misleading users. When sponsors join,
+// add them to `currentSponsors` above.
 
 // Helper functions
-export const getSponsorsByTier = (tier, useMockData = false) => {
-  const sponsors = useMockData ? mockSponsors : currentSponsors;
-  return sponsors.filter(sponsor => sponsor.tier === tier);
+export const getSponsorsByTier = (tier) => {
+  return currentSponsors.filter(sponsor => sponsor.tier === tier);
 };
 
-export const getFeaturedSponsors = (useMockData = false) => {
-  const sponsors = useMockData ? mockSponsors : currentSponsors;
-  return sponsors.filter(sponsor => sponsor.featured);
+export const getFeaturedSponsors = () => {
+  return currentSponsors.filter(sponsor => sponsor.featured);
 };
 
-export const getAllSponsors = (useMockData = false) => {
-  const sponsors = useMockData ? mockSponsors : currentSponsors;
+export const getAllSponsors = () => {
+  // Return a sorted shallow copy to avoid mutating the source array
+  const sponsors = [...currentSponsors];
   return sponsors.sort((a, b) => {
     const tierOrder = { PLATINUM: 0, GOLD: 1, SILVER: 2, BRONZE: 3 };
-    return tierOrder[a.tier] - tierOrder[b.tier];
+    return (tierOrder[a.tier] || 99) - (tierOrder[b.tier] || 99);
   });
 };
 

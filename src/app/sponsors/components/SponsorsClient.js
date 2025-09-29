@@ -19,7 +19,9 @@ import {
 import { trackSponsorView, trackSponsorClick } from '@/lib/sponsorAnalytics';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
-import { sponsors } from '@/lib/sponsorData.js';
+import BmcButtonLoader from '@/components/ui/BmcButtonLoader';
+// Note: `sponsors` list intentionally not imported — we prefer an honest empty state
+// until real sponsors join. This prevents showing placeholder/mock companies.
 
 export default function SponsorsClient() {
   const [analytics, setAnalytics] = useState(null);
@@ -104,51 +106,57 @@ export default function SponsorsClient() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sponsors.map((sponsor) => (
-            <div
-              key={sponsor.id}
-              className="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-gray-600 transition-all duration-300 hover:scale-105 cursor-pointer group"
-              onClick={() => handleSponsorClick(sponsor.id, sponsor.url)}
-              data-sponsor-id={sponsor.id}
-              data-placement="main_grid"
-            >
-              {/* Tier Badge */}
-              <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${getTierColor(sponsor.tier)} text-white mb-4`}>
-                {getTierIcon(sponsor.tier)}
-                <span className="ml-1 capitalize">{sponsor.tier} Sponsor</span>
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-8 shadow-lg ring-1 ring-white/5">
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">We don’t have sponsors yet — join us ✨</h3>
+            <p className="text-gray-300 mb-6">
+              easy-pdf will remain free for students, teachers, researchers, doctors, institutions, and community projects.
+              If your organization values privacy and education, consider partnering with us to keep these tools accessible.
+            </p>
+
+            <ul className="text-left mx-auto mb-6 max-w-xl space-y-3">
+              <li className="flex items-start">
+                <span className="text-green-400 mr-3">•</span>
+                <span><strong>Support education</strong> — sponsorships keep tools open for learners.</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-400 mr-3">•</span>
+                <span><strong>Professional plans</strong> — special options for researchers and institutions.</span>
+              </li>
+              <li className="flex items-start">
+                <span className="text-green-400 mr-3">•</span>
+                <span><strong>Privacy-first partnerships</strong> — we only work with trusted organizations.</span>
+              </li>
+            </ul>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              {/* Buy Me A Coffee anchor + image */}
+              <div className="inline-flex items-center px-6 py-3 bg-transparent rounded-md">
+                <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
+                  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style={{ height: '43px', width: '157px' }} />
+                </a>
               </div>
 
-              {/* Logo and Name */}
-              <div className="flex items-center mb-4">
-                <div className="text-3xl mr-3">{sponsor.logo}</div>
-                <div>
-                  <h3 className="text-xl font-semibold group-hover:text-blue-400 transition-colors">
-                    {sponsor.name}
-                  </h3>
-                  <p className="text-sm text-gray-400">{sponsor.category}</p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-gray-300 mb-4 line-clamp-3">
-                {sponsor.description}
-              </p>
-
-              {/* Value Proposition */}
-              <div className="bg-gray-700/50 rounded-lg p-3 mb-4">
-                <p className="text-sm text-blue-300 font-medium">
-                  {sponsor.value}
-                </p>
-              </div>
-
-              {/* CTA */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-400">Click to visit</span>
-                <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
-              </div>
+              <a
+                href="#partnership-tiers"
+                onClick={(e) => {
+                  e.preventDefault();
+                  try {
+                    const el = document.getElementById('partnership-tiers');
+                    if (el) {
+                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch {}
+                    }
+                  } catch (err) {
+                    window.location.href = '/#partnership-tiers';
+                  }
+                }}
+                className="inline-flex items-center px-6 py-3 border border-white/10 rounded-md text-white hover:bg-white/5 transition-colors"
+              >
+                Learn about partnership tiers
+              </a>
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
