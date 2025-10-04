@@ -132,7 +132,7 @@ export const renderTextWithToolLinks = (text) => {
           React.createElement(Link, {
             key: `${toolName}-${startIndex}`,
             href: href,
-            className: "text-blue-400 hover:text-blue-300 hover:underline transition-colors font-medium"
+            className: "text-gray-400 hover:text-gray-300 hover:underline transition-colors font-medium"
           }, toolName)
         );
         lastIndex = endIndex;

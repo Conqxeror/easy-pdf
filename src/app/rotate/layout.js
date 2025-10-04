@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Rotate PDF Pages Online – Free PDF Rotation Tool | easy-pdf",
-  description: "Rotate PDF pages to the correct orientation (90, 180, 270 degrees). Free online PDF rotation tool with secure browser-based processing. 100% client-side with no uploads.",
-  keywords: [
-    "Rotate PDF",
-    "Fix PDF orientation",
-    "Turn PDF pages",
-    "PDF rotation",
-    "Flip PDF",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF rotate",
-    "PDF page rotation",
-    "Correct PDF orientation",
-    "Rotate PDF pages online",
-    "PDF document rotation",
-    "Free PDF rotator",
-    "Online PDF rotation",
-    "PDF page flipper",
-    "PDF orientation fix",
-    "Rotate individual PDF pages",
-    "PDF clockwise rotation",
-    "PDF anticlockwise rotation",
-    "Batch PDF rotation"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/rotate",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Rotator",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Rotator", url: "https://easy-pdf-murex.vercel.app/rotate" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Rotator",
-  description: "Rotate PDF pages to the correct orientation (90, 180, 270 degrees). Free online PDF rotation tool with secure browser-based processing.",
-  url: "/rotate",
-  features: [
-    "Multiple rotation angles",
-    "Page-specific rotation",
-    "Batch rotation",
-    "Preview changes"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Rotator", url: "https://easy-pdf-murex.vercel.app/rotate" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/rotate');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,57 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Rotate PDF Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is it free to rotate PDF pages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our Rotate PDF tool is completely free to use. You can rotate as many PDF files as you need without any hidden costs or limitations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my files secure when rotating PDFs?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. Your privacy is our top priority. All PDF processing, including rotation, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I rotate only specific pages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, you can specify a custom page range to rotate. This allows you to precisely control which pages are affected by the rotation."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What rotation angles are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can choose from 90 degrees clockwise, 180 degrees, or 270 degrees clockwise (which is equivalent to 90 degrees counter-clockwise)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does rotating affect the quality of my PDF?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, rotating your PDF pages with our tool does not affect the quality of your document. The content remains sharp and clear."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

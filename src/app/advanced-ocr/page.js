@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, Search, FileText, Image as ImageIcon, Brain, Copy, Zap, Globe, CheckCircle, AlertCircle } from 'lucide-react';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { createWorker } from 'tesseract.js';
+import { createTesseractWorker, terminateWorker } from '@/lib/tesseractWorker';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 // Set up PDF.js worker (browser-only)
@@ -76,7 +76,7 @@ export default function AdvancedOCR() {
     setProgress(0);
     setResults([]);
 
-    const worker = await createWorker(selectedLanguage, 1, {
+    const worker = await createTesseractWorker(selectedLanguage, 1, {
       logger: m => {
         if (m.status === 'recognizing text') {
           setProgress(m.progress * 100);
@@ -141,7 +141,7 @@ export default function AdvancedOCR() {
       console.error("OCR Error:", error);
       setProcessingStatus('error');
     } finally {
-      await worker.terminate();
+      await terminateWorker(worker);
       setIsProcessing(false);
     }
   };
@@ -256,7 +256,7 @@ export default function AdvancedOCR() {
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${ isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'}`}
+                className={`border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${ isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'}`}
               >
                 <input {...getInputProps()} />
                 <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" aria-hidden="true" />
@@ -333,12 +333,12 @@ export default function AdvancedOCR() {
               <Button 
                 onClick={processFiles} 
                 disabled={files.length === 0 || isProcessing}
-                className="w-full px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+                className="w-full px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl"
               >
                 <Search className="h-4 w-4 mr-2" aria-hidden="true" />
                 {isProcessing ? (
                   <span className="flex items-center">
-                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                    <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                     Processing...
                   </span>
                 ) : 'Extract Text'}
@@ -364,7 +364,7 @@ export default function AdvancedOCR() {
             <CardContent>
               <div className="space-y-2 max-h-40 overflow-y-auto">
                 {files.map((fileData) => (
-                  <div key={fileData.id} className="flex items-center justify-between p-2 border rounded">
+                  <div key={fileData.id} className="flex items-center justify-between p-2 border">
                     <div className="flex items-center gap-2">
                       {fileData.file.type === 'application/pdf' ? (
                         <FileText className="h-4 w-4" aria-hidden="true" />
@@ -454,7 +454,7 @@ export default function AdvancedOCR() {
                           <Textarea
                             value={result.text}
                             readOnly
-                            className="min-h-[200px] font-mono text-sm border border-gray-200 rounded-md p-2"
+                            className="min-h-[200px] font-mono text-sm border border-gray-200 p-2"
                           />
                           <div className="flex gap-2">
                             <Button
@@ -481,7 +481,7 @@ export default function AdvancedOCR() {
                             <Textarea
                               value={result.enhancedText}
                               readOnly
-                              className="min-h-[200px] font-mono text-sm border border-gray-200 rounded-md p-2"
+                              className="min-h-[200px] font-mono text-sm border border-gray-200 p-2"
                             />
                             {result.improvements && (
                               <div className="text-sm text-muted-foreground">
@@ -516,7 +516,7 @@ export default function AdvancedOCR() {
 
                         {result.pageResults && (
                           <TabsContent value="pages">
-                            <div className="space-y-3 max-h-[300px] overflow-y-auto p-2 border border-gray-200 rounded-md">
+                            <div className="space-y-3 max-h-[300px] overflow-y-auto p-2 border border-gray-200">
                               {result.pageResults.map((pageResult, pageIndex) => (
                                 <Card key={pageIndex} className="bg-white shadow-sm">
                                   <CardHeader className="pb-2">
@@ -531,7 +531,7 @@ export default function AdvancedOCR() {
                                     <Textarea
                                       value={pageResult.text}
                                       readOnly
-                                      className="min-h-[100px] text-sm border border-gray-100 rounded-md p-1"
+                                      className="min-h-[100px] text-sm border border-gray-100 p-1"
                                     />
                                   </CardContent>
                                 </Card>

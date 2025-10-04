@@ -31,17 +31,17 @@ const CategorizedToolsSection = () => {
           if (categoryTools.length === 0) return null;
 
           return (
-            <div key={category.name} className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 rounded-2xl p-6 border border-gray-700 hover:border-blue-500 transition-all duration-300">
+            <div key={category.name} className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="text-blue-400">
+                  <span className="text-gray-400">
                     {category.icon}
                   </span>
                   {category.name}
                 </h3>
                 <Link 
                   href={`/categories/${slugify(category.name)}`}
-                  className="text-sm text-blue-400 hover:text-blue-300 font-medium inline-flex items-center group"
+                  className="text-sm link-blue font-medium inline-flex items-center group"
                 >
                   View all
                   <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />
@@ -61,7 +61,7 @@ const CategorizedToolsSection = () => {
       <div className="mt-12 text-center">
         <Link 
           href="/tools"
-          className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium group"
+          className="inline-flex items-center link-blue font-medium group"
         >
           View all PDF tools
           <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />

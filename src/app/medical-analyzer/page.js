@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import Loader from "@/components/ui/Loader";
@@ -64,14 +65,10 @@ export default function MedicalAnalyzerPage() {
           setLoadingMessage("Extracting text from document...");
           await new Promise((resolve) => setTimeout(resolve, 500));
 
-          // Dynamically import pdfjs-dist only if the file is a PDF
+          // Load pdfjs worker for PDF files
           if (file.type === "application/pdf") {
             try {
-              // Dynamically import the legacy pdfjs build for client-side rendering
-              const pdfjsLib = await import("pdfjs-dist/legacy/build/pdf");
-              if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-              }
+              await loadPdfJs();
             } catch {
               console.warn("PDF.js worker setup failed");
             }
@@ -210,7 +207,7 @@ export default function MedicalAnalyzerPage() {
             <p className="text-lg text-gray-300">
               Upload your medical document (PDF, Word, or image). Our AI will
               extract key patient information, diagnoses, medications, and more.
-              <b className="text-pink-300">
+              <b className="text-gray-300">
                 Your document content is sent to an external AI service for
                 analysis and is not stored by easy-pdf.
               </b>
@@ -224,7 +221,7 @@ export default function MedicalAnalyzerPage() {
             isLoading={loading}
           />
           {file && (
-            <div className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md shadow-md border border-gray-700">
+            <div className="mt-4 flex items-center justify-between p-3 bg-gray-950 shadow-md border border-gray-700">
               <span className="text-sm text-gray-200 truncate pr-2">
                 {file.name}
               </span>
@@ -249,8 +246,8 @@ export default function MedicalAnalyzerPage() {
             </div>
           )}
           <Button
-            className="mt-3 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                       bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700
+            className="mt-3 w-full py-3 px-6 text-lg font-semibold shadow-xl
+                       bg-gradient-to-r from-red-600 to-gray-800 hover:from-red-700 hover:to-gray-900
                        text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-900"
             onClick={analyzeDocument}
             disabled={!file || loading}
@@ -264,11 +261,11 @@ export default function MedicalAnalyzerPage() {
             </Alert>
           )}
           {result && (
-            <Card className="mt-10 p-8 bg-gray-800 text-gray-200 rounded-lg shadow-xl border border-gray-700">
+            <Card className="mt-10 p-8 bg-gray-950 text-gray-200 shadow-xl border border-gray-700">
               <h2 className="text-3xl font-bold mb-6 text-center text-red-400">
                 Analysis Report
               </h2>
-              <Alert className="block mb-6 p-4 bg-yellow-900/20 text-yellow-300 border border-yellow-700 rounded-lg">
+              <Alert className="block mb-6 p-4 bg-yellow-900/20 text-yellow-300 border border-yellow-700">
                 <p className="text-sm text-center">
                   <div className="font-semibold mb-2">
                     <b>Important:</b>
@@ -377,7 +374,7 @@ export default function MedicalAnalyzerPage() {
                 )}
               </div>
               <Button
-                className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
+                className="mt-6 w-full py-3 px-6 text-lg font-semibold shadow-xl
                            bg-gradient-to-r from-teal-600 to-green-600 hover:from-teal-700 hover:to-green-700
                            text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:ring-offset-gray-900"
                 onClick={() => {
@@ -436,7 +433,7 @@ ${result.recommendations?.join(
               </Button>
             </Card>
           )}
-          <Alert className="block mt-10 p-6 bg-gray-800/70 text-gray-400 rounded-lg border border-gray-700 italic text-sm text-center">
+          <Alert className="block mt-10 p-6 bg-gray-950/70 text-gray-400 border border-gray-700 italic text-sm text-center">
             <b className="text-gray-200 mb-2 not-italic">Disclaimer:</b>
             <div>
               This tool uses AI (OpenRouter) to assist with medical document

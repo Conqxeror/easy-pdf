@@ -17,7 +17,7 @@ export default function CategoryClient() {
 
   if (!category) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 bg-gray-100 rounded-xl border border-gray-200">
+      <div className="flex flex-col items-center justify-center p-8 bg-gray-100 border border-gray-200">
         <h1 className="text-2xl font-bold mb-4">Category Not Found</h1>
         <p>The requested category of PDF tools could not be found.</p>
       </div>
@@ -38,7 +38,7 @@ export default function CategoryClient() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {tools.map(tool => (
           <Link href={tool.href} key={tool.href}>
-            <Card className="bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow duration-300">
+            <Card className="bg-white dark:bg-black hover:shadow-lg transition-shadow duration-300">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
                   {tool.icon}

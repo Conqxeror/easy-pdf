@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Reorder PDF Pages Online – Free PDF Page Arrangement | easy-pdf",
-  description: "Rearrange the order of pages within your PDF document. Free online PDF page reordering tool with drag-and-drop interface. 100% client-side with no uploads.",
-  keywords: [
-    "Reorder PDF pages",
-    "Rearrange PDF",
-    "Organize PDF pages",
-    "PDF page order",
-    "Sort PDF pages",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF reorder",
-    "PDF page arrangement",
-    "Change PDF page sequence",
-    "PDF document reordering",
-    "Free PDF page reorder",
-    "Online PDF page arrangement",
-    "PDF page sorting tool",
-    "Drag and drop PDF pages",
-    "PDF page management",
-    "PDF page sequence changer",
-    "Visual PDF page reordering",
-    "Interactive PDF page arrangement",
-    "Batch PDF page reordering"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/reorder",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Page Reorderer",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Page Reorderer", url: "https://easy-pdf-murex.vercel.app/reorder" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Page Reorderer",
-  description: "Rearrange the order of pages within your PDF document. Free online PDF page reordering tool with drag-and-drop interface.",
-  url: "/reorder",
-  features: [
-    "Drag & drop interface",
-    "Visual page preview",
-    "Instant reordering",
-    "Download organized PDF"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Page Reorderer", url: "https://easy-pdf-murex.vercel.app/reorder" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/reorder');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,49 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Reorder PDF Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is it free to reorder PDF pages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our Reorder PDF Pages tool is completely free to use. You can rearrange pages in as many PDF files as you need without any hidden costs or limitations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my files secure when reordering pages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. Your privacy is our top priority. All PDF processing, including reordering, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I reorder pages from multiple PDFs?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool is designed to reorder pages within a single PDF document. If you need to combine pages from multiple PDFs, please use our 'Merge PDF' tool first, and then reorder the combined document."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is there a limit to the number of pages I can reorder?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "While there isn't a strict limit on the number of pages, very large PDFs (e.g., hundreds of pages) might take longer to load and process due to client-side operations. We recommend keeping file sizes manageable for optimal performance."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

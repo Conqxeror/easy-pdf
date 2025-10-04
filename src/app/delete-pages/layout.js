@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Delete PDF Pages Online – Free PDF Page Remover | easy-pdf",
-  description: "Remove unwanted pages from your PDF document easily. Free online tool to extract specific pages or delete page ranges. 100% client-side with no uploads.",
-  keywords: [
-    "Delete PDF pages",
-    "Remove PDF pages",
-    "Extract PDF pages",
-    "PDF page removal",
-    "Trim PDF",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF delete",
-    "PDF page extractor",
-    "Remove specific PDF pages",
-    "Delete PDF page range",
-    "PDF document trimming",
-    "Free PDF page remover",
-    "Online PDF page deletion",
-    "PDF page management",
-    "Selective PDF page removal",
-    "PDF page cutter",
-    "PDF page reduction",
-    "Batch PDF page deletion",
-    "PDF page cleanup"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/delete-pages",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Page Deleter",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Page Deleter", url: "https://easy-pdf-murex.vercel.app/delete-pages" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Page Deleter",
-  description: "Remove unwanted pages from your PDF document easily. Free online tool to extract specific pages or delete page ranges.",
-  url: "/delete-pages",
-  features: [
-    "Select specific pages",
-    "Page range deletion",
-    "Preview before deletion",
-    "Instant processing"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Page Deleter", url: "https://easy-pdf-murex.vercel.app/delete-pages" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/delete-pages');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,57 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Delete Pages Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is it free to delete pages from a PDF?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our Delete PDF Pages tool is completely free to use. You can remove pages from as many PDF files as you need without any hidden costs or limitations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my files secure when deleting pages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. Your privacy is our top priority. All PDF processing, including page deletion, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I delete multiple pages at once?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, you can select multiple individual pages or specify page ranges to delete. Simply click on the pages you want to remove or enter ranges like '1-5,8,10-15' in the input field."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I undo page deletion?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Once you've downloaded the modified PDF, the deleted pages are permanently removed. To recover them, you would need to use the original PDF file. We recommend keeping a backup of your original document."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is there a limit to the number of pages I can delete?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, you can delete as many pages as you want from your PDF. The tool works with documents of any size, though processing speed may vary based on file complexity."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

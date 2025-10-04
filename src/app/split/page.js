@@ -333,10 +333,10 @@ export default function SplitPdfPage() {
         />
 
         {fileName && (
-          <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="p-4 bg-gray-950 border border-gray-700">
             <div className="flex items-center">
-              <div className="p-2 rounded-lg bg-blue-500/10 mr-3">
-                <FileText className="w-5 h-5 text-blue-400" />
+              <div className="p-2 bg-gray-950/10 mr-3">
+                <FileText className="w-5 h-5 text-gray-400" />
               </div>
               <div>
                 <h3 className="font-medium text-gray-100">{fileName}</h3>
@@ -367,10 +367,10 @@ export default function SplitPdfPage() {
                   />
                   <Label
                     htmlFor="split-range"
-                    className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
+                    className="flex items-center space-x-3 cursor-pointer p-4 border-2 border-gray-600 bg-gray-950 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 peer-data-[state=checked]:bg-gray-950/10 transition-colors"
                   >
-                    <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
-                      <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
+                    <div className="flex items-center justify-center w-5 h-5 border-2 border-gray-400 peer-data-[state=checked]:border-gray-600">
+                      <div className="w-2 h-2 bg-gray-950 peer-data-[state=checked]:bg-gray-950"></div>
                     </div>
                     <div>
                       <span className="font-medium text-gray-100">By Page Range</span>
@@ -386,10 +386,10 @@ export default function SplitPdfPage() {
                   />
                   <Label
                     htmlFor="split-individual"
-                    className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
+                    className="flex items-center space-x-3 cursor-pointer p-4 border-2 border-gray-600 bg-gray-950 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 peer-data-[state=checked]:bg-gray-950/10 transition-colors"
                   >
-                    <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
-                      <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
+                    <div className="flex items-center justify-center w-5 h-5 border-2 border-gray-400 peer-data-[state=checked]:border-gray-600">
+                      <div className="w-2 h-2 bg-gray-950 peer-data-[state=checked]:bg-gray-950"></div>
                     </div>
                     <div>
                       <span className="font-medium text-gray-100">Extract Individual Pages</span>
@@ -405,10 +405,10 @@ export default function SplitPdfPage() {
                   />
                   <Label
                     htmlFor="split-custom"
-                    className="flex items-center space-x-3 cursor-pointer p-4 rounded-lg border-2 border-gray-600 bg-gray-700 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-500/10 transition-colors"
+                    className="flex items-center space-x-3 cursor-pointer p-4 border-2 border-gray-600 bg-gray-950 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 peer-data-[state=checked]:bg-gray-950/10 transition-colors"
                   >
-                    <div className="flex items-center justify-center w-5 h-5 rounded-full border-2 border-gray-400 peer-data-[state=checked]:border-blue-500">
-                      <div className="w-2 h-2 rounded-full bg-blue-500 peer-data-[state=checked]:bg-blue-500"></div>
+                    <div className="flex items-center justify-center w-5 h-5 border-2 border-gray-400 peer-data-[state=checked]:border-gray-600">
+                      <div className="w-2 h-2 bg-gray-950 peer-data-[state=checked]:bg-gray-950"></div>
                     </div>
                     <div>
                       <span className="font-medium text-gray-100">Custom Ranges</span>
@@ -420,7 +420,7 @@ export default function SplitPdfPage() {
             </div>
 
             {splitMode === "range" && (
-              <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+              <div className="p-4 bg-gray-950 border border-gray-700">
                 <Label className="text-gray-200 mb-3 block flex items-center">
                   <Split className="w-4 h-4 mr-2" />
                   Page Range
@@ -436,7 +436,7 @@ export default function SplitPdfPage() {
               </div>
             )}
             {splitMode === "custom" && (
-              <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 space-y-3">
+              <div className="p-4 bg-gray-950 border border-gray-700 space-y-3">
                 <Label className="text-gray-200 mb-3 block flex items-center">
                   <Split className="w-4 h-4 mr-2" />
                   Custom Ranges
@@ -450,7 +450,7 @@ export default function SplitPdfPage() {
                       value={range.start}
                       onChange={(e) => updateCustomRange(idx, 'start', e.target.value)}
                       placeholder="Start"
-                      className="w-24 px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-gray-100"
+                      className="w-24 px-3 py-2 bg-black border border-gray-700 text-gray-100"
                     />
                     <span className="text-gray-400">to</span>
                     <input
@@ -460,7 +460,7 @@ export default function SplitPdfPage() {
                       value={range.end}
                       onChange={(e) => updateCustomRange(idx, 'end', e.target.value)}
                       placeholder="End"
-                      className="w-24 px-3 py-2 bg-gray-900 border border-gray-700 rounded-md text-gray-100"
+                      className="w-24 px-3 py-2 bg-black border border-gray-700 text-gray-100"
                     />
                     <div className="ml-2 flex items-center space-x-2">
                       <Button variant="ghost" onClick={() => addCustomRange()}>
@@ -480,10 +480,10 @@ export default function SplitPdfPage() {
 
         {isProcessing &&
           file && (
-            <div className="space-y-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="space-y-3 p-4 bg-gray-950 border border-gray-700">
               <Progress
                 value={currentProgress}
-                className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-500 rounded-full"
+                className="h-2.5 bg-gray-950 [&::-webkit-progress-bar]:bg-gray-950 [&::-webkit-progress-value]:bg-gray-950"
               />
               <p className="text-sm text-center text-gray-400">
                 {processingMessage || `Splitting PDF... ${currentProgress}%`}
@@ -504,7 +504,7 @@ export default function SplitPdfPage() {
         />
 
         {pdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center">
                 <Download className="w-6 h-6 mr-2 text-green-400" />
@@ -512,25 +512,25 @@ export default function SplitPdfPage() {
               </h3>
               
               {splitMode === "range" && (
-                <div className="bg-gray-900 rounded-lg p-4 border border-gray-700">
+                <div className="bg-black p-4 border border-gray-700">
                   <p className="text-gray-300 mb-3">Pages {startPage} to {endPage} extracted</p>
                   <iframe
                     src={pdfUrl}
                     width="100%"
                     height="400px"
-                    className="border border-gray-600 rounded-md shadow-inner"
+                    className="border border-gray-600 shadow-inner"
                     title="PDF Preview"
                   ></iframe>
                 </div>
               )}
               
               {splitMode === "individual" && (
-                <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 text-center">
+                <div className="bg-black p-6 border border-gray-700 text-center">
                   <p className="text-gray-300 mb-4">
                     Your PDF has been split into individual pages and compressed into a ZIP file.
                   </p>
-                  <div className="inline-flex items-center justify-center p-3 rounded-full bg-blue-500/10 mb-4">
-                    <FileText className="w-8 h-8 text-blue-400" />
+                  <div className="inline-flex items-center justify-center p-3 bg-gray-950/10 mb-4">
+                    <FileText className="w-8 h-8 text-gray-400" />
                   </div>
                   <p className="text-gray-400 text-sm">
                     {totalPages} individual PDF files

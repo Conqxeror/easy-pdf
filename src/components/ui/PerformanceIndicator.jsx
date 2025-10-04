@@ -47,7 +47,7 @@ const PerformanceIndicator = memo(({ toolName, className = "" }) => {
       </button>
       
       {isVisible && (
-        <div className="absolute top-full left-0 mt-2 p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50 min-w-[280px]">
+        <div className="absolute top-full left-0 mt-2 p-4 bg-gray-950 border border-gray-700 shadow-lg z-50 min-w-[280px]">
           <h4 className="font-semibold mb-3 flex items-center">
             <TrendingUp className="w-4 h-4 mr-2" />
             Performance Metrics
@@ -89,7 +89,7 @@ const PerformanceIndicator = memo(({ toolName, className = "" }) => {
                   {metrics.recent.map((time, index) => (
                     <div
                       key={index}
-                      className={`w-2 h-8 rounded-sm ${getPerformanceColor(time).replace('text-', 'bg-')}`}
+                      className={`w-2 h-8 ${getPerformanceColor(time).replace('text-', 'bg-')}`}
                       style={{
                         height: `${Math.min((time / Math.max(...metrics.recent)) * 32, 32)}px`
                       }}

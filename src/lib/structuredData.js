@@ -7,7 +7,7 @@ export const generateJsonLd = (pageType, pageData = {}) => {
     "@type": "Organization",
     "name": "easy-pdf",
     "url": baseUrl,
-    "logo": `${baseUrl}/icon.png`,
+  "logo": `${baseUrl}/icon.svg`,
     "description": "Privacy-first PDF tools for secure document processing",
     "foundingDate": "2024",
     "contactPoint": {

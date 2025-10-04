@@ -213,7 +213,7 @@ export default function RotatePdfPage() {
 
         {totalPages > 0 && (
           <div className="space-y-5">
-            <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="p-4 bg-gray-950 border border-gray-700">
               <Label className="text-gray-200 mb-3 block flex items-center">
                 <RotateCw className="w-4 h-4 mr-2" />
                 Page Range
@@ -233,7 +233,7 @@ export default function RotatePdfPage() {
                 Rotation Angle
               </Label>
               <Select value={angle} onValueChange={setAngle}>
-                <SelectTrigger className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500">
+                <SelectTrigger className="w-full bg-gray-950 text-gray-100 border-gray-600 focus:border-gray-600 focus:ring-gray-600">
                   <SelectValue placeholder="Select angle" />
                 </SelectTrigger>
                 <SelectContent>
@@ -256,14 +256,14 @@ export default function RotatePdfPage() {
           <Button
             onClick={rotatePDF}
             disabled={isProcessing || !file}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            className="px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
             aria-label="Rotate PDF"
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Rotating...
               </span>
             ) : (
@@ -273,7 +273,7 @@ export default function RotatePdfPage() {
         </div>
 
         {rotatedUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

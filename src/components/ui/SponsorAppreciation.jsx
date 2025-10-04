@@ -29,13 +29,13 @@ const SponsorAppreciation = ({
   const getIcon = () => {
     switch (context) {
       case 'milestone_reached':
-        return <Star className="w-6 h-6 text-yellow-400" />;
+        return <Star className="w-6 h-6 text-yellow-400 preserve-color" />;
       case 'frequent_user':
-        return <Heart className="w-6 h-6 text-red-400" />;
+        return <Heart className="w-6 h-6 text-red-400 preserve-color" />;
       case 'feature_appreciation':
-        return <Coffee className="w-6 h-6 text-orange-400" />;
+        return <Coffee className="w-6 h-6 text-orange-400 preserve-color" />;
       default:
-        return <Users className="w-6 h-6 text-blue-400" />;
+        return <Users className="w-6 h-6 text-gray-400" />;
     }
   };
 
@@ -90,7 +90,7 @@ const SponsorAppreciation = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-800 rounded-xl shadow-2xl max-w-md w-full border border-gray-700">
+      <div className="bg-gray-950 shadow-2xl max-w-md w-full border border-gray-700">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-700">
           <div className="flex items-center space-x-3">
@@ -118,7 +118,7 @@ const SponsorAppreciation = ({
             <ul className="space-y-2">
               {appreciationContent.benefits.map((benefit, index) => (
                 <li key={index} className="flex items-center text-sm text-gray-300">
-                  <Heart className="w-4 h-4 text-red-400 mr-2 flex-shrink-0" />
+                  <Heart className="w-4 h-4 text-red-400 mr-2 flex-shrink-0 preserve-color" />
                   {benefit}
                 </li>
               ))}
@@ -126,13 +126,13 @@ const SponsorAppreciation = ({
           </div>
 
           {/* Sponsor appreciation */}
-          <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-700/50 rounded-lg p-4 mb-4">
+          <div className="bg-gradient-to-r from-gray-900/30 to-gray-900/30 border border-gray-800/50 p-4 mb-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-blue-300 font-medium">Our Amazing Sponsors</p>
-                <p className="text-blue-400 text-sm">Supporting free tools for everyone</p>
+                <p className="text-gray-300 font-medium">Our Amazing Sponsors</p>
+                <p className="text-gray-400 text-sm">Supporting free tools for everyone</p>
               </div>
-              <Star className="w-6 h-6 text-yellow-400" />
+              <Star className="w-6 h-6 text-yellow-400 preserve-color" />
             </div>
           </div>
 
@@ -141,10 +141,10 @@ const SponsorAppreciation = ({
             <button
               onClick={handleViewSponsors}
               disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center"
+              className="w-full bg-gray-950 hover:bg-gray-950 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-4 transition-colors flex items-center justify-center"
             >
               {isLoading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin" />
               ) : (
                 <>
                   <Heart className="w-4 h-4 mr-2" />

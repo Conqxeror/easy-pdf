@@ -1,21 +1,11 @@
 "use client";
 
-
-
 import React, { useState, useRef, useEffect, useCallback } from "react";
-
-
 import { PDFDocument } from "pdf-lib";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
-// import { Card } from "@/components/ui/card"; // Unused import
-
-// Import pdfjs legacy build for PDF rendering
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
@@ -144,6 +134,10 @@ export default function ReorderPage() {
     try {
       const file = newFiles[0];
       const arrayBuffer = await file.arrayBuffer();
+      
+      // Dynamically load pdfjs and configure worker
+      const pdfjs = await loadPdfJs();
+      
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise; // Load PDF with pdfjs-dist
       setPdfDocProxy(pdf); // Store the PDFDocumentProxy
 
@@ -169,7 +163,7 @@ export default function ReorderPage() {
   const handleDragEnter = useCallback((e, position) => {
     dragOverItem.current = position;
     // Add a class for visual feedback (e.g., border for drop target)
-    e.currentTarget.classList.add("border-blue-500", "scale-105");
+    e.currentTarget.classList.add("border-gray-600", "scale-105");
   }, []);
 
   const handleDragOver = useCallback((e) => {
@@ -198,7 +192,7 @@ export default function ReorderPage() {
 
   const handleDragLeave = useCallback((e) => {
     // Remove highlight from item being dragged over
-    e.currentTarget.classList.remove("border-blue-500", "scale-105");
+    e.currentTarget.classList.remove("border-gray-600", "scale-105");
   }, []);
 
   const handleDragEnd = useCallback(
@@ -213,7 +207,7 @@ export default function ReorderPage() {
       ) {
         canvasRefs.current[
           pageOrder[dragOverItem.current]
-        ].parentNode.classList.remove("border-blue-500", "scale-105");
+        ].parentNode.classList.remove("border-gray-600", "scale-105");
       }
       dragItem.current = null;
       dragOverItem.current = null;
@@ -319,7 +313,7 @@ export default function ReorderPage() {
         />
 
         {numPages > 0 && (
-          <div className="mt-4 p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
+          <div className="mt-4 p-4 bg-gray-950 shadow-inner border border-gray-700 space-y-4">
             <h2 className="font-semibold text-xl mb-3 text-gray-100">
               Page Order
             </h2>
@@ -340,12 +334,12 @@ export default function ReorderPage() {
                   onDrop={handleDrop}
                   onDragEnd={handleDragEnd}
                   onDragLeave={handleDragLeave} // Added drag leave handler
-                  className={`relative flex flex-col items-center p-2 border rounded-md group
-                              border-gray-600 bg-gray-700
-                              hover:border-blue-500 transition-all duration-200 cursor-grab
+                  className={`relative flex flex-col items-center p-2 border group
+                              border-gray-600 bg-gray-950
+                              hover:border-gray-600 transition-all duration-200 cursor-grab
                               ${
                                 dragItem.current === displayIndex
-                                  ? "shadow-lg opacity-50 border-blue-500"
+                                  ? "shadow-lg opacity-50 border-gray-600"
                                   : ""
                               }
                             `}
@@ -363,7 +357,7 @@ export default function ReorderPage() {
                       // Store the canvas node reference
                       canvasRefs.current[originalPageIndex] = node;
                     }}
-                    className="w-full h-auto max-w-[150px] border border-gray-600 rounded-sm bg-white" // Fixed width for thumbnail consistency
+                    className="w-full h-auto max-w-[150px] border border-gray-600 bg-white" // Fixed width for thumbnail consistency
                   ></canvas>
                 </li>
               ))}
@@ -379,14 +373,14 @@ export default function ReorderPage() {
 
         <div className="flex justify-center">
           <Button
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            className="px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl"
             onClick={handleReorder}
             disabled={isProcessing || numPages === 0}
             aria-label="Reorder pages"
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Processing...
               </span>
             ) : (
@@ -396,7 +390,7 @@ export default function ReorderPage() {
         </div>
 
         {reorderedPdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -414,16 +408,18 @@ export default function ReorderPage() {
                 <a
                   href={reorderedPdfUrl}
                   download={downloadFileName}
-                  className="text-center flex items-center"
+                  className="text-center"
                   onClick={() => {
                     const u = reorderedPdfUrl;
                     setTimeout(() => { try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { } }, 500);
                   }}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                  </svg>
-                  Download Reordered PDF
+                  <span className="flex items-center">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Reordered PDF
+                  </span>
                 </a>
               </Button>
             </div>

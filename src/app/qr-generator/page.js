@@ -267,7 +267,7 @@ END:VCARD`;
                 type="email"
                 value={qrCodeData.email}
                 onChange={(e) => updateQRData('email', e.target.value)}
-                placeholder="kadriwalimohammad@gmail.com"
+                placeholder="support@example.com"
               />
             </div>
             <div>
@@ -433,7 +433,7 @@ END:VCARD`;
                   type="email"
                   value={qrCodeData.emailAddress}
                   onChange={(e) => updateQRData('emailAddress', e.target.value)}
-                  placeholder="kadriwalimohammad@gmail.com"
+                  placeholder="support@example.com"
                 />
               </div>
             </div>
@@ -617,11 +617,11 @@ END:VCARD`;
             onClick={generateQRCode}
             disabled={isGenerating}
             size="lg"
-            className="w-full bg-purple-600 hover:bg-purple-700"
+            className="w-full bg-gray-700 hover:bg-purple-700"
           >
             {isGenerating ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></div>
                 Generating...
               </>
             ) : (
@@ -644,7 +644,7 @@ END:VCARD`;
                 <canvas
                   ref={canvasRef}
                   style={{ display: qrCodeImage ? 'none' : 'block' }}
-                  className="border border-gray-300 rounded"
+                  className="border border-gray-300"
                 />
                 {qrCodeImage && (
                   <div className="relative w-full max-w-md">
@@ -652,14 +652,14 @@ END:VCARD`;
                     <img
                       src={qrCodeImage}
                       alt="Generated QR Code"
-                      className="border border-gray-300 rounded w-full h-auto"
+                      className="border border-gray-300 w-full h-auto"
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
                 )}
                 {!qrCodeImage && (
-                  <div className="w-64 h-64 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                  <div className="w-64 h-64 border-2 border-dashed border-gray-300 flex items-center justify-center">
                     <div className="text-center text-gray-500">
                       <QrCode className="w-12 h-12 mx-auto mb-2" />
                       <p>QR code will appear here</p>

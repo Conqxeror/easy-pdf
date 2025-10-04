@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Download, CheckCircle, Key, FileText, Lock, Loader2 } from "lucide-react";
-import { PDFDocument, rgb } from 'pdf-lib';
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
 
@@ -47,7 +47,7 @@ export default function PDFDigitalSignature() {
     
     setCertificateInfo({
       name: certificateInfo.name || "John Doe",
-      email: certificateInfo.email || "kadriwalimohammad@gmail.com",
+  email: certificateInfo.email || process.env.NEXT_PUBLIC_CONTACT_EMAIL || "kadriwalimohammad@gmail.com",
       organization: certificateInfo.organization || "Example Corp",
       country: certificateInfo.country || "US",
       validFrom: now.toISOString().split('T')[0],
@@ -64,8 +64,9 @@ export default function PDFDigitalSignature() {
     try {
       // Read the PDF file
       setProgress(20);
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const { PDFDocument, rgb } = await getPdfLib();
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
 
       setProgress(40);
 
@@ -276,7 +277,7 @@ export default function PDFDigitalSignature() {
                       placeholder="Enter signature text or leave blank for default"
                       value={signatureText}
                       onChange={(e) => setSignatureText(e.target.value)}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
 
@@ -288,7 +289,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.x}
                         onChange={(e) => setSignaturePosition({...signaturePosition, x: parseInt(e.target.value)})}
-                        className="bg-gray-800 border-gray-600 text-gray-200"
+                        className="bg-gray-950 border-gray-600 text-gray-200"
                       />
                     </div>
                     <div>
@@ -298,7 +299,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.y}
                         onChange={(e) => setSignaturePosition({...signaturePosition, y: parseInt(e.target.value)})}
-                        className="bg-gray-800 border-gray-600 text-gray-200"
+                        className="bg-gray-950 border-gray-600 text-gray-200"
                       />
                     </div>
                   </div>
@@ -311,7 +312,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.width}
                         onChange={(e) => setSignaturePosition({...signaturePosition, width: parseInt(e.target.value)})}
-                        className="bg-gray-800 border-gray-600 text-gray-200"
+                        className="bg-gray-950 border-gray-600 text-gray-200"
                       />
                     </div>
                     <div>
@@ -321,7 +322,7 @@ export default function PDFDigitalSignature() {
                         type="number"
                         value={signaturePosition.height}
                         onChange={(e) => setSignaturePosition({...signaturePosition, height: parseInt(e.target.value)})}
-                        className="bg-gray-800 border-gray-600 text-gray-200"
+                        className="bg-gray-950 border-gray-600 text-gray-200"
                       />
                     </div>
                   </div>
@@ -384,7 +385,7 @@ export default function PDFDigitalSignature() {
                       placeholder="John Doe"
                       value={certificateInfo.name}
                       onChange={(e) => setCertificateInfo({...certificateInfo, name: e.target.value})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -392,10 +393,10 @@ export default function PDFDigitalSignature() {
                     <Input
                       id="cert-email"
                       type="email"
-                      placeholder="kadriwalimohammad@gmail.com"
+                      placeholder="support@example.com"
                       value={certificateInfo.email}
                       onChange={(e) => setCertificateInfo({...certificateInfo, email: e.target.value})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -408,7 +409,7 @@ export default function PDFDigitalSignature() {
                       placeholder="Example Corporation"
                       value={certificateInfo.organization}
                       onChange={(e) => setCertificateInfo({...certificateInfo, organization: e.target.value})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -418,7 +419,7 @@ export default function PDFDigitalSignature() {
                       placeholder="US"
                       value={certificateInfo.country}
                       onChange={(e) => setCertificateInfo({...certificateInfo, country: e.target.value})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -429,7 +430,7 @@ export default function PDFDigitalSignature() {
                 </Button>
 
                 {certificateInfo.validFrom && (
-                  <div className="mt-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+                  <div className="mt-4 p-4 bg-gray-950 border border-gray-700">
                     <h4 className="font-semibold mb-2 text-gray-200">Certificate Details:</h4>
                     <div className="grid grid-cols-2 gap-2 text-sm text-gray-300">
                       <div><strong>Name:</strong> {certificateInfo.name}</div>
@@ -463,7 +464,7 @@ export default function PDFDigitalSignature() {
                     id="validate-file"
                     type="file"
                     accept=".pdf"
-                    className="bg-gray-800 border-gray-600 text-gray-200 file:bg-gray-700 file:text-gray-200 file:border-0"
+                    className="bg-gray-950 border-gray-600 text-gray-200 file:bg-gray-950 file:text-gray-200 file:border-0"
                   />
                 </div>
 
@@ -490,7 +491,7 @@ export default function PDFDigitalSignature() {
           </TabsContent>
         </Tabs>
 
-        <Card className="mt-8 bg-gray-800 border-gray-700">
+        <Card className="mt-8 bg-gray-950 border-gray-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-200">
               <Shield className="h-5 w-5" />

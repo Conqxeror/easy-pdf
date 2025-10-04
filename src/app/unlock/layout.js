@@ -1,56 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Unlock PDF (Remove Password) – Free PDF Unlocker | easy-pdf",
-  description: "Remove password protection from your PDF files. Free online PDF unlocker with secure browser-based processing. 100% client-side with no file uploads.",
-  keywords: [
-    "Unlock PDF",
-    "Remove PDF password",
-    "Decrypt PDF",
-    "PDF password remover",
-    "Open protected PDF",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF unlock",
-    "PDF decryption",
-    "Password protected PDF remover",
-    "Secure PDF unlocker",
-    "Online PDF unlocker",
-    "Free PDF password remover",
-    "PDF access restoration",
-    "Protected PDF opener",
-    "PDF security removal",
-    "Password recovery PDF",
-    "PDF unlock tool",
-    "Browser-based PDF unlocker",
-    "Local PDF decryption",
-    "Safe PDF unlocking"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/unlock",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Unlocker",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Unlocker", url: "https://easy-pdf-murex.vercel.app/unlock" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Unlocker",
-  description: "Remove password protection from your PDF files. Free online PDF unlocker with secure browser-based processing.",
-  url: "/unlock",
-  features: [
-    "Password removal",
-    "Quick processing",
-    "Secure unlocking",
-    "No data retention"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Unlocker", url: "https://easy-pdf-murex.vercel.app/unlock" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/unlock');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (

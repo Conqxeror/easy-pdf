@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback  } from "react";
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -18,11 +18,6 @@ import JSZip from "jszip";
 // Use native <img> for blob/object URLs (next/image optimizations don't apply to blob URLs)
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
-
-// Configure pdfjs worker
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function PdfToJpgPage() {
   const [file, setFile] = useState(null);
@@ -124,6 +119,9 @@ export default function PdfToJpgPage() {
         console.log("Loading PDF document...");
         const arrayBuffer = await currentFile.arrayBuffer();
         
+        // Dynamically load pdfjs and configure worker
+        const pdfjs = await loadPdfJs();
+        
         const loadingTask = pdfjs.getDocument({
           data: arrayBuffer,
         });
@@ -168,6 +166,10 @@ export default function PdfToJpgPage() {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
+      
+      // Dynamically load pdfjs and configure worker
+      const pdfjs = await loadPdfJs();
+      
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       const totalPdfPages = pdf.numPages;
 
@@ -361,12 +363,12 @@ export default function PdfToJpgPage() {
                     onValueChange={setSelectedPages}
                   >
                     <SelectTrigger
-                      id="pagesToConvert"
-                      className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
-                    >
+                          id="pagesToConvert"
+                          className="w-full bg-black/80 text-gray-100 border-gray-600 focus:border-gray-600 focus:ring-gray-600"
+                        >
                       <SelectValue placeholder="Select pages" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
+                    <SelectContent className="bg-gray-950 text-gray-100 border-gray-600">
                       <SelectItem value="all">
                         All Pages ({totalPages})
                       </SelectItem>
@@ -384,7 +386,7 @@ export default function PdfToJpgPage() {
           </div>
         )}
 
-        {isProcessing && (
+  {isProcessing && (
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-gray-300">
@@ -397,12 +399,12 @@ export default function PdfToJpgPage() {
             </div>
             <Progress
               value={currentProgress}
-              className="h-2 bg-gray-600 [&::-webkit-progress-bar]:bg-gray-600 [&::-webkit-progress-value]:bg-blue-500"
+              className="h-2 bg-gray-950 [&::-webkit-progress-bar]:bg-gray-950 [&::-webkit-progress-value]:bg-white/70"
             />
           </div>
         )}
 
-        {error && (
+  {error && (
           <Alert variant="destructive" className="mt-4">
             {error}
           </Alert>
@@ -412,13 +414,13 @@ export default function PdfToJpgPage() {
           <Button
             onClick={convertToJpg}
             disabled={isProcessing || !file || totalPages === 0}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            className="px-8 py-3 bg-black text-white shadow-lg hover:shadow-xl border border-gray-700"
             variant="default"
             size="lg"
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Converting...
               </span>
             ) : (
@@ -428,7 +430,7 @@ export default function PdfToJpgPage() {
         </div>
 
         {images.length > 0 && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-black/90 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center">
                 {images.filter((img) => !img.isZip).length > 1
@@ -436,11 +438,11 @@ export default function PdfToJpgPage() {
                   : "Converted Image"}
               </h3>
 
-              {images.filter((img) => !img.isZip).length === 1 && (
-                <div className="w-full flex justify-center items-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden relative p-4">
+                {images.filter((img) => !img.isZip).length === 1 && (
+                <div className="w-full flex justify-center items-center bg-black border border-gray-700 overflow-hidden relative p-4">
                   <canvas
                     ref={imagePreviewCanvasRef}
-                    className="max-w-full h-auto border border-gray-600 rounded-md shadow-lg"
+                    className="max-w-full h-auto border border-gray-600 shadow-lg"
                     style={{ maxWidth: "100%", height: "auto" }}
                     aria-label="Converted image preview"
                   ></canvas>
@@ -453,7 +455,7 @@ export default function PdfToJpgPage() {
                   .map((image, _index) => (
                     <div
                       key={image.fileName}
-                      className="border border-gray-600 rounded-md p-3 bg-gray-700 text-gray-100 flex flex-col items-center text-center"
+                      className="border border-gray-600 p-3 bg-gray-950 text-gray-100 flex flex-col items-center text-center"
                     >
                       <div className="flex items-center gap-3 mb-2">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -462,7 +464,7 @@ export default function PdfToJpgPage() {
                           alt={`Page ${image.pageNumber}`}
                           width={64}
                           height={64}
-                          className="object-cover rounded shadow"
+                          className="object-cover shadow"
                             onError={(e) => {
                             const t = e.currentTarget;
                             // @ts-ignore - currentTarget is HTMLImageElement

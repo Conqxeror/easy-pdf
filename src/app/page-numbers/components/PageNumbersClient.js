@@ -120,7 +120,7 @@ export default function PageNumbersClient() {
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Adding Page Numbers...
               </span>
             ) : (

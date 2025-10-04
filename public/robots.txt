@@ -15,7 +15,7 @@ Disallow: /private/
 Disallow: /temp/
 
 # Allow important assets
-Allow: /icon.png
+# Note: icon.svg is used as the canonical logo now
 Allow: /og-image.jpg
 Allow: /twitter-image.jpg
 Allow: /site.webmanifest
@@ -23,5 +23,3 @@ Allow: /favicon.ico
 
 # Sitemap
 Sitemap: https://easy-pdf-murex.vercel.app/sitemap.xml
-
-Sitemap: https://easy-pdf-murex.vercel.app/sitemap-alt.xml

@@ -17,17 +17,17 @@ const UsageIndicator = ({ className = '', compact = false }) => {
   }
 
   return (
-    <div className={`bg-gray-800 border border-gray-700 rounded-lg p-4 ${className}`}>
+    <div className={`bg-gray-950 border border-gray-700 p-4 ${className}`}>
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-sm font-medium text-gray-300">Usage Status</h3>
         <div className="flex items-center space-x-1 text-xs text-green-400">
-          <CheckCircle className="w-3 h-3" />
+            <CheckCircle className="w-3 h-3 preserve-color" />
           <span>Unlimited</span>
         </div>
       </div>
 
       <div className="text-center py-4">
-        <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-2" />
+  <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-2 preserve-color" />
         <p className="text-sm text-gray-300 mb-1">All Features Unlimited</p>
         <p className="text-xs text-gray-400">
           No daily limits • No file size restrictions • All tools available

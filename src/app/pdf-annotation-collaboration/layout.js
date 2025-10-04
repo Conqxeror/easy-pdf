@@ -1,48 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "PDF Annotation Collaboration - Team Review Tool",
-  description: "Collaborate on PDF annotations with team members and export shared comments. Perfect for document review workflows.",
-  keywords: [
-  "PDF collaboration",
-  "document review",
-  "team annotations",
-  "collaborative editing",
-  "PDF comments",
-  "document workflow",
-  "review process",
-  "annotation sharing",
-  "team collaboration",
-  "document feedback",
-  "collaborative review",
-  "shared annotations"
-],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/pdf-annotation-collaboration",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Annotation Collaboration",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Annotation Collaboration", url: "https://easy-pdf-murex.vercel.app/pdf-annotation-collaboration" }
-  ]
-});
-
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Annotation Collaboration",
-  description: "Collaborate on PDF annotations with team members and export shared comments. Perfect for document review workflows.",
-  url: "/pdf-annotation-collaboration",
-  features: [
-    "Team annotations",
-    "Comment threads",
-    "Export annotations",
-    "Review workflows"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Annotation Collaboration", url: "https://easy-pdf-murex.vercel.app/pdf-annotation-collaboration" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/pdf-annotation-collaboration');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 const faqStructuredData = {
   "@context": "https://schema.org",

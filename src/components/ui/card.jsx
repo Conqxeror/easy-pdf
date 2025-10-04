@@ -1,18 +1,55 @@
 import * as React from "react"
+import { cva } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+const cardVariants = cva(
+  "flex flex-col transition-all duration-200",
+  {
+    variants: {
+      variant: {
+        // Default card - subtle elevation
+        default: "bg-white dark:bg-black text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-md",
+        
+        // Elevated card - stronger shadow, lifts on hover
+        elevated: "bg-white dark:bg-black text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:-translate-y-1",
+        
+        // Glass card - glassmorphism effect
+        glass: "bg-white/90 dark:bg-black/90 backdrop-blur-md text-gray-900 dark:text-gray-100 border border-gray-200/50 dark:border-gray-700/50 shadow-lg",
+        
+        // Interactive card - for clickable cards
+        interactive: "bg-white dark:bg-black text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-gray-600 dark:hover:border-gray-600 cursor-pointer",
+        
+        // Flat card - no shadow, subtle border
+  flat: "bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700",
+        
+        // Outlined card - prominent border
+        outlined: "bg-transparent text-gray-900 dark:text-gray-100 border-2 border-gray-300 dark:border-gray-600",
+      },
+      padding: {
+        none: "p-0",
+        sm: "p-4",
+        default: "p-6",
+        lg: "p-8",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      padding: "default",
+    },
+  }
+)
+
 function Card({
   className,
+  variant,
+  padding,
   ...props
 }) {
   return (
     <div
       data-slot="card"
-      className={cn(
-        "bg-gray-800 text-gray-100 flex flex-col gap-6 rounded-xl border border-gray-700 py-6 shadow-lg",
-        className
-      )}
+      className={cn(cardVariants({ variant, padding }), "gap-6", className)}
       {...props} />
   );
 }

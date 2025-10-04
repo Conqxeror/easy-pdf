@@ -409,7 +409,7 @@ export default function CertificateGeneratorPage() {
     >
       <div className="space-y-6">
         {/* Template Selection */}
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Award className="w-5 h-5" />
@@ -418,10 +418,10 @@ export default function CertificateGeneratorPage() {
           </CardHeader>
           <CardContent>
             <Select value={certificateData.template} onValueChange={(value) => updateCertificateData('template', value)}>
-              <SelectTrigger className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+              <SelectTrigger className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+              <SelectContent className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
                 <SelectItem value="completion">Certificate of Completion</SelectItem>
                 <SelectItem value="achievement">Certificate of Achievement</SelectItem>
                 <SelectItem value="participation">Certificate of Participation</SelectItem>
@@ -436,7 +436,7 @@ export default function CertificateGeneratorPage() {
         </Card>
 
         {/* Recipient Information */}
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <User className="w-5 h-5" />
@@ -452,7 +452,7 @@ export default function CertificateGeneratorPage() {
                 onChange={(e) => updateCertificateData('recipientName', e.target.value)}
                 placeholder="John Doe"
                 required
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div>
@@ -462,14 +462,14 @@ export default function CertificateGeneratorPage() {
                 value={certificateData.certificateId}
                 onChange={(e) => updateCertificateData('certificateId', e.target.value)}
                 placeholder="CERT-001"
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Course/Program Information */}
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="text-gray-900 dark:text-gray-100">Course/Program Information</CardTitle>
           </CardHeader>
@@ -482,7 +482,7 @@ export default function CertificateGeneratorPage() {
                 onChange={(e) => updateCertificateData('courseName', e.target.value)}
                 placeholder="Advanced Web Development"
                 required
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -493,7 +493,7 @@ export default function CertificateGeneratorPage() {
                   value={certificateData.duration}
                   onChange={(e) => updateCertificateData('duration', e.target.value)}
                   placeholder="40 hours"
-                  className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
                 />
               </div>
               <div>
@@ -503,7 +503,7 @@ export default function CertificateGeneratorPage() {
                   value={certificateData.grade}
                   onChange={(e) => updateCertificateData('grade', e.target.value)}
                   placeholder="A+ / 95%"
-                  className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
                 />
               </div>
               <div>
@@ -513,7 +513,7 @@ export default function CertificateGeneratorPage() {
                   type="date"
                   value={certificateData.issueDate}
                   onChange={(e) => updateCertificateData('issueDate', e.target.value)}
-                  className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                  className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
@@ -525,14 +525,14 @@ export default function CertificateGeneratorPage() {
                 onChange={(e) => updateCertificateData('description', e.target.value)}
                 placeholder="Additional details about the course or achievement"
                 rows={3}
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Organization Information */}
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
               <Building className="w-5 h-5" />
@@ -548,7 +548,7 @@ export default function CertificateGeneratorPage() {
                 onChange={(e) => updateCertificateData('organizationName', e.target.value)}
                 placeholder="Tech Academy"
                 required
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div>
@@ -558,7 +558,7 @@ export default function CertificateGeneratorPage() {
                 value={certificateData.signatoryName}
                 onChange={(e) => updateCertificateData('signatoryName', e.target.value)}
                 placeholder="Dr. Jane Smith"
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
             <div className="md:col-span-2">
@@ -568,14 +568,14 @@ export default function CertificateGeneratorPage() {
                 value={certificateData.signatoryTitle}
                 onChange={(e) => updateCertificateData('signatoryTitle', e.target.value)}
                 placeholder="Director of Education"
-                className="bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100"
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Styling Options */}
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="text-gray-900 dark:text-gray-100">Styling Options</CardTitle>
           </CardHeader>
@@ -587,7 +587,7 @@ export default function CertificateGeneratorPage() {
                 type="color"
                 value={certificateData.primaryColor}
                 onChange={(e) => updateCertificateData('primaryColor', e.target.value)}
-                className="h-10 bg-white dark:bg-gray-700"
+                className="h-10 bg-white dark:bg-gray-950"
               />
             </div>
             <div>
@@ -597,7 +597,7 @@ export default function CertificateGeneratorPage() {
                 type="color"
                 value={certificateData.secondaryColor}
                 onChange={(e) => updateCertificateData('secondaryColor', e.target.value)}
-                className="h-10 bg-white dark:bg-gray-700"
+                className="h-10 bg-white dark:bg-gray-950"
               />
             </div>
           </CardContent>
@@ -613,7 +613,7 @@ export default function CertificateGeneratorPage() {
           >
             {isGenerating ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></div>
                 Generating Certificate...
               </>
             ) : (

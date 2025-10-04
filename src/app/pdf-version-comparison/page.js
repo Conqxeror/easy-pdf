@@ -9,7 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, Download, CheckCircle, AlertTriangle, FileText, Eye, BarChart3, Clock, Loader2 } from "lucide-react";
-import { PDFDocument } from 'pdf-lib';
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
 
@@ -109,8 +109,9 @@ export default function PDFVersionComparison() {
       const arrayBuffer2 = await file2.arrayBuffer();
       
       setProgress(40);
-      const pdfDoc1 = await PDFDocument.load(arrayBuffer1);
-      const pdfDoc2 = await PDFDocument.load(arrayBuffer2);
+  const { PDFDocument } = await getPdfLib();
+  const pdfDoc1 = await PDFDocument.load(arrayBuffer1);
+  const pdfDoc2 = await PDFDocument.load(arrayBuffer2);
 
       setProgress(60);
 
@@ -404,12 +405,12 @@ export default function PDFVersionComparison() {
                     </Alert>
 
                     <div className="grid md:grid-cols-2 gap-4">
-                      <div className="p-4 bg-blue-50 rounded-lg">
-                        <h4 className="font-semibold text-blue-900">Document 1</h4>
-                        <p className="text-sm text-blue-700">{comparisonResult.doc1Info.name}</p>
-                        <p className="text-sm text-blue-600">{comparisonResult.doc1Info.pages} pages • {comparisonResult.doc1Info.size}</p>
+                      <div className="p-4 bg-gray-50">
+                        <h4 className="font-semibold text-gray-900">Document 1</h4>
+                        <p className="text-sm text-gray-800">{comparisonResult.doc1Info.name}</p>
+                        <p className="text-sm text-gray-700">{comparisonResult.doc1Info.pages} pages • {comparisonResult.doc1Info.size}</p>
                       </div>
-                      <div className="p-4 bg-green-50 rounded-lg">
+                      <div className="p-4 bg-green-50">
                         <h4 className="font-semibold text-green-900">Document 2</h4>
                         <p className="text-sm text-green-700">{comparisonResult.doc2Info.name}</p>
                         <p className="text-sm text-green-600">{comparisonResult.doc2Info.pages} pages • {comparisonResult.doc2Info.size}</p>
@@ -447,7 +448,7 @@ export default function PDFVersionComparison() {
 
                     <div className="space-y-3">
                       {differences.map((diff) => (
-                        <div key={diff.id} className="p-4 border rounded-lg">
+                        <div key={diff.id} className="p-4 border">
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <span className="text-lg">{getChangeTypeIcon(diff.type)}</span>
@@ -491,19 +492,19 @@ export default function PDFVersionComparison() {
                 {statistics ? (
                   <div className="space-y-6">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="text-center p-4 bg-blue-50 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">{statistics.totalChanges}</div>
-                        <div className="text-sm text-blue-800">Total Changes</div>
+                      <div className="text-center p-4 bg-gray-50">
+                        <div className="text-2xl font-bold text-gray-700">{statistics.totalChanges}</div>
+                        <div className="text-sm text-gray-900">Total Changes</div>
                       </div>
-                      <div className="text-center p-4 bg-green-50 rounded-lg">
+                      <div className="text-center p-4 bg-green-50">
                         <div className="text-2xl font-bold text-green-600">{statistics.similarityScore}%</div>
                         <div className="text-sm text-green-800">Similarity</div>
                       </div>
-                      <div className="text-center p-4 bg-purple-50 rounded-lg">
-                        <div className="text-2xl font-bold text-purple-600">{statistics.pagesCompared}</div>
+                      <div className="text-center p-4 bg-purple-50">
+                        <div className="text-2xl font-bold text-gray-700">{statistics.pagesCompared}</div>
                         <div className="text-sm text-purple-800">Pages Compared</div>
                       </div>
-                      <div className="text-center p-4 bg-orange-50 rounded-lg">
+                      <div className="text-center p-4 bg-orange-50">
                         <div className="text-2xl font-bold text-orange-600">{statistics.processingTime}</div>
                         <div className="text-sm text-orange-800">Processing Time</div>
                       </div>
@@ -513,15 +514,15 @@ export default function PDFVersionComparison() {
                       <div className="space-y-4">
                         <h4 className="font-semibold">Change Types</h4>
                         <div className="space-y-2">
-                          <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                          <div className="flex justify-between items-center p-2 bg-gray-50">
                             <span className="text-sm">Text Changes</span>
                             <Badge variant="outline">{statistics.textChanges}</Badge>
                           </div>
-                          <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                          <div className="flex justify-between items-center p-2 bg-gray-50">
                             <span className="text-sm">Formatting Changes</span>
                             <Badge variant="outline">{statistics.formattingChanges}</Badge>
                           </div>
-                          <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                          <div className="flex justify-between items-center p-2 bg-gray-50">
                             <span className="text-sm">Image Changes</span>
                             <Badge variant="outline">{statistics.imageChanges}</Badge>
                           </div>

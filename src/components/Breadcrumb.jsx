@@ -34,7 +34,7 @@ const Breadcrumb = ({ items }) => {
             ) : (
               <a
                 href={item.href}
-                className="text-blue-400 hover:text-blue-300 transition-colors duration-200 hover:underline"
+                className="text-gray-400 hover:text-gray-300 transition-colors duration-200 hover:underline"
                 itemProp="item"
               >
                 <span itemProp="name">{item.label}</span>

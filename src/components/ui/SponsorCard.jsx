@@ -36,12 +36,12 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
     <div className={`
       ${sizeClasses[size]} 
       ${tierColors[sponsor.tier]}
-      border-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 
+      border-2 shadow-lg hover:shadow-xl transition-all duration-300 
       hover:scale-105 relative overflow-hidden
     `}>
       {/* Tier Badge */}
       <div className={`
-        absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-semibold
+        absolute top-3 right-3 px-2 py-1 text-xs font-semibold
         ${tierBadgeColors[sponsor.tier]}
       `}>
         {sponsor.tier}
@@ -58,7 +58,7 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
             className="object-contain"
           />
         ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gray-800 rounded-lg border border-gray-700">
+          <div className="flex items-center justify-center w-full h-full bg-gray-950 border border-gray-700">
             <span className="text-gray-200 font-semibold text-lg">
               {sponsor.name.split(' ').map(word => word[0]).join('').toUpperCase()}
             </span>
@@ -93,7 +93,7 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
           href={sponsor.website}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          className="inline-flex items-center px-4 py-2 bg-gray-950 text-white text-sm font-medium hover:bg-gray-950 transition-colors duration-200"
         >
           Visit Website
           <ExternalLink className="w-3 h-3 ml-1" />
@@ -102,7 +102,7 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
 
       {/* Featured Badge */}
       {sponsor.featured && (
-        <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+        <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 text-xs font-semibold">
           Featured
         </div>
       )}

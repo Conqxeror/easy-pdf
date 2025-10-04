@@ -7,12 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MessageSquare, Download, CheckCircle, AlertTriangle, FileText, Users, Send, Reply, Edit3, Highlighter, Loader2 } from "lucide-react";
-import { PDFDocument, rgb } from 'pdf-lib';
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
 
@@ -30,10 +30,21 @@ export default function PDFAnnotationCollaboration() {
     y: 100,
     author: "Current User"
   });
+  // Workflow stepper state
+  const [currentStep, setCurrentStep] = useState('upload');
+  const [stepComplete, setStepComplete] = useState({
+    upload: false,
+    annotate: false,
+    collaborate: false,
+    review: false,
+    export: false
+  });
+  // Arrow animation flags for transitions between steps
+  const [arrowAnimating, setArrowAnimating] = useState([false, false, false, false]);
   const [collaborators, setCollaborators] = useState([
-    { id: 1, name: "John Doe", email: "kadriwalimohammad@gmail.com", avatar: "", role: "Reviewer", active: true },
-    { id: 2, name: "Jane Smith", email: "kadriwalimohammad@gmail.com", avatar: "", role: "Editor", active: false },
-    { id: 3, name: "Mike Johnson", email: "kadriwalimohammad@gmail.com", avatar: "", role: "Approver", active: true }
+    { id: 1, name: "John Doe", email: "user@example.com", avatar: "", role: "Reviewer", active: true },
+    { id: 2, name: "Jane Smith", email: "user@example.com", avatar: "", role: "Editor", active: false },
+    { id: 3, name: "Mike Johnson", email: "user@example.com", avatar: "", role: "Approver", active: true }
   ]);
   const [newCollaborator, setNewCollaborator] = useState({ email: "", role: "Reviewer" });
   const [selectedAnnotation, setSelectedAnnotation] = useState(null);
@@ -112,6 +123,30 @@ export default function PDFAnnotationCollaboration() {
     setNewCollaborator({ email: "", role: "Reviewer" });
   };
 
+  const markStepComplete = (stepId) => {
+    setStepComplete(prev => ({ ...prev, [stepId]: true }));
+    // animate arrow for the step index and auto-advance after short delay
+    const steps = ['upload','annotate','collaborate','review','export'];
+    const idx = steps.indexOf(stepId);
+    if (idx >= 0 && idx < 4) {
+      setArrowAnimating(prev => {
+        const copy = [...prev];
+        copy[idx] = true;
+        return copy;
+      });
+      setTimeout(() => {
+        setArrowAnimating(prev => {
+          const copy = [...prev];
+          copy[idx] = false;
+          return copy;
+        });
+        // Advance to next step
+        const next = steps[idx + 1];
+        if (next) setCurrentStep(next);
+      }, 450);
+    }
+  };
+
   const applyAnnotations = async () => {
     if (!file) return;
 
@@ -121,8 +156,9 @@ export default function PDFAnnotationCollaboration() {
     try {
       // Read the PDF file
       setProgress(20);
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const { PDFDocument, rgb } = await getPdfLib();
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
 
       setProgress(40);
 
@@ -246,7 +282,7 @@ export default function PDFAnnotationCollaboration() {
       case 'open': return 'bg-red-100 text-red-800';
       case 'in_progress': return 'bg-yellow-100 text-yellow-800';
       case 'resolved': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+  default: return 'bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-300';
     }
   };
 
@@ -255,7 +291,7 @@ export default function PDFAnnotationCollaboration() {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
       case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+  default: return 'bg-gray-100 dark:bg-gray-950 text-gray-800 dark:text-gray-300';
     }
   };
 
@@ -297,16 +333,41 @@ export default function PDFAnnotationCollaboration() {
       ]}
     >
       <div className="space-y-6">
-        <Tabs defaultValue="upload" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="upload">Upload</TabsTrigger>
-            <TabsTrigger value="annotate">Annotate</TabsTrigger>
-            <TabsTrigger value="collaborate">Collaborate</TabsTrigger>
-            <TabsTrigger value="review">Review</TabsTrigger>
-            <TabsTrigger value="export">Export</TabsTrigger>
-          </TabsList>
+  <Tabs value={currentStep} className="space-y-6" onValueChange={(v) => setCurrentStep(v)}>
+          {/* Stepper: make steps look like buttons with arrows and auto-advance when completed */}
+          <div className="flex items-center gap-3 w-full">
+            {[
+              { id: 'upload', label: 'Upload' },
+              { id: 'annotate', label: 'Annotate' },
+              { id: 'collaborate', label: 'Collaborate' },
+              { id: 'review', label: 'Review' },
+              { id: 'export', label: 'Export' }
+            ].map((step, idx, arr) => (
+              <div key={step.id} className="flex items-center">
+                <Button
+                  variant={currentStep === step.id ? 'default' : stepComplete[step.id] ? 'success' : 'outline'}
+                  size="sm"
+                  onClick={() => setCurrentStep(step.id)}
+                  className="flex items-center gap-2"
+                >
+                  <span className="font-medium text-sm">{step.label}</span>
+                  {stepComplete[step.id] && (
+                    <CheckCircle className="h-4 w-4 text-green-400" />
+                  )}
+                </Button>
 
-          <TabsContent value="upload" className="space-y-6">
+                {idx < arr.length - 1 && (
+                  <span className={`mx-2 transition-transform duration-300 ${arrowAnimating[idx] ? 'translate-x-1.5 opacity-100' : 'translate-x-0 opacity-50'}`}>
+                    <svg className="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <TabsContent value="upload" className={`space-y-6 ${currentStep !== 'upload' ? 'hidden' : ''}`}>
             <Card>
                             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-200">
@@ -329,7 +390,7 @@ export default function PDFAnnotationCollaboration() {
                   />
                   
                   {file && (
-                    <Alert className="bg-gray-800 border-gray-700">
+                    <Alert className="bg-gray-950 border-gray-700">
                       <CheckCircle className="h-4 w-4 text-green-400" aria-hidden="true" />
                       <AlertDescription className="text-gray-200">
                         File loaded: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
@@ -341,7 +402,7 @@ export default function PDFAnnotationCollaboration() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="annotate" className="space-y-6">
+          <TabsContent value="annotate" className={`space-y-6 ${currentStep !== 'annotate' ? 'hidden' : ''}`}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -391,7 +452,7 @@ export default function PDFAnnotationCollaboration() {
                       min="1"
                       value={newAnnotation.page}
                       onChange={(e) => setNewAnnotation({...newAnnotation, page: parseInt(e.target.value)})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -404,7 +465,7 @@ export default function PDFAnnotationCollaboration() {
                       type="number"
                       value={newAnnotation.x}
                       onChange={(e) => setNewAnnotation({...newAnnotation, x: parseInt(e.target.value)})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -414,7 +475,7 @@ export default function PDFAnnotationCollaboration() {
                       type="number"
                       value={newAnnotation.y}
                       onChange={(e) => setNewAnnotation({...newAnnotation, y: parseInt(e.target.value)})}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -426,11 +487,11 @@ export default function PDFAnnotationCollaboration() {
                     placeholder="Enter your annotation comment..."
                     value={newAnnotation.text}
                     onChange={(e) => setNewAnnotation({...newAnnotation, text: e.target.value})}
-                    className="bg-gray-800 border-gray-600 text-gray-200"
+                    className="bg-gray-950 border-gray-600 text-gray-200"
                   />
                 </div>
 
-                <Button onClick={addAnnotation} disabled={!newAnnotation.text.trim()}>
+                <Button onClick={() => { addAnnotation(); markStepComplete('annotate'); }} disabled={!newAnnotation.text.trim()}>
                   <MessageSquare className="mr-2 h-4 w-4" aria-hidden="true" />
                   Add Annotation
                 </Button>
@@ -445,7 +506,7 @@ export default function PDFAnnotationCollaboration() {
                 <CardContent>
                   <div className="space-y-4 max-h-96 overflow-y-auto">
                     {annotations.map((annotation) => (
-                      <div key={annotation.id} className="p-4 border rounded-lg">
+                      <div key={annotation.id} className="p-4 border">
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <Avatar className="h-6 w-6">
@@ -461,10 +522,10 @@ export default function PDFAnnotationCollaboration() {
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <Badge className={getStatusColor(annotation.status).replace('bg-red-100 text-red-800', 'bg-red-900/30 text-red-400').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-900/30 text-yellow-400').replace('bg-green-100 text-green-800', 'bg-green-900/30 text-green-400').replace('bg-gray-100 text-gray-800', 'bg-gray-700 text-gray-300')}>
+                            <Badge className={getStatusColor(annotation.status).replace('bg-red-100 text-red-800', 'bg-red-900/30 text-red-400').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-900/30 text-yellow-400').replace('bg-green-100 text-green-800', 'bg-green-900/30 text-green-400').replace('bg-gray-100 text-gray-800', 'bg-gray-950 text-gray-300')}>
                               {annotation.status}
                             </Badge>
-                            <Badge className={getPriorityColor(annotation.priority).replace('bg-red-100 text-red-800', 'bg-red-900/30 text-red-400').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-900/30 text-yellow-400').replace('bg-green-100 text-green-800', 'bg-green-900/30 text-green-400').replace('bg-gray-100 text-gray-800', 'bg-gray-700 text-gray-300')}>
+                            <Badge className={getPriorityColor(annotation.priority).replace('bg-red-100 text-red-800', 'bg-red-900/30 text-red-400').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-900/30 text-yellow-400').replace('bg-green-100 text-green-800', 'bg-green-900/30 text-green-400').replace('bg-gray-100 text-gray-800', 'bg-gray-950 text-gray-300')}>
                               {annotation.priority}
                             </Badge>
                           </div>
@@ -477,7 +538,7 @@ export default function PDFAnnotationCollaboration() {
                               <div key={reply.id} className="text-sm">
                                 <div className="flex items-center gap-2 mb-1">
                                   <Avatar className="h-4 w-4">
-                                    <AvatarFallback className="text-xs bg-gray-700 text-gray-200">
+                                    <AvatarFallback className="text-xs bg-gray-950 text-gray-200">
                                       {reply.author.split(' ').map(n => n[0]).join('')}
                                     </AvatarFallback>
                                   </Avatar>
@@ -517,7 +578,7 @@ export default function PDFAnnotationCollaboration() {
                               placeholder="Type your reply..."
                               value={replyText}
                               onChange={(e) => setReplyText(e.target.value)}
-                              className="flex-1 bg-gray-800 border-gray-600 text-gray-200"
+                              className="flex-1 bg-gray-950 border-gray-600 text-gray-200"
                             />
                             <Button
                               size="sm"
@@ -543,7 +604,7 @@ export default function PDFAnnotationCollaboration() {
             )}
           </TabsContent>
 
-          <TabsContent value="collaborate" className="space-y-6">
+          <TabsContent value="collaborate" className={`space-y-6 ${currentStep !== 'collaborate' ? 'hidden' : ''}`}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -555,33 +616,33 @@ export default function PDFAnnotationCollaboration() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex gap-2">
+                  <div className="flex gap-2">
                   <Input
                     placeholder="Enter email address"
                     value={newCollaborator.email}
                     onChange={(e) => setNewCollaborator({...newCollaborator, email: e.target.value})}
-                    className="flex-1 bg-gray-800 border-gray-600 text-gray-200"
+                    className="flex-1 bg-gray-950 border-gray-600 text-gray-200"
                   />
                   <select
                     value={newCollaborator.role}
                     onChange={(e) => setNewCollaborator({...newCollaborator, role: e.target.value})}
-                    className="px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-gray-200"
+                    className="px-3 py-2 bg-gray-950 border border-gray-600 text-gray-200"
                   >
                     <option value="Reviewer">Reviewer</option>
                     <option value="Editor">Editor</option>
                     <option value="Approver">Approver</option>
                   </select>
-                  <Button onClick={addCollaborator} disabled={!newCollaborator.email.trim()}>
+                  <Button onClick={() => { addCollaborator(); markStepComplete('collaborate'); }} disabled={!newCollaborator.email.trim()}>
                     Add
                   </Button>
                 </div>
 
                 <div className="space-y-3">
                   {collaborators.map((collaborator) => (
-                    <div key={collaborator.id} className="flex items-center justify-between p-3 border border-gray-700 rounded-lg bg-gray-800">
+                    <div key={collaborator.id} className="flex items-center justify-between p-3 border border-gray-700 bg-gray-950">
                       <div className="flex items-center gap-3">
                         <Avatar>
-                          <AvatarFallback className="bg-gray-700 text-gray-200">
+                          <AvatarFallback className="bg-gray-950 text-gray-200">
                             {collaborator.name.split(' ').map(n => n[0]).join('')}
                           </AvatarFallback>
                         </Avatar>
@@ -592,7 +653,7 @@ export default function PDFAnnotationCollaboration() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="border-gray-600 text-gray-300">{collaborator.role}</Badge>
-                        <div className={`w-2 h-2 rounded-full ${collaborator.active ? 'bg-green-500' : 'bg-gray-500'}`} />
+                        <div className={`w-2 h-2 ${collaborator.active ? 'bg-green-500' : 'bg-gray-500'}`} />
                       </div>
                     </div>
                   ))}
@@ -601,7 +662,7 @@ export default function PDFAnnotationCollaboration() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="review" className="space-y-6">
+          <TabsContent value="review" className={`space-y-6 ${currentStep !== 'review' ? 'hidden' : ''}`}>
                         <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -614,19 +675,19 @@ export default function PDFAnnotationCollaboration() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="text-center p-4 bg-red-900/30 rounded-lg border border-red-800">
+                  <div className="text-center p-4 bg-red-900/30 border border-red-800">
                     <div className="text-2xl font-bold text-red-400">
                       {annotations.filter(a => a.status === 'open').length}
                     </div>
                     <div className="text-sm text-red-300">Open</div>
                   </div>
-                  <div className="text-center p-4 bg-yellow-900/30 rounded-lg border border-yellow-800">
+                  <div className="text-center p-4 bg-yellow-900/30 border border-yellow-800">
                     <div className="text-2xl font-bold text-yellow-400">
                       {annotations.filter(a => a.status === 'in_progress').length}
                     </div>
                     <div className="text-sm text-yellow-300">In Progress</div>
                   </div>
-                  <div className="text-center p-4 bg-green-900/30 rounded-lg border border-green-800">
+                  <div className="text-center p-4 bg-green-900/30 border border-green-800">
                     <div className="text-2xl font-bold text-green-400">
                       {annotations.filter(a => a.status === 'resolved').length}
                     </div>
@@ -634,7 +695,7 @@ export default function PDFAnnotationCollaboration() {
                   </div>
                 </div>
 
-                <Button onClick={applyAnnotations} disabled={!file || isProcessing} className="w-full">
+                <Button onClick={async () => { await applyAnnotations(); markStepComplete('review'); }} disabled={!file || isProcessing} className="w-full">
                   {isProcessing ? (
                     <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Applying Annotations...</span>
                   ) : (
@@ -644,7 +705,7 @@ export default function PDFAnnotationCollaboration() {
 
                 {isProcessing && (
                   <div className="space-y-2 mt-4">
-                    <Progress value={progress} className="bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-600" />
+                    <Progress value={progress} className="bg-gray-950 [&::-webkit-progress-bar]:bg-gray-950 [&::-webkit-progress-value]:bg-white/70" />
                     <p className="text-sm text-gray-400 text-center">
                       Processing annotations... {progress}%
                     </p>
@@ -652,7 +713,7 @@ export default function PDFAnnotationCollaboration() {
                 )}
 
                 {annotatedPdf && (
-                  <Alert className="bg-gray-800 border-gray-700">
+                  <Alert className="bg-gray-950 border-gray-700">
                     <CheckCircle className="h-4 w-4 text-green-400" />
                     <AlertDescription className="flex items-center justify-between text-gray-200">
                       <span>Annotations applied successfully!</span>
@@ -667,7 +728,7 @@ export default function PDFAnnotationCollaboration() {
             </Card>
           </TabsContent>
 
-          <TabsContent value="export" className="space-y-6">
+          <TabsContent value="export" className={`space-y-6 ${currentStep !== 'export' ? 'hidden' : ''}`}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -707,7 +768,7 @@ export default function PDFAnnotationCollaboration() {
           </TabsContent>
         </Tabs>
 
-        <Card className="mt-8 bg-gray-800 border-gray-700">
+        <Card className="mt-8 bg-gray-950 border-gray-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-200">
               <MessageSquare className="h-5 w-5" />

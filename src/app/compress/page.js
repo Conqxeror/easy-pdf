@@ -234,10 +234,10 @@ export default function CompressPDFs() {
         />
 
         {fileName && (
-          <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="p-4 bg-gray-950 border border-gray-600">
             <div className="flex items-center mb-3">
-              <div className="p-2 rounded-lg bg-blue-900/50 mr-3">
-                <FileText className="w-5 h-5 text-blue-400" />
+              <div className="p-2 bg-black/40 mr-3">
+                <FileText className="w-5 h-5 text-gray-400" />
               </div>
               <div>
                 <h3 className="font-medium text-gray-100">{fileName}</h3>
@@ -248,7 +248,7 @@ export default function CompressPDFs() {
             </div>
             
             {compressedSize > 0 && !isCompressing && (
-              <div className="mt-4 pt-4 border-t border-gray-700">
+              <div className="mt-4 pt-4 border-t border-gray-600">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-gray-300">Original Size:</span>
                   <span className="font-medium">
@@ -263,7 +263,7 @@ export default function CompressPDFs() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-300">Reduction:</span>
-                  <span className="font-medium text-blue-400">
+                  <span className="font-medium text-gray-400">
                     {compressionPercentage}%
                   </span>
                 </div>
@@ -297,7 +297,7 @@ export default function CompressPDFs() {
                 />
                 <Label
                   htmlFor="mild"
-                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-800 p-4 hover:bg-gray-700 peer-data-[state=checked]:border-blue-400 [&:has([data-state=checked])]:border-blue-400 text-gray-200 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between border-2 border-gray-600 bg-black/10 p-4 hover:bg-black/20 peer-data-[state=checked]:border-gray-400 [&:has([data-state=checked])]:border-gray-400 text-gray-200 cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Mild</span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -313,7 +313,7 @@ export default function CompressPDFs() {
                 />
                 <Label
                   htmlFor="balanced"
-                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-800 p-4 hover:bg-gray-700 peer-data-[state=checked]:border-blue-400 [&:has([data-state=checked])]:border-blue-400 text-gray-200 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between border-2 border-gray-600 bg-black/10 p-4 hover:bg-black/20 peer-data-[state=checked]:border-gray-400 [&:has([data-state=checked])]:border-gray-400 text-gray-200 cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Balanced</span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -329,7 +329,7 @@ export default function CompressPDFs() {
                 />
                 <Label
                   htmlFor="aggressive"
-                  className="flex flex-col items-center justify-between rounded-lg border-2 border-gray-600 bg-gray-800 p-4 hover:bg-gray-700 peer-data-[state=checked]:border-blue-400 [&:has([data-state=checked])]:border-blue-400 text-gray-200 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between border-2 border-gray-600 bg-black/10 p-4 hover:bg-black/20 peer-data-[state=checked]:border-gray-400 [&:has([data-state=checked])]:border-gray-400 text-gray-200 cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Aggressive</span>
                   <span className="text-xs text-gray-400 mt-1">
@@ -363,10 +363,10 @@ export default function CompressPDFs() {
         </div>
 
         {isCompressing && (
-          <div className="space-y-3 p-4 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="space-y-3 p-4 bg-gray-950 border border-gray-600">
             <Progress
-              value={progress}
-              className="h-2.5 bg-gray-700 [&::-webkit-progress-bar]:bg-gray-700 [&::-webkit-progress-value]:bg-blue-600 rounded-full"
+           value={progress}
+                className="h-2.5 bg-gray-950 [&::-webkit-progress-bar]:bg-gray-950 [&::-webkit-progress-value]:bg-white/70"
             />
             <p className="text-sm text-center text-gray-300">
               {processingMessage || `Compressing PDF... ${progress}%`}
@@ -387,26 +387,26 @@ export default function CompressPDFs() {
         />
 
         {compressedPdfUrl && !isCompressing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-600">
             <div className="w-full text-center space-y-4 text-gray-200">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <Download className="w-6 h-6 mr-2" />
                 Compression Complete
               </h3>
               
-              <div className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+              <div className="bg-gray-950 p-4 border border-gray-600">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="text-center p-3 bg-gray-800 rounded-lg">
+                  <div className="text-center p-3 bg-gray-950">
                     <div className="text-gray-400 text-sm">Original Size</div>
                     <div className="font-medium">{formatFileSize(originalSize)}</div>
                   </div>
-                  <div className="text-center p-3 bg-gray-800 rounded-lg">
+                  <div className="text-center p-3 bg-gray-950">
                     <div className="text-gray-400 text-sm">Compressed Size</div>
                     <div className="font-medium text-green-400">{formatFileSize(compressedSize)}</div>
                   </div>
-                  <div className="text-center p-3 bg-gray-800 rounded-lg">
+                  <div className="text-center p-3 bg-gray-950">
                     <div className="text-gray-400 text-sm">Saved</div>
-                    <div className="font-medium text-blue-400">{compressionPercentage}%</div>
+                    <div className="font-medium text-gray-400">{compressionPercentage}%</div>
                   </div>
                 </div>
               </div>
@@ -417,7 +417,7 @@ export default function CompressPDFs() {
                 <a
                   href={compressedPdfUrl}
                   download={`compressed_${String(fileName || 'file').replace(/\.[^/.]+$/, '').replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-_.]/g,'')}.pdf`}
-                  className="text-center flex items-center"
+                  className="text-center"
                   onClick={() => {
                     const urlToRevoke = compressedPdfUrl;
                     if (!urlToRevoke || String(urlToRevoke).startsWith("data:")) return;
@@ -426,8 +426,10 @@ export default function CompressPDFs() {
                     }, 500);
                   }}
                 >
-                  <Download className="w-5 h-5 mr-2" />
-                  Download Compressed PDF
+                  <span className="flex items-center">
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Compressed PDF
+                  </span>
                 </a>
               </Button>
             </div>

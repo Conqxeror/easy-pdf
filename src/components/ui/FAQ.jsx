@@ -32,11 +32,11 @@ export default function FAQ({ faqs = [], title = "Frequently Asked Questions" })
         {faqs.map((faq, index) => (
           <div 
             key={index} 
-            className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden"
+            className="bg-black/10 border border-gray-700 overflow-hidden"
           >
             <button
               onClick={() => toggleItem(index)}
-              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-750 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-750 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600"
               aria-expanded={openItems.has(index)}
               aria-controls={`faq-answer-${index}`}
             >
@@ -44,9 +44,9 @@ export default function FAQ({ faqs = [], title = "Frequently Asked Questions" })
                 {faq.question}
               </h3>
               {openItems.has(index) ? (
-                <ChevronUp className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-blue-400 flex-shrink-0" />
+                <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
               )}
             </button>
             {openItems.has(index) && (

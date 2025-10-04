@@ -2,19 +2,15 @@
 
 import React, { useState, useCallback  } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { getDocument } from 'pdfjs-dist';
+import { loadPdfJs, ensurePdfWorkerEntry } from '@/lib/pdfjsWorker';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Upload, Download, FileText, Table, Loader2, AlertCircle } from 'lucide-react';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
-// Configure PDF.js worker
-if (typeof window !== 'undefined') {
-  import('pdfjs-dist/build/pdf.worker.entry').then((pdfjsWorker) => {
-    window.pdfjsLib = { GlobalWorkerOptions: { workerSrc: pdfjsWorker.default } };
-  });
-}
+// PDF.js will be loaded lazily when a PDF file is processed. The helper
+// `loadPdfJs` configures the workerSrc to /pdf.worker.min.js where possible.
 
 export default function PDFTableExtractor() {
   const [file, setFile] = useState(null);
@@ -33,7 +29,17 @@ export default function PDFTableExtractor() {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await getDocument({ data: arrayBuffer }).promise;
+      // Lazily import pdfjs and ensure worker is configured
+      try {
+        // Optionally attempt to load the worker entry (this may return null)
+        // but it's a best-effort; the main `loadPdfJs` call sets workerSrc.
+        await ensurePdfWorkerEntry();
+      } catch {
+        // ignore - helper logs if needed
+      }
+
+      const pdfjsLib = await loadPdfJs();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       const extractedTables = [];
 
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
@@ -185,7 +191,7 @@ export default function PDFTableExtractor() {
         <CardContent>
           <div
             {...getRootProps()}
-            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+            className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
               isDragActive
                 ? 'border-primary bg-primary/5'
                 : 'border-muted-foreground/25'
@@ -204,7 +210,7 @@ export default function PDFTableExtractor() {
           </div>
           
           {file && (
-            <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-950">
               <p className="text-sm text-muted-foreground">
                 Selected: {file.name} ({Math.round(file.size / 1024)} KB)
               </p>
@@ -253,7 +259,7 @@ export default function PDFTableExtractor() {
           <CardContent>
             <div className="space-y-6">
               {tables.map((table, index) => (
-                <div key={index} className="border border-gray-200 rounded-lg p-4">
+                <div key={index} className="border border-gray-200 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold">
                       Table from Page {table.page}

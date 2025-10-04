@@ -212,7 +212,7 @@ export default function JpgToPdfPage() {
             <h3 className="text-xl font-semibold">Selected Images:</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {files.map((file) => (
-                <div key={file.name} className="border border-gray-200 rounded-md p-3 bg-white flex flex-col items-center text-center relative">
+                <div key={file.name} className="border border-gray-200 p-3 bg-white flex flex-col items-center text-center relative">
                   <Button
                     variant="destructive"
                     size="sm"
@@ -227,7 +227,7 @@ export default function JpgToPdfPage() {
                     alt={file.name}
                     width={100}
                     height={100}
-                    className="object-cover rounded shadow mb-2"
+                    className="object-cover shadow mb-2"
                     onError={(e) => {
                       const t = e.currentTarget;
                       // @ts-ignore
@@ -255,7 +255,7 @@ export default function JpgToPdfPage() {
             </div>
             <Progress
               value={currentProgress}
-              className="h-2 bg-gray-200 [&::-webkit-progress-bar]:bg-gray-200 [&::-webkit-progress-value]:bg-blue-600"
+              className="h-2 bg-gray-200 [&::-webkit-progress-bar]:bg-gray-200 [&::-webkit-progress-value]:bg-gray-700"
             />
           </div>
         )}
@@ -275,7 +275,7 @@ export default function JpgToPdfPage() {
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Converting...
               </span>
             ) : (
@@ -285,7 +285,7 @@ export default function JpgToPdfPage() {
         </div>
 
         {pdfUrl && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 shadow-lg border border-gray-200">
             <div className="w-full text-center space-y-4">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

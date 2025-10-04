@@ -18,7 +18,7 @@ export const PageContainer = ({ children, className, ...props }) => {
 
 export const PageHeader = ({ 
   title, 
-  subtitle, 
+  subtitle,
   children, 
   className,
   gradient = true,
@@ -32,7 +32,7 @@ export const PageHeader = ({
       )} 
       {...props}
     >
-      <div className="container-standard">
+      <div className="container-standard px-6 py-8">
         {title && (
           <h1 className={cn(
             "text-h1 font-extrabold mb-4",
@@ -51,7 +51,6 @@ export const PageHeader = ({
     </header>
   );
 };
-
 export const PageContent = ({ children, className, narrow = false, ...props }) => {
   return (
     <main 
@@ -82,10 +81,10 @@ export const Section = ({
       className={cn(spacingClass, className)} 
       {...props}
     >
-      <div className="container-standard">
+      <div className="container-standard px-6 py-8">
         {title && (
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
               {title}
             </h2>
             {subtitle && (
@@ -118,7 +117,7 @@ export const Card = ({
   return (
     <div 
       className={cn(
-        "card-standard bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-xl border border-gray-700",
+        "card-standard bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700",
         hover && "hover:scale-[1.02] transition-transform duration-200",
         paddingClass,
         className
@@ -187,7 +186,7 @@ export const Hero = ({
       )}
       <div className="relative container-standard">
         {title && (
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent animate-slide-up">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900 dark:text-white animate-slide-up">
             {title}
           </h1>
         )}
@@ -212,11 +211,11 @@ export const FeatureGrid = ({ features, className, ...props }) => {
       {features.map((feature, index) => (
         <Card 
           key={index} 
-          className="text-center group animate-slide-up border-2 border-transparent hover:border-blue-500 transition-all duration-300 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50"
+          className="text-center group animate-slide-up border-2 border-transparent hover:border-gray-600 transition-all duration-300 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
-          {feature.icon && (
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-600/10 text-blue-400 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+            {feature.icon && (
+            <div className="flex items-center justify-center w-12 h-12 bg-black/10 text-gray-400 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
               {feature.icon}
             </div>
           )}
@@ -237,9 +236,9 @@ export const CTASection = ({
   ...props 
 }) => {
   return (
-    <Section className={cn("bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-2xl border border-gray-700", className)} {...props}>
+    <Section className={cn("bg-gradient-to-r from-gray-800/50 to-gray-900/50 border border-gray-700", className)} {...props}>
       <div className="text-center">
-        {title && <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{title}</h2>}
+        {title && <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">{title}</h2>}
         {subtitle && <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">{subtitle}</p>}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           {primaryAction}

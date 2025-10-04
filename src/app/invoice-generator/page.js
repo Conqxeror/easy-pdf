@@ -440,9 +440,9 @@ export default function InvoiceGeneratorPage() {
               Invoice Details
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4 pb-4">
             <div>
-              <Label htmlFor="invoiceNumber">Invoice Number</Label>
+              <Label htmlFor="invoiceNumber" className="mb-2 block">Invoice Number</Label>
               <Input
                 id="invoiceNumber"
                 value={invoiceData.invoiceNumber}
@@ -451,7 +451,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="date">Invoice Date</Label>
+              <Label htmlFor="date" className="mb-2 block">Invoice Date</Label>
               <Input
                 id="date"
                 type="date"
@@ -460,7 +460,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="dueDate">Due Date</Label>
+              <Label htmlFor="dueDate" className="mb-2 block">Due Date</Label>
               <Input
                 id="dueDate"
                 type="date"
@@ -469,7 +469,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="currency">Currency</Label>
+              <Label htmlFor="currency" className="mb-2 block">Currency</Label>
               <Select value={invoiceData.currency} onValueChange={(value) => updateInvoiceData('currency', value)}>
                 <SelectTrigger>
                   <SelectValue />
@@ -492,7 +492,7 @@ export default function InvoiceGeneratorPage() {
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="companyName">Company Name *</Label>
+              <Label htmlFor="companyName" className="mb-2 block">Company Name *</Label>
               <Input
                 id="companyName"
                 value={invoiceData.companyName}
@@ -502,17 +502,17 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="companyEmail">Email</Label>
+              <Label htmlFor="companyEmail" className="mb-2 block">Email</Label>
               <Input
                 id="companyEmail"
                 type="email"
                 value={invoiceData.companyEmail}
                 onChange={(e) => updateInvoiceData('companyEmail', e.target.value)}
-                placeholder="kadriwalimohammad@gmail.com"
+                placeholder="support@example.com"
               />
             </div>
             <div className="md:col-span-2">
-              <Label htmlFor="companyAddress">Address</Label>
+              <Label htmlFor="companyAddress" className="mb-2 block">Address</Label>
               <Textarea
                 id="companyAddress"
                 value={invoiceData.companyAddress}
@@ -522,7 +522,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="companyPhone">Phone</Label>
+              <Label htmlFor="companyPhone" className="mb-2 block">Phone</Label>
               <Input
                 id="companyPhone"
                 value={invoiceData.companyPhone}
@@ -531,7 +531,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="companyGST">GST Number</Label>
+              <Label htmlFor="companyGST" className="mb-2 block">GST Number</Label>
               <Input
                 id="companyGST"
                 value={invoiceData.companyGST}
@@ -549,7 +549,7 @@ export default function InvoiceGeneratorPage() {
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="clientName">Client Name *</Label>
+              <Label htmlFor="clientName" className="mb-2 block">Client Name *</Label>
               <Input
                 id="clientName"
                 value={invoiceData.clientName}
@@ -559,17 +559,17 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="clientEmail">Email</Label>
+              <Label htmlFor="clientEmail" className="mb-2 block">Email</Label>
               <Input
                 id="clientEmail"
                 type="email"
                 value={invoiceData.clientEmail}
                 onChange={(e) => updateInvoiceData('clientEmail', e.target.value)}
-                placeholder="kadriwalimohammad@gmail.com"
+                placeholder="support@example.com"
               />
             </div>
             <div className="md:col-span-2">
-              <Label htmlFor="clientAddress">Address</Label>
+              <Label htmlFor="clientAddress" className="mb-2 block">Address</Label>
               <Textarea
                 id="clientAddress"
                 value={invoiceData.clientAddress}
@@ -579,7 +579,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="clientPhone">Phone</Label>
+              <Label htmlFor="clientPhone" className="mb-2 block">Phone</Label>
               <Input
                 id="clientPhone"
                 value={invoiceData.clientPhone}
@@ -588,7 +588,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="clientGST">GST Number</Label>
+              <Label htmlFor="clientGST" className="mb-2 block">GST Number</Label>
               <Input
                 id="clientGST"
                 value={invoiceData.clientGST}
@@ -613,9 +613,9 @@ export default function InvoiceGeneratorPage() {
           <CardContent>
             <div className="space-y-4">
               {invoiceData.items.map((item, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-lg">
+                <div key={index} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 border rounded-md">
                   <div className="md:col-span-2">
-                    <Label>Description</Label>
+                    <Label className="mb-2 block">Description</Label>
                     <Input
                       value={item.description}
                       onChange={(e) => updateItem(index, 'description', e.target.value)}
@@ -623,7 +623,7 @@ export default function InvoiceGeneratorPage() {
                     />
                   </div>
                   <div>
-                    <Label>Quantity</Label>
+                    <Label className="mb-2 block">Quantity</Label>
                     <Input
                       type="number"
                       min="1"
@@ -632,7 +632,7 @@ export default function InvoiceGeneratorPage() {
                     />
                   </div>
                   <div>
-                    <Label>Rate ({invoiceData.currency})</Label>
+                    <Label className="mb-2 block">Rate ({invoiceData.currency})</Label>
                     <Input
                       type="number"
                       min="0"
@@ -643,7 +643,7 @@ export default function InvoiceGeneratorPage() {
                   </div>
                   <div className="flex items-end gap-2">
                     <div className="flex-1">
-                      <Label>Amount</Label>
+                      <Label className="mb-2 block">Amount</Label>
                       <Input
                         value={`${invoiceData.currency} ${item.amount.toFixed(2)}`}
                         readOnly
@@ -675,7 +675,7 @@ export default function InvoiceGeneratorPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <Label htmlFor="taxRate">Tax Rate (%)</Label>
+                <Label htmlFor="taxRate" className="mb-2 block">Tax Rate (%)</Label>
                 <Input
                   id="taxRate"
                   type="number"
@@ -711,7 +711,7 @@ export default function InvoiceGeneratorPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="notes">Notes</Label>
+              <Label htmlFor="notes" className="mb-2 block">Notes</Label>
               <Textarea
                 id="notes"
                 value={invoiceData.notes}
@@ -721,7 +721,7 @@ export default function InvoiceGeneratorPage() {
               />
             </div>
             <div>
-              <Label htmlFor="terms">Terms & Conditions</Label>
+              <Label htmlFor="terms" className="mb-2 block">Terms & Conditions</Label>
               <Textarea
                 id="terms"
                 value={invoiceData.terms}
@@ -742,7 +742,7 @@ export default function InvoiceGeneratorPage() {
           >
             {isGenerating ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Generating Invoice...
               </span>
             ) : (
@@ -752,7 +752,7 @@ export default function InvoiceGeneratorPage() {
         </div>
 
         {invoiceUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 shadow-lg border border-gray-200">
             <div className="w-full text-center space-y-4 text-gray-800">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -770,7 +770,7 @@ export default function InvoiceGeneratorPage() {
                 <a
                   href={invoiceUrl}
                   download={downloadFileName}
-                  className="text-center flex items-center"
+                  className="text-center"
                   onClick={() => {
                     const u = invoiceUrl;
                     setTimeout(() => {
@@ -778,8 +778,10 @@ export default function InvoiceGeneratorPage() {
                     }, 500);
                   }}
                 >
-                  <Download className="w-5 h-5 mr-2" />
-                  Download Invoice PDF
+                  <span className="flex items-center">
+                    <Download className="w-5 h-5 mr-2" />
+                    Download Invoice PDF
+                  </span>
                 </a>
               </Button>
             </div>

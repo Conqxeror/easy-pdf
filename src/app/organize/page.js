@@ -3,16 +3,11 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
 import { PDFDocument } from "pdf-lib";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
-
-// Import pdfjs legacy build for PDF rendering
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function OrganizePage() {
   const [files, setFiles] = useState([]);
@@ -144,6 +139,10 @@ export default function OrganizePage() {
     try {
       const file = newFiles[0];
       const arrayBuffer = await file.arrayBuffer();
+      
+      // Dynamically load pdfjs and configure worker
+      const pdfjs = await loadPdfJs();
+      
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise; // Load PDF with pdfjs-dist
       setPdfDocProxy(pdf); // Store the PDFDocumentProxy
 
@@ -329,7 +328,7 @@ export default function OrganizePage() {
         />
 
         {numPages > 0 && (
-          <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 space-y-4">
+          <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-950 shadow-inner border border-gray-200 dark:border-gray-700 space-y-4">
             <h2 className="font-semibold text-xl mb-3">
               Page Order & Selection
             </h2>
@@ -350,22 +349,22 @@ export default function OrganizePage() {
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
                   onDragEnd={handleDragEnd}
-                  className={`relative flex flex-col items-center p-2 border rounded-md group
+                  className={`relative flex flex-col items-center p-2 border group
                               ${
                                 selected.includes(originalPageIndex)
                                   ? "border-destructive bg-red-100 opacity-70"
                                   : "border-gray-300 bg-white"
                               }
-                              hover:border-blue-500 transition-all duration-200 cursor-grab
+                              hover:border-gray-600 transition-all duration-200 cursor-grab
                               ${
                                 dragItem.current === displayIndex
-                                  ? "shadow-lg opacity-50 border-blue-500"
+                                  ? "shadow-lg opacity-50 border-gray-600"
                                   : ""
                               }
                               ${
                                 dragOverItem.current === displayIndex &&
                                 dragItem.current !== displayIndex
-                                  ? "border-blue-500 shadow-md scale-105"
+                                  ? "border-gray-600 shadow-md scale-105"
                                   : ""
                               }
                             `}
@@ -389,7 +388,7 @@ export default function OrganizePage() {
                       // Store the canvas node reference
                       canvasRefs.current[originalPageIndex] = node;
                     }}
-                    className="w-full h-auto max-w-[150px] border border-gray-300 rounded-sm bg-white" // Fixed width for thumbnail consistency
+                    className="w-full h-auto max-w-[150px] border border-gray-300 bg-white" // Fixed width for thumbnail consistency
                   ></canvas>
 
                   <div className="flex gap-1 mt-2">
@@ -483,7 +482,7 @@ export default function OrganizePage() {
         </Button>
 
         {organizedPdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200 mt-6">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 dark:bg-gray-950 shadow-lg border border-gray-200 dark:border-gray-700 mt-6">
             <div className="w-full text-center space-y-4">
               <h3 className="text-2xl font-semibold flex items-center justify-center">
                 Pages Organized Successfully
@@ -498,16 +497,18 @@ export default function OrganizePage() {
                 <a
                   href={organizedPdfUrl}
                   download={downloadFileName}
-                  className="text-center flex items-center"
+                  className="text-center"
                   onClick={() => {
                     const u = organizedPdfUrl;
                     setTimeout(() => { try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { } }, 500);
                   }}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                  </svg>
-                  Download Organized PDF
+                  <span className="flex items-center">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Organized PDF
+                  </span>
                 </a>
               </Button>
             </div>

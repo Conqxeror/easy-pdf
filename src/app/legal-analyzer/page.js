@@ -250,7 +250,7 @@ export default function LegalAnalyzerPage() {
           isLoading={loading}
         />
         {file && (
-          <div className="mt-4 flex items-center justify-between p-3 bg-gray-800 rounded-md shadow-md border border-gray-700">
+          <div className="mt-4 flex items-center justify-between p-3 bg-gray-950 shadow-md border border-gray-700">
             <span className="text-sm truncate pr-2 text-gray-200">
               {file.name}
             </span>
@@ -275,9 +275,9 @@ export default function LegalAnalyzerPage() {
           </div>
         )}
         <Button
-          className="mt-3 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
-                       bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700
-                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          className="mt-3 w-full py-3 px-6 text-lg font-semibold shadow-xl
+                       bg-gradient-to-r from-gray-700 to-indigo-600 hover:from-gray-800 hover:to-indigo-700
+                       text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
           onClick={analyzeDocument}
           disabled={!file || loading}
           aria-label="Analyze Document"
@@ -290,18 +290,18 @@ export default function LegalAnalyzerPage() {
           </Alert>
         )}
         {result && (
-          <Card className="mt-10 p-8 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
-            <h2 className="text-3xl font-bold mb-4 text-center text-blue-400">
+          <Card className="mt-10 p-8 bg-gray-950 shadow-xl border border-gray-700">
+            <h2 className="text-3xl font-bold mb-4 text-center text-gray-400">
               Analysis Report
             </h2>
-            <Alert className="mb-6 p-4 bg-yellow-900/30 text-yellow-300 border border-yellow-700 rounded-lg">
+            <Alert className="mb-6 p-4 bg-yellow-900/30 text-yellow-300 border border-yellow-700">
               <p className="text-sm text-center">
                 <strong>Important:</strong> This analysis is performed by an external AI service (OpenRouter). While your document is not stored by easy-pdf, its content is sent to this external service for processing. Please review OpenRouter&apos;s privacy policy for more details.
               </p>
             </Alert>
             <div className="mb-6 border-b border-gray-700 pb-4">
-              <h3 className="text-blue-400 block mb-2 text-lg items-center">
-                <FileText className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
+              <h3 className="text-gray-400 block mb-2 text-lg items-center">
+                <FileText className="w-6 h-6 inline-block mr-2 text-gray-400" />{" "}
                 Summary:
               </h3>
               <p className="whitespace-pre-line leading-relaxed text-gray-200">
@@ -309,8 +309,8 @@ export default function LegalAnalyzerPage() {
               </p>
             </div>
             <div className="mb-6 border-b border-gray-700 pb-4">
-              <h3 className="text-blue-400 block mb-2 text-lg items-center">
-                <Users className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
+              <h3 className="text-gray-400 block mb-2 text-lg items-center">
+                <Users className="w-6 h-6 inline-block mr-2 text-gray-400" />{" "}
                 Key Entities:
               </h3>
               {result.entities && result.entities.length > 0 ? (
@@ -326,8 +326,8 @@ export default function LegalAnalyzerPage() {
               )}
             </div>
             <div className="mb-6 border-b border-gray-700 pb-4">
-              <h3 className="text-blue-400 block mb-2 text-lg items-center">
-                <ScrollText className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
+              <h3 className="text-gray-400 block mb-2 text-lg items-center">
+                <ScrollText className="w-6 h-6 inline-block mr-2 text-gray-400" />{" "}
                 Detected Clauses:
               </h3>
               {result.clauses && result.clauses.length > 0 ? (
@@ -343,8 +343,8 @@ export default function LegalAnalyzerPage() {
               )}
             </div>
             <div className="mb-6 border-b border-gray-700 pb-4">
-              <h3 className="text-blue-400 block mb-2 text-lg items-center">
-                <ShieldAlert className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
+              <h3 className="text-gray-400 block mb-2 text-lg items-center">
+                <ShieldAlert className="w-6 h-6 inline-block mr-2 text-gray-400" />{" "}
                 Risk Assessment:
               </h3>
               <p
@@ -356,8 +356,8 @@ export default function LegalAnalyzerPage() {
               </p>
             </div>
             <div className="mb-6">
-              <h3 className="text-blue-400 block mb-2 text-lg items-center">
-                <Lightbulb className="w-6 h-6 inline-block mr-2 text-blue-400" />{" "}
+              <h3 className="text-gray-400 block mb-2 text-lg items-center">
+                <Lightbulb className="w-6 h-6 inline-block mr-2 text-gray-400" />{" "}
                 Suggestions:
               </h3>
               {result.suggestions && result.suggestions.length > 0 ? (
@@ -373,7 +373,7 @@ export default function LegalAnalyzerPage() {
               )}
             </div>
             <Button
-              className="mt-6 w-full py-3 px-6 text-lg font-semibold rounded-lg shadow-xl
+              className="mt-6 w-full py-3 px-6 text-lg font-semibold shadow-xl
                          bg-gradient-to-r from-teal-500 to-green-500 hover:from-teal-600 hover:to-green-600
                          text-white transition-all duration-300 focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
               onClick={() => {
@@ -415,7 +415,7 @@ export default function LegalAnalyzerPage() {
             </Button>
           </Card>
         )}
-                <Alert className="block mt-10 p-6 bg-gray-800 text-gray-400 rounded-lg border border-gray-700 italic text-sm text-center">
+                <Alert className="block mt-10 p-6 bg-gray-950 text-gray-400 border border-gray-700 italic text-sm text-center">
           <b className="text-gray-200 mb-2 not-italic">Disclaimer:</b>
           <div>
             This tool uses AI (OpenRouter) to assist with legal document

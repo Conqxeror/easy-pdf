@@ -1,6 +1,14 @@
 import React from "react";
 import Link from "next/link";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, Mail, PenTool } from "lucide-react";
+import { Orbitron } from "next/font/google";
+
+// Font loader must be called at module scope per Next.js font loader rules
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['700'],
+  display: 'swap'
+});
 import FooterClient from './FooterClient';
 import { toolCategories } from "@/lib/toolCategories";
 
@@ -32,26 +40,30 @@ const footerLinks = [
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
+
   return (
-    <footer className="w-full bg-gradient-to-t from-gray-950 to-gray-900 border-t border-gray-800 mt-16 py-12 px-4 font-inter">
+  <footer className="w-full bg-gradient-to-t from-black/95 to-gray-950 border-t border-gray-800 mt-16 py-16 px-4 font-inter">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Branding/About Section */}
         <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-1">
           <Link
             href="/"
-            className="text-3xl font-extrabold text-white hover:text-blue-400 transition-colors"
+            className="flex items-center gap-2 text-3xl font-extrabold text-white hover:text-blue-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
           >
-            easy-pdf
+            <span className="bg-white/5 rounded-sm px-1 py-0.5 flex items-center justify-center shadow-sm">
+              <PenTool className="w-5 h-5 text-white" />
+            </span>
+            <span className={`${orbitron.className} ml-1 font-extrabold -skew-x-6 tracking-tight`}>easy-pdf</span>
           </Link>
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <p className="text-gray-300 text-sm leading-relaxed">
             easy-pdf is a blazing-fast, privacy-first PDF toolkit for India and
             the world. 100% client-side, open-source, and SEO-optimized.
           </p>
           <div className="flex space-x-4 mt-2">
             <a
-              href="mailto:kadriwalimohammad@gmail.com"
+              href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`}
               aria-label="Email"
-              className="text-gray-400 hover:text-red-400 transition-colors"
+              className="text-gray-300 hover:text-red-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-500"
             >
               <Mail size={20} />
             </a>
@@ -60,7 +72,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn Profile"
-              className="text-gray-400 hover:text-blue-500 transition-colors"
+              className="text-gray-300 hover:text-blue-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
             >
               <Linkedin size={20} />
             </a>
@@ -69,7 +81,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
-              className="text-gray-400 hover:text-gray-300 transition-colors"
+              className="text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
             >
               <Github size={20} />
             </a>
@@ -88,7 +100,7 @@ export default function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {toolCategories.map((category) => (
               <div key={category.name} className="flex flex-col gap-3">
-                <h3 className="text-base font-medium text-blue-400 flex items-center gap-2">
+                <h3 className="text-base font-medium text-gray-200 flex items-center gap-2">
                   {category.icon}
                   {category.name}
                 </h3>
@@ -97,7 +109,7 @@ export default function Footer() {
                     <li key={tool.href}>
                       <Link
                         href={tool.href}
-                        className="text-gray-400 hover:text-blue-400 transition-colors text-sm hover:underline flex items-center gap-1"
+                        className="text-gray-300 hover:text-blue-300 transition-colors text-sm hover:underline flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
                       >
                         {tool.icon}
                         {tool.name}
@@ -111,7 +123,7 @@ export default function Footer() {
           <div className="mt-4">
             <Link
               href="/tools"
-              className="inline-flex items-center text-blue-400 hover:text-blue-300 text-sm font-medium"
+              className="inline-flex items-center text-blue-300 hover:text-white text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
             >
               View all tools
               <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,7 +145,7 @@ export default function Footer() {
                   {link.external ? (
                     <a
                       href={link.href}
-                      className="text-gray-400 hover:text-blue-400 transition-colors text-base break-all hover:underline"
+                      className="text-gray-300 hover:text-blue-300 transition-colors text-base break-all hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={link.name}
@@ -143,7 +155,7 @@ export default function Footer() {
                   ) : (
                     <Link
                       href={link.href}
-                      className="text-gray-400 hover:text-blue-400 transition-colors text-base hover:underline"
+                      className="text-gray-300 hover:text-blue-300 transition-colors text-base hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
                     >
                       {link.name}
                     </Link>
@@ -156,9 +168,9 @@ export default function Footer() {
       </div>
 
       {/* Copyright and Bottom Info */}
-      <div className="max-w-7xl mx-auto border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-        <span>&copy; {currentYear} easy-pdf. All rights reserved.</span>
-        <span className="text-gray-600">Made with &hearts; in India.</span>
+      <div className="max-w-7xl mx-auto border-t border-gray-800 mt-14 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-400">
+        <span className="text-gray-300">&copy; {currentYear} easy-pdf. All rights reserved.</span>
+        <span className="text-gray-200">Made with <span className="text-red-400">&hearts;</span> in India.</span>
       </div>
 
       {/* SEO: Organization structured data */}
@@ -174,7 +186,7 @@ export default function Footer() {
             contactPoint: [
               {
                 "@type": "ContactPoint",
-                email: "kadriwalimohammad@gmail.com",
+                email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "kadriwalimohammad@gmail.com",
                 contactType: "customer support",
               },
             ],

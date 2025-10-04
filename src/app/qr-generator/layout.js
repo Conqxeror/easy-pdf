@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "QR Code Generator - Create QR Codes for PDF Online | easy-pdf",
-  description: "Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality. Free online QR code maker with no uploads.",
-  keywords: [
-    "QR code generator",
-    "QR code maker",
-    "wifi QR code",
-    "vcard QR code",
-    "url QR code",
-    "QR code PDF",
-    "barcode generator",
-    "QR code creator",
-    "dynamic QR code",
-    "free QR code generator",
-    "online QR code maker",
-    "PDF QR code creator",
-    "custom QR code design",
-    "QR code printing tool",
-    "professional QR code generator",
-    "QR code design tool",
-    "batch QR code creation",
-    "QR code customization",
-    "secure QR code generator",
-    "privacy-first QR code tool"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/qr-generator",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "QR Code Generator",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "QR Code Generator", url: "https://easy-pdf-murex.vercel.app/qr-generator" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "QR Code Generator",
-  description: "Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality.",
-  url: "/qr-generator",
-  features: [
-    "Multiple QR code types",
-    "Customizable size and quality",
-    "WiFi and vCard support",
-    "PNG and PDF export"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "QR Code Generator", url: "https://easy-pdf-murex.vercel.app/qr-generator" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/qr-generator');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,57 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for QR Generator Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is the QR code generator free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, you can create and download unlimited QR codes for free."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I create QR codes for WiFi, email, or contacts?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our tool supports many QR code types including WiFi, email, vCard, phone, and more."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my QR code contents stored?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, all generation is done in your browser. Your content is never uploaded or saved."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I customize the QR code's appearance?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can adjust size, margin, and error correction level. Advanced styling coming soon."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is there a limit to the number of QR codes I can generate?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No limits—generate as many as you need!"
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

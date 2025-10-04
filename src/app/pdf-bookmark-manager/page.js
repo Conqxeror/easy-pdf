@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload, Download, Bookmark, FileText, Plus, Edit, Trash2, Loader2 } from 'lucide-react';
-import { PDFDocument } from 'pdf-lib';
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 export default function PDFBookmarkManager() {
@@ -36,8 +36,9 @@ export default function PDFBookmarkManager() {
   const extractBookmarks = async (file) => {
     try {
       setIsProcessing(true);
-      const arrayBuffer = await file.arrayBuffer();
-      await PDFDocument.load(arrayBuffer);
+  const { PDFDocument } = await getPdfLib();
+  const arrayBuffer = await file.arrayBuffer();
+  await PDFDocument.load(arrayBuffer);
       
       // For now, we'll start with an empty bookmark list since pdf-lib doesn't have direct bookmark reading
       // In a production app, you'd use a more comprehensive PDF library for reading existing bookmarks
@@ -95,6 +96,7 @@ export default function PDFBookmarkManager() {
 
     try {
       setIsProcessing(true);
+      const { PDFDocument } = await getPdfLib();
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
 
@@ -162,10 +164,10 @@ export default function PDFBookmarkManager() {
   };
 
   const BookmarkItem = ({ bookmark }) => (
-    <div className={`border rounded-lg p-3 ${bookmark.level > 0 ? 'ml-6 border-l-4 border-l-primary' : ''}`}>
+    <div className={`border p-3 ${bookmark.level > 0 ? 'ml-6 border-l-4 border-l-primary' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 flex-1">
-          <Bookmark className="h-4 w-4 text-primary" aria-hidden="true" />
+          <Bookmark className="h-4 w-4 text-primary preserve-color" aria-hidden="true" />
           {editingBookmark === bookmark.id ? (
             <div className="flex gap-2 flex-1">
               <Input
@@ -286,7 +288,7 @@ export default function PDFBookmarkManager() {
           <CardContent>
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+              className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
                 isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
               }`}
             >

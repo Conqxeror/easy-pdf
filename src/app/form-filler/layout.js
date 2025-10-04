@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "PDF Form Filler Online – Free PDF Form Completion | easy-pdf",
-  description: "Add text, checkmarks, or other inputs to any PDF form. Free online PDF form completion tool with save functionality. 100% client-side with no uploads.",
-  keywords: [
-    "Fill PDF form",
-    "PDF form filler",
-    "Complete PDF forms",
-    "PDF input",
-    "Form completion",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF form",
-    "PDF form completion tool",
-    "Fill PDF documents online",
-    "PDF form filling software",
-    "Free PDF form filler",
-    "Online PDF form completion",
-    "PDF document form filler",
-    "PDF form editor",
-    "Digital PDF form completion",
-    "PDF form processing tool",
-    "Batch PDF form filling",
-    "Secure PDF form completion",
-    "Professional PDF form filler"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/form-filler",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Form Filler",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Form Filler", url: "https://easy-pdf-murex.vercel.app/form-filler" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Form Filler",
-  description: "Add text, checkmarks, or other inputs to any PDF form. Free online PDF form completion tool with save functionality.",
-  url: "/form-filler",
-  features: [
-    "Form field detection",
-    "Text input",
-    "Checkbox support",
-    "Form saving"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Form Filler", url: "https://easy-pdf-murex.vercel.app/form-filler" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/form-filler');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,57 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Form Filler Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is it free to fill out PDF forms online?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our PDF Form Filler tool is completely free to use. You can add text to as many PDF forms as you need without any hidden costs or limitations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my files secure when filling forms?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. Your privacy is our top priority. All PDF processing, including adding text to forms, happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I add multiple text fields to a PDF?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Currently, our tool allows you to add one text field at a time. To add multiple fields, you would need to repeat the process for each text entry."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I add signatures or images with this tool?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool is primarily designed for adding text. For adding signatures, please use our dedicated 'Sign PDF' tool. For adding images, you might consider converting your image to PDF first and then merging it."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does this tool work with interactive PDF forms?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our tool adds text as a new layer on top of the PDF. While it works on all PDFs, it does not interact with pre-existing interactive form fields (AcroForm fields) within the PDF. It's best for adding text to non-fillable PDFs or adding additional text to existing forms."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

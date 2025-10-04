@@ -65,7 +65,7 @@ const AllToolsPage = () => {
             <Input
               type="text"
               placeholder="Search for tools..."
-              className="pl-10 py-6 text-lg bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 focus:border-blue-500 rounded-xl"
+              className="pl-10 py-6 text-lg bg-gradient-to-r from-gray-800 to-gray-900 border border-gray-700 focus:border-gray-600"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -86,7 +86,7 @@ const AllToolsPage = () => {
                 key={category.name}
                 title={
                   <div className="flex items-center gap-3">
-                    <span className="text-blue-400">
+                    <span className="text-gray-400">
                       {category.icon}
                     </span>
                     {category.name}

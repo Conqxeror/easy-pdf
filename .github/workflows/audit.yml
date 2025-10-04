@@ -1,0 +1,88 @@
+name: Performance & Accessibility Audit
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run linting
+        run: npm run lint:strict
+      
+      - name: Type check
+        run: npm run type-check
+      
+      - name: Build production
+        run: npm run build
+      
+      - name: Start production server
+        run: |
+          npx next start -p 3000 &
+          echo $! > .server-pid
+          # Wait for server to be ready
+          timeout 30 bash -c 'until curl -sf http://localhost:3000 > /dev/null; do sleep 1; done'
+        
+      - name: Run Lighthouse on key pages
+        run: |
+          mkdir -p docs/logs
+          node scripts/run-lighthouse.js http://localhost:3000/ docs/logs/ci_lh_home.json || true
+          node scripts/run-lighthouse.js http://localhost:3000/merge docs/logs/ci_lh_merge.json || true
+          node scripts/run-lighthouse.js http://localhost:3000/ocr docs/logs/ci_lh_ocr.json || true
+      
+      - name: Extract Lighthouse metrics
+        run: |
+          node scripts/extract-lighthouse-metrics.js docs/logs/ci_lh_*.json > docs/logs/ci-lighthouse-summary.txt
+          cat docs/logs/ci-lighthouse-summary.txt
+      
+      - name: Check bundle size
+        run: |
+          # List chunk sizes
+          echo "## Bundle Sizes" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          ls -lh .next/static/chunks/*.js | awk '{print $9, $5}' | sort -k2 -h -r | head -20 >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: docs/logs/ci_*.json
+          retention-days: 30
+      
+      - name: Stop server
+        if: always()
+        run: |
+          if [ -f .server-pid ]; then
+            kill $(cat .server-pid) || true
+          fi
+      
+      - name: Performance budget check (advisory)
+        run: |
+          echo "## Performance Check (Advisory)" >> $GITHUB_STEP_SUMMARY
+          echo "Checking if any pages exceed performance budgets..." >> $GITHUB_STEP_SUMMARY
+          # Parse metrics and check thresholds
+          # For now, this is advisory only - doesn't fail the build
+          node scripts/extract-lighthouse-metrics.js docs/logs/ci_lh_*.json > /tmp/metrics.txt
+          cat /tmp/metrics.txt >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Targets**: LCP < 2.5s, TBT < 200ms, FCP < 1.8s" >> $GITHUB_STEP_SUMMARY
+          echo "**Note**: This check is advisory only and does not fail the build." >> $GITHUB_STEP_SUMMARY

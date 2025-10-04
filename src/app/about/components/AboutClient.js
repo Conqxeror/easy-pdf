@@ -29,7 +29,7 @@ export default function AboutClient() {
 
   const handleContactClick = () => {
     trackEvent('contact_link_clicked');
-    window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`;
+  window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`;
   };
 
   const teamMembers = [
@@ -56,10 +56,10 @@ export default function AboutClient() {
       </div>
 
       {/* Mission Section */}
-      <Card className="mb-8 bg-white dark:bg-gray-800">
+      <Card className="mb-8 bg-white dark:bg-black">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <Heart className="h-6 w-6 text-red-500" />
+            <Heart className="h-6 w-6 text-red-500 preserve-color" />
             Our Mission
           </CardTitle>
         </CardHeader>
@@ -79,10 +79,10 @@ export default function AboutClient() {
 
       {/* Values Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <Shield className="h-5 w-5 text-blue-500" />
+              <Shield className="h-5 w-5 text-gray-600" />
               Privacy First
             </CardTitle>
           </CardHeader>
@@ -94,10 +94,10 @@ export default function AboutClient() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <Zap className="h-5 w-5 text-yellow-500" />
+              <Zap className="h-5 w-5 text-yellow-500 preserve-color" />
               Lightning Fast
             </CardTitle>
           </CardHeader>
@@ -109,10 +109,10 @@ export default function AboutClient() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <Users className="h-5 w-5 text-green-500" />
+              <Users className="h-5 w-5 text-green-500 preserve-color" />
               Community Driven
             </CardTitle>
           </CardHeader>
@@ -124,10 +124,10 @@ export default function AboutClient() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <Globe className="h-5 w-5 text-purple-500" />
+              <Globe className="h-5 w-5 text-gray-600" />
               Accessible Everywhere
             </CardTitle>
           </CardHeader>
@@ -139,10 +139,10 @@ export default function AboutClient() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <Lock className="h-5 w-5 text-red-500" />
+              <Lock className="h-5 w-5 text-red-500 preserve-color" />
               Secure by Design
             </CardTitle>
           </CardHeader>
@@ -154,10 +154,10 @@ export default function AboutClient() {
           </CardContent>
         </Card>
 
-        <Card className="bg-white dark:bg-gray-800">
+        <Card className="bg-white dark:bg-black">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-              <Star className="h-5 w-5 text-yellow-500" />
+              <Star className="h-5 w-5 text-yellow-500 preserve-color" />
               Always Free
             </CardTitle>
           </CardHeader>
@@ -171,28 +171,28 @@ export default function AboutClient() {
       </div>
 
       {/* Technology Stack */}
-      <Card className="mb-8 bg-white dark:bg-gray-800">
+      <Card className="mb-8 bg-white dark:bg-black">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <Code className="h-6 w-6 text-blue-500" />
+            <Code className="h-6 w-6 text-gray-600" />
             Built with Modern Technology
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">Next.js</div>
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-950">
+              <div className="text-2xl font-bold text-gray-700">Next.js</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">React Framework</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-950">
               <div className="text-2xl font-bold text-green-600">PDF-lib</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">PDF Processing</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">Tailwind</div>
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-950">
+              <div className="text-2xl font-bold text-gray-700">Tailwind</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Styling</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="text-center p-4 bg-gray-50 dark:bg-gray-950">
               <div className="text-2xl font-bold text-yellow-600">TypeScript</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Type Safety</div>
             </div>
@@ -201,17 +201,17 @@ export default function AboutClient() {
       </Card>
 
       {/* Stats Section */}
-      <Card className="mb-8 bg-white dark:bg-gray-800">
+      <Card className="mb-8 bg-white dark:bg-black">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <TrendingUp className="h-6 w-6 text-green-500" />
+              <TrendingUp className="h-6 w-6 text-green-500 preserve-color" />
             Our Impact
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">10,000+</div>
+              <div className="text-3xl font-bold text-gray-700">10,000+</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Files Processed</div>
             </div>
             <div className="text-center">
@@ -219,7 +219,7 @@ export default function AboutClient() {
               <div className="text-sm text-gray-600 dark:text-gray-400">Happy Users</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-purple-600">20+</div>
+              <div className="text-3xl font-bold text-gray-700">20+</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">PDF Tools</div>
             </div>
             <div className="text-center">
@@ -231,18 +231,18 @@ export default function AboutClient() {
       </Card>
 
       {/* Team Section */}
-      <Card className="mb-8 bg-white dark:bg-gray-800">
+      <Card className="mb-8 bg-white dark:bg-black">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <Users className="h-6 w-6 text-blue-500" />
+            <Users className="h-6 w-6 text-gray-600" />
             Meet the Team
           </CardTitle>
         </CardHeader>
         <CardContent>
           {teamMembers.map((member, index) => (
             <div key={index} className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden flex items-center justify-center">
-                <div className="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-full">
+              <div className="w-24 h-24 mx-auto mb-4 overflow-hidden flex items-center justify-center">
+                <div className="w-full h-full bg-gradient-to-r from-gray-600 to-gray-800 flex items-center justify-center">
                   <span className="text-2xl font-bold text-white">{member.avatar}</span>
                 </div>
               </div>
@@ -259,7 +259,7 @@ export default function AboutClient() {
       </Card>
 
       {/* Call to Action */}
-      <Card className="mb-8 bg-white dark:bg-gray-800">
+      <Card className="mb-8 bg-white dark:bg-black">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Award className="h-6 w-6 text-yellow-500" />
@@ -273,14 +273,14 @@ export default function AboutClient() {
               className="flex items-center gap-2"
               variant="outline"
             >
-              <Github className="h-5 w-5" />
+              <Github className="h-5 w-5 preserve-color" />
               View on GitHub
             </Button>
             <Button
               onClick={handleContactClick}
               className="flex items-center gap-2"
             >
-              <Coffee className="h-5 w-5" />
+              <Coffee className="h-5 w-5 preserve-color" />
               Get in Touch
             </Button>
           </div>

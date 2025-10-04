@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
 import { Upload, Download, Layers, FileText, Trash2, Play, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { PDFDocument } from 'pdf-lib';
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
@@ -83,7 +83,8 @@ export default function PDFBatchProcessor() {
   };
 
   const processMerge = async () => {
-    const mergedPdf = await PDFDocument.create();
+  const { PDFDocument } = await getPdfLib();
+  const mergedPdf = await PDFDocument.create();
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -116,13 +117,14 @@ export default function PDFBatchProcessor() {
   };
 
   const processCompress = async () => {
+    const { PDFDocument } = await getPdfLib();
     const compressedResults = [];
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
         const arrayBuffer = await file.file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
+  const pdf = await PDFDocument.load(arrayBuffer);
         
         // Basic compression by re-saving (pdf-lib automatically optimizes)
         const pdfBytes = await pdf.save();
@@ -148,13 +150,14 @@ export default function PDFBatchProcessor() {
   };
 
   const processSplit = async () => {
+    const { PDFDocument } = await getPdfLib();
     const splitResults = [];
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
         const arrayBuffer = await file.file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
+  const pdf = await PDFDocument.load(arrayBuffer);
         const pageCount = pdf.getPageCount();
         
         for (let pageNum = 0; pageNum < pageCount; pageNum++) {
@@ -184,13 +187,14 @@ export default function PDFBatchProcessor() {
   };
 
   const processRotate = async () => {
+    const { PDFDocument } = await getPdfLib();
     const rotatedResults = [];
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
         const arrayBuffer = await file.file.arrayBuffer();
-        const pdf = await PDFDocument.load(arrayBuffer);
+  const pdf = await PDFDocument.load(arrayBuffer);
         const pages = pdf.getPages();
         
         // Rotate all pages 90 degrees clockwise
@@ -299,7 +303,7 @@ export default function PDFBatchProcessor() {
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                className={`border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${
                   isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
                 }`}
               >
@@ -371,7 +375,7 @@ export default function PDFBatchProcessor() {
             <CardContent>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {files.map((file) => (
-                  <div key={file.id} className="flex items-center justify-between p-2 border rounded">
+                  <div key={file.id} className="flex items-center justify-between p-2 border">
                     <div className="flex items-center gap-2">
                       <FileText className="h-4 w-4" />
                       <span className="text-sm">{file.file.name}</span>
@@ -425,7 +429,7 @@ export default function PDFBatchProcessor() {
             <CardContent>
               <div className="space-y-2 mb-4 max-h-60 overflow-y-auto">
                 {results.map((result, index) => (
-                  <div key={index} className="flex items-center justify-between p-2 border rounded">
+                  <div key={index} className="flex items-center justify-between p-2 border">
                     <div className="flex items-center gap-2">
                       <FileText className="h-4 w-4" aria-hidden="true" />
                       <span className="text-sm">{result.name}</span>
@@ -433,7 +437,7 @@ export default function PDFBatchProcessor() {
                         {formatFileSize(result.size)}
                       </span>
                       {result.compressionRatio && (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1">
                           -{result.compressionRatio}%
                         </span>
                       )}

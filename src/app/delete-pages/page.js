@@ -222,7 +222,7 @@ export default function DeletePagesPage() {
         />
 
         {numPages > 0 && (
-          <div className="my-4 p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200">
+          <div className="my-4 p-4 bg-gray-100 shadow-inner border border-gray-200">
             <h2 className="font-semibold text-xl mb-3 text-gray-800">
               Select Pages to Delete ({selected.length} selected)
             </h2>
@@ -304,7 +304,7 @@ export default function DeletePagesPage() {
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Processing...
               </span>
             ) : (
@@ -314,7 +314,7 @@ export default function DeletePagesPage() {
         </div>
 
         {deletedPdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 shadow-lg border border-gray-200">
             <div className="w-full text-center space-y-4 text-gray-800">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -332,16 +332,18 @@ export default function DeletePagesPage() {
                 <a
                   href={deletedPdfUrl}
                   download={downloadFileName}
-                  className="text-center flex items-center"
+                  className="text-center"
                   onClick={() => {
                     const u = deletedPdfUrl;
                     setTimeout(() => { try { if (u && typeof URL !== 'undefined' && !String(u).startsWith('data:')) URL.revokeObjectURL(u); } catch { } }, 500);
                   }}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                  </svg>
-                  Download Modified PDF
+                  <span className="flex items-center">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Modified PDF
+                  </span>
                 </a>
               </Button>
             </div>

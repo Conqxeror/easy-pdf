@@ -69,10 +69,10 @@ const SponsorsPage = () => {
 
   const getTierColor = (tier) => {
     switch (tier) {
-      case 'platinum': return 'from-purple-500 to-pink-500';
+      case 'platinum': return 'from-gray-600 to-gray-700';
       case 'gold': return 'from-yellow-400 to-orange-500';
       case 'silver': return 'from-gray-400 to-gray-600';
-      default: return 'from-blue-400 to-blue-600';
+      default: return 'from-gray-400 to-gray-700';
     }
   };
 
@@ -86,9 +86,9 @@ const SponsorsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
+    <div className="min-h-screen bg-black text-gray-100">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-900 via-purple-900 to-pink-900 py-20">
+      <div className="bg-gradient-to-r from-gray-900 via-gray-900 to-gray-900 py-20">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Our Amazing Sponsors ❤️
@@ -102,19 +102,19 @@ const SponsorsPage = () => {
           {/* App Stats */}
           {analytics && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div className="bg-white/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">{analytics.totalOperations?.toLocaleString() || '10,000+'}</div>
                 <div className="text-sm text-gray-300">Files Processed</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div className="bg-white/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">{analytics.totalSessions?.toLocaleString() || '5,000+'}</div>
                 <div className="text-sm text-gray-300">User Sessions</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div className="bg-white/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">100%</div>
                 <div className="text-sm text-gray-300">Free Forever</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div className="bg-white/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">0</div>
                 <div className="text-sm text-gray-300">Files Uploaded</div>
               </div>
@@ -135,7 +135,7 @@ const SponsorsPage = () => {
 
         <div className="max-w-3xl mx-auto text-center">
           {sponsors.length === 0 ? (
-            <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-8 shadow-lg ring-1 ring-white/5">
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 shadow-lg ring-1 ring-white/5">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">We don’t have sponsors yet — you can be the first ✨</h3>
               <p className="text-gray-300 mb-6">
                 easy-pdf will always provide free access to students, teachers, researchers, doctors, institutions, and community projects.
@@ -158,9 +158,9 @@ const SponsorsPage = () => {
               </ul>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <div className="inline-flex items-center px-6 py-3 bg-transparent rounded-md">
+                <div className="inline-flex items-center px-6 py-3 bg-transparent">
                   <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
-                    <Image src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
+                    <Image className="preserve-color" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
                   </a>
                 </div>
 
@@ -178,7 +178,7 @@ const SponsorsPage = () => {
                       window.location.href = '/#partnership-tiers';
                     }
                   }}
-                  className="inline-flex items-center px-6 py-3 border border-white/10 rounded-md text-white hover:bg-white/5 transition-colors"
+                  className="inline-flex items-center px-6 py-3 border border-white/10 text-white hover:bg-white/5 transition-colors"
                 >
                   Learn about partnership tiers
                 </a>
@@ -191,14 +191,14 @@ const SponsorsPage = () => {
                   key={sponsor.id}
                   role="button"
                   tabIndex={0}
-                  className="bg-gray-800 border border-gray-700 rounded-lg p-6 hover:border-gray-600 transition-all duration-300 hover:scale-105 cursor-pointer group"
+                  className="bg-gray-950 border border-gray-700 p-6 hover:border-gray-600 transition-all duration-300 hover:scale-105 cursor-pointer group"
                   onClick={() => handleSponsorClick(sponsor.id, sponsor.url)}
                   onKeyDown={(e) => handleSponsorKey(e, sponsor)}
                   data-sponsor-id={sponsor.id}
                   data-placement="main_grid"
                 >
                   {/* Tier Badge */}
-                  <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${getTierColor(sponsor.tier)} text-white mb-4`}>
+                  <div className={`inline-flex items-center px-3 py-1 text-xs font-medium bg-gradient-to-r ${getTierColor(sponsor.tier)} text-white mb-4`}>
                     {getTierIcon(sponsor.tier)}
                     <span className="ml-1 capitalize">{sponsor.tier} Sponsor</span>
                   </div>
@@ -207,7 +207,7 @@ const SponsorsPage = () => {
                   <div className="flex items-center mb-4">
                     <div className="text-3xl mr-3">{sponsor.logo}</div>
                     <div>
-                      <h3 className="text-xl font-semibold group-hover:text-blue-400 transition-colors">
+                      <h3 className="text-xl font-semibold group-hover:text-gray-400 transition-colors">
                         {sponsor.name}
                       </h3>
                       <p className="text-sm text-gray-400">{sponsor.category}</p>
@@ -220,8 +220,8 @@ const SponsorsPage = () => {
                   </p>
 
                   {/* Value Proposition */}
-                  <div className="bg-gray-700/50 rounded-lg p-3 mb-4">
-                    <p className="text-sm text-blue-300 font-medium">
+                  <div className="bg-gray-950/50 p-3 mb-4">
+                    <p className="text-sm text-gray-300 font-medium">
                       {sponsor.value}
                     </p>
                   </div>
@@ -229,7 +229,7 @@ const SponsorsPage = () => {
                   {/* CTA */}
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-400">Click to visit</span>
-                    <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-400 transition-colors" />
+                    <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-400 transition-colors" />
                   </div>
                 </div>
               ))}
@@ -239,7 +239,7 @@ const SponsorsPage = () => {
       </div>
 
       {/* Why We Use Sponsors */}
-      <div className="bg-gray-800 py-16">
+      <div className="bg-gray-950 py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Sponsors?</h2>
@@ -251,7 +251,7 @@ const SponsorsPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-gray-950 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Privacy First</h3>
@@ -262,7 +262,7 @@ const SponsorsPage = () => {
             </div>
 
             <div className="text-center">
-              <div className="bg-green-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-green-600 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Community Driven</h3>
@@ -273,7 +273,7 @@ const SponsorsPage = () => {
             </div>
 
             <div className="text-center">
-              <div className="bg-purple-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="bg-gray-950 w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Sustainable Growth</h3>
@@ -296,26 +296,26 @@ const SponsorsPage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-            <Globe className="w-8 h-8 text-blue-400 mx-auto mb-3" />
+          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
+            <Globe className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <div className="text-2xl font-bold mb-1">Global</div>
             <div className="text-sm text-gray-400">Worldwide reach</div>
           </div>
 
-          <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
+          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
             <Users className="w-8 h-8 text-green-400 mx-auto mb-3" />
             <div className="text-2xl font-bold mb-1">Growing</div>
             <div className="text-sm text-gray-400">User base expansion</div>
           </div>
 
-          <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-            <TrendingUp className="w-8 h-8 text-purple-400 mx-auto mb-3" />
+          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
+            <TrendingUp className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <div className="text-2xl font-bold mb-1">Engaged</div>
             <div className="text-sm text-gray-400">High user engagement</div>
           </div>
 
-          <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-            <Coffee className="w-8 h-8 text-orange-400 mx-auto mb-3" />
+          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
+            <Coffee className="w-8 h-8 text-orange-400 mx-auto mb-3 preserve-color" />
             <div className="text-2xl font-bold mb-1">Trusted</div>
             <div className="text-sm text-gray-400">Community approved</div>
           </div>
@@ -323,40 +323,42 @@ const SponsorsPage = () => {
       </div>
 
       {/* Become a Sponsor CTA */}
-      <div id="partnership-tiers" className="bg-gradient-to-r from-blue-600 to-purple-600 py-16">
+      <div id="partnership-tiers" className="bg-gradient-to-r from-gray-700 to-gray-800 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Become a Sponsor</h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-gray-100 mb-8">
             Join our community of sponsors and help keep powerful tools free for everyone
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div className="bg-white/10 backdrop-blur-sm p-4">
               <BarChart3 className="w-8 h-8 text-white mx-auto mb-2" />
               <div className="font-semibold">Detailed Analytics</div>
-              <div className="text-sm text-blue-100">Track your ROI with comprehensive metrics</div>
+              <div className="text-sm text-gray-100">Track your ROI with comprehensive metrics</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div className="bg-white/10 backdrop-blur-sm p-4">
               <Target className="w-8 h-8 text-white mx-auto mb-2" />
               <div className="font-semibold">Targeted Audience</div>
-              <div className="text-sm text-blue-100">Reach privacy-conscious professionals</div>
+              <div className="text-sm text-gray-100">Reach privacy-conscious professionals</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+            <div className="bg-white/10 backdrop-blur-sm p-4">
               <Heart className="w-8 h-8 text-white mx-auto mb-2" />
               <div className="font-semibold">Community Impact</div>
-              <div className="text-sm text-blue-100">Support free tools for everyone</div>
+              <div className="text-sm text-gray-100">Support free tools for everyone</div>
             </div>
           </div>
 
           {/* Buy Me A Coffee anchor + image */}
             <div className="flex items-center justify-center">
-            <div dangerouslySetInnerHTML={{ __html: `<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kadriwalimt" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Sponsor this project." data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>` }} />
+            <div className="preserve-color">
+              <div dangerouslySetInnerHTML={{ __html: `<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kadriwalimt" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Sponsor this project." data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>` }} />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Thank You */}
-      <div className="bg-gray-900 py-12">
+      <div className="bg-black py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold mb-4">Thank You! 🙏</h2>
           <p className="text-gray-400">

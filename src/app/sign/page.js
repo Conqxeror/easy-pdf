@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { PDFDocument } from "pdf-lib";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -15,13 +16,6 @@ import {
   SelectValue } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
-
-// Import pdfjs-dist legacy build for PDF rendering (safer with bundlers)
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
-// Configure pdfjs worker only on the client to avoid SSR issues
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function SignPdfPage() {
   const [files, setFiles] = useState([]);
@@ -275,6 +269,10 @@ export default function SignPdfPage() {
 
     try {
       const arrayBuffer = await selectedFile.arrayBuffer();
+      
+      // Dynamically load pdfjs and configure worker
+      const pdfjs = await loadPdfJs();
+      
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
 
       activePdfDocProxyRef.current = pdf; // Set the ref directly
@@ -538,7 +536,7 @@ export default function SignPdfPage() {
         {files.length > 0 && numPages > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* File Info */}
-            <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700">
+            <div className="p-4 bg-gray-950 shadow-inner border border-gray-700">
               <h2 className="font-semibold text-xl mb-3 text-gray-100">
                 File Information
               </h2>
@@ -549,11 +547,11 @@ export default function SignPdfPage() {
                 <span className="font-medium">Pages:</span> {numPages}
               </p>
               {processingMessage && (
-                <p className="text-blue-400 mt-2">{processingMessage}</p>
+                <p className="text-gray-400 mt-2">{processingMessage}</p>
               )}
             </div>
             {/* Signature Drawing Controls */}
-            <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
+            <div className="p-4 bg-gray-950 shadow-inner border border-gray-700 space-y-4">
               <h2 className="font-semibold text-xl mb-3 text-gray-100">
                 1. Draw Your Signature
               </h2>
@@ -595,7 +593,7 @@ export default function SignPdfPage() {
                 ref={signatureCanvasRef}
                 width={400}
                 height={200}
-                className="w-full h-auto border border-gray-600 rounded-md bg-white cursor-crosshair"
+                className="w-full h-auto border border-gray-600 bg-white cursor-crosshair"
                 onMouseDown={handleSignatureMouseDown}
                 onMouseMove={handleSignatureMouseMove}
                 onMouseUp={handleSignatureMouseUp}
@@ -603,14 +601,14 @@ export default function SignPdfPage() {
               <Button
                 onClick={handleClearSignature}
                 variant="outline"
-                className="w-full bg-gray-700 hover:bg-gray-600 text-gray-100 border-gray-600"
+                className="w-full"
               >
                 Clear Signature
               </Button>
             </div>
 
             {/* PDF Preview & Placement */}
-            <div className="p-4 bg-gray-800 rounded-lg shadow-inner border border-gray-700 space-y-4">
+            <div className="p-4 bg-gray-950 shadow-inner border border-gray-700 space-y-4">
               <h2 className="font-semibold text-xl mb-3 text-gray-100">
                 2. Position Signature
               </h2>
@@ -628,11 +626,11 @@ export default function SignPdfPage() {
                   >
                     <SelectTrigger
                       id="pageSelect"
-                      className="w-full mt-1 bg-gray-700 text-gray-100 border-gray-600"
+                      className="w-full mt-1 bg-gray-950 text-gray-100 border-gray-600"
                     >
                       <SelectValue placeholder="Select page" />
                     </SelectTrigger>
-                    <SelectContent className="bg-gray-700 text-gray-100 border-gray-600">
+                    <SelectContent className="bg-gray-950 text-gray-100 border-gray-600">
                       {Array.from({ length: numPages }, (_, i) => (
                         <SelectItem key={i} value={String(i)}>
                           Page {i + 1}
@@ -654,14 +652,14 @@ export default function SignPdfPage() {
                       value={signatureWidth}
                       onChange={(e) => setSignatureWidth(Number(e.target.value))}
                       placeholder="Width"
-                      className="bg-gray-700 text-gray-100 border-gray-600"
+                      className="bg-gray-950 text-gray-100 border-gray-600"
                     />
                     <Input
                       type="number"
                       value={signatureHeight}
                       onChange={(e) => setSignatureHeight(Number(e.target.value))}
                       placeholder="Height"
-                      className="bg-gray-700 text-gray-100 border-gray-600"
+                      className="bg-gray-950 text-gray-100 border-gray-600"
                     />
                   </div>
                 </div>
@@ -669,7 +667,7 @@ export default function SignPdfPage() {
               <div className="w-full flex justify-center items-center overflow-hidden">
                 <canvas
                   ref={pdfPreviewCanvasRef}
-                  className={`max-w-full h-auto border border-gray-600 rounded-md ${
+                  className={`max-w-full h-auto border border-gray-600 ${
                     signatureDataUrl ? "cursor-move" : "cursor-default"
                   }`}
                   onMouseDown={handlePreviewMouseDown}
@@ -695,29 +693,24 @@ export default function SignPdfPage() {
 
         <div className="flex justify-center">
           <Button
-            className="px-8 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl"
+            variant="destructive"
+            size="lg"
+            className="px-8 py-3"
             onClick={handleSign}
+            loading={isProcessing}
             disabled={
-              isProcessing ||
               files.length === 0 ||
               !signatureDataUrl ||
               numPages === 0
             }
             aria-label="Sign PDF"
           >
-            {isProcessing ? (
-              <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
-                Processing...
-              </span>
-            ) : (
-              "Sign PDF"
-            )}
+            {isProcessing ? "Processing..." : "Sign PDF"}
           </Button>
         </div>
 
         {signedPdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -731,11 +724,11 @@ export default function SignPdfPage() {
             </div>
 
             <div className="flex justify-center">
-              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+              <Button asChild variant="success" size="lg" className="px-8 py-3">
                 <a
                   href={signedPdfUrl}
                   download={downloadFileName}
-                  className="text-center flex items-center"
+                  className="text-center"
                   onClick={() => {
                     const urlToRevoke = signedPdfUrl;
                     setTimeout(() => {
@@ -747,10 +740,12 @@ export default function SignPdfPage() {
                     }, 500);
                   }}
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                  </svg>
-                  Download Signed PDF
+                  <span className="flex items-center">
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    Download Signed PDF
+                  </span>
                 </a>
               </Button>
             </div>

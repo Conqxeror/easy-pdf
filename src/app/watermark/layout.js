@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Watermark PDF Online – Free PDF Watermarking | easy-pdf",
-  description: "Add custom text or image watermarks to your PDF documents. Free online watermarking tool with position control and opacity adjustment. 100% client-side with no uploads.",
-  keywords: [
-    "Watermark PDF",
-    "Add watermark",
-    "PDF branding",
-    "Document protection",
-    "PDF stamp",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF watermark",
-    "Text watermark PDF",
-    "Image watermark PDF",
-    "PDF document branding",
-    "Free PDF watermarking",
-    "Online PDF watermark",
-    "PDF copyright protection",
-    "Custom PDF watermark",
-    "PDF watermark tool",
-    "Batch PDF watermarking",
-    "PDF security watermark",
-    "Professional PDF watermark",
-    "PDF watermark position control"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/watermark",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Watermarker",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Watermarker", url: "https://easy-pdf-murex.vercel.app/watermark" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Watermarker",
-  description: "Add custom text or image watermarks to your PDF documents. Free online watermarking tool with position control and opacity adjustment.",
-  url: "/watermark",
-  features: [
-    "Text & image watermarks",
-    "Custom positioning",
-    "Opacity control",
-    "Rotation options"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Watermarker", url: "https://easy-pdf-murex.vercel.app/watermark" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/watermark');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (

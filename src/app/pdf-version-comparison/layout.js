@@ -1,47 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "PDF Version Comparison - Document Diff Tool",
-  description: "Compare different versions of PDF documents with visual diff highlighting. Track changes and identify differences between document versions.",
-  keywords: [
-  "PDF comparison",
-  "document diff",
-  "version control",
-  "change tracking",
-  "document comparison",
-  "PDF diff tool",
-  "version tracking",
-  "change detection",
-  "document versioning",
-  "file comparison",
-  "revision tracking",
-  "document analysis"
-],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/pdf-version-comparison",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Version Comparison",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Version Comparison", url: "https://easy-pdf-murex.vercel.app/pdf-version-comparison" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Version Comparison",
-  description: "Compare different versions of PDF documents with visual diff highlighting. Track changes and identify differences between document versions.",
-  url: "/pdf-version-comparison",
-  features: [
-  "Visual diff",
-  "Text comparison",
-  "Layout changes",
-  "Version tracking"
-],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Version Comparison", url: "https://easy-pdf-murex.vercel.app/pdf-version-comparison" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/pdf-version-comparison');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (

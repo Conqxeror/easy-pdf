@@ -1,0 +1,12 @@
+npm run build
+
+Build succeeded. Next build route summary captured in audit report.
+
+Route sizes:
+- First Load JS shared by all: 640 kB
+- Homepage First Load JS: 696 kB
+- Several tool pages First Load JS: ~1.23 MB
+
+Notes:
+- Large shared vendor chunk: vendors-61c2fb3e2a60ae7a.js (~638 kB)
+- Many tool pages reference large shared chunks, indicating heavy client-side dependencies (PDF.js, Tesseract, etc.).

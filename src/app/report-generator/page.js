@@ -177,14 +177,14 @@ export default function ReportGeneratorPage() {
     >
       <div className="space-y-6">
         {banner.message && (
-          <div className={`rounded-md p-3 text-sm font-medium ${banner.type === 'success' ? 'bg-green-900/20 text-green-300 border border-green-600' : 'bg-red-900/20 text-red-300 border border-red-600'} w-full`}>
+          <div className={`p-3 text-sm font-medium ${banner.type === 'success' ? 'bg-green-900/20 text-green-300 border border-green-600' : 'bg-red-900/20 text-red-300 border border-red-600'} w-full`}>
             {banner.message}
           </div>
         )}
         <Card className="border border-gray-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <UploadCloud className="w-5 h-5 text-indigo-400" /> Import/Export Report
+              <UploadCloud className="w-5 h-5 text-indigo-400 preserve-color" /> Import/Export Report
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -207,7 +207,7 @@ export default function ReportGeneratorPage() {
                 title="Export your current report as a JSON file for later editing."
                 aria-label="Export as JSON"
               >
-                <Save className="w-4 h-4 mr-2" />
+                <Save className="w-4 h-4 mr-2 preserve-color" />
                 Export as JSON
               </Button>
             </div>
@@ -322,7 +322,7 @@ export default function ReportGeneratorPage() {
           <CardContent>
             <div className="space-y-4">
               {reportData.metrics.map((metric, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-6 gap-4 p-4 border rounded-lg">
+                <div key={index} className="grid grid-cols-1 md:grid-cols-6 gap-4 p-4 border">
                   <div>
                     <Label>Metric Label</Label>
                     <Input
@@ -413,7 +413,7 @@ export default function ReportGeneratorPage() {
           <CardContent>
             <div className="space-y-4">
               {reportData.sections.map((section, index) => (
-                <div key={index} className="p-4 border rounded-lg">
+                <div key={index} className="p-4 border">
                   <div className="grid grid-cols-1 gap-4">
                     <div className="flex gap-4 items-start">
                       <div className="flex-1">
@@ -564,12 +564,12 @@ export default function ReportGeneratorPage() {
           <Button
             onClick={generateReportPDF}
             disabled={isGenerating || !reportData.title || !reportData.author}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            className="px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl"
             aria-label="Generate Report PDF"
           >
             {isGenerating ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Generating Report...
               </span>
             ) : (

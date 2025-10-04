@@ -29,9 +29,9 @@ export default function SponsorSection({ variant = "homepage" }) {
           </div>
 
           {/* Empty State Call to Action */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-2xl p-8 border border-gray-700/50 backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 border border-gray-700/50 backdrop-blur-sm">
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-teal-600 rounded-full mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-gray-700 to-teal-600 mb-6">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
               
@@ -47,7 +47,7 @@ export default function SponsorSection({ variant = "homepage" }) {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
                   href="/sponsors"
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-teal-600 text-white font-medium hover:from-gray-800 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   <Users className="mr-2 w-4 h-4" />
                   View Sponsorship Plans
@@ -56,7 +56,7 @@ export default function SponsorSection({ variant = "homepage" }) {
                 
                 <Link
                   href="/sponsors#become-sponsor"
-                  className="text-blue-400 hover:text-blue-300 text-sm underline"
+                  className="text-sm link-blue underline"
                 >
                   Learn More About Benefits
                 </Link>
@@ -64,22 +64,22 @@ export default function SponsorSection({ variant = "homepage" }) {
               
               {/* Sponsorship tiers preview */}
               <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
+                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
                   <div className="text-yellow-400 font-semibold">Platinum</div>
                   <div className="text-gray-400">$500/month</div>
                   <div className="text-gray-500 text-xs">Max visibility</div>
                 </div>
-                <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
+                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
                   <div className="text-amber-400 font-semibold">Gold</div>
                   <div className="text-gray-400">$200/month</div>
                   <div className="text-gray-500 text-xs">Premium placement</div>
                 </div>
-                <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
+                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
                   <div className="text-gray-400 font-semibold">Silver</div>
                   <div className="text-gray-400">$100/month</div>
                   <div className="text-gray-500 text-xs">Great exposure</div>
                 </div>
-                <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
+                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
                   <div className="text-orange-400 font-semibold">Bronze</div>
                   <div className="text-gray-400">$50/month</div>
                   <div className="text-gray-500 text-xs">Community support</div>
@@ -171,7 +171,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         <div className="text-center mt-8">
           <Link
             href="/sponsors"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-teal-600 text-white font-medium rounded-lg hover:from-blue-700 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-teal-600 text-white font-medium hover:from-gray-800 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             View All Sponsors
             <ArrowRight className="ml-2 w-4 h-4" />
@@ -179,7 +179,7 @@ export default function SponsorSection({ variant = "homepage" }) {
           <div className="mt-4">
             <Link
               href="/sponsors#become-sponsor"
-              className="text-blue-400 hover:text-blue-300 text-sm underline"
+              className="text-gray-400 hover:text-gray-300 text-sm underline"
             >
               Become a Sponsor
             </Link>

@@ -1,48 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "PDF Bookmark Manager - Organize PDF Navigation",
-  description: "Add, edit, and organize PDF bookmarks and navigation structure. Improve document navigation and user experience.",
-  keywords: [
-  "PDF bookmarks",
-  "PDF navigation",
-  "bookmark manager",
-  "PDF outline",
-  "document navigation",
-  "PDF table of contents",
-  "bookmark editor",
-  "navigation structure",
-  "PDF organization",
-  "document outline",
-  "bookmark creation",
-  "PDF structure"
-],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/pdf-bookmark-manager",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Bookmark Manager",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Bookmark Manager", url: "https://easy-pdf-murex.vercel.app/pdf-bookmark-manager" }
-  ]
-});
-
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Bookmark Manager",
-  description: "Add, edit, and organize PDF bookmarks and navigation structure. Improve document navigation and user experience.",
-  url: "/pdf-bookmark-manager",
-  features: [
-    "Add custom bookmarks",
-    "Edit existing bookmarks",
-    "Organize bookmark hierarchy",
-    "Export bookmark list"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Bookmark Manager", url: "https://easy-pdf-murex.vercel.app/pdf-bookmark-manager" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/pdf-bookmark-manager');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 const faqStructuredData = {
   "@context": "https://schema.org",

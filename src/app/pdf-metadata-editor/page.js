@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, Download, Settings, FileText, Calendar, User, BookOpen, Tag, Loader2 } from 'lucide-react';
-import { PDFDocument } from 'pdf-lib';
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
@@ -47,7 +47,8 @@ export default function PDFMetadataEditor() {
     try {
       setIsProcessing(true);
       const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const { PDFDocument } = await getPdfLib();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
       
       const title = pdfDoc.getTitle() || '';
       const author = pdfDoc.getAuthor() || '';
@@ -92,7 +93,8 @@ export default function PDFMetadataEditor() {
     try {
       setIsProcessing(true);
       const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const { PDFDocument } = await getPdfLib();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
 
       // Update metadata
       if (metadata.title) pdfDoc.setTitle(metadata.title);
@@ -202,7 +204,7 @@ export default function PDFMetadataEditor() {
           <CardContent>
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+              className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
                 isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
               }`}
             >

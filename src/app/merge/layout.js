@@ -1,51 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Merge PDF Online – Easy PDF Tool",
-  description: "Combine multiple PDF files into one seamlessly. Our free online PDF merger runs 100% in your browser — no uploads, fast processing, and built for privacy. Perfect for reports, presentations, and archiving.",
-  keywords: [
-  "Merge PDF",
-  "Combine PDF",
-  "PDF merger",
-  "Join PDF",
-  "PDF tools",
-  "Client-side PDF",
-  "Privacy PDF tool",
-  "No upload PDF merger",
-  "Free PDF merger",
-  "Secure PDF merge",
-  "Browser PDF merge",
-  "Offline PDF merge",
-  "PDF combiner",
-  "Document merger"
-],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/merge",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF Merger",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Merger", url: "https://easy-pdf-murex.vercel.app/merge" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF Merger",
-  description: "Combine multiple PDF files into one seamlessly. Our client-side PDF merger supports drag & drop, reordering, and instant merging without leaving your browser. Ideal for professionals and casual users who need a quick, private merge.",
-  url: "/merge",
-  features: [
-    "Drag & drop multiple files",
-    "Reorder files with drag-and-drop",
-    "Preview merged output",
-    "No server uploads — 100% client-side processing",
-    "Supports large PDFs up to 50MB per file",
-    "Preserves original PDF quality and metadata (optional)"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF Merger", url: "https://easy-pdf-murex.vercel.app/merge" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/merge');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -53,6 +11,57 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Merge PDF Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Is my data uploaded to servers?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No — merging happens client-side in your browser. Files are processed locally and are not uploaded."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What file types are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "PDF files only. Make sure each file has a .pdf extension for best results."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What size limits are there?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Individual files up to 50MB are supported. For very large batches, merge in smaller groups to avoid memory limits in the browser."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I change the order after uploading?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes — drag any file in the list to change the order before merging."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Will the merged PDF preserve quality?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes — the tool preserves original PDF quality, fonts, and vector content where possible."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

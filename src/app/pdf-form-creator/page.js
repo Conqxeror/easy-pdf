@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Unused
 import { Upload, Download, FileBadge2, Type, CheckSquare, Circle, ChevronDown, PenTool, Trash2, Plus, Eye, Loader2 } from 'lucide-react';
-import { PDFDocument, rgb } from 'pdf-lib'; // Removed unused PDF form components
+import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 
 export default function PDFFormCreator() {
@@ -93,9 +93,11 @@ export default function PDFFormCreator() {
       if (templateFile) {
         // Use existing PDF as template
         const arrayBuffer = await templateFile.arrayBuffer();
+        const { PDFDocument } = await getPdfLib();
         pdfDoc = await PDFDocument.load(arrayBuffer);
       } else {
         // Create new PDF
+        const { PDFDocument, rgb } = await getPdfLib();
         pdfDoc = await PDFDocument.create();
         const page = pdfDoc.addPage([612, 792]); // Standard letter size
         
@@ -282,7 +284,7 @@ export default function PDFFormCreator() {
                   value={formTitle}
                   onChange={(e) => setFormTitle(e.target.value)}
                   placeholder="Enter form title"
-                  className="bg-gray-800 border-gray-600 text-gray-200"
+                  className="bg-gray-950 border-gray-600 text-gray-200"
                 />
               </div>
               
@@ -294,10 +296,10 @@ export default function PDFFormCreator() {
                 
                 <div
                   {...getRootProps()}
-                  className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+                  className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
                     isDragActive 
-                      ? 'border-blue-500 bg-blue-900/20' 
-                      : 'border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700/50'
+                      ? 'border-gray-600 bg-black/20' 
+                      : 'border-gray-600 hover:border-gray-500 bg-gray-950 hover:bg-gray-950/50'
                   }`}
                 >
                   <input {...getInputProps()} />
@@ -327,7 +329,7 @@ export default function PDFFormCreator() {
                       variant="outline"
                       size="sm"
                       onClick={() => addField(fieldType.id)}
-                      className="flex flex-col h-16 p-2 border-gray-600 bg-gray-800 text-gray-200 hover:bg-gray-700"
+                      className="flex flex-col h-16 p-2 border-gray-600 bg-gray-950 text-gray-200 hover:bg-gray-950"
                     >
                       <Icon className="h-4 w-4 mb-1" aria-hidden="true" />
                       <span className="text-xs">{fieldType.name}</span>
@@ -349,7 +351,7 @@ export default function PDFFormCreator() {
                   <Input
                     value={selectedField.name}
                     onChange={(e) => updateField(selectedField.id, { name: e.target.value })}
-                    className="bg-gray-800 border-gray-600 text-gray-200"
+                    className="bg-gray-950 border-gray-600 text-gray-200"
                   />
                 </div>
                 
@@ -358,7 +360,7 @@ export default function PDFFormCreator() {
                   <Input
                     value={selectedField.label}
                     onChange={(e) => updateField(selectedField.id, { label: e.target.value })}
-                    className="bg-gray-800 border-gray-600 text-gray-200"
+                    className="bg-gray-950 border-gray-600 text-gray-200"
                   />
                 </div>
 
@@ -369,7 +371,7 @@ export default function PDFFormCreator() {
                       type="number"
                       value={selectedField.width}
                       onChange={(e) => updateField(selectedField.id, { width: parseInt(e.target.value) })}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                   <div>
@@ -378,7 +380,7 @@ export default function PDFFormCreator() {
                       type="number"
                       value={selectedField.height}
                       onChange={(e) => updateField(selectedField.id, { height: parseInt(e.target.value) })}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                 </div>
@@ -390,7 +392,7 @@ export default function PDFFormCreator() {
                       <Input
                         value={selectedField.placeholder}
                         onChange={(e) => updateField(selectedField.id, { placeholder: e.target.value })}
-                        className="bg-gray-800 border-gray-600 text-gray-200"
+                        className="bg-gray-950 border-gray-600 text-gray-200"
                       />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -416,7 +418,7 @@ export default function PDFFormCreator() {
                       placeholder={`Option 1
 Option 2
 Option 3`}
-                      className="bg-gray-800 border-gray-600 text-gray-200"
+                      className="bg-gray-950 border-gray-600 text-gray-200"
                     />
                   </div>
                 )}
@@ -474,7 +476,7 @@ Option 3`}
               </div>
             </CardHeader>
             <CardContent className="h-full">
-              <div className="relative w-full h-full border-2 border-dashed border-gray-600 rounded-lg overflow-auto">
+              <div className="relative w-full h-full border-2 border-dashed border-gray-600 overflow-auto">
                 {templateFile ? (
                   <div className="p-4">
                     <p className="text-center text-gray-400">
@@ -485,9 +487,9 @@ Option 3`}
                     </p>
                   </div>
                 ) : (
-                  <div className="relative w-full h-full bg-gray-800">
+                  <div className="relative w-full h-full bg-gray-950">
                     {/* Simulated PDF page */}
-                    <div className="absolute inset-4 bg-gray-900 shadow-lg border border-gray-700">
+                    <div className="absolute inset-4 bg-black shadow-lg border border-gray-700">
                       <div className="p-6">
                         <h2 className="text-xl font-bold mb-4 text-gray-100">{formTitle}</h2>
                         
@@ -496,7 +498,7 @@ Option 3`}
                           <div
                             key={field.id}
                             className={`absolute border-2 cursor-pointer ${
-                              selectedField?.id === field.id ? 'border-blue-500 bg-blue-900/20' : 'border-gray-600'
+                              selectedField?.id === field.id ? 'border-gray-600 bg-black/20' : 'border-gray-600'
                             }`}
                             style={{
                               left: field.x,
@@ -522,7 +524,7 @@ Option 3`}
                               />
                             )}
                             {field.type === 'dropdown' && (
-                              <select className="w-full h-full px-2 text-sm border-none outline-none bg-gray-800 text-gray-200" disabled={!previewMode}>
+                              <select className="w-full h-full px-2 text-sm border-none outline-none bg-gray-950 text-gray-200" disabled={!previewMode}>
                                 {field.options.map(option => (
                                   <option key={option} value={option}>{option}</option>
                                 ))}
@@ -534,7 +536,7 @@ Option 3`}
                               </div>
                             )}
                             {!previewMode && (
-                              <div className="absolute -top-6 left-0 text-xs bg-blue-600 text-white px-2 py-1 rounded">
+                              <div className="absolute -top-6 left-0 text-xs bg-gray-950 text-white px-2 py-1">
                                 {field.label}
                               </div>
                             )}

@@ -22,10 +22,10 @@ const LazyRelatedTools = lazy(() => import('@/components/RelatedTools').catch(()
 // Loading skeletons for better UX
 const RelatedToolsSkeleton = () => (
   <div className="animate-pulse">
-    <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-48 mb-4"></div>
+  <div className="h-8 bg-gray-200 dark:bg-gray-950 w-48 mb-4"></div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+  <div key={i} className="h-24 bg-gray-200 dark:bg-gray-950"></div>
       ))}
     </div>
   </div>
@@ -33,37 +33,37 @@ const RelatedToolsSkeleton = () => (
 
 // Icon mapping for features
 const featureIcons = {
-  "merge": <Files className="w-6 h-6 text-blue-500" />,
-  "split": <Split className="w-6 h-6 text-green-500" />,
-  "compress": <Minimize2 className="w-6 h-6 text-purple-500" />,
-  "rotate": <RotateCw className="w-6 h-6 text-yellow-500" />,
-  "watermark": <Stamp className="w-6 h-6 text-red-500" />,
+  "merge": <Files className="w-6 h-6 text-gray-600" />,
+  "split": <Split className="w-6 h-6 text-green-500 preserve-color" />,
+  "compress": <Minimize2 className="w-6 h-6 text-gray-600" />,
+  "rotate": <RotateCw className="w-6 h-6 text-yellow-500 preserve-color" />,
+  "watermark": <Stamp className="w-6 h-6 text-red-500 preserve-color" />,
   "protect": <Lock className="w-6 h-6 text-gray-500" />,
-  "unlock": <Unlock className="w-6 h-6 text-orange-500" />,
-  "delete": <Eraser className="w-6 h-6 text-indigo-500" />,
-  "reorder": <ListOrdered className="w-6 h-6 text-cyan-500" />,
+  "unlock": <Unlock className="w-6 h-6 text-orange-500 preserve-color" />,
+  "delete": <Eraser className="w-6 h-6 text-indigo-500 preserve-color" />,
+  "reorder": <ListOrdered className="w-6 h-6 text-cyan-500 preserve-color" />,
   "page-numbers": <PlusCircle className="w-6 h-6 text-amber-500" />,
-  "sign": <Signature className="w-6 h-6 text-rose-500" />,
-  "form": <Text className="w-6 h-6 text-lime-500" />,
-  "ocr": <Search className="w-6 h-6 text-green-400" />,
-  "image": <LucideImage className="w-6 h-6 text-pink-500" />,
+  "sign": <Signature className="w-6 h-6 text-rose-500 preserve-color" />,
+  "form": <Text className="w-6 h-6 text-lime-500 preserve-color" />,
+  "ocr": <Search className="w-6 h-6 text-green-400 preserve-color" />,
+  "image": <LucideImage className="w-6 h-6 text-gray-600" />,
   "metadata": <Settings className="w-6 h-6 text-gray-500" />,
-  "bookmark": <Bookmark className="w-6 h-6 text-blue-500" />,
+  "bookmark": <Bookmark className="w-6 h-6 text-gray-600" />,
   "table": <Table className="w-6 h-6 text-green-500" />,
-  "layers": <Layers className="w-6 h-6 text-purple-500" />,
+  "layers": <Layers className="w-6 h-6 text-gray-600" />,
   "check": <CheckCircle className="w-6 h-6 text-green-600" />,
-  "shield": <Shield className="w-6 h-6 text-blue-600" />,
+  "shield": <Shield className="w-6 h-6 text-gray-700" />,
   "eye": <EyeOff className="w-6 h-6 text-red-600" />,
   "compare": <GitCompare className="w-6 h-6 text-indigo-600" />,
   "message": <MessageSquare className="w-6 h-6 text-cyan-600" />,
   "calculator": <Calculator className="w-6 h-6 text-green-500" />,
-  "qr": <QrCode className="w-6 h-6 text-purple-500" />,
+  "qr": <QrCode className="w-6 h-6 text-gray-600" />,
   "award": <Award className="w-6 h-6 text-yellow-500" />,
-  "briefcase": <Briefcase className="w-6 h-6 text-blue-500" />,
-  "file": <FileText className="w-6 h-6 text-teal-500" />,
-  "heart": <FileHeart className="w-6 h-6 text-red-500" />,
-  "badge": <FileBadge2 className="w-6 h-6 text-orange-500" />,
-  "default": <FileText className="w-6 h-6 text-blue-500" />
+  "briefcase": <Briefcase className="w-6 h-6 text-gray-600" />,
+  "file": <FileText className="w-6 h-6 text-teal-500 preserve-color" />,
+  "heart": <FileHeart className="w-6 h-6 text-red-500 preserve-color" />,
+  "badge": <FileBadge2 className="w-6 h-6 text-orange-500 preserve-color" />,
+  "default": <FileText className="w-6 h-6 text-gray-600" />
 };
 
 export default function EnhancedToolPageLayout({
@@ -138,7 +138,7 @@ export default function EnhancedToolPageLayout({
         
         {/* Main Tool Card */}
         <Section spacing="small">
-          <Card className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-gray-900 border-gray-700'}`}>
+          <Card className={`${isDark ? 'bg-black/10 border-gray-700' : 'bg-black border-gray-700'}`}>
             <CardHeader>
               <CardTitle className={`text-2xl font-bold ${isDark ? 'text-gray-100' : 'text-gray-100'}`}>
                 {toolName}
@@ -163,11 +163,11 @@ export default function EnhancedToolPageLayout({
               {features.map((feature, index) => (
                 <div 
                   key={index} 
-                  className={`${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-800/50 border-gray-700'} p-6 rounded-xl border transition-all duration-300 hover:border-blue-500 hover:scale-[1.02]`}
+                  className={`${isDark ? 'bg-black/10 border-gray-700' : 'bg-black/10 border-gray-700'} p-6 border transition-all duration-300 hover:border-gray-600 hover:scale-[1.02]`}
                 >
                   <div className="flex items-start">
                     <div className="flex-shrink-0 mr-4 mt-1">
-                      <div className="bg-blue-500/10 p-2 rounded-lg">
+                      <div className="bg-gray-950/10 p-2">
                         {getFeatureIcon(feature)}
                       </div>
                     </div>
@@ -189,9 +189,9 @@ export default function EnhancedToolPageLayout({
               {steps.map((step, index) => (
                 <div 
                   key={index} 
-                  className={`${isDark ? 'bg-gray-800/50 border-gray-700 hover:border-blue-500' : 'bg-gray-800/50 border-gray-700 hover:border-blue-500'} p-6 rounded-xl border transition-all duration-300 hover:scale-[1.02]`}
+                  className={`${isDark ? 'bg-black/10 border-gray-700 hover:border-gray-600' : 'bg-black/10 border-gray-700 hover:border-gray-600'} p-6 border transition-all duration-300 hover:scale-[1.02]`}
                 >
-                  <div className={`text-blue-500 dark:text-blue-400 text-2xl font-bold mb-3`}>0{index + 1}</div>
+                  <div className={`text-gray-600 dark:text-gray-400 text-2xl font-bold mb-3`}>0{index + 1}</div>
                   <p className={`${isDark ? 'text-gray-200' : 'text-gray-200'}`}>{step}</p>
                 </div>
               ))}
@@ -209,9 +209,9 @@ export default function EnhancedToolPageLayout({
               {useCases.map((useCase, index) => (
                 <div 
                   key={index} 
-                  className={`${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-800/50 border-gray-700'} p-6 rounded-xl border transition-all duration-300 hover:border-purple-500 hover:scale-[1.02]`}
+                  className={`${isDark ? 'bg-black/10 border-gray-700' : 'bg-black/10 border-gray-700'} p-6 border transition-all duration-300 hover:border-gray-600 hover:scale-[1.02]`}
                 >
-                  <h3 className={`font-semibold mb-2 ${isDark ? 'text-purple-400' : 'text-purple-500'}`}>{useCase.title}</h3>
+                  <h3 className={`font-semibold mb-2 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{useCase.title}</h3>
                   <p className={`${isDark ? 'text-gray-300' : 'text-gray-300'}`}>{useCase.description}</p>
                 </div>
               ))}
@@ -230,9 +230,9 @@ export default function EnhancedToolPageLayout({
                 <AccordionItem 
                   key={index} 
                   value={`item-${index}`} 
-                  className={`${isDark ? 'bg-gray-800/50 border-gray-700' : 'bg-gray-800/50 border-gray-700'} mb-4 rounded-lg px-6`}
+                  className={`${isDark ? 'bg-black/10 border-gray-700' : 'bg-black/10 border-gray-700'} mb-4 px-6`}
                 >
-                  <AccordionTrigger className={`text-left ${isDark ? 'text-gray-100 hover:text-blue-400' : 'text-gray-100 hover:text-blue-400'}`}>
+                  <AccordionTrigger className={`text-left ${isDark ? 'text-gray-100 hover:text-gray-400' : 'text-gray-100 hover:text-gray-400'}`}>
                     {faq.question}
                   </AccordionTrigger>
                   <AccordionContent className={`${isDark ? 'text-gray-300' : 'text-gray-300'}`}>
@@ -265,7 +265,7 @@ export default function EnhancedToolPageLayout({
               asChild
               variant="gradient"
               size="lg"
-              className="px-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+              className="px-8 bg-gradient-to-r from-gray-700 via-gray-700 to-gray-800 hover:from-gray-800 hover:via-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
             >
               <a href="/merge">
                 Get Started Now

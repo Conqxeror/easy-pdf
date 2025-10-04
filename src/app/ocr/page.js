@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import Tesseract from "tesseract.js";
+import { createTesseractWorker, terminateWorker } from '@/lib/tesseractWorker';
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,12 +17,6 @@ import {
 } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import ToolActions from "@/components/ui/ToolActions";
-
-// Import pdfjs-dist for PDF rendering
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function OcrPage() {
   const [files, setFiles] = useState([]);
@@ -73,7 +68,7 @@ export default function OcrPage() {
         console.log("Starting simplified Tesseract worker initialization...");
         
         // Test if Tesseract can be loaded with local files
-        const testWorker = await Tesseract.createWorker("eng", 1, {          
+        const testWorker = await createTesseractWorker("eng", 1, {          
           logger: (m) => {
             console.log("Tesseract:", m);
             if (m.status === "loading tesseract core") {
@@ -271,6 +266,9 @@ export default function OcrPage() {
         console.log("Loading PDF document...");
         const arrayBuffer = await file.arrayBuffer();
         
+        // Dynamically load pdfjs and configure worker
+        const pdfjs = await loadPdfJs();
+        
         const loadingTask = pdfjs.getDocument({
           data: arrayBuffer,
         });
@@ -323,9 +321,9 @@ export default function OcrPage() {
       const allExtractedText = [];
       let pagesToOcr = [];
 
-      // Create a new worker for this OCR operation
+      // Create a new worker for this OCR operation (lazy-loaded)
       console.log("Creating Tesseract worker for OCR...");
-      worker = await Tesseract.createWorker("eng", 1, {
+      worker = await createTesseractWorker("eng", 1, {
         logger: (m) => {
           console.log("OCR Progress:", m);
           if (m.status === "recognizing") {
@@ -415,10 +413,10 @@ ${data.text.trim()}`);
     } catch (e) {
       console.error("OCR error:", e);
       setError(`Failed to extract text: ${e.message}`);
-    } finally {
-      // Always terminate the worker
+      } finally {
+      // Always terminate the worker (best-effort)
       if (worker) {
-        await worker.terminate();
+        await terminateWorker(worker);
         console.log("OCR worker terminated");
       }
       setIsProcessing(false);
@@ -511,10 +509,10 @@ ${data.text.trim()}`);
       <div className="space-y-6">
         {/* OCR Engine Status */}
         {(workerInitializing || processingMessage) && (
-          <div className="p-4 bg-blue-100 border border-blue-200 rounded-lg">
+          <div className="p-4 bg-gray-100 dark:bg-gray-950 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center space-x-3">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600"></div>
-              <span className="text-blue-800">
+              <div className="animate-spin h-5 w-5 border-b-2 border-gray-700"></div>
+              <span className="text-gray-900">
                 {processingMessage || "Initializing OCR engine..."}
               </span>
             </div>
@@ -522,9 +520,9 @@ ${data.text.trim()}`);
         )}
         
         {workerReady && !workerInitializing && !processingMessage && (
-          <div className="p-4 bg-green-100 border border-green-200 rounded-lg">
+          <div className="p-4 bg-green-100 border border-green-200">
             <div className="flex items-center space-x-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-green-500"></div>
               <span className="text-green-800">OCR engine ready</span>
             </div>
           </div>
@@ -543,21 +541,21 @@ ${data.text.trim()}`);
 
         {files.length > 0 && (
           <>
-            <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 flex flex-col items-center">
+            <div className="p-4 bg-gray-100 dark:bg-gray-950 shadow-inner border border-gray-200 dark:border-gray-700 flex flex-col items-center">
               <h2 className="font-semibold text-xl mb-3">
                 File Preview
               </h2>
               <div className="w-full flex justify-center items-center overflow-hidden">
                 <canvas
                   ref={previewCanvasRef}
-                  className="max-w-full h-auto border border-gray-300 rounded-md shadow-lg"
+                  className="max-w-full h-auto border border-gray-300 shadow-lg"
                   style={{ maxWidth: "100%", height: "auto" }}
                 ></canvas>
               </div>
             </div>
 
             {numPages > 0 && (
-              <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 space-y-4">
+              <div className="p-4 bg-gray-100 dark:bg-gray-950 shadow-inner border border-gray-200 dark:border-gray-700 space-y-4">
                 <h2 className="font-semibold text-xl mb-3">
                   OCR Options
                 </h2>
@@ -657,7 +655,7 @@ ${data.text.trim()}`);
         )}
 
         {result && (
-          <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200">
+          <div className="p-4 bg-gray-100 dark:bg-gray-950 shadow-inner border border-gray-200 dark:border-gray-700">
             <div className="flex justify-between items-center mb-3">
               <h2 className="font-semibold text-xl">Extracted Text</h2>
             </div>

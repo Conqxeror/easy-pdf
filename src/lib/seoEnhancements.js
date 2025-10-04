@@ -87,19 +87,10 @@ export const generateEnhancedMetadata = ({
     },
     
     icons: {
-      icon: [
-        { url: "/icon.png", sizes: "16x16", type: "image/png" },
-        { url: "/icon.png", sizes: "32x32", type: "image/png" },
-        { url: "/icon.png", sizes: "192x192", type: "image/png" },
-        { url: "/icon.png", sizes: "512x512", type: "image/png" }
-      ],
-      apple: [
-        { url: "/icon.png", sizes: "180x180", type: "image/png" }
-      ],
+      icon: [ { url: "/icon.svg", sizes: "any", type: "image/svg+xml" } ],
+      apple: "/icon.svg",
       shortcut: "/favicon.ico",
-      other: [
-        { rel: "mask-icon", url: "/icon.svg", color: "#1f2937" }
-      ]
+      other: [ { rel: "mask-icon", url: "/icon.svg", color: "#1f2937" } ]
     },
     
     openGraph: {
@@ -205,7 +196,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
     "url": baseUrl,
     "logo": {
       "@type": "ImageObject",
-      "url": `${baseUrl}/icon.png`,
+  "url": `${baseUrl}/icon.svg`,
       "width": 512,
       "height": 512
     },

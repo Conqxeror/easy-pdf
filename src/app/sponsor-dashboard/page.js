@@ -44,8 +44,8 @@ const SponsorDashboardPage = () => {
 
   if (showLogin) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 max-w-md w-full">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="bg-gray-950 border border-gray-700 p-8 max-w-md w-full">
           <h1 className="text-2xl font-bold text-white mb-6 text-center">
             Sponsor Dashboard Access
           </h1>
@@ -59,7 +59,7 @@ const SponsorDashboardPage = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                className="w-full bg-gray-950 border border-gray-600 px-3 py-2 text-white focus:outline-none focus:border-gray-600"
                 placeholder="Enter dashboard password"
                 required
               />
@@ -67,7 +67,7 @@ const SponsorDashboardPage = () => {
             
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              className="w-full bg-gray-950 hover:bg-gray-950 text-white font-medium py-2 px-4 transition-colors"
             >
               Access Dashboard
             </button>
@@ -75,11 +75,11 @@ const SponsorDashboardPage = () => {
           
           <div className="mt-6 text-center">
             <p className="text-gray-400 text-sm">
-              Demo password: <code className="bg-gray-700 px-2 py-1 rounded">demo</code>
+              Demo password: <code className="bg-gray-700 px-2 py-1">demo</code>
             </p>
             <button
               onClick={() => router.push('/sponsors')}
-              className="text-blue-400 hover:text-blue-300 text-sm mt-2"
+              className="text-gray-400 hover:text-gray-300 text-sm mt-2"
             >
               ← Back to Sponsors Page
             </button>
@@ -91,9 +91,9 @@ const SponsorDashboardPage = () => {
 
   if (!isAuthorized) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500 mx-auto"></div>
+          <div className="animate-spin h-32 w-32 border-b-2 border-gray-600 mx-auto"></div>
           <p className="text-gray-400 mt-4">Loading dashboard...</p>
         </div>
       </div>

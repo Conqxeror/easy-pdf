@@ -1,11 +1,8 @@
 "use client";
 
-
-
 import React, { useState, useRef, useEffect, useCallback } from "react";
-
-
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -18,13 +15,6 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-
-// Import pdfjs legacy build for PDF rendering
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
-// Configure pdfjs worker only on the client to avoid SSR/runtime errors
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function PageNumbersPage() {
   const [files, setFiles] = useState([]);
@@ -267,6 +257,10 @@ export default function PageNumbersPage() {
     try {
       const file = newFiles[0];
       const arrayBuffer = await file.arrayBuffer();
+      
+      // Dynamically load pdfjs and configure worker
+      const pdfjs = await loadPdfJs();
+      
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       setPdfDocProxy(pdf); // This will trigger preview render via useEffect
       setNumPages(pdf.numPages);
@@ -508,7 +502,7 @@ export default function PageNumbersPage() {
         />
 
         {files.length > 0 && (
-          <div className="mt-4 p-4 bg-gray-900 rounded-lg border border-gray-800">
+          <div className="mt-4 p-4 bg-black border border-gray-600 rounded-sm">
             <div className="flex justify-between items-center">
               <span>{files[0].name}</span>
               <span className="text-sm text-gray-400">
@@ -527,13 +521,13 @@ export default function PageNumbersPage() {
               {Array.from({ length: Math.min(5, numPages) }).map((_, index) => (
                 <div
                   key={index}
-                  className="relative border-2 border-gray-600 rounded-lg p-2"
+                  className="relative border-2 border-gray-600 p-2"
                 >
                   <canvas
                     ref={(el) => (previewCanvasRef.current = el)}
-                    className="w-32 h-40 bg-gray-800 border border-gray-700 rounded"
+                    className="w-32 h-40 bg-gray-950 border border-gray-600 rounded-sm"
                   />
-                  <div className="absolute top-1 left-1 bg-black/70 text-white text-xs px-1 rounded">
+                  <div className="absolute top-1 left-1 bg-black/70 text-white text-xs px-1">
                     {index + 1}
                   </div>
                 </div>
@@ -544,7 +538,7 @@ export default function PageNumbersPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
-            <Card className="bg-gray-900 border-gray-800">
+            <Card className="bg-black border-gray-600">
               <CardHeader>
                 <CardTitle>
                   Add Page Numbers, Header & Footer
@@ -570,7 +564,7 @@ export default function PageNumbersPage() {
                           setCustomText("");
                         }
                       }}
-                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                      className="h-4 w-4 text-gray-700 bg-black border-gray-600 focus:ring-gray-600"
                     />
                     <label
                       htmlFor="addPageNumbers"
@@ -590,7 +584,7 @@ export default function PageNumbersPage() {
                     value={headerText}
                     onChange={(e) => setHeaderText(e.target.value)}
                     placeholder="Enter header text (use {NUM} for page number, {TOTAL} for total pages)"
-                    className="w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded"
+                    className="w-full p-2 bg-black text-gray-100 border border-gray-600 rounded-sm"
                   />
                 </div>
 
@@ -603,7 +597,7 @@ export default function PageNumbersPage() {
                     value={footerText}
                     onChange={(e) => setFooterText(e.target.value)}
                     placeholder="Enter footer text (use {NUM} for page number, {TOTAL} for total pages)"
-                    className="w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded"
+                    className="w-full p-2 bg-black text-gray-100 border border-gray-600 rounded-sm"
                   />
                 </div>
 
@@ -615,7 +609,7 @@ export default function PageNumbersPage() {
                     <select
                       value={fontSize}
                       onChange={(e) => setFontSize(Number(e.target.value))}
-                      className="w-full p-2 bg-gray-900 text-gray-100 border border-gray-700 rounded"
+                      className="w-full p-2 bg-black text-gray-100 border border-gray-600 rounded-sm"
                     >
                       {[8, 10, 12, 14, 16, 18, 20, 24, 28, 32].map((size) => (
                         <option key={size} value={size}>
@@ -630,12 +624,12 @@ export default function PageNumbersPage() {
                       Text Color
                     </Label>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="color"
-                        value={textColor}
-                        onChange={(e) => setTextColor(e.target.value)}
-                        className="h-10 w-16 p-1 bg-gray-900 border border-gray-700 rounded"
-                      />
+                        <input
+                          type="color"
+                          value={textColor}
+                          onChange={(e) => setTextColor(e.target.value)}
+                          className="h-10 w-16 p-1 bg-black border border-gray-600 rounded-sm"
+                        />
                       <span className="text-gray-300 text-sm">
                         {textColor}
                       </span>
@@ -659,10 +653,10 @@ export default function PageNumbersPage() {
                       <button
                         key={pos}
                         onClick={() => setPosition(pos)}
-                        className={`p-2 text-xs rounded border ${
+                        className={`p-2 text-xs border ${
                           position === pos
-                            ? "bg-blue-600 border-blue-500 text-white"
-                            : "bg-gray-800 border-gray-700 text-gray-200 hover:bg-gray-700"
+                            ? "bg-gray-950 border-gray-600 text-white"
+                            : "bg-black/10 border-gray-700 text-gray-200 hover:bg-black/20"
                         }`}
                       >
                         {pos.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
@@ -683,7 +677,7 @@ export default function PageNumbersPage() {
                       name="pageRange"
                       checked={applyToMode === "all"}
                       onChange={() => setApplyToMode("all")}
-                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                      className="h-4 w-4 text-gray-700 bg-black border-gray-600 focus:ring-gray-600"
                     />
                       <label
                         htmlFor="allPages"
@@ -699,7 +693,7 @@ export default function PageNumbersPage() {
                       name="pageRange"
                       checked={applyToMode === "single"}
                       onChange={() => setApplyToMode("single")}
-                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                      className="h-4 w-4 text-gray-700 bg-black border-gray-600 focus:ring-gray-600"
                     />
                       <label
                         htmlFor="singlePage"
@@ -715,7 +709,7 @@ export default function PageNumbersPage() {
                         onChange={(e) =>
                           setSinglePageIdx(Math.max(0, Math.min(numPages - 1, Number(e.target.value) - 1)))
                         }
-                        className="w-16 p-1 bg-gray-900 text-gray-100 border border-gray-700 rounded text-sm"
+                        className="w-16 p-1 bg-black text-gray-100 border border-gray-600 text-sm rounded-sm"
                         disabled={applyToMode !== "single"}
                       />
                     </div>
@@ -726,7 +720,7 @@ export default function PageNumbersPage() {
                       name="pageRange"
                       checked={applyToMode === "range"}
                       onChange={() => setApplyToMode("range")}
-                      className="h-4 w-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                      className="h-4 w-4 text-gray-700 bg-gray-950 border-gray-600 focus:ring-gray-600"
                     />
                       <label
                         htmlFor="pageRange"
@@ -742,7 +736,7 @@ export default function PageNumbersPage() {
                         onChange={(e) =>
                           setPageRangeStart(Math.max(1, Math.min(numPages, Number(e.target.value))))
                         }
-                        className="w-16 p-1 bg-gray-900 text-gray-100 border border-gray-700 rounded text-sm"
+                        className="w-16 p-1 bg-black text-gray-100 border border-gray-600 text-sm rounded-sm"
                         disabled={applyToMode !== "range"}
                       />
                       <span className="text-sm">to</span>
@@ -754,7 +748,7 @@ export default function PageNumbersPage() {
                         onChange={(e) =>
                           setPageRangeEnd(Math.max(1, Math.min(numPages, Number(e.target.value))))
                         }
-                        className="w-16 p-1 bg-gray-900 text-gray-100 border border-gray-700 rounded text-sm"
+                        className="w-16 p-1 bg-black text-gray-100 border border-gray-600 text-sm rounded-sm"
                         disabled={applyToMode !== "range"}
                       />
                     </div>
@@ -768,7 +762,7 @@ export default function PageNumbersPage() {
                   >
                     {isProcessing ? (
                       <span className="flex items-center justify-center">
-                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                        <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                         Processing...
                       </span>
                     ) : (
@@ -780,7 +774,7 @@ export default function PageNumbersPage() {
           </div>
 
           <div>
-            <Card className="mt-6 bg-gray-900 border-gray-800">
+            <Card className="mt-6 bg-gray-950 border border-gray-700">
               <CardHeader>
                 <CardTitle>Download</CardTitle>
               </CardHeader>

@@ -2,19 +2,14 @@
 
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield, Loader2 } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
-
-// Configure pdf.js worker only on client and use CDN worker for compatibility
-if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function PDFAccessibilityChecker() {
   const [file, setFile] = useState(null);
@@ -109,6 +104,10 @@ export default function PDFAccessibilityChecker() {
     let pdf = null;
     try {
       const arrayBuffer = await file.arrayBuffer();
+      
+      // Dynamically load pdfjs and configure worker
+      const pdfjsLib = await loadPdfJs();
+      
       pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       
       const analysisResults = {
@@ -432,7 +431,7 @@ export default function PDFAccessibilityChecker() {
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${
+                className={`border-2 border-dashed p-6 text-center cursor-pointer transition-colors ${
                   isDragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/25'
                 }`}
               >
@@ -451,7 +450,7 @@ export default function PDFAccessibilityChecker() {
               </div>
 
               {file && (
-                <div className="mt-4 p-3 border rounded-lg">
+                <div className="mt-4 p-3 border">
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4" aria-hidden="true" />
                     <span className="text-sm font-medium">{file.name}</span>
@@ -627,7 +626,7 @@ export default function PDFAccessibilityChecker() {
                       <Card key={index}>
                         <CardContent className="pt-4">
                           <div className="flex items-start gap-3">
-                            <div className={`p-2 rounded-full ${
+                            <div className={`p-2 ${
                               check.passed ? 'bg-green-100' : 'bg-red-100'
                             }`}>
                               {check.passed ? (
@@ -646,7 +645,7 @@ export default function PDFAccessibilityChecker() {
                                 {check.message}
                               </p>
                               {check.recommendation && (
-                                <p className="text-xs text-blue-600 bg-blue-50 p-2 rounded">
+                                <p className="text-xs text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-950 p-2">
                                   {check.recommendation}
                                 </p>
                               )}
@@ -703,7 +702,7 @@ export default function PDFAccessibilityChecker() {
                     <Card key={index}>
                       <CardContent className="pt-4">
                         <div className="flex items-start gap-3">
-                          <div className={`p-2 rounded-full ${
+                          <div className={`p-2 ${
                             rec.priority === 'high' ? 'bg-red-100' :
                             rec.priority === 'medium' ? 'bg-yellow-100' : 'bg-green-100'
                           }`}>

@@ -1,7 +1,20 @@
 "use client";
 
 import React, { useState, useRef, useEffect  } from "react";
-import { PDFDocument, rgb, degrees, StandardFonts } from "pdf-lib";
+
+// Lazy-load pdf-lib to keep it out of the initial client bundle for this page
+let _pdfLib = null;
+async function getPdfLib() {
+  if (_pdfLib) return _pdfLib;
+  const mod = await import('pdf-lib');
+  _pdfLib = {
+    PDFDocument: mod.PDFDocument || mod.default?.PDFDocument,
+    rgb: mod.rgb || (mod.default && mod.default.rgb),
+    degrees: mod.degrees || (mod.default && mod.default.degrees),
+    StandardFonts: mod.StandardFonts || (mod.default && mod.default.StandardFonts)
+  };
+  return _pdfLib;
+}
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -197,15 +210,16 @@ export default function WatermarkPdfPage() {
     setIsProcessing(true);
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const { PDFDocument, rgb, degrees, StandardFonts } = await getPdfLib();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
       const pages = pdfDoc.getPages();
 
       // Convert hex color to RGB (0-1 range for pdf-lib)
-      const [r, g, b] = hexToRgb(color);
-      const textColorRgb = rgb(r / 255, g / 255, b / 255);
-      const watermarkOpacity = opacity / 100;
-      const watermarkRotation = degrees(rotation);
-      const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold); // Embed a standard font
+  const [r, g, b] = hexToRgb(color);
+  const textColorRgb = rgb(r / 255, g / 255, b / 255);
+  const watermarkOpacity = opacity / 100;
+  const watermarkRotation = degrees(rotation);
+  const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold); // Embed a standard font
 
       let embeddedWatermarkImg = null;
       let watermarkImgWidth = 0;
@@ -417,20 +431,20 @@ export default function WatermarkPdfPage() {
 
         <Tabs
           defaultValue="text"
-          className="w-full bg-gray-900 rounded-md p-4 border border-gray-700"
+          className="w-full bg-black p-4 border border-gray-700"
         >
-          <TabsList className="grid w-full grid-cols-2 bg-gray-700">
+          <TabsList className="grid w-full grid-cols-2 bg-gray-950">
             <TabsTrigger
               value="text"
               onClick={() => setWatermarkType("text")}
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-700 data-[state=inactive]:text-gray-300 transition-colors"
+              className="data-[state=active]:bg-gray-950 data-[state=active]:text-white data-[state=inactive]:bg-gray-950 data-[state=inactive]:text-gray-300 transition-colors"
             >
               Text Watermark
             </TabsTrigger>
             <TabsTrigger
               value="image"
               onClick={() => setWatermarkType("image")}
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=inactive]:bg-gray-700 data-[state=inactive]:text-gray-300 transition-colors"
+              className="data-[state=active]:bg-gray-950 data-[state=active]:text-white data-[state=inactive]:bg-gray-950 data-[state=inactive]:text-gray-300 transition-colors"
             >
               Image Watermark
             </TabsTrigger>
@@ -450,7 +464,7 @@ export default function WatermarkPdfPage() {
                 value={watermarkText}
                 onChange={(e) => setWatermarkText(e.target.value)}
                 placeholder="Enter watermark text"
-                className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full bg-gray-950 text-gray-100 border-gray-600 focus:border-gray-600 focus:ring-gray-600"
               />
             </div>
 
@@ -460,7 +474,7 @@ export default function WatermarkPdfPage() {
               </Label>
               <div className="flex items-center gap-3">
                 <div
-                  className="w-10 h-10 rounded-md border border-gray-600 cursor-pointer shadow-md"
+                  className="w-10 h-10 border border-gray-600 cursor-pointer shadow-md"
                   style={{ backgroundColor: color }}
                   onClick={() => setShowColorPicker(!showColorPicker)}
                   aria-label="Toggle color picker"
@@ -468,7 +482,7 @@ export default function WatermarkPdfPage() {
                 <span className="text-sm text-gray-300">{color}</span>
               </div>
               {showColorPicker && (
-                <div className="p-4 border border-gray-600 rounded-md bg-gray-700 mt-2">
+                <div className="p-4 border border-gray-600 bg-gray-950 mt-2">
                   <HexColorPicker
                     color={color}
                     onChange={handleColorChange}
@@ -529,7 +543,7 @@ export default function WatermarkPdfPage() {
                     alt="Watermark preview"
                     width={80}
                     height={80}
-                    className="object-contain border border-gray-600 rounded-md shadow-md"
+                    className="object-contain border border-gray-600 shadow-md"
                     onError={(e) => {
                       // fallback to placeholder on error
                       e.currentTarget.onerror = null;
@@ -544,7 +558,7 @@ export default function WatermarkPdfPage() {
                       if (fileInputRef.current)
                         fileInputRef.current.value = "";
                     }}
-                    className="text-gray-200 border-gray-600 hover:bg-gray-600 hover:text-white"
+                    className="text-gray-200 border-gray-600 hover:bg-gray-950 hover:text-white"
                   >
                     Change Image
                   </Button>
@@ -564,7 +578,7 @@ export default function WatermarkPdfPage() {
                   ref={fileInputRef}
                   accept="image/jpeg,image/png"
                   onChange={handleImageUpload}
-                  className="cursor-pointer bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                  className="cursor-pointer bg-gray-950 text-gray-100 border-gray-600 focus:border-gray-600 focus:ring-gray-600"
                 />
                 <p className="text-sm text-gray-400">
                   Recommended: Transparent PNG, JPEG (Max 5MB)
@@ -618,7 +632,7 @@ export default function WatermarkPdfPage() {
           <RadioGroup
             value={position}
             onValueChange={setPosition}
-            className="grid grid-cols-3 gap-2 p-2 rounded-md bg-gray-700 border border-gray-600"
+            className="grid grid-cols-3 gap-2 p-2 bg-gray-950 border border-gray-600"
           >
             <div>
               <RadioGroupItem
@@ -628,7 +642,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="top-left"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Top Left
               </Label>
@@ -641,7 +655,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="top-right"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Top Right
               </Label>
@@ -654,7 +668,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="center"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Center
               </Label>
@@ -667,7 +681,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="bottom-left"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Bottom Left
               </Label>
@@ -680,7 +694,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="bottom-right"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Bottom Right
               </Label>
@@ -693,7 +707,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="diagonal"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Diagonal
               </Label>
@@ -706,7 +720,7 @@ export default function WatermarkPdfPage() {
               />
               <Label
                 htmlFor="tiled"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-gray-600 bg-gray-700 p-2 hover:bg-gray-600 peer-data-[state=checked]:border-blue-500 [&:has([data-state=checked])]:border-blue-500 text-gray-300"
+                className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-2 hover:bg-gray-950 peer-data-[state=checked]:border-gray-600 [&:has([data-state=checked])]:border-gray-600 text-gray-300"
               >
                 Tiled
               </Label>
@@ -747,14 +761,14 @@ export default function WatermarkPdfPage() {
               (watermarkType === "text" && !watermarkText.trim()) || // Ensure text is not just whitespace
               (watermarkType === "image" && !watermarkImage)
             }
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            className="px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
             aria-label="Add watermark to PDF"
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Processing...
               </span>
             ) : (
@@ -764,7 +778,7 @@ export default function WatermarkPdfPage() {
         </div>
 
         {watermarkedUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -776,7 +790,7 @@ export default function WatermarkPdfPage() {
                 src={watermarkedUrl}
                 width="100%"
                 height="500px"
-                className="border border-gray-600 rounded-md shadow-inner"
+                className="border border-gray-600 shadow-inner"
                 title="PDF Preview"
               />
             </div>

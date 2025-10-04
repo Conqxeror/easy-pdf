@@ -3,9 +3,12 @@
 
 import React, { useState, useCallback, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { FileText, UploadCloud, X, CheckCircle } from "lucide-react";
+import { FileText, UploadCloud, X, CheckCircle, AlertCircle } from "lucide-react";
 import Loader from "./Loader";
 import { Button } from "./button";
+import { Card } from "./card";
+import { Progress } from "./progress";
+import { Badge } from "./badge";
 
 const FileDropzone = ({
   accept = ".pdf",
@@ -180,15 +183,16 @@ const FileDropzone = ({
 
   return (
     <div className="w-full space-y-4">
-      <label className="block text-sm font-medium text-gray-300">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
 
-      <div
+      <Card
+        variant={isDragActive ? "elevated" : "glass"}
         className={cn(
-          "relative border-2 border-dashed rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition-all duration-200",
+          "relative border-2 border-dashed cursor-pointer transition-all duration-300 overflow-hidden",
           isDragActive
-            ? "border-blue-500 bg-blue-900/20 scale-[1.02]"
-            : "border-gray-600 hover:border-gray-500 bg-gray-800 hover:bg-gray-700/50",
-          (internalError || externalError) && "border-red-500"
+            ? "border-gray-600 dark:border-gray-400 bg-gray-50/50 dark:bg-gray-950/30 scale-[1.02] shadow-xl shadow-gray-500/20 animate-pulse"
+            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg",
+          (internalError || externalError) && "border-red-500 dark:border-red-400 bg-red-50/50 dark:bg-red-950/20"
         )}
         onClick={openFileDialog}
         onDragEnter={handleDrag}
@@ -199,100 +203,139 @@ const FileDropzone = ({
         tabIndex={0}
         aria-label="File drop zone"
       >
-        {isLoading ? (
-          <div className="flex flex-col items-center">
-            <Loader className="mb-2" />
-            <span className="text-sm text-gray-400">Processing files...</span>
-          </div>
-        ) : (
-          <>
-            <div className="mb-4 p-3 rounded-full bg-blue-500/10">
-              <UploadCloud
-                className={cn(
-                  "w-8 h-8 transition-colors",
-                  isDragActive ? "text-blue-400" : "text-blue-500"
-                )}
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-lg font-medium text-gray-200 mb-1">{description}</p>
-              <p className="text-sm text-gray-400">
-                Accepted:{" "}
-                {accept
-                  .split(",")
-                  .map((s) => s.replace(".", "").toUpperCase())
-                  .join(", ")}{" "}
-                (max {maxSize / 1024 / 1024}MB)
-              </p>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-4 border-blue-500 text-blue-400 hover:bg-blue-500/10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Browse Files
-            </Button>
-          </>
+        {/* Animated Background Gradient on Drag */}
+        {isDragActive && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 via-gray-600/10 to-gray-600/10 animate-gradient" />
         )}
 
-        <input
-          ref={inputRef}
-          type="file"
-          accept={inputAcceptAttribute}
-          multiple={multiple}
-          className="hidden"
-          onChange={handleChange}
-          aria-hidden="true"
-        />
-      </div>
+        <div className="relative p-8 flex flex-col items-center justify-center">
+          {isLoading ? (
+            <div className="flex flex-col items-center animate-in fade-in-0 duration-300">
+              <Loader className="mb-2" />
+              <span className="text-sm text-gray-600 dark:text-gray-400">Processing files...</span>
+            </div>
+          ) : (
+            <>
+              <div className={cn(
+                "mb-4 p-4 transition-all duration-300",
+                isDragActive 
+                  ? "bg-gray-950 dark:bg-gray-950 shadow-lg scale-110" 
+                  : "bg-gray-100 dark:bg-gray-950/30 group-hover:scale-105"
+              )}>
+                <UploadCloud
+                  className={cn(
+                    "w-8 h-8 transition-all duration-300",
+                    isDragActive ? "text-white animate-bounce" : "text-gray-700 dark:text-gray-400"
+                  )}
+                />
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                  {isDragActive ? "Drop files here!" : description}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {accept
+                    .split(",")
+                    .map((s) => s.replace(".", "").toUpperCase())
+                    .join(", ")}{" "}
+                  • Max {maxSize / 1024 / 1024}MB per file
+                </p>
+              </div>
+              {!isDragActive && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="mt-6 animate-in fade-in-0 slide-in-from-bottom-2 duration-500"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Browse Files
+                </Button>
+              )}
+            </>
+          )}
+
+          <input
+            ref={inputRef}
+            type="file"
+            accept={inputAcceptAttribute}
+            multiple={multiple}
+            className="hidden"
+            onChange={handleChange}
+            aria-hidden="true"
+          />
+        </div>
+      </Card>
 
       {files.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Badge variant="outline" className="gap-1">
+              <CheckCircle className="w-3 h-3 text-green-500" />
+              {files.length} {files.length === 1 ? 'file' : 'files'} selected
+            </Badge>
+            {files.length > 1 && (
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                Total: {(files.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2)} MB
+              </span>
+            )}
+          </div>
+          
           {files.map((file, index) => (
-            <div
+            <Card
               key={`${file.name}-${index}`}
-              className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors"
+              variant="glass"
+              className="group hover:shadow-lg transition-all duration-300 animate-in fade-in-0 slide-in-from-bottom-2"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <div className="flex items-center space-x-3">
-                <div className="p-2 rounded-lg bg-blue-500/10">
-                  <FileText className="w-5 h-5 text-blue-400" />
+              <div className="flex items-center justify-between p-4">
+                <div className="flex items-center space-x-3 flex-1 min-w-0">
+                  <div className="p-2 bg-gray-950 dark:bg-gray-950 shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <FileText className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="text-sm flex-1 min-w-0">
+                    <p className="text-gray-900 dark:text-gray-100 font-medium truncate" title={file.name}>
+                      {file.name}
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                    </p>
+                  </div>
                 </div>
-                <div className="text-sm">
-                  <p className="text-gray-200 font-medium line-clamp-1">{file.name}</p>
-                  <p className="text-xs text-gray-400">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
-                  </p>
+                <div className="flex items-center space-x-2 ml-2">
+                  <div className="flex items-center space-x-1 text-green-600 dark:text-green-400 animate-in fade-in-0 zoom-in-95 duration-300">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="text-xs font-medium hidden sm:inline">Ready</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFile(index);
+                    }}
+                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200"
+                    aria-label={`Remove ${file.name}`}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeFile(index);
-                  }}
-                  className="text-gray-400 hover:text-red-400 transition-colors p-1"
-                  aria-label={`Remove ${file.name}`}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
 
       {(internalError || externalError) && (
-        <div className="mt-2 p-4 bg-red-900/20 border border-red-500 rounded-lg">
-          <div className="text-red-400 text-sm">
-            {(internalError || externalError).split("\n").map((line, i) => (
-              <p key={i} className="mb-1 last:mb-0">{line}</p>
-            ))}
+        <Card variant="glass" className="border-red-300 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20 animate-in fade-in-0 slide-in-from-top-2 duration-300">
+          <div className="p-4 flex items-start space-x-3">
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+            <div className="text-red-700 dark:text-red-300 text-sm flex-1">
+              {(internalError || externalError).split("\n").map((line, i) => (
+                <p key={i} className="mb-1 last:mb-0">{line}</p>
+              ))}
+            </div>
           </div>
-        </div>
+        </Card>
       )}
     </div>
   );

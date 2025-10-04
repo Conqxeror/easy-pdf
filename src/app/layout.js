@@ -21,10 +21,35 @@ const structuredData = generateComprehensiveJsonLd('homepage');
 const performanceHints = generatePerformanceHints();
 
 export default function RootLayout({ children }) {
+  const cacheBust = Date.now();
+
+  // Inline white pen-tool SVG data URL to force immediate favicon rendering in browsers
+  const inlineFaviconSvg = encodeURIComponent(`<?xml version="1.0" encoding="UTF-8"?>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+    <path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="m2.3 2.3 7.286 7.286" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="11" cy="11" r="2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`);
+  const inlineFavicon = `data:image/svg+xml;utf8,${inlineFaviconSvg}`;
+
   return (
-    <html lang="en" className="scroll-smooth" style={{ backgroundColor: '#000000' }}>
+  <html lang="en" className="scroll-smooth" style={{ backgroundColor: '#000000' }}>
       <head>
+        {/* Inline data-URL favicon (highest priority) */}
+        <link rel="icon" href={inlineFavicon} />
         <link rel="manifest" href="/site.webmanifest" />
+    {/* Favicon & touch icons with cache-bust to ensure fresh load during dev */}
+  {/* Prefer ICO/PNG (white) for tab visibility; SVG left as fallback */}
+  <link rel="icon" href={`/favicon.ico?v=${cacheBust}`} type="image/x-icon" />
+  <link rel="icon" href={`/favicon.png?v=${cacheBust}`} sizes="16x16" />
+  <link rel="shortcut icon" href={`/favicon.png?v=${cacheBust}`} />
+  <link rel="apple-touch-icon" href={`/apple-touch-icon.png?v=${cacheBust}`} />
+    {/* Prefer SVG icon for modern browsers as a fallback */}
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <meta name="msapplication-TileImage" content={`/apple-touch-icon.png?v=${cacheBust}`} />
+  {/* Safari pinned tab mask icon (use white for dark tab visibility) */}
+  <link rel="mask-icon" href="/icon.svg" color="#ffffff" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
         
         {/* Performance Optimizations */}

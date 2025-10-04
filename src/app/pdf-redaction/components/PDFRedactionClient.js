@@ -236,10 +236,10 @@ export default function PDFRedactionClient() {
                     <h4 className="font-semibold">Found Terms ({foundTerms.length})</h4>
                     <div className="max-h-60 overflow-y-auto space-y-2">
                       {foundTerms.map((term) => (
-                        <div key={term.id} className="flex items-center space-x-3 p-2 border rounded border-gray-700 bg-gray-800">
+                        <div key={term.id} className="flex items-center space-x-3 p-2 border border-gray-700 bg-gray-950">
                           <Checkbox checked={selectedTerms.has(term.id)} onCheckedChange={() => toggleTermSelection(term.id)} />
                           <div className="flex-1">
-                            <span className="font-mono text-sm bg-gray-700 px-2 py-1 rounded">{term.text}</span>
+                            <span className="font-mono text-sm bg-gray-950 px-2 py-1">{term.text}</span>
                             <span className="text-sm text-gray-400 ml-2">Page {term.page} at ({term.x}, {term.y})</span>
                           </div>
                         </div>
@@ -268,7 +268,7 @@ export default function PDFRedactionClient() {
                   <h4 className="font-semibold">Redaction Areas ({redactionAreas.length})</h4>
                   <div className="max-h-60 overflow-y-auto space-y-3">
                     {redactionAreas.map((area) => (
-                      <div key={area.id} className="p-4 border rounded border-gray-700 bg-gray-800 space-y-3">
+                      <div key={area.id} className="p-4 border border-gray-700 bg-gray-950 space-y-3">
                         <div className="flex justify-between items-center">
                           <h5 className="font-medium">Area #{area.id}</h5>
                           <Button variant="destructive" size="sm" onClick={() => removeRedactionArea(area.id)}>Remove</Button>
@@ -321,7 +321,7 @@ export default function PDFRedactionClient() {
                 </div>
               </div>
 
-              <div className="p-4 bg-gray-800 rounded-lg">
+              <div className="p-4 bg-gray-950">
                 <h4 className="font-semibold mb-2">Redaction Summary:</h4>
                 <ul className="text-sm space-y-1 text-gray-300">
                   <li>• Selected search terms: {selectedTerms.size}</li>

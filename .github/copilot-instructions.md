@@ -1,51 +1,52 @@
 # Copilot Instructions for easy-pdf
 
-## Project Overview
-- This is a Next.js 15 monorepo for a comprehensive PDF & document toolkit web app. Major features are implemented as modular tools under `src/app/`, each with its own directory (e.g., `compress`, `merge`, `ocr`, etc.).
-- UI components are organized in `src/components/` and subfolders (e.g., `ui/`, `layout/`, `home/`). Shared logic and data live in `src/lib/`.
-- The app uses Tailwind CSS for styling, Radix UI for accessible components, and PDF.js/Tesseract.js for PDF/OCR operations.
+# Copilot Instructions for easy-pdf
 
-## Architecture & Patterns
-- **Tool Routing:** Each tool is a Next.js route under `src/app/TOOLNAME/`. Tool-specific logic/UI is colocated in these folders.
-- **Shared Components:** Reusable UI elements are in `src/components/ui/` and `src/components/layout/`.
-- **Context & State:** App-wide state (e.g., theme) is managed via React Contexts in `src/contexts/`.
-- **Lib Utilities:** Common logic (PDF manipulation, analytics, metadata, etc.) is in `src/lib/`. Use these utilities for cross-tool features.
-- **Data:** Static data (tool lists, FAQ, sponsors) is in `src/lib/` as JS/JSON modules.
+Short, actionable guidance to work effectively in this repository.
 
-## Developer Workflows
-- **Build:** `npm run build` (Next.js build)
-- **Dev Server:** `npm run dev` (hot reload, port 3000)
-- **Lint:** `npm run lint` (uses custom ESLint configs: see `eslint.config.*.mjs`)
-- **No default test scripts**; add tests as needed. No test runner is preconfigured.
-- **Debugging:** Use browser/Next.js dev tools. No custom debug scripts.
+Overview
+- Framework: Next.js (app router, Next 15). Routes/tools live under `src/app/`.
+- Styling: Tailwind CSS is used everywhere; utility classes are embedded in JSX.
+- UI primitives: `src/components/ui/` contains canonical components (Button, Card, Input, Progress, Slider, Tooltip, Badge, etc.). Reuse these.
 
-## Conventions & Practices
-- **File Naming:** Use PascalCase for React components, camelCase for hooks/utilities.
-- **Component Structure:** Prefer function components. Use Tailwind for styling, Radix for accessibility.
-- **Routing:** All tools are accessed via `/TOOLNAME` routes. Shared layouts are in `src/app/layout.js` and tool-specific layouts in each tool folder.
-- **No Redux/MobX:** State is managed via React Context or local state only.
-- **No serverless functions or API routes** are present; all logic is client-side.
-- **External Libraries:** PDF.js, Tesseract.js, Framer Motion, Radix UI, Tailwind CSS.
+Key architecture notes
+- Tool-per-route: each tool is a folder `src/app/<tool>/` with `page.js`. Client-heavy logic (PDF processing) belongs in `src/app/<tool>/components/*` and should be client-only (`"use client"`).
+- Dynamic imports: heavy libs (PDF.js, pdf-lib, Tesseract) are dynamically imported in client components via `src/lib/pdfUtils.js` / `advancedPdfProcessing.js`.
+- Shared layout: app-level layout is in `src/app/layout.js` and `src/app/ClientLayout.js`.
 
-## Integration Points
-- **PDF.js**: Used for PDF rendering/manipulation in browser (see `src/lib/pdfUtils.js`).
-- **Tesseract.js**: Used for OCR (see `src/lib/advancedPdfProcessing.js`).
-- **Analytics:** Custom logic in `src/lib/analytics.js` and `src/app/vercel-analytics.js`.
-- **SEO:** Structured data and enhancements in `src/lib/seoEnhancements.js` and `src/lib/structuredData.js`.
+Developer workflows (commands you should run)
+- Dev server: `npm run dev` (open http://localhost:3000)  specifically.
+- Production build: `npm run build`
+- Lint: `npm run lint` (run after edits; maintains code health)
+- Visual QA: manually check Home, Compress, Merge, OCR pages in dark mode after styling changes.
 
-## Examples
-- To add a new tool: create a folder under `src/app/TOOLNAME/` with `page.js` and (optionally) `layout.js`.
-- To use a shared UI element: import from `src/components/ui/`.
-- To manipulate PDFs: use helpers from `src/lib/pdfUtils.js`.
+Project-specific conventions & gotchas
+- "use client" boundaries: Do not import browser-only libs into server components; put them in client components or use dynamic import.
+- Tailwind edits: Many className strings are computed/template-literals. Avoid global regex replacements; change className locals and run `npm run lint` + `npm run build`.
+- Dark-mode consistency: Components frequently include both light and `dark:` variants. Preserve `dark:` tokens (e.g., `bg-gray-50 dark:bg-gray-950`).
+- Accessibility: UI primitives use ARIA and keyboard handlers—preserve these when refactoring (see `src/components/ui/*`).
 
-## Key Files & Directories
-- `src/app/` — main app routes/tools
-- `src/components/` — shared UI
-- `src/lib/` — utilities/data
-- `src/contexts/` — React Contexts
+Integration & important files
+- PDF helpers: `src/lib/pdfUtils.js`, `src/lib/advancedPdfProcessing.js` (look here for browser-only integration patterns).
+- Analytics: `src/lib/analytics.js` and `src/app/vercel-analytics.js`.
+- UI primitives: `src/components/ui/` (Button, Input, Progress, Slider, Badge, Tooltip, Card).
+
+Concrete examples
+- Adding a new tool page:
+	- Create `src/app/<tool>/page.js` and client components under `src/app/<tool>/components/`. Keep heavy libs in client components.
+- Progress/Slider dark pattern:
+	- Track: `bg-gray-950` (dark)
+	- Indicator: `bg-white/70`
+
+Quality gates
+- After any visual or component change: run `npm run lint` then `npm run build` to catch SSR and compile-time issues.
+- Follow with manual visual QA in dark mode for Home, Compress, Merge, and OCR pages.
+
+If anything here is unclear or you want additional examples (e.g., component extension pattern or a small refactor), ask and I will update this file.
 - `public/` — static assets
-- `eslint.config.*.mjs` — linting configs
 
----
-
-If any section is unclear or missing, please provide feedback for further refinement.
+Important Messages:
+- Never ever run "npm run build" & "npm run dev" as it will be already running in the background & when you run this command again other crashes. Tell user to run these commands when needed.
+- Keep consistency all around the project.
+- If you find anything which is an issue related to UI, SEO, or anything, while reading code or modifying code or you come around any way, then fix it & inform user.
+- Whenever working on an issue or implementation, look for similar components that might have same issue and fix them too.

@@ -353,7 +353,7 @@ export default function FormFillerPage() {
         {numPages > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Text Input Controls */}
-            <div className="p-4 bg-gray-100 rounded-lg shadow-inner border border-gray-200 space-y-4">
+            <div className="p-4 bg-gray-100 shadow-inner border border-gray-200 space-y-4">
               <h2 className="font-semibold text-xl mb-3 text-gray-100">
                 Text Settings
               </h2>
@@ -370,7 +370,7 @@ export default function FormFillerPage() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder="Enter text to add to PDF"
-                  className="mt-1 bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 bg-gray-950 text-gray-100 border-gray-600 focus:border-gray-600 focus:ring-gray-600"
                 />
               </div>
 
@@ -389,7 +389,7 @@ export default function FormFillerPage() {
                   >
                     <SelectTrigger
                       id="pageSelect"
-                      className="w-full mt-1 bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="w-full mt-1 bg-white text-gray-800 border-gray-300 focus:border-gray-600 focus:ring-gray-600"
                     >
                       <SelectValue placeholder="Select page" />
                     </SelectTrigger>
@@ -436,7 +436,7 @@ export default function FormFillerPage() {
                     value={x}
                     onChange={(e) => setX(Number(e.target.value))}
                     min={0}
-                    className="mt-1 bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 bg-white text-gray-800 border-gray-300 focus:border-gray-600 focus:ring-gray-600"
                   />
                 </div>
 
@@ -453,7 +453,7 @@ export default function FormFillerPage() {
                     value={y}
                     onChange={(e) => setY(Number(e.target.value))}
                     min={0}
-                    className="mt-1 bg-white text-gray-800 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 bg-white text-gray-800 border-gray-300 focus:border-gray-600 focus:ring-gray-600"
                   />
                 </div>
               </div>
@@ -476,14 +476,14 @@ export default function FormFillerPage() {
             </div>
 
             {/* PDF Preview */}
-            <div className="p-4 bg-white rounded-lg shadow-inner border border-gray-200">
+            <div className="p-4 bg-white shadow-inner border border-gray-200">
               <h2 className="font-semibold text-xl mb-3 text-gray-800">
                 PDF Preview
               </h2>
               <div className="w-full flex justify-center items-center overflow-hidden relative">
                 <canvas
                   ref={canvasRef}
-                  className={`max-w-full h-auto border border-gray-300 rounded-md shadow-lg ${
+                  className={`max-w-full h-auto border border-gray-300 shadow-lg ${
                     isDragging ? "cursor-grabbing" : "cursor-crosshair"
                   }`}
                   onMouseDown={handleMouseDown}
@@ -492,7 +492,7 @@ export default function FormFillerPage() {
                   onMouseLeave={handleMouseUp} // Important: stop dragging if mouse leaves
                 ></canvas>
                 {isDragging && (
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-sm rounded-full shadow-lg pointer-events-none z-10">
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-gray-950 text-white text-sm shadow-lg pointer-events-none z-10">
                     DRAGGING
                   </div>
                 )}
@@ -518,7 +518,7 @@ export default function FormFillerPage() {
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Processing...
               </span>
             ) : (
@@ -528,7 +528,7 @@ export default function FormFillerPage() {
         </div>
 
         {filledPdfUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-100 rounded-xl shadow-lg border border-gray-200 mt-6">
+          <div className="flex flex-col gap-6 p-6 bg-gray-100 shadow-lg border border-gray-200 mt-6">
             <div className="w-full text-center space-y-4 text-gray-800">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-600">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

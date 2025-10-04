@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Report Generator - Create Professional Business Reports PDF | easy-pdf",
-  description: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting. Free online report maker with no uploads.",
-  keywords: [
-    "report generator",
-    "business report",
-    "PDF report",
-    "professional report",
-    "report maker",
-    "business analysis",
-    "report template",
-    "professional reporting",
-    "free report generator",
-    "online report maker",
-    "PDF report creator",
-    "custom report design",
-    "report printing tool",
-    "business report generator",
-    "report design tool",
-    "batch report creation",
-    "report customization",
-    "secure report generator",
-    "privacy-first report tool",
-    "comprehensive report maker"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/report-generator",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "Report Generator",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Report Generator", url: "https://easy-pdf-murex.vercel.app/report-generator" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Report Generator",
-  description: "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting.",
-  url: "/report-generator",
-  features: [
-    "Multiple report templates",
-    "Key metrics dashboard",
-    "Customizable sections",
-    "Professional formatting"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Report Generator", url: "https://easy-pdf-murex.vercel.app/report-generator" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/report-generator');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,49 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Report Generator Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Can I add more sections or metrics?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, use the 'Add Section' or 'Add Metric' buttons to include as many as you need."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I style my report?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can choose different templates and customize primary/secondary colors."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is my report data saved online?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, all processing happens in your browser for privacy."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I upload existing reports?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can import a JSON file exported from this tool to continue editing."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

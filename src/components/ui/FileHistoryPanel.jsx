@@ -82,6 +82,8 @@ const FileHistoryPanel = ({ className = '' }) => {
     }
   };
 
+  const [currentTab, setCurrentTab] = useState('history');
+
   // const toggleActions = (itemId) => { // Feature incomplete
   //   setShowActions(prev => ({
   //     ...prev,
@@ -90,10 +92,10 @@ const FileHistoryPanel = ({ className = '' }) => {
   // };
 
   const HistoryItem = ({ item, onRemove, onAddToFavorites, showFavoriteButton = true }) => (
-    <div className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors">
+  <div className="flex items-center justify-between p-3 bg-black/40 border border-gray-600 hover:border-gray-500 transition-colors">
       <div className="flex items-center space-x-3 flex-1 min-w-0">
         <div className="flex-shrink-0">
-          <FileText className="w-5 h-5 text-blue-400" />
+          <FileText className="w-5 h-5 text-gray-400" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-gray-200 truncate">
@@ -132,11 +134,11 @@ const FileHistoryPanel = ({ className = '' }) => {
   );
 
   return (
-    <Card className={`bg-gray-900 border-gray-700 ${className}`}>
+  <Card className={`bg-black border-gray-700 ${className}`}>
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <History className="w-5 h-5 text-blue-400" />
+            <History className="w-5 h-5 text-gray-400" />
             <h2 className="text-lg font-semibold text-gray-200">File History</h2>
           </div>
           <div className="flex items-center space-x-2">
@@ -144,7 +146,7 @@ const FileHistoryPanel = ({ className = '' }) => {
               variant="ghost"
               size="sm"
               onClick={exportHistory}
-              className="text-gray-400 hover:text-blue-400"
+              className="text-gray-400 hover:text-gray-400"
             >
               <Download className="w-4 h-4" />
             </Button>
@@ -158,7 +160,7 @@ const FileHistoryPanel = ({ className = '' }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gray-400 hover:text-blue-400"
+                className="text-gray-400 hover:text-gray-400"
                 as="span"
               >
                 <Upload className="w-4 h-4" />
@@ -169,19 +171,19 @@ const FileHistoryPanel = ({ className = '' }) => {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="text-center p-3 bg-gray-800/30 rounded-lg">
-            <div className="text-lg font-semibold text-blue-400">
+          <div className="text-center p-3 bg-black/10">
+            <div className="text-lg font-semibold text-gray-400">
               {stats.totalFiles}
             </div>
             <div className="text-xs text-gray-400">Total Files</div>
           </div>
-          <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+          <div className="text-center p-3 bg-black/10">
             <div className="text-lg font-semibold text-yellow-400">
               {stats.favoritesCount}
             </div>
             <div className="text-xs text-gray-400">Favorites</div>
           </div>
-          <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+          <div className="text-center p-3 bg-black/10">
             <div className="text-lg font-semibold text-green-400">
               {Object.keys(stats.toolUsage).length}
             </div>
@@ -190,18 +192,18 @@ const FileHistoryPanel = ({ className = '' }) => {
         </div>
 
         <Tabs defaultValue="history" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-800">
-            <TabsTrigger value="history" className="data-[state=active]:bg-gray-700">
+          <div className="flex gap-2 mb-4">
+            <Button variant={currentTab === 'history' ? 'default' : 'outline'} size="sm" onClick={() => setCurrentTab('history')}>
               <History className="w-4 h-4 mr-2" />
               History ({history.length})
-            </TabsTrigger>
-            <TabsTrigger value="favorites" className="data-[state=active]:bg-gray-700">
+            </Button>
+            <Button variant={currentTab === 'favorites' ? 'default' : 'outline'} size="sm" onClick={() => setCurrentTab('favorites')}>
               <Star className="w-4 h-4 mr-2" />
               Favorites ({favorites.length})
-            </TabsTrigger>
-          </TabsList>
+            </Button>
+          </div>
 
-          <TabsContent value="history" className="space-y-4">
+          <TabsContent value="history" className={`space-y-4 ${currentTab !== 'history' ? 'hidden' : ''}`}>
             {/* Filter */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
@@ -209,7 +211,7 @@ const FileHistoryPanel = ({ className = '' }) => {
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="bg-gray-800 border border-gray-600 rounded px-2 py-1 text-sm text-gray-200"
+                  className="bg-gray-950 border border-gray-600 px-2 py-1 text-sm text-gray-200"
                 >
                   <option value="all">All Tools</option>
                   {uniqueTools.map(tool => (
@@ -251,7 +253,7 @@ const FileHistoryPanel = ({ className = '' }) => {
             </div>
           </TabsContent>
 
-          <TabsContent value="favorites" className="space-y-4">
+          <TabsContent value="favorites" className={`space-y-4 ${currentTab !== 'favorites' ? 'hidden' : ''}`}>
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-400">
                 {favorites.length}/{20} favorites

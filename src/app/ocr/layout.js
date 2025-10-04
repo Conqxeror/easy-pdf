@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "OCR (Text Recognition) PDF – Free PDF Text Extraction | easy-pdf",
-  description: "Extract editable text from scanned PDFs and images. Free online OCR tool with multiple language support and high accuracy. 100% client-side with no uploads.",
-  keywords: [
-    "OCR PDF",
-    "Extract text",
-    "PDF text recognition",
-    "Scan to text",
-    "PDF OCR online",
-    "Client-side PDF",
-    "Privacy PDF tool",
-    "No upload PDF OCR",
-    "PDF text extraction",
-    "Scanned PDF OCR",
-    "Image to text converter",
-    "Free PDF OCR tool",
-    "Online PDF text recognition",
-    "PDF document OCR",
-    "Multi-language PDF OCR",
-    "Accurate PDF text extraction",
-    "PDF scanning to text",
-    "Digital PDF OCR",
-    "Batch PDF OCR processing",
-    "Professional PDF OCR tool"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/ocr",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "PDF OCR Tool",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF OCR Tool", url: "https://easy-pdf-murex.vercel.app/ocr" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "PDF OCR Tool",
-  description: "Extract editable text from scanned PDFs and images. Free online OCR tool with multiple language support and high accuracy.",
-  url: "/ocr",
-  features: [
-    "Text extraction",
-    "Multiple languages",
-    "Image processing",
-    "Editable output"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "PDF OCR Tool", url: "https://easy-pdf-murex.vercel.app/ocr" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/ocr');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,65 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for OCR Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is OCR and how does it work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "OCR (Optical Character Recognition) is a technology that converts scanned documents, images, and PDFs into editable text. Our tool uses advanced AI algorithms to recognize and extract text from various file formats, making scanned documents searchable and editable."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What file types does the OCR tool support?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our OCR tool supports PDF documents and various image formats including JPG, PNG, TIFF, and BMP. For best results, ensure your documents have clear, high-quality text and good contrast."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How accurate is the text recognition?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The accuracy depends on the quality of your source document. Clear, well-scanned documents with good contrast typically achieve 95%+ accuracy. Handwritten text or low-quality scans may have lower accuracy."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Are my files secure during OCR processing?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely! All OCR processing happens locally in your browser. Your files are never uploaded to our servers, ensuring complete privacy and security for your sensitive documents."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I extract text from specific pages of a multi-page PDF?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, you can choose to extract text from all pages, a single page, or a specific range of pages. This is useful for large documents where you only need text from certain sections."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What languages does the OCR tool support?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Currently, our OCR tool supports English text recognition. For documents in other languages, the accuracy may vary depending on the text quality and character complexity."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

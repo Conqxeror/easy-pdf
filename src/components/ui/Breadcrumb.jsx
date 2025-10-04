@@ -22,7 +22,7 @@ export default function Breadcrumb({ items = [] }) {
           <li>
             <Link 
               href="/" 
-              className="flex items-center hover:text-blue-400 transition-colors"
+              className="flex items-center hover:text-gray-400 transition-colors"
               aria-label="Go to homepage"
             >
               <Home className="w-4 h-4" />
@@ -39,7 +39,7 @@ export default function Breadcrumb({ items = [] }) {
               ) : (
                 <Link 
                   href={item.url} 
-                  className="hover:text-blue-400 transition-colors"
+                  className="hover:text-gray-400 transition-colors"
                   aria-label={`Go to ${item.name}`}
                 >
                   {item.name}

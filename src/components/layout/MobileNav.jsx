@@ -11,12 +11,12 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
 
   return (
     isOpen && (
-      <div className="md:hidden bg-gray-900 border-t border-gray-800 pb-4">
+  <div className="md:hidden bg-black border-t border-gray-700 pb-4">
         <div className="px-4 pt-3 space-y-2">
           {toolCategories.map((category) => (
             <div
               key={category.name}
-              className="border-b border-gray-800 last:border-b-0"
+              className="border-b border-gray-700 last:border-b-0"
             >
               <div>
                 <button
@@ -28,11 +28,11 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
                     )
                   }
                   className={clsx(
-                    "group w-full flex items-center justify-between px-4 py-3 rounded-lg text-base font-medium",
+                    "group w-full flex items-center justify-between px-4 py-3 text-base font-medium",
                     mobileSubmenuOpen === category.name ||
                       category.submenu.some((i) => pathname === i.href)
-                      ? "bg-gray-800 text-white"
-                      : "text-gray-300 hover:bg-gray-800 hover:text-white",
+                      ? "bg-black/20 text-white"
+                        : "text-gray-300 hover:bg-black/90 hover:text-white",
                     "transition-colors duration-200"
                   )}
                 >
@@ -49,17 +49,17 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
                 </button>
 
                 {mobileSubmenuOpen === category.name && (
-                  <div className="pl-8 pt-2 pb-3 space-y-1 bg-gray-800/50 rounded-b-lg">
+                  <div className="pl-8 pt-2 pb-3 space-y-1 bg-black/60">
                     {category.submenu.map((subItem) => (
                       <Link
                         key={subItem.name}
                         href={subItem.href}
                         onClick={closeAllMenus}
                         className={clsx(
-                          "px-4 py-2.5 rounded-md text-sm font-medium flex items-center gap-3",
+                          "px-4 py-2.5 text-sm font-medium flex items-center gap-3",
                           pathname === subItem.href
-                            ? "bg-blue-600/20 text-white border-r-2 border-blue-500"
-                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            ? "bg-gray-950/20 text-white border-r-2 border-gray-600"
+                            : "text-gray-300 hover:bg-gray-950 hover:text-white",
                           "transition-colors duration-200"
                         )}
                       >
@@ -71,7 +71,7 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
                       <Link
                         href="/tools"
                         onClick={closeAllMenus}
-                        className="px-4 py-2 text-sm text-blue-400 hover:text-blue-300 flex items-center gap-2 transition-colors duration-200"
+                        className="px-4 py-2 text-sm text-gray-400 hover:text-gray-300 flex items-center gap-2 transition-colors duration-200"
                       >
                         <span>View all {category.name.toLowerCase()} tools</span>
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -46,40 +46,7 @@ const structuredData = generateComprehensiveJsonLd('faq', {
 });
 
 export default function SecurityPage() {
-  const faqs = [
-    {
-      question: "How does easy-pdf ensure my files are secure?",
-      answer:
-        "easy-pdf operates entirely client-side. This means all PDF processing—merging, splitting, compressing, converting, etc.—happens directly in your web browser. Your files are never uploaded to our servers, ensuring they remain on your device and under your control.",
-    },
-    {
-      question: "Do you store my documents?",
-      answer:
-        "No. We do not store, collect, or transmit your documents or any data from them. Once you close your browser tab or navigate away, your document data is gone.",
-    },
-    {
-      question: "What about cookies and tracking?",
-      answer:
-        "We use minimal, essential cookies for the proper functioning of the website (e.g., for dark mode preferences). We do not use tracking cookies or collect personal identifiable information. Our analytics are privacy-focused and anonymized.",
-    },
-    {
-      question: "Is easy-pdf open source?",
-      answer:
-        "Yes, easy-pdf is open source. You can review our codebase on GitHub to verify our privacy claims and understand exactly how the application works. This transparency ensures there are no hidden processes.",
-    },
-    {
-      question: "What technologies are used to ensure client-side processing?",
-      answer:
-        "We leverage powerful JavaScript libraries like pdf-lib and pdfjs-dist, which enable robust PDF manipulation directly within the browser environment, eliminating the need for server interaction for core PDF functionalities.",
-    },
-  ];
-
-  const steps = [
-    "All PDF processing happens directly in your browser - no server uploads required.",
-    "Your files remain on your device throughout the entire process.",
-    "No data collection, storage, or transmission of your documents.",
-    "Open source codebase available for transparency and verification.",
-  ];
+  // structuredData already includes FAQ information; constants removed to avoid duplicate unused vars
 
   const toolName = "Security & Privacy Policy";
   const toolDescription = "Your privacy and data security are our top priorities. Learn how easy-pdf protects your sensitive documents with 100% client-side processing, ensuring your files never leave your device.";
@@ -102,8 +69,6 @@ export default function SecurityPage() {
         subtitle="Your privacy and data security are our top priorities. Learn how easy-pdf protects your sensitive documents with 100% client-side processing."
         toolName={toolName}
         toolDescription={toolDescription}
-        steps={steps}
-        faqs={faqs}
         currentTool="security"
         breadcrumbs={[
           { label: 'Home', href: '/' },

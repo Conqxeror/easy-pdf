@@ -1,6 +1,7 @@
-export const generateMetadata = ({ title, description, keywords, canonicalUrl, metadataBaseUrl, toolName, ogImage }) => {
-  const baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
-  const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
+export const generateMetadata = ({ title = 'easy-pdf', description = '', keywords, canonicalUrl, metadataBaseUrl, toolName, ogImage }) => {
+  const baseTitle = (title && title.includes && title.includes('easy-pdf')) ? title : `${title} | easy-pdf`
+  const safeDesc = description || '';
+  const enhancedDescription = safeDesc.length > 160 ? safeDesc.substring(0, 157) + '...' : safeDesc
   
   return {
     metadataBase: new URL(metadataBaseUrl),
@@ -31,11 +32,8 @@ export const generateMetadata = ({ title, description, keywords, canonicalUrl, m
       canonical: canonicalUrl,
     },
     icons: {
-      icon: [
-        { url: "/icon.png", sizes: "192x192", type: "image/png" },
-        { url: "/icon.png", sizes: "512x512", type: "image/png" }
-      ],
-      apple: "/icon.png",
+      icon: [ { url: "/icon.svg", sizes: "any", type: "image/svg+xml" } ],
+      apple: "/icon.svg",
       shortcut: "/favicon.ico",
     },
     openGraph: {

@@ -697,7 +697,7 @@ export default function PortfolioCreatorPage() {
                 type="email"
                 value={portfolioData.email}
                 onChange={(e) => updatePortfolioData('email', e.target.value)}
-                placeholder="kadriwalimohammad@gmail.com"
+                placeholder="support@example.com"
               />
             </div>
             <div>
@@ -746,7 +746,7 @@ export default function PortfolioCreatorPage() {
           </CardHeader>
           <CardContent>
             {portfolioData.experience.map((exp, index) => (
-              <div key={index} className="mb-6 p-4 border rounded-lg">
+              <div key={index} className="mb-6 p-4 border">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-semibold">Experience #{index + 1}</h3>
                   <Button
@@ -820,7 +820,7 @@ export default function PortfolioCreatorPage() {
           </CardHeader>
           <CardContent>
             {portfolioData.education.map((edu, index) => (
-              <div key={index} className="mb-6 p-4 border rounded-lg">
+              <div key={index} className="mb-6 p-4 border">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-semibold">Education #{index + 1}</h3>
                   <Button
@@ -891,7 +891,7 @@ export default function PortfolioCreatorPage() {
           </CardHeader>
           <CardContent>
             {portfolioData.skills.map((skill, index) => (
-              <div key={index} className="mb-4 p-4 border rounded-lg">
+              <div key={index} className="mb-4 p-4 border">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-semibold">Skill #{index + 1}</h3>
                   <Button
@@ -946,7 +946,7 @@ export default function PortfolioCreatorPage() {
           </CardHeader>
           <CardContent>
             {portfolioData.projects.map((project, index) => (
-              <div key={index} className="mb-6 p-4 border rounded-lg">
+              <div key={index} className="mb-6 p-4 border">
                 <div className="flex justify-between items-start mb-3">
                   <h3 className="text-lg font-semibold">Project #{index + 1}</h3>
                   <Button
@@ -1030,11 +1030,11 @@ export default function PortfolioCreatorPage() {
             onClick={generatePortfolioPDF}
             disabled={isGenerating || !portfolioData.fullName || !portfolioData.title}
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700"
+            className="bg-gray-950 hover:bg-gray-950"
           >
             {isGenerating ? (
               <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                <div className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></div>
                 Generating Portfolio...
               </>
             ) : (

@@ -2,8 +2,21 @@
 
 "use client";
 
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { trackEvent } from './analytics';
+
+// Lazy-load pdf-lib to avoid adding it to the initial client bundle.
+let _pdfLibModule = null;
+async function getPdfLib() {
+  if (_pdfLibModule) return _pdfLibModule;
+  const mod = await import('pdf-lib');
+  // normalize export names for older module shapes
+  _pdfLibModule = {
+    PDFDocument: mod.PDFDocument || mod.default?.PDFDocument,
+    rgb: mod.rgb || (mod.default && mod.default.rgb),
+    StandardFonts: mod.StandardFonts || (mod.default && mod.default.StandardFonts)
+  };
+  return _pdfLibModule;
+}
 
 export class AdvancedPdfProcessor {
   constructor() {
@@ -69,6 +82,7 @@ export class AdvancedPdfProcessor {
   async processSingleFile(file, operation, options) {
     try {
       const arrayBuffer = await file.arrayBuffer();
+      const { PDFDocument } = await getPdfLib();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
 
       switch (operation) {
@@ -123,6 +137,8 @@ export class AdvancedPdfProcessor {
   async addWatermark(pdfDoc, options = {}) {
     const { text = 'WATERMARK', opacity = 0.5, fontSize = 50 } = options;
     const pages = pdfDoc.getPages();
+    // Ensure pdf-lib symbols are loaded lazily
+    const { StandardFonts, rgb } = await getPdfLib();
     const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
     for (const page of pages) {
@@ -148,6 +164,7 @@ export class AdvancedPdfProcessor {
    */
   async extractPages(pdfDoc, options = {}) {
     const { pageNumbers = [] } = options;
+    const { PDFDocument } = await getPdfLib();
     const newPdf = await PDFDocument.create();
     
     for (const pageNum of pageNumbers) {
@@ -212,6 +229,7 @@ export class AdvancedPdfProcessor {
    */
   async mergePdfs(files, options = {}) {
     const { addBookmarks = false, addPageNumbers = false } = options;
+    const { PDFDocument, rgb } = await getPdfLib();
     const mergedPdf = await PDFDocument.create();
     
     let pageOffset = 0;
@@ -220,7 +238,7 @@ export class AdvancedPdfProcessor {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await PDFDocument.load(arrayBuffer);
+  const pdf = await PDFDocument.load(arrayBuffer);
       const pageCount = pdf.getPageCount();
       
       const copiedPages = await mergedPdf.copyPages(pdf, Array.from({ length: pageCount }, (_, i) => i));
@@ -229,13 +247,13 @@ export class AdvancedPdfProcessor {
         mergedPdf.addPage(page);
         
         // Add page numbers if requested
-        if (addPageNumbers) {
+          if (addPageNumbers) {
           const pageNum = pageOffset + pageIndex + 1;
           page.drawText(`${pageNum}`, {
             x: page.getWidth() - 50,
             y: 20,
             size: 10,
-            color: rgb(0.5, 0.5, 0.5)
+              color: rgb(0.5, 0.5, 0.5)
           });
         }
       });

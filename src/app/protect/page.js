@@ -174,7 +174,7 @@ export default function ProtectPdfPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter a strong password"
-            className="w-full bg-gray-700 text-gray-100 border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+            className="w-full bg-gray-950 text-gray-100 border-gray-600 focus:border-gray-600 focus:ring-gray-600"
             aria-label="Password for PDF protection"
           />
           <p className="text-xs text-gray-400 mt-1">
@@ -192,14 +192,14 @@ export default function ProtectPdfPage() {
           <Button
             onClick={handleProtect}
             disabled={isProcessing || !file || password.length === 0}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl"
+            className="px-8 py-3 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white shadow-lg hover:shadow-xl"
             variant="default"
             size="lg"
             aria-label="Protect PDF with password"
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Protecting...
               </span>
             ) : (
@@ -209,7 +209,7 @@ export default function ProtectPdfPage() {
         </div>
 
         {protectedUrl && !isProcessing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-800 rounded-xl shadow-lg border border-gray-700">
+          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
             <div className="w-full text-center space-y-4 text-gray-100">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,55 +1,9 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = generateEnhancedMetadata({
-  title: "Advanced OCR with AI - Smart Text Recognition | easy-pdf",
-  description: "Extract text from PDFs and images with AI-powered enhancement and formatting. Multi-language support and high accuracy. Free online advanced OCR tool with no uploads.",
-  keywords: [
-    "advanced OCR",
-    "AI text recognition",
-    "smart OCR",
-    "text extraction",
-    "AI-powered OCR",
-    "multi-language OCR",
-    "intelligent text recognition",
-    "OCR enhancement",
-    "document digitization",
-    "text mining",
-    "AI document processing",
-    "smart text extraction",
-    "free advanced OCR",
-    "online AI OCR tool",
-    "PDF text recognition",
-    "image to text converter",
-    "professional OCR tool",
-    "batch OCR processing",
-    "accurate text extraction",
-    "secure OCR processing"
-  ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/advanced-ocr",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
-  toolName: "Advanced OCR with AI",
-  pageType: "tool",
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Advanced OCR with AI", url: "https://easy-pdf-murex.vercel.app/advanced-ocr" }
-  ]
-});
-
-const structuredData = generateComprehensiveJsonLd('tool', {
-  title: "Advanced OCR with AI",
-  description: "Extract text from PDFs and images with AI-powered enhancement and formatting. Multi-language support and high accuracy.",
-  url: "/advanced-ocr",
-  features: [
-    "AI-enhanced text extraction",
-    "Multiple language support",
-    "Format preservation",
-    "Confidence scoring"
-  ],
-  breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Advanced OCR with AI", url: "https://easy-pdf-murex.vercel.app/advanced-ocr" }
-  ]
-});
+// Get metadata and structured data from centralized helper
+const toolSeo = getToolMetadata('/advanced-ocr');
+export const metadata = toolSeo?.metadata || {};
+const structuredData = toolSeo?.structuredData || [];
 
 export default function Layout({ children }) {
   return (
@@ -57,6 +11,57 @@ export default function Layout({ children }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+
+      {/* FAQ structured data for Advanced OCR Tool */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What makes this OCR tool 'advanced'?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our advanced OCR tool uses multiple recognition engines and processing techniques to achieve higher accuracy than standard OCR tools. It supports multiple languages and offers different processing modes for various document types."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What file types are supported?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Our tool supports PDF documents and common image formats including JPG, PNG, BMP, and TIFF. For best results, ensure your documents have clear, high-contrast text."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the AI-powered mode work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The AI-powered mode uses advanced neural networks to recognize text patterns with greater accuracy, especially for complex layouts, handwritten text, or documents with poor image quality."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is my data secure when using this tool?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. All processing happens locally in your browser. Your files are never uploaded to our servers, ensuring complete privacy and security for your sensitive documents."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I recognize text in multiple languages?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, our tool supports recognition in over 100 languages. Simply select the appropriate language from the dropdown menu before processing your document."
+              }
+            }
+          ]
+        }) }}
       />
       {children}
     </>

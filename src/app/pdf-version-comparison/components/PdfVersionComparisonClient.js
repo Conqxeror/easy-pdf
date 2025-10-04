@@ -10,7 +10,7 @@ import { toolsData } from '@/lib/toolData';
 export default function PdfVersionComparisonClient() {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
-  const [isProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Get tool data for this specific tool
   const toolData = toolsData.find(tool => tool.href === '/pdf-version-comparison');
@@ -95,13 +95,20 @@ export default function PdfVersionComparisonClient() {
 
         <div className="flex justify-center">
           <Button
-            onClick={() => {}}
+            onClick={async () => {
+              if (!file) return;
+              setIsProcessing(true);
+              // simulate processing for visual feedback
+              await new Promise((r) => setTimeout(r, 900));
+              setIsProcessing(false);
+              alert('Processing complete (simulated)');
+            }}
             disabled={isProcessing || !file}
             size="lg"
           >
             {isProcessing ? (
               <span className="flex items-center">
-                <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></span>
+                <span className="animate-spin h-4 w-4 border-b-2 border-white mr-2"></span>
                 Processing...
               </span>
             ) : (
