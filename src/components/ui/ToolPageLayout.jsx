@@ -16,7 +16,7 @@ import { Skeleton, SkeletonCard } from "@/components/ui/skeleton";
 import Breadcrumb from "@/components/Breadcrumb";
 import { toolsData } from '@/lib/toolData';
 import { useTheme } from "@/contexts/ThemeContext";
-import { CheckCircle, Sparkles } from "lucide-react";
+import { CheckCircle, Sparkles, FileText, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, Search, FileHeart, Settings, Bookmark, Table, Layers, Shield, EyeOff, GitCompare, MessageSquare, Calculator, QrCode, Award, Briefcase, Files } from "lucide-react";
 
 // Lazy load heavy components with error boundaries
 const LazyRelatedTools = lazy(() => import('@/components/RelatedTools').catch(() => ({ default: () => null })));
@@ -33,6 +33,41 @@ const RelatedToolsSkeleton = () => (
   </div>
 );
 
+// Icon mapping for features
+const featureIcons = {
+  "merge": <Files className="w-6 h-6 text-gray-600" />,
+  "split": <Split className="w-6 h-6 text-green-500 preserve-color" />,
+  "compress": <Minimize2 className="w-6 h-6 text-gray-600" />,
+  "rotate": <RotateCw className="w-6 h-6 text-yellow-500 preserve-color" />,
+  "watermark": <Stamp className="w-6 h-6 text-red-500 preserve-color" />,
+  "protect": <Lock className="w-6 h-6 text-gray-500" />,
+  "unlock": <Unlock className="w-6 h-6 text-orange-500 preserve-color" />,
+  "delete": <Eraser className="w-6 h-6 text-indigo-500 preserve-color" />,
+  "reorder": <ListOrdered className="w-6 h-6 text-cyan-500 preserve-color" />,
+  "page-numbers": <PlusCircle className="w-6 h-6 text-amber-500" />,
+  "sign": <Signature className="w-6 h-6 text-rose-500 preserve-color" />,
+  "form": <Text className="w-6 h-6 text-lime-500 preserve-color" />,
+  "ocr": <Search className="w-6 h-6 text-green-400 preserve-color" />,
+  "image": <LucideImage className="w-6 h-6 text-gray-600" />,
+  "metadata": <Settings className="w-6 h-6 text-gray-500" />,
+  "bookmark": <Bookmark className="w-6 h-6 text-gray-600" />,
+  "table": <Table className="w-6 h-6 text-green-500" />,
+  "layers": <Layers className="w-6 h-6 text-gray-600" />,
+  "check": <CheckCircle className="w-6 h-6 text-green-600" />,
+  "shield": <Shield className="w-6 h-6 text-gray-700" />,
+  "eye": <EyeOff className="w-6 h-6 text-red-600" />,
+  "compare": <GitCompare className="w-6 h-6 text-indigo-600" />,
+  "message": <MessageSquare className="w-6 h-6 text-cyan-600" />,
+  "calculator": <Calculator className="w-6 h-6 text-green-500" />,
+  "qr": <QrCode className="w-6 h-6 text-gray-600" />,
+  "award": <Award className="w-6 h-6 text-yellow-500" />,
+  "briefcase": <Briefcase className="w-6 h-6 text-gray-600" />,
+  "file": <FileText className="w-6 h-6 text-teal-500 preserve-color" />,
+  "heart": <FileHeart className="w-6 h-6 text-red-500 preserve-color" />,
+  "badge": <FileBadge2 className="w-6 h-6 text-orange-500 preserve-color" />,
+  "default": <FileText className="w-6 h-6 text-gray-600" />
+};
+
 export default function ToolPageLayout({
   title,
   subtitle,
@@ -45,9 +80,49 @@ export default function ToolPageLayout({
   breadcrumbs = [],
   primaryActionHref,
   badge,
-  icon
+  icon,
+  features = [],
+  useCases = []
 }) {
   const { isDark } = useTheme();
+
+  // Function to get icon based on feature text
+  const getFeatureIcon = (featureText) => {
+    const lowerFeature = featureText.toLowerCase();
+    
+    if (lowerFeature.includes("merge") || lowerFeature.includes("combine")) return featureIcons.merge;
+    if (lowerFeature.includes("split") || lowerFeature.includes("extract")) return featureIcons.split;
+    if (lowerFeature.includes("compress") || lowerFeature.includes("reduce") || lowerFeature.includes("optimize")) return featureIcons.compress;
+    if (lowerFeature.includes("rotate") || lowerFeature.includes("orientation")) return featureIcons.rotate;
+    if (lowerFeature.includes("watermark") || lowerFeature.includes("stamp")) return featureIcons.watermark;
+    if (lowerFeature.includes("protect") || lowerFeature.includes("password") || lowerFeature.includes("encrypt")) return featureIcons.protect;
+    if (lowerFeature.includes("unlock") || lowerFeature.includes("remove password")) return featureIcons.unlock;
+    if (lowerFeature.includes("delete") || lowerFeature.includes("remove") || lowerFeature.includes("trim")) return featureIcons.delete;
+    if (lowerFeature.includes("reorder") || lowerFeature.includes("organize") || lowerFeature.includes("arrange")) return featureIcons.reorder;
+    if (lowerFeature.includes("page number") || lowerFeature.includes("header") || lowerFeature.includes("footer")) return featureIcons["page-numbers"];
+    if (lowerFeature.includes("sign") || lowerFeature.includes("signature") || lowerFeature.includes("annotate")) return featureIcons.sign;
+    if (lowerFeature.includes("form") || lowerFeature.includes("fill")) return featureIcons.form;
+    if (lowerFeature.includes("ocr") || lowerFeature.includes("text recognition") || lowerFeature.includes("scan")) return featureIcons.ocr;
+    if (lowerFeature.includes("image") || lowerFeature.includes("photo") || lowerFeature.includes("jpg") || lowerFeature.includes("png")) return featureIcons.image;
+    if (lowerFeature.includes("metadata") || lowerFeature.includes("title") || lowerFeature.includes("author")) return featureIcons.metadata;
+    if (lowerFeature.includes("bookmark") || lowerFeature.includes("navigation")) return featureIcons.bookmark;
+    if (lowerFeature.includes("table") || lowerFeature.includes("csv") || lowerFeature.includes("excel")) return featureIcons.table;
+    if (lowerFeature.includes("batch") || lowerFeature.includes("multiple")) return featureIcons.layers;
+    if (lowerFeature.includes("accessibility") || lowerFeature.includes("wcag") || lowerFeature.includes("compliance")) return featureIcons.check;
+    if (lowerFeature.includes("digital signature") || lowerFeature.includes("certificate")) return featureIcons.shield;
+    if (lowerFeature.includes("redaction") || lowerFeature.includes("sensitive")) return featureIcons.eye;
+    if (lowerFeature.includes("compare") || lowerFeature.includes("diff") || lowerFeature.includes("version")) return featureIcons.compare;
+    if (lowerFeature.includes("comment") || lowerFeature.includes("collaboration")) return featureIcons.message;
+    if (lowerFeature.includes("invoice") || lowerFeature.includes("calculate") || lowerFeature.includes("tax")) return featureIcons.calculator;
+    if (lowerFeature.includes("qr") || lowerFeature.includes("barcode")) return featureIcons.qr;
+    if (lowerFeature.includes("certificate") || lowerFeature.includes("award")) return featureIcons.award;
+    if (lowerFeature.includes("portfolio") || lowerFeature.includes("resume") || lowerFeature.includes("cv")) return featureIcons.briefcase;
+    if (lowerFeature.includes("report") || lowerFeature.includes("document")) return featureIcons.file;
+    if (lowerFeature.includes("medical") || lowerFeature.includes("health")) return featureIcons.heart;
+    if (lowerFeature.includes("create") || lowerFeature.includes("maker")) return featureIcons.badge;
+    
+    return featureIcons.default;
+  };
 
   return (
     <>
@@ -106,6 +181,72 @@ export default function ToolPageLayout({
               </Card>
             </div>
           </Section>
+
+          {/* Features Section with Icons */}
+          {features.length > 0 && (
+            <Section className="px-6 py-6">
+              <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-150">
+                <AccessibleHeading 
+                  level={2} 
+                  className="text-4xl text-center mb-12 font-bold text-gray-900 dark:text-white"
+                >
+                  Key Features
+                </AccessibleHeading>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {features.map((feature, index) => (
+                    <Card 
+                      key={index}
+                      variant="elevated"
+                      className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-950 border border-gray-700"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-gray-950/30 flex items-center justify-center">
+                            {getFeatureIcon(feature)}
+                          </div>
+                        </div>
+                        <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                          {feature}
+                        </p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </Section>
+          )}
+
+          {/* Use Cases Section */}
+          {useCases.length > 0 && (
+            <Section className="px-6 py-6 bg-gray-50 dark:bg-gray-950">
+              <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-175">
+                <AccessibleHeading 
+                  level={2} 
+                  className="text-4xl text-center mb-12 font-bold text-gray-900 dark:text-white"
+                >
+                  Common Use Cases
+                </AccessibleHeading>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                  {useCases.map((useCase, index) => (
+                    <Card 
+                      key={index}
+                      variant="elevated"
+                      className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-950 border border-gray-700"
+                    >
+                      <div className="space-y-3">
+                        <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                          {useCase.title}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                          {useCase.description}
+                        </p>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </Section>
+          )}
 
           {/* How to Use Steps - Premium Cards */}
           {steps.length > 0 && (

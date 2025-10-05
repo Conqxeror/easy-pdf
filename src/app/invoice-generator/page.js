@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -136,6 +136,7 @@ export default function InvoiceGeneratorPage() {
     setProgress(0);
 
     try {
+      const { PDFDocument, rgb, StandardFonts } = await loadPdfLib();
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);

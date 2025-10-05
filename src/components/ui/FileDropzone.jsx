@@ -179,6 +179,13 @@ const FileDropzone = ({
     inputRef.current?.click();
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      openFileDialog();
+    }
+  };
+
   const inputAcceptAttribute = Array.from(acceptedMimeTypesSet).join(",");
 
   return (
@@ -199,6 +206,7 @@ const FileDropzone = ({
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
+        onKeyDown={handleKeyDown}
         role="button"
         tabIndex={0}
         aria-label="File drop zone"

@@ -31,3 +31,12 @@ export async function ensurePdfWorkerEntry() {
     return null;
   }
 }
+
+/**
+ * Dynamically load pdf-lib to keep it out of the main bundle
+ * Returns the entire pdf-lib module
+ */
+export async function loadPdfLib() {
+  const pdfLib = await import('pdf-lib');
+  return pdfLib;
+}

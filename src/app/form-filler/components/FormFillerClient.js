@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import EnhancedToolPageLayout from "@/components/ui/EnhancedToolPageLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { toolsData } from '@/lib/toolData';
 
 export default function FormFillerClient() {
@@ -59,7 +59,7 @@ export default function FormFillerClient() {
   ];
 
   return (
-    <EnhancedToolPageLayout
+    <ToolPageLayout
       title="Form Filler"
       subtitle="Process your PDF documents with our free online tool."
       toolName={toolName}
@@ -110,6 +110,6 @@ export default function FormFillerClient() {
           </Button>
         </div>
       </div>
-    </EnhancedToolPageLayout>
+    </ToolPageLayout>
   );
 }

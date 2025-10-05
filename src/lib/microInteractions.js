@@ -193,7 +193,10 @@ export const triggerConfetti = () => {
         colors: ['#3B82F6', '#8B5CF6', '#EC4899', '#10B981']
       });
     }).catch(() => {
-      console.log('canvas-confetti not installed');
+      // Silently fail if canvas-confetti is not installed
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('canvas-confetti not installed');
+      }
     });
   }
 };

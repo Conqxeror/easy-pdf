@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import EnhancedToolPageLayout from "@/components/ui/EnhancedToolPageLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { toolsData } from '@/lib/toolData';
 
 export default function InvoiceGeneratorClient() {
@@ -76,7 +76,7 @@ export default function InvoiceGeneratorClient() {
   ];
 
   return (
-    <EnhancedToolPageLayout
+    <ToolPageLayout
       title="PDF Invoice Generator"
       subtitle="Create professional invoices with GST support, multiple currencies, and customizable templates."
       toolName={toolName}
@@ -127,6 +127,6 @@ export default function InvoiceGeneratorClient() {
           </Button>
         </div>
       </div>
-    </EnhancedToolPageLayout>
+    </ToolPageLayout>
   );
 }

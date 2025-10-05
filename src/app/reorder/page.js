@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { PDFDocument } from "pdf-lib";
-import { loadPdfJs } from "@/lib/pdfjsWorker";
+import { loadPdfLib, loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
@@ -221,9 +220,11 @@ export default function ReorderPage() {
       return;
     }
     setIsProcessing(true);
+    setReorderedPdfUrl(null);
     setError(""); // Clear previous errors
 
     try {
+      const { PDFDocument } = await loadPdfLib();
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
       const srcDoc = await PDFDocument.load(arrayBuffer); // Load original PDF
@@ -237,13 +238,13 @@ export default function ReorderPage() {
         newDoc.addPage(copiedPage);
       }
 
-    const pdfBytes = await newDoc.save();
-    const blob = new Blob([pdfBytes], { type: "application/pdf" });
-    try { safeRevokeObjectURL(reorderedPdfUrl); } catch {}
-    const url = safeCreateObjectURL(blob);
-    setReorderedPdfUrl(url);
-    const baseName = files && files[0] && files[0].name ? sanitizeFileName(String(files[0].name).replace(/\.[^/.]+$/, "")) : "document";
-    setDownloadFileName(`reordered_${baseName}.pdf`);
+      const pdfBytes = await newDoc.save();
+      const blob = new Blob([pdfBytes], { type: "application/pdf" });
+      try { safeRevokeObjectURL(reorderedPdfUrl); } catch {}
+      const url = safeCreateObjectURL(blob);
+      setReorderedPdfUrl(url);
+      const baseName = files && files[0] && files[0].name ? sanitizeFileName(String(files[0].name).replace(/\.[^/.]+$/, "")) : "document";
+      setDownloadFileName(`reordered_${baseName}.pdf`);
 
       setError(""); // Clear error on success
     } catch (e) {

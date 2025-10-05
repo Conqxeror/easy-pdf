@@ -10,14 +10,9 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, Search, FileText, Image as ImageIcon, Brain, Copy, Zap, Globe, CheckCircle, AlertCircle } from 'lucide-react';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
+import { loadPdfJs } from '@/lib/pdfjsWorker';
 import { createTesseractWorker, terminateWorker } from '@/lib/tesseractWorker';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
-
-// Set up PDF.js worker (browser-only)
-if (typeof window !== 'undefined' && pdfjsLib && pdfjsLib.GlobalWorkerOptions) {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function AdvancedOCR() {
   const [files, setFiles] = useState([]);
@@ -94,6 +89,8 @@ export default function AdvancedOCR() {
           // Load PDF from ArrayBuffer instead of object URL to avoid blob URL pitfalls
           let pdf;
           try {
+            // Load pdfjs dynamically
+            const pdfjsLib = await loadPdfJs();
             const arrayBuffer = await file.arrayBuffer();
             const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
             pdf = await loadingTask.promise;

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect  } from "react";
 import FileDropzone from "@/components/ui/FileDropzone";
-import { PDFDocument } from "pdf-lib";
+import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
@@ -46,6 +46,7 @@ export default function UnlockPdfPage() {
     }
     setIsProcessing(true);
     try {
+      const { PDFDocument } = await loadPdfLib();
       const arrayBuffer = await file.arrayBuffer();
       // Attempt to load the PDF with the provided password
       const pdfDoc = await PDFDocument.load(arrayBuffer, { password });

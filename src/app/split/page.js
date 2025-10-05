@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect  } from "react";
-import { PDFDocument } from "pdf-lib";
+import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Download, FileText, Split } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -64,6 +64,7 @@ export default function SplitPdfPage() {
     if (!selectedFile) return;
 
     try {
+      const { PDFDocument } = await loadPdfLib();
       const arrayBuffer = await selectedFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       setTotalPages(pdfDoc.getPageCount());
@@ -124,6 +125,7 @@ export default function SplitPdfPage() {
     setProcessingMessage("Loading PDF document...");
 
     try {
+      const { PDFDocument } = await loadPdfLib();
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const total = pdfDoc.getPageCount();

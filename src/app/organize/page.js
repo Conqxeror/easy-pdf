@@ -2,8 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-import { PDFDocument } from "pdf-lib";
-import { loadPdfJs } from "@/lib/pdfjsWorker";
+import { loadPdfLib, loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
@@ -225,6 +224,7 @@ export default function OrganizePage() {
     setError(""); // Clear previous errors
 
     try {
+      const { PDFDocument } = await loadPdfLib();
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
       const srcDoc = await PDFDocument.load(arrayBuffer); // Load original PDF

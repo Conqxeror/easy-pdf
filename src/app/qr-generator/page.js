@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect  } from "react";
-import { PDFDocument, rgb } from "pdf-lib";
+import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -178,6 +178,7 @@ END:VCARD`;
 
     let url = null;
     try {
+      const { PDFDocument, rgb } = await loadPdfLib();
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([595.28, 841.89]); // A4 size
 

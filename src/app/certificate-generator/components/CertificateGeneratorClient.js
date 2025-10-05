@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import EnhancedToolPageLayout from "@/components/ui/EnhancedToolPageLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { toolsData } from '@/lib/toolData';
 
 export default function CertificateGeneratorClient() {
@@ -77,7 +77,7 @@ export default function CertificateGeneratorClient() {
   ];
 
   return (
-    <EnhancedToolPageLayout
+    <ToolPageLayout
       title="Certificate Generator"
       subtitle="Create professional certificates for courses, training, achievements, and more with customizable templates."
       toolName={toolName}
@@ -128,6 +128,6 @@ export default function CertificateGeneratorClient() {
           </Button>
         </div>
       </div>
-    </EnhancedToolPageLayout>
+    </ToolPageLayout>
   );
 }

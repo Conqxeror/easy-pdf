@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { PDFDocument } from "pdf-lib";
-import { loadPdfJs } from "@/lib/pdfjsWorker";
+import { loadPdfJs, loadPdfLib } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -419,6 +418,7 @@ export default function SignPdfPage() {
     setError("");
 
     try {
+      const { PDFDocument } = await loadPdfLib();
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);

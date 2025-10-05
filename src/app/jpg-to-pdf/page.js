@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import { PDFDocument } from "pdf-lib";
+import { loadPdfLib } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,7 @@ export default function JpgToPdfPage() {
     setCurrentProgress(0);
 
     try {
+      const { PDFDocument } = await loadPdfLib();
       const pdfDoc = await PDFDocument.create();
       
 

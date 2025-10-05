@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect  } from "react";
-import { PDFDocument } from "pdf-lib";
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
+import { loadPdfJs, loadPdfLib } from "@/lib/pdfjsWorker";
 import { Download, FileText, Zap } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -13,11 +12,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import ToolActions from "@/components/ui/ToolActions";
-
-// Configure pdfjs worker only on the client to avoid SSR/runtime errors
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function CompressPDFs() {
   const [file, setFile] = useState(null);
@@ -79,9 +73,12 @@ export default function CompressPDFs() {
     setCompressedPdfUrl(null);
 
     try {
-  const arrayBuffer = await file.arrayBuffer();
-  // Use getDocument with data property to avoid relying on blob URLs
-  const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
+      // Load pdf libraries dynamically
+      const pdfjs = await loadPdfJs();
+      const { PDFDocument } = await loadPdfLib();
+      const arrayBuffer = await file.arrayBuffer();
+      // Use getDocument with data property to avoid relying on blob URLs
+      const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       const numPages = pdf.numPages;
       setProgress(10);
       setProcessingMessage("Processing pages...");

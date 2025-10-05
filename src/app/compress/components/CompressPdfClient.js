@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect  } from "react";
-import { PDFDocument } from "pdf-lib";
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
+import { loadPdfJs, loadPdfLib } from "@/lib/pdfjsWorker";
 import { Download, FileText, Zap } from "lucide-react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
@@ -12,11 +11,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
-
-// Configure pdfjs worker only on the client to avoid SSR/runtime errors
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function CompressPdfClient() {
   const [file, setFile] = useState(null);
@@ -74,6 +68,9 @@ export default function CompressPdfClient() {
     setCompressedPdfUrl(null);
 
     try {
+      // Load pdf libraries dynamically
+      const pdfjs = await loadPdfJs();
+      const { PDFDocument } = await loadPdfLib();
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjs.getDocument(arrayBuffer).promise;
       const numPages = pdf.numPages;

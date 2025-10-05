@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { loadPdfJs } from "@/lib/pdfjsWorker";
+import { loadPdfLib, loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -43,7 +42,8 @@ export default function PageNumbersPage() {
   const renderTaskRef = useRef(null); // To manage pdf.js render tasks
 
   // Helper to convert hex color to RGB object for pdf-lib
-  const hexToRgb = (hex) => {
+  const hexToRgb = async (hex) => {
+    const { rgb } = await loadPdfLib();
     const r = parseInt(hex.substring(1, 3), 16) / 255;
     const g = parseInt(hex.substring(3, 5), 16) / 255;
     const b = parseInt(hex.substring(5, 7), 16) / 255;
@@ -298,6 +298,7 @@ export default function PageNumbersPage() {
     setError("");
 
     try {
+      const { PDFDocument, StandardFonts } = await loadPdfLib();
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import EnhancedToolPageLayout from "@/components/ui/EnhancedToolPageLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { toolsData } from '@/lib/toolData';
 
 export default function JpgToPdfClient() {
@@ -75,7 +75,7 @@ export default function JpgToPdfClient() {
   ];
 
   return (
-    <EnhancedToolPageLayout
+    <ToolPageLayout
       title="JPG to PDF Converter"
       subtitle="Convert your JPG, PNG, and other image files into a single PDF document."
       toolName={toolName}
@@ -126,6 +126,6 @@ export default function JpgToPdfClient() {
           </Button>
         </div>
       </div>
-    </EnhancedToolPageLayout>
+    </ToolPageLayout>
   );
 }

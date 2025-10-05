@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import EnhancedToolPageLayout from "@/components/ui/EnhancedToolPageLayout";
+import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { toolsData } from '@/lib/toolData';
 
 export default function OcrClient() {
@@ -59,7 +59,7 @@ export default function OcrClient() {
   ];
 
   return (
-    <EnhancedToolPageLayout
+    <ToolPageLayout
       title="Ocr"
       subtitle="Process your PDF documents with our free online tool."
       toolName={toolName}
@@ -110,6 +110,6 @@ export default function OcrClient() {
           </Button>
         </div>
       </div>
-    </EnhancedToolPageLayout>
+    </ToolPageLayout>
   );
 }

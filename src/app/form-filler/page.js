@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { loadPdfLib, loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -17,13 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
-
-// Import pdfjs-dist for PDF rendering
-import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
-// Configure pdfjs worker only on the client to avoid SSR/runtime issues
-if (typeof window !== 'undefined' && pdfjs && pdfjs.GlobalWorkerOptions) {
-  pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-}
 
 export default function FormFillerPage() {
   const [files, setFiles] = useState([]);
@@ -171,6 +164,8 @@ export default function FormFillerPage() {
     if (newFiles.length === 0) return;
 
     try {
+      // Load pdfjs dynamically
+      const pdfjs = await loadPdfJs();
       const file = newFiles[0];
       const arrayBuffer = await file.arrayBuffer();
       const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
@@ -228,6 +223,7 @@ export default function FormFillerPage() {
     setError("");
 
     try {
+      const { PDFDocument, rgb, StandardFonts } = await loadPdfLib();
       const file = files[0];
       const arrayBuffer = await file.arrayBuffer();
       const srcDoc = await PDFDocument.load(arrayBuffer); // Load original PDF

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -81,6 +81,7 @@ export default function CertificateGeneratorPage() {
     trackEvent('certificate_generation_started', { template: certificateData.template });
 
     try {
+      const { PDFDocument, rgb, StandardFonts } = await loadPdfLib();
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([841.89, 595.28]); // A4 landscape
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
