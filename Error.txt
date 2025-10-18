@@ -1,3 +1,0 @@
-http://localhost:3000/page-numbers
-http://localhost:3000/form-filler
-http://localhost:3000/certificate-generator
