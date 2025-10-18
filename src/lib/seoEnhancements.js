@@ -297,28 +297,30 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       "Page Management - Organize pages"
     ],
     "screenshot": `${baseUrl}/og-image.jpg`,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "2847",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "review": [
-      {
-        "@type": "Review",
-        "reviewRating": {
-          "@type": "Rating",
-          "ratingValue": "5",
-          "bestRating": "5"
-        },
-        "author": {
-          "@type": "Person",
-          "name": "Anonymous User"
-        },
-        "reviewBody": "Excellent privacy-focused PDF tools. Works completely offline and keeps my documents secure."
-      }
-    ]
+    // Note: Aggregate rating removed - add real user ratings when available
+    // "aggregateRating": {
+    //   "@type": "AggregateRating",
+    //   "ratingValue": "4.9",
+    //   "ratingCount": "2847",
+    //   "bestRating": "5",
+    //   "worstRating": "1"
+    // },
+    // Note: Reviews removed - add real user reviews when available
+    // "review": [
+    //   {
+    //     "@type": "Review",
+    //     "reviewRating": {
+    //       "@type": "Rating",
+    //       "ratingValue": "5",
+    //       "bestRating": "5"
+    //     },
+    //     "author": {
+    //       "@type": "Person",
+    //       "name": "Anonymous User"
+    //     },
+    //     "reviewBody": "Excellent privacy-focused PDF tools. Works completely offline and keeps my documents secure."
+    //   }
+    // ]
   }
 
   switch (pageType) {

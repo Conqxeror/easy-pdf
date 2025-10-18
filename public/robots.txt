@@ -21,5 +21,6 @@ Allow: /twitter-image.jpg
 Allow: /site.webmanifest
 Allow: /favicon.ico
 
-# Sitemap
+# Sitemap - Next.js will serve this dynamically at /sitemap.xml
+# The URL will adapt to your deployment domain automatically
 Sitemap: https://easy-pdf-murex.vercel.app/sitemap.xml

@@ -15,7 +15,8 @@ function registerServiceWorker() {
   if (process.env.NODE_ENV === 'development') {
     return;
   }
-  console.log("Service worker registration disabled");
+  // Service worker registration logic can be added here in the future
+  // For now, it's intentionally disabled
 }
 
 import clsx from "clsx";
@@ -143,14 +144,14 @@ export default function RootLayout({ children }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const skipButton = document.getElementById('skip-to-content-btn');
-      if (skipButton) {
+      const scrollButton = document.getElementById('scroll-to-top-btn');
+      if (scrollButton) {
         if (window.scrollY > 100) { // Adjust this threshold as needed
-          skipButton.classList.remove('opacity-0', 'pointer-events-none');
-          skipButton.classList.add('opacity-100');
+          scrollButton.classList.remove('opacity-0', 'pointer-events-none');
+          scrollButton.classList.add('opacity-100');
         } else {
-          skipButton.classList.remove('opacity-100');
-          skipButton.classList.add('opacity-0', 'pointer-events-none');
+          scrollButton.classList.remove('opacity-100');
+          scrollButton.classList.add('opacity-0', 'pointer-events-none');
         }
       }
     };
@@ -165,15 +166,23 @@ export default function RootLayout({ children }) {
     <ThemeProvider>
       <UserPreferencesProvider>
   <div className={`${inter.className} min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100`}>
-        {/* Skip Navigation Link */}
+        {/* Skip Navigation Link - First focusable element for accessibility */}
         <a
           href="#main-content"
-          id="skip-to-content-btn"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-gray-950 focus:text-white focus:shadow-lg"
+          aria-label="Skip to main content"
+        >
+          Skip to main content
+        </a>
+        {/* Scroll to Top Button */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          id="scroll-to-top-btn"
           className="fixed bottom-6 right-6 bg-gray-950 dark:bg-gray-950 text-white w-14 h-14 flex items-center justify-center z-50 shadow-lg transition-all duration-300 opacity-0 pointer-events-none hover:bg-gray-950 dark:hover:bg-black/60 hover:scale-105"
           aria-label="Scroll to top"
         >
           <ArrowUp className="h-6 w-6" />
-        </a>
+        </button>
         <Navbar />
         <main id="main-content" className="min-h-screen pt-20 bg-white dark:bg-black" aria-label="Main content">
           {children}

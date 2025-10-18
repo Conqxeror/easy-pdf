@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
   const inlineFavicon = `data:image/svg+xml;utf8,${inlineFaviconSvg}`;
 
   return (
-  <html lang="en" className="scroll-smooth" style={{ backgroundColor: '#000000' }}>
+  <html lang="en" className="scroll-smooth bg-black">
       <head>
         {/* Inline data-URL favicon (highest priority) */}
         <link rel="icon" href={inlineFavicon} />

@@ -5,6 +5,10 @@ import { toolsData } from './toolData';
  * Get metadata for a tool page using toolsData
  * @param {string} href - The tool href (e.g., '/merge')
  * @returns {object} - Metadata and structured data for the tool
+ * 
+ * IMPORTANT: This function always returns a complete metadata object.
+ * The fallback ensures that `toolSeo?.metadata || {}` in layout files
+ * will receive valid metadata even if the tool is not found in toolData.
  */
 export function getToolMetadata(href) {
   const tool = toolsData.find(t => t.href === href);

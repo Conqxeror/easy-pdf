@@ -348,7 +348,6 @@ export default function ReorderPage() {
                   aria-grabbed={
                     dragItem.current === displayIndex ? "true" : "false"
                   }
-                  aria-dropeffect="move"
                 >
                   <span className="text-sm font-medium mb-2 text-gray-100">
                     Page {originalPageIndex + 1}

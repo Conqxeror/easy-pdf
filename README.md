@@ -115,7 +115,13 @@ If you have a suggestion that would make this better, please fork the repo and c
 4.  Push to the Branch (`git push origin feature/AmazingFeature`)
 5.  Open a Pull Request
 
-## 📄 License
+## � Documentation
+
+- **[Quick Reference Guide](QUICK_REFERENCE.md)** - Best practices, common issues, and development checklist
+- **[Recent Improvements](IMPROVEMENTS_2025-10.md)** - October 2025 code quality and consistency improvements
+- **[Copilot Instructions](.github/copilot-instructions.md)** - AI-assisted development guidelines
+
+## �📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 

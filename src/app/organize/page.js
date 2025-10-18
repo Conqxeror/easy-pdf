@@ -372,7 +372,6 @@ export default function OrganizePage() {
                   aria-grabbed={
                     dragItem.current === displayIndex ? "true" : "false"
                   }
-                  aria-dropeffect="move"
                 >
                   <span
                     className={`text-sm font-medium mb-2 ${

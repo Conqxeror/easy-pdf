@@ -121,7 +121,14 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            // Allow buymeacoffee image CDN and the buymeacoffee script host so the external button widget can load
+            // CSP Notes:
+            // - 'unsafe-inline' and 'unsafe-eval' are currently required for:
+            //   1. Next.js development mode and React hydration
+            //   2. JSON-LD structured data injected via dangerouslySetInnerHTML
+            //   3. PDF.js and Tesseract.js worker initialization
+            //   4. Buy Me a Coffee widget
+            // TODO: Consider using CSP nonces or hashes to remove 'unsafe-inline'
+            // TODO: Isolate third-party widgets in iframes with separate CSP
             value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://vercel.live https://cdnjs.buymeacoffee.com; worker-src 'self' blob: https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https://cdn.buymeacoffee.com https://www.buymeacoffee.com data: blob:; media-src 'self'; font-src 'self'; connect-src 'self' https://infragrid.v.network https://cdn.jsdelivr.net https://vitals.vercel-insights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests; block-all-mixed-content;",
           },
           {
