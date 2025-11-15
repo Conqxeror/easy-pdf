@@ -63,7 +63,12 @@ export const generateJsonLd = (pageType, pageData = {}) => {
       "PDF Form Filling",
       "PDF Signing"
     ],
-    "screenshot": `${baseUrl}/og-image.jpg`,
+    "screenshot": {
+      "@type": "ImageObject",
+      "url": `${baseUrl}/og/homepage`,
+      "width": 1200,
+      "height": 630
+    },
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
@@ -92,7 +97,13 @@ export const generateJsonLd = (pageType, pageData = {}) => {
           "priceCurrency": "INR"
         },
         "featureList": pageData.features || [],
-        "browserRequirements": "Modern web browser with JavaScript enabled"
+        "browserRequirements": "Modern web browser with JavaScript enabled",
+        "screenshot": {
+          "@type": "ImageObject",
+          "url": `${baseUrl}/og/tool/${(pageData.url || '').replace(/^\//, '')}`,
+          "width": 1200,
+          "height": 630
+        }
       }
       return [organizationSchema, toolSchema]
 

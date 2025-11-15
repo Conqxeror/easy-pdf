@@ -12,6 +12,21 @@ export default async function sitemap() {
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: ['merge', 'split', 'compress', 'jpg-to-pdf', 'pdf-to-jpg'].some(p => tool.href.includes(p)) ? 0.9 : 0.8,
+    images: [
+      {
+        url: (function () {
+          const staticPath = `/og-static/${tool.href.replace(/^\//, '')}.png`;
+          const exists = (() => {
+            try { return require('fs').existsSync(require('path').join(process.cwd(), 'public', 'og-static', `${tool.href.replace(/^\//, '')}.png`)); } catch { return false; }
+          })();
+
+          return exists ? `${resolvedBase}${staticPath}` : `${resolvedBase}/og/tool/${tool.href.replace(/^\//, '')}`;
+        })(),
+        title: tool.title,
+        width: 1200,
+        height: 630
+      }
+    ]
   }));
 
   // Build category list from toolCategories to keep slugs and names in sync
@@ -37,6 +52,7 @@ export default async function sitemap() {
     lastModified: new Date(),
     changeFrequency: item.changeFrequency,
     priority: item.priority,
+    images: item.route === '' ? [{ url: `${resolvedBase}/og/homepage`, title: 'easy-pdf' }] : undefined,
   }));
 
   return [...routes, ...categoryPages, ...tools];

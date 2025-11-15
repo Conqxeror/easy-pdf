@@ -1,4 +1,6 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from './seoEnhancements';
+import fs from 'fs';
+import path from 'path';
 import { toolsData } from './toolData';
 
 /**
@@ -12,7 +14,7 @@ import { toolsData } from './toolData';
  */
 export function getToolMetadata(href) {
   const tool = toolsData.find(t => t.href === href);
-  
+
   if (!tool) {
     console.warn(`Tool not found for href: ${href}`);
     // Return a safe fallback metadata object so callers that do `toolSeo?.metadata || {}`
@@ -26,6 +28,7 @@ export function getToolMetadata(href) {
       canonicalUrl,
       metadataBaseUrl: resolvedBase,
       toolName: 'easy-pdf',
+      ogImage: `${resolvedBase}/og/homepage`,
       pageType: 'tool'
     });
 
@@ -46,6 +49,16 @@ export function getToolMetadata(href) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL;
   const resolvedBase = baseUrl ? (baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`) : 'https://easy-pdf-murex.vercel.app';
   const canonicalUrl = `${resolvedBase}${href}`;
+  const slug = href.replace(/^\//, '');
+  // Prefer pre-generated static OG images in public/og-static for top pages if available.
+  const staticPath = path.join(process.cwd(), 'public', 'og-static', `${slug}.png`);
+  let ogImageUrl;
+  if (fs.existsSync(staticPath)) {
+    ogImageUrl = `${resolvedBase}/og-static/${slug}.png`;
+  } else {
+    const ogVersion = tool.ogImageVersion ? `?v=${tool.ogImageVersion}` : '';
+    ogImageUrl = `${resolvedBase}/og/tool/${slug}${ogVersion}`;
+  }
 
   // Generate metadata
   const metadata = generateEnhancedMetadata({
@@ -54,6 +67,7 @@ export function getToolMetadata(href) {
     keywords: tool.keywords || [],
     canonicalUrl,
     metadataBaseUrl: resolvedBase,
+    ogImage: ogImageUrl,
     toolName: tool.title,
     pageType: 'tool',
     breadcrumbs: [
@@ -102,7 +116,7 @@ export function getAllToolRoutes() {
 export function getRelatedTools(href) {
   const tool = toolsData.find(t => t.href === href);
   if (!tool || !tool.relatedTools) return [];
-  
+
   return tool.relatedTools
     .map(relatedHref => toolsData.find(t => t.href === relatedHref))
     .filter(Boolean);

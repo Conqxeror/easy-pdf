@@ -14,6 +14,9 @@
     ],
     "seoTitle": "Free PDF Merger - Combine Multiple PDFs Online",
     "seoDescription": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
+    "ogTitle": "Merge PDF — Combine Files Fast & Secure",
+    "ogSubtitle": "Privacy-first, client-side processing. No uploads." ,
+    "ogImageVersion": "2025-11-16",
     "features": [
       "Drag & drop multiple files",
       "Reorder before merging",
@@ -42,6 +45,9 @@
     ],
     "seoTitle": "Free PDF Splitter - Instant Page Extraction Online",
     "seoDescription": "Split PDF files into separate documents or extract specific pages instantly. Free online tool with secure browser-based processing. No upload limits or registration.",
+    "ogTitle": "Split PDF — Extract Pages Instantly",
+    "ogSubtitle": "Quick, secure and private — split pages in seconds.",
+    "ogImageVersion": "2025-11-16",
     "features": [
       "Extract specific pages",
       "Split by page ranges",
@@ -70,6 +76,9 @@
     ],
     "seoTitle": "Free PDF Compressor - Reduce File Size Instantly",
     "seoDescription": "Compress PDF files to reduce size while maintaining quality. Free online compression tool with secure browser processing and no data retention.",
+    "ogTitle": "Compress PDF — Reduce File Size Quickly",
+    "ogSubtitle": "Optimize for web and email with privacy-first compression.",
+    "ogImageVersion": "2025-11-16",
     "features": [
       "Multiple compression levels",
       "Quality preservation",
@@ -99,6 +108,9 @@
     ],
     "seoTitle": "Free JPG to PDF - Convert Images Instantly Online",
     "seoDescription": "Convert JPG, PNG, and other images to PDF format instantly. Free online converter with batch processing, secure browser-based conversion. No uploads required.",
+    "ogTitle": "JPG to PDF — Convert Images to PDF",
+    "ogSubtitle": "Batch convert images to PDF in your browser.",
+    "ogImageVersion": "2025-11-16",
     "features": [
       "Multiple image formats",
       "Batch conversion",
@@ -127,6 +139,9 @@
     ],
     "seoTitle": "Free PDF to JPG - Export Images Securely Online",
     "seoDescription": "Convert PDF pages to high-quality JPG images instantly. Free online tool with customizable quality, secure browser-based processing. Batch convert with no file limits.",
+    "ogTitle": "PDF to JPG — Export Pages as Images",
+    "ogSubtitle": "High-quality conversion with privacy-first processing.",
+    "ogImageVersion": "2025-11-16",
     "features": [
       "High-quality output",
       "Custom resolution",

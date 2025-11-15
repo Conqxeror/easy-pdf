@@ -3,17 +3,17 @@
 
 "use client";
 
-import React, { useState, useEffect  } from 'react';
-import { 
-  Heart, 
-  
-  TrendingUp, 
-  Users, 
-  Globe, 
+import React, { useState, useEffect } from 'react';
+import {
+  Heart,
+
+  TrendingUp,
+  Users,
+  Globe,
   Shield,
   Zap,
   Coffee,
-  
+
   BarChart3,
   Target
 } from 'lucide-react';
@@ -32,24 +32,24 @@ const SponsorsPage = () => {
     // Load analytics data
     const appAnalytics = getAppUsageAnalytics();
     setAnalytics(appAnalytics);
-    
+
     // Load sponsor reports
     const reports = getAllSponsorReports();
     setSponsorReports(reports);
-    
+
     // Track page view
     trackEvent('sponsors_page_viewed');
     trackSponsorView('sponsors_page', 'full_page');
   }, []);
 
   const handleSponsorClick = (sponsorId, url, placement = 'main_page') => {
-    try { trackSponsorClick && trackSponsorClick(sponsorId, placement); } catch {}
+    try { trackSponsorClick && trackSponsorClick(sponsorId, placement); } catch { }
     if (typeof window === 'undefined') return;
     try {
       const newWin = window.open(url, '_blank', 'noopener,noreferrer');
-      try { if (newWin) newWin.opener = null; } catch {}
+      try { if (newWin) newWin.opener = null; } catch { }
     } catch {
-      try { window.location.href = url; } catch {}
+      try { window.location.href = url; } catch { }
     }
   };
 
@@ -72,11 +72,11 @@ const SponsorsPage = () => {
             Our Amazing Sponsors ❤️
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-            These incredible partners make easy-pdf completely free for everyone. 
+            These incredible partners make easy-pdf completely free for everyone.
             Show them some love and check out their amazing services!
           </p>
           {/* removed green 'Contact to Sponsor' button to simplify hero */}
-          
+
           {/* App Stats */}
           {analytics && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
@@ -106,7 +106,7 @@ const SponsorsPage = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Meet Our Sponsors</h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            These trusted partners share our commitment to privacy, security, and providing 
+            These trusted partners share our commitment to privacy, security, and providing
             valuable tools to the community.
           </p>
         </div>
@@ -150,7 +150,7 @@ const SponsorsPage = () => {
                       const el = document.getElementById('partnership-tiers');
                       if (el) {
                         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch {}
+                        try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch { }
                       }
                     } catch {
                       window.location.href = '/#partnership-tiers';
@@ -198,7 +198,7 @@ const SponsorsPage = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Sponsors?</h2>
             <p className="text-gray-400 max-w-3xl mx-auto">
-              We believe in keeping powerful tools free and accessible. Our sponsor model 
+              We believe in keeping powerful tools free and accessible. Our sponsor model
               allows us to maintain the highest standards while never charging users.
             </p>
           </div>
@@ -210,7 +210,7 @@ const SponsorsPage = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Privacy First</h3>
               <p className="text-gray-400">
-                All sponsors are vetted for privacy practices. We only partner with 
+                All sponsors are vetted for privacy practices. We only partner with
                 companies that respect user privacy and data protection.
               </p>
             </div>
@@ -221,7 +221,7 @@ const SponsorsPage = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Community Driven</h3>
               <p className="text-gray-400">
-                Our sponsors share our values of building tools that serve the community. 
+                Our sponsors share our values of building tools that serve the community.
                 They help us keep improving without compromising our mission.
               </p>
             </div>
@@ -232,7 +232,7 @@ const SponsorsPage = () => {
               </div>
               <h3 className="text-xl font-semibold mb-3">Sustainable Growth</h3>
               <p className="text-gray-400">
-                Sponsorships allow us to invest in new features, better performance, 
+                Sponsorships allow us to invest in new features, better performance,
                 and expanded capabilities while keeping everything free.
               </p>
             </div>
@@ -303,7 +303,7 @@ const SponsorsPage = () => {
           </div>
 
           {/* Buy Me A Coffee anchor + image */}
-            <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <div className="preserve-color">
               <div dangerouslySetInnerHTML={{ __html: `<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kadriwalimt" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Sponsor this project." data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>` }} />
             </div>
@@ -316,7 +316,7 @@ const SponsorsPage = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold mb-4">Thank You! 🙏</h2>
           <p className="text-gray-400">
-            To our sponsors and users - you make this possible. Together, we&apos;re building 
+            To our sponsors and users - you make this possible. Together, we&apos;re building
             a better, more private, and more accessible web.
           </p>
         </div>

@@ -109,13 +109,6 @@ export const generateEnhancedMetadata = ({
           height: 630,
           alt: `${toolName || title} - Free PDF Tool | easy-pdf`,
           type: "image/jpeg",
-        },
-        {
-          url: ogImage || "/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: `${toolName || title} - Privacy-First PDF Processing`,
-          type: "image/jpeg",
         }
       ],
       ...(pageType === 'article' && {
@@ -169,9 +162,9 @@ export const generateEnhancedMetadata = ({
       'msapplication-TileColor': '#1f2937',
       'msapplication-config': '/browserconfig.xml',
       'og:image:secure_url': ogImage || "/og-image.jpg",
-      'og:image:type': 'image/jpeg',
       'og:image:width': '1200',
       'og:image:height': '630',
+      'og:image:type': 'image/jpeg',
     },
 
     // Additional metadata for better SEO
@@ -261,6 +254,14 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       "@type": "SoftwareApplication",
       "@id": `${baseUrl}#software`
     }
+    ,
+    "image": {
+      "@type": "ImageObject",
+      "url": `${baseUrl}/og/homepage`,
+      "width": 1200,
+      "height": 630,
+      "caption": "easy-pdf - Privacy-first PDF tools"
+    }
   }
 
   const softwareApplicationSchema = {
@@ -296,7 +297,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       "OCR - Extract text from images",
       "Page Management - Organize pages"
     ],
-    "screenshot": `${baseUrl}/og-image.jpg`,
+    "screenshot": `${baseUrl}/og/homepage`,
     // Note: Aggregate rating removed - add real user ratings when available
     // "aggregateRating": {
     //   "@type": "AggregateRating",
@@ -346,7 +347,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         },
         "featureList": pageData.features || [],
         "browserRequirements": "Modern web browser with JavaScript enabled",
-        "screenshot": `${baseUrl}/og-image.jpg`,
+        "screenshot": `${baseUrl}/og/homepage`,
         "mainEntity": {
           "@type": "SoftwareApplication",
           "@id": `${baseUrl}#software`

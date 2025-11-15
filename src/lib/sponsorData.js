@@ -14,7 +14,7 @@ export const sponsorTiers = {
     ]
   },
   GOLD: {
-    name: "Gold Sponsor", 
+    name: "Gold Sponsor",
     price: "$200/month",
     maxSponsors: 5,
     benefits: [
@@ -26,7 +26,7 @@ export const sponsorTiers = {
   },
   SILVER: {
     name: "Silver Sponsor",
-    price: "$100/month", 
+    price: "$100/month",
     maxSponsors: 10,
     benefits: [
       "Small logo on homepage",
@@ -98,11 +98,11 @@ export const hasRealSponsors = () => {
 export const getTotalMonthlyRevenue = () => {
   const tierPrices = {
     PLATINUM: 500,
-    GOLD: 200, 
+    GOLD: 200,
     SILVER: 100,
     BRONZE: 50
   };
-  
+
   return currentSponsors.reduce((total, sponsor) => {
     return total + tierPrices[sponsor.tier];
   }, 0);
@@ -117,14 +117,14 @@ export const sponsorApplicationFields = [
     required: true
   },
   {
-    name: "contactEmail", 
+    name: "contactEmail",
     label: "Contact Email",
     type: "email",
     required: true
   },
   {
     name: "website",
-    label: "Company Website", 
+    label: "Company Website",
     type: "url",
     required: true
   },

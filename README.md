@@ -48,13 +48,14 @@ Our toolkit offers a wide range of functionalities to empower your document work
 
 This project leverages modern web technologies to deliver a robust and efficient application:
 
--   **Next.js 15**: ⚛️ A React framework for production-grade applications.
--   **React 19**: 💡 A JavaScript library for building user interfaces.
--   **Tailwind CSS**: 🎨 A utility-first CSS framework for rapid UI development.
--   **Radix UI**: 🧩 High-quality, accessible UI components.
--   **PDF.js**: 📖 For rendering and manipulating PDF documents directly in the browser.
--   **Tesseract.js**: 🤖 For performing Optical Character Recognition (OCR).
--   **Framer Motion**: ✨ For smooth animations and transitions.
+
+## Open Graph & Analytics
+
+- Dynamic Open Graph (OG) images are generated at runtime by the App Router at `/og/tool/:slug` for tool pages and `/og/homepage` for the homepage. These images are 1200x630 (recommended)
+- Local fonts for OG rendering can be added to `public/fonts/` (see `public/fonts/README.md`). The generator falls back to Google Fonts if local fonts are not available.
+- The server logs OG hits via `/api/og/log`; to forward OG hits to Google Analytics (Measurement Protocol), set `GA_MEASUREMENT_ID` and `GA_API_SECRET` in environment variables (see `.env.example`).
+ - You can also pre-generate OG images at build-time for high-traffic pages using `npm run generate-og-static` — this stores images in `public/og-static/{slug}.png` and `public/og-static/homepage.png` and is used automatically by the metadata helpers when present.
+ - The `prebuild` script runs the static OG generation step automatically (so `npm run build` will also create these static OG images prior to building the Next.js site).
 
 ## 💻 Getting Started
 

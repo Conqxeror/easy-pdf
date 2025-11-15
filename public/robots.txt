@@ -20,6 +20,8 @@ Allow: /og-image.jpg
 Allow: /twitter-image.jpg
 Allow: /site.webmanifest
 Allow: /favicon.ico
+Allow: /og/
+Allow: /api/og/
 
 # Sitemap - Next.js will serve this dynamically at /sitemap.xml
 # The URL will adapt to your deployment domain automatically

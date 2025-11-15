@@ -24,6 +24,17 @@
 .DS_Store
 *.pem
 
+# OS files
+Thumbs.db
+ehthumbs.db
+
+# Editor / IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.swp
+
 # debug
 npm-debug.log*
 yarn-debug.log*
@@ -46,3 +57,51 @@ next-env.d.ts
 .continue/
 
 lighthouse-tool-page-result.json
+
+# logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# pnpm
+/node_modules/.pnpm
+
+# caches
+.cache/
+.next/cache/
+
+# Playwright (tests)
+playwright-report/
+# Playwright traces/videos
+tests/e2e/traces/
+tests/e2e/videos/
+
+# E2E screenshot outputs: ignore generated screenshots but keep baseline folder
+tests/e2e/screenshots/*
+!tests/e2e/screenshots/baseline/
+!tests/e2e/screenshots/baseline/**
+
+# Parcel / bundlers cache
+.parcel-cache/
+
+# ESLint cache
+.eslintcache
+
+# Next standalone output
+.next/standalone/
+
+# temp files
+tmp/
+temp/
+
+# caches created by tools
+.turbo/
+.vercel/build
+.vercel/cache
+
+# test results and CI artifacts
+/test-results/
+/.nyc_output/

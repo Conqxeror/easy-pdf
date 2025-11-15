@@ -7,13 +7,14 @@ export const metadata = generateEnhancedMetadata({
 
 
   keywords: [
-    "PDF tools", "Merge PDF", "Split PDF", "Compress PDF", "JPG to PDF", "PDF to JPG", 
+    "PDF tools", "Merge PDF", "Split PDF", "Compress PDF", "JPG to PDF", "PDF to JPG",
     "Free PDF Tools", "India", "Privacy-first", "Client-side processing", "Secure PDF tools",
     "Browser PDF editor", "No upload PDF tools", "PDF converter", "Document processing"
   ],
   canonicalUrl: "https://easy-pdf-murex.vercel.app",
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
   pageType: "homepage",
+  ogImage: "https://easy-pdf-murex.vercel.app/og/homepage",
   lastModified: new Date().toISOString()
 });
 
@@ -34,37 +35,37 @@ export default function RootLayout({ children }) {
   const inlineFavicon = `data:image/svg+xml;utf8,${inlineFaviconSvg}`;
 
   return (
-  <html lang="en" className="scroll-smooth bg-black">
+    <html lang="en" className="scroll-smooth bg-black">
       <head>
         {/* Inline data-URL favicon (highest priority) */}
         <link rel="icon" href={inlineFavicon} />
         <link rel="manifest" href="/site.webmanifest" />
-    {/* Favicon & touch icons with cache-bust to ensure fresh load during dev */}
-  {/* Prefer ICO/PNG (white) for tab visibility; SVG left as fallback */}
-  <link rel="icon" href={`/favicon.ico?v=${cacheBust}`} type="image/x-icon" />
-  <link rel="icon" href={`/favicon.png?v=${cacheBust}`} sizes="16x16" />
-  <link rel="shortcut icon" href={`/favicon.png?v=${cacheBust}`} />
-  <link rel="apple-touch-icon" href={`/apple-touch-icon.png?v=${cacheBust}`} />
-    {/* Prefer SVG icon for modern browsers as a fallback */}
-    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-  <meta name="msapplication-TileImage" content={`/apple-touch-icon.png?v=${cacheBust}`} />
-  {/* Safari pinned tab mask icon (use white for dark tab visibility) */}
-  <link rel="mask-icon" href="/icon.svg" color="#ffffff" />
+        {/* Favicon & touch icons with cache-bust to ensure fresh load during dev */}
+        {/* Prefer ICO/PNG (white) for tab visibility; SVG left as fallback */}
+        <link rel="icon" href={`/favicon.ico?v=${cacheBust}`} type="image/x-icon" />
+        <link rel="icon" href={`/favicon.png?v=${cacheBust}`} sizes="16x16" />
+        <link rel="shortcut icon" href={`/favicon.png?v=${cacheBust}`} />
+        <link rel="apple-touch-icon" href={`/apple-touch-icon.png?v=${cacheBust}`} />
+        {/* Prefer SVG icon for modern browsers as a fallback */}
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <meta name="msapplication-TileImage" content={`/apple-touch-icon.png?v=${cacheBust}`} />
+        {/* Safari pinned tab mask icon (use white for dark tab visibility) */}
+        <link rel="mask-icon" href="/icon.svg" color="#ffffff" />
         <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-        
+
         {/* Performance Optimizations */}
         {performanceHints.preconnect.map((hint, index) => (
           <link key={`preconnect-${index}`} rel="preconnect" href={hint.href} {...(hint.crossOrigin && { crossOrigin: hint.crossOrigin })} />
         ))}
-        
+
         {performanceHints.preload.map((hint, index) => (
           <link key={`preload-${index}`} rel="preload" href={hint.href} as={hint.as} {...(hint.type && { type: hint.type })} {...(hint.crossOrigin && { crossOrigin: hint.crossOrigin })} />
         ))}
-        
+
         {performanceHints.prefetch.map((hint, index) => (
           <link key={`prefetch-${index}`} rel="prefetch" href={hint.href} as={hint.as} />
         ))}
-        
+
         <link rel="dns-prefetch" href="https://vercel.live" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="format-detection" content="telephone=no" />
@@ -77,14 +78,14 @@ export default function RootLayout({ children }) {
         <meta name="apple-mobile-web-app-title" content="easy-pdf" />
         <meta name="application-name" content="easy-pdf" />
         <meta name="msapplication-TileColor" content="#000000" />
-        
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
       <body className="antialiased bg-black">
-  <ClientLayout>{children}</ClientLayout>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
