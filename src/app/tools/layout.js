@@ -1,5 +1,8 @@
 import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app'
+const siteUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`
+
 export const metadata = generateEnhancedMetadata({
   title: 'All PDF Tools - easy-pdf | Complete PDF Toolkit',
   description: 'Complete suite of PDF tools organized by category. Merge, split, compress, convert, secure, and edit PDFs with our privacy-first tools. 100% client-side processing with no file uploads.',
@@ -9,7 +12,8 @@ export const metadata = generateEnhancedMetadata({
     "Client-side PDF processing", "No upload PDF tools", "Secure PDF tools", "Browser-based PDF tools",
     "Online PDF editor", "PDF processing tools", "Document management tools"
   ],
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  canonicalUrl: `${siteUrl}/tools`,
+  metadataBaseUrl: siteUrl,
 });
 
 export default function ToolsLayout({ children }) {

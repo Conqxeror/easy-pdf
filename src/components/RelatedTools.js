@@ -5,8 +5,21 @@ import { toolCategories } from '@/lib/toolCategories';
 import { Card } from '@/components/ui/Layout';
 
 const RelatedTools = ({ currentTool, tools }) => {
-  // Get related tools based on categories and functionality
+  // Get related tools based on relatedTools field in toolData, with fallback to category
   const getRelatedTools = () => {
+    // Find current tool in tools array
+    const currentToolData = tools.find(tool =>
+      tool.href === `/${currentTool}` || tool.href === currentTool
+    );
+
+    // If current tool has relatedTools field, use that for best internal linking
+    if (currentToolData && currentToolData.relatedTools && currentToolData.relatedTools.length > 0) {
+      return tools
+        .filter(tool => currentToolData.relatedTools.includes(tool.href))
+        .slice(0, 4);
+    }
+
+    // Fallback: Get related tools based on categories
     let currentToolCategory = null;
     // Find the category of the current tool from toolCategories
     for (const category of toolCategories) {
@@ -49,17 +62,17 @@ const RelatedTools = ({ currentTool, tools }) => {
 
   return (
     <div className="container-standard px-6 py-8">
-  <Card className="bg-black/90 border border-gray-600 p-6 shadow-xl">
-          <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+      <Card className="bg-black/90 border border-gray-600 p-6 shadow-xl">
+        <h3 className="text-xl font-bold text-white mb-6 flex items-center">
           <span className="mr-3 flex-shrink-0">
             <PenTool className="w-5 h-5 text-white" />
           </span>
           Related PDF Tools
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {relatedTools.map((tool) => (
-                <Link
+            <Link
               key={tool.href}
               href={tool.href}
               className="group flex items-start p-4 border border-gray-600 hover:border-gray-600 hover:bg-black/60 transition-all duration-200"
@@ -84,7 +97,7 @@ const RelatedTools = ({ currentTool, tools }) => {
 
         <div className="mt-6 pt-4 border-t border-gray-700">
           <Link
-            href="/"
+            href="/tools"
             className="text-sm text-gray-400 hover:text-gray-300 font-medium inline-flex items-center group"
           >
             View all PDF tools

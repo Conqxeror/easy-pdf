@@ -1,13 +1,14 @@
 // Enhanced structured data for better SEO
 export const generateJsonLd = (pageType, pageData = {}) => {
-  const baseUrl = 'https://easy-pdf-murex.vercel.app'
-  
+  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
+  const baseUrl = (envBase && envBase.startsWith('http')) ? envBase : (envBase ? `https://${envBase}` : 'https://easy-pdf-murex.vercel.app')
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "easy-pdf",
     "url": baseUrl,
-  "logo": `${baseUrl}/icon.svg`,
+    "logo": `${baseUrl}/icon.svg`,
     "description": "Privacy-first PDF tools for secure document processing",
     "foundingDate": "2024",
     "contactPoint": {
@@ -52,7 +53,7 @@ export const generateJsonLd = (pageType, pageData = {}) => {
     },
     "featureList": [
       "PDF Merge",
-      "PDF Split", 
+      "PDF Split",
       "PDF Compress",
       "PDF to JPG",
       "JPG to PDF",
@@ -74,7 +75,7 @@ export const generateJsonLd = (pageType, pageData = {}) => {
   switch (pageType) {
     case 'homepage':
       return [organizationSchema, websiteSchema, softwareApplicationSchema]
-    
+
     case 'tool':
       const toolSchema = {
         "@context": "https://schema.org",
@@ -94,7 +95,7 @@ export const generateJsonLd = (pageType, pageData = {}) => {
         "browserRequirements": "Modern web browser with JavaScript enabled"
       }
       return [organizationSchema, toolSchema]
-    
+
     case 'faq':
       const faqSchema = {
         "@context": "https://schema.org",
@@ -109,7 +110,7 @@ export const generateJsonLd = (pageType, pageData = {}) => {
         })) || []
       }
       return [organizationSchema, faqSchema]
-    
+
     default:
       return [organizationSchema]
   }

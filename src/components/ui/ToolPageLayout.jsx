@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton, SkeletonCard } from "@/components/ui/skeleton";
 import Breadcrumb from "@/components/Breadcrumb";
 import { toolsData } from '@/lib/toolData';
+import { getFAQsForTool } from '@/lib/faqData';
 import { useTheme } from "@/contexts/ThemeContext";
 import { CheckCircle, Sparkles, FileText, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, Search, FileHeart, Settings, Bookmark, Table, Layers, Shield, EyeOff, GitCompare, MessageSquare, Calculator, QrCode, Award, Briefcase, Files } from "lucide-react";
 
@@ -258,7 +259,8 @@ export default function ToolPageLayout({
                 >
                   How to Use
                 </AccessibleHeading>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+                {/* Make each step card full width and stack vertically for clearer reading */}
+                <div className="grid grid-cols-1 gap-8 md:gap-10">
                   {steps.map((step, index) => (
                     <Card 
                       key={index}
@@ -275,6 +277,8 @@ export default function ToolPageLayout({
                         <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
                           {step}
                         </p>
+
+                        {/* Pro tips removed — keeping How to Use content concise */}
                       </div>
                     </Card>
                   ))}
@@ -284,7 +288,7 @@ export default function ToolPageLayout({
           )}
 
           {/* FAQs - Enhanced Accordion */}
-          {faqs.length > 0 && (
+          {((faqs && faqs.length > 0) || currentTool) && (
             <Section className="px-6 py-6">
               <div className="container-standard max-w-4xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-300">
                 <AccessibleHeading 
@@ -293,10 +297,23 @@ export default function ToolPageLayout({
                 >
                   Frequently Asked Questions
                 </AccessibleHeading>
-                <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto space-y-4">
-                  {faqs.map((faq, index) => (
+                {(() => {
+                  // Merge provided page FAQs with common/tool-specific FAQs for richer content
+                  const provided = Array.isArray(faqs) ? faqs : []
+                  let merged = [...provided]
+                  if (currentTool) {
+                    const extra = getFAQsForTool(currentTool)
+                    extra.forEach(e => {
+                      if (!merged.some(m => m.question?.toLowerCase() === e.question?.toLowerCase())) merged.push(e)
+                    })
+                  }
+
+                  return (
+                    <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto space-y-4">
+                      {merged.map((faq, index) => (
                     <AccordionItem 
                       key={index}
+                      value={`faq-${index}`}
                       className="bg-white dark:bg-gray-950 border border-gray-800 px-6 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
                     >
                       <AccordionTrigger className="text-left text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-400 font-semibold py-5">
@@ -308,6 +325,8 @@ export default function ToolPageLayout({
                     </AccordionItem>
                   ))}
                 </Accordion>
+                  )
+                })()}
               </div>
             </Section>
           )}

@@ -32,6 +32,27 @@ async function gen() {
         .png({ quality: 90 })
         .toFile(outPath);
     }
+    // Also generate favicon.ico from multiple PNG sizes for cross-browser support
+    try {
+      const icoSizes = [16, 32, 48, 64];
+      const pngBuffers = await Promise.all(
+        icoSizes.map((size) =>
+          sharp(svgPath)
+            .resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+            .png({ quality: 90 })
+            .toBuffer()
+        )
+      );
+
+      // Use `to-ico` package to convert an array of PNG buffers to an ICO buffer
+      const toIco = require('to-ico');
+      const icoBuffer = await toIco(pngBuffers);
+      const icoPath = path.join(publicDir, 'favicon.ico');
+      await fs.promises.writeFile(icoPath, icoBuffer);
+      console.log('Generated favicon.ico');
+    } catch (err) {
+      console.error('Error generating favicon.ico:', err);
+    }
     console.log('All icons generated successfully.');
   } catch (err) {
     console.error('Error generating icons:', err);

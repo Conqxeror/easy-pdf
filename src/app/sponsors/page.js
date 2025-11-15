@@ -6,22 +6,23 @@
 import React, { useState, useEffect  } from 'react';
 import { 
   Heart, 
-  Star, 
+  
   TrendingUp, 
   Users, 
   Globe, 
   Shield,
   Zap,
   Coffee,
-  Award,
-  ExternalLink,
+  
   BarChart3,
   Target
 } from 'lucide-react';
 import { trackSponsorView, trackSponsorClick, getAllSponsorReports } from '@/lib/sponsorAnalytics';
+import { getAllSponsors } from '@/lib/sponsorData';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
 import Image from 'next/image';
+import SponsorCard from '@/components/ui/SponsorCard';
 
 const SponsorsPage = () => {
   const [analytics, setAnalytics] = useState(null);
@@ -52,38 +53,15 @@ const SponsorsPage = () => {
     }
   };
 
-  // support keyboard accessibility for sponsor cards
-  const handleSponsorKey = (e, sponsor) => {
-    // Accept Enter and both common Space key identifiers for broad browser support
-    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-      e.preventDefault();
-      handleSponsorClick(sponsor.id, sponsor.url);
-    }
-  };
+  // SponsorCard provides keyboard accessibility — no page-level key handlers required
 
   // handleSponsorInquiryClick removed; leave analytics event calls inline where needed.
 
-  // We intentionally don't show placeholder sponsors. Instead show an honest
-  // empty state that invites meaningful sponsorships and explains free access.
-  const sponsors = [];
+  // Pull sponsors from central data. Using `getAllSponsors()` will include
+  // the mock entry in `src/lib/sponsorData.js` for local testing.
+  const sponsors = getAllSponsors();
 
-  const getTierColor = (tier) => {
-    switch (tier) {
-      case 'platinum': return 'from-gray-600 to-gray-700';
-      case 'gold': return 'from-yellow-400 to-orange-500';
-      case 'silver': return 'from-gray-400 to-gray-600';
-      default: return 'from-gray-400 to-gray-700';
-    }
-  };
-
-  const getTierIcon = (tier) => {
-    switch (tier) {
-      case 'platinum': return <Award className="w-5 h-5" />;
-      case 'gold': return <Star className="w-5 h-5" />;
-      case 'silver': return <Target className="w-5 h-5" />;
-      default: return <Heart className="w-5 h-5" />;
-    }
-  };
+  // Formatting and tier icons are handled by `SponsorCard` itself.
 
   return (
     <div className="min-h-screen bg-black text-gray-100">
@@ -124,7 +102,7 @@ const SponsorsPage = () => {
       </div>
 
       {/* Sponsors Grid */}
-      <div className="max-w-6xl mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Meet Our Sponsors</h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
@@ -133,7 +111,7 @@ const SponsorsPage = () => {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto text-center">
           {sponsors.length === 0 ? (
             <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 shadow-lg ring-1 ring-white/5">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">We don’t have sponsors yet — you can be the first ✨</h3>
@@ -185,54 +163,30 @@ const SponsorsPage = () => {
               </div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {sponsors.map((sponsor) => (
-                <div
-                  key={sponsor.id}
-                  role="button"
-                  tabIndex={0}
-                  className="bg-gray-950 border border-gray-700 p-6 hover:border-gray-600 transition-all duration-300 hover:scale-105 cursor-pointer group"
-                  onClick={() => handleSponsorClick(sponsor.id, sponsor.url)}
-                  onKeyDown={(e) => handleSponsorKey(e, sponsor)}
-                  data-sponsor-id={sponsor.id}
-                  data-placement="main_grid"
-                >
-                  {/* Tier Badge */}
-                  <div className={`inline-flex items-center px-3 py-1 text-xs font-medium bg-gradient-to-r ${getTierColor(sponsor.tier)} text-white mb-4`}>
-                    {getTierIcon(sponsor.tier)}
-                    <span className="ml-1 capitalize">{sponsor.tier} Sponsor</span>
-                  </div>
-
-                  {/* Logo and Name */}
-                  <div className="flex items-center mb-4">
-                    <div className="text-3xl mr-3">{sponsor.logo}</div>
-                    <div>
-                      <h3 className="text-xl font-semibold group-hover:text-gray-400 transition-colors">
-                        {sponsor.name}
-                      </h3>
-                      <p className="text-sm text-gray-400">{sponsor.category}</p>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-gray-300 mb-4 line-clamp-3">
-                    {sponsor.description}
-                  </p>
-
-                  {/* Value Proposition */}
-                  <div className="bg-gray-950/50 p-3 mb-4">
-                    <p className="text-sm text-gray-300 font-medium">
-                      {sponsor.value}
-                    </p>
-                  </div>
-
-                  {/* CTA */}
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-400">Click to visit</span>
-                    <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-400 transition-colors" />
-                  </div>
+            <div className="flex justify-center">
+              {sponsors.length === 1 ? (
+                <div className="w-full flex justify-center">
+                  <SponsorCard
+                    key={sponsors[0].id}
+                    sponsor={sponsors[0]}
+                    size="medium"
+                    showDescription={true}
+                    onVisit={(id, url) => handleSponsorClick(id, url)}
+                  />
                 </div>
-              ))}
+              ) : (
+                <div className="inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center place-items-center justify-center mx-auto">
+                  {sponsors.map((sponsor) => (
+                    <SponsorCard
+                      key={sponsor.id}
+                      sponsor={sponsor}
+                      size="medium"
+                      showDescription={true}
+                      onVisit={(id, url) => handleSponsorClick(id, url)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

@@ -1,11 +1,11 @@
 // Enhanced SEO utilities for comprehensive optimization
-export const generateEnhancedMetadata = ({ 
-  title = 'easy-pdf', 
-  description = 'Privacy-first PDF tools for secure document processing.', 
-  keywords, 
-  canonicalUrl, 
+export const generateEnhancedMetadata = ({
+  title = 'easy-pdf',
+  description = 'Privacy-first PDF tools for secure document processing.',
+  keywords,
+  canonicalUrl,
   metadataBaseUrl,
-  toolName, 
+  toolName,
   ogImage,
   pageType = 'tool',
   breadcrumbs = [],
@@ -18,7 +18,7 @@ export const generateEnhancedMetadata = ({
   const baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
   const keywordArray = Array.isArray(keywords) ? keywords : (keywords ? [keywords] : [])
-  
+
   // Enhanced keywords with semantic variations
   const enhancedKeywords = [
     ...keywordArray,
@@ -34,14 +34,14 @@ export const generateEnhancedMetadata = ({
   ].filter(Boolean).join(', ')
 
   return {
-  metadataBase: new URL(resolvedBase),
+    metadataBase: new URL(resolvedBase),
     title: {
       default: baseTitle,
       template: '%s | easy-pdf - Privacy-First PDF Tools'
     },
     description: enhancedDescription,
     keywords: enhancedKeywords,
-  authors: [{ name: author, url: String(resolvedBase) }],
+    authors: [{ name: author, url: String(resolvedBase) }],
     creator: author,
     publisher: "easy-pdf",
     applicationName: "easy-pdf",
@@ -49,7 +49,7 @@ export const generateEnhancedMetadata = ({
     referrer: "origin-when-cross-origin",
     category: "Business Tools",
     classification: "Document Processing",
-    
+
     robots: {
       index: true,
       follow: true,
@@ -76,7 +76,7 @@ export const generateEnhancedMetadata = ({
         'max-snippet': -1,
       }
     },
-    
+
     alternates: {
       canonical: canonicalUrl || resolvedBase,
       languages: {
@@ -85,22 +85,22 @@ export const generateEnhancedMetadata = ({
         'en': canonicalUrl || resolvedBase
       }
     },
-    
+
     icons: {
-      icon: [ { url: "/icon.svg", sizes: "any", type: "image/svg+xml" } ],
+      icon: [{ url: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
       apple: "/icon.svg",
       shortcut: "/favicon.ico",
-      other: [ { rel: "mask-icon", url: "/icon.svg", color: "#1f2937" } ]
+      other: [{ rel: "mask-icon", url: "/icon.svg", color: "#1f2937" }]
     },
-    
+
     openGraph: {
       title: baseTitle,
       description: enhancedDescription,
-  url: canonicalUrl || resolvedBase,
+      url: canonicalUrl || resolvedBase,
       siteName: "easy-pdf - Privacy-First PDF Tools",
       type: pageType === 'homepage' ? 'website' : 'article',
-  locale: "en-IN",
-    alternateLocale: ["en-US", "en"],
+      locale: "en-IN",
+      alternateLocale: ["en-US", "en"],
       countryName: "India",
       images: [
         {
@@ -125,7 +125,7 @@ export const generateEnhancedMetadata = ({
         tags: keywordArray
       })
     },
-    
+
     twitter: {
       card: "summary_large_image",
       title: baseTitle,
@@ -141,9 +141,9 @@ export const generateEnhancedMetadata = ({
         }
       ],
     },
-    
+
     manifest: "/site.webmanifest",
-    
+
     verification: {
       google: process.env.GOOGLE_SITE_VERIFICATION || "google623ea46cb772f199",
       yandex: process.env.YANDEX_VERIFICATION,
@@ -153,7 +153,7 @@ export const generateEnhancedMetadata = ({
         'facebook-domain-verification': process.env.FACEBOOK_VERIFICATION,
       }
     },
-    
+
     other: {
       'mobile-web-app-capable': 'yes',
       'apple-mobile-web-app-capable': 'yes',
@@ -173,7 +173,7 @@ export const generateEnhancedMetadata = ({
       'og:image:width': '1200',
       'og:image:height': '630',
     },
-    
+
     // Additional metadata for better SEO
     category: 'Technology',
     bookmarks: canonicalUrl || resolvedBase,
@@ -187,7 +187,7 @@ export const generateEnhancedMetadata = ({
 export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
   const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
   const baseUrl = envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app'
-  
+
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -196,7 +196,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
     "url": baseUrl,
     "logo": {
       "@type": "ImageObject",
-  "url": `${baseUrl}/icon.svg`,
+      "url": `${baseUrl}/icon.svg`,
       "width": 512,
       "height": 512
     },
@@ -218,9 +218,9 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       "name": "India"
     },
     "knowsAbout": [
-      "PDF processing", 
-      "Document conversion", 
-      "File security", 
+      "PDF processing",
+      "Document conversion",
+      "File security",
       "Privacy protection",
       "Client-side processing",
       "Browser-based tools",
@@ -284,7 +284,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
     },
     "featureList": [
       "PDF Merge - Combine multiple PDFs",
-      "PDF Split - Extract specific pages", 
+      "PDF Split - Extract specific pages",
       "PDF Compress - Reduce file size",
       "PDF to JPG - Convert to images",
       "JPG to PDF - Convert images to PDF",
@@ -326,7 +326,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
   switch (pageType) {
     case 'homepage':
       return [organizationSchema, websiteSchema, softwareApplicationSchema]
-    
+
     case 'tool':
       const toolSchema = {
         "@context": "https://schema.org",
@@ -356,7 +356,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
           "@id": `${baseUrl}#organization`
         }
       }
-      
+
       // Add breadcrumb if available
       if (pageData.breadcrumbs && pageData.breadcrumbs.length > 0) {
         const breadcrumbSchema = {
@@ -371,9 +371,9 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         }
         return [organizationSchema, toolSchema, breadcrumbSchema]
       }
-      
+
       return [organizationSchema, toolSchema]
-    
+
     case 'faq':
       const faqSchema = {
         "@context": "https://schema.org",
@@ -388,7 +388,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         })) || []
       }
       return [organizationSchema, faqSchema]
-    
+
     case 'about':
       const aboutSchema = {
         "@context": "https://schema.org",
@@ -402,7 +402,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         }
       }
       return [organizationSchema, aboutSchema]
-    
+
     default:
       return [organizationSchema]
   }
@@ -425,5 +425,23 @@ export const generatePerformanceHints = () => {
       { href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { href: "https://vercel.live" }
     ]
+  }
+}
+
+// Generate FAQPage schema from FAQ array
+export const generateFAQPageSchema = (faqs = []) => {
+  if (!Array.isArray(faqs) || faqs.length === 0) return null
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
   }
 }

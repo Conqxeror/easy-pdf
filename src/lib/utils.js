@@ -45,18 +45,16 @@ export async function extractTextFromFile(base64, name) {
     try {
       // Dynamic import for server-side compatibility
       const pdfjsLib = await import("pdfjs-dist");
-      
-      // Configure worker for server environment
-      if (typeof window === 'undefined') {
-        try {
-          const workerPath = require.resolve('pdfjs-dist/build/pdf.worker.js');
-          pdfjsLib.GlobalWorkerOptions.workerSrc = workerPath;
-        } catch {
-          // Fallback to CDN worker
-          pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-        }
+
+      // Configure worker in canonical way (server and client handled by helper)
+      try {
+        const { getPdfWorkerUrl } = require('./pdfjsWorker');
+        pdfjsLib.GlobalWorkerOptions.workerSrc = getPdfWorkerUrl();
+      } catch {
+        // Fallback to public worker if local resolution fails
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
       }
-      
+
       const pdf = await pdfjsLib.getDocument({ data: binary }).promise;
       let text = "";
       for (let i = 1; i <= pdf.numPages; i++) {
@@ -99,7 +97,7 @@ export const renderTextWithToolLinks = (text) => {
   if (typeof window === 'undefined') {
     return text;
   }
-  
+
   try {
     // Use dynamic import instead of require for consistency
     const { toolsData } = require('./toolData');
@@ -163,9 +161,9 @@ export const renderTextWithToolLinks = (text) => {
  */
 export function formatFileSize(bytes) {
   if (!bytes || bytes === 0) return '0 B';
-  
+
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  
+
   return `${(bytes / Math.pow(1024, i)).toFixed(i === 0 ? 0 : 1)} ${sizes[i]}`;
 }

@@ -14,11 +14,11 @@ const __dirname = path.dirname(__filename);
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  
+
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
-  
+
   // Image optimization
   images: {
     formats: ['image/webp', 'image/avif'],
@@ -26,18 +26,26 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
     dangerouslyAllowSVG: true,
-    domains: ['cdn.buymeacoffee.com'],
+    // NOTE: Next.js 'images.domains' is deprecated; use `remotePatterns` instead.
+    // Keep an equivalent remote pattern to allow the Buy Me a Coffee CDN.
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.buymeacoffee.com',
+        pathname: '/**',
+      },
+    ],
   },
-  
+
   // Bundle optimization
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-slot', 'framer-motion'],
     webVitalsAttribution: ['CLS', 'LCP'],
   },
-  
+
   // External packages for server components
   serverExternalPackages: ['pdf-lib', 'pdfjs-dist', 'canvas'],
-  
+
   // Webpack optimizations
   webpack: (config, { dev, isServer }) => {
     // Exclude service worker from server bundle
@@ -47,7 +55,7 @@ const nextConfig = {
         './sw.js': 'commonjs ./sw.js'
       });
     }
-    
+
     // Production optimizations
     if (!dev) {
       config.optimization = {
@@ -97,23 +105,23 @@ const nextConfig = {
         // Minimize JavaScript
         minimize: true,
       };
-      
+
       // Add module concatenation for smaller bundles
       config.optimization.concatenateModules = true;
     }
-    
+
     // Handle PDF.js worker
     config.resolve.alias = {
       ...config.resolve.alias,
       'pdfjs-dist/build/pdf.worker.js': 'pdfjs-dist/build/pdf.worker.min.js',
     };
-    
+
     // Add resolve extensions for better tree shaking
     config.resolve.extensions = [...config.resolve.extensions, '.mjs', '.jsx'];
-    
+
     return config;
   },
-  
+
   async headers() {
     return [
       {
@@ -189,7 +197,7 @@ const nextConfig = {
       },
     ];
   },
-  
+
   // Turbopack Configuration
   turbopack: {
     rules: {

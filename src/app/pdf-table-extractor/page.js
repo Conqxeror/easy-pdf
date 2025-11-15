@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback  } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { loadPdfJs, ensurePdfWorkerEntry } from '@/lib/pdfjsWorker';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +10,8 @@ import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 // PDF.js will be loaded lazily when a PDF file is processed. The helper
-// `loadPdfJs` configures the workerSrc to /pdf.worker.min.js where possible.
+// `loadPdfJs` configures the workerSrc via the centralized helper `getPdfWorkerUrl()` which
+// respects the configured asset prefix to locate the worker binary in production.
 
 export default function PDFTableExtractor() {
   const [file, setFile] = useState(null);
@@ -22,7 +23,7 @@ export default function PDFTableExtractor() {
 
   const extractTables = useCallback(async (file) => {
     if (!file) return;
-    
+
     setLoading(true);
     setError(null);
     setTables([]);
@@ -45,7 +46,7 @@ export default function PDFTableExtractor() {
       for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
         const page = await pdf.getPage(pageNum);
         const textContent = await page.getTextContent();
-        
+
         // Simple table detection logic
         const items = textContent.items;
         const lines = [];
@@ -102,10 +103,10 @@ export default function PDFTableExtractor() {
   });
 
   const exportToCSV = (table) => {
-    const csvContent = table.rows.map(row => 
+    const csvContent = table.rows.map(row =>
       row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(',')
     ).join('\n');
-    
+
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     let url = null;
     try {
@@ -122,7 +123,7 @@ export default function PDFTableExtractor() {
       console.error('Failed to export CSV:', err);
       alert('Failed to export CSV. Please try again.');
     } finally {
-      setTimeout(() => { try { safeRevokeObjectURL(url); } catch {} }, 500);
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch { } }, 500);
     }
   };
 
@@ -177,146 +178,145 @@ export default function PDFTableExtractor() {
           </p>
         </div>
 
-      {/* Upload Section */}
-      <Card className="lg:col-span-2">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Upload className="w-5 h-5" />
-            Upload PDF
-          </CardTitle>
-          <CardDescription>
-            Select a PDF file to extract tables from
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div
-            {...getRootProps()}
-            className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${
-              isDragActive
-                ? 'border-primary bg-primary/5'
-                : 'border-muted-foreground/25'
-            }`}
-          >
-            <input {...getInputProps()} />
-            <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            {isDragActive ? (
-              <p className="text-lg">Drop the PDF file here...</p>
-            ) : (
-              <div>
-                <p className="text-lg mb-2">Drag and drop a PDF file here, or click to select</p>
-                <p className="text-sm text-muted-foreground">Only PDF files are supported</p>
-              </div>
-            )}
-          </div>
-          
-          {file && (
-            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-950">
-              <p className="text-sm text-muted-foreground">
-                Selected: {file.name} ({Math.round(file.size / 1024)} KB)
-              </p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Loading State */}
-      {loading && (
-        <Card>
-          <CardContent className="text-center py-8">
-            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-muted-foreground">Extracting tables from PDF...</p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Error State */}
-      {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="text-center py-8">
-            <div className="flex items-center justify-center gap-2 text-red-600">
-              <AlertCircle className="h-5 w-5" />
-              <p>Error: {error}</p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Results */}
-      {tables.length > 0 && (
-        <Card>
+        {/* Upload Section */}
+        <Card className="lg:col-span-2">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Table className="w-5 h-5" />
-                Extracted Tables ({tables.length})
-              </CardTitle>
-              <Button onClick={exportAllToCSV} className="flex items-center">
-                <Download className="w-4 h-4 mr-2" />
-                Export All CSV
-              </Button>
-            </div>
+            <CardTitle className="flex items-center gap-2">
+              <Upload className="w-5 h-5" />
+              Upload PDF
+            </CardTitle>
+            <CardDescription>
+              Select a PDF file to extract tables from
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-6">
-              {tables.map((table, index) => (
-                <div key={index} className="border border-gray-200 p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold">
-                      Table from Page {table.page}
-                    </h3>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => exportToCSV(table)}
-                      className="flex items-center"
-                    >
-                      <Download className="w-4 h-4 mr-2" />
-                      Export CSV
-                    </Button>
-                  </div>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full border-collapse border border-gray-300">
-                      <tbody>
-                        {table.rows.slice(0, 10).map((row, rowIndex) => (
-                          <tr key={rowIndex}>
-                            {row.map((cell, cellIndex) => (
-                              <td 
-                                key={cellIndex}
-                                className="border border-gray-300 px-3 py-2 text-sm"
-                              >
-                                {cell}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                    {table.rows.length > 10 && (
-                      <p className="text-sm text-muted-foreground mt-2">
-                        Showing first 10 rows of {table.rows.length} total rows
-                      </p>
-                    )}
-                  </div>
+            <div
+              {...getRootProps()}
+              className={`border-2 border-dashed p-8 text-center cursor-pointer transition-colors ${isDragActive
+                  ? 'border-primary bg-primary/5'
+                  : 'border-muted-foreground/25'
+                }`}
+            >
+              <input {...getInputProps()} />
+              <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              {isDragActive ? (
+                <p className="text-lg">Drop the PDF file here...</p>
+              ) : (
+                <div>
+                  <p className="text-lg mb-2">Drag and drop a PDF file here, or click to select</p>
+                  <p className="text-sm text-muted-foreground">Only PDF files are supported</p>
                 </div>
-              ))}
+              )}
             </div>
-          </CardContent>
-        </Card>
-      )}
 
-      {/* No Tables Found */}
-      {!loading && !error && file && tables.length === 0 && (
-        <Card>
-          <CardContent className="text-center py-8">
-            <Table className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">
-              No tables found in this PDF. The document may not contain structured table data.
-            </p>
+            {file && (
+              <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-950">
+                <p className="text-sm text-muted-foreground">
+                  Selected: {file.name} ({Math.round(file.size / 1024)} KB)
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
-      )}
-    </div>
+
+        {/* Loading State */}
+        {loading && (
+          <Card>
+            <CardContent className="text-center py-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Extracting tables from PDF...</p>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="text-center py-8">
+              <div className="flex items-center justify-center gap-2 text-red-600">
+                <AlertCircle className="h-5 w-5" />
+                <p>Error: {error}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Results */}
+        {tables.length > 0 && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Table className="w-5 h-5" />
+                  Extracted Tables ({tables.length})
+                </CardTitle>
+                <Button onClick={exportAllToCSV} className="flex items-center">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export All CSV
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {tables.map((table, index) => (
+                  <div key={index} className="border border-gray-200 p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold">
+                        Table from Page {table.page}
+                      </h3>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => exportToCSV(table)}
+                        className="flex items-center"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Export CSV
+                      </Button>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full border-collapse border border-gray-300">
+                        <tbody>
+                          {table.rows.slice(0, 10).map((row, rowIndex) => (
+                            <tr key={rowIndex}>
+                              {row.map((cell, cellIndex) => (
+                                <td
+                                  key={cellIndex}
+                                  className="border border-gray-300 px-3 py-2 text-sm"
+                                >
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {table.rows.length > 10 && (
+                        <p className="text-sm text-muted-foreground mt-2">
+                          Showing first 10 rows of {table.rows.length} total rows
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* No Tables Found */}
+        {!loading && !error && file && tables.length === 0 && (
+          <Card>
+            <CardContent className="text-center py-8">
+              <Table className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">
+                No tables found in this PDF. The document may not contain structured table data.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </ToolPageLayout>
   );
 }

@@ -3,6 +3,7 @@
 "use client";
 
 import { trackEvent } from './analytics';
+import { processPdfInWorker } from './pdfWorkerClient';
 
 // Lazy-load pdf-lib to avoid adding it to the initial client bundle.
 let _pdfLibModule = null;
@@ -46,17 +47,17 @@ export class AdvancedPdfProcessor {
 
     const results = [];
     const maxConcurrent = 10; // No premium restrictions
-    
+
     for (let i = 0; i < files.length; i += maxConcurrent) {
       const batch = files.slice(i, i + maxConcurrent);
-      const batchPromises = batch.map(file => 
+      const batchPromises = batch.map(file =>
         this.processSingleFile(file, operation, options)
       );
-      
+
       try {
         const batchResults = await Promise.all(batchPromises);
         results.push(...batchResults);
-        
+
         // Update progress
         if (options.onProgress) {
           options.onProgress(Math.min(i + maxConcurrent, files.length), files.length);
@@ -81,6 +82,25 @@ export class AdvancedPdfProcessor {
    */
   async processSingleFile(file, operation, options) {
     try {
+      // Try running heavy operations in a dedicated worker to avoid blocking the UI
+      const workerOps = ['compress', 'watermark', 'extract_pages', 'rotate', 'add_metadata'];
+      if (typeof window !== 'undefined' && workerOps.includes(operation)) {
+        try {
+          const res = await processPdfInWorker({ action: operation, file, options, fileName: file.name });
+          // map worker response to the same shape as server-side helpers
+          const originalSize = res.originalSize || file.size || 0;
+          return {
+            data: res.buffer,
+            originalSize,
+            compressedSize: res.compressedSize || res.buffer?.byteLength || 0,
+            compressionRatio: originalSize ? ((originalSize - (res.compressedSize || res.buffer?.byteLength || 0)) / originalSize * 100).toFixed(1) : undefined,
+            totalPages: res.totalPages
+          };
+        } catch (err) {
+          // If worker fails, fall through to client-side `pdf-lib` processing below
+          console.warn('Worker processing failed for operation', operation, err);
+        }
+      }
       const arrayBuffer = await file.arrayBuffer();
       const { PDFDocument } = await getPdfLib();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
@@ -109,10 +129,10 @@ export class AdvancedPdfProcessor {
    */
   async compressPdf(pdfDoc, options = {}) {
     const compressionLevel = 'high'; // Always use best compression
-    
+
     // Basic compression - remove unused objects
     const _pages = pdfDoc.getPages(); // eslint-disable-line no-unused-vars
-    
+
     // Advanced compression now available to all users
     if (compressionLevel === 'high') {
       // Advanced compression techniques available to everyone
@@ -143,7 +163,7 @@ export class AdvancedPdfProcessor {
 
     for (const page of pages) {
       const { width, height } = page.getSize();
-      
+
       page.drawText(text, {
         x: width / 2 - (text.length * fontSize) / 4,
         y: height / 2,
@@ -166,7 +186,7 @@ export class AdvancedPdfProcessor {
     const { pageNumbers = [] } = options;
     const { PDFDocument } = await getPdfLib();
     const newPdf = await PDFDocument.create();
-    
+
     for (const pageNum of pageNumbers) {
       if (pageNum > 0 && pageNum <= pdfDoc.getPageCount()) {
         const [copiedPage] = await newPdf.copyPages(pdfDoc, [pageNum - 1]);
@@ -175,8 +195,8 @@ export class AdvancedPdfProcessor {
     }
 
     const pdfBytes = await newPdf.save();
-    return { 
-      data: pdfBytes, 
+    return {
+      data: pdfBytes,
       extractedPages: pageNumbers.length,
       totalPages: pdfDoc.getPageCount()
     };
@@ -215,7 +235,7 @@ export class AdvancedPdfProcessor {
     if (author) pdfDoc.setAuthor(author);
     if (subject) pdfDoc.setSubject(subject);
     if (keywords) pdfDoc.setKeywords(keywords.split(','));
-    
+
     pdfDoc.setProducer('PDF Tools - Privacy-First PDF Processing');
     pdfDoc.setCreationDate(new Date());
     pdfDoc.setModificationDate(new Date());
@@ -231,29 +251,29 @@ export class AdvancedPdfProcessor {
     const { addBookmarks = false, addPageNumbers = false } = options;
     const { PDFDocument, rgb } = await getPdfLib();
     const mergedPdf = await PDFDocument.create();
-    
+
     let pageOffset = 0;
     const bookmarks = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const arrayBuffer = await file.arrayBuffer();
-  const pdf = await PDFDocument.load(arrayBuffer);
+      const pdf = await PDFDocument.load(arrayBuffer);
       const pageCount = pdf.getPageCount();
-      
+
       const copiedPages = await mergedPdf.copyPages(pdf, Array.from({ length: pageCount }, (_, i) => i));
-      
+
       copiedPages.forEach((page, pageIndex) => {
         mergedPdf.addPage(page);
-        
+
         // Add page numbers if requested
-          if (addPageNumbers) {
+        if (addPageNumbers) {
           const pageNum = pageOffset + pageIndex + 1;
           page.drawText(`${pageNum}`, {
             x: page.getWidth() - 50,
             y: 20,
             size: 10,
-              color: rgb(0.5, 0.5, 0.5)
+            color: rgb(0.5, 0.5, 0.5)
           });
         }
       });
@@ -270,8 +290,8 @@ export class AdvancedPdfProcessor {
     }
 
     const pdfBytes = await mergedPdf.save();
-    return { 
-      data: pdfBytes, 
+    return {
+      data: pdfBytes,
       totalPages: pageOffset,
       sourceFiles: files.length,
       bookmarks: addBookmarks ? bookmarks : null

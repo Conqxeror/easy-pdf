@@ -1,15 +1,23 @@
 import PrivacyClient from './PrivacyClient';
+import { generateEnhancedMetadata } from '@/lib/seoEnhancements';
 
-export const metadata = {
-  title: 'Privacy Policy | easy-pdf',
-  description: 'Learn how easy-pdf protects your privacy. We process all PDFs in your browser - no server uploads, no data collection, complete privacy.',
-  keywords: 'privacy policy, data protection, GDPR, browser-based PDF processing, client-side encryption',
-  openGraph: {
-    title: 'Privacy Policy | easy-pdf',
-    description: 'Learn how easy-pdf protects your privacy with 100% client-side processing.',
-    type: 'website',
-  },
-};
+export const metadata = generateEnhancedMetadata({
+  title: "Privacy Policy - easy-pdf | Privacy-First PDF Tools",
+  description: "Learn how easy-pdf protects your privacy with 100% client-side processing. No server uploads, no data collection, complete privacy and security guaranteed.",
+  keywords: [
+    "privacy policy",
+    "data protection",
+    "GDPR",
+    "browser-based PDF processing",
+    "client-side encryption",
+    "data privacy",
+    "PDF security",
+    "secure PDF tools",
+    "no data collection"
+  ],
+  canonicalUrl: "https://easy-pdf-murex.vercel.app/privacy",
+  pageType: "article"
+});
 
 export default function PrivacyPage() {
   return <PrivacyClient />;

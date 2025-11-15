@@ -11,6 +11,7 @@ export default function SponsorSection({ variant = "homepage" }) {
   const featuredSponsors = getFeaturedSponsors(false);
   const goldSponsors = getSponsorsByTier("GOLD", false);
   const silverSponsors = getSponsorsByTier("SILVER", false);
+  const bronzeSponsors = getSponsorsByTier("BRONZE", false);
 
   if (variant === "homepage") {
     // Empty state when no real sponsors
@@ -111,7 +112,7 @@ export default function SponsorSection({ variant = "homepage" }) {
               Platinum Sponsors
             </h3>
             <div className="flex justify-center">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center mx-auto">
                 {featuredSponsors.map((sponsor) => (
                   <SponsorCard 
                     key={sponsor.id} 
@@ -132,7 +133,7 @@ export default function SponsorSection({ variant = "homepage" }) {
               Gold Sponsors
             </h3>
             <div className="flex justify-center">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="inline-grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center mx-auto">
                 {goldSponsors.slice(0, 4).map((sponsor) => (
                   <SponsorCard 
                     key={sponsor.id} 
@@ -153,7 +154,7 @@ export default function SponsorSection({ variant = "homepage" }) {
               Silver Sponsors
             </h3>
             <div className="flex justify-center">
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              <div className="inline-grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 justify-items-center mx-auto">
                 {silverSponsors.slice(0, 6).map((sponsor) => (
                   <SponsorCard 
                     key={sponsor.id} 
@@ -161,6 +162,28 @@ export default function SponsorSection({ variant = "homepage" }) {
                     size="small"
                     showDescription={false}
                   />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bronze Supporters */}
+        {bronzeSponsors.length > 0 && (
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-center mb-4 text-gray-400">
+              Bronze Supporters
+            </h3>
+            <div className="flex justify-center">
+              <div className="flex flex-wrap gap-4 justify-center max-w-4xl">
+                {bronzeSponsors.slice(0, 8).map((sponsor) => (
+                  <div key={sponsor.id} className="flex items-start justify-center">
+                    <SponsorCard 
+                      sponsor={sponsor} 
+                      size="small"
+                      showDescription={false}
+                    />
+                  </div>
                 ))}
               </div>
             </div>

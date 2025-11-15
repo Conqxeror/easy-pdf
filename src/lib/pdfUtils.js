@@ -1,6 +1,7 @@
 // PDF utilities with dynamic imports for better bundle splitting
 import React, { useEffect, useState } from 'react';
 import { safeCreateObjectURL } from './enhancedUX';
+import { getPdfWorkerUrl } from './pdfjsWorker';
 
 // Hook to dynamically load PDFLib
 export const usePDFLib = () => {
@@ -10,7 +11,7 @@ export const usePDFLib = () => {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadPDFLib = async () => {
       try {
         const pdfLibModule = await import('pdf-lib');
@@ -44,13 +45,17 @@ export const usePDFJS = () => {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadPDFJS = async () => {
       try {
         const pdfjsModule = await import('pdfjs-dist');
         if (isMounted) {
-          // Set worker source
-          pdfjsModule.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+          // Set worker source in a canonical way respecting assetPrefix
+          try {
+            pdfjsModule.GlobalWorkerOptions.workerSrc = getPdfWorkerUrl();
+          } catch {
+            pdfjsModule.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
+          }
           setPdfjs(pdfjsModule);
           setLoading(false);
         }
@@ -75,10 +80,10 @@ export const usePDFJS = () => {
 // Utility function to merge PDFs using dynamic imports
 export const mergePDFs = async (files, setProgress) => {
   const { PDFDocument } = await import('pdf-lib');
-  
+
   const mergedPdf = await PDFDocument.create();
   const totalFiles = files.length;
-  
+
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const arrayBuffer = await file.arrayBuffer();
@@ -87,7 +92,7 @@ export const mergePDFs = async (files, setProgress) => {
     copiedPages.forEach((page) => mergedPdf.addPage(page));
     setProgress(Math.round(((i + 1) / totalFiles) * 90));
   }
-  
+
   setProgress(95);
   const pdfBytes = await mergedPdf.save();
   const blob = new Blob([pdfBytes], { type: "application/pdf" });

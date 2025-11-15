@@ -25,7 +25,7 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    // removed invalid TypeScript option "noUncheckedSideEffectImports" — not a supported compiler option
   },
   "include": [
     "next-env.d.ts",

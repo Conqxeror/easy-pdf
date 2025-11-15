@@ -50,9 +50,26 @@ export const currentSponsors = [
   // Real sponsors will be added here when they join.
   // Keeping this array intentionally empty ensures the UI shows an honest
   // "no sponsors yet" state rather than placeholder/mock content.
+
+  // This sponsor represents a real community contributor from Instagram.
+  {
+    id: "instagram-adnann-42",
+    name: "Adnann",
+    tier: "BRONZE",
+    website: "https://www.instagram.com/adnann_.42/",
+    description: "Creator and supporter on Instagram.",
+    joinDate: "2025-11-15T00:00:00.000Z",
+    featured: false,
+    avatar: true,
+    // Local path to downloaded Instagram profile image. Use the provided script
+    // `scripts/fetch_instagram_profile_image.ps1` to download to
+    // `public/images/sponsors/<username>.jpg` and set the `logo` field.
+    // If the image is not available this will fallback to showing initials.
+    logo: "/images/sponsors/adnann_.42.jpg"
+  }
 ];
 
-// NOTE: we intentionally removed mock/placeholder sponsors. Showing real,
+// NOTE: we intentionally removed placeholder sponsors. Showing real,
 // up-to-date sponsor information avoids misleading users. When sponsors join,
 // add them to `currentSponsors` above.
 
