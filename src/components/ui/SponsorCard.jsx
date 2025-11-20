@@ -26,23 +26,43 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
   };
 
   const tierColors = {
-    PLATINUM: "border-yellow-400 bg-gradient-to-br from-gray-800 to-gray-900",
-    GOLD: "border-yellow-600 bg-gradient-to-br from-gray-800 to-gray-900", 
-    SILVER: "border-gray-400 bg-gradient-to-br from-gray-800 to-gray-900",
-    BRONZE: "border-orange-600 bg-gradient-to-br from-gray-800 to-gray-900"
+    PLATINUM: "border-yellow-400 bg-background dark:bg-gradient-to-br dark:from-zinc-800 dark:to-zinc-900",
+    GOLD: "border-yellow-600 bg-background dark:bg-gradient-to-br dark:from-zinc-800 dark:to-zinc-900", 
+    SILVER: "border-border bg-background dark:bg-gradient-to-br dark:from-zinc-800 dark:to-zinc-900",
+    // Bronze: explicit light/dark theming — white card with bronze border in light,
+    // black card in dark mode. Text and button colors handled separately.
+    BRONZE: "border-orange-600 bg-white dark:bg-background"
   };
 
   const tierBadgeColors = {
-    PLATINUM: "bg-yellow-400 text-gray-900",
-    GOLD: "bg-yellow-600 text-gray-900",
-    SILVER: "bg-gray-400 text-gray-900", 
-    BRONZE: "bg-orange-600 text-gray-900"
+    PLATINUM: "bg-yellow-400 text-foreground",
+    GOLD: "bg-yellow-600 text-foreground",
+    SILVER: "bg-background text-foreground", 
+    BRONZE: "bg-orange-600 text-foreground"
+  };
+
+  // Button styles per tier to ensure good contrast in light mode
+  const tierButtonStyles = {
+    PLATINUM: "border-yellow-400",
+    GOLD: "border-yellow-600",
+    SILVER: "border-border",
+    // Light: black button with white text. Dark: white button with black text.
+    BRONZE: "border-orange-600 bg-black text-white hover:bg-zinc-900 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+  };
+
+  // Tier-specific text colors to make names/descriptions readable
+  const tierTextColors = {
+    PLATINUM: 'text-foreground',
+    GOLD: 'text-foreground',
+    SILVER: 'text-foreground',
+    BRONZE: 'text-black dark:text-foreground'
   };
 
   return (
     <div className={`
       ${sizeClasses[size]} 
       ${tierColors[sponsor.tier]}
+      ${tierTextColors[sponsor.tier] || 'text-foreground'}
       border-2 shadow-lg hover:shadow-xl transition-all duration-300 
       hover:scale-105 relative overflow-hidden mx-auto
     `}>
@@ -68,12 +88,12 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
                 alt={`${sponsor.name} profile`}
                 width={avatarSizes[size]}
                 height={avatarSizes[size]}
-                className="object-cover rounded-full border-2 border-gray-700 shadow-xl"
+                className="object-cover border-2 border-border shadow-xl"
               />
               {/* Instagram overlay when website is Instagram */}
               {sponsor.website && sponsor.website.includes('instagram.com') && (
-                <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-400 rounded-full p-1 shadow-md">
-                  <Instagram className="w-4 h-4 text-white" />
+                <div className="absolute -bottom-2 -right-2 bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-400 p-1 shadow-md">
+                  <Instagram className="w-4 h-4 text-foreground" />
                 </div>
               )}
             </div>
@@ -87,8 +107,8 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
             />
           )
         ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gray-950 border border-gray-700">
-            <span className="text-gray-200 font-semibold text-lg">
+          <div className="flex items-center justify-center w-full h-full bg-background dark:bg-background border border-border">
+            <span className="text-foreground dark:text-foreground font-semibold text-lg">
               {sponsor.name.split(' ').map(word => word[0]).join('').toUpperCase()}
             </span>
           </div>
@@ -96,20 +116,20 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
       </div>
 
       {/* Company Name */}
-      <h3 className={`text-center mb-2 ${size === 'small' ? 'text-base font-semibold' : 'text-lg font-bold text-gray-100'}`}>
+      <h3 className={`text-center mb-2 ${size === 'small' ? 'text-base font-semibold' : 'text-lg font-bold'} ${tierTextColors[sponsor.tier] || 'text-foreground'}`}>
         {sponsor.name}
       </h3>
 
       {/* Description */}
       {showDescription && sponsor.description && (
-        <p className="text-sm text-gray-300 text-center mb-4 line-clamp-3">
+        <p className={`text-sm text-center mb-4 line-clamp-3 ${tierTextColors[sponsor.tier] || 'text-foreground'}`}>
           {sponsor.description}
         </p>
       )}
 
       {/* Join Date (hide for small cards to save space) */}
       {size !== 'small' && (
-        <div className="flex items-center justify-center text-xs text-gray-400 mb-4">
+        <div className={`flex items-center justify-center text-xs mb-4 ${tierTextColors[sponsor.tier] || 'text-foreground'}`}>
         <Calendar className="w-3 h-3 mr-1" />
         Sponsor since {new Date(sponsor.joinDate).toLocaleDateString('en-IN', { 
           month: 'short', 
@@ -119,13 +139,17 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
       )}
 
       {/* Website Link / Instagram handle */}
-      <div className="flex justify-center">
+        <div className="flex justify-center">
         <Link
           href={sponsor.website}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => { try { onVisit && onVisit(sponsor.id, sponsor.website); } catch {} }}
-          className={`inline-flex items-center gap-2 px-4 ${size === 'small' ? 'py-1 text-xs' : 'py-2 text-sm'} bg-black text-white font-medium hover:bg-white hover:text-black transition-colors duration-150 rounded-md border border-white/10 focus:outline-none focus:ring-2 focus:ring-white/20`}
+          className={
+            `inline-flex items-center gap-2 px-4 ${size === 'small' ? 'py-1 text-xs' : 'py-2 text-sm'} bg-background dark:bg-background font-medium transition-colors duration-150 border border-transparent dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-900 dark:focus:ring-white/20 ` +
+            // Append tier-specific button styles to increase contrast for some tiers (e.g., Bronze)
+            (tierButtonStyles[sponsor.tier] || ' text-foreground')
+          }
         >
           {sponsor.website && sponsor.website.includes('instagram.com') ? (
             <>
@@ -143,7 +167,7 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
 
       {/* Featured Badge */}
       {sponsor.featured && (
-        <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 text-xs font-semibold">
+        <div className="absolute top-3 left-3 bg-red-500 text-foreground px-2 py-1 text-xs font-semibold">
           Featured
         </div>
       )}

@@ -162,36 +162,36 @@ export default function CompressPdfClient() {
         />
 
         {fileName && (
-          <div className="p-4 bg-black/10 border border-gray-600">
+          <div className="p-4 bg-background/10 border border-border">
             <div className="flex items-center mb-3">
-              <div className="p-2 bg-black/20 mr-3">
-                <FileText className="w-5 h-5 text-gray-400" />
+              <div className="p-2 bg-background/20 mr-3">
+                <FileText className="w-5 h-5 text-foreground" />
               </div>
               <div>
-                <h3 className="font-medium text-gray-100">{fileName}</h3>
-                <p className="text-sm text-gray-400">
+                <h3 className="font-medium text-foreground">{fileName}</h3>
+                <p className="text-sm text-foreground">
                   {formatFileSize(originalSize)}
                 </p>
               </div>
             </div>
             
             {compressedSize > 0 && !isCompressing && (
-              <div className="mt-4 pt-4 border-t border-gray-700">
+              <div className="mt-4 pt-4 border-t border-border">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-300">Original Size:</span>
+                  <span className="text-foreground">Original Size:</span>
                   <span className="font-medium">
                     {formatFileSize(originalSize)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-gray-300">Compressed Size:</span>
+                  <span className="text-foreground">Compressed Size:</span>
                   <span className="font-medium text-green-400">
                     {formatFileSize(compressedSize)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-300">Reduction:</span>
-                  <span className="font-medium text-gray-400">
+                  <span className="text-foreground">Reduction:</span>
+                  <span className="font-medium text-foreground">
                     {compressionPercentage}%
                   </span>
                 </div>
@@ -202,7 +202,7 @@ export default function CompressPdfClient() {
 
         <div className="space-y-5">
           <div>
-            <Label className="text-gray-200 mb-3 block">Compression Level</Label>
+            <Label className="text-foreground mb-3 block">Compression Level</Label>
             <RadioGroup
               value={compressionLevel}
               onValueChange={(value) => {
@@ -225,10 +225,10 @@ export default function CompressPdfClient() {
                 />
                 <Label
                   htmlFor="mild"
-                  className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-4 hover:bg-gray-950 peer-data-[state=checked]:border-gray-400 [&:has([data-state=checked])]:border-gray-400 text-gray-200 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between border-2 border-border bg-background p-4 hover:bg-background peer-data-[state=checked]:border-border [&:has([data-state=checked])]:border-border text-foreground cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Mild</span>
-                  <span className="text-xs text-gray-400 mt-1">
+                  <span className="text-xs text-foreground mt-1">
                     Good Quality (85%)
                   </span>
                 </Label>
@@ -241,10 +241,10 @@ export default function CompressPdfClient() {
                 />
                 <Label
                   htmlFor="balanced"
-                  className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-4 hover:bg-gray-950 peer-data-[state=checked]:border-gray-400 [&:has([data-state=checked])]:border-gray-400 text-gray-200 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between border-2 border-border bg-background p-4 hover:bg-background peer-data-[state=checked]:border-border [&:has([data-state=checked])]:border-border text-foreground cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Balanced</span>
-                  <span className="text-xs text-gray-400 mt-1">
+                  <span className="text-xs text-foreground mt-1">
                     Recommended (75%)
                   </span>
                 </Label>
@@ -257,10 +257,10 @@ export default function CompressPdfClient() {
                 />
                 <Label
                   htmlFor="aggressive"
-                  className="flex flex-col items-center justify-between border-2 border-gray-600 bg-gray-950 p-4 hover:bg-gray-950 peer-data-[state=checked]:border-gray-400 [&:has([data-state=checked])]:border-gray-400 text-gray-200 cursor-pointer transition-colors"
+                  className="flex flex-col items-center justify-between border-2 border-border bg-background p-4 hover:bg-background peer-data-[state=checked]:border-border [&:has([data-state=checked])]:border-border text-foreground cursor-pointer transition-colors"
                 >
                   <span className="font-medium">Aggressive</span>
-                  <span className="text-xs text-gray-400 mt-1">
+                  <span className="text-xs text-foreground mt-1">
                     Smallest Size (50%)
                   </span>
                 </Label>
@@ -270,7 +270,7 @@ export default function CompressPdfClient() {
 
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <Label className="text-gray-200">
+              <Label className="text-foreground">
                 Image Quality: {imageQuality}%
               </Label>
               <Zap className="w-4 h-4 text-yellow-400" />
@@ -283,7 +283,7 @@ export default function CompressPdfClient() {
               step={1}
               className="w-full"
             />
-            <div className="flex justify-between text-xs text-gray-400">
+            <div className="flex justify-between text-xs text-foreground">
               <span>Smaller File</span>
               <span>Better Quality</span>
             </div>
@@ -291,12 +291,12 @@ export default function CompressPdfClient() {
         </div>
 
         {isCompressing && (
-          <div className="space-y-3 p-4 bg-gray-950 border border-gray-700">
+          <div className="space-y-3 p-4 bg-background border border-border">
             <Progress
               value={progress}
-              className="h-2.5 bg-gray-950 [&::-webkit-progress-bar]:bg-gray-950 [&::-webkit-progress-value]:bg-gray-950"
+              className="h-2.5 bg-background [&::-webkit-progress-bar]:bg-background [&::-webkit-progress-value]:bg-background"
             />
-            <p className="text-sm text-center text-gray-300">
+            <p className="text-sm text-center text-foreground">
               {processingMessage || `Compressing PDF... ${progress}%`}
             </p>
           </div>
@@ -322,33 +322,33 @@ export default function CompressPdfClient() {
         </div>
 
         {compressedPdfUrl && !isCompressing && (
-          <div className="flex flex-col gap-6 p-6 bg-gray-950 shadow-lg border border-gray-700">
-            <div className="w-full text-center space-y-4 text-gray-200">
+          <div className="flex flex-col gap-6 p-6 bg-background shadow-lg border border-border">
+            <div className="w-full text-center space-y-4 text-foreground">
               <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
                 <Download className="w-6 h-6 mr-2" />
                 Compression Complete
               </h3>
               
-              <div className="bg-gray-950 p-4 border border-gray-600">
+              <div className="bg-background p-4 border border-border">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="text-center p-3 bg-gray-950">
-                    <div className="text-gray-400 text-sm">Original Size</div>
+                  <div className="text-center p-3 bg-background">
+                    <div className="text-foreground text-sm">Original Size</div>
                     <div className="font-medium">{formatFileSize(originalSize)}</div>
                   </div>
-                  <div className="text-center p-3 bg-gray-950">
-                    <div className="text-gray-400 text-sm">Compressed Size</div>
+                  <div className="text-center p-3 bg-background">
+                    <div className="text-foreground text-sm">Compressed Size</div>
                     <div className="font-medium text-green-400">{formatFileSize(compressedSize)}</div>
                   </div>
-                  <div className="text-center p-3 bg-gray-950">
-                    <div className="text-gray-400 text-sm">Saved</div>
-                    <div className="font-medium text-gray-400">{compressionPercentage}%</div>
+                  <div className="text-center p-3 bg-background">
+                    <div className="text-foreground text-sm">Saved</div>
+                    <div className="font-medium text-foreground">{compressionPercentage}%</div>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="flex justify-center">
-              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl">
+              <Button asChild variant="success" size="lg" className="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-foreground shadow-lg hover:shadow-xl">
                 <a
                   href={compressedPdfUrl}
                   download={`compressed_${fileName}`}

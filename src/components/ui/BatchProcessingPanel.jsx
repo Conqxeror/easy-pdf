@@ -147,8 +147,8 @@ const BatchProcessingPanel = ({ className = '' }) => {
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'pending': return <Clock className="w-4 h-4 text-gray-400" />;
-      case 'processing': return <Zap className="w-4 h-4 text-gray-400 animate-pulse" />;
+      case 'pending': return <Clock className="w-4 h-4 text-foreground" />;
+      case 'processing': return <Zap className="w-4 h-4 text-foreground animate-pulse" />;
       case 'completed': return <CheckCircle className="w-4 h-4 text-green-400" />;
       case 'error': return <AlertCircle className="w-4 h-4 text-red-400" />;
       default: return null;
@@ -162,14 +162,14 @@ const BatchProcessingPanel = ({ className = '' }) => {
   const [currentTab, setCurrentTab] = useState('setup');
 
   return (
-    <Card className={`bg-gray-950 border-gray-700 ${className}`}>
+    <Card className={`bg-background border-border ${className}`}>
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <Zap className="w-5 h-5 text-gray-400" />
-            <h2 className="text-lg font-semibold text-gray-200">Batch Processing</h2>
+            <Zap className="w-5 h-5 text-foreground" />
+            <h2 className="text-lg font-semibold text-foreground">Batch Processing</h2>
           </div>
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-foreground">
             {files.length}/{capabilities.maxBatchSize} files
           </div>
         </div>
@@ -184,19 +184,19 @@ const BatchProcessingPanel = ({ className = '' }) => {
           <TabsContent value="setup" className={`space-y-4 ${currentTab !== 'setup' ? 'hidden' : ''}`}>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-foreground mb-2">
                   Operation
                 </label>
                 <Select value={operation} onValueChange={setOperation}>
-                  <SelectTrigger className="bg-black/10 border-gray-600">
+                  <SelectTrigger className="bg-background/10 border-border">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-black/10 border-gray-600">
+                    <SelectContent className="bg-background/10 border-border">
                     {operations.map(op => (
                       <SelectItem 
                         key={op.value} 
                         value={op.value}
-                        className="text-gray-200"
+                        className="text-foreground"
                       >
                         <div className="flex items-center space-x-2">
                           <span>{op.label}</span>
@@ -210,14 +210,14 @@ const BatchProcessingPanel = ({ className = '' }) => {
               {/* Operation-specific options */}
               {operation === 'watermark' && (
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">
+                  <label className="block text-sm font-medium text-foreground">
                     Watermark Text
                   </label>
                   <input
                     type="text"
                     value={options.text || ''}
                     onChange={(e) => setOptions(prev => ({ ...prev, text: e.target.value }))}
-                    className="w-full px-3 py-2 bg-gray-950 border border-gray-600 text-gray-200"
+                    className="w-full px-3 py-2 bg-background border border-border text-foreground"
                     placeholder="Enter watermark text"
                   />
                 </div>
@@ -225,7 +225,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
 
               {operation === 'extract_pages' && (
                 <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-300">
+                  <label className="block text-sm font-medium text-foreground">
                     Page Numbers (comma-separated)
                   </label>
                   <input
@@ -235,7 +235,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
                       ...prev, 
                       pageNumbers: e.target.value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n))
                     }))}
-                    className="w-full px-3 py-2 bg-gray-950 border border-gray-600 text-gray-200"
+                    className="w-full px-3 py-2 bg-background border border-border text-foreground"
                     placeholder="e.g., 1,3,5-7"
                   />
                 </div>
@@ -273,7 +273,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
 
           <TabsContent value="files" className={`space-y-2 ${currentTab !== 'files' ? 'hidden' : ''}`}>
             {files.length === 0 ? (
-              <div className="text-center py-8 text-gray-400">
+              <div className="text-center py-8 text-foreground">
                 <FileText className="w-12 h-12 mx-auto mb-2 opacity-50" />
                 <p>No files added yet</p>
                 <p className="text-xs">Add PDF files to start batch processing</p>
@@ -283,15 +283,15 @@ const BatchProcessingPanel = ({ className = '' }) => {
                 {files.map((fileItem) => (
                   <div
                     key={fileItem.id}
-                    className="flex items-center justify-between p-3 bg-gray-950/50 border border-gray-700"
+                    className="flex items-center justify-between p-3 bg-background/50 border border-border"
                   >
                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                       {getStatusIcon(fileItem.status)}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-200 truncate">
+                        <p className="text-sm font-medium text-foreground truncate">
                           {fileItem.file.name}
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-foreground">
                           {(fileItem.file.size / 1024 / 1024).toFixed(1)} MB
                         </p>
                       </div>
@@ -300,7 +300,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
                       variant="ghost"
                       size="sm"
                       onClick={() => removeFile(fileItem.id)}
-                      className="text-gray-400 hover:text-red-400"
+                      className="text-foreground hover:text-red-400"
                     >
                       ×
                     </Button>
@@ -314,8 +314,8 @@ const BatchProcessingPanel = ({ className = '' }) => {
             {processing && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-300">Processing...</span>
-                  <span className="text-sm text-gray-400">{Math.round(progress)}%</span>
+                  <span className="text-sm text-foreground">Processing...</span>
+                  <span className="text-sm text-foreground">{Math.round(progress)}%</span>
                 </div>
                 <Progress value={progress} className="w-full" />
               </div>
@@ -324,7 +324,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
             {results.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-300">
+                  <span className="text-sm text-foreground">
                     Processed {results.filter(r => !r.error).length}/{results.length} files
                   </span>
                   <Button
@@ -341,7 +341,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
                   {results.map((result, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-2 bg-gray-950/30 border border-gray-700"
+                      className="flex items-center justify-between p-2 bg-background/30 border border-border"
                     >
                       <div className="flex items-center space-x-2">
                         {result.error ? (
@@ -349,7 +349,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
                         ) : (
                           <CheckCircle className="w-4 h-4 text-green-400" />
                         )}
-                        <span className="text-sm text-gray-200">
+                        <span className="text-sm text-foreground">
                           {files[index]?.file.name || `File ${index + 1}`}
                         </span>
                       </div>

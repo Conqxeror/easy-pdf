@@ -31,7 +31,6 @@ let changed = []
 
 for (const file of files) {
   let content = fs.readFileSync(file, 'utf8')
-  let original = content
 
   const lines = content.split(/\r?\n/)
   let modified = false
@@ -39,7 +38,7 @@ for (const file of files) {
     const line = lines[i]
     if (!/bg-gray-(600|700)/.test(line)) continue
     // if the line or surrounding context contains dark markers, replace
-    const window = lines.slice(Math.max(0, i-3), Math.min(lines.length, i+3)).join(' ')
+    const window = lines.slice(Math.max(0, i - 3), Math.min(lines.length, i + 3)).join(' ')
     const isDarkContext = darkMarkers.some(m => window.includes(m))
     if (!isDarkContext) continue
 

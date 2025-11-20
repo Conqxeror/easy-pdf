@@ -61,7 +61,7 @@ const CategoryPage = ({ params }) => {
         />
         <PageContent>
           <div className="text-center py-12">
-            <p className="text-gray-400">No tools found in this category.</p>
+            <p className="text-foreground">No tools found in this category.</p>
           </div>
         </PageContent>
       </PageContainer>

@@ -1,8 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const glob = require('glob');
-
 console.log('📐 Fixing spacing and layout issues...\n');
+
+const fs = require('fs');
+const glob = require('glob');
 
 const patterns = [
   // Add proper spacing to sections without padding
@@ -97,7 +96,6 @@ let totalModified = 0;
 files.forEach(file => {
   let content = fs.readFileSync(file, 'utf8');
   let modified = false;
-  const originalContent = content;
 
   patterns.forEach(pattern => {
     if (typeof pattern.to === 'function') {

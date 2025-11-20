@@ -9,30 +9,30 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: [
-          "bg-white dark:bg-black border-gray-200 dark:border-gray-600",
-          "text-gray-900 dark:text-gray-100",
-          "placeholder:text-gray-400 dark:placeholder:text-gray-500",
-          "focus-visible:border-gray-600 focus-visible:ring-2 focus-visible:ring-gray-600/20",
-          "hover:border-gray-300 dark:hover:border-gray-600",
+          "bg-background border-border",
+          "text-foreground",
+          "placeholder:text-muted-foreground",
+          "focus-visible:border-border focus-visible:ring-2 focus-visible:ring-zinc-600/20",
+          "hover:border-border dark:hover:border-border",
         ],
         error: [
-          "bg-white dark:bg-black border-red-300 dark:border-red-700",
-          "text-gray-900 dark:text-gray-100",
+          "bg-background border-red-300 dark:border-red-700",
+          "text-foreground",
           "placeholder:text-red-400 dark:placeholder:text-red-500",
           "focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500/20",
         ],
         success: [
-          "bg-white dark:bg-black border-green-300 dark:border-green-700",
-          "text-gray-900 dark:text-gray-100",
+          "bg-background border-green-300 dark:border-green-700",
+          "text-foreground",
           "placeholder:text-green-400 dark:placeholder:text-green-500",
           "focus-visible:border-green-500 focus-visible:ring-2 focus-visible:ring-green-500/20",
         ],
         glass: [
-          "bg-white/70 dark:bg-black/70 backdrop-blur-md",
-          "border-white/30 dark:border-gray-600/30",
-          "text-gray-900 dark:text-gray-100",
-          "placeholder:text-gray-400 dark:placeholder:text-gray-500",
-          "focus-visible:border-gray-600 focus-visible:ring-2 focus-visible:ring-gray-600/20",
+          "bg-background/70 dark:bg-background/70 backdrop-blur-xl",
+          "border-white/30 dark:border-border/30",
+          "text-foreground",
+          "placeholder:text-foreground dark:placeholder:text-muted-foreground",
+          "focus-visible:border-border focus-visible:ring-2 focus-visible:ring-gray-600/20",
         ],
       },
       size: {
@@ -69,8 +69,8 @@ const InputWrapper = React.forwardRef(({
         data-slot="input"
         className={cn(
           inputVariants({ variant: computedVariant, size }),
-          "file:text-gray-900 dark:file:text-gray-100",
-          "selection:bg-gray-950 selection:text-white",
+          "file:text-foreground dark:file:text-foreground",
+          "selection:bg-background selection:text-foreground",
           className
         )}
         {...props}
@@ -81,7 +81,7 @@ const InputWrapper = React.forwardRef(({
   return (
     <div className={cn("relative w-full", className)}>
       {hasLeftIcon && (
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none">
+        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground dark:text-foreground pointer-events-none">
           {leftIcon}
         </div>
       )}
@@ -90,8 +90,8 @@ const InputWrapper = React.forwardRef(({
         data-slot="input"
         className={cn(
           inputVariants({ variant: computedVariant, size }),
-          "file:text-gray-900 dark:file:text-gray-100",
-          "selection:bg-gray-950 selection:text-white",
+          "file:text-foreground dark:file:text-foreground",
+          "selection:bg-background selection:text-foreground",
           hasLeftIcon && "pl-10",
           hasRightIcon && "pr-10"
         )}
@@ -99,7 +99,7 @@ const InputWrapper = React.forwardRef(({
         {...props}
       />
       {hasRightIcon && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground dark:text-foreground">
           {loading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (

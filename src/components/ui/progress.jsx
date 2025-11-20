@@ -10,9 +10,9 @@ const progressVariants = cva(
   {
     variants: {
       variant: {
-  default: "bg-gray-200 dark:bg-gray-950",
-        gradient: "bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600",
-        glass: "bg-white/20 dark:bg-black/20 backdrop-blur-sm",
+        default: "bg-background dark:bg-background",
+        gradient: "bg-gradient-to-r from-zinc-200 to-zinc-300 dark:from-zinc-700 dark:to-zinc-600",
+        glass: "bg-background/20 dark:bg-background/20 backdrop-blur-sm",
       },
       size: {
         sm: "h-1",
@@ -33,7 +33,7 @@ const progressIndicatorVariants = cva(
     variants: {
       color: {
         // Use a light neutral progress indicator so it reads clearly on dark backgrounds.
-        default: "bg-white/70",
+        default: "bg-background dark:bg-background",
         success: "bg-green-500",
         warning: "bg-yellow-500",
         error: "bg-red-500",

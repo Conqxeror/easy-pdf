@@ -1,15 +1,19 @@
 // next.config.mjs
-import path from "path";
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 import withBundleAnalyzer from '@next/bundle-analyzer';
+
+// Ensure browser globals used by certain vendors exist during server-side builds.
+if (typeof globalThis.self === "undefined") {
+  globalThis.self = globalThis;
+}
 
 const bundleAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
 // Helper to get __dirname equivalent in ES Modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -56,8 +60,8 @@ const nextConfig = {
       });
     }
 
-    // Production optimizations
-    if (!dev) {
+    // Production optimizations (client only)
+    if (!dev && !isServer) {
       config.optimization = {
         ...config.optimization,
         splitChunks: {

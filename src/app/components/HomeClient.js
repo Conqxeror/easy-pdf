@@ -99,8 +99,8 @@ export default function HomeClient() {
   const displayTools =
     recentTools.length > 0
       ? toolsData.filter((tool) =>
-          recentTools.includes(tool.href.replace("/", "")),
-        )
+        recentTools.includes(tool.href.replace("/", "")),
+      )
       : toolsData;
 
   const features = [
@@ -224,22 +224,22 @@ export default function HomeClient() {
           {/* Hero Section with Glassmorphism */}
           <div className="relative overflow-hidden py-10 px-6 mb-10 sm:py-16">
             {/* Solid Background */}
-            <div className="absolute inset-0 bg-white dark:bg-black -z-10" />
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.02] dark:opacity-[0.02] -z-10" />
-            
+            <div className="absolute inset-0 bg-background -z-10" />
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.04] -z-10" />
+
             <div className="container-standard px-6 py-8 max-w-7xl mx-auto">
               <div className="text-center max-w-4xl mx-auto mb-12 animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-                <Badge variant="outline" className="mb-4 gap-1">
+                <Badge variant="outline" className="mb-4 gap-1 border-primary/20 text-primary-foreground bg-primary/5">
                   <Shield className="w-3 h-3" />
                   100% Privacy-First
                 </Badge>
-                
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
+
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-foreground tracking-tight">
                   Privacy-First PDF Tools
                 </h1>
-                
-                <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-200 mb-8 max-w-2xl mx-auto">
-                  All processing happens in your browser. No file uploads, no privacy risks. 
+
+                <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                  All processing happens in your browser. No file uploads, no privacy risks.
                   Fast, free, and made for everyone.
                 </p>
 
@@ -275,11 +275,11 @@ export default function HomeClient() {
                       aria-label="Install easy-pdf as a Progressive Web App"
                     >
                       <svg
-            className="w-5 h-5 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
+                        className="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -313,69 +313,69 @@ export default function HomeClient() {
           </div>
 
           {/* Stats Section with Glass Cards */}
-          <Section spacing="small" className="py-6 px-6 bg-gray-50 dark:bg-gray-950">
+          <Section spacing="small" className="py-6 px-6 bg-secondary/50">
             <div className="container-standard max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-              {stats.map((stat, index) => (
-                <Card
-                  key={index}
-                  variant="glass"
-                  className="group text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CardContent className="pt-6">
-                    <div className="flex justify-center mb-3 text-gray-600 dark:text-gray-400 group-hover:scale-110 transition-transform duration-300">
-                      {stat.icon}
-                    </div>
-                    <div className="text-3xl font-bold mb-1 text-gray-900 dark:text-white">
-                      {stat.value}
-                    </div>
-                    <div className="text-gray-600 dark:text-gray-400">{stat.label}</div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                {stats.map((stat, index) => (
+                  <Card
+                    key={index}
+                    variant="glass"
+                    className="group text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 animate-in fade-in-0 slide-in-from-bottom-4 duration-500 bg-card border-border"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <CardContent className="pt-6">
+                      <div className="flex justify-center mb-3 text-muted-foreground group-hover:text-primary-foreground group-hover:scale-110 transition-all duration-300">
+                        {stat.icon}
+                      </div>
+                      <div className="text-3xl font-bold mb-1 text-foreground">
+                        {stat.value}
+                      </div>
+                      <div className="text-muted-foreground">{stat.label}</div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </Section>
 
           {/* Features Section with Enhanced Cards */}
           <Section className="py-16 px-6">
             <div className="container-standard max-w-7xl mx-auto">
-            <div className="text-center mb-16 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-              <Badge variant="premium" className="mb-6">
-                <Sparkles className="w-3 h-3" />
-                Premium Features
-              </Badge>
-              <AccessibleHeading level={2} className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                Why Choose easy-pdf?
-              </AccessibleHeading>
-              <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Built with privacy and performance in mind. No compromises.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-              {features.map((feature, index) => (
-                <Card
-                  key={index}
-                  variant="elevated"
-                  className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 animate-in fade-in-0 slide-in-from-bottom-5 duration-500"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CardHeader>
-                    <div className="w-12 h-12 bg-gray-950 dark:bg-gray-950 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                      {feature.icon}
-                    </div>
-                    <CardTitle className="text-xl">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">
-                      {feature.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+              <div className="text-center mb-16 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+                <Badge variant="premium" className="mb-6 bg-primary/10 text-primary-foreground border-primary/20">
+                  <Sparkles className="w-3 h-3" />
+                  Premium Features
+                </Badge>
+                <AccessibleHeading level={2} className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                  Why Choose easy-pdf?
+                </AccessibleHeading>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Built with privacy and performance in mind. No compromises.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                {features.map((feature, index) => (
+                  <Card
+                    key={index}
+                    variant="elevated"
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 animate-in fade-in-0 slide-in-from-bottom-5 duration-500 border-border"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <CardHeader>
+                      <div className="w-12 h-12 bg-background dark:bg-background flex items-center justify-center text-foreground dark:text-foreground mb-4 group-hover:scale-110 transition-transform duration-300 rounded-none">
+                        {feature.icon}
+                      </div>
+                      <CardTitle className="text-xl text-foreground">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <CardDescription className="text-base text-muted-foreground">
+                        {feature.description}
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </Section>
 

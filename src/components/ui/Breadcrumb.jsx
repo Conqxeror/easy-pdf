@@ -18,11 +18,11 @@ export default function Breadcrumb({ items = [] }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
       <nav aria-label="Breadcrumb" className="mb-6">
-        <ol className="flex items-center space-x-2 text-sm text-gray-400">
+        <ol className="flex items-center space-x-2 text-sm text-foreground">
           <li>
             <Link 
               href="/" 
-              className="flex items-center hover:text-gray-400 transition-colors"
+              className="flex items-center hover:text-foreground transition-colors"
               aria-label="Go to homepage"
             >
               <Home className="w-4 h-4" />
@@ -31,15 +31,15 @@ export default function Breadcrumb({ items = [] }) {
           </li>
           {items.map((item, index) => (
             <li key={index} className="flex items-center">
-              <ChevronRight className="w-4 h-4 mx-2 text-gray-600" />
+              <ChevronRight className="w-4 h-4 mx-2 text-foreground" />
               {index === items.length - 1 ? (
-                <span className="text-gray-200 font-medium" aria-current="page">
+                <span className="text-foreground font-medium" aria-current="page">
                   {item.name}
                 </span>
               ) : (
                 <Link 
                   href={item.url} 
-                  className="hover:text-gray-400 transition-colors"
+                  className="hover:text-foreground transition-colors"
                   aria-label={`Go to ${item.name}`}
                 >
                   {item.name}

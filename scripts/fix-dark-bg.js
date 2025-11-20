@@ -41,7 +41,6 @@ const replacements = [
 ];
 
 let filesChanged = 0;
-let replacementsCount = 0;
 
 patterns.forEach((pattern) => {
   const files = glob.sync(path.join(root, pattern), { nodir: true });

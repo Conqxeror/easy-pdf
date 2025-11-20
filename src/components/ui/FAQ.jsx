@@ -25,34 +25,34 @@ export default function FAQ({ faqs = [], title = "Frequently Asked Questions" })
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
-      <h2 className="text-2xl font-bold text-gray-100 mb-6 text-center">
+      <h2 className="text-2xl font-bold text-foreground mb-6 text-center">
         {title}
       </h2>
       <div className="space-y-4">
         {faqs.map((faq, index) => (
           <div 
             key={index} 
-            className="bg-black/10 border border-gray-700 overflow-hidden"
+            className="bg-background/10 border border-border overflow-hidden"
           >
             <button
               onClick={() => toggleItem(index)}
-              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-750 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600"
+              className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-background transition-colors focus:outline-none focus:ring-2 focus:ring-gray-600"
               aria-expanded={openItems.has(index)}
               aria-controls={`faq-answer-${index}`}
             >
-              <h3 className="text-lg font-medium text-gray-100 pr-4">
+              <h3 className="text-lg font-medium text-foreground pr-4">
                 {faq.question}
               </h3>
               {openItems.has(index) ? (
-                <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <ChevronUp className="w-5 h-5 text-foreground flex-shrink-0" />
               ) : (
-                <ChevronDown className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <ChevronDown className="w-5 h-5 text-foreground flex-shrink-0" />
               )}
             </button>
             {openItems.has(index) && (
               <div 
                 id={`faq-answer-${index}`}
-                className="px-6 pb-4 text-gray-300 leading-relaxed"
+                className="px-6 pb-4 text-foreground leading-relaxed"
               >
                 {faq.answer}
               </div>

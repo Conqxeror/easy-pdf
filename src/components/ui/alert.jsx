@@ -9,15 +9,15 @@ const alertVariants = cva(
     variants: {
       variant: {
         default: [
-          "bg-gray-100 dark:bg-black border-gray-200 dark:border-gray-700",
-          "text-gray-900 dark:text-gray-100",
-          "[&>svg]:text-gray-500 dark:[&>svg]:text-gray-400",
+          "bg-background dark:bg-background border-border",
+          "text-foreground",
+          "[&>svg]:text-foreground dark:[&>svg]:text-foreground",
         ],
         info: [
-          "bg-gray-50 dark:bg-gray-950/30 border-gray-200 dark:border-gray-900",
-          "text-gray-900 dark:text-gray-100",
-          "[&>svg]:text-gray-600 dark:[&>svg]:text-gray-400",
-          "*:data-[slot=alert-description]:text-gray-900 dark:*:data-[slot=alert-description]:text-gray-200",
+          "bg-background dark:bg-background/30 border-border dark:border-border",
+          "text-foreground",
+          "[&>svg]:text-foreground dark:[&>svg]:text-foreground",
+          "*:data-[slot=alert-description]:text-foreground dark:*:data-[slot=alert-description]:text-foreground",
         ],
         success: [
           "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800",
@@ -89,7 +89,7 @@ function Alert({
       {dismissible && (
         <button
           onClick={handleDismiss}
-          className="col-start-3 -mr-2 -mt-1 p-1 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+          className="col-start-3 -mr-2 -mt-1 p-1 hover:bg-background/5 dark:hover:bg-background/5 transition-colors"
           aria-label="Dismiss alert"
         >
           <X className="h-4 w-4" />

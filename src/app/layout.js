@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
   const inlineFavicon = `data:image/svg+xml;utf8,${inlineFaviconSvg}`;
 
   return (
-    <html lang="en" className="scroll-smooth bg-black">
+    <html lang="en" className="scroll-smooth bg-background">
       <head>
         {/* Inline data-URL favicon (highest priority) */}
         <link rel="icon" href={inlineFavicon} />
@@ -84,7 +84,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body className="antialiased bg-black">
+      <body className="antialiased bg-background text-foreground">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

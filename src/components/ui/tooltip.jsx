@@ -17,21 +17,21 @@ const tooltipContentVariants = cva(
     variants: {
       variant: {
         default: [
-          "bg-black text-white",
-          "shadow-lg border border-gray-600",
+          "bg-background dark:bg-background text-foreground dark:text-foreground",
+          "shadow-lg border border-border dark:border-border",
         ],
         light: [
-          "bg-white dark:bg-gray-100 text-gray-900",
-          "shadow-xl border border-gray-200",
+          "bg-background text-foreground",
+          "shadow-xl border border-border",
         ],
         glass: [
-          "bg-white/90 dark:bg-black/90 backdrop-blur-md",
-          "text-gray-900 dark:text-white",
-          "shadow-xl border border-white/20 dark:border-gray-600/20",
+          "bg-background/90 dark:bg-background/90 backdrop-blur-xl",
+          "text-foreground",
+          "shadow-xl border border-white/20 dark:border-border/20",
         ],
         premium: [
-          "bg-gradient-to-br from-gray-700 to-gray-800",
-          "text-white shadow-xl border border-gray-600/20",
+          "bg-gradient-to-br from-zinc-700 to-zinc-800",
+          "text-foreground shadow-xl border border-border/20",
         ],
       },
     },
@@ -59,10 +59,10 @@ const TooltipContent = React.forwardRef(({
       <TooltipPrimitive.Arrow 
         className={cn(
           "fill-current",
-          variant === "default" && "text-gray-900 dark:text-gray-800",
-          variant === "light" && "text-white dark:text-gray-100",
-          variant === "glass" && "text-white/90 dark:text-gray-900/90",
-          variant === "premium" && "text-gray-700"
+          variant === "default" && "text-foreground dark:text-foreground",
+          variant === "light" && "text-foreground dark:text-foreground",
+          variant === "glass" && "text-foreground/90 dark:text-foreground/90",
+          variant === "premium" && "text-foreground"
         )} 
       />
     )}

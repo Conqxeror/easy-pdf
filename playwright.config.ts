@@ -9,9 +9,15 @@ export default defineConfig({
 		ignoreHTTPSErrors: true,
 		video: 'retain-on-failure'
 	},
-	webServer: {
-		command: 'npm run build && npm run start',
-		port: 3000,
-		reuseExistingServer: true
-	}
+	webServer: (() => {
+		// Use a fast dev server locally if the env var PLAYWRIGHT_USE_DEV=true is set.
+		// For CI we prefer the built server. Reuse server if already running.
+		const useDev = Boolean(process.env.PLAYWRIGHT_USE_DEV);
+		return {
+			command: useDev ? 'npm run dev' : 'npm run build && npm run start',
+			port: 3000,
+			reuseExistingServer: true,
+			timeout: 120_000
+		};
+	})()
 });

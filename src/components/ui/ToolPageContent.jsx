@@ -9,10 +9,10 @@ const LazyFAQ = lazy(() => import('@/components/FAQ').catch(() => ({ default: ()
 // Loading skeletons for better UX
 const RelatedToolsSkeleton = () => (
   <div className="animate-pulse">
-    <div className="h-8 bg-gray-950 w-48 mb-4"></div>
+    <div className="h-8 bg-background w-48 mb-4"></div>
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="h-24 bg-gray-950"></div>
+        <div key={i} className="h-24 bg-background"></div>
       ))}
     </div>
   </div>
@@ -21,10 +21,10 @@ const RelatedToolsSkeleton = () => (
 const FAQSkeleton = () => (
   <div className="animate-pulse space-y-4">
     {[...Array(3)].map((_, i) => (
-      <div key={i} className="border-b border-gray-700 pb-4">
-        <div className="h-6 bg-gray-950 w-3/4 mb-2"></div>
-        <div className="h-4 bg-gray-950 w-full mb-1"></div>
-        <div className="h-4 bg-gray-950 w-2/3"></div>
+      <div key={i} className="border-b border-border pb-4">
+        <div className="h-6 bg-background w-3/4 mb-2"></div>
+        <div className="h-4 bg-background w-full mb-1"></div>
+        <div className="h-4 bg-background w-2/3"></div>
       </div>
     ))}
   </div>
@@ -36,10 +36,10 @@ const StepsList = memo(({ steps }) => {
     return null;
   }
   return (
-    <ol className="space-y-4 text-gray-300">
+    <ol className="space-y-4 text-foreground">
       {(steps || []).map((step, index) => (
         <li key={index} className="flex items-start group">
-          <span className="flex-shrink-0 flex items-center justify-center h-8 w-8 bg-gradient-to-r from-gray-700 to-indigo-700 text-white text-sm font-bold mr-4 mt-0.5 group-hover:scale-110 transition-transform duration-200">
+          <span className="flex-shrink-0 flex items-center justify-center h-8 w-8 bg-gradient-to-r from-gray-700 to-indigo-700 text-foreground text-sm font-bold mr-4 mt-0.5 group-hover:scale-110 transition-transform duration-200">
             {index + 1}
           </span>
           <span className="leading-relaxed text-lg">{step}</span>
@@ -51,9 +51,9 @@ const StepsList = memo(({ steps }) => {
 
 // Memoized features grid
 const FeaturesGrid = memo(({ toolName: _toolName }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
-    <Card className="p-5 hover:border-gray-600 transition-colors">
-      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-foreground">
+    <Card className="p-5 hover:border-border transition-colors">
+      <h4 className="text-lg font-semibold text-foreground mb-3 flex items-center">
         <span className="mr-2">🔒</span> 100% Secure & Private
       </h4>
       <p className="leading-relaxed">
@@ -61,8 +61,8 @@ const FeaturesGrid = memo(({ toolName: _toolName }) => (
         ensuring complete privacy and security for your sensitive documents.
       </p>
     </Card>
-    <Card className="p-5 hover:border-gray-600 transition-colors">
-      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+    <Card className="p-5 hover:border-border transition-colors">
+      <h4 className="text-lg font-semibold text-foreground mb-3 flex items-center">
         <span className="mr-2">⚡</span> Fast & Efficient
       </h4>
       <p className="leading-relaxed">
@@ -70,8 +70,8 @@ const FeaturesGrid = memo(({ toolName: _toolName }) => (
         No waiting times or server delays.
       </p>
     </Card>
-    <Card className="p-5 hover:border-gray-600 transition-colors">
-      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+    <Card className="p-5 hover:border-border transition-colors">
+      <h4 className="text-lg font-semibold text-foreground mb-3 flex items-center">
         <span className="mr-2">💰</span> Completely Free
       </h4>
       <p className="leading-relaxed">
@@ -79,8 +79,8 @@ const FeaturesGrid = memo(({ toolName: _toolName }) => (
         with unlimited access and no watermarks.
       </p>
     </Card>
-    <Card className="p-5 hover:border-gray-600 transition-colors">
-      <h4 className="text-lg font-semibold text-white mb-3 flex items-center">
+    <Card className="p-5 hover:border-border transition-colors">
+      <h4 className="text-lg font-semibold text-foreground mb-3 flex items-center">
         <span className="mr-2">🌐</span> Works Everywhere
       </h4>
       <p className="leading-relaxed">
@@ -111,10 +111,10 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
     <div className="space-y-12">
       {/* Header section */}
       <div className="text-center">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-6 text-gray-900 dark:text-white">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-6 text-foreground dark:text-foreground">
           {`How to ${toolName} Online for Free`}
         </h2>
-        <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xl text-foreground max-w-3xl mx-auto leading-relaxed">
           {toolDescription}
         </p>
       </div>
@@ -122,9 +122,9 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
       {/* Main content grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Steps section */}
-        <Card className="p-6 md:p-8 hover:border-gray-600 transition-all duration-300">
-          <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <span className="bg-gradient-to-r from-gray-700 to-indigo-700 text-white w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+        <Card className="p-6 md:p-8 hover:border-border transition-all duration-300">
+          <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center">
+            <span className="bg-gradient-to-r from-gray-700 to-indigo-700 text-foreground w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
               1
             </span>
             How to {toolName}
@@ -134,8 +134,8 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
 
         {/* FAQ section */}
         <Card className="p-6 md:p-8 hover:border-green-500 transition-all duration-300">
-          <h3 className="text-2xl font-bold text-white mb-6 flex items-center">
-            <span className="bg-gradient-to-r from-green-600 to-emerald-700 text-white w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
+          <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center">
+            <span className="bg-gradient-to-r from-green-600 to-emerald-700 text-foreground w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">
               ?
             </span>
             Frequently Asked Questions
@@ -147,9 +147,9 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
             ) : (
               <div className="space-y-6">
                 {(faqs || []).map((faq, index) => (
-                  <div key={index} className="border-b border-gray-700 last:border-b-0 pb-4 last:pb-0">
-                    <h4 className="text-lg font-semibold text-white mb-2">{faq.question}</h4>
-                    <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                  <div key={index} className="border-b border-border last:border-b-0 pb-4 last:pb-0">
+                    <h4 className="text-lg font-semibold text-foreground mb-2">{faq.question}</h4>
+                    <p className="text-foreground leading-relaxed">{faq.answer}</p>
                   </div>
                 ))}
               </div>
@@ -159,8 +159,8 @@ const ToolPageContent = ({ toolName, toolDescription, steps, faqs, currentTool }
       </div>
 
       {/* Features section */}
-      <Card className="p-6 md:p-8 hover:border-gray-600 transition-all duration-300">
-        <h3 className="text-2xl font-bold text-white mb-6">
+      <Card className="p-6 md:p-8 hover:border-border transition-all duration-300">
+        <h3 className="text-2xl font-bold text-foreground mb-6">
           Why Choose Our {toolName} Tool?
         </h3>
         <FeaturesGrid toolName={toolName} />

@@ -12,7 +12,7 @@
  */
 export const triggerSuccessAnimation = (element) => {
   if (!element) return;
-  
+
   element.classList.add('animate-in', 'zoom-in-95', 'duration-300');
   setTimeout(() => {
     element.classList.remove('animate-in', 'zoom-in-95', 'duration-300');
@@ -25,7 +25,7 @@ export const triggerSuccessAnimation = (element) => {
  */
 export const triggerShakeAnimation = (element) => {
   if (!element) return;
-  
+
   element.classList.add('animate-shake');
   setTimeout(() => {
     element.classList.remove('animate-shake');
@@ -38,7 +38,7 @@ export const triggerShakeAnimation = (element) => {
  */
 export const triggerPulseAnimation = (element) => {
   if (!element) return;
-  
+
   element.classList.add('animate-pulse');
   setTimeout(() => {
     element.classList.remove('animate-pulse');
@@ -53,10 +53,10 @@ export const triggerPulseAnimation = (element) => {
 export const smoothScrollTo = (elementId, offset = 80) => {
   const element = document.getElementById(elementId);
   if (!element) return;
-  
+
   const elementPosition = element.getBoundingClientRect().top;
   const offsetPosition = elementPosition + window.pageYOffset - offset;
-  
+
   window.scrollTo({
     top: offsetPosition,
     behavior: 'smooth'
@@ -72,18 +72,18 @@ export const smoothScrollTo = (elementId, offset = 80) => {
 export const copyToClipboard = async (text, button = null) => {
   try {
     await navigator.clipboard.writeText(text);
-    
+
     if (button) {
       const originalText = button.textContent;
       button.textContent = '✓ Copied!';
       button.classList.add('animate-in', 'zoom-in-95');
-      
+
       setTimeout(() => {
         button.textContent = originalText;
         button.classList.remove('animate-in', 'zoom-in-95');
       }, 2000);
     }
-    
+
     return true;
   } catch (err) {
     console.error('Failed to copy:', err);
@@ -100,18 +100,18 @@ export const createRipple = (event) => {
   const circle = document.createElement('span');
   const diameter = Math.max(button.clientWidth, button.clientHeight);
   const radius = diameter / 2;
-  
+
   const rect = button.getBoundingClientRect();
   circle.style.width = circle.style.height = `${diameter}px`;
   circle.style.left = `${event.clientX - rect.left - radius}px`;
   circle.style.top = `${event.clientY - rect.top - radius}px`;
   circle.classList.add('ripple');
-  
+
   const ripple = button.getElementsByClassName('ripple')[0];
   if (ripple) {
     ripple.remove();
   }
-  
+
   button.appendChild(circle);
 };
 
@@ -127,7 +127,7 @@ export const observeScrollAnimations = (selector = '.animate-on-scroll', options
     threshold: 0.1,
     ...options
   };
-  
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -136,10 +136,10 @@ export const observeScrollAnimations = (selector = '.animate-on-scroll', options
       }
     });
   }, defaultOptions);
-  
+
   const elements = document.querySelectorAll(selector);
   elements.forEach(el => observer.observe(el));
-  
+
   return observer;
 };
 
@@ -152,7 +152,7 @@ export const observeScrollAnimations = (selector = '.animate-on-scroll', options
 export const staggerAnimation = (containerSelector, itemSelector, delay = 100) => {
   const container = document.querySelector(containerSelector);
   if (!container) return;
-  
+
   const items = container.querySelectorAll(itemSelector);
   items.forEach((item, index) => {
     item.style.animationDelay = `${index * delay}ms`;
@@ -166,12 +166,12 @@ export const staggerAnimation = (containerSelector, itemSelector, delay = 100) =
  */
 export const addHoverLift = (card) => {
   if (!card) return;
-  
+
   card.addEventListener('mouseenter', () => {
     card.style.transform = 'translateY(-4px)';
     card.style.transition = 'transform 200ms ease-out';
   });
-  
+
   card.addEventListener('mouseleave', () => {
     card.style.transform = 'translateY(0)';
   });
@@ -209,11 +209,11 @@ export const triggerConfetti = () => {
  */
 export const animateCounter = (element, target, duration = 1000) => {
   if (!element) return;
-  
+
   const start = parseInt(element.textContent) || 0;
   const increment = (target - start) / (duration / 16); // 60fps
   let current = start;
-  
+
   const timer = setInterval(() => {
     current += increment;
     if ((increment > 0 && current >= target) || (increment < 0 && current <= target)) {
@@ -231,8 +231,8 @@ export const animateCounter = (element, target, duration = 1000) => {
  */
 export const showLoadingSkeleton = (element) => {
   if (!element) return;
-  
-  element.classList.add('animate-pulse', 'bg-gray-200', 'dark:bg-black', 'rounded');
+
+  element.classList.add('animate-pulse', 'bg-background', 'dark:bg-background', 'rounded');
   element.style.minHeight = element.offsetHeight + 'px';
 };
 
@@ -242,8 +242,8 @@ export const showLoadingSkeleton = (element) => {
  */
 export const hideLoadingSkeleton = (element) => {
   if (!element) return;
-  
-  element.classList.remove('animate-pulse', 'bg-gray-200', 'dark:bg-black');
+
+  element.classList.remove('animate-pulse', 'bg-background', 'dark:bg-background');
   element.style.minHeight = '';
 };
 
@@ -258,15 +258,15 @@ export const showToast = (message, type = 'info', duration = 3000) => {
   const colors = {
     success: 'bg-green-500',
     error: 'bg-red-500',
-    info: 'bg-gray-950',
+    info: 'bg-background',
     warning: 'bg-yellow-500'
   };
-  
-  toast.className = `fixed bottom-4 right-4 ${colors[type]} text-white px-6 py-3 shadow-lg z-50 animate-in slide-in-from-bottom-5 duration-300`;
+
+  toast.className = `fixed bottom-4 right-4 ${colors[type]} text-foreground px-6 py-3 shadow-lg z-50 animate-in slide-in-from-bottom-5 duration-300`;
   toast.textContent = message;
-  
+
   document.body.appendChild(toast);
-  
+
   setTimeout(() => {
     toast.classList.add('animate-out', 'slide-out-to-bottom-5');
     setTimeout(() => toast.remove(), 300);

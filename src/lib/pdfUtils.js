@@ -1,7 +1,7 @@
 // PDF utilities with dynamic imports for better bundle splitting
 import React, { useEffect, useState } from 'react';
 import { safeCreateObjectURL } from './enhancedUX';
-import { getPdfWorkerUrl } from './pdfjsWorker';
+import { loadPdfJs } from './pdfjsWorker';
 
 // Hook to dynamically load PDFLib
 export const usePDFLib = () => {
@@ -48,14 +48,8 @@ export const usePDFJS = () => {
 
     const loadPDFJS = async () => {
       try {
-        const pdfjsModule = await import('pdfjs-dist');
+        const pdfjsModule = await loadPdfJs();
         if (isMounted) {
-          // Set worker source in a canonical way respecting assetPrefix
-          try {
-            pdfjsModule.GlobalWorkerOptions.workerSrc = getPdfWorkerUrl();
-          } catch {
-            pdfjsModule.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.js";
-          }
           setPdfjs(pdfjsModule);
           setLoading(false);
         }

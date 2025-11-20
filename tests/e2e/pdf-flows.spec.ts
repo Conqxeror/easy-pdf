@@ -42,7 +42,7 @@ test.describe('PDF flows', () => {
 		const input = page.locator('input[type=file]');
 		await input.setInputFiles(path.join(process.cwd(), 'tests/fixtures/sample1.pdf'));
 
-		await expect(page.locator('text=Add Watermark')).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Add Watermark' })).toBeVisible();
 
 		// Choose default watermark and apply
 		await page.locator('button:has-text("Add Watermark")').click();

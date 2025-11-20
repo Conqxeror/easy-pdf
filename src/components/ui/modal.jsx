@@ -18,7 +18,7 @@ const DialogOverlay = React.forwardRef(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm",
+      "fixed inset-0 z-50 bg-background/60 backdrop-blur-sm",
       "data-[state=open]:animate-in data-[state=closed]:animate-out",
       "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       "transition-all duration-300",
@@ -35,16 +35,16 @@ const dialogContentVariants = cva(
     variants: {
       variant: {
         default: [
-          "bg-white dark:bg-black",
-          "border-gray-200 dark:border-gray-700",
+          "bg-background",
+          "border-border",
         ],
         glass: [
-          "bg-white/90 dark:bg-black/90 backdrop-blur-xl",
-          "border-white/20 dark:border-gray-700/20",
+          "bg-background/90 dark:bg-background/90 backdrop-blur-xl",
+          "border-white/20 dark:border-border/20",
         ],
         elevated: [
-          "bg-white dark:bg-black",
-          "border-gray-200 dark:border-gray-700",
+          "bg-background",
+          "border-border",
           "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
         ],
       },
@@ -86,8 +86,8 @@ const DialogContent = React.forwardRef(({
           className={cn(
             "absolute right-4 top-4 p-1.5",
             "opacity-70 transition-all duration-200",
-            "hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-950",
-            "focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2",
+            "hover:opacity-100 hover:bg-background dark:hover:bg-background",
+            "focus:outline-none focus:ring-2 focus:ring-zinc-600 focus:ring-offset-2",
             "disabled:pointer-events-none"
           )}
         >
@@ -133,7 +133,7 @@ const DialogTitle = React.forwardRef(({ className, ...props }, ref) => (
     ref={ref}
     className={cn(
       "text-lg font-semibold leading-none tracking-tight",
-      "text-gray-900 dark:text-gray-100",
+      "text-foreground",
       className
     )}
     {...props}
@@ -145,7 +145,7 @@ const DialogDescription = React.forwardRef(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
     className={cn(
-      "text-sm text-gray-600 dark:text-gray-400",
+      "text-sm text-foreground dark:text-foreground",
       className
     )}
     {...props}

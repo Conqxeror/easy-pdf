@@ -64,14 +64,14 @@ const SponsorsPage = () => {
   // Formatting and tier icons are handled by `SponsorCard` itself.
 
   return (
-    <div className="min-h-screen bg-black text-gray-100">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-gray-900 via-gray-900 to-gray-900 py-20">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Our Amazing Sponsors ❤️
           </h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-foreground mb-8 max-w-3xl mx-auto">
             These incredible partners make easy-pdf completely free for everyone.
             Show them some love and check out their amazing services!
           </p>
@@ -80,21 +80,21 @@ const SponsorsPage = () => {
           {/* App Stats */}
           {analytics && (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm p-4">
+              <div className="bg-background/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">{analytics.totalOperations?.toLocaleString() || '10,000+'}</div>
-                <div className="text-sm text-gray-300">Files Processed</div>
+                <div className="text-sm text-foreground">Files Processed</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm p-4">
+              <div className="bg-background/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">{analytics.totalSessions?.toLocaleString() || '5,000+'}</div>
-                <div className="text-sm text-gray-300">User Sessions</div>
+                <div className="text-sm text-foreground">User Sessions</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm p-4">
+              <div className="bg-background/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">100%</div>
-                <div className="text-sm text-gray-300">Free Forever</div>
+                <div className="text-sm text-foreground">Free Forever</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm p-4">
+              <div className="bg-background/10 backdrop-blur-sm p-4">
                 <div className="text-2xl font-bold">0</div>
-                <div className="text-sm text-gray-300">Files Uploaded</div>
+                <div className="text-sm text-foreground">Files Uploaded</div>
               </div>
             </div>
           )}
@@ -105,7 +105,7 @@ const SponsorsPage = () => {
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Meet Our Sponsors</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-foreground max-w-2xl mx-auto">
             These trusted partners share our commitment to privacy, security, and providing
             valuable tools to the community.
           </p>
@@ -115,7 +115,7 @@ const SponsorsPage = () => {
           {sponsors.length === 0 ? (
             <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 shadow-lg ring-1 ring-white/5">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">We don’t have sponsors yet — you can be the first ✨</h3>
-              <p className="text-gray-300 mb-6">
+              <p className="text-foreground mb-6">
                 easy-pdf will always provide free access to students, teachers, researchers, doctors, institutions, and community projects.
                 We’re building a sustainable model and would love to partner with organizations that share our values: privacy, accessibility and education.
               </p>
@@ -156,7 +156,7 @@ const SponsorsPage = () => {
                       window.location.href = '/#partnership-tiers';
                     }
                   }}
-                  className="inline-flex items-center px-6 py-3 border border-white/10 text-white hover:bg-white/5 transition-colors"
+                  className="inline-flex items-center px-6 py-3 border border-white/10 text-foreground hover:bg-background/5 transition-colors"
                 >
                   Learn about partnership tiers
                 </a>
@@ -193,11 +193,11 @@ const SponsorsPage = () => {
       </div>
 
       {/* Why We Use Sponsors */}
-      <div className="bg-gray-950 py-16">
+      <div className="bg-background py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Why Sponsors?</h2>
-            <p className="text-gray-400 max-w-3xl mx-auto">
+            <p className="text-foreground max-w-3xl mx-auto">
               We believe in keeping powerful tools free and accessible. Our sponsor model
               allows us to maintain the highest standards while never charging users.
             </p>
@@ -205,11 +205,11 @@ const SponsorsPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-gray-950 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <div className="bg-background w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Shield className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Privacy First</h3>
-              <p className="text-gray-400">
+              <p className="text-foreground">
                 All sponsors are vetted for privacy practices. We only partner with
                 companies that respect user privacy and data protection.
               </p>
@@ -220,18 +220,18 @@ const SponsorsPage = () => {
                 <Heart className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Community Driven</h3>
-              <p className="text-gray-400">
+              <p className="text-foreground">
                 Our sponsors share our values of building tools that serve the community.
                 They help us keep improving without compromising our mission.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-gray-950 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <div className="bg-background w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Sustainable Growth</h3>
-              <p className="text-gray-400">
+              <p className="text-foreground">
                 Sponsorships allow us to invest in new features, better performance,
                 and expanded capabilities while keeping everything free.
               </p>
@@ -244,34 +244,34 @@ const SponsorsPage = () => {
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Sponsor Impact</h2>
-          <p className="text-gray-400">
+          <p className="text-foreground">
             See how our sponsors help deliver value to thousands of users
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
-            <Globe className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+          <div className="bg-background border border-border p-6 text-center">
+            <Globe className="w-8 h-8 text-foreground mx-auto mb-3" />
             <div className="text-2xl font-bold mb-1">Global</div>
-            <div className="text-sm text-gray-400">Worldwide reach</div>
+            <div className="text-sm text-foreground">Worldwide reach</div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
+          <div className="bg-background border border-border p-6 text-center">
             <Users className="w-8 h-8 text-green-400 mx-auto mb-3" />
             <div className="text-2xl font-bold mb-1">Growing</div>
-            <div className="text-sm text-gray-400">User base expansion</div>
+            <div className="text-sm text-foreground">User base expansion</div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
-            <TrendingUp className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+          <div className="bg-background border border-border p-6 text-center">
+            <TrendingUp className="w-8 h-8 text-foreground mx-auto mb-3" />
             <div className="text-2xl font-bold mb-1">Engaged</div>
-            <div className="text-sm text-gray-400">High user engagement</div>
+            <div className="text-sm text-foreground">High user engagement</div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-700 p-6 text-center">
+          <div className="bg-background border border-border p-6 text-center">
             <Coffee className="w-8 h-8 text-orange-400 mx-auto mb-3 preserve-color" />
             <div className="text-2xl font-bold mb-1">Trusted</div>
-            <div className="text-sm text-gray-400">Community approved</div>
+            <div className="text-sm text-foreground">Community approved</div>
           </div>
         </div>
       </div>
@@ -280,25 +280,25 @@ const SponsorsPage = () => {
       <div id="partnership-tiers" className="bg-gradient-to-r from-gray-700 to-gray-800 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Become a Sponsor</h2>
-          <p className="text-xl text-gray-100 mb-8">
+          <p className="text-xl text-foreground mb-8">
             Join our community of sponsors and help keep powerful tools free for everyone
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white/10 backdrop-blur-sm p-4">
-              <BarChart3 className="w-8 h-8 text-white mx-auto mb-2" />
+            <div className="bg-background/10 backdrop-blur-sm p-4">
+              <BarChart3 className="w-8 h-8 text-foreground mx-auto mb-2" />
               <div className="font-semibold">Detailed Analytics</div>
-              <div className="text-sm text-gray-100">Track your ROI with comprehensive metrics</div>
+              <div className="text-sm text-foreground">Track your ROI with comprehensive metrics</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm p-4">
-              <Target className="w-8 h-8 text-white mx-auto mb-2" />
+            <div className="bg-background/10 backdrop-blur-sm p-4">
+              <Target className="w-8 h-8 text-foreground mx-auto mb-2" />
               <div className="font-semibold">Targeted Audience</div>
-              <div className="text-sm text-gray-100">Reach privacy-conscious professionals</div>
+              <div className="text-sm text-foreground">Reach privacy-conscious professionals</div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm p-4">
-              <Heart className="w-8 h-8 text-white mx-auto mb-2" />
+            <div className="bg-background/10 backdrop-blur-sm p-4">
+              <Heart className="w-8 h-8 text-foreground mx-auto mb-2" />
               <div className="font-semibold">Community Impact</div>
-              <div className="text-sm text-gray-100">Support free tools for everyone</div>
+              <div className="text-sm text-foreground">Support free tools for everyone</div>
             </div>
           </div>
 
@@ -312,10 +312,10 @@ const SponsorsPage = () => {
       </div>
 
       {/* Thank You */}
-      <div className="bg-black py-12">
+      <div className="bg-background py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold mb-4">Thank You! 🙏</h2>
-          <p className="text-gray-400">
+          <p className="text-foreground">
             To our sponsors and users - you make this possible. Together, we&apos;re building
             a better, more private, and more accessible web.
           </p>

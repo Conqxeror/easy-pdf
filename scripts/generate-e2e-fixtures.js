@@ -4,7 +4,7 @@ const { PDFDocument } = require('pdf-lib');
 async function createSamplePdf(path, text) {
 	const pdfDoc = await PDFDocument.create();
 	const page = pdfDoc.addPage([600, 400]);
-	const { width, height } = page.getSize();
+	const { height } = page.getSize();
 	const fontSize = 24;
 	page.drawText(text || 'Sample PDF', {
 		x: 50,
@@ -20,6 +20,13 @@ async function createSamplePdf(path, text) {
 		fs.mkdirSync('tests/fixtures', { recursive: true });
 		await createSamplePdf('tests/fixtures/sample1.pdf', 'E2E Sample 1');
 		await createSamplePdf('tests/fixtures/sample2.pdf', 'E2E Sample 2');
+		// create DOCX fixture for e2e tests
+		try {
+			const { createDocx } = require('./generate-docx-fixture');
+			await createDocx('tests/fixtures/sample.docx');
+		} catch (err) {
+			console.warn('docx fixture creation skipped (docx library missing?):', err.message);
+		}
 		console.log('E2E fixtures created');
 	} catch (err) {
 		console.error('Failed to create e2e fixtures', err);

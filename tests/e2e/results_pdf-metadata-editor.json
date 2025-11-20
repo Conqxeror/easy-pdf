@@ -1,0 +1,6 @@
+[
+  {
+    "type": "pageerror",
+    "message": "Cannot access 'extractMetadata' before initialization"
+  }
+]

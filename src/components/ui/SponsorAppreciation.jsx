@@ -35,7 +35,7 @@ const SponsorAppreciation = ({
       case 'feature_appreciation':
         return <Coffee className="w-6 h-6 text-orange-400 preserve-color" />;
       default:
-        return <Users className="w-6 h-6 text-gray-400" />;
+        return <Users className="w-6 h-6 text-foreground" />;
     }
   };
 
@@ -89,17 +89,17 @@ const SponsorAppreciation = ({
   const appreciationContent = getAppreciationContent();
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-950 shadow-2xl max-w-md w-full border border-gray-700">
+    <div className="fixed inset-0 bg-background/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-background dark:bg-background shadow-2xl max-w-md w-full border border-border">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-700">
+        <div className="flex items-center justify-between p-6 border-b border-border">
           <div className="flex items-center space-x-3">
             {getIcon()}
-            <h3 className="text-xl font-semibold text-white">{appreciationContent.title}</h3>
+            <h3 className="text-xl font-semibold text-foreground">{appreciationContent.title}</h3>
           </div>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-foreground hover:text-foreground transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -108,16 +108,16 @@ const SponsorAppreciation = ({
 
         {/* Content */}
         <div className="p-6">
-          <p className="text-gray-300 mb-6">{appreciationContent.message}</p>
+          <p className="text-foreground mb-6">{appreciationContent.message}</p>
 
           {/* Benefits */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-400 mb-3 uppercase tracking-wide">
+            <h4 className="text-sm font-medium text-foreground mb-3 uppercase tracking-wide">
               Why We Stay Free
             </h4>
             <ul className="space-y-2">
               {appreciationContent.benefits.map((benefit, index) => (
-                <li key={index} className="flex items-center text-sm text-gray-300">
+                <li key={index} className="flex items-center text-sm text-foreground">
                   <Heart className="w-4 h-4 text-red-400 mr-2 flex-shrink-0 preserve-color" />
                   {benefit}
                 </li>
@@ -126,11 +126,11 @@ const SponsorAppreciation = ({
           </div>
 
           {/* Sponsor appreciation */}
-          <div className="bg-gradient-to-r from-gray-900/30 to-gray-900/30 border border-gray-800/50 p-4 mb-4">
+          <div className="bg-gradient-to-r from-gray-900/30 to-gray-900/30 border border-border/50 p-4 mb-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-300 font-medium">Our Amazing Sponsors</p>
-                <p className="text-gray-400 text-sm">Supporting free tools for everyone</p>
+                <p className="text-foreground font-medium">Our Amazing Sponsors</p>
+                <p className="text-foreground text-sm">Supporting free tools for everyone</p>
               </div>
               <Star className="w-6 h-6 text-yellow-400 preserve-color" />
             </div>
@@ -141,7 +141,7 @@ const SponsorAppreciation = ({
             <button
               onClick={handleViewSponsors}
               disabled={isLoading}
-              className="w-full bg-gray-950 hover:bg-gray-950 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-4 transition-colors flex items-center justify-center"
+              className="w-full bg-background hover:bg-background disabled:opacity-50 disabled:cursor-not-allowed text-foreground font-medium py-3 px-4 transition-colors flex items-center justify-center"
             >
               {isLoading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent animate-spin" />
@@ -155,7 +155,7 @@ const SponsorAppreciation = ({
             
             <button
               onClick={handleClose}
-              className="w-full text-gray-400 hover:text-white text-sm py-2 transition-colors"
+              className="w-full text-foreground hover:text-foreground text-sm py-2 transition-colors"
             >
               Continue Using App
             </button>
@@ -163,7 +163,7 @@ const SponsorAppreciation = ({
 
           {/* Thank you note */}
           <div className="mt-4 text-center">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-foreground">
               Thank you for supporting our sponsor ecosystem! 🙏
             </p>
           </div>

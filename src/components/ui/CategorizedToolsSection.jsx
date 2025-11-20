@@ -31,17 +31,17 @@ const CategorizedToolsSection = () => {
           if (categoryTools.length === 0) return null;
 
           return (
-            <div key={category.name} className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 p-6 border border-gray-700 hover:border-gray-600 transition-all duration-300">
+            <div key={category.name} className="bg-card p-6 border border-border hover:border-primary/30 transition-all duration-300">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-white flex items-center gap-3">
-                  <span className="text-gray-400">
+                <h3 className="text-2xl font-bold text-foreground flex items-center gap-3">
+                  <span className="text-muted-foreground">
                     {category.icon}
                   </span>
                   {category.name}
                 </h3>
                 <Link 
                   href={`/categories/${slugify(category.name)}`}
-                  className="text-sm link-blue font-medium inline-flex items-center group"
+                  className="text-sm text-primary-foreground hover:text-secondary font-medium inline-flex items-center group"
                 >
                   View all
                   <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform" />

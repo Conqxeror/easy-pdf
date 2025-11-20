@@ -9,22 +9,23 @@ const cardVariants = cva(
     variants: {
       variant: {
         // Default card - subtle elevation
-        default: "bg-white dark:bg-black text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-md",
+        default: "bg-card text-foreground border-2 border-border shadow-md",
         
         // Elevated card - stronger shadow, lifts on hover
-        elevated: "bg-white dark:bg-black text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:-translate-y-1",
+        elevated: "bg-card text-foreground border-2 border-border shadow-lg hover:shadow-xl hover:-translate-y-1",
         
         // Glass card - glassmorphism effect
-        glass: "bg-white/90 dark:bg-black/90 backdrop-blur-md text-gray-900 dark:text-gray-100 border border-gray-200/50 dark:border-gray-700/50 shadow-lg",
+        // Change to solid white in light mode for highest contrast, preserve translucency in dark mode
+        glass: "bg-card dark:bg-background/90 backdrop-blur-xl text-foreground border border-border/50 dark:border-border/50 shadow-lg",
         
         // Interactive card - for clickable cards
-        interactive: "bg-white dark:bg-black text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700 shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-gray-600 dark:hover:border-gray-600 cursor-pointer",
+        interactive: "bg-card text-foreground border-2 border-border shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-border dark:hover:border-border cursor-pointer",
         
         // Flat card - no shadow, subtle border
-  flat: "bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-gray-700",
+        flat: "bg-card dark:bg-background text-foreground border-2 border-border",
         
         // Outlined card - prominent border
-        outlined: "bg-transparent text-gray-900 dark:text-gray-100 border-2 border-gray-300 dark:border-gray-600",
+        outlined: "bg-transparent text-foreground border-2 border-border dark:border-border",
       },
       padding: {
         none: "p-0",
@@ -88,7 +89,7 @@ function CardDescription({
   return (
     <div
       data-slot="card-description"
-      className={cn("text-gray-400 text-sm", className)}
+      className={cn("text-foreground text-sm", className)}
       {...props} />
   );
 }

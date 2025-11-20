@@ -8,7 +8,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+// const path = require('path');
 const glob = require('glob');
 
 // Define the replacement mappings

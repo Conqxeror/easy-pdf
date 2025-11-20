@@ -18,7 +18,7 @@ const createLazyComponent = (importFn, fallback = null) => {
 // Optimized skeleton components
 const OptimizedSkeleton = memo(({ className = "", children, ...props }) => (
   <div 
-  className={`animate-pulse bg-gray-200 dark:bg-gray-950 ${className}`}
+  className={`animate-pulse bg-background dark:bg-background ${className}`}
     {...props}
   >
     {children}

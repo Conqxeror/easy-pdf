@@ -17,11 +17,6 @@ const fs = require('fs');
 const path = require('path');
 const { glob } = require('glob');
 
-// Configuration
-const REQUIRED_META_FIELDS = ['title', 'description'];
-const REQUIRED_OG_FIELDS = ['og:title', 'og:description', 'og:image', 'og:url'];
-const REQUIRED_TWITTER_FIELDS = ['twitter:card', 'twitter:title', 'twitter:description'];
-
 const SEO_PATTERNS = {
   generateEnhancedMetadata: /generateEnhancedMetadata\s*\(/g,
   generateComprehensiveJsonLd: /generateComprehensiveJsonLd\s*\(/g,
@@ -46,9 +41,9 @@ class SEOValidator {
     // Find all layout and page files
     const layoutFiles = await glob('src/app/**/layout.{js,jsx,ts,tsx}');
     const pageFiles = await glob('src/app/**/page.{js,jsx,ts,tsx}');
-    
+
     const allFiles = [...new Set([...layoutFiles, ...pageFiles])];
-    
+
     console.log(`Found ${allFiles.length} files to validate\n`);
 
     for (const filePath of allFiles) {
@@ -56,7 +51,7 @@ class SEOValidator {
     }
 
     this.printReport();
-    
+
     // Exit with error code if failures found
     if (this.results.failed > 0) {
       process.exit(1);
@@ -65,11 +60,11 @@ class SEOValidator {
 
   validateFile(filePath) {
     this.results.total++;
-    
+
     const fullPath = path.join(process.cwd(), filePath);
     const content = fs.readFileSync(fullPath, 'utf8');
     const relativePath = path.relative(process.cwd(), fullPath);
-    
+
     const pageResult = {
       path: relativePath,
       issues: [],
@@ -121,7 +116,7 @@ class SEOValidator {
       if (!pageResult.checks.hasMetadataExport) {
         pageResult.issues.push('Layout file missing metadata export');
       }
-      
+
       // Tool pages should have JSON-LD
       if (filePath.includes('src/app/') && !filePath.includes('src/app/layout.') && !filePath.includes('/api/')) {
         if (!pageResult.checks.hasJsonLd) {
@@ -175,7 +170,7 @@ class SEOValidator {
 
     for (const page of this.results.pages) {
       console.log(`\n📄 ${page.path}`);
-      
+
       if (page.issues.length > 0) {
         console.log('  ❌ Issues:');
         page.issues.forEach(issue => {
@@ -198,13 +193,13 @@ class SEOValidator {
     }
 
     console.log('\n' + '='.repeat(80));
-    
+
     if (this.results.failed > 0) {
       console.log('❌ VALIDATION FAILED - Please fix the issues above');
     } else {
       console.log('✅ VALIDATION PASSED - Some warnings may need attention');
     }
-    
+
     console.log('='.repeat(80) + '\n');
 
     console.log('Recommendations:');

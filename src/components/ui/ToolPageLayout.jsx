@@ -36,12 +36,12 @@ const RelatedToolsSkeleton = () => (
 
 // Icon mapping for features
 const featureIcons = {
-  "merge": <Files className="w-6 h-6 text-gray-600" />,
+  "merge": <Files className="w-6 h-6 text-foreground" />,
   "split": <Split className="w-6 h-6 text-green-500 preserve-color" />,
-  "compress": <Minimize2 className="w-6 h-6 text-gray-600" />,
+  "compress": <Minimize2 className="w-6 h-6 text-foreground" />,
   "rotate": <RotateCw className="w-6 h-6 text-yellow-500 preserve-color" />,
   "watermark": <Stamp className="w-6 h-6 text-red-500 preserve-color" />,
-  "protect": <Lock className="w-6 h-6 text-gray-500" />,
+  "protect": <Lock className="w-6 h-6 text-foreground" />,
   "unlock": <Unlock className="w-6 h-6 text-orange-500 preserve-color" />,
   "delete": <Eraser className="w-6 h-6 text-indigo-500 preserve-color" />,
   "reorder": <ListOrdered className="w-6 h-6 text-cyan-500 preserve-color" />,
@@ -49,24 +49,24 @@ const featureIcons = {
   "sign": <Signature className="w-6 h-6 text-rose-500 preserve-color" />,
   "form": <Text className="w-6 h-6 text-lime-500 preserve-color" />,
   "ocr": <Search className="w-6 h-6 text-green-400 preserve-color" />,
-  "image": <LucideImage className="w-6 h-6 text-gray-600" />,
-  "metadata": <Settings className="w-6 h-6 text-gray-500" />,
-  "bookmark": <Bookmark className="w-6 h-6 text-gray-600" />,
+  "image": <LucideImage className="w-6 h-6 text-foreground" />,
+  "metadata": <Settings className="w-6 h-6 text-foreground" />,
+  "bookmark": <Bookmark className="w-6 h-6 text-foreground" />,
   "table": <Table className="w-6 h-6 text-green-500" />,
-  "layers": <Layers className="w-6 h-6 text-gray-600" />,
+  "layers": <Layers className="w-6 h-6 text-foreground" />,
   "check": <CheckCircle className="w-6 h-6 text-green-600" />,
-  "shield": <Shield className="w-6 h-6 text-gray-700" />,
+  "shield": <Shield className="w-6 h-6 text-foreground" />,
   "eye": <EyeOff className="w-6 h-6 text-red-600" />,
   "compare": <GitCompare className="w-6 h-6 text-indigo-600" />,
   "message": <MessageSquare className="w-6 h-6 text-cyan-600" />,
   "calculator": <Calculator className="w-6 h-6 text-green-500" />,
-  "qr": <QrCode className="w-6 h-6 text-gray-600" />,
+  "qr": <QrCode className="w-6 h-6 text-foreground" />,
   "award": <Award className="w-6 h-6 text-yellow-500" />,
-  "briefcase": <Briefcase className="w-6 h-6 text-gray-600" />,
+  "briefcase": <Briefcase className="w-6 h-6 text-foreground" />,
   "file": <FileText className="w-6 h-6 text-teal-500 preserve-color" />,
   "heart": <FileHeart className="w-6 h-6 text-red-500 preserve-color" />,
   "badge": <FileBadge2 className="w-6 h-6 text-orange-500 preserve-color" />,
-  "default": <FileText className="w-6 h-6 text-gray-600" />
+  "default": <FileText className="w-6 h-6 text-foreground" />
 };
 
 export default function ToolPageLayout({
@@ -132,7 +132,7 @@ export default function ToolPageLayout({
           {/* Hero Section with Glass Effect */}
           <div className="relative overflow-hidden py-6 px-6 mb-4">
             {/* Solid Background */}
-            <div className="absolute inset-0 bg-white dark:bg-black -z-10" />
+            <div className="absolute inset-0 bg-background -z-10" />
             <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] -z-10" />
             
             <Hero title={title} subtitle={subtitle} />
@@ -150,21 +150,21 @@ export default function ToolPageLayout({
           {/* Main Tool Section - Glass Card */}
           <Section spacing="small" className="px-6 py-6">
             <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-              <Card variant="glass" padding="lg" className="shadow-xl bg-white/90 dark:bg-black">
+              <Card variant="glass" padding="lg" className="shadow-xl bg-card">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
                         {icon && (
-                          <div className="flex-shrink-0 w-10 h-10 bg-gray-100 dark:bg-gray-950/30 flex items-center justify-center text-gray-700 dark:text-gray-400">
+                          <div className="flex-shrink-0 w-10 h-10 bg-muted flex items-center justify-center text-muted-foreground">
                             {icon}
                           </div>
                         )}
-                        <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
+                        <CardTitle className="text-3xl font-bold text-card-foreground">
                           {toolName}
                         </CardTitle>
                       </div>
-                      <CardDescription className="text-base text-gray-600 dark:text-gray-300">
+                      <CardDescription className="text-base text-foreground">
                         {toolDescription}
                       </CardDescription>
                     </div>
@@ -189,7 +189,7 @@ export default function ToolPageLayout({
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-150">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-gray-900 dark:text-white"
+                  className="text-4xl text-center mb-12 font-bold text-foreground"
                 >
                   Key Features
                 </AccessibleHeading>
@@ -198,15 +198,15 @@ export default function ToolPageLayout({
                     <Card 
                       key={index}
                       variant="elevated"
-                      className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-950 border border-gray-700"
+                      className="group hover:shadow-xl transition-all duration-300 bg-card border border-border"
                     >
                       <div className="space-y-4">
                         <div className="flex items-start gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-gray-100 dark:bg-gray-950/30 flex items-center justify-center">
+                          <div className="flex-shrink-0 w-12 h-12 bg-muted flex items-center justify-center">
                             {getFeatureIcon(feature)}
                           </div>
                         </div>
-                        <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                        <p className="text-card-foreground leading-relaxed">
                           {feature}
                         </p>
                       </div>
@@ -219,11 +219,11 @@ export default function ToolPageLayout({
 
           {/* Use Cases Section */}
           {useCases.length > 0 && (
-            <Section className="px-6 py-6 bg-gray-50 dark:bg-gray-950">
+            <Section className="px-6 py-6">
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-175">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-gray-900 dark:text-white"
+                  className="text-4xl text-center mb-12 font-bold text-foreground"
                 >
                   Common Use Cases
                 </AccessibleHeading>
@@ -232,13 +232,13 @@ export default function ToolPageLayout({
                     <Card 
                       key={index}
                       variant="elevated"
-                      className="group hover:shadow-xl transition-all duration-300 bg-white dark:bg-gray-950 border border-gray-700"
+                      className="group hover:shadow-xl transition-all duration-300 bg-card border border-border"
                     >
                       <div className="space-y-3">
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                        <h3 className="font-bold text-lg text-card-foreground">
                           {useCase.title}
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        <p className="text-muted-foreground leading-relaxed">
                           {useCase.description}
                         </p>
                       </div>
@@ -251,11 +251,11 @@ export default function ToolPageLayout({
 
           {/* How to Use Steps - Premium Cards */}
           {steps.length > 0 && (
-            <Section className="px-6 py-6 bg-gray-50 dark:bg-gray-950">
+            <Section className="px-6 py-6">
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-200">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-gray-900 dark:text-white"
+                  className="text-4xl text-center mb-12 font-bold text-foreground"
                 >
                   How to Use
                 </AccessibleHeading>
@@ -265,16 +265,16 @@ export default function ToolPageLayout({
                     <Card 
                       key={index}
                       variant="elevated"
-                      className="group hover:shadow-2xl transition-all duration-300 bg-white dark:bg-gray-950 border border-gray-700"
+                      className="group hover:shadow-2xl transition-all duration-300 bg-card border border-border"
                     >
                       <div className="space-y-4">
                         <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0 w-12 h-12 bg-gray-950 dark:bg-gray-950 flex items-center justify-center text-white font-bold text-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          <div className="flex-shrink-0 w-12 h-12 bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
                             {index + 1}
                           </div>
                           <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 preserve-color" />
                         </div>
-                        <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+                        <p className="text-card-foreground leading-relaxed">
                           {step}
                         </p>
 
@@ -293,7 +293,7 @@ export default function ToolPageLayout({
               <div className="container-standard max-w-4xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-300">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-gray-900 dark:text-white"
+                  className="text-4xl text-center mb-12 font-bold text-foreground"
                 >
                   Frequently Asked Questions
                 </AccessibleHeading>
@@ -314,12 +314,12 @@ export default function ToolPageLayout({
                     <AccordionItem 
                       key={index}
                       value={`faq-${index}`}
-                      className="bg-white dark:bg-gray-950 border border-gray-800 px-6 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                      className="bg-background border border-border px-6 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
                     >
-                      <AccordionTrigger className="text-left text-gray-900 dark:text-gray-100 hover:text-gray-700 dark:hover:text-gray-400 font-semibold py-5">
+                      <AccordionTrigger className="text-left text-foreground hover:text-foreground dark:hover:text-foreground font-semibold py-5">
                         {faq.question}
                       </AccordionTrigger>
-                      <AccordionContent className="text-gray-600 dark:text-gray-300 pb-5 leading-relaxed">
+                      <AccordionContent className="text-foreground dark:text-foreground pb-5 leading-relaxed">
                         {faq.answer}
                       </AccordionContent>
                     </AccordionItem>
@@ -349,10 +349,10 @@ export default function ToolPageLayout({
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 via-gray-600/10 to-gray-700/10 -z-10" />
                 <div className="text-center py-12 px-6">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground dark:text-foreground">
                     Ready to transform your PDF workflow?
                   </h2>
-                  <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+                  <p className="text-lg text-foreground dark:text-foreground mb-8 max-w-2xl mx-auto">
                     Join thousands of users who trust our privacy-focused PDF tools.
                   </p>
                   

@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const config = {
   darkMode: 'class',
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -60,12 +60,16 @@ export default {
         ring: 'rgb(var(--ring) / <alpha-value>)',
       },
       borderRadius: {
-        xs: 'var(--radius-sm)',
-        sm: 'var(--radius-sm)',
-        DEFAULT: 'var(--radius)',
-        md: 'var(--radius)',
-        lg: 'var(--radius-lg)',
-        xl: 'var(--radius-xl)',
+        none: '0',
+        xs: '0',
+        sm: '0',
+        DEFAULT: '0',
+        md: '0',
+        lg: '0',
+        xl: '0',
+        '2xl': '0',
+        '3xl': '0',
+        full: '0',
       },
       spacing: {
         xs: 'var(--spacing-xs)',
@@ -141,3 +145,5 @@ export default {
   },
   plugins: [],
 };
+
+export default config;

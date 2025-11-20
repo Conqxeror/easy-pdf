@@ -105,13 +105,13 @@ const SponsorDashboard = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-black text-gray-100 p-8">
+      <div className="min-h-screen bg-background text-foreground p-8">
         <div className="max-w-7xl mx-auto">
           <div className="animate-pulse space-y-8">
-            <div className="h-8 bg-gray-950 w-1/3"></div>
+            <div className="h-8 bg-background w-1/3"></div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-32 bg-gray-950"></div>
+                <div key={i} className="h-32 bg-background"></div>
               ))}
             </div>
           </div>
@@ -121,13 +121,13 @@ const SponsorDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-gray-100 p-8">
+    <div className="min-h-screen bg-background text-foreground p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold mb-2">Sponsor Analytics Dashboard</h1>
-            <p className="text-gray-400">
+            <p className="text-foreground">
               Comprehensive metrics and ROI tracking for all sponsors
             </p>
           </div>
@@ -136,7 +136,7 @@ const SponsorDashboard = () => {
             <select
               value={selectedTimeframe}
               onChange={(e) => setSelectedTimeframe(e.target.value)}
-              className="bg-gray-950 border border-gray-700 px-3 py-2 text-white"
+              className="bg-background border border-border px-3 py-2 text-foreground"
             >
               <option value="7">Last 7 days</option>
               <option value="30">Last 30 days</option>
@@ -145,7 +145,7 @@ const SponsorDashboard = () => {
             
             <button
               onClick={handleExportData}
-              className="inline-flex items-center px-4 py-2 bg-gray-950 hover:bg-gray-950 transition-colors"
+              className="inline-flex items-center px-4 py-2 bg-background hover:bg-background transition-colors"
             >
               <Download className="w-4 h-4 mr-2" />
               Export Data
@@ -155,13 +155,13 @@ const SponsorDashboard = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gray-950 border border-gray-700 p-6">
+          <div className="bg-background border border-border p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Total Views</p>
+                <p className="text-foreground text-sm">Total Views</p>
                 <p className="text-2xl font-bold">{summaryMetrics.totalViews.toLocaleString()}</p>
               </div>
-              <Eye className="w-8 h-8 text-gray-400" />
+              <Eye className="w-8 h-8 text-foreground" />
             </div>
             <div className="mt-2">
               <span className="text-green-400 text-sm">
@@ -170,10 +170,10 @@ const SponsorDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-700 p-6">
+          <div className="bg-background border border-border p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Total Clicks</p>
+                <p className="text-foreground text-sm">Total Clicks</p>
                 <p className="text-2xl font-bold">{summaryMetrics.totalClicks.toLocaleString()}</p>
               </div>
               <MousePointer className="w-8 h-8 text-green-400" />
@@ -185,13 +185,13 @@ const SponsorDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-700 p-6">
+          <div className="bg-background border border-border p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Conversions</p>
+                <p className="text-foreground text-sm">Conversions</p>
                 <p className="text-2xl font-bold">{summaryMetrics.totalConversions.toLocaleString()}</p>
               </div>
-              <Target className="w-8 h-8 text-gray-400" />
+              <Target className="w-8 h-8 text-foreground" />
             </div>
             <div className="mt-2">
               <span className="text-green-400 text-sm">
@@ -200,10 +200,10 @@ const SponsorDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-950 border border-gray-700 p-6">
+          <div className="bg-background border border-border p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-400 text-sm">Active Sponsors</p>
+                <p className="text-foreground text-sm">Active Sponsors</p>
                 <p className="text-2xl font-bold">{sponsorReports.length}</p>
               </div>
               <Users className="w-8 h-8 text-yellow-400" />
@@ -219,7 +219,7 @@ const SponsorDashboard = () => {
         {/* Charts Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Sponsor Performance Chart */}
-          <div className="bg-gray-950 border border-gray-700 p-6">
+          <div className="bg-background border border-border p-6">
             <h3 className="text-xl font-semibold mb-4">Sponsor Performance</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={sponsorPerformanceData}>
@@ -228,7 +228,7 @@ const SponsorDashboard = () => {
                 <YAxis stroke="#9CA3AF" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#1F2937', 
+                    backgroundColor: '#18181b', 
                     border: '1px solid #374151',
                     borderRadius: '8px'
                   }}
@@ -240,7 +240,7 @@ const SponsorDashboard = () => {
           </div>
 
           {/* Placement Distribution */}
-          <div className="bg-gray-950 border border-gray-700 p-6">
+          <div className="bg-background border border-border p-6">
             <h3 className="text-xl font-semibold mb-4">Views by Placement</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -260,7 +260,7 @@ const SponsorDashboard = () => {
                 </Pie>
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#1F2937', 
+                    backgroundColor: '#18181b', 
                     border: '1px solid #374151',
                     borderRadius: '8px'
                   }}
@@ -271,12 +271,12 @@ const SponsorDashboard = () => {
         </div>
 
         {/* Detailed Sponsor Table */}
-        <div className="bg-gray-950 border border-gray-700 p-6">
+        <div className="bg-background border border-border p-6">
           <h3 className="text-xl font-semibold mb-4">Detailed Sponsor Metrics</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-700">
+                <tr className="border-b border-border">
                   <th className="text-left py-3 px-4">Sponsor</th>
                   <th className="text-right py-3 px-4">Views</th>
                   <th className="text-right py-3 px-4">Clicks</th>
@@ -289,7 +289,7 @@ const SponsorDashboard = () => {
               </thead>
               <tbody>
                 {sponsorReports.map((report, _index) => (
-                  <tr key={report.sponsorId} className="border-b border-gray-700 hover:bg-gray-950/50">
+                  <tr key={report.sponsorId} className="border-b border-border hover:bg-background/50">
                     <td className="py-3 px-4 font-medium">{report.sponsorId}</td>
                     <td className="text-right py-3 px-4">{report.totalViews.toLocaleString()}</td>
                     <td className="text-right py-3 px-4">{report.totalClicks.toLocaleString()}</td>
@@ -314,27 +314,27 @@ const SponsorDashboard = () => {
         </div>
 
         {/* Value Proposition for Sponsors */}
-        <div className="mt-8 bg-gradient-to-r from-gray-900/30 to-gray-900/30 border border-gray-800/50 p-8">
+        <div className="mt-8 bg-gradient-to-r from-zinc-900/30 to-zinc-900/30 border border-border/50 p-8">
           <h3 className="text-2xl font-bold mb-4">Why Sponsor easy-pdf?</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
-              <Globe className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <Globe className="w-12 h-12 text-foreground mx-auto mb-3" />
               <h4 className="font-semibold mb-2">Global Reach</h4>
-              <p className="text-gray-400 text-sm">
+              <p className="text-foreground text-sm">
                 {summaryMetrics.totalViews.toLocaleString()} monthly views from users worldwide
               </p>
             </div>
             <div className="text-center">
               <TrendingUp className="w-12 h-12 text-green-400 mx-auto mb-3" />
               <h4 className="font-semibold mb-2">Growing Audience</h4>
-              <p className="text-gray-400 text-sm">
+              <p className="text-foreground text-sm">
                 Consistent growth with high engagement rates and return users
               </p>
             </div>
             <div className="text-center">
-              <Smartphone className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <Smartphone className="w-12 h-12 text-foreground mx-auto mb-3" />
               <h4 className="font-semibold mb-2">Privacy-Focused Users</h4>
-              <p className="text-gray-400 text-sm">
+              <p className="text-foreground text-sm">
                 Attract privacy-conscious professionals and businesses
               </p>
             </div>

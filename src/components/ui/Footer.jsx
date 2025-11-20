@@ -2,36 +2,23 @@ import React from "react";
 import Link from "next/link";
 import { Github, Linkedin, Mail, PenTool } from "lucide-react";
 import { Orbitron } from "next/font/google";
+import { cn } from "@/lib/utils";
+import FooterClient from './FooterClient';
+import { toolCategories } from "@/lib/toolCategories";
 
-// Font loader must be called at module scope per Next.js font loader rules
 const orbitron = Orbitron({
   subsets: ['latin'],
   weight: ['700'],
   display: 'swap'
 });
-import FooterClient from './FooterClient';
-import { toolCategories } from "@/lib/toolCategories";
 
-// Define the footer links structure
 const footerLinks = [
   {
     section: "Company",
     links: [
-      {
-        name: "About easy-pdf",
-        href: "/about",
-        external: false,
-      },
-      {
-        name: "Sitemap",
-        href: "/sitemap.xml",
-        external: false,
-      },
-      {
-        name: "Privacy Policy",
-        href: "/security",
-        external: false,
-      },
+      { name: "About easy-pdf", href: "/about" },
+      { name: "Sitemap", href: "/sitemap.xml" },
+      { name: "Privacy Policy", href: "/security" },
       { name: "Sponsors", href: "/sponsors" },
     ],
   },
@@ -40,163 +27,118 @@ const footerLinks = [
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-
   return (
-  <footer className="w-full bg-gradient-to-t from-black/95 to-gray-950 border-t border-gray-800 mt-16 py-16 px-4 font-inter">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {/* Branding/About Section */}
-        <div className="flex flex-col gap-4 md:col-span-2 lg:col-span-1">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-3xl font-extrabold text-white hover:text-blue-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
-          >
-            <span className="bg-white/5 rounded-sm px-1 py-0.5 flex items-center justify-center shadow-sm">
-              <PenTool className="w-5 h-5 text-white" />
-            </span>
-            <span className={`${orbitron.className} ml-1 font-extrabold -skew-x-6 tracking-tight`}>easy-pdf</span>
-          </Link>
-          <p className="text-gray-300 text-sm leading-relaxed">
-            easy-pdf is a blazing-fast, privacy-first PDF toolkit for India and
-            the world. 100% client-side, open-source, and SEO-optimized.
-          </p>
-          <div className="flex space-x-4 mt-2">
-            <a
-              href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`}
-              aria-label="Email"
-              className="text-gray-300 hover:text-red-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-red-500"
+    <footer className="w-full border-t border-border mt-20 pt-16 pb-8 font-inter">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 mb-16">
+          {/* Brand Section */}
+          <div className="lg:col-span-4 space-y-6">
+            <Link
+              href="/"
+              className="flex items-center gap-2 group w-fit"
             >
-              <Mail size={20} />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/walimohammadkadri/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="LinkedIn Profile"
-              className="text-gray-300 hover:text-blue-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
-            >
-              <Linkedin size={20} />
-            </a>
-            <a
-              href="https://github.com/Conqxeror"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub Profile"
-              className="text-gray-300 hover:text-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-            >
-              <Github size={20} />
-            </a>
+              <div className="bg-primary/10 p-1.5 group-hover:bg-primary/20 transition-colors duration-300">
+                <PenTool className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <span className={cn(orbitron.className, "text-2xl font-bold tracking-tight text-foreground")}>
+                easy-pdf
+              </span>
+            </Link>
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
+              A blazing-fast, privacy-first PDF toolkit. 100% client-side processing ensures your documents never leave your device. Open-source and free forever.
+            </p>
+            <div className="flex items-center gap-4">
+              <SocialLink href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`} icon={<Mail size={18} />} label="Email" />
+              <SocialLink href="https://www.linkedin.com/in/walimohammadkadri/" icon={<Linkedin size={18} />} label="LinkedIn" />
+              <SocialLink href="https://github.com/Conqxeror" icon={<Github size={18} />} label="GitHub" />
+            </div>
+            <div className="pt-2">
+              <FooterClient />
+            </div>
           </div>
 
-          {/* Place the Buy Me A Coffee button below the social icons for better separation */}
-          <div className="mt-4">
-            <FooterClient />
-          </div>
-          
-        </div>
-
-        {/* Tools Section - Organized by Categories */}
-        <div className="md:col-span-2 lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-4 text-white">PDF Tools</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Tools Section */}
+          <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-8">
             {toolCategories.map((category) => (
-              <div key={category.name} className="flex flex-col gap-3">
-                <h3 className="text-base font-medium text-gray-200 flex items-center gap-2">
-                  {category.icon}
+              <div key={category.name} className="space-y-4">
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <span className="text-primary-foreground/80">{category.icon}</span>
                   {category.name}
                 </h3>
-                <ul className="space-y-2">
-                  {category.submenu.slice(0, 4).map((tool) => (
-                    <li key={tool.href}>
-                      <Link
+                <ul className="space-y-2.5">
+                  {category.submenu.slice(0, 6).map((tool) => (
+                    <li key={tool.name}>
+                      <Link 
                         href={tool.href}
-                        className="text-gray-300 hover:text-blue-300 transition-colors text-sm hover:underline flex items-center gap-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center gap-2 group"
                       >
-                        {tool.icon}
+                        <span className="w-1 h-1 bg-border group-hover:bg-primary transition-colors" />
                         {tool.name}
                       </Link>
                     </li>
                   ))}
+                  {category.submenu.length > 6 && (
+                    <li>
+                      <Link 
+                        href="/tools"
+                        className="text-xs font-medium text-primary hover:underline flex items-center gap-1 mt-2"
+                      >
+                        View all {category.name}
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}
           </div>
-          <div className="mt-4">
-            <Link
-              href="/tools"
-              className="inline-flex items-center text-blue-300 hover:text-white text-sm font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
-            >
-              View all tools
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </Link>
-          </div>
-        </div>
 
-        {/* Company Section */}
-        {footerLinks.map((section) => (
-          <div key={section.section} className="lg:col-span-1">
-            <h2 className="text-xl font-semibold mb-4 text-white">
-              {section.section}
-            </h2>
-            <ul className="space-y-2">
-              {section.links.map((link) => (
-                <li key={link.href}>
-                  {link.external ? (
-                    <a
-                      href={link.href}
-                      className="text-gray-300 hover:text-blue-300 transition-colors text-base break-all hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={link.name}
-                    >
-                      {link.name}
-                    </a>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      className="text-gray-300 hover:text-blue-300 transition-colors text-base hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500"
-                    >
-                      {link.name}
-                    </Link>
-                  )}
+          {/* Company Links */}
+          <div className="lg:col-span-2 space-y-4">
+            <h3 className="font-semibold text-foreground">Company</h3>
+            <ul className="space-y-2.5">
+              {footerLinks[0].links.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    href={link.href}
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+                  >
+                    {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Copyright and Bottom Info */}
-      <div className="max-w-7xl mx-auto border-t border-gray-800 mt-14 pt-8 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-400">
-        <span className="text-gray-300">&copy; {currentYear} easy-pdf. All rights reserved.</span>
-        <span className="text-gray-200">Made with <span className="text-red-400">&hearts;</span> in India.</span>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground text-center md:text-left">
+            © {currentYear} easy-pdf. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <Link href="/security" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+            <Link href="/sitemap.xml" className="hover:text-foreground transition-colors">Sitemap</Link>
+          </div>
+        </div>
       </div>
-
-      {/* SEO: Organization structured data */}
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "easy-pdf",
-            url: "https://easy-pdf-murex.vercel.app/",
-            contactPoint: [
-              {
-                "@type": "ContactPoint",
-                email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "kadriwalimohammad@gmail.com",
-                contactType: "customer support",
-              },
-            ],
-            sameAs: [
-              "https://www.linkedin.com/in/walimohammadkadri/",
-              "https://github.com/Conqxeror",
-            ],
-          }),
-        }}
-      />
     </footer>
+  );
+}
+
+function SocialLink({ href, icon, label }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="w-9 h-9 flex items-center justify-center bg-background border border-border text-muted-foreground hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300"
+    >
+      {icon}
+    </a>
   );
 }

@@ -62,10 +62,11 @@ const RelatedTools = ({ currentTool, tools }) => {
 
   return (
     <div className="container-standard px-6 py-8">
-      <Card className="bg-black/90 border border-gray-600 p-6 shadow-xl">
-        <h3 className="text-xl font-bold text-white mb-6 flex items-center">
+      {/* Make the related tools card white in light theme; keep default dark bg in dark mode */}
+      <Card className="bg-card border-2 border-border p-6 shadow-xl">
+        <h3 className="text-xl font-bold text-foreground mb-6 flex items-center">
           <span className="mr-3 flex-shrink-0">
-            <PenTool className="w-5 h-5 text-white" />
+            <PenTool className="w-5 h-5 text-foreground" />
           </span>
           Related PDF Tools
         </h3>
@@ -75,30 +76,30 @@ const RelatedTools = ({ currentTool, tools }) => {
             <Link
               key={tool.href}
               href={tool.href}
-              className="group flex items-start p-4 border border-gray-600 hover:border-gray-600 hover:bg-black/60 transition-all duration-200"
+              className="group flex items-start p-4 border-2 border-border hover:border-border hover:bg-background transition-all duration-200"
             >
               <div className="flex items-start w-full">
-                <div className="w-10 h-10 bg-black/10 flex items-center justify-center mr-3 group-hover:bg-black/20 transition-colors flex-shrink-0">
+                <div className="w-10 h-10 bg-background/10 flex items-center justify-center mr-3 group-hover:bg-background/20 transition-colors flex-shrink-0">
                   {tool.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-white group-hover:text-gray-400 transition-colors text-sm leading-tight mb-1">
+                  <h4 className="font-semibold text-foreground group-hover:text-foreground transition-colors text-sm leading-tight mb-1">
                     {tool.title}
                   </h4>
-                  <p className="text-xs text-gray-400 leading-relaxed line-clamp-2">
+                  <p className="text-xs text-foreground leading-relaxed line-clamp-2">
                     {tool.description}
                   </p>
                 </div>
-                <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-gray-400 transition-colors flex-shrink-0 ml-2 mt-0.5" />
+                <ChevronRight className="w-4 h-4 text-foreground group-hover:text-foreground transition-colors flex-shrink-0 ml-2 mt-0.5" />
               </div>
             </Link>
           ))}
         </div>
 
-        <div className="mt-6 pt-4 border-t border-gray-700">
+        <div className="mt-6 pt-4 border-t border-border">
           <Link
             href="/tools"
-            className="text-sm text-gray-400 hover:text-gray-300 font-medium inline-flex items-center group"
+            className="text-sm text-foreground hover:text-foreground font-medium inline-flex items-center group"
           >
             View all PDF tools
             <ChevronRight className="w-3 h-3 ml-1 group-hover:translate-x-0.5 transition-transform" />

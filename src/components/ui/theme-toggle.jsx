@@ -66,10 +66,10 @@ export function ThemeToggleSimple({ className }) {
       onClick={toggleTheme}
       className={cn(
         "relative inline-flex h-10 w-10 items-center justify-center",
-        "text-gray-600 dark:text-gray-400",
-  "hover:bg-gray-100 dark:hover:bg-gray-950",
+        "text-foreground dark:text-foreground",
+  "hover:bg-background dark:hover:bg-background",
         "transition-colors duration-200",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-600",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-600",
         className
       )}
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}

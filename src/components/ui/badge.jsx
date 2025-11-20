@@ -9,29 +9,30 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: [
-          "border-transparent bg-gray-950 text-white",
-          "[a&]:hover:bg-gray-950 [a&]:hover:shadow-md",
+          "border-transparent bg-background text-foreground",
+          "[a&]:hover:bg-background [a&]:hover:shadow-md",
         ],
         secondary: [
-          "border-transparent bg-gray-200 dark:bg-gray-900",
-          "text-gray-900 dark:text-white",
-          "[a&]:hover:bg-gray-300 dark:[a&]:hover:bg-gray-800",
+          "border-transparent bg-background dark:bg-background",
+          "text-foreground dark:text-foreground",
+          "[a&]:hover:bg-background dark:[a&]:hover:bg-background",
           "focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
         ],
         destructive: [
-          "border-transparent bg-red-500 text-white",
+          "border-transparent bg-red-500 text-foreground",
           "[a&]:hover:bg-red-600 [a&]:hover:shadow-md",
         ],
         outline: [
-          "border-gray-300 dark:border-gray-500 bg-transparent",
-          "text-gray-700 dark:text-white",
-          "[a&]:hover:bg-gray-100 dark:[a&]:hover:bg-gray-800",
+          "border-border dark:border-border bg-transparent",
+          "text-foreground dark:text-foreground",
+          "[a&]:hover:bg-background dark:[a&]:hover:bg-background",
           "focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
         ],
         success: [
-          "border-transparent bg-green-100 dark:bg-green-950/30",
-          "text-green-700 dark:text-green-400",
-          "[a&]:hover:bg-green-200 dark:[a&]:hover:bg-green-900/30",
+          // Use design tokens and stronger contrast for light mode while keeping dark mode subtle
+          "border-transparent bg-success/10 dark:bg-green-950/30",
+          "text-success dark:text-green-300",
+          "[a&]:hover:bg-success/20 dark:[a&]:hover:bg-green-900/30",
         ],
         warning: [
           "border-transparent bg-yellow-100 dark:bg-yellow-950/30",
@@ -39,13 +40,13 @@ const badgeVariants = cva(
           "[a&]:hover:bg-yellow-200 dark:[a&]:hover:bg-yellow-900/30",
         ],
         info: [
-          "border-transparent bg-gray-100 dark:bg-gray-950/30",
-          "text-gray-800 dark:text-gray-400",
-          "[a&]:hover:bg-gray-200 dark:[a&]:hover:bg-black/30",
+          "border-transparent bg-background dark:bg-background/30",
+          "text-foreground dark:text-foreground",
+          "[a&]:hover:bg-background dark:[a&]:hover:bg-background/30",
         ],
         premium: [
           "border-transparent bg-gradient-to-r from-gray-600 to-gray-800",
-          "text-white shadow-md",
+          "text-foreground shadow-md",
           "[a&]:hover:shadow-lg [a&]:hover:from-gray-700 [a&]:hover:to-gray-900",
         ],
         dot: [

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   FileText,
+  Code2,
   Combine,
   Spline,
   FileImage,
@@ -21,6 +22,9 @@ import {
   QrCode,
   Calculator,
   Award,
+  ArchiveRestore,
+  Files,
+  Music2,
   User,
   BarChart3,
   Settings,
@@ -48,6 +52,121 @@ export const toolCategories = [
         name: "PDF to JPG",
         href: "/pdf-to-jpg",
         icon: <FileImage className="w-4 h-4" />,
+      },
+      {
+        name: "HTML to PDF",
+        href: "/html-to-pdf",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "MP4 to MP3",
+        href: "/mp4-to-mp3",
+        icon: <Music2 className="w-4 h-4" />,
+      },
+      {
+        name: "ZIP Extractor",
+        href: "/zip-extractor",
+        icon: <ArchiveRestore className="w-4 h-4" />,
+      },
+      {
+        name: "CSV ↔ JSON",
+        href: "/csv-json-converter",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "Text Case Converter",
+        href: "/text-case-converter",
+        icon: <Text className="w-4 h-4" />,
+      },
+      {
+        name: "URL Encoder / Decoder",
+        href: "/url-encoder",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "Base64 Encoder",
+        href: "/base64-encoder",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "HTML ↔ Markdown",
+        href: "/html-markdown-converter",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "JSON ↔ XML",
+        href: "/json-xml-converter",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "Text Diff Checker",
+        href: "/text-diff-checker",
+        icon: <GitCompare className="w-4 h-4" />,
+      },
+      {
+        name: "Regex Tester",
+        href: "/regex-tester",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "UUID Generator",
+        href: "/uuid-generator",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "Hash Generator",
+        href: "/hash-generator",
+        icon: <Code2 className="w-4 h-4" />,
+      },
+      {
+        name: "HEIC to JPG",
+        href: "/heic-to-jpg",
+        icon: <FileImage className="w-4 h-4" />,
+      },
+      {
+        name: "DOCX to PDF",
+        href: "/docx-to-pdf",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "DOCX to Text",
+        href: "/docx-to-text",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "Image Converter",
+        href: "/image-converter",
+        icon: <FileImage className="w-4 h-4" />,
+      },
+      {
+        name: "ZIP Creator",
+        href: "/zip-creator",
+        icon: <Files className="w-4 h-4" />,
+      },
+      {
+        name: "TAR / GZIP Extractor",
+        href: "/tar-extractor",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "Video to GIF",
+        href: "/video-to-gif",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "WebM ↔ MP4",
+        href: "/webm-to-mp4",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "Video Compressor",
+        href: "/video-compress",
+        icon: <FileText className="w-4 h-4" />,
+      },
+      {
+        name: "Trim & Merge",
+        href: "/video-trim",
+        icon: <FileText className="w-4 h-4" />,
       },
       {
         name: "QR Code Generator",
@@ -189,10 +308,10 @@ export const toolCategories = [
     name: "AI & Analysis",
     icon: <Search className="w-4 h-4" />,
     submenu: [
-      { 
-        name: "OCR (Text Recognition)", 
-        href: "/ocr", 
-        icon: <Search className="w-4 h-4" /> 
+      {
+        name: "OCR (Text Recognition)",
+        href: "/ocr",
+        icon: <Search className="w-4 h-4" />
       },
       {
         name: "Advanced OCR",

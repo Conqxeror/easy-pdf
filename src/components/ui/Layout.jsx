@@ -41,8 +41,8 @@ export const PageHeader = ({
             {title}
           </h1>
         )}
-        {subtitle && (
-          <p className="text-lg text-muted-foreground mb-6 max-w-3xl mx-auto">
+          {subtitle && (
+          <p className="text-lg text-foreground mb-6 max-w-3xl mx-auto">
             {subtitle}
           </p>
         )}
@@ -84,11 +84,11 @@ export const Section = ({
       <div className="container-standard px-6 py-8">
         {title && (
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
               {title}
             </h2>
             {subtitle && (
-              <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+              <p className="text-lg text-foreground max-w-3xl mx-auto">
                 {subtitle}
               </p>
             )}
@@ -117,7 +117,7 @@ export const Card = ({
   return (
     <div 
       className={cn(
-        "card-standard bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700",
+        "card-standard bg-card border border-border dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 dark:border-border",
         hover && "hover:scale-[1.02] transition-transform duration-200",
         paddingClass,
         className
@@ -186,12 +186,12 @@ export const Hero = ({
       )}
       <div className="relative container-standard">
         {title && (
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900 dark:text-white animate-slide-up">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-foreground dark:text-foreground animate-slide-up">
             {title}
           </h1>
         )}
         {subtitle && (
-          <p className="text-lg sm:text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <p className="text-lg sm:text-xl text-foreground mb-8 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
             {subtitle}
           </p>
         )}
@@ -211,16 +211,16 @@ export const FeatureGrid = ({ features, className, ...props }) => {
       {features.map((feature, index) => (
         <Card 
           key={index} 
-          className="text-center group animate-slide-up border-2 border-transparent hover:border-gray-600 transition-all duration-300 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/50 hover:to-gray-800/50"
+          className="text-center group animate-slide-up border-2 border-transparent hover:border-border transition-all duration-300 bg-card dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 dark:hover:from-gray-700/50 dark:hover:to-gray-800/50"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
             {feature.icon && (
-            <div className="flex items-center justify-center w-12 h-12 bg-black/10 text-gray-400 mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-12 h-12 bg-background dark:bg-background/10 text-foreground dark:text-foreground mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
               {feature.icon}
             </div>
           )}
-          <h3 className="text-h4 font-semibold mb-2 text-white">{feature.title}</h3>
-          <p className="text-gray-400">{feature.description}</p>
+          <h3 className="text-h4 font-semibold mb-2 text-foreground dark:text-foreground">{feature.title}</h3>
+          <p className="text-muted-foreground dark:text-foreground">{feature.description}</p>
         </Card>
       ))}
     </Grid>
@@ -236,10 +236,10 @@ export const CTASection = ({
   ...props 
 }) => {
   return (
-    <Section className={cn("bg-gradient-to-r from-gray-800/50 to-gray-900/50 border border-gray-700", className)} {...props}>
+    <Section className={cn("bg-card border border-border dark:bg-gradient-to-r dark:from-gray-800/50 dark:to-gray-900/50 dark:border-border", className)} {...props}>
       <div className="text-center">
-        {title && <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">{title}</h2>}
-        {subtitle && <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">{subtitle}</p>}
+        {title && <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground dark:text-foreground">{title}</h2>}
+        {subtitle && <p className="text-lg text-muted-foreground dark:text-foreground mb-8 max-w-2xl mx-auto">{subtitle}</p>}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           {primaryAction}
           {secondaryAction}

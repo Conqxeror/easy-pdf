@@ -92,16 +92,16 @@ const FileHistoryPanel = ({ className = '' }) => {
   // };
 
   const HistoryItem = ({ item, onRemove, onAddToFavorites, showFavoriteButton = true }) => (
-  <div className="flex items-center justify-between p-3 bg-black/40 border border-gray-600 hover:border-gray-500 transition-colors">
+  <div className="flex items-center justify-between p-3 bg-background/40 border border-border hover:border-border transition-colors">
       <div className="flex items-center space-x-3 flex-1 min-w-0">
         <div className="flex-shrink-0">
-          <FileText className="w-5 h-5 text-gray-400" />
+          <FileText className="w-5 h-5 text-foreground" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-200 truncate">
+          <p className="text-sm font-medium text-foreground truncate">
             {item.fileName}
           </p>
-          <div className="flex items-center space-x-2 text-xs text-gray-400">
+          <div className="flex items-center space-x-2 text-xs text-foreground">
             <span className="capitalize">{item.tool}</span>
             <span>•</span>
             <span>{formatFileSize(item.fileSize)}</span>
@@ -116,7 +116,7 @@ const FileHistoryPanel = ({ className = '' }) => {
             variant="ghost"
             size="sm"
             onClick={() => onAddToFavorites(item)}
-            className="text-gray-400 hover:text-yellow-400"
+            className="text-foreground hover:text-yellow-400"
           >
             <Heart className="w-4 h-4" />
           </Button>
@@ -125,7 +125,7 @@ const FileHistoryPanel = ({ className = '' }) => {
           variant="ghost"
           size="sm"
           onClick={() => onRemove(item.id)}
-          className="text-gray-400 hover:text-red-400"
+          className="text-foreground hover:text-red-400"
         >
           <Trash2 className="w-4 h-4" />
         </Button>
@@ -134,19 +134,19 @@ const FileHistoryPanel = ({ className = '' }) => {
   );
 
   return (
-  <Card className={`bg-black border-gray-700 ${className}`}>
+  <Card className={`bg-background border-border ${className}`}>
       <div className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <History className="w-5 h-5 text-gray-400" />
-            <h2 className="text-lg font-semibold text-gray-200">File History</h2>
+            <History className="w-5 h-5 text-foreground" />
+            <h2 className="text-lg font-semibold text-foreground">File History</h2>
           </div>
           <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
               size="sm"
               onClick={exportHistory}
-              className="text-gray-400 hover:text-gray-400"
+              className="text-foreground hover:text-foreground"
             >
               <Download className="w-4 h-4" />
             </Button>
@@ -160,7 +160,7 @@ const FileHistoryPanel = ({ className = '' }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gray-400 hover:text-gray-400"
+                className="text-foreground hover:text-foreground"
                 as="span"
               >
                 <Upload className="w-4 h-4" />
@@ -171,23 +171,23 @@ const FileHistoryPanel = ({ className = '' }) => {
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <div className="text-center p-3 bg-black/10">
-            <div className="text-lg font-semibold text-gray-400">
+          <div className="text-center p-3 bg-background/10">
+            <div className="text-lg font-semibold text-foreground">
               {stats.totalFiles}
             </div>
-            <div className="text-xs text-gray-400">Total Files</div>
+            <div className="text-xs text-foreground">Total Files</div>
           </div>
-          <div className="text-center p-3 bg-black/10">
+          <div className="text-center p-3 bg-background/10">
             <div className="text-lg font-semibold text-yellow-400">
               {stats.favoritesCount}
             </div>
-            <div className="text-xs text-gray-400">Favorites</div>
+            <div className="text-xs text-foreground">Favorites</div>
           </div>
-          <div className="text-center p-3 bg-black/10">
+          <div className="text-center p-3 bg-background/10">
             <div className="text-lg font-semibold text-green-400">
               {Object.keys(stats.toolUsage).length}
             </div>
-            <div className="text-xs text-gray-400">Tools Used</div>
+            <div className="text-xs text-foreground">Tools Used</div>
           </div>
         </div>
 
@@ -207,11 +207,11 @@ const FileHistoryPanel = ({ className = '' }) => {
             {/* Filter */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <Filter className="w-4 h-4 text-gray-400" />
+                <Filter className="w-4 h-4 text-foreground" />
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="bg-gray-950 border border-gray-600 px-2 py-1 text-sm text-gray-200"
+                  className="bg-background border border-border px-2 py-1 text-sm text-foreground"
                 >
                   <option value="all">All Tools</option>
                   {uniqueTools.map(tool => (
@@ -226,7 +226,7 @@ const FileHistoryPanel = ({ className = '' }) => {
                   variant="ghost"
                   size="sm"
                   onClick={clearHistory}
-                  className="text-gray-400 hover:text-red-400"
+                  className="text-foreground hover:text-red-400"
                 >
                   Clear All
                 </Button>
@@ -235,7 +235,7 @@ const FileHistoryPanel = ({ className = '' }) => {
 
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {filteredHistory.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-foreground">
                   <History className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>No files in history</p>
                   <p className="text-xs">Process some files to see them here</p>
@@ -255,7 +255,7 @@ const FileHistoryPanel = ({ className = '' }) => {
 
           <TabsContent value="favorites" className={`space-y-4 ${currentTab !== 'favorites' ? 'hidden' : ''}`}>
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-400">
+              <div className="text-sm text-foreground">
                 {favorites.length}/{20} favorites
               </div>
               {favorites.length > 0 && (
@@ -263,7 +263,7 @@ const FileHistoryPanel = ({ className = '' }) => {
                   variant="ghost"
                   size="sm"
                   onClick={clearFavorites}
-                  className="text-gray-400 hover:text-red-400"
+                  className="text-foreground hover:text-red-400"
                 >
                   Clear All
                 </Button>
@@ -272,7 +272,7 @@ const FileHistoryPanel = ({ className = '' }) => {
 
             <div className="space-y-2 max-h-96 overflow-y-auto">
               {favorites.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">
+                <div className="text-center py-8 text-foreground">
                   <Star className="w-12 h-12 mx-auto mb-2 opacity-50" />
                   <p>No favorite files</p>
                   <p className="text-xs">Add files to favorites from history</p>

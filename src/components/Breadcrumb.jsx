@@ -8,7 +8,7 @@ const Breadcrumb = ({ items }) => {
 
   return (
     <nav 
-      className="flex items-center space-x-2 text-sm text-gray-400 container-standard"
+      className="flex items-center space-x-2 text-sm text-foreground container-standard"
       aria-label="Breadcrumb"
       itemScope
       itemType="https://schema.org/BreadcrumbList"
@@ -16,7 +16,7 @@ const Breadcrumb = ({ items }) => {
       {items.map((item, index) => (
         <React.Fragment key={index}>
           {index > 0 && (
-            <ChevronRight className="w-4 h-4 text-gray-500" />
+            <ChevronRight className="w-4 h-4 text-foreground" />
           )}
           <div
             itemScope
@@ -25,7 +25,7 @@ const Breadcrumb = ({ items }) => {
           >
             {index === items.length - 1 ? (
               <span 
-                className="text-gray-300 font-medium"
+                className="text-foreground font-medium"
                 itemProp="name"
                 aria-current="page"
               >
@@ -34,7 +34,7 @@ const Breadcrumb = ({ items }) => {
             ) : (
               <a
                 href={item.href}
-                className="text-gray-400 hover:text-gray-300 transition-colors duration-200 hover:underline"
+                className="text-foreground hover:text-foreground transition-colors duration-200 hover:underline"
                 itemProp="item"
               >
                 <span itemProp="name">{item.label}</span>

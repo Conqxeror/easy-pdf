@@ -12,55 +12,55 @@ const buttonVariants = cva(
       variant: {
         // Primary action - bold and prominent
         default:
-          "bg-gray-950 dark:bg-gray-500 text-white shadow-md hover:bg-gray-950 dark:hover:bg-gray-950 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-ring",
         
         // Destructive actions
         destructive:
-          "bg-red-600 dark:bg-red-500 text-white shadow-md hover:bg-red-700 dark:hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-red-500",
+          "bg-red-600 dark:bg-red-500 text-foreground shadow-md hover:bg-red-700 dark:hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-red-500",
         
         // Bordered secondary actions
         outline:
-          "border border-gray-300 dark:border-gray-500 bg-transparent text-gray-900 dark:text-white shadow-sm hover:bg-gray-100 dark:hover:bg-gray-800 hover:border-gray-500 focus-visible:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
+          "border border-border dark:border-border bg-transparent text-foreground dark:text-foreground shadow-sm hover:bg-background dark:hover:bg-background hover:border-border focus-visible:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
         
         // Subtle secondary actions
         secondary:
-          "bg-gray-200 dark:bg-black/80 text-gray-900 dark:text-gray-100 shadow-sm hover:bg-gray-300 dark:hover:bg-black/70 hover:shadow-md focus-visible:ring-gray-500",
+          "bg-background dark:bg-background/80 text-foreground shadow-sm hover:bg-background dark:hover:bg-background/70 hover:shadow-md focus-visible:ring-gray-500",
         
         // Minimal ghost button
         ghost:
-          "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white focus-visible:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
+          "text-foreground dark:text-foreground hover:bg-background dark:hover:bg-background hover:text-foreground dark:hover:text-foreground focus-visible:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
         
         // Text link style
         link: 
-          "text-gray-600 dark:text-gray-400 underline-offset-4 hover:underline focus-visible:ring-gray-500 px-0",
+          "text-foreground dark:text-foreground underline-offset-4 hover:underline focus-visible:ring-gray-500 px-0",
         
         // NEW: Premium variant - subtle gradient, elegant
         premium:
-          "bg-gradient-to-b from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-white shadow-lg hover:shadow-xl hover:from-gray-600 hover:to-gray-700 dark:hover:from-gray-500 dark:hover:to-gray-600 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-gradient-to-b from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-foreground shadow-lg hover:shadow-xl hover:from-gray-600 hover:to-gray-700 dark:hover:from-gray-500 dark:hover:to-gray-600 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
         
         // NEW: Subtle variant - barely visible, reveals on hover
         subtle:
-          "bg-gray-100/50 dark:bg-black/20 text-gray-700 dark:text-gray-300 border border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-100 dark:hover:bg-black/30 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm focus-visible:ring-gray-500",
+          "bg-background/50 dark:bg-background/20 text-foreground dark:text-foreground border border-border/50 dark:border-border/50 hover:bg-background dark:hover:bg-background/30 hover:border-border dark:hover:border-border hover:shadow-sm focus-visible:ring-gray-500",
         
         // NEW: Elevated variant - strong shadow, prominent
         elevated:
-          "bg-white dark:bg-black text-gray-900 dark:text-gray-100 shadow-xl border border-gray-200 dark:border-gray-600 hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-background text-foreground shadow-xl border border-border dark:border-border hover:shadow-2xl hover:-translate-y-1 active:translate-y-0 focus-visible:ring-gray-500",
         
         // NEW: Glass variant - glassmorphism effect
         glass:
-          "bg-white/70 dark:bg-black/70 backdrop-blur-md text-gray-900 dark:text-gray-100 border border-white/30 dark:border-gray-600/30 shadow-lg hover:bg-white/80 dark:hover:bg-black/80 hover:shadow-xl focus-visible:ring-gray-500",
+          "bg-background/70 dark:bg-background/70 backdrop-blur-xl text-foreground border border-white/30 dark:border-border/30 shadow-lg hover:bg-background/80 dark:hover:bg-background/80 hover:shadow-xl focus-visible:ring-gray-500",
         
         // Semantic status variants
         success:
-          "bg-green-600 dark:bg-green-500 text-white shadow-md hover:bg-green-700 dark:hover:bg-green-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-green-500",
+          "bg-green-600 dark:bg-green-500 text-foreground shadow-md hover:bg-green-700 dark:hover:bg-green-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-green-500",
         warning:
-          "bg-yellow-600 dark:bg-yellow-500 text-white shadow-md hover:bg-yellow-700 dark:hover:bg-yellow-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-yellow-500",
+          "bg-yellow-600 dark:bg-yellow-500 text-foreground shadow-md hover:bg-yellow-700 dark:hover:bg-yellow-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-yellow-500",
         info:
-          "bg-gray-950 dark:bg-gray-500 text-white shadow-md hover:bg-gray-950 dark:hover:bg-gray-950 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-background dark:bg-background0 text-foreground shadow-md hover:bg-background dark:hover:bg-background hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
         
         // Bold gradient for hero CTAs
         gradient:
-          "bg-gradient-to-r from-gray-600 via-gray-700 to-gray-800 text-white shadow-lg hover:shadow-2xl hover:from-gray-700 hover:via-gray-800 hover:to-gray-900 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-gradient-to-r from-gray-600 via-gray-700 to-gray-800 text-foreground shadow-lg hover:shadow-2xl hover:from-gray-700 hover:via-gray-800 hover:to-gray-900 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
       },
       size: {
         sm: "h-8 gap-1.5 px-3 text-xs",

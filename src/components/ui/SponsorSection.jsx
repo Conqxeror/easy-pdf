@@ -19,28 +19,28 @@ export default function SponsorSection({ variant = "homepage" }) {
       return (
         <section className="w-full max-w-6xl mt-16 mb-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-100">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
               <Heart className="inline-block w-6 h-6 mr-2 text-red-500" />
               Support Our Mission
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-foreground dark:text-foreground max-w-2xl mx-auto">
               Help us keep easy-pdf free for everyone while supporting privacy-first technology. 
               Become our first sponsor and get maximum visibility!
             </p>
           </div>
 
           {/* Empty State Call to Action */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 border border-gray-700/50 backdrop-blur-sm">
+          <div className="bg-background dark:bg-background/50 p-8 border border-border/50 backdrop-blur-sm shadow-sm dark:shadow-none">
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-gray-700 to-teal-600 mb-6">
-                <Sparkles className="w-8 h-8 text-white" />
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-zinc-700 to-teal-600 mb-6">
+                <Sparkles className="w-8 h-8 text-foreground" />
               </div>
               
-              <h3 className="text-xl font-semibold text-gray-100 mb-4">
+              <h3 className="text-xl font-semibold text-foreground mb-4">
                 Be Our First Sponsor!
               </h3>
               
-              <p className="text-gray-400 mb-6 max-w-lg mx-auto">
+              <p className="text-foreground dark:text-foreground mb-6 max-w-lg mx-auto">
                 Join us in building the future of privacy-first PDF tools. 
                 Early sponsors get premium placement and help shape our platform.
               </p>
@@ -48,7 +48,7 @@ export default function SponsorSection({ variant = "homepage" }) {
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <Link
                   href="/sponsors"
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-teal-600 text-white font-medium hover:from-gray-800 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-teal-600 text-foreground font-medium hover:from-gray-800 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                 >
                   <Users className="mr-2 w-4 h-4" />
                   View Sponsorship Plans
@@ -65,25 +65,25 @@ export default function SponsorSection({ variant = "homepage" }) {
               
               {/* Sponsorship tiers preview */}
               <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
+                <div className="bg-background dark:bg-background/50 p-3 border border-border/50">
                   <div className="text-yellow-400 font-semibold">Platinum</div>
-                  <div className="text-gray-400">$500/month</div>
-                  <div className="text-gray-500 text-xs">Max visibility</div>
+                  <div className="text-foreground dark:text-foreground">$500/month</div>
+                  <div className="text-foreground text-xs">Max visibility</div>
                 </div>
-                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
+                <div className="bg-background dark:bg-background/50 p-3 border border-border/50">
                   <div className="text-amber-400 font-semibold">Gold</div>
-                  <div className="text-gray-400">$200/month</div>
-                  <div className="text-gray-500 text-xs">Premium placement</div>
+                  <div className="text-foreground dark:text-foreground">$200/month</div>
+                  <div className="text-foreground text-xs">Premium placement</div>
                 </div>
-                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
-                  <div className="text-gray-400 font-semibold">Silver</div>
-                  <div className="text-gray-400">$100/month</div>
-                  <div className="text-gray-500 text-xs">Great exposure</div>
+                <div className="bg-background dark:bg-background/50 p-3 border border-border/50">
+                  <div className="text-foreground dark:text-foreground font-semibold">Silver</div>
+                  <div className="text-foreground dark:text-foreground">$100/month</div>
+                  <div className="text-foreground text-xs">Great exposure</div>
                 </div>
-                <div className="bg-gray-950/50 p-3 border border-gray-700/50">
+                <div className="bg-background dark:bg-background/50 p-3 border border-border/50">
                   <div className="text-orange-400 font-semibold">Bronze</div>
-                  <div className="text-gray-400">$50/month</div>
-                  <div className="text-gray-500 text-xs">Community support</div>
+                  <div className="text-foreground dark:text-foreground">$50/month</div>
+                  <div className="text-foreground text-xs">Community support</div>
                 </div>
               </div>
             </div>
@@ -96,11 +96,11 @@ export default function SponsorSection({ variant = "homepage" }) {
     return (
       <section className="w-full max-w-6xl mt-16 mb-8">
         <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-gray-100">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
             <Heart className="inline-block w-6 h-6 mr-2 text-red-500" />
             Proudly Supported By
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-foreground dark:text-foreground max-w-2xl mx-auto">
             These amazing companies help keep easy-pdf free for everyone while supporting privacy-first technology.
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         {/* Featured/Platinum Sponsors */}
         {featuredSponsors.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-xl font-semibold text-center mb-6 text-gray-200">
+            <h3 className="text-xl font-semibold text-center mb-6 text-foreground dark:text-foreground">
               Platinum Sponsors
             </h3>
             <div className="flex justify-center">
@@ -129,7 +129,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         {/* Gold Sponsors */}
         {goldSponsors.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-center mb-4 text-gray-300">
+            <h3 className="text-lg font-semibold text-center mb-4 text-foreground dark:text-foreground">
               Gold Sponsors
             </h3>
             <div className="flex justify-center">
@@ -150,7 +150,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         {/* Silver Sponsors */}
         {silverSponsors.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-center mb-4 text-gray-300">
+            <h3 className="text-lg font-semibold text-center mb-4 text-foreground dark:text-foreground">
               Silver Sponsors
             </h3>
             <div className="flex justify-center">
@@ -171,7 +171,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         {/* Bronze Supporters */}
         {bronzeSponsors.length > 0 && (
           <div className="mb-8">
-            <h3 className="text-lg font-semibold text-center mb-4 text-gray-400">
+            <h3 className="text-lg font-semibold text-center mb-4 text-foreground dark:text-foreground">
               Bronze Supporters
             </h3>
             <div className="flex justify-center">
@@ -194,7 +194,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         <div className="text-center mt-8">
           <Link
             href="/sponsors"
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-teal-600 text-white font-medium hover:from-gray-800 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-gray-700 to-teal-600 text-foreground font-medium hover:from-gray-800 hover:to-teal-700 transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             View All Sponsors
             <ArrowRight className="ml-2 w-4 h-4" />
@@ -202,7 +202,7 @@ export default function SponsorSection({ variant = "homepage" }) {
           <div className="mt-4">
             <Link
               href="/sponsors#become-sponsor"
-              className="text-gray-400 hover:text-gray-300 text-sm underline"
+              className="text-foreground hover:text-foreground dark:text-foreground dark:hover:text-foreground text-sm underline"
             >
               Become a Sponsor
             </Link>

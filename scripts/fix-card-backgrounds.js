@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const glob = require('glob');
 
 console.log('🎨 Fixing blue-tinted backgrounds and standardizing spacing...\n');
@@ -7,7 +6,6 @@ console.log('🎨 Fixing blue-tinted backgrounds and standardizing spacing...\n'
 let totalModified = 0;
 
 // Fix card colors in tool pages - the cards that look blue should use proper card variants
-const cardBgPattern = /(bg-gray-800|bg-gray-900)(?!\/)(\s+border\s+border-gray-700)?/g;
 
 const files = glob.sync('src/**/*.{js,jsx,tsx,ts}', {
   ignore: ['**/node_modules/**', '**/dist/**', '**/.next/**']
@@ -15,7 +13,6 @@ const files = glob.sync('src/**/*.{js,jsx,tsx,ts}', {
 
 files.forEach(file => {
   let content = fs.readFileSync(file, 'utf8');
-  let modified = false;
   const originalContent = content;
 
   // Replace hardcoded dark backgrounds with proper card styling
@@ -31,13 +28,12 @@ files.forEach(file => {
       if (before.includes('className="inline') || before.includes('Button')) {
         return match;
       }
-      
-      modified = true;
+
       // Replace with proper card styling
-      const replacement = bgClass === 'bg-gray-900' 
+      const replacement = bgClass === 'bg-gray-900'
         ? 'bg-white dark:bg-gray-950'
         : 'bg-gray-50 dark:bg-gray-900';
-      
+
       return `<${tag}${before}${replacement}${after}>`;
     }
   );

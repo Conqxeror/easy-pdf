@@ -22,6 +22,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
@@ -30,6 +31,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
+    "**/*.d.ts",
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",

@@ -12,7 +12,7 @@ export default function PageRangeInput({
   return (
     <div className={`flex flex-col sm:flex-row items-center gap-3 ${className}`}>
       <div className="flex items-center gap-2">
-        <label className="text-gray-300 text-sm">From</label>
+        <label className="text-foreground text-sm">From</label>
         <Input
           type="number"
           min={1}
@@ -25,10 +25,10 @@ export default function PageRangeInput({
         />
       </div>
       
-      <div className="text-gray-500">-</div>
+      <div className="text-foreground">-</div>
       
       <div className="flex items-center gap-2">
-        <label className="text-gray-300 text-sm">To</label>
+        <label className="text-foreground text-sm">To</label>
         <Input
           type="number"
           min={1}
@@ -42,7 +42,7 @@ export default function PageRangeInput({
       </div>
       
       {totalPages && (
-        <span className="text-sm text-gray-400 whitespace-nowrap">
+        <span className="text-sm text-foreground whitespace-nowrap">
           of {totalPages} pages
         </span>
       )}

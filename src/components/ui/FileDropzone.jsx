@@ -62,8 +62,21 @@ const FileDropzone = ({
         let reason = "";
 
         // Check file type
-        if (acceptedMimeTypesSet.size > 0) {
-          let isMimeTypeAccepted = acceptedMimeTypesSet.has(file.type);
+          if (acceptedMimeTypesSet.size > 0) {
+          // Accept exact mime types (video/webm) as well as wildcards like video/*
+          let isMimeTypeAccepted = false;
+          for (const mt of acceptedMimeTypesSet) {
+            if (mt.endsWith('/*')) {
+              const prefix = mt.split('/')[0] + '/';
+              if (file.type && file.type.startsWith(prefix)) {
+                isMimeTypeAccepted = true;
+                break;
+              }
+            } else if (file.type === mt) {
+              isMimeTypeAccepted = true;
+              break;
+            }
+          }
 
           // Fallback check: if direct MIME type doesn't match, try matching by extension
           if (!isMimeTypeAccepted && file.name) {
@@ -190,16 +203,16 @@ const FileDropzone = ({
 
   return (
     <div className="w-full space-y-4">
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">{label}</label>
+      <label className="block text-sm font-medium text-foreground">{label}</label>
 
       <Card
         variant={isDragActive ? "elevated" : "glass"}
         className={cn(
           "relative border-2 border-dashed cursor-pointer transition-all duration-300 overflow-hidden",
           isDragActive
-            ? "border-gray-600 dark:border-gray-400 bg-gray-50/50 dark:bg-gray-950/30 scale-[1.02] shadow-xl shadow-gray-500/20 animate-pulse"
-            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-600 hover:shadow-lg",
-          (internalError || externalError) && "border-red-500 dark:border-red-400 bg-red-50/50 dark:bg-red-950/20"
+            ? "border-secondary bg-primary/5 scale-[1.02] shadow-xl shadow-secondary/20 animate-pulse"
+            : "border-border hover:border-secondary/50 hover:shadow-lg",
+          (internalError || externalError) && "border-destructive bg-destructive/5"
         )}
         onClick={openFileDialog}
         onDragEnter={handleDrag}
@@ -213,35 +226,35 @@ const FileDropzone = ({
       >
         {/* Animated Background Gradient on Drag */}
         {isDragActive && (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 via-gray-600/10 to-gray-600/10 animate-gradient" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-primary/5 to-primary/5 animate-gradient" />
         )}
 
         <div className="relative p-8 flex flex-col items-center justify-center">
           {isLoading ? (
             <div className="flex flex-col items-center animate-in fade-in-0 duration-300">
               <Loader className="mb-2" />
-              <span className="text-sm text-gray-600 dark:text-gray-400">Processing files...</span>
+              <span className="text-sm text-muted-foreground">Processing files...</span>
             </div>
           ) : (
             <>
               <div className={cn(
                 "mb-4 p-4 transition-all duration-300",
                 isDragActive 
-                  ? "bg-gray-950 dark:bg-gray-950 shadow-lg scale-110" 
-                  : "bg-gray-100 dark:bg-gray-950/30 group-hover:scale-105"
+                  ? "bg-primary shadow-lg scale-110" 
+                  : "bg-muted group-hover:scale-105"
               )}>
                 <UploadCloud
                   className={cn(
                     "w-8 h-8 transition-all duration-300",
-                    isDragActive ? "text-white animate-bounce" : "text-gray-700 dark:text-gray-400"
+                    isDragActive ? "text-primary-foreground animate-bounce" : "text-muted-foreground"
                   )}
                 />
               </div>
               <div className="text-center">
-                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                <p className="text-lg font-semibold text-foreground mb-2">
                   {isDragActive ? "Drop files here!" : description}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-muted-foreground">
                   {accept
                     .split(",")
                     .map((s) => s.replace(".", "").toUpperCase())
@@ -283,7 +296,7 @@ const FileDropzone = ({
               {files.length} {files.length === 1 ? 'file' : 'files'} selected
             </Badge>
             {files.length > 1 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
+              <span className="text-xs text-muted-foreground">
                 Total: {(files.reduce((acc, f) => acc + f.size, 0) / 1024 / 1024).toFixed(2)} MB
               </span>
             )}
@@ -298,14 +311,14 @@ const FileDropzone = ({
             >
               <div className="flex items-center justify-between p-4">
                 <div className="flex items-center space-x-3 flex-1 min-w-0">
-                  <div className="p-2 bg-gray-950 dark:bg-gray-950 shadow-md group-hover:scale-110 transition-transform duration-300">
-                    <FileText className="w-5 h-5 text-white" />
+                  <div className="p-2 bg-primary shadow-md group-hover:scale-110 transition-transform duration-300">
+                    <FileText className="w-5 h-5 text-primary-foreground" />
                   </div>
                   <div className="text-sm flex-1 min-w-0">
-                    <p className="text-gray-900 dark:text-gray-100 font-medium truncate" title={file.name}>
+                    <p className="text-foreground font-medium truncate" title={file.name}>
                       {file.name}
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                       {(file.size / 1024 / 1024).toFixed(2)} MB
                     </p>
                   </div>
@@ -321,7 +334,7 @@ const FileDropzone = ({
                       e.stopPropagation();
                       removeFile(index);
                     }}
-                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all duration-200"
+                    className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-200"
                     aria-label={`Remove ${file.name}`}
                   >
                     <X className="w-4 h-4" />
@@ -334,10 +347,10 @@ const FileDropzone = ({
       )}
 
       {(internalError || externalError) && (
-        <Card variant="glass" className="border-red-300 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20 animate-in fade-in-0 slide-in-from-top-2 duration-300">
+        <Card variant="glass" className="border-destructive/50 bg-destructive/10 animate-in fade-in-0 slide-in-from-top-2 duration-300">
           <div className="p-4 flex items-start space-x-3">
-            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-            <div className="text-red-700 dark:text-red-300 text-sm flex-1">
+            <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+            <div className="text-destructive text-sm flex-1">
               {(internalError || externalError).split("\n").map((line, i) => (
                 <p key={i} className="mb-1 last:mb-0">{line}</p>
               ))}

@@ -11,6 +11,8 @@ const routes = Array.from(new Set([
 	'/watermark',
 	'/sign',
 	'/pdf-to-jpg',
+	'/html-to-pdf',
+	'/pdf-metadata-editor',
 	'/pdf-accessibility-checker',
 	'/pdf-batch-processor',
 	'/reorder',

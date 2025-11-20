@@ -1,5 +1,4 @@
 const fs = require('fs');
-const path = require('path');
 const glob = require('glob');
 
 console.log('🎨 Fixing text gradients, backgrounds, and spacing issues...\n');
@@ -65,7 +64,6 @@ let totalModified = 0;
 files.forEach(file => {
   let content = fs.readFileSync(file, 'utf8');
   let modified = false;
-  const originalContent = content;
 
   patterns.forEach(pattern => {
     if (typeof pattern.to === 'function') {

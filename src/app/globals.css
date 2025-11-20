@@ -10,251 +10,183 @@
    LIGHT MODE (Default)
    ---------------------------------------------------------------------------- */
 :root {
-  /* Background Colors */
+  /* Zinc Palette for Neutrals */
   --background-primary: 255 255 255;
-  /* Pure white */
-  --background-secondary: 250 250 250;
-  /* Off-white */
-  --background-tertiary: 245 245 245;
-  /* Light gray */
+  --background-secondary: 255 255 255;
+  /* Zinc 50 -> White */
+  --background-tertiary: 255 255 255;
+  /* Zinc 100 -> White */
   --background-elevated: 255 255 255;
-  /* Card backgrounds */
 
-  /* Foreground Colors */
-  --foreground-primary: 23 23 23;
-  /* Main text (gray-900) */
-  --foreground-secondary: 82 82 82;
-  /* Secondary text (gray-600) */
-  --foreground-tertiary: 115 115 115;
-  /* Muted text (gray-500) */
-  --foreground-inverse: 250 250 250;
-  /* Text on dark backgrounds */
+  --foreground-primary: 0 0 0;
+  /* Pure Black */
+  --foreground-secondary: 71 85 105;
+  /* Slate 600 - Dark Gray for secondary text */
+  --foreground-tertiary: 100 116 139;
+  /* Slate 500 */
+  --foreground-inverse: 255 255 255;
 
-  /* Brand Colors - GRAYSCALE */
-  --primary: 82 82 82;
-  /* Gray 600 */
-  --primary-hover: 64 64 64;
-  /* Gray 700 */
-  --primary-light: 163 163 163;
-  /* Gray 400 */
-  --primary-foreground: 255 255 255;
+  /* Violet Palette for Primary */
+  /* Primary color (light mode) is intentionally neutral/white for a clean canvas. */
+  /* Primary should be white so page backgrounds keep the minimalist brand, */
+  /* with a strong, high-contrast primary foreground (black) for text/icon content. */
+  --primary: 255 255 255;
+  /* white */
+  --primary-hover: 245 245 245;
+  /* very light gray hover for visual affordance */
+  --primary-light: 255 255 255;
+  /* subtle elevation for nested surfaces */
+  --primary-foreground: 0 0 0;
+  /* Pure Black */
+
+  /* Black and gray palette for Secondary */
+  --secondary: 0 0 0;
+  /* Pure Black */
+  --secondary-hover: 30 30 30;
+  /* Dark Gray */
+  --secondary-light: 0 0 0;
+  /* Black */
+  --secondary-foreground: 255 255 255;
   /* White */
 
-  /* Accent Colors - GRAYSCALE */
-  --accent-dark: 38 38 38;
-  /* Gray 800 */
-  --accent-medium: 115 115 115;
-  /* Gray 500 */
-  --accent-light: 163 163 163;
-  /* Gray 400 */
-
-  /* Semantic Colors - Light Mode */
+  /* Semantic Colors */
   --success: 34 197 94;
   /* Green 500 */
   --success-bg: 240 253 244;
   /* Green 50 */
-  --success-border: 187 247 208;
-  /* Green 200 */
-  --success-text: 22 101 52;
-  /* Green 800 */
-  --success-foreground: 255 255 255;
+  --success-text: 21 128 61;
+  /* Green 700 */
 
   --warning: 234 179 8;
   /* Yellow 500 */
   --warning-bg: 254 252 232;
   /* Yellow 50 */
-  --warning-border: 253 224 71;
-  /* Yellow 200 */
-  --warning-text: 133 77 14;
-  /* Yellow 800 */
-  --warning-foreground: 255 255 255;
+  --warning-text: 161 98 7;
+  /* Yellow 700 */
 
   --error: 239 68 68;
   /* Red 500 */
   --error-bg: 254 242 242;
   /* Red 50 */
-  --error-border: 254 202 202;
-  /* Red 200 */
-  --error-text: 153 27 27;
-  /* Red 800 */
-  --error-foreground: 255 255 255;
+  --error-text: 185 28 28;
+  /* Red 700 */
 
-  --info: 82 82 82;
-  /* Gray 600 */
-  --info-bg: 250 250 250;
-  /* Gray 50 */
-  --info-border: 229 229 229;
-  /* Gray 200 */
-  --info-text: 38 38 38;
-  /* Gray 800 */
-  --info-foreground: 255 255 255;
+  --info: 59 130 246;
+  /* Blue 500 */
+  --info-bg: 239 246 255;
+  /* Blue 50 */
+  --info-text: 29 78 216;
+  /* Blue 700 */
 
-  /* Border Colors */
-  --border-subtle: 229 229 229;
-  /* Gray 200 */
-  --border-default: 212 212 212;
-  /* Gray 300 */
-  --border-strong: 163 163 163;
-  /* Gray 400 */
+  /* Borders */
+  --border-subtle: 0 0 0;
+  /* Black */
+  --border-default: 0 0 0;
+  /* Black */
+  --border-strong: 0 0 0;
+  /* Black */
 
-  /* Input & Form */
+  /* UI Elements */
   --input-bg: 255 255 255;
-  --input-border: 212 212 212;
-  /* Gray 300 */
-  --input-border-focus: 82 82 82;
-  /* Gray 600 */
-  --input-text: 23 23 23;
-  /* Gray 900 */
-  --input-placeholder: 163 163 163;
-  /* Gray 400 */
-
-  /* Component Colors */
+  --input-border: 0 0 0;
+  /* Black */
   --card-bg: 255 255 255;
-  --card-border: 229 229 229;
-  /* Gray 200 */
-
+  --card-border: 0 0 0;
+  /* Black */
   --popover-bg: 255 255 255;
-  --popover-border: 212 212 212;
-  /* Gray 300 */
+  --popover-border: 0 0 0;
+  /* Black */
 
-  /* Shadows - Light Mode */
+  /* Radius - SHARP EDGES (No Rounding) */
+  --radius-sm: 0;
+  --radius: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-
-  /* Glassmorphism - Light Mode */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --glass-blur: blur(10px) saturate(180%);
-
-  /* Animation */
-  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-colors: color 200ms, background-color 200ms, border-color 200ms;
 }
 
-/* ----------------------------------------------------------------------------
-   DARK MODE
-   ---------------------------------------------------------------------------- */
 .dark {
-  /* Background Colors - PURE BLACK/GRAY (NO BLUE) */
+  /* Zinc Palette for Dark Mode */
   --background-primary: 0 0 0;
-  /* Pure black */
-  --background-secondary: 17 24 39;
-  /* Gray 900 */
-  --background-tertiary: 31 41 55;
-  /* Gray 800 */
-  --background-elevated: 17 24 39;
-  /* Card backgrounds */
+  /* Pure Black */
+  --background-secondary: 0 0 0;
+  /* Pure Black */
+  --background-tertiary: 0 0 0;
+  /* Pure Black */
+  --background-elevated: 0 0 0;
+  /* Pure Black */
 
-  /* Foreground Colors */
-  --foreground-primary: 250 250 250;
-  /* Off-white (gray-50) */
-  --foreground-secondary: 163 163 163;
-  /* Gray 400 */
-  --foreground-tertiary: 115 115 115;
-  /* Gray 500 */
-  --foreground-inverse: 23 23 23;
-  /* Text on light backgrounds */
+  --foreground-primary: 255 255 255;
+  /* Pure White */
+  --foreground-secondary: 200 200 200;
+  /* Light Gray for secondary text */
+  --foreground-tertiary: 160 160 160;
+  /* Gray */
+  --foreground-inverse: 0 0 0;
 
-  /* Brand Colors - GRAYSCALE for dark mode */
-  --primary: 163 163 163;
-  /* Gray 400 (softer) */
-  --primary-hover: 115 115 115;
-  /* Gray 500 */
-  --primary-light: 212 212 212;
-  /* Gray 300 */
-  --primary-foreground: 23 23 23;
-  /* Dark text on primary */
+  /* Purple Palette for Primary in Dark Mode */
+  --primary: 255 255 255;
+  /* White */
+  --primary-hover: 220 220 220;
+  /* Light Gray */
+  --primary-light: 255 255 255;
+  /* White */
+  --primary-foreground: 0 0 0;
+  /* Black */
 
-  /* Semantic Colors - Dark Mode */
-  --success: 74 222 128;
-  /* Green 400 */
+  /* Gray palette for Secondary in Dark Mode */
+  --secondary: 255 255 255;
+  /* White */
+  --secondary-hover: 220 220 220;
+  /* Light Gray */
+  --secondary-light: 255 255 255;
+  /* White */
+  --secondary-foreground: 0 0 0;
+  /* Black */
+
+  /* Semantic Colors */
+  --success: 34 197 94;
   --success-bg: 20 83 45;
-  /* Green 900 */
-  --success-border: 22 101 52;
-  /* Green 800 */
   --success-text: 134 239 172;
-  /* Green 300 */
-  --success-foreground: 23 23 23;
 
-  --warning: 250 204 21;
-  /* Yellow 400 */
-  --warning-bg: 66 32 6;
-  /* Yellow 900 */
-  --warning-border: 133 77 14;
-  /* Yellow 800 */
+  --warning: 234 179 8;
+  --warning-bg: 113 63 18;
   --warning-text: 253 224 71;
-  /* Yellow 200 */
-  --warning-foreground: 23 23 23;
 
-  --error: 248 113 113;
-  /* Red 400 */
-  --error-bg: 69 10 10;
-  /* Red 950 */
-  --error-border: 153 27 27;
-  /* Red 800 */
+  --error: 239 68 68;
+  --error-bg: 127 29 29;
   --error-text: 252 165 165;
-  /* Red 300 */
-  --error-foreground: 23 23 23;
 
-  --info: 163 163 163;
-  /* Gray 400 */
-  --info-bg: 38 38 38;
-  /* Gray 800 */
-  --info-border: 64 64 64;
-  /* Gray 700 */
-  --info-text: 229 229 229;
-  /* Gray 200 */
-  --info-foreground: 23 23 23;
+  --info: 59 130 246;
+  --info-bg: 30 58 138;
+  --info-text: 147 197 253;
 
-  /* Border Colors */
-  --border-subtle: 38 38 38;
-  /* Gray 800 */
-  --border-default: 64 64 64;
-  /* Gray 700 */
-  --border-strong: 82 82 82;
-  /* Gray 600 */
+  /* Borders */
+  --border-subtle: 39 39 42;
+  /* Zinc 800 */
+  --border-default: 255 255 255;
+  /* White border for contrast on black */
+  --border-strong: 255 255 255;
+  /* White */
 
-  /* Input & Form */
-  --input-bg: 23 23 23;
-  /* Gray 900 */
-  --input-border: 64 64 64;
-  /* Gray 700 */
-  --input-border-focus: 163 163 163;
-  /* Gray 400 */
-  --input-text: 250 250 250;
-  /* Off-white */
-  --input-placeholder: 115 115 115;
-  /* Gray 500 */
+  /* UI Elements */
+  --input-bg: 0 0 0;
+  --input-border: 255 255 255;
+  --card-bg: 0 0 0;
+  --card-border: 255 255 255;
+  --popover-bg: 0 0 0;
+  --popover-border: 255 255 255;
 
-  /* Component Colors */
-  --card-bg: 23 23 23;
-  /* Gray 900 */
-  --card-border: 64 64 64;
-  /* Gray 700 */
-
-  --popover-bg: 23 23 23;
-  /* Gray 900 */
-  --popover-border: 64 64 64;
-  /* Gray 700 */
-
-  /* Shadows - Dark Mode (More Pronounced) */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-
-  /* Glass Effect - Dark Mode */
-  --glass-bg: rgba(64, 64, 64, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: 16px;
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.3);
 }
 
 /* ============================================================================
@@ -275,8 +207,7 @@ html.transitioning *:after {
 /* ----------------------------------------------------------------------------
    LEGACY COMPATIBILITY (for existing components)
    ---------------------------------------------------------------------------- */
-:root,
-.dark {
+:root {
   /* Map new variables to old names for gradual migration */
   --background: var(--background-primary);
   --foreground: var(--foreground-primary);
@@ -284,8 +215,11 @@ html.transitioning *:after {
   --card-foreground: var(--foreground-primary);
   --popover: var(--popover-bg);
   --popover-foreground: var(--foreground-primary);
-  --secondary: var(--background-tertiary);
-  --secondary-foreground: var(--foreground-primary);
+  --secondary: var(--secondary);
+  /* Use the properly defined secondary variable */
+  --secondary-foreground: var(--secondary-foreground);
+  --secondary-hover: var(--secondary-hover);
+  --secondary-light: var(--secondary-light);
   --muted: var(--background-tertiary);
   --muted-foreground: var(--foreground-secondary);
   --accent: var(--background-tertiary);
@@ -294,13 +228,31 @@ html.transitioning *:after {
   --destructive-foreground: var(--error-foreground);
   --border: var(--border-default);
   --input: var(--input-border);
-  --ring: var(--primary);
+  /* Use the secondary for focus rings so focus is always visible */
+  --ring: var(--secondary);
 
   /* Design Tokens - SHARP NIKE-STYLE (No Rounding) */
   --radius: 0;
   --radius-sm: 0;
   --radius-lg: 0;
   --radius-xl: 0;
+}
+
+/* Keep the legacy mappings for .dark separate so dark skin remains unchanged */
+.dark {
+  --secondary: var(--secondary);
+  --secondary-foreground: var(--secondary-foreground);
+  --secondary-hover: var(--secondary-hover);
+  --secondary-light: var(--secondary-light);
+  --muted: var(--background-tertiary);
+  --muted-foreground: var(--foreground-secondary);
+  --accent: var(--background-tertiary);
+  --accent-foreground: var(--foreground-primary);
+  --destructive: var(--error);
+  --destructive-foreground: var(--error-foreground);
+  --border: var(--border-default);
+  --input: var(--input-border);
+  --ring: var(--secondary);
 }
 
 /* Accessibility utilities */
@@ -372,7 +324,7 @@ html.transitioning *:after {
   h4,
   .text-h4 {
     font-size: var(--font-size-xl);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.4;
   }
 
@@ -415,7 +367,7 @@ html.transitioning *:after {
     background-color: rgb(var(--card));
     color: rgb(var(--card-foreground));
     border-radius: var(--radius-lg);
-    border: 1px solid rgb(var(--border));
+    border: 2px solid rgb(var(--border));
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
   }
