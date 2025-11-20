@@ -25,7 +25,7 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
     <div
       role="menu"
       aria-label="Easy PDF navigation"
-      className="lg:hidden bg-background h-full overflow-y-auto"
+      className="lg:hidden h-full overflow-y-auto"
     >
       <div className="px-4 pt-4 pb-20 space-y-4">
         {toolCategories.map((category) => {
@@ -34,7 +34,7 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
           return (
             <div
               key={category.name}
-              className="border border-border overflow-hidden bg-card"
+              className="border border-border/50 overflow-hidden bg-card/95 rounded-lg shadow-sm"
             >
               <button
                 type="button"
@@ -86,7 +86,7 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
                   isCategoryOpen ? "opacity-100" : "opacity-0"
                 )}
               >
-                <div className="px-2 pb-2 space-y-1 bg-muted/30 border-t border-border/50">
+                <div className="px-2 pb-2 space-y-1 bg-muted/85 border-t border-border/50">
                   {category.submenu.map((subItem) => (
                     <Link
                       key={subItem.name}

@@ -254,7 +254,7 @@ export default function DesktopNav({ closeAllMenus }) {
                   : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                 "focus:outline-none focus:ring-2 focus:ring-primary/20"
               )}
-              aria-expanded={isOpen}
+              aria-expanded={desktopSubmenuOpen === category.name}
               aria-haspopup="true"
             >
               <span className="opacity-70 group-hover:opacity-100 transition-opacity">
@@ -264,12 +264,12 @@ export default function DesktopNav({ closeAllMenus }) {
               <ChevronDown
                 className={cn(
                   "h-4 w-4 transition-transform duration-300 opacity-50 group-hover:opacity-100",
-                  isOpen && "rotate-180"
+                  desktopSubmenuOpen === category.name && "rotate-180"
                 )}
               />
             </button>
 
-            {isOpen && (
+            {desktopSubmenuOpen === category.name && (
               <div
                 className="absolute z-50 top-full mt-2 pt-2 left-0 right-0 flex pointer-events-none"
                 style={{
