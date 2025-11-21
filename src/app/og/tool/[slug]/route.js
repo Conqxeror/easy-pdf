@@ -2,221 +2,150 @@ import { ImageResponse } from 'next/og';
 import { toolsData } from '@/lib/toolData';
 
 export const runtime = 'edge';
+export const revalidate = 3600; // Cache for 1 hour
 
 export async function GET(req, { params }) {
   try {
     const { slug } = await params;
+    
+    // Validate slug exists and is a string
+    if (!slug || typeof slug !== 'string') {
+      return new Response('Invalid slug', { status: 400 });
+    }
+
     const toolHref = `/${slug}`;
     const tool = toolsData.find((t) => t.href === toolHref);
-
-    const title = tool?.ogTitle || tool?.seoTitle || tool?.title || 'easy-pdf';
-    const subtitle = tool?.ogSubtitle || tool?.seoDescription || 'Privacy-first PDF tools — no uploads.';
-
-    const url = new URL(req.url);
-    const origin = `${url.protocol}//${url.host}`;
-
-    // Try CDN fonts first (more reliable in CI), then local fonts. If both fail, warn.
-    let interBold, interReg;
-    try {
-      const interBoldReq = await fetch('https://fonts.gstatic.com/s/inter/v12/Inter-Bold.woff2');
-      const interRegReq = await fetch('https://fonts.gstatic.com/s/inter/v12/Inter-Regular.woff2');
-      if (interBoldReq.ok && interRegReq.ok) {
-        interBold = await interBoldReq.arrayBuffer();
-        interReg = await interRegReq.arrayBuffer();
-      }
-    } catch {
-      // try local fonts next in case CDN is blocked or unavailable
-    }
-
-    if (!interBold || !interReg) {
+    
+    // If tool not found, try static image first, then fallback
+    if (!tool) {
       try {
-        const localBold = await fetch(`${origin}/fonts/Inter-Bold.woff2`);
-        const localReg = await fetch(`${origin}/fonts/Inter-Regular.woff2`);
-        if (localBold.ok && localReg.ok) {
-          interBold = await localBold.arrayBuffer();
-          interReg = await localReg.arrayBuffer();
-        }
-      } catch {
-        // final fallback: leave fonts undefined and continue without custom fonts
-        console.warn('OG fonts unavailable; falling back to system fonts.');
-      }
-    }
-
-    // NOTE: We intentionally do NOT prefer static OG images here anymore, 
-    // because we want the new dynamic design to be the primary source.
-    // The static images in public/og-static are likely outdated or basic.
-
-
-    let image;
-    try {
-      // If font loading failed above, ImageResponse will still render using system fonts.
-      image = new ImageResponse(
-      (
-        <div
-          style={{
-            width: '1200px',
-            height: '630px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: '#000000',
-            color: 'white',
-            fontFamily: 'Inter',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Background Pattern */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundImage: 'radial-gradient(circle at 2px 2px, #222 1px, transparent 0)',
-              backgroundSize: '48px 48px',
-              opacity: 0.5,
-              zIndex: 0,
-            }}
-          />
-
-          {/* Brand Header (Top Left) */}
-          <div style={{ position: 'absolute', top: 60, left: 60, display: 'flex', alignItems: 'center', gap: 16, zIndex: 10 }}>
-             {/* eslint-disable-next-line @next/next/no-img-element */}
-             <img src={`${origin}/icon-192.png`} width="48" height="48" alt="Easy PDF Logo" style={{ borderRadius: 12 }} />
-             <span style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.02em' }}>Easy PDF</span>
-          </div>
-
-          {/* Main Content (Centered) */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, maxWidth: '900px', textAlign: 'center' }}>
-            
-            {/* Tool Icon */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              width: 120, 
-              height: 120, 
-              background: '#111', 
-              border: '1px solid #333',
-              borderRadius: 24,
-              marginBottom: 40,
-              boxShadow: '0 20px 40px -10px rgba(0,0,0,0.5)'
-            }}>
-               {/* eslint-disable-next-line @next/next/no-img-element */}
-               <img src={tool?.ogIcon || `${origin}/images/tools/tool.png`} width="72" height="72" alt={`${tool?.title || 'Tool'} icon`} />
-            </div>
-
-            {/* Title */}
-            <span style={{ 
-              fontSize: 80, 
-              fontWeight: 800, 
-              letterSpacing: '-0.04em', 
-              lineHeight: 1.1,
-              marginBottom: 24,
-              backgroundImage: 'linear-gradient(to bottom right, #fff, #ccc)',
-              backgroundClip: 'text',
-              color: 'transparent',
-            }}>
-              {title}
-            </span>
-
-            {/* Subtitle / Description */}
-            <span style={{ 
-              fontSize: 32, 
-              color: '#A1A1AA', 
-              lineHeight: 1.5,
-              fontWeight: 400,
-              maxWidth: '800px',
-              textWrap: 'balance'
-            }}>
-              {subtitle.length > 120 ? subtitle.substring(0, 120) + '...' : subtitle}
-            </span>
-          </div>
-
-          {/* Footer (Bottom) */}
-          <div style={{ position: 'absolute', bottom: 60, left: 60, right: 60, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
-             <div style={{ display: 'flex', gap: 32 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
-                  <span style={{ fontSize: 20, fontWeight: 500, color: '#e5e7eb' }}>Client-side Only</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
-                  <span style={{ fontSize: 20, fontWeight: 500, color: '#e5e7eb' }}>No Uploads</span>
-                </div>
-             </div>
-
-             {tool?.category && (
-              <div style={{ 
-                padding: '10px 20px', 
-                background: '#fff', 
-                color: '#000', 
-                fontSize: 18, 
-                fontWeight: 600,
-                borderRadius: 999,
-              }}>
-                {tool.category}
-              </div>
-            )}
-          </div>
-        </div>
-      ),
-      {
-        width: 1200,
-        height: 630,
-        fonts: interBold && interReg ? [
-          { name: 'Inter', data: interReg, weight: 400, style: 'normal' },
-          { name: 'Inter', data: interBold, weight: 700, style: 'normal' }
-        ] : []
-      }
-      );
-    } catch (err) {
-      // ImageResponse failed for some reason (fonts or Edge runtime issue). Try sensible fallbacks:
-      console.warn('ImageResponse failed, attempting fallbacks', err);
-      try {
+        const url = new URL(req.url);
+        const origin = `${url.protocol}//${url.host}`;
         const staticOg = await fetch(`${origin}/og-static/${slug}.png`);
         if (staticOg.ok) {
           const buffer = await staticOg.arrayBuffer();
           return new Response(buffer, { status: 200, headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, s-maxage=86400' } });
         }
+      } catch {}
+      return new Response('Tool not found', { status: 404 });
+    }
+
+    const title = tool?.ogTitle || tool?.seoTitle || tool?.title || 'easy-pdf';
+    const description = tool?.seoDescription || 'Privacy-first PDF tools — no uploads.';
+
+    const url = new URL(req.url);
+    const origin = `${url.protocol}//${url.host}`;
+
+
+    // Try dynamic OG generation with ImageResponse
+    try {
+      return new ImageResponse(
+        (
+          <div style={{ width: '1200px', height: '630px', display: 'flex', flexDirection: 'column', background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)', color: '#fff', fontFamily: 'system-ui, -apple-system, sans-serif', position: 'relative', overflow: 'hidden' }}>
+            {/* Background Grid Pattern */}
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: 'radial-gradient(circle at 1px 1px, #333 1px, transparent 1px)', backgroundSize: '50px 50px', opacity: 0.1 }} />
+            
+            {/* Header with Brand */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, padding: '40px 60px', zIndex: 1 }}>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ minWidth: 48 }}>
+                <g transform="translate(12 12) scale(0.91) translate(-12 -12) translate(1 1)" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15.707 21.293a1 1 0 0 1-1.414 0l-1.586-1.586a1 1 0 0 1 0-1.414l5.586-5.586a1 1 0 0 1 1.414 0l1.586 1.586a1 1 0 0 1 0 1.414z" />
+                  <path d="m18 13-1.375-6.874a1 1 0 0 0-.746-.776L3.235 2.028a1 1 0 0 0-1.207 1.207L5.35 15.879a1 1 0 0 0 .776.746L13 18" />
+                  <path d="m2.3 2.3 7.286 7.286" />
+                  <circle cx="11" cy="11" r="2" />
+                </g>
+              </svg>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <div style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em' }}>easy-pdf</div>
+                <div style={{ fontSize: 12, color: '#999', fontWeight: 400 }}>Privacy-First Tools</div>
+              </div>
+            </div>
+
+            {/* Main Content */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', flex: 1, padding: '0 60px', gap: 32, zIndex: 1 }}>
+              {/* Tool Title */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.1, maxWidth: '800px' }}>{title}</div>
+                <div style={{ fontSize: 28, color: '#aaa', fontWeight: 400, maxWidth: '800px', lineHeight: 1.4 }}>{description.length > 100 ? description.substring(0, 100) + '...' : description}</div>
+              </div>
+
+              {/* Features */}
+              <div style={{ display: 'flex', gap: 24, marginTop: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
+                  <span style={{ fontSize: 16, color: '#ddd' }}>Client-side Only</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
+                  <span style={{ fontSize: 16, color: '#ddd' }}>No Uploads</span>
+                </div>
+                {tool?.category && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ width: 8, height: 8, background: '#22c55e', borderRadius: '50%' }} />
+                    <span style={{ fontSize: 16, color: '#ddd' }}>{tool.category}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '40px 60px', borderTop: '1px solid #333', zIndex: 1 }}>
+              <div style={{ fontSize: 16, color: '#666', fontWeight: 500 }}>easypdf.app</div>
+              <div style={{ fontSize: 14, color: '#666' }}>Privacy-first PDF Tools</div>
+            </div>
+          </div>
+        ),
+        {
+          width: 1200,
+          height: 630,
+          headers: {
+            'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=604800',
+          },
+        }
+      );
+    } catch (err) {
+      // ImageResponse generation failed - try fallbacks
+      console.warn('OG route ImageResponse generation failed', err);
+      
+      // Try static OG image
+      try {
+        const staticOg = await fetch(`${origin}/og-static/${slug}.png`);
+        if (staticOg.ok) {
+          const buffer = await staticOg.arrayBuffer();
+          return new Response(buffer, { 
+            status: 200, 
+            headers: { 
+              'Content-Type': 'image/png', 
+              'Cache-Control': 'public, s-maxage=86400' 
+            } 
+          });
+        }
       } catch {
-        // swallow
+        // Static also failed
       }
 
-      // Final fallback: return the small tool icon (best-effort) so the request doesn't 500.
+      // Final fallback: generic tool icon
       try {
         const fallback = await fetch(`${origin}/images/tools/tool.png`);
         if (fallback.ok) {
           const buffer = await fallback.arrayBuffer();
-          return new Response(buffer, { status: 200, headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, s-maxage=86400' } });
+          return new Response(buffer, { 
+            status: 200, 
+            headers: { 
+              'Content-Type': 'image/png', 
+              'Cache-Control': 'public, s-maxage=86400' 
+            } 
+          });
         }
       } catch {
-        // If everything failed, let the outer catch handle the error and return 500.
+        // Everything failed
       }
-    }
 
-    try {
-      image.headers.set('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
-    } catch {
-      console.warn('Unable to set cache header on ImageResponse');
+      // Return error placeholder
+      return new Response('Failed to generate image', { status: 500 });
     }
-
-    try {
-      void fetch(`${origin}/api/og/log`, {
-        method: 'POST',
-        body: JSON.stringify({ slug, tool: tool?.title || null, path: req.url }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-    } catch {
-      // no-op
-    }
-
-    return image;
   } catch (err) {
-    console.error('OG generation failed', err);
-    return new Response('Failed to generate image', { status: 500 });
+    console.error('OG route error', err);
+    return new Response('Internal server error', { status: 500 });
   }
 }
