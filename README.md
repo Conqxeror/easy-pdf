@@ -52,6 +52,16 @@ This project leverages modern web technologies to deliver a robust and efficient
 ## Open Graph & Analytics
 
 - Dynamic Open Graph (OG) images are generated at runtime by the App Router at `/og/tool/:slug` for tool pages and `/og/homepage` for the homepage. These images are 1200x630 (recommended)
+
+## Sitemap generation
+
+The app now serves a custom `/sitemap.xml` route that:
+
+- Emits valid XML with the Image Sitemap extension namespace.
+- Ensures each `<image:loc>` contains a plain absolute URL (no objects, no width/height attributes).
+- Avoids non-standard/unsupported fields that could cause crawlers to reject the sitemap.
+
+If you need to change which images are exposed in the sitemap, update `src/lib/sitemapEntries.js` which builds the sitemap entries. The `/sitemap.xml` endpoint returns the final XML.
 - Local fonts for OG rendering can be added to `public/fonts/` (see `public/fonts/README.md`). The generator falls back to Google Fonts if local fonts are not available.
 - The server logs OG hits via `/api/og/log`; to forward OG hits to Google Analytics (Measurement Protocol), set `GA_MEASUREMENT_ID` and `GA_API_SECRET` in environment variables (see `.env.example`).
  - You can also pre-generate OG images at build-time for high-traffic pages using `npm run generate-og-static` — this stores images in `public/og-static/{slug}.png` and `public/og-static/homepage.png` and is used automatically by the metadata helpers when present.
