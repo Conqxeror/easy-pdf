@@ -1,8 +1,8 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
-import PDFTableExtractorClient from "./components/PDFTableExtractorClient";
+import PdfTableExtractorClient from "./components/PdfTableExtractorClient";
 
 export const metadata = getToolMetadata("/pdf-table-extractor");
 
 export default function PDFTableExtractorPage() {
-  return <PDFTableExtractorClient />;
+  return <PdfTableExtractorClient />;
 }

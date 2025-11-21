@@ -1,8 +1,8 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
-import PDFBatchProcessorClient from "./components/PDFBatchProcessorClient";
+import PdfBatchProcessorClient from "./components/PdfBatchProcessorClient";
 
 export const metadata = getToolMetadata("/pdf-batch-processor");
 
 export default function PDFBatchProcessorPage() {
-  return <PDFBatchProcessorClient />;
+  return <PdfBatchProcessorClient />;
 }

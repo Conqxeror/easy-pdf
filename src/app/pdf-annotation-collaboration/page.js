@@ -1,8 +1,8 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
-import PDFAnnotationCollaborationClient from "./components/PDFAnnotationCollaborationClient";
+import PdfAnnotationCollaborationClient from "./components/PdfAnnotationCollaborationClient";
 
 export const metadata = getToolMetadata("/pdf-annotation-collaboration");
 
 export default function PDFAnnotationCollaborationPage() {
-  return <PDFAnnotationCollaborationClient />;
+  return <PdfAnnotationCollaborationClient />;
 }

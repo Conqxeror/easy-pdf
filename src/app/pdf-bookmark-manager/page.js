@@ -1,8 +1,8 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
-import PDFBookmarkManagerClient from "./components/PDFBookmarkManagerClient";
+import PdfBookmarkManagerClient from "./components/PdfBookmarkManagerClient";
 
 export const metadata = getToolMetadata("/pdf-bookmark-manager");
 
 export default function PDFBookmarkManagerPage() {
-  return <PDFBookmarkManagerClient />;
+  return <PdfBookmarkManagerClient />;
 }
