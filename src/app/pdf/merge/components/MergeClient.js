@@ -231,7 +231,7 @@ export default function MergeClient() {
     <div className="space-y-6">
       {/* Screen reader announcements */}
       <LiveRegion message={statusMessage} priority="polite" />
-      
+
       {(pdfLibLoading || pdfjsLoading) ? (
         <div className="flex flex-col items-center justify-center p-8 bg-muted border border-border rounded-none">
           <div className="animate-spin h-12 w-12 border-b-2 border-primary mb-4" aria-hidden="true"></div>

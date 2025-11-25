@@ -4,7 +4,7 @@ import { FileText, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOr
 
 export const toolsData = [
   {
-    href: "/merge",
+    href: "/pdf/merge",
     title: "Merge PDF",
     description: "Combine multiple PDF files into one seamless document.",
     icon: <Files className="w-8 h-8 text-blue-500 preserve-color" />,
@@ -13,11 +13,11 @@ export const toolsData = [
     seoTitle: "Free PDF Merger - Combine Multiple PDFs Online",
     seoDescription: "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
     features: ["Drag & drop multiple files", "Reorder before merging", "No file size limits", "100% secure processing"],
-    relatedTools: ["/split", "/organize", "/compress"],
+    relatedTools: ["/pdf/split", "/organize", "/pdf/compress"],
     category: "Organize & Edit"
   },
   {
-    href: "/split",
+    href: "/pdf/split",
     title: "Split PDF",
     description: "Extract specific pages or split a PDF into multiple files.",
     icon: <Split className="w-8 h-8 text-green-500" />,
@@ -26,11 +26,11 @@ export const toolsData = [
     seoTitle: "Free PDF Splitter - Extract Pages from PDF Online",
     seoDescription: "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing.",
     features: ["Extract specific pages", "Split by page ranges", "Preview before splitting", "Download as ZIP"],
-    relatedTools: ["/merge", "/delete-pages", "/organize"],
+    relatedTools: ["/pdf/merge", "/delete-pages", "/organize"],
     category: "Organize & Edit"
   },
   {
-    href: "/compress",
+    href: "/pdf/compress",
     title: "Compress PDF",
     description: "Reduce PDF file size for easier sharing and storage.",
     icon: <Minimize2 className="w-8 h-8 text-purple-500" />,
@@ -39,7 +39,7 @@ export const toolsData = [
     seoTitle: "Free PDF Compressor - Reduce PDF File Size Online",
     seoDescription: "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels.",
     features: ["Multiple compression levels", "Quality preservation", "Batch processing", "Size preview"],
-    relatedTools: ["/merge", "/split", "/watermark", "/protect"],
+    relatedTools: ["/pdf/merge", "/pdf/split", "/watermark", "/protect"],
     category: "Security & Privacy"
   },
   {
@@ -52,7 +52,7 @@ export const toolsData = [
     seoTitle: "Free JPG to PDF Converter - Convert Images to PDF Online",
     seoDescription: "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing.",
     features: ["Multiple image formats", "Batch conversion", "Custom page sizes", "Image ordering"],
-    relatedTools: ["/pdf-to-jpg", "/merge", "/compress"],
+    relatedTools: ["/pdf-to-jpg", "/pdf/merge", "/pdf/compress"],
     category: "Convert & Create"
   },
 
@@ -66,7 +66,7 @@ export const toolsData = [
     seoTitle: "Free PDF to JPG Converter - Convert PDF to Images Online",
     seoDescription: "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
     features: ["High-quality output", "Custom resolution", "Batch processing", "Multiple formats"],
-    relatedTools: ["/jpg-to-pdf", "/split", "/compress", "/ocr"],
+    relatedTools: ["/jpg-to-pdf", "/pdf/split", "/pdf/compress", "/ocr"],
     category: "Convert & Create"
   },
   {
@@ -93,7 +93,7 @@ export const toolsData = [
     seoTitle: "ZIP Extractor - Unzip Archives in Your Browser",
     seoDescription: "Upload a ZIP, inspect its folders, and download the files you need instantly. Powered by JSZip and 100% client-side.",
     features: ["Runs entirely offline", "Folder-aware preview", "Individual file downloads", "Batch export option"],
-    relatedTools: ["/compress", "/mp4-to-mp3", "/jpg-to-pdf"],
+    relatedTools: ["/pdf/compress", "/mp4-to-mp3", "/jpg-to-pdf"],
     category: "Convert & Create",
     isNew: true
   },
@@ -731,7 +731,7 @@ export const toolsData = [
       "Sanitized rendering that strips scripts",
       "Client-side export powered by html2canvas + jsPDF"
     ],
-    relatedTools: ["/jpg-to-pdf", "/merge", "/pdf-version-comparison"],
+    relatedTools: ["/jpg-to-pdf", "/pdf/merge", "/pdf-version-comparison"],
     category: "Convert & Create",
     isNew: true
   },
@@ -759,7 +759,7 @@ export const toolsData = [
     seoTitle: "Free PDF Rotator - Rotate PDF Pages Online",
     seoDescription: "Rotate PDF pages by 90, 180, or 270 degrees. Fix document orientation with our free online PDF rotation tool.",
     features: ["Multiple rotation angles", "Page-specific rotation", "Batch rotation", "Preview changes"],
-    relatedTools: ["/organize", "/reorder", "/delete-pages", "/split"],
+    relatedTools: ["/organize", "/reorder", "/delete-pages", "/pdf/split"],
     category: "Organize & Edit"
   },
   {
@@ -772,7 +772,7 @@ export const toolsData = [
     seoTitle: "Free PDF Watermark Tool - Add Watermarks to PDF Online",
     seoDescription: "Add text or image watermarks to PDF documents. Customize position, opacity, and rotation with our free online watermarking tool.",
     features: ["Text & image watermarks", "Custom positioning", "Opacity control", "Rotation options"],
-    relatedTools: ["/protect", "/sign", "/page-numbers", "/compress"],
+    relatedTools: ["/protect", "/sign", "/page-numbers", "/pdf/compress"],
     category: "Security & Privacy"
   },
   {
@@ -785,7 +785,7 @@ export const toolsData = [
     seoTitle: "Free PDF Password Protection - Secure PDF Files Online",
     seoDescription: "Protect PDF files with password encryption. Add security to sensitive documents with our free online PDF protection tool.",
     features: ["Password encryption", "User permissions", "Print restrictions", "Copy protection"],
-    relatedTools: ["/unlock", "/watermark", "/sign", "/compress"],
+    relatedTools: ["/unlock", "/watermark", "/sign", "/pdf/compress"],
     category: "Security & Privacy"
   },
   {
@@ -798,7 +798,7 @@ export const toolsData = [
     seoTitle: "Free PDF Unlocker - Remove PDF Password Online",
     seoDescription: "Remove password protection from PDF files. Unlock encrypted PDFs with our free online PDF password removal tool.",
     features: ["Password removal", "Quick processing", "Secure unlocking", "No data retention"],
-    relatedTools: ["/protect", "/merge", "/split", "/compress"],
+    relatedTools: ["/protect", "/pdf/merge", "/pdf/split", "/pdf/compress"],
     category: "Security & Privacy"
   },
   {
@@ -811,7 +811,7 @@ export const toolsData = [
     seoTitle: "Free PDF Page Deleter - Remove Pages from PDF Online",
     seoDescription: "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool.",
     features: ["Select specific pages", "Page range deletion", "Preview before deletion", "Instant processing"],
-    relatedTools: ["/split", "/organize", "/reorder", "/merge"],
+    relatedTools: ["/pdf/split", "/organize", "/reorder", "/pdf/merge"],
     category: "Organize & Edit"
   },
   {
@@ -824,7 +824,7 @@ export const toolsData = [
     seoTitle: "Free PDF Page Reorder Tool - Rearrange PDF Pages Online",
     seoDescription: "Reorder and rearrange PDF pages with drag-and-drop interface. Organize your PDF documents with our free online tool.",
     features: ["Drag & drop interface", "Visual page preview", "Instant reordering", "Download organized PDF"],
-    relatedTools: ["/organize", "/delete-pages", "/split", "/merge"],
+    relatedTools: ["/organize", "/delete-pages", "/pdf/split", "/pdf/merge"],
     category: "Organize & Edit"
   },
   {
@@ -837,7 +837,7 @@ export const toolsData = [
     seoTitle: "Free PDF Organizer - Manage PDF Pages Online",
     seoDescription: "Organize PDF pages by reordering, deleting, and managing content. Complete PDF organization tool with visual interface.",
     features: ["Page reordering", "Page deletion", "Visual management", "Complete organization"],
-    relatedTools: ["/reorder", "/delete-pages", "/merge", "/split"],
+    relatedTools: ["/reorder", "/delete-pages", "/pdf/merge", "/pdf/split"],
     category: "Organize & Edit"
   },
   {
@@ -850,7 +850,7 @@ export const toolsData = [
     seoTitle: "Free PDF Page Number Tool - Add Page Numbers Online",
     seoDescription: "Add page numbers, headers, and footers to PDF documents. Customize format, position, and styling with our free online tool.",
     features: ["Custom numbering formats", "Header & footer options", "Position control", "Font customization"],
-    relatedTools: ["/watermark", "/organize", "/merge", "/sign"],
+    relatedTools: ["/watermark", "/organize", "/pdf/merge", "/sign"],
     category: "Security & Privacy"
   },
   {
@@ -983,7 +983,7 @@ export const toolsData = [
     seoTitle: "PDF Bookmark Manager - Add & Organize PDF Bookmarks",
     seoDescription: "Add, edit, and organize PDF bookmarks and navigation structure. Manage document navigation with our free online PDF bookmark manager.",
     features: ["Add custom bookmarks", "Edit existing bookmarks", "Organize bookmark hierarchy", "Export bookmark list"],
-    relatedTools: ["/organize", "/reorder", "/page-numbers", "/split"],
+    relatedTools: ["/organize", "/reorder", "/page-numbers", "/pdf/split"],
     category: "Advanced PDF Tools",
     isNew: true
   },
@@ -1011,7 +1011,7 @@ export const toolsData = [
     seoTitle: "PDF Batch Processor - Process Multiple PDFs at Once",
     seoDescription: "Process multiple PDF files at once with batch merge, split, compress, and watermarking. Automate PDF operations with our free online batch processor.",
     features: ["Batch merge multiple PDFs", "Bulk compression", "Mass watermarking", "Batch operations"],
-    relatedTools: ["/merge", "/compress", "/split", "/watermark"],
+    relatedTools: ["/pdf/merge", "/pdf/compress", "/pdf/split", "/watermark"],
     category: "Advanced PDF Tools",
     isNew: true
   },
@@ -1142,7 +1142,7 @@ export const toolsData = [
     seoTitle: "QR Code Generator - Create QR Codes for PDF Online",
     seoDescription: "Generate QR codes for URLs, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality.",
     features: ["Multiple QR code types", "Customizable size and quality", "WiFi and vCard support", "PNG and PDF export"],
-    relatedTools: ["/watermark", "/merge", "/form-filler"],
+    relatedTools: ["/watermark", "/pdf/merge", "/form-filler"],
     category: "Convert & Create",
     isNew: true
   },
@@ -1227,6 +1227,20 @@ export const toolsData = [
     seoDescription: "Convert Excel files (XLSX) to CSV format directly in your browser. Fast, secure, and private conversion without file uploads.",
     features: ["Convert XLSX to CSV", "Client-side processing", "No file uploads", "Fast conversion"],
     relatedTools: ["/csv-to-xlsx", "/pdf-to-xlsx", "/csv-json-converter"],
+    category: "Convert & Create",
+    isNew: true
+  },
+  {
+    href: "/csv-to-xlsx",
+    title: "CSV to XLSX",
+    description: "Convert CSV files to Excel (XLSX) spreadsheets instantly in your browser.",
+    icon: <Table className="w-8 h-8 text-emerald-600" />,
+    comingSoon: false,
+    keywords: ["csv to xlsx", "csv to excel", "convert csv", "spreadsheet converter", "csv converter"],
+    seoTitle: "CSV to XLSX Converter - Convert CSV to Excel Online",
+    seoDescription: "Convert CSV files to Excel (XLSX) format directly in your browser. Fast, secure, and private conversion without file uploads.",
+    features: ["Convert CSV to XLSX", "Client-side processing", "No file uploads", "Fast conversion"],
+    relatedTools: ["/xlsx-to-csv", "/pdf-to-xlsx", "/csv-json-converter"],
     category: "Convert & Create",
     isNew: true
   },

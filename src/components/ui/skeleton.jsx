@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const skeletonVariants = cva(
-  "animate-pulse bg-gradient-to-r",
+  "animate-pulse bg-gradient-to-r rounded-none",
   {
     variants: {
       variant: {

@@ -1,7 +1,7 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import MergePageClient from "./components/MergePageClient";
 
-const toolSeo = getToolMetadata("/merge");
+const toolSeo = getToolMetadata("/pdf/merge");
 export const metadata = toolSeo.metadata;
 
 export default function MergePage() {

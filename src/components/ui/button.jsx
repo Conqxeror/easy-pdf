@@ -6,37 +6,37 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 rounded-none",
   {
     variants: {
       variant: {
         // Primary action - bold and prominent
         default:
-          "bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-ring",
+          "bg-primary text-primary-foreground border border-primary hover:bg-background hover:text-primary transition-colors duration-200",
         
         // Destructive actions
         destructive:
-          "bg-red-600 dark:bg-red-500 text-foreground shadow-md hover:bg-red-700 dark:hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-red-500",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         
         // Bordered secondary actions
         outline:
-          "border border-border dark:border-border bg-transparent text-foreground dark:text-foreground shadow-sm hover:bg-background dark:hover:bg-background hover:border-border focus-visible:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
         
         // Subtle secondary actions
         secondary:
-          "bg-background dark:bg-background/80 text-foreground shadow-sm hover:bg-background dark:hover:bg-background/70 hover:shadow-md focus-visible:ring-gray-500",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         
         // Minimal ghost button
         ghost:
-          "text-foreground dark:text-foreground hover:bg-background dark:hover:bg-background hover:text-foreground dark:hover:text-foreground focus-visible:ring-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-500",
+          "hover:bg-accent hover:text-accent-foreground",
         
         // Text link style
         link: 
-          "text-foreground dark:text-foreground underline-offset-4 hover:underline focus-visible:ring-gray-500 px-0",
+          "text-primary underline-offset-4 hover:underline",
         
         // NEW: Premium variant - subtle gradient, elegant
         premium:
-          "bg-gradient-to-b from-gray-500 to-gray-600 dark:from-gray-400 dark:to-gray-500 text-foreground shadow-lg hover:shadow-xl hover:from-gray-600 hover:to-gray-700 dark:hover:from-gray-500 dark:hover:to-gray-600 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-primary text-primary-foreground border border-primary hover:bg-background hover:text-primary transition-colors duration-200",
         
         // NEW: Subtle variant - barely visible, reveals on hover
         subtle:
@@ -60,7 +60,7 @@ const buttonVariants = cva(
         
         // Bold gradient for hero CTAs
         gradient:
-          "bg-gradient-to-r from-gray-600 via-gray-700 to-gray-800 text-foreground shadow-lg hover:shadow-2xl hover:from-gray-700 hover:via-gray-800 hover:to-gray-900 hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-gray-500",
+          "bg-primary text-primary-foreground border border-primary hover:bg-background hover:text-primary transition-colors duration-200",
       },
       size: {
         sm: "h-8 gap-1.5 px-3 text-xs",

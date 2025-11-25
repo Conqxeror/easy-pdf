@@ -19,7 +19,7 @@ const footerLinks = [
       { name: "About easy-pdf", href: "/about" },
       { name: "Sitemap", href: "/sitemap.xml" },
       { name: "Privacy Policy", href: "/security" },
-      { name: "Sponsors", href: "/sponsors" },
+      { name: "Buy me a coffee", href: "https://buymeacoffee.com/kadriwalimt", external: true },
     ],
   },
 ];
@@ -45,12 +45,11 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-sm">
-              A blazing-fast, privacy-first PDF toolkit. 100% client-side processing ensures your documents never leave your device. Open-source and free forever.
+              A blazing-fast, privacy-first PDF toolkit. 100% client-side processing ensures your documents never leave your device. Completely free forever.
             </p>
             <div className="flex items-center gap-4">
               <SocialLink href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`} icon={<Mail size={18} />} label="Email" />
               <SocialLink href="https://www.linkedin.com/in/walimohammadkadri/" icon={<Linkedin size={18} />} label="LinkedIn" />
-              <SocialLink href="https://github.com/Conqxeror" icon={<Github size={18} />} label="GitHub" />
             </div>
             <div className="pt-2">
               <FooterClient />
@@ -104,6 +103,7 @@ export default function Footer() {
                   <Link 
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
+                    {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   >
                     {link.name}
                   </Link>

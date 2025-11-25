@@ -35,8 +35,8 @@ const structuredData = generateComprehensiveJsonLd('faq', {
       answer: "We use minimal, essential cookies for the proper functioning of the website (e.g., for dark mode preferences). We do not use tracking cookies or collect personal identifiable information. Our analytics are privacy-focused and anonymized."
     },
     {
-      question: "Is easy-pdf open source?",
-      answer: "Yes, easy-pdf is open source. You can review our codebase on GitHub to verify our privacy claims and understand exactly how the application works. This transparency ensures there are no hidden processes."
+      question: "Is the code transparent?",
+      answer: "Yes, our codebase is available for review on GitHub to verify our privacy claims and understand exactly how the application works. This transparency ensures there are no hidden processes."
     },
     {
       question: "What technologies are used to ensure client-side processing?",

@@ -32,7 +32,7 @@ export const PageHeader = ({
       )} 
       {...props}
     >
-      <div className="container-standard px-6 py-8">
+      <div className="container-standard px-4 md:px-6 py-8">
         {title && (
           <h1 className={cn(
             "text-h1 font-extrabold mb-4",
@@ -81,14 +81,14 @@ export const Section = ({
       className={cn(spacingClass, className)} 
       {...props}
     >
-      <div className="container-standard px-6 py-8">
+      <div className="container-standard px-4 py-6 md:px-6 md:py-8">
         {title && (
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 text-foreground">
               {title}
             </h2>
             {subtitle && (
-              <p className="text-lg text-foreground max-w-3xl mx-auto">
+              <p className="text-base md:text-lg text-foreground max-w-3xl mx-auto">
                 {subtitle}
               </p>
             )}
@@ -117,8 +117,8 @@ export const Card = ({
   return (
     <div 
       className={cn(
-        "card-standard bg-card border border-border dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 dark:border-border",
-        hover && "hover:scale-[1.02] transition-transform duration-200",
+        "card-standard bg-card border border-border rounded-none",
+        hover && "hover:bg-foreground hover:text-background transition-colors duration-200",
         paddingClass,
         className
       )} 
@@ -174,24 +174,38 @@ export const Hero = ({
   return (
     <section 
       className={cn(
-        "relative section-spacing text-center overflow-hidden",
+        "relative section-spacing text-center overflow-hidden border-b border-border",
         backgroundImage && "bg-cover bg-center bg-no-repeat",
         className
       )}
       style={backgroundImage ? { backgroundImage: `url(${backgroundImage})` } : {}}
       {...props}
     >
+      {/* Abstract Geometric Background */}
+      {!backgroundImage && (
+        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none">
+           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+             <defs>
+               <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                 <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1"/>
+               </pattern>
+             </defs>
+             <rect width="100%" height="100%" fill="url(#grid)" />
+           </svg>
+        </div>
+      )}
+
       {overlay && backgroundImage && (
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 to-gray-900/90 backdrop-blur-sm" />
       )}
-      <div className="relative container-standard">
+      <div className="relative container-standard z-10">
         {title && (
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-foreground dark:text-foreground animate-slide-up">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-slide-up uppercase">
             {title}
           </h1>
         )}
         {subtitle && (
-          <p className="text-lg sm:text-xl text-foreground mb-8 max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-slide-up font-light" style={{ animationDelay: '0.1s' }}>
             {subtitle}
           </p>
         )}
@@ -211,16 +225,16 @@ export const FeatureGrid = ({ features, className, ...props }) => {
       {features.map((feature, index) => (
         <Card 
           key={index} 
-          className="text-center group animate-slide-up border-2 border-transparent hover:border-border transition-all duration-300 bg-card dark:bg-gradient-to-br dark:from-gray-800/50 dark:to-gray-900/50 dark:hover:from-gray-700/50 dark:hover:to-gray-800/50"
+          className="text-center group animate-slide-up border-0 md:border border-border hover:bg-foreground hover:text-background transition-all duration-300 bg-transparent md:bg-card rounded-none"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
             {feature.icon && (
-            <div className="flex items-center justify-center w-12 h-12 bg-background dark:bg-background/10 text-foreground dark:text-foreground mb-4 mx-auto group-hover:scale-110 transition-transform duration-300">
+            <div className="flex items-center justify-center w-12 h-12 bg-background border border-border text-foreground mb-4 mx-auto group-hover:bg-background group-hover:text-foreground transition-transform duration-300">
               {feature.icon}
             </div>
           )}
-          <h3 className="text-h4 font-semibold mb-2 text-foreground dark:text-foreground">{feature.title}</h3>
-          <p className="text-muted-foreground dark:text-foreground">{feature.description}</p>
+          <h3 className="text-h4 font-semibold mb-2 text-inherit">{feature.title}</h3>
+          <p className="text-muted-foreground group-hover:text-background/80">{feature.description}</p>
         </Card>
       ))}
     </Grid>
@@ -236,7 +250,7 @@ export const CTASection = ({
   ...props 
 }) => {
   return (
-    <Section className={cn("bg-card border border-border dark:bg-gradient-to-r dark:from-gray-800/50 dark:to-gray-900/50 dark:border-border", className)} {...props}>
+    <Section className={cn("bg-transparent md:bg-card border-0 md:border border-border rounded-none", className)} {...props}>
       <div className="text-center">
         {title && <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground dark:text-foreground">{title}</h2>}
         {subtitle && <p className="text-lg text-muted-foreground dark:text-foreground mb-8 max-w-2xl mx-auto">{subtitle}</p>}

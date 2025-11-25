@@ -14,15 +14,15 @@ import {
   Star,
   Award,
   TrendingUp,
-  Coffee,
-  Github
+  Coffee
 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
 export default function AboutPage() {
 
-  const handleGitHubClick = () => {
-    // Implementation here
+  const handleSupportClick = () => {
+    trackEvent('support_link_clicked');
+    window.open('https://buymeacoffee.com/walimohammad', '_blank');
   };
 
   const handleContactClick = () => {
@@ -39,7 +39,7 @@ export default function AboutPage() {
         </h1>
         <p className="text-xl text-foreground dark:text-foreground max-w-3xl mx-auto">
           We&apos;re building the future of document processing with privacy-first, 
-          open-source PDF tools that work entirely in your browser.
+          secure PDF tools that work entirely in your browser.
         </p>
       </div>
 
@@ -106,7 +106,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Open source and community-focused. We welcome contributions and feedback from 
+              Community-focused. We welcome contributions and feedback from 
               users worldwide.
             </p>
           </CardContent>
@@ -256,12 +256,12 @@ export default function AboutPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button 
-              onClick={handleGitHubClick}
+              onClick={handleSupportClick}
               className="flex items-center gap-2"
               variant="outline"
             >
-              <Github className="h-5 w-5" />
-              View on GitHub
+              <Coffee className="h-5 w-5 text-yellow-500" />
+              Support Us
             </Button>
             <Button 
               onClick={handleContactClick}
@@ -277,7 +277,7 @@ export default function AboutPage() {
       {/* Footer Note */}
       <div className="text-center text-foreground dark:text-foreground">
         <p>
-          Made with ❤️ for the open source community
+          Made with ❤️ for the community
         </p>
         <p className="text-sm mt-2">
           © 2024 Easy-PDF. All rights reserved.

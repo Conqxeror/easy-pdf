@@ -4,7 +4,7 @@ import { getToolMetadata } from "@/lib/toolSeoHelper";
 export { metadata };
 
 // Get structured data from centralized helper
-const toolSeo = getToolMetadata('/split');
+const toolSeo = getToolMetadata('/pdf/split');
 const structuredData = toolSeo?.structuredData || [];
 
 export default function SplitPdfLayout({ children }) {

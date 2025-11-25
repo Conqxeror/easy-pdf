@@ -61,9 +61,9 @@ const RelatedTools = ({ currentTool, tools }) => {
   if (relatedTools.length === 0) return null
 
   return (
-    <div className="container-standard px-6 py-8">
+    <div className="container-standard px-4 md:px-6 py-8">
       {/* Make the related tools card white in light theme; keep default dark bg in dark mode */}
-      <Card className="bg-card border-2 border-border p-6 shadow-xl">
+      <Card className="bg-transparent md:bg-card border-0 md:border-2 border-border p-0 md:p-6 shadow-none md:shadow-xl">
         <h3 className="text-xl font-bold text-foreground mb-6 flex items-center">
           <span className="mr-3 flex-shrink-0">
             <PenTool className="w-5 h-5 text-foreground" />
@@ -76,7 +76,7 @@ const RelatedTools = ({ currentTool, tools }) => {
             <Link
               key={tool.href}
               href={tool.href}
-              className="group flex items-start p-4 border-2 border-border hover:border-border hover:bg-background transition-all duration-200"
+              className="group flex items-start p-4 border-2 border-border hover:border-border hover:bg-background transition-all duration-200 bg-card md:bg-transparent"
             >
               <div className="flex items-start w-full">
                 <div className="w-10 h-10 bg-background/10 flex items-center justify-center mr-3 group-hover:bg-background/20 transition-colors flex-shrink-0">

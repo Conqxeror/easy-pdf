@@ -1,7 +1,7 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 
 // Get metadata and structured data from centralized helper
-const toolSeo = getToolMetadata('/merge');
+const toolSeo = getToolMetadata('/pdf/merge');
 export const metadata = toolSeo?.metadata || {};
 const structuredData = toolSeo?.structuredData || [];
 

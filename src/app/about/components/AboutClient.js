@@ -14,18 +14,11 @@ import {
   Star,
   Award,
   TrendingUp,
-  Coffee,
-  Github
+  Coffee
 } from 'lucide-react';
 import { trackEvent } from '@/lib/analytics';
 
 export default function AboutClient() {
-
-  const handleGitHubClick = () => {
-    trackEvent('github_link_clicked');
-
-    window.open(process.env.NEXT_PUBLIC_GITHUB_URL || 'https://github.com/easy-pdf/easy-pdf', '_blank');
-  };
 
   const handleContactClick = () => {
     trackEvent('contact_link_clicked');
@@ -51,7 +44,7 @@ export default function AboutClient() {
         </h1>
         <p className="text-xl text-foreground dark:text-foreground max-w-3xl mx-auto">
           We&apos;re building the future of document processing with privacy-first,
-          open-source PDF tools that work entirely in your browser.
+          secure PDF tools that work entirely in your browser.
         </p>
       </div>
 
@@ -118,7 +111,7 @@ export default function AboutClient() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Open source and community-focused. We welcome contributions and feedback from
+              Community-focused. We welcome contributions and feedback from
               users worldwide.
             </p>
           </CardContent>
@@ -269,14 +262,6 @@ export default function AboutClient() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button
-              onClick={handleGitHubClick}
-              className="flex items-center gap-2"
-              variant="outline"
-            >
-              <Github className="h-5 w-5 preserve-color" />
-              View on GitHub
-            </Button>
-            <Button
               onClick={handleContactClick}
               className="flex items-center gap-2"
             >
@@ -290,7 +275,7 @@ export default function AboutClient() {
       {/* Footer Note */}
       <div className="text-center text-foreground dark:text-foreground">
         <p>
-          Made with ❤️ for the open source community
+          Made with ❤️ for the community
         </p>
         <p className="text-sm mt-2">
           © {new Date().getFullYear()} Easy-PDF. All rights reserved.

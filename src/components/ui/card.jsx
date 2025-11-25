@@ -4,22 +4,22 @@ import { cva } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const cardVariants = cva(
-  "flex flex-col transition-all duration-200",
+  "flex flex-col transition-all duration-200 rounded-none",
   {
     variants: {
       variant: {
         // Default card - subtle elevation
-        default: "bg-card text-foreground border-2 border-border shadow-md",
+        default: "bg-background text-foreground border border-border hover:bg-foreground hover:text-background transition-all duration-200",
         
         // Elevated card - stronger shadow, lifts on hover
-        elevated: "bg-card text-foreground border-2 border-border shadow-lg hover:shadow-xl hover:-translate-y-1",
+        elevated: "bg-card text-foreground border-2 border-border shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all",
         
         // Glass card - glassmorphism effect
         // Change to solid white in light mode for highest contrast, preserve translucency in dark mode
         glass: "bg-card dark:bg-background/90 backdrop-blur-xl text-foreground border border-border/50 dark:border-border/50 shadow-lg",
         
         // Interactive card - for clickable cards
-        interactive: "bg-card text-foreground border-2 border-border shadow-md hover:shadow-xl hover:-translate-y-1 hover:border-border dark:hover:border-border cursor-pointer",
+        interactive: "bg-background text-foreground border border-border hover:bg-foreground hover:text-background transition-all duration-200 cursor-pointer",
         
         // Flat card - no shadow, subtle border
         flat: "bg-card dark:bg-background text-foreground border-2 border-border",

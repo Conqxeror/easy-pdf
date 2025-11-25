@@ -14,6 +14,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Skeleton, SkeletonCard } from "@/components/ui/skeleton";
 import Breadcrumb from "@/components/Breadcrumb";
+import Supporters from "@/components/ui/Supporters";
 import { toolsData } from '@/lib/toolData';
 import { getFAQsForTool } from '@/lib/faqData';
 import { useTheme } from "@/contexts/ThemeContext";
@@ -37,35 +38,35 @@ const RelatedToolsSkeleton = () => (
 // Icon mapping for features
 const featureIcons = {
   "merge": <Files className="w-6 h-6 text-foreground" />,
-  "split": <Split className="w-6 h-6 text-green-500 preserve-color" />,
+  "split": <Split className="w-6 h-6 text-foreground" />,
   "compress": <Minimize2 className="w-6 h-6 text-foreground" />,
-  "rotate": <RotateCw className="w-6 h-6 text-yellow-500 preserve-color" />,
-  "watermark": <Stamp className="w-6 h-6 text-red-500 preserve-color" />,
+  "rotate": <RotateCw className="w-6 h-6 text-foreground" />,
+  "watermark": <Stamp className="w-6 h-6 text-foreground" />,
   "protect": <Lock className="w-6 h-6 text-foreground" />,
-  "unlock": <Unlock className="w-6 h-6 text-orange-500 preserve-color" />,
-  "delete": <Eraser className="w-6 h-6 text-indigo-500 preserve-color" />,
-  "reorder": <ListOrdered className="w-6 h-6 text-cyan-500 preserve-color" />,
-  "page-numbers": <PlusCircle className="w-6 h-6 text-amber-500" />,
-  "sign": <Signature className="w-6 h-6 text-rose-500 preserve-color" />,
-  "form": <Text className="w-6 h-6 text-lime-500 preserve-color" />,
-  "ocr": <Search className="w-6 h-6 text-green-400 preserve-color" />,
+  "unlock": <Unlock className="w-6 h-6 text-foreground" />,
+  "delete": <Eraser className="w-6 h-6 text-foreground" />,
+  "reorder": <ListOrdered className="w-6 h-6 text-foreground" />,
+  "page-numbers": <PlusCircle className="w-6 h-6 text-foreground" />,
+  "sign": <Signature className="w-6 h-6 text-foreground" />,
+  "form": <Text className="w-6 h-6 text-foreground" />,
+  "ocr": <Search className="w-6 h-6 text-foreground" />,
   "image": <LucideImage className="w-6 h-6 text-foreground" />,
   "metadata": <Settings className="w-6 h-6 text-foreground" />,
   "bookmark": <Bookmark className="w-6 h-6 text-foreground" />,
-  "table": <Table className="w-6 h-6 text-green-500" />,
+  "table": <Table className="w-6 h-6 text-foreground" />,
   "layers": <Layers className="w-6 h-6 text-foreground" />,
-  "check": <CheckCircle className="w-6 h-6 text-green-600" />,
+  "check": <CheckCircle className="w-6 h-6 text-foreground" />,
   "shield": <Shield className="w-6 h-6 text-foreground" />,
-  "eye": <EyeOff className="w-6 h-6 text-red-600" />,
-  "compare": <GitCompare className="w-6 h-6 text-indigo-600" />,
-  "message": <MessageSquare className="w-6 h-6 text-cyan-600" />,
-  "calculator": <Calculator className="w-6 h-6 text-green-500" />,
+  "eye": <EyeOff className="w-6 h-6 text-foreground" />,
+  "compare": <GitCompare className="w-6 h-6 text-foreground" />,
+  "message": <MessageSquare className="w-6 h-6 text-foreground" />,
+  "calculator": <Calculator className="w-6 h-6 text-foreground" />,
   "qr": <QrCode className="w-6 h-6 text-foreground" />,
-  "award": <Award className="w-6 h-6 text-yellow-500" />,
+  "award": <Award className="w-6 h-6 text-foreground" />,
   "briefcase": <Briefcase className="w-6 h-6 text-foreground" />,
-  "file": <FileText className="w-6 h-6 text-teal-500 preserve-color" />,
-  "heart": <FileHeart className="w-6 h-6 text-red-500 preserve-color" />,
-  "badge": <FileBadge2 className="w-6 h-6 text-orange-500 preserve-color" />,
+  "file": <FileText className="w-6 h-6 text-foreground" />,
+  "heart": <FileHeart className="w-6 h-6 text-foreground" />,
+  "badge": <FileBadge2 className="w-6 h-6 text-foreground" />,
   "default": <FileText className="w-6 h-6 text-foreground" />
 };
 
@@ -148,10 +149,10 @@ export default function ToolPageLayout({
           )}
 
           {/* Main Tool Section - Glass Card */}
-          <Section spacing="small" className="px-6 py-6">
+          <Section spacing="small">
             <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
-              <Card variant="glass" padding="lg" className="shadow-xl bg-card">
-                <CardHeader>
+              <Card variant="default" padding="none" className="md:p-8 p-0 shadow-none border-0 bg-transparent md:border md:shadow-xl md:bg-card">
+                <CardHeader className="px-0 md:px-6">
                   <div className="flex items-start justify-between gap-4 flex-wrap">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-2">
@@ -160,7 +161,7 @@ export default function ToolPageLayout({
                             {icon}
                           </div>
                         )}
-                        <CardTitle className="text-3xl font-bold text-card-foreground">
+                        <CardTitle className="text-2xl md:text-3xl font-bold text-foreground">
                           {toolName}
                         </CardTitle>
                       </div>
@@ -176,7 +177,7 @@ export default function ToolPageLayout({
                     )}
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-8 pt-6">
+                <CardContent className="space-y-8 pt-6 px-0 md:px-6">
                   {children}
                 </CardContent>
               </Card>
@@ -185,11 +186,11 @@ export default function ToolPageLayout({
 
           {/* Features Section with Icons */}
           {features.length > 0 && (
-            <Section className="px-6 py-6">
+            <Section>
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-150">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-foreground"
+                  className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-bold text-foreground"
                 >
                   Key Features
                 </AccessibleHeading>
@@ -197,8 +198,8 @@ export default function ToolPageLayout({
                   {features.map((feature, index) => (
                     <Card 
                       key={index}
-                      variant="elevated"
-                      className="group hover:shadow-xl transition-all duration-300 bg-card border border-border"
+                      variant="default"
+                      className="group hover:shadow-xl transition-all duration-300 bg-transparent md:bg-card border-0 md:border border-border p-0 md:p-6"
                     >
                       <div className="space-y-4">
                         <div className="flex items-start gap-4">
@@ -206,7 +207,7 @@ export default function ToolPageLayout({
                             {getFeatureIcon(feature)}
                           </div>
                         </div>
-                        <p className="text-card-foreground leading-relaxed">
+                        <p className="text-foreground leading-relaxed">
                           {feature}
                         </p>
                       </div>
@@ -219,11 +220,11 @@ export default function ToolPageLayout({
 
           {/* Use Cases Section */}
           {useCases.length > 0 && (
-            <Section className="px-6 py-6">
+            <Section>
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-175">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-foreground"
+                  className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-bold text-foreground"
                 >
                   Common Use Cases
                 </AccessibleHeading>
@@ -231,11 +232,11 @@ export default function ToolPageLayout({
                   {useCases.map((useCase, index) => (
                     <Card 
                       key={index}
-                      variant="elevated"
-                      className="group hover:shadow-xl transition-all duration-300 bg-card border border-border"
+                      variant="default"
+                      className="group hover:shadow-xl transition-all duration-300 bg-transparent md:bg-card border-0 md:border border-border p-0 md:p-6"
                     >
                       <div className="space-y-3">
-                        <h3 className="font-bold text-lg text-card-foreground">
+                        <h3 className="font-bold text-lg text-foreground">
                           {useCase.title}
                         </h3>
                         <p className="text-muted-foreground leading-relaxed">
@@ -251,11 +252,11 @@ export default function ToolPageLayout({
 
           {/* How to Use Steps - Premium Cards */}
           {steps.length > 0 && (
-            <Section className="px-6 py-6">
+            <Section>
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-200">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-foreground"
+                  className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-bold text-foreground"
                 >
                   How to Use
                 </AccessibleHeading>
@@ -264,8 +265,8 @@ export default function ToolPageLayout({
                   {steps.map((step, index) => (
                     <Card 
                       key={index}
-                      variant="elevated"
-                      className="group hover:shadow-2xl transition-all duration-300 bg-card border border-border"
+                      variant="default"
+                      className="group hover:shadow-2xl transition-all duration-300 bg-transparent md:bg-card border-0 md:border border-border p-0 md:p-6"
                     >
                       <div className="space-y-4">
                         <div className="flex items-center gap-4">
@@ -274,7 +275,7 @@ export default function ToolPageLayout({
                           </div>
                           <CheckCircle className="w-5 h-5 text-green-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 preserve-color" />
                         </div>
-                        <p className="text-card-foreground leading-relaxed">
+                        <p className="text-foreground leading-relaxed">
                           {step}
                         </p>
 
@@ -289,11 +290,11 @@ export default function ToolPageLayout({
 
           {/* FAQs - Enhanced Accordion */}
           {((faqs && faqs.length > 0) || currentTool) && (
-            <Section className="px-6 py-6">
+            <Section>
               <div className="container-standard max-w-4xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-300">
                 <AccessibleHeading 
                   level={2} 
-                  className="text-4xl text-center mb-12 font-bold text-foreground"
+                  className="text-3xl md:text-4xl text-center mb-8 md:mb-12 font-bold text-foreground"
                 >
                   Frequently Asked Questions
                 </AccessibleHeading>
@@ -314,7 +315,7 @@ export default function ToolPageLayout({
                     <AccordionItem 
                       key={index}
                       value={`faq-${index}`}
-                      className="bg-background border border-border px-6 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                      className="bg-transparent md:bg-background border-0 md:border border-border px-0 md:px-6 shadow-none md:shadow-sm hover:shadow-none md:hover:shadow-md transition-shadow duration-300 overflow-hidden"
                     >
                       <AccordionTrigger className="text-left text-foreground hover:text-foreground dark:hover:text-foreground font-semibold py-5">
                         {faq.question}
@@ -345,10 +346,10 @@ export default function ToolPageLayout({
           {/* CTA Section - Premium Glass Effect */}
           <Section spacing="small">
             <div className="animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-500">
-              <Card variant="glass" className="relative overflow-hidden shadow-2xl">
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 via-gray-600/10 to-gray-700/10 -z-10" />
-                <div className="text-center py-12 px-6">
+              <Card variant="glass" className="relative overflow-hidden shadow-none md:shadow-2xl bg-transparent md:bg-card border-0 md:border backdrop-blur-none md:backdrop-blur-xl">
+                {/* Gradient Overlay - Hidden on mobile */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-600/10 via-gray-600/10 to-gray-700/10 -z-10 hidden md:block" />
+                <div className="text-center py-8 md:py-12 px-0 md:px-6">
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground dark:text-foreground">
                     Ready to transform your PDF workflow?
                   </h2>
@@ -361,7 +362,7 @@ export default function ToolPageLayout({
                       asChild
                       variant="premium"
                       size="lg"
-                      className="px-8 shadow-xl hover:shadow-2xl"
+                      className="px-8 shadow-xl hover:shadow-2xl w-full sm:w-auto"
                     >
                       <a href={primaryActionHref || "/merge"}>
                         Get Started Now
@@ -371,7 +372,7 @@ export default function ToolPageLayout({
                       asChild
                       variant="outline"
                       size="lg"
-                      className="px-8"
+                      className="px-8 w-full sm:w-auto"
                     >
                       <a href="/tools">
                         View All Tools
@@ -381,15 +382,15 @@ export default function ToolPageLayout({
                   
                   {/* Trust Badges */}
                   <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-                    <Badge variant="outline" size="lg">
+                    <Badge variant="outline" size="lg" className="bg-transparent border-foreground/20">
                       <CheckCircle className="h-4 w-4 text-green-500 preserve-color" />
                       100% Private
                     </Badge>
-                    <Badge variant="outline" size="lg">
+                    <Badge variant="outline" size="lg" className="bg-transparent border-foreground/20">
                       <CheckCircle className="h-4 w-4 text-green-500 preserve-color" />
                       No Sign-up Required
                     </Badge>
-                    <Badge variant="outline" size="lg">
+                    <Badge variant="outline" size="lg" className="bg-transparent border-foreground/20">
                       <CheckCircle className="h-4 w-4 text-green-500 preserve-color" />
                       Free Forever
                     </Badge>
@@ -398,6 +399,9 @@ export default function ToolPageLayout({
               </Card>
             </div>
           </Section>
+
+          {/* Supporters Section */}
+          <Supporters />
         </PageContainer>
       </main>
     </>

@@ -1,7 +1,7 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import CompressClient from "./components/CompressClient";
 
-const toolSeo = getToolMetadata("/compress");
+const toolSeo = getToolMetadata("/pdf/compress");
 export const metadata = toolSeo.metadata;
 
 export default function CompressPage() {
