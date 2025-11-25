@@ -17,7 +17,6 @@ import ToolPageLayout from '@/components/ui/ToolPageLayout';
 export default function AdvancedOCRClient() {
   const [files, setFiles] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [results, setResults] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('eng');
   const [ocrMode, setOcrMode] = useState('standard'); // standard, enhanced, ai-powered
@@ -45,86 +44,152 @@ export default function AdvancedOCRClient() {
       id: Date.now() + Math.random(),
       file,
       status: 'ready',
+      progress: 0,
       result: null,
-      confidence: null
+      errorMessage: null,
     }))]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const setFileState = (id, newState) => {
+    setFiles(prevFiles =>
+      prevFiles.map(file =>
+        file.id === id ? { ...file, ...newState } : file
+      )
+    );
+  };
+
+  const _processImageFile = async (worker, file, onProgress) => {
+    const { data: { text, confidence } } = await worker.recognize(file, {}, { logger: onProgress });
+    return {
+      fileName: file.name,
+      type: 'image',
+      text,
+      confidence: confidence.toFixed(2)
+    };
+  };
+
+  const _processPdfFile = async (worker, file, onProgress) => {
+    let pdf;
+    try {
+      const pdfjsLib = await loadPdfJs();
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+      pdf = await loadingTask.promise;
+    } catch (err) {
+      console.error('Failed to load PDF in AdvancedOCR:', err);
+      throw new Error("Failed to load the PDF file. It might be corrupt or protected.");
+    }
+
+    let pdfText = '';
+    let pageResults = [];
+    const numPages = pdf.numPages;
+
+    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+      try {
+        const page = await pdf.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 2.0 });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        
+        const pageProgress = (m) => {
+          if (m.status === 'recognizing text') {
+              const overallProgress = ((pageNum - 1 + m.progress) / numPages);
+              onProgress({ status: 'recognizing text', progress: overallProgress });
+          }
+        };
+        
+        const { data: { text, confidence } } = await worker.recognize(canvas, {}, { logger: pageProgress });
+
+        pdfText += text + '\n\n';
+        pageResults.push({ page: pageNum, text, confidence: confidence.toFixed(2) });
+      } catch (pageError) {
+          console.error(`Error processing page ${pageNum} of ${file.name}:`, pageError);
+          // Continue to next page, but you could also throw to stop processing this file
+      }
+    }
+
+    if (pageResults.length === 0) {
+        throw new Error("No pages could be processed from this PDF.");
+    }
+
+    return {
+      fileName: file.name,
+      type: 'pdf',
+      text: pdfText,
+      confidence: (pageResults.reduce((sum, p) => sum + parseFloat(p.confidence), 0) / pageResults.length).toFixed(2),
+      pages: numPages,
+      pageResults: pageResults
+    };
+  };
+
   const processFiles = async () => {
-    if (files.length === 0) return;
+    if (files.filter(f => f.status === 'ready').length === 0) return;
     setIsProcessing(true);
-    setProgress(0);
     setResults([]);
 
-    const worker = await createTesseractWorker(selectedLanguage, 1, {
-      logger: m => {
-        if (m.status === 'recognizing text') {
-          setProgress(m.progress * 100);
-        }
-      }
-    });
+    const worker = await createTesseractWorker(selectedLanguage, 1);
 
+    const newResults = [];
+    for (const fileData of files) {
+      if (fileData.status !== 'ready') continue;
+      
+      try {
+        setFileState(fileData.id, { status: 'processing', progress: 0, errorMessage: null });
+
+        const onProgress = (m) => {
+          if (m.status === 'recognizing text') {
+            setFileState(fileData.id, { progress: m.progress * 100 });
+          }
+        };
+
+        let result;
+        if (fileData.file.type === 'application/pdf') {
+          result = await _processPdfFile(worker, fileData.file, onProgress);
+        } else if (fileData.file.type.startsWith('image/')) {
+          result = await _processImageFile(worker, fileData.file, onProgress);
+        }
+
+        if (result) {
+          setFileState(fileData.id, { status: 'completed', progress: 100 });
+          newResults.push(result);
+        }
+      } catch (error) {
+        console.error("OCR Error for file:", fileData.file.name, error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        setFileState(fileData.id, { status: 'error', progress: 0, errorMessage });
+      }
+    }
+    
+    setResults(newResults);
+    await terminateWorker(worker);
+    setIsProcessing(false);
+  };
+
+  const _downloadBlob = (blob, fileName) => {
+    let url = null;
     try {
-      const processedResults = [];
-      for (let i = 0; i < files.length; i++) {
-        const fileData = files[i];
-        const { file } = fileData;
-
-        if (file.type === 'application/pdf') {
-          // Load PDF from ArrayBuffer instead of object URL to avoid blob URL pitfalls
-          let pdf;
-          try {
-            // Load pdfjs dynamically
-            const pdfjsLib = await loadPdfJs();
-            const arrayBuffer = await file.arrayBuffer();
-            const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-            pdf = await loadingTask.promise;
-          } catch (err) {
-            console.error('Failed to load PDF in AdvancedOCR:', err);
-            throw err;
-          }
-          let pdfText = '';
-          let pageResults = [];
-
-          for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-            const page = await pdf.getPage(pageNum);
-            const viewport = page.getViewport({ scale: 2.0 });
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            await page.render({ canvasContext: context, viewport: viewport }).promise;
-            const { data: { text, confidence } } = await worker.recognize(canvas);
-            pdfText += text + '\n\n';
-            pageResults.push({ page: pageNum, text, confidence: confidence.toFixed(2) });
-          }
-          processedResults.push({
-            fileName: file.name,
-            type: 'pdf',
-            text: pdfText,
-            confidence: (pageResults.reduce((sum, p) => sum + parseFloat(p.confidence), 0) / pageResults.length).toFixed(2),
-            pages: pdf.numPages,
-            pageResults: pageResults
-          });
-        } else if (file.type.startsWith('image/')) {
-          const { data: { text, confidence } } = await worker.recognize(file);
-          processedResults.push({
-            fileName: file.name,
-            type: 'image',
-            text,
-            confidence: confidence.toFixed(2)
-          });
-        }
-      }
-      setResults(processedResults);
-    } catch (error) {
-      console.error("OCR Error:", error);
+      url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error creating or triggering download:', err);
+      alert('Unable to download file.');
     } finally {
-      await terminateWorker(worker);
-      setIsProcessing(false);
+      if (url) {
+        setTimeout(() => {
+          try { URL.revokeObjectURL(url); } catch {}
+        }, 500);
+      }
     }
   };
 
@@ -132,21 +197,7 @@ export default function AdvancedOCRClient() {
     if (results.length === 0) return;
     const allText = results.map(r => `--- ${r.fileName} ---\n${r.text}`).join('\n\n');
     const blob = new Blob([allText], { type: 'text/plain' });
-    let url = null;
-    try {
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Failed to create OCR results URL:', err); url = null; }
-      const a = document.createElement('a');
-      a.href = url || '';
-      a.download = 'all_ocr_results.txt';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error('Error downloading all OCR results:', err);
-      alert('Unable to download OCR results');
-    } finally {
-      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
-    }
+    _downloadBlob(blob, 'all_ocr_results.txt');
   };
 
   const copyToClipboard = (text) => {
@@ -155,23 +206,8 @@ export default function AdvancedOCRClient() {
 
   const downloadText = (result) => {
     const blob = new Blob([result.text], { type: 'text/plain' });
-    let url = null;
-    try {
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Failed to create OCR text URL:', err); url = null; }
-      const a = document.createElement('a');
-      a.href = url || '';
-      // sanitize filename
-      const safeBase = result.fileName ? result.fileName.replace(/\.txt$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'result';
-      a.download = `${safeBase}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (err) {
-      console.error('Error downloading OCR text file:', err);
-      alert('Unable to download file');
-    } finally {
-      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
-    }
+    const safeBase = result.fileName ? result.fileName.replace(/\.txt$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'result';
+    _downloadBlob(blob, `${safeBase}.txt`);
   };
 
   const getConfidenceColor = (confidence) => {
@@ -253,6 +289,19 @@ export default function AdvancedOCRClient() {
                   </div>
                 )}
               </div>
+              
+              {files.length > 0 && !isProcessing && (
+                <div className="mt-6 space-y-2">
+                  <h3 className="font-medium">Uploaded Files</h3>
+                  {files.map(fileData => (
+                    <div key={fileData.id} className="p-3 border rounded-md flex justify-between items-center text-sm">
+                      <span className="truncate font-medium">{fileData.file.name}</span>
+                      <Badge variant="outline">Ready</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+
             </CardContent>
           </Card>
 
@@ -325,19 +374,33 @@ export default function AdvancedOCRClient() {
 
         {isProcessing && (
           <Card>
-            <CardContent className="pt-6">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Processing document...</span>
-                  <span>{Math.round(progress)}%</span>
+            <CardHeader>
+                <CardTitle>Processing Files</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {files.filter(f => f.status !== 'ready').map(fileData => (
+                <div key={fileData.id} className="p-3 border rounded-md">
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="truncate font-medium">{fileData.file.name}</span>
+                    <Badge variant={
+                      fileData.status === 'completed' ? 'success' :
+                      fileData.status === 'error' ? 'destructive' :
+                      'outline'
+                    }>{fileData.status}</Badge>
+                  </div>
+                  {fileData.status === 'processing' && fileData.progress > 0 && (
+                      <Progress value={fileData.progress} className="mt-2" />
+                  )}
+                  {fileData.status === 'error' && fileData.errorMessage && (
+                    <p className="text-red-500 text-xs mt-1">{fileData.errorMessage}</p>
+                  )}
                 </div>
-                <Progress value={progress} />
-              </div>
+              ))}
             </CardContent>
           </Card>
         )}
 
-        {results.length > 0 && (
+        {results.length > 0 && !isProcessing && (
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Results</h2>
@@ -409,3 +472,4 @@ export default function AdvancedOCRClient() {
     </ToolPageLayout>
   );
 }
+

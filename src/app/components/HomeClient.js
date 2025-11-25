@@ -35,10 +35,10 @@ export default function HomeClient() {
   usePerformanceMonitoring();
   useWebVitals();
 
-  // Lazy load ToolCard component
+  // ToolCard can be SSR'd since it's a presentational component without client-side state
   const ToolCard = dynamic(() => import("@/components/ui/ToolCard"), {
     loading: () => <Skeleton className="h-48" />,
-    ssr: false,
+    ssr: true,
   });
 
   useEffect(() => {

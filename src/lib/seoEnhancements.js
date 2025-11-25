@@ -87,10 +87,14 @@ export const generateEnhancedMetadata = ({
     },
 
     icons: {
-      icon: [{ url: "/icon.svg", sizes: "any", type: "image/svg+xml" }],
-      apple: "/icon.svg",
-      shortcut: "/favicon.ico",
-      other: [{ rel: "mask-icon", url: "/icon.svg", color: "#1f2937" }]
+      icon: [
+        { url: '/favicon.ico', type: 'image/x-icon', sizes: '48x48' },
+        { url: '/icon.svg', type: 'image/svg+xml', sizes: 'any' },
+        { url: '/icon-16.png', type: 'image/png', sizes: '16x16' },
+        { url: '/icon-32.png', type: 'image/png', sizes: '32x32' },
+      ],
+      apple: '/apple-touch-icon.png',
+      shortcut: '/favicon.ico',
     },
 
     openGraph: {
@@ -444,5 +448,173 @@ export const generateFAQPageSchema = (faqs = []) => {
         "text": faq.answer
       }
     }))
+  }
+}
+
+/**
+ * Generate HowTo schema for tool pages
+ * Helps search engines understand step-by-step processes
+ * @param {Object} options - HowTo schema options
+ * @param {string} options.name - Name of the how-to guide
+ * @param {string} options.description - Description of what the guide teaches
+ * @param {Array<{name: string, text: string, image?: string}>} options.steps - Array of step objects
+ * @param {string} [options.totalTime] - ISO 8601 duration (e.g., 'PT5M' for 5 minutes)
+ * @param {string} [options.tool] - Tool name required
+ * @param {Array<{name: string}>} [options.supplies] - Materials needed
+ * @param {string} [options.image] - Image URL for the guide
+ * @returns {Object|null} - HowTo schema object or null if invalid
+ */
+export const generateHowToSchema = ({
+  name,
+  description,
+  steps = [],
+  totalTime,
+  tool,
+  supplies = [],
+  image
+} = {}) => {
+  if (!name || !description || !Array.isArray(steps) || steps.length === 0) {
+    return null
+  }
+
+  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
+  const baseUrl = envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app'
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": name,
+    "description": description,
+    "step": steps.map((step, index) => ({
+      "@type": "HowToStep",
+      "position": index + 1,
+      "name": step.name,
+      "text": step.text,
+      ...(step.image && {
+        "image": {
+          "@type": "ImageObject",
+          "url": step.image.startsWith('http') ? step.image : `${baseUrl}${step.image}`
+        }
+      })
+    }))
+  }
+
+  // Add optional fields
+  if (totalTime) {
+    howToSchema.totalTime = totalTime
+  }
+
+  if (tool) {
+    howToSchema.tool = {
+      "@type": "HowToTool",
+      "name": tool
+    }
+  }
+
+  if (supplies.length > 0) {
+    howToSchema.supply = supplies.map(supply => ({
+      "@type": "HowToSupply",
+      "name": supply.name
+    }))
+  }
+
+  if (image) {
+    howToSchema.image = {
+      "@type": "ImageObject",
+      "url": image.startsWith('http') ? image : `${baseUrl}${image}`
+    }
+  }
+
+  return howToSchema
+}
+
+/**
+ * Pre-defined HowTo schemas for common PDF tools
+ * Can be used directly or customized per tool
+ */
+export const toolHowToSchemas = {
+  merge: {
+    name: "How to Merge PDF Files Online",
+    description: "Learn how to combine multiple PDF documents into a single file using easy-pdf's free online merger tool.",
+    totalTime: "PT2M",
+    tool: "easy-pdf Merge Tool",
+    steps: [
+      { name: "Upload PDFs", text: "Click 'Select Files' or drag and drop your PDF files into the upload area." },
+      { name: "Arrange Order", text: "Drag and drop the files to rearrange them in your desired order." },
+      { name: "Merge Files", text: "Click the 'Merge PDFs' button to combine all files." },
+      { name: "Download Result", text: "Once processing is complete, click 'Download' to save your merged PDF." }
+    ]
+  },
+  split: {
+    name: "How to Split a PDF File",
+    description: "Step-by-step guide to extract pages or split a PDF into multiple files using easy-pdf's free splitter.",
+    totalTime: "PT2M",
+    tool: "easy-pdf Split Tool",
+    steps: [
+      { name: "Upload PDF", text: "Click 'Select File' or drag and drop your PDF into the upload area." },
+      { name: "Select Pages", text: "Choose which pages to extract by clicking on page thumbnails or entering page ranges." },
+      { name: "Split Document", text: "Click 'Split PDF' to extract the selected pages." },
+      { name: "Download Files", text: "Download individual split files or all files as a ZIP archive." }
+    ]
+  },
+  compress: {
+    name: "How to Compress a PDF File",
+    description: "Reduce PDF file size for easier sharing and storage using easy-pdf's free compression tool.",
+    totalTime: "PT1M",
+    tool: "easy-pdf Compress Tool",
+    steps: [
+      { name: "Upload PDF", text: "Click 'Select File' or drag and drop your PDF into the upload area." },
+      { name: "Choose Quality", text: "Select your preferred compression level: Low, Medium, or High quality." },
+      { name: "Compress File", text: "Click 'Compress PDF' to reduce the file size." },
+      { name: "Download Result", text: "View the size reduction and download your compressed PDF." }
+    ]
+  },
+  'jpg-to-pdf': {
+    name: "How to Convert Images to PDF",
+    description: "Convert JPG, PNG, and other images to PDF format using easy-pdf's free converter.",
+    totalTime: "PT2M",
+    tool: "easy-pdf Image to PDF Converter",
+    steps: [
+      { name: "Upload Images", text: "Click 'Select Images' or drag and drop your image files (JPG, PNG, etc.)." },
+      { name: "Arrange Order", text: "Drag images to reorder them as they should appear in the PDF." },
+      { name: "Adjust Settings", text: "Choose page size, orientation, and margins if needed." },
+      { name: "Convert & Download", text: "Click 'Convert to PDF' and download your new PDF document." }
+    ]
+  },
+  'pdf-to-jpg': {
+    name: "How to Convert PDF to Images",
+    description: "Extract pages from PDF as high-quality JPG images using easy-pdf's free converter.",
+    totalTime: "PT2M",
+    tool: "easy-pdf PDF to Image Converter",
+    steps: [
+      { name: "Upload PDF", text: "Click 'Select File' or drag and drop your PDF into the upload area." },
+      { name: "Select Pages", text: "Choose which pages to convert or convert all pages." },
+      { name: "Set Quality", text: "Adjust image quality and resolution settings." },
+      { name: "Download Images", text: "Download individual images or all as a ZIP archive." }
+    ]
+  },
+  protect: {
+    name: "How to Password Protect a PDF",
+    description: "Add password protection to your PDF files using easy-pdf's free security tool.",
+    totalTime: "PT1M",
+    tool: "easy-pdf Protect Tool",
+    steps: [
+      { name: "Upload PDF", text: "Click 'Select File' or drag and drop your PDF into the upload area." },
+      { name: "Set Password", text: "Enter a strong password to protect your document." },
+      { name: "Apply Protection", text: "Click 'Protect PDF' to encrypt your document." },
+      { name: "Download Secured PDF", text: "Download your password-protected PDF file." }
+    ]
+  },
+  ocr: {
+    name: "How to Extract Text from PDF with OCR",
+    description: "Use OCR technology to extract text from scanned PDFs and images using easy-pdf.",
+    totalTime: "PT3M",
+    tool: "easy-pdf OCR Tool",
+    steps: [
+      { name: "Upload Document", text: "Click 'Select File' or drag and drop your scanned PDF or image." },
+      { name: "Select Language", text: "Choose the language of the text in your document for better accuracy." },
+      { name: "Run OCR", text: "Click 'Extract Text' to start the OCR process." },
+      { name: "Copy or Download", text: "Copy the extracted text or download it as a text file." }
+    ]
   }
 }

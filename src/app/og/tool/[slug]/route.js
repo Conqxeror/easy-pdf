@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og';
 import { toolsData } from '@/lib/toolData';
 
 export const runtime = 'edge';
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 0; // No caching - always generate fresh
 
 export async function GET(req, { params }) {
   try {

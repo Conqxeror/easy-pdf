@@ -43,7 +43,7 @@ const nextConfig = {
 
   // Bundle optimization
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-slot', 'framer-motion'],
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-slot'],
     webVitalsAttribution: ['CLS', 'LCP'],
   },
 
@@ -80,7 +80,7 @@ const nextConfig = {
               reuseExistingChunk: true,
             },
             ui: {
-              test: /[\\/]node_modules[\\/](@radix-ui|lucide-react|framer-motion)[\\/]/,
+              test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
               name: 'ui-libs',
               priority: 15,
               reuseExistingChunk: true,

@@ -1,4 +1,4 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from './seoEnhancements';
+import { generateEnhancedMetadata, generateComprehensiveJsonLd, generateHowToSchema, toolHowToSchemas } from './seoEnhancements';
 import fs from 'fs';
 import path from 'path';
 import { toolsData } from './toolData';
@@ -91,9 +91,14 @@ export function getToolMetadata(href) {
     ]
   });
 
+  // Generate HowTo schema if available for this tool (slug already defined above)
+  const howToData = toolHowToSchemas[slug];
+  const howToSchema = howToData ? generateHowToSchema(howToData) : null;
+
   return {
     metadata,
     structuredData,
+    howToSchema,
     tool
   };
 }

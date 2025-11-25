@@ -271,6 +271,87 @@ export const usePerformanceMonitoring = () => {
   }, []);
 };
 
+/**
+ * LiveRegion component for announcing dynamic content changes to screen readers
+ * @param {Object} props
+ * @param {string} props.message - The message to announce
+ * @param {'polite' | 'assertive'} props.priority - The priority of the announcement
+ * @param {boolean} props.atomic - Whether to announce the entire region or just changes
+ * @param {string} props.className - Additional CSS classes
+ */
+export const LiveRegion = ({ 
+  message, 
+  priority = 'polite', 
+  atomic = true, 
+  className = '' 
+}) => {
+  return (
+    <div
+      role="status"
+      aria-live={priority}
+      aria-atomic={atomic}
+      className={`sr-only ${className}`}
+    >
+      {message}
+    </div>
+  );
+};
+
+/**
+ * Hook for managing screen reader announcements
+ * @returns {Object} - announce function and LiveRegion component
+ */
+export const useLiveAnnouncer = () => {
+  const [announcement, setAnnouncement] = React.useState('');
+  const [priority, setPriority] = React.useState('polite');
+
+  const announce = React.useCallback((message, announcementPriority = 'polite') => {
+    // Clear first to ensure re-announcements work
+    setAnnouncement('');
+    setPriority(announcementPriority);
+    // Use setTimeout to ensure state update triggers re-render
+    setTimeout(() => {
+      setAnnouncement(message);
+    }, 100);
+  }, []);
+
+  const AnnouncerRegion = React.useCallback(() => (
+    <LiveRegion message={announcement} priority={priority} />
+  ), [announcement, priority]);
+
+  return { announce, AnnouncerRegion };
+};
+
+/**
+ * VisuallyHidden component - hides content visually but keeps it accessible
+ * Use this for screen reader only content
+ */
+export const VisuallyHidden = ({ children, as: Component = 'span', ...props }) => {
+  return (
+    <Component
+      className="sr-only"
+      {...props}
+    >
+      {children}
+    </Component>
+  );
+};
+
+/**
+ * SkipLink component for keyboard navigation
+ * Allows users to skip to main content
+ */
+export const SkipLink = ({ href = '#main-content', children = 'Skip to main content' }) => {
+  return (
+    <a
+      href={href}
+      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:shadow-lg focus:ring-2 focus:ring-primary"
+    >
+      {children}
+    </a>
+  );
+};
+
 export default {
   AccessibleHeading,
   AccessibleLoader,
@@ -279,5 +360,9 @@ export default {
   AccessibleModal,
   AccessibleProgress,
   AccessibleAlert,
-  usePerformanceMonitoring
+  usePerformanceMonitoring,
+  LiveRegion,
+  useLiveAnnouncer,
+  VisuallyHidden,
+  SkipLink
 };

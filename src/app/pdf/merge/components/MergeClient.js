@@ -6,6 +6,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { LiveRegion } from "@/components/ui/AccessibilityEnhancements";
 // ToolPageLayout is provided by the parent page; this client component only renders the tool UI
 
 // Dynamically import heavy PDF libraries only when needed
@@ -18,6 +19,7 @@ export default function MergeClient() {
   const [mergedDownloadName, setMergedDownloadName] = useState("merged.pdf");
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
+  const [statusMessage, setStatusMessage] = useState(""); // For screen reader announcements
   const dragItem = useRef(null);
   const dragOverItem = useRef(null);
   const mergedPdfPreviewCanvasRef = useRef(null);
@@ -96,6 +98,8 @@ export default function MergeClient() {
   const handleFiles = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     setError("");
+    // Announce file addition to screen readers
+    setStatusMessage(`${newFiles.length} file${newFiles.length > 1 ? 's' : ''} added. Total: ${files.length + newFiles.length} files.`);
     // revoke any previous merged URL
     try { if (mergedPdfUrl && typeof URL !== 'undefined' && !String(mergedPdfUrl).startsWith('data:')) URL.revokeObjectURL(mergedPdfUrl); } catch { /* ignore */ }
     setMergedPdfUrl(null);
@@ -108,7 +112,10 @@ export default function MergeClient() {
 
   const removeFile = useCallback(
     (indexToRemove) => {
+      const fileName = files[indexToRemove]?.name || 'File';
       setFiles((prevFiles) => prevFiles.filter((_, i) => i !== indexToRemove));
+      // Announce removal to screen readers
+      setStatusMessage(`${fileName} removed. ${files.length - 1} files remaining.`);
       try { if (mergedPdfUrl && typeof URL !== 'undefined' && !String(mergedPdfUrl).startsWith('data:')) URL.revokeObjectURL(mergedPdfUrl); } catch { /* ignore */ }
       setMergedPdfUrl(null);
       if (mergedPdfDocProxy) {
@@ -117,7 +124,7 @@ export default function MergeClient() {
       }
       setProgress(0);
     },
-    [mergedPdfDocProxy, mergedPdfUrl]
+    [mergedPdfDocProxy, mergedPdfUrl, files]
   );
 
   const handleDragStart = (e, index) => {
@@ -161,11 +168,13 @@ export default function MergeClient() {
   const mergePDFs = async () => {
     if (files.length === 0) {
       setError("Please add at least one PDF file.");
+      setStatusMessage("Error: Please add at least one PDF file.");
       return;
     }
 
     setError("");
     setProgress(0);
+    setStatusMessage("Merging PDFs...");
     setMergedPdfUrl(null);
     if (mergedPdfDocProxy) {
       mergedPdfDocProxy.destroy();
@@ -186,6 +195,7 @@ export default function MergeClient() {
 
         // Update progress
         setProgress(((i + 1) / files.length) * 100);
+        setStatusMessage(`Processing file ${i + 1} of ${files.length}...`);
       }
 
       // Save the merged PDF
@@ -199,6 +209,9 @@ export default function MergeClient() {
       setMergedDownloadName(`merged_${baseName}.pdf`);
       setMergedPdfUrl(url);
 
+      // Announce success to screen readers
+      setStatusMessage(`Success! ${files.length} PDFs merged. Ready for download.`);
+
       // Load the merged PDF for preview
       if (pdfjs) {
         const docProxy = await pdfjs.getDocument({ data: mergedPdfBytes }).promise;
@@ -207,6 +220,7 @@ export default function MergeClient() {
     } catch (err) {
       console.error("Error merging PDFs:", err);
       setError("Failed to merge PDFs. Please try again with different files.");
+      setStatusMessage("Error: Failed to merge PDFs. Please try again.");
     }
   };
 
@@ -215,10 +229,13 @@ export default function MergeClient() {
 
   return (
     <div className="space-y-6">
+      {/* Screen reader announcements */}
+      <LiveRegion message={statusMessage} priority="polite" />
+      
       {(pdfLibLoading || pdfjsLoading) ? (
         <div className="flex flex-col items-center justify-center p-8 bg-muted border border-border rounded-none">
-          <div className="animate-spin h-12 w-12 border-b-2 border-primary mb-4"></div>
-          <p className="text-muted-foreground">Loading PDF processing tools...</p>
+          <div className="animate-spin h-12 w-12 border-b-2 border-primary mb-4" aria-hidden="true"></div>
+          <p className="text-muted-foreground" role="status">Loading PDF processing tools...</p>
         </div>
       ) : (
         <FileDropzone
