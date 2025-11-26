@@ -1,0 +1,946 @@
+{
+  "timestamp": "2025-11-26T13:43:03.519Z",
+  "results": [
+    {
+      "url": "/",
+      "title": "easy-pdf - Free Online PDF Tools | Merge, Split, Compress PDF",
+      "description": "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser. Privacy-first, secure, and completely...",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/about",
+      "title": "About Us - easy-pdf | Privacy-First PDF Toolkit | easy-pdf",
+      "description": "Learn about the mission and vision of easy-pdf, a privacy-first PDF toolkit for everyone. 100% client-side processing ensures your files never leave your dev...",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/advanced-ocr",
+      "title": "Advanced OCR with AI | Easy PDF | easy-pdf",
+      "description": "Extract text from PDFs and images with enhanced accuracy using our advanced OCR technology. Supports multiple languages and offers different processing modes.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/aes-encrypt",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/audio-compressor",
+      "title": "Audio Compressor | Easy PDF | easy-pdf",
+      "description": "Compress audio files (MP3, WAV, M4A, FLAC) online. Reduce file size while maintaining quality with adjustable compression levels.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/audio-speed-changer",
+      "title": "Audio Speed Changer | Easy PDF | easy-pdf",
+      "description": "Change the playback speed of audio files (MP3, WAV, M4A, FLAC) online. Speed up or slow down audio without changing pitch.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/avi-mkv-to-mp4",
+      "title": "AVI/MKV to MP4 Converter | Easy PDF | easy-pdf",
+      "description": "Convert AVI and MKV videos to MP4 format in the browser using FFmpeg.wasm. Your video never leaves your device during conversion.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/barcode-generator",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/base64-encoder",
+      "title": "Base64 Encoder / Decoder | Easy PDF | easy-pdf",
+      "description": "Convert text or small files to Base64 (and back) entirely inside your browser. Perfect for inline payloads, data URLs, and quick debugging.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/bmp-tiff-converter",
+      "title": "BMP/TIFF Converter | Easy PDF | easy-pdf",
+      "description": "Convert BMP and TIFF images to PNG or JPG formats directly in your browser. Free, secure, and easy to use.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/categories/advanced-pdf-tools",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/categories/advanced-pdf-tools\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/categories/ai-analysis",
+      "title": "Ai Analysis PDF Tools - easy-pdf | Free Online Ai Analysis PDF Tools | easy-pdf",
+      "description": "All ai analysis PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online ai analysis PDF tools for secure document processing.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/categories/business-tools",
+      "title": "Business Tools PDF Tools - easy-pdf | Free Online Business Tools PDF Tools | easy-pdf",
+      "description": "All business tools PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online business tools PDF tools for secure document processing.",
+      "issues": [
+        "Title too long",
+        "Description too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/categories/convert-create",
+      "title": "Convert Create PDF Tools - easy-pdf | Free Online Convert Create PDF Tools | easy-pdf",
+      "description": "All convert create PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online convert create PDF tools for secure document processing.",
+      "issues": [
+        "Title too long",
+        "Description too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/categories/forms-documents",
+      "title": "Forms Documents PDF Tools - easy-pdf | Free Online Forms Documents PDF Tools | easy-pdf",
+      "description": "All forms documents PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online forms documents PDF tools for secure document processing.",
+      "issues": [
+        "Title too long",
+        "Description too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/categories/organize-edit",
+      "title": "Organize Edit PDF Tools - easy-pdf | Free Online Organize Edit PDF Tools | easy-pdf",
+      "description": "All organize edit PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online organize edit PDF tools for secure document processing.",
+      "issues": [
+        "Title too long",
+        "Description too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/categories/security-privacy",
+      "title": "Security Privacy PDF Tools - easy-pdf | Free Online Security Privacy PDF Tools | easy-pdf",
+      "description": "All security privacy PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online security privacy PDF tools for secure document processing.",
+      "issues": [
+        "Title too long",
+        "Description too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/certificate-generator",
+      "title": "Certificate Generator | Easy PDF | easy-pdf",
+      "description": "Create professional certificates instantly. Choose from multiple templates, customize colors, and download high-quality PDF certificates for free.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/color-converter",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/compress-images",
+      "title": "Compress Images | Easy PDF | easy-pdf",
+      "description": "Compress JPEG and PNG images online. Reduce file size while maintaining quality for faster web loading.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/css-minifier",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/csv-json-converter",
+      "title": "CSV ↔ JSON Converter | Easy PDF | easy-pdf",
+      "description": "Convert CSV to JSON and JSON to CSV instantly. Free online tool for developers and data analysts.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/csv-to-xlsx",
+      "title": "CSV to Excel Converter | Easy PDF | easy-pdf",
+      "description": "Convert CSV files to Excel (XLSX) format online. Free, fast, and secure conversion directly in your browser.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/currency-converter",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/delete-pages",
+      "title": "Free PDF Page Deleter - Remove Pages from PDF Online | easy-pdf | easy-pdf",
+      "description": "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/docx-to-pdf",
+      "title": "DOCX to PDF Converter - Private Browser Tool | easy-pdf | easy-pdf",
+      "description": "Convert DOCX files to PDF instantly using a browser-only workflow powered by mammoth and docx.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/docx-to-text",
+      "title": "DOCX to Text Converter | Easy PDF | easy-pdf",
+      "description": "Extract plain text from DOCX files instantly. Free online tool to convert Word documents to text format.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/extract-audio",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/face-blur",
+      "title": "easy-pdf",
+      "description": "Privacy-first PDF tools for secure document processing.",
+      "issues": [
+        "Title too short",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/file-checksum",
+      "title": "File Checksum Validator - Verify File Integrity | easy-pdf | easy-pdf",
+      "description": "Calculate and verify file checksums (MD5, SHA-1, SHA-256) online. Ensure file integrity.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/form-filler",
+      "title": "PDF Form Filler | Easy PDF | easy-pdf",
+      "description": "Fill out PDF forms online for free. Add text, checkmarks, and signatures to any PDF document securely in your browser.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/hash-generator",
+      "title": "Hash Generator - MD5 / SHA digests in your browser | easy-pdf | easy-pdf",
+      "description": "Paste strings or drop files to calculate MD5, SHA-1, SHA-256, or SHA-512 hashes instantly without uploads.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/heic-to-jpg",
+      "title": "HEIC to JPG Converter - Private Browser Tool | easy-pdf | easy-pdf",
+      "description": "Turn HEIC photos into JPGs instantly using heic2any. Runs entirely in your browser for maximum privacy.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/html-markdown-converter",
+      "title": "HTML ↔ Markdown Converter - Instant bidirectional markup conversion | easy-pdf | easy-pdf",
+      "description": "Flip Markdown to clean HTML (and back) entirely in your browser with sanitization, previews, and copy shortcuts.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/html-minifier",
+      "title": "Free HTML Minifier - Compress HTML Code Online | easy-pdf | easy-pdf",
+      "description": "Minify HTML code to reduce file size and improve website performance. Removes whitespace and comments instantly.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/html-to-pdf",
+      "title": "HTML to PDF Converter | Easy PDF | easy-pdf",
+      "description": "Convert HTML code or files to PDF instantly in your browser.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-converter",
+      "title": "Image Converter - JPG/PNG/WEBP conversions in browser | easy-pdf | easy-pdf",
+      "description": "Convert images between common formats, change quality, and download without uploading your files.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-crop",
+      "title": "Free Image Cropper - Crop Photos Online | easy-pdf | easy-pdf",
+      "description": "Crop images to custom dimensions or fixed aspect ratios. Free online photo cropping tool.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-cropper",
+      "title": "Image Cropper - Crop Pictures Online | easy-pdf | easy-pdf",
+      "description": "Crop and resize images online. Simple and fast image cropping tool.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-drawing",
+      "title": "Draw on Image - Free Online Annotation Tool | easy-pdf | easy-pdf",
+      "description": "Draw, highlight, or annotate your images directly in the browser. Choose your color and brush size.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-filters",
+      "title": "Free Image Filters - Apply Effects Online | easy-pdf | easy-pdf",
+      "description": "Enhance your images with brightness, contrast, saturation, and artistic filters like sepia and grayscale. Free online photo editor.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-rotator",
+      "title": "Free Image Rotator - Rotate Photos Online | easy-pdf | easy-pdf",
+      "description": "Rotate images 90, 180, or 270 degrees. Fix photo orientation online.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-text-overlay",
+      "title": "Add Text to Image - Free Online Photo Editor | easy-pdf | easy-pdf",
+      "description": "Easily add text captions, quotes, or watermarks to your photos. Customize font, size, color, and position.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/image-watermark",
+      "title": "Free Image Watermark Tool - Add Logo to Photos | easy-pdf | easy-pdf",
+      "description": "Overlay a logo or image watermark onto your photos. Adjust transparency, size, and position to protect your work.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/invoice-generator",
+      "title": "PDF Invoice Generator - Create Professional Invoices Online | easy-pdf | easy-pdf",
+      "description": "Generate professional PDF invoices with GST support, multiple currencies, and customizable templates. Perfect for businesses and freelancers.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/jpg-to-pdf",
+      "title": "Free JPG to PDF Converter - Convert Images to PDF Online | easy-pdf | easy-pdf",
+      "description": "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/js-minifier",
+      "title": "Free JS Minifier - Compress JavaScript Code Online | easy-pdf | easy-pdf",
+      "description": "Minify JavaScript code to reduce file size and improve website performance. Removes whitespace and comments instantly.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/json-xml-converter",
+      "title": "JSON ↔ XML Converter - Fast browser-based transformations | easy-pdf | easy-pdf",
+      "description": "Convert JSON payloads to XML (and back) with validation, formatting, and instant copy/download actions. 100% private in-browser processing.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/jwt-decoder",
+      "title": "Free JWT Decoder - Decode JSON Web Tokens Online | easy-pdf | easy-pdf",
+      "description": "Decode and inspect JSON Web Tokens (JWT) instantly. View header and payload claims securely in your browser.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/legal-analyzer",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/legal-analyzer\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/m4a-mp3-converter",
+      "title": "M4A/MP3 Converter - Convert Audio Formats Online with FFmpeg | easy-pdf | easy-pdf",
+      "description": "Convert between M4A and MP3 audio formats using FFmpeg.wasm. Convert audio directly in your browser without uploading files to a server.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/markdown-previewer",
+      "title": "Free Markdown Previewer - Edit & Preview Markdown Online | easy-pdf | easy-pdf",
+      "description": "Write and preview Markdown content in real-time. Supports GitHub Flavored Markdown (GFM) and instant HTML rendering.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/markdown-to-html",
+      "title": "Markdown to HTML Converter - Convert MD to HTML Online | easy-pdf | easy-pdf",
+      "description": "Convert Markdown text to HTML markup directly in your browser. Create web-ready content from Markdown documents without uploading files to a server.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/medical-analyzer",
+      "title": "AI Medical Document Analyzer - Review Medical Records | easy-pdf | easy-pdf",
+      "description": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/merge",
+      "status": 404,
+      "error": "Status 404"
+    },
+    {
+      "url": "/metadata-extractor",
+      "title": "Free Metadata Extractor - View Image & PDF Metadata Online | easy-pdf | easy-pdf",
+      "description": "Extract and view hidden metadata from images and PDF files. See EXIF data, camera settings, author info, and more.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/mp4-to-mp3",
+      "title": "Free MP4 to MP3 Converter - Browser-based Audio Extraction | easy-pdf | easy-pdf",
+      "description": "Convert MP4 and other videos to MP3 locally with ffmpeg.wasm. No uploads, fast 192 kbps output, and full privacy.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/number-base-converter",
+      "title": "Free Number Base Converter - Binary, Hex, Decimal Online | easy-pdf | easy-pdf",
+      "description": "Convert numbers between Binary, Octal, Decimal, and Hexadecimal formats instantly. Free online base conversion tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/ocr",
+      "title": "Free PDF OCR Tool - Extract Text from Scanned PDFs | easy-pdf | easy-pdf",
+      "description": "Extract editable text from scanned PDFs and images using OCR technology. Free online optical character recognition tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/organize",
+      "title": "Free PDF Organizer - Manage PDF Pages Online | easy-pdf | easy-pdf",
+      "description": "Organize PDF pages by reordering, deleting, and managing content. Complete PDF organization tool with visual interface.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/page-numbers",
+      "title": "Free PDF Page Number Tool - Add Page Numbers Online | easy-pdf | easy-pdf",
+      "description": "Add page numbers, headers, and footers to PDF documents. Customize format, position, and styling with our free online tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/password-strength",
+      "title": "Free Password Strength Checker - Test Password Security Online | easy-pdf | easy-pdf",
+      "description": "Check how strong your password is and learn how to make it more secure. Client-side analysis ensures your password never leaves your browser.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-accessibility-checker",
+      "title": "PDF Accessibility Checker - WCAG Compliance Audit Tool | easy-pdf | easy-pdf",
+      "description": "Check PDF accessibility compliance with WCAG standards. Validate alt text, reading order, and color contrast with our free online audit tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-annotation-collaboration",
+      "title": "PDF Annotation Collaboration - Team PDF Review Tool | easy-pdf | easy-pdf",
+      "description": "Collaborate on PDF annotations with team members and export shared comments. Streamline document review and team collaboration workflows.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-batch-processor",
+      "title": "PDF Batch Processor - Process Multiple PDFs at Once | easy-pdf | easy-pdf",
+      "description": "Process multiple PDF files at once with batch merge, split, compress, and watermarking. Automate PDF operations with our free online batch processor.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-bookmark-manager",
+      "title": "PDF Bookmark Manager - Add & Organize PDF Bookmarks | easy-pdf | easy-pdf",
+      "description": "Add, edit, and organize PDF bookmarks and navigation structure. Manage document navigation with our free online PDF bookmark manager.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-digital-signature",
+      "title": "PDF Digital Signature - Legally Binding Digital Signatures | easy-pdf | easy-pdf",
+      "description": "Add legally binding digital signatures to PDF documents with certificate management and validation. Ensure legal compliance with digital signatures.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-form-creator",
+      "title": "PDF Form Creator - Create Interactive PDF Forms Online | easy-pdf | easy-pdf",
+      "description": "Create interactive PDF forms with text fields, checkboxes, signatures, and more. Free online PDF form creator with no coding required.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-metadata-editor",
+      "title": "PDF Metadata Editor | Easy PDF | easy-pdf",
+      "description": "Clean up authorship, keywords, and document dates without uploading your file.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-redaction",
+      "title": "PDF Redaction | Easy PDF | easy-pdf",
+      "description": "Permanently remove or mask sensitive information from PDF documents right in your browser.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-table-extractor",
+      "title": "PDF Table Extractor - Convert PDF Tables to CSV/Excel | easy-pdf | easy-pdf",
+      "description": "Extract tables from PDF documents and export to CSV, Excel, or JSON format. Free online PDF table extraction tool with automatic detection.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-to-docx",
+      "title": "PDF to DOCX Converter - Convert PDF to Word Online | easy-pdf | easy-pdf",
+      "description": "Convert PDF files to editable Word documents. Extract text and preserve structure with our free online PDF to DOCX converter.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-to-html",
+      "title": "PDF to HTML Converter - Convert PDF to HTML Online | easy-pdf | easy-pdf",
+      "description": "Convert PDF files to HTML markup by extracting content. Transform PDF documents to structured HTML for web use.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-to-jpg",
+      "title": "Free PDF to JPG Converter - Convert PDF to Images Online | easy-pdf | easy-pdf",
+      "description": "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-to-ppt",
+      "title": "PDF to PowerPoint Converter - Convert PDF to PPT Online | easy-pdf | easy-pdf",
+      "description": "Convert PDF files to presentation slides. Extract and structure content from PDFs for use in PowerPoint presentations.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-to-text",
+      "title": "PDF to Text Converter - Extract Native Text from PDFs | easy-pdf | easy-pdf",
+      "description": "Extract native text content from PDF files directly in your browser. Fast text extraction for text-based PDFs without using OCR.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-to-xlsx",
+      "title": "PDF to Excel Converter - Convert PDF Tables to XLSX Online | easy-pdf | easy-pdf",
+      "description": "Convert PDF files to Excel spreadsheets by extracting table data. Extract and convert tables from PDFs to structured Excel files.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf-version-comparison",
+      "title": "PDF Version Comparison - Privacy-First Diff Viewer | easy-pdf | easy-pdf",
+      "description": "Upload two PDF versions, highlight text/layout changes entirely offline, and export a structured comparison report for audits.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf/compress",
+      "title": "Free PDF Compressor - Reduce PDF File Size Online | easy-pdf | easy-pdf",
+      "description": "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf/merge",
+      "title": "Free PDF Merger - Combine Multiple PDFs Online | easy-pdf | easy-pdf",
+      "description": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/pdf/split",
+      "title": "Free PDF Splitter - Extract Pages from PDF Online | easy-pdf | easy-pdf",
+      "description": "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/portfolio-creator",
+      "title": "Portfolio Creator - Create Professional PDF Portfolios | easy-pdf | easy-pdf",
+      "description": "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/ppt-to-pdf",
+      "title": "PPT to PDF Converter - Convert PowerPoint to PDF | easy-pdf | easy-pdf",
+      "description": "Convert PowerPoint presentations (PPT/PPTX) to PDF documents online. Preserve formatting and layout.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/privacy",
+      "title": "Privacy Policy - easy-pdf | Privacy-First PDF Tools | easy-pdf",
+      "description": "Learn how easy-pdf protects your privacy with 100% client-side processing. No server uploads, no data collection, complete privacy and security guaranteed.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/protect",
+      "title": "Free PDF Password Protection - Secure PDF Files Online | easy-pdf | easy-pdf",
+      "description": "Protect PDF files with password encryption. Add security to sensitive documents with our free online PDF protection tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/qr-generator",
+      "title": "QR Code Generator - Create QR Codes for PDF Online | easy-pdf | easy-pdf",
+      "description": "Generate QR codes for URLs, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/qr-scanner",
+      "title": "Free QR Code Scanner - Scan QR Codes Online | easy-pdf | easy-pdf",
+      "description": "Scan QR codes instantly using your camera or by uploading an image. Works offline and keeps your data private.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/regex-tester",
+      "title": "Regex Tester - Highlight matches and capture groups in your browser | easy-pdf | easy-pdf",
+      "description": "Paste a regex and sample text to see matches, capture groups, and flag behavior instantly with zero uploads.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/remove-audio",
+      "title": "Remove Audio from Video - Mute Videos Online with FFmpeg | easy-pdf | easy-pdf",
+      "description": "Remove the audio track from video files using FFmpeg.wasm. Create silent video files directly in your browser without uploading to a server.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/remove-background",
+      "title": "Free Background Remover - Remove Image Backgrounds Online | easy-pdf | easy-pdf",
+      "description": "Remove image backgrounds instantly with AI. Create transparent PNGs for free directly in your browser. No signup required.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/remove-silence",
+      "title": "Remove Silence from Audio - Trim Quiet Sections Online | easy-pdf | easy-pdf",
+      "description": "Remove silence from audio files to create more compact recordings. Remove dead air and pauses while preserving spoken content.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/reorder",
+      "title": "Free PDF Page Reorder Tool - Rearrange PDF Pages Online | easy-pdf | easy-pdf",
+      "description": "Reorder and rearrange PDF pages with drag-and-drop interface. Organize your PDF documents with our free online tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/report-generator",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/report-generator\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/resize-images",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/resize-images\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/rotate",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rotate\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/rsa-generator",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rsa-generator\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/security",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/security\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/sign",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/sign\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/split",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/split\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/sponsor-dashboard",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/sponsor-dashboard\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/sponsors",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/sponsors\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/steganography",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/steganography\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/svg-to-png",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/svg-to-png\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/tar-extractor",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/tar-extractor\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/text-case-converter",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/text-case-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/text-diff-checker",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/text-diff-checker\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/timezone-converter",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/timezone-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/tools",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/tools\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/txt-to-pdf",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/txt-to-pdf\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/unit-converter",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/unit-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/unlock",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/unlock\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/url-encoder",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/url-encoder\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/url-shortener",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/url-shortener\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/uuid-generator",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/uuid-generator\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/video-compress",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/video-compress\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/video-to-gif",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/video-to-gif\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/video-trim",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/video-trim\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/voice-changer",
+      "title": "Voice Changer - Change Pitch and Speed of Audio Online | easy-pdf | easy-pdf",
+      "description": "Change pitch and speed of audio files to create different voice effects. Modify voice characteristics while maintaining audio quality.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/watermark",
+      "title": "Free PDF Watermark Tool - Add Watermarks to PDF Online | easy-pdf | easy-pdf",
+      "description": "Add text or image watermarks to PDF documents. Customize position, opacity, and rotation with our free online watermarking tool.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/wav-mp3-converter",
+      "title": "WAV/MP3 Converter - Convert Audio Formats Online with FFmpeg | easy-pdf | easy-pdf",
+      "description": "Convert between WAV and MP3 audio formats using FFmpeg.wasm. Convert audio directly in your browser without uploading files to a server.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/webm-to-mp4",
+      "title": "Convert WebM to MP4 or MP4 to WebM in Browser | easy-pdf | easy-pdf",
+      "description": "Use ffmpeg.wasm to convert videos between WebM and MP4 directly in your browser without uploads.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/xlsx-to-csv",
+      "title": "XLSX to CSV Converter - Convert Excel to CSV Online | easy-pdf | easy-pdf",
+      "description": "Convert Excel files (XLSX) to CSV format directly in your browser. Fast, secure, and private conversion without file uploads.",
+      "issues": [
+        "Title too long",
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/zip-creator",
+      "title": "ZIP Creator - Create ZIP Files Client-side | easy-pdf | easy-pdf",
+      "description": "Bundle multiple files into a single ZIP archive using JSZip. Downloads stay local to your browser.",
+      "issues": [
+        "Missing H1"
+      ]
+    },
+    {
+      "url": "/zip-extractor",
+      "error": "page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/zip-extractor\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ]
+}

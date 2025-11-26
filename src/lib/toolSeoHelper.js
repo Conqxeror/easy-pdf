@@ -84,6 +84,7 @@ export function getToolMetadata(href) {
     description: tool.description,
     url: href,
     features: tool.features || [],
+    faqs: tool.faqs || [],
     breadcrumbs: [
       { name: 'Home', url: resolvedBase },
       { name: 'Tools', url: `${resolvedBase}/tools` },

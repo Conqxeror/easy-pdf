@@ -37,5 +37,13 @@ export const metadata = generateEnhancedMetadata({
 });
 
 export default function Home() {
-  return <HomeClient />;
+  return (
+    <>
+      {/* ✅ SSR H1 for SEO - Hidden visually but visible to crawlers */}
+      <h1 className="sr-only">
+        Easy PDF - Free Online PDF Tools | Privacy-First Document Processing
+      </h1>
+      <HomeClient />
+    </>
+  );
 }

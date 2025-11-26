@@ -200,7 +200,7 @@ export const Hero = ({
       )}
       <div className="relative container-standard z-10">
         {title && (
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-slide-up uppercase">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-slide-up uppercase" aria-label={title}>
             {title}
           </h1>
         )}

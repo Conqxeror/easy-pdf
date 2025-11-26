@@ -217,7 +217,7 @@ export const toolCategories = [
     submenu: [
       {
         name: "Compress PDF",
-        href: "/compress",
+        href: "/pdf/compress",
         icon: <Minimize2 className="w-4 h-4" />,
       },
       {

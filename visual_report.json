@@ -1,0 +1,385 @@
+{
+  "timestamp": "2025-11-26T12:19:41.170Z",
+  "results": [
+    {
+      "url": "/",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\home_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\home_mobile.png"
+    },
+    {
+      "url": "/about",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/about\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/advanced-ocr",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/advanced-ocr\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/aes-encrypt",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/aes-encrypt\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/audio-compressor",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\audio-compressor_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\audio-compressor_mobile.png"
+    },
+    {
+      "url": "/audio-speed-changer",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/audio-speed-changer\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/avi-mkv-to-mp4",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\avi-mkv-to-mp4_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\avi-mkv-to-mp4_mobile.png"
+    },
+    {
+      "url": "/barcode-generator",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\barcode-generator_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\barcode-generator_mobile.png"
+    },
+    {
+      "url": "/base64-encoder",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\base64-encoder_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\base64-encoder_mobile.png"
+    },
+    {
+      "url": "/bmp-tiff-converter",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\bmp-tiff-converter_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\bmp-tiff-converter_mobile.png"
+    },
+    {
+      "url": "/categories/advanced-pdf-tools",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/categories/advanced-pdf-tools\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/categories/ai-analysis",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_ai-analysis_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_ai-analysis_mobile.png"
+    },
+    {
+      "url": "/categories/business-tools",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_business-tools_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_business-tools_mobile.png"
+    },
+    {
+      "url": "/categories/convert-create",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_convert-create_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_convert-create_mobile.png"
+    },
+    {
+      "url": "/categories/forms-documents",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_forms-documents_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_forms-documents_mobile.png"
+    },
+    {
+      "url": "/categories/organize-edit",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_organize-edit_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_organize-edit_mobile.png"
+    },
+    {
+      "url": "/categories/security-privacy",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_security-privacy_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\categories_security-privacy_mobile.png"
+    },
+    {
+      "url": "/certificate-generator",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\certificate-generator_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\certificate-generator_mobile.png"
+    },
+    {
+      "url": "/color-converter",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\color-converter_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\color-converter_mobile.png"
+    },
+    {
+      "url": "/compress",
+      "status": "failed",
+      "issues": [
+        "Status code 404"
+      ],
+      "statusCode": 404,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\compress_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\compress_mobile.png"
+    },
+    {
+      "url": "/compress-images",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\compress-images_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\compress-images_mobile.png"
+    },
+    {
+      "url": "/css-minifier",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\css-minifier_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\css-minifier_mobile.png"
+    },
+    {
+      "url": "/csv-json-converter",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\csv-json-converter_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\csv-json-converter_mobile.png"
+    },
+    {
+      "url": "/csv-to-xlsx",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\csv-to-xlsx_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\csv-to-xlsx_mobile.png"
+    },
+    {
+      "url": "/currency-converter",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\currency-converter_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\currency-converter_mobile.png"
+    },
+    {
+      "url": "/delete-pages",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\delete-pages_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\delete-pages_mobile.png"
+    },
+    {
+      "url": "/docx-to-pdf",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\docx-to-pdf_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\docx-to-pdf_mobile.png"
+    },
+    {
+      "url": "/docx-to-text",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\docx-to-text_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\docx-to-text_mobile.png"
+    },
+    {
+      "url": "/extract-audio",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\extract-audio_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\extract-audio_mobile.png"
+    },
+    {
+      "url": "/face-blur",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/face-blur\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/face-blur\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/file-checksum",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/file-checksum\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/file-checksum\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/form-filler",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/form-filler\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/form-filler\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/hash-generator",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/hash-generator\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/heic-to-jpg",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/heic-to-jpg\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/html-markdown-converter",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/html-markdown-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/html-minifier",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\html-minifier_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\html-minifier_mobile.png"
+    },
+    {
+      "url": "/html-to-pdf",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\html-to-pdf_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\html-to-pdf_mobile.png"
+    },
+    {
+      "url": "/image-converter",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-converter_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-converter_mobile.png"
+    },
+    {
+      "url": "/image-crop",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-crop_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-crop_mobile.png"
+    },
+    {
+      "url": "/image-cropper",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-cropper_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-cropper_mobile.png"
+    },
+    {
+      "url": "/image-drawing",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-drawing_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-drawing_mobile.png"
+    },
+    {
+      "url": "/image-filters",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-filters_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-filters_mobile.png"
+    },
+    {
+      "url": "/image-rotator",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-rotator_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-rotator_mobile.png"
+    },
+    {
+      "url": "/image-text-overlay",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-text-overlay_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-text-overlay_mobile.png"
+    },
+    {
+      "url": "/image-watermark",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-watermark_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\image-watermark_mobile.png"
+    },
+    {
+      "url": "/invoice-generator",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\invoice-generator_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\invoice-generator_mobile.png"
+    },
+    {
+      "url": "/jpg-to-pdf",
+      "status": "success",
+      "issues": [],
+      "statusCode": 200,
+      "desktopScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\jpg-to-pdf_desktop.png",
+      "mobileScreenshot": "D:\\Projects\\easy-pdf\\screenshots\\jpg-to-pdf_mobile.png"
+    },
+    {
+      "url": "/js-minifier",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/js-minifier\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/js-minifier\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/json-xml-converter",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/json-xml-converter\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/json-xml-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/jwt-decoder",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/jwt-decoder\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/jwt-decoder\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "url": "/legal-analyzer",
+      "status": "error",
+      "issues": [],
+      "error": "page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/legal-analyzer\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/legal-analyzer\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    }
+  ]
+}

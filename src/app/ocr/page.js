@@ -1,7 +1,7 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import OcrClient from "./components/OcrClient";
 
-export const metadata = getToolMetadata("/ocr");
+export const metadata = getToolMetadata("/ocr").metadata;
 
 export default function OcrPage() {
   return <OcrClient />;

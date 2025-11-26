@@ -1,0 +1,3605 @@
+{
+  "timestamp": "2025-11-26T14:08:47.527Z",
+  "counts": {
+    "critical": 0,
+    "high": 16,
+    "medium": 404,
+    "low": 31,
+    "total": 451
+  },
+  "issues": [
+    {
+      "id": "ISSUE-001",
+      "page": "/about",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/about\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-002",
+      "page": "/advanced-ocr",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/advanced-ocr\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-003",
+      "page": "/aes-encrypt",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/aes-encrypt\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-004",
+      "page": "/audio-speed-changer",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/audio-speed-changer\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-005",
+      "page": "/categories/advanced-pdf-tools",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/categories/advanced-pdf-tools\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-006",
+      "page": "/compress",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: 404",
+      "evidence": "D:\\Projects\\easy-pdf\\screenshots\\compress_desktop.png"
+    },
+    {
+      "id": "ISSUE-007",
+      "page": "/compress",
+      "type": "visual",
+      "severity": "medium",
+      "description": "Status code 404",
+      "evidence": "D:\\Projects\\easy-pdf\\screenshots\\compress_mobile.png"
+    },
+    {
+      "id": "ISSUE-008",
+      "page": "/face-blur",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/face-blur\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/face-blur\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-009",
+      "page": "/file-checksum",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/file-checksum\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/file-checksum\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-010",
+      "page": "/form-filler",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/form-filler\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/form-filler\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-011",
+      "page": "/hash-generator",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/hash-generator\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-012",
+      "page": "/heic-to-jpg",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/heic-to-jpg\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-013",
+      "page": "/html-markdown-converter",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/html-markdown-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-014",
+      "page": "/js-minifier",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/js-minifier\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/js-minifier\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-015",
+      "page": "/json-xml-converter",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/json-xml-converter\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/json-xml-converter\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-016",
+      "page": "/jwt-decoder",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/jwt-decoder\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/jwt-decoder\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-017",
+      "page": "/legal-analyzer",
+      "type": "visual",
+      "severity": "high",
+      "description": "Visual crawl failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/legal-analyzer\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/legal-analyzer\", waiting until \"domcontentloaded\"\u001b[22m\n"
+    },
+    {
+      "id": "ISSUE-018",
+      "page": "/about",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-019",
+      "page": "/about",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-020",
+      "page": "/advanced-ocr",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-021",
+      "page": "/advanced-ocr",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-022",
+      "page": "/aes-encrypt",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-023",
+      "page": "/aes-encrypt",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-024",
+      "page": "/audio-compressor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-025",
+      "page": "/audio-compressor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-026",
+      "page": "/audio-speed-changer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-027",
+      "page": "/audio-speed-changer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-028",
+      "page": "/avi-mkv-to-mp4",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-029",
+      "page": "/avi-mkv-to-mp4",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-030",
+      "page": "/barcode-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-031",
+      "page": "/barcode-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-032",
+      "page": "/base64-encoder",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-033",
+      "page": "/base64-encoder",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-034",
+      "page": "/bmp-tiff-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-035",
+      "page": "/bmp-tiff-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-036",
+      "page": "/categories/advanced-pdf-tools",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-037",
+      "page": "/categories/advanced-pdf-tools",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-038",
+      "page": "/categories/ai-analysis",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-039",
+      "page": "/categories/ai-analysis",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-040",
+      "page": "/categories/business-tools",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-041",
+      "page": "/categories/business-tools",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-042",
+      "page": "/categories/convert-create",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-043",
+      "page": "/categories/convert-create",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-044",
+      "page": "/categories/forms-documents",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-045",
+      "page": "/categories/forms-documents",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-046",
+      "page": "/categories/organize-edit",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-047",
+      "page": "/categories/organize-edit",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-048",
+      "page": "/categories/security-privacy",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-049",
+      "page": "/categories/security-privacy",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-050",
+      "page": "/certificate-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-051",
+      "page": "/certificate-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-052",
+      "page": "/color-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-053",
+      "page": "/color-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-054",
+      "page": "/compress",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-055",
+      "page": "/compress",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-056",
+      "page": "/compress-images",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-057",
+      "page": "/compress-images",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-058",
+      "page": "/css-minifier",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-059",
+      "page": "/css-minifier",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-060",
+      "page": "/csv-json-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-061",
+      "page": "/csv-json-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-062",
+      "page": "/csv-to-xlsx",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-063",
+      "page": "/csv-to-xlsx",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-064",
+      "page": "/currency-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-065",
+      "page": "/currency-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-066",
+      "page": "/delete-pages",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-067",
+      "page": "/delete-pages",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-068",
+      "page": "/docx-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-069",
+      "page": "/docx-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-070",
+      "page": "/docx-to-text",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-071",
+      "page": "/docx-to-text",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-072",
+      "page": "/extract-audio",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-073",
+      "page": "/extract-audio",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-074",
+      "page": "/face-blur",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-075",
+      "page": "/face-blur",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-076",
+      "page": "/file-checksum",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-077",
+      "page": "/file-checksum",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-078",
+      "page": "/form-filler",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-079",
+      "page": "/form-filler",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-080",
+      "page": "/hash-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-081",
+      "page": "/hash-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-082",
+      "page": "/heic-to-jpg",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-083",
+      "page": "/heic-to-jpg",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-084",
+      "page": "/html-markdown-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-085",
+      "page": "/html-markdown-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-086",
+      "page": "/html-minifier",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-087",
+      "page": "/html-minifier",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-088",
+      "page": "/html-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-089",
+      "page": "/html-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-090",
+      "page": "/image-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-091",
+      "page": "/image-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-092",
+      "page": "/image-crop",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-093",
+      "page": "/image-crop",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-094",
+      "page": "/image-cropper",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-095",
+      "page": "/image-cropper",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-096",
+      "page": "/image-drawing",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-097",
+      "page": "/image-drawing",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-098",
+      "page": "/image-filters",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-099",
+      "page": "/image-filters",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-100",
+      "page": "/image-rotator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-101",
+      "page": "/image-rotator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-102",
+      "page": "/image-text-overlay",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-103",
+      "page": "/image-text-overlay",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-104",
+      "page": "/image-watermark",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-105",
+      "page": "/image-watermark",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-106",
+      "page": "/invoice-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-107",
+      "page": "/invoice-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-108",
+      "page": "/jpg-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-109",
+      "page": "/jpg-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-110",
+      "page": "/js-minifier",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-111",
+      "page": "/js-minifier",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-112",
+      "page": "/json-xml-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-113",
+      "page": "/json-xml-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-114",
+      "page": "/jwt-decoder",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-115",
+      "page": "/jwt-decoder",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-116",
+      "page": "/legal-analyzer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-117",
+      "page": "/legal-analyzer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-118",
+      "page": "/m4a-mp3-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-119",
+      "page": "/m4a-mp3-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-120",
+      "page": "/markdown-previewer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-121",
+      "page": "/markdown-previewer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-122",
+      "page": "/markdown-to-html",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-123",
+      "page": "/markdown-to-html",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-124",
+      "page": "/medical-analyzer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-125",
+      "page": "/medical-analyzer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-126",
+      "page": "/merge",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-127",
+      "page": "/merge",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-128",
+      "page": "/metadata-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-129",
+      "page": "/metadata-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-130",
+      "page": "/mp4-to-mp3",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-131",
+      "page": "/mp4-to-mp3",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-132",
+      "page": "/number-base-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-133",
+      "page": "/number-base-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-134",
+      "page": "/ocr",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-135",
+      "page": "/ocr",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-136",
+      "page": "/organize",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-137",
+      "page": "/organize",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-138",
+      "page": "/page-numbers",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-139",
+      "page": "/page-numbers",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-140",
+      "page": "/password-strength",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-141",
+      "page": "/password-strength",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-142",
+      "page": "/pdf-accessibility-checker",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-143",
+      "page": "/pdf-accessibility-checker",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-144",
+      "page": "/pdf-annotation-collaboration",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-145",
+      "page": "/pdf-annotation-collaboration",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-146",
+      "page": "/pdf-batch-processor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-147",
+      "page": "/pdf-batch-processor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-148",
+      "page": "/pdf-bookmark-manager",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-149",
+      "page": "/pdf-bookmark-manager",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-150",
+      "page": "/pdf-digital-signature",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-151",
+      "page": "/pdf-digital-signature",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-152",
+      "page": "/pdf-form-creator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-153",
+      "page": "/pdf-form-creator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-154",
+      "page": "/pdf-metadata-editor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-155",
+      "page": "/pdf-metadata-editor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-156",
+      "page": "/pdf-redaction",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-157",
+      "page": "/pdf-redaction",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-158",
+      "page": "/pdf-table-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-159",
+      "page": "/pdf-table-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-160",
+      "page": "/pdf-to-docx",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-161",
+      "page": "/pdf-to-docx",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-162",
+      "page": "/pdf-to-html",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-163",
+      "page": "/pdf-to-html",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-164",
+      "page": "/pdf-to-jpg",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-165",
+      "page": "/pdf-to-jpg",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-166",
+      "page": "/pdf-to-ppt",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-167",
+      "page": "/pdf-to-ppt",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-168",
+      "page": "/pdf-to-text",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-169",
+      "page": "/pdf-to-text",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-170",
+      "page": "/pdf-to-xlsx",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-171",
+      "page": "/pdf-to-xlsx",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-172",
+      "page": "/pdf-version-comparison",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-173",
+      "page": "/pdf-version-comparison",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-174",
+      "page": "/pdf/compress",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-175",
+      "page": "/pdf/compress",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-176",
+      "page": "/pdf/merge",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-177",
+      "page": "/pdf/merge",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-178",
+      "page": "/pdf/split",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-179",
+      "page": "/pdf/split",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-180",
+      "page": "/portfolio-creator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-181",
+      "page": "/portfolio-creator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-182",
+      "page": "/ppt-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-183",
+      "page": "/ppt-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-184",
+      "page": "/privacy",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-185",
+      "page": "/privacy",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-186",
+      "page": "/protect",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-187",
+      "page": "/protect",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-188",
+      "page": "/qr-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-189",
+      "page": "/qr-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-190",
+      "page": "/qr-scanner",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-191",
+      "page": "/qr-scanner",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-192",
+      "page": "/regex-tester",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-193",
+      "page": "/regex-tester",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-194",
+      "page": "/remove-audio",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-195",
+      "page": "/remove-audio",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-196",
+      "page": "/remove-background",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-197",
+      "page": "/remove-background",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-198",
+      "page": "/remove-silence",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-199",
+      "page": "/remove-silence",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-200",
+      "page": "/reorder",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-201",
+      "page": "/reorder",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-202",
+      "page": "/report-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-203",
+      "page": "/report-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-204",
+      "page": "/resize-images",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-205",
+      "page": "/resize-images",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-206",
+      "page": "/rotate",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-207",
+      "page": "/rotate",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-208",
+      "page": "/rsa-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-209",
+      "page": "/rsa-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-210",
+      "page": "/security",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-211",
+      "page": "/security",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-212",
+      "page": "/sign",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-213",
+      "page": "/sign",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-214",
+      "page": "/split",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-215",
+      "page": "/split",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-216",
+      "page": "/sponsor-dashboard",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-217",
+      "page": "/sponsor-dashboard",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-218",
+      "page": "/sponsors",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-219",
+      "page": "/sponsors",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-220",
+      "page": "/steganography",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-221",
+      "page": "/steganography",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-222",
+      "page": "/svg-to-png",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-223",
+      "page": "/svg-to-png",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-224",
+      "page": "/tar-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-225",
+      "page": "/tar-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-226",
+      "page": "/text-case-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-227",
+      "page": "/text-case-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-228",
+      "page": "/text-diff-checker",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-229",
+      "page": "/text-diff-checker",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-230",
+      "page": "/timezone-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-231",
+      "page": "/timezone-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-232",
+      "page": "/tools",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-233",
+      "page": "/tools",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-234",
+      "page": "/txt-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-235",
+      "page": "/txt-to-pdf",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-236",
+      "page": "/unit-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-237",
+      "page": "/unit-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-238",
+      "page": "/unlock",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-239",
+      "page": "/unlock",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-240",
+      "page": "/url-encoder",
+      "type": "accessibility",
+      "severity": "low",
+      "description": "Audit failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/url-encoder\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/url-encoder\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-241",
+      "page": "/url-shortener",
+      "type": "accessibility",
+      "severity": "low",
+      "description": "Audit failed: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:3000/url-shortener\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/url-shortener\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-242",
+      "page": "/uuid-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-243",
+      "page": "/uuid-generator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-244",
+      "page": "/video-compress",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-245",
+      "page": "/video-compress",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-246",
+      "page": "/video-to-gif",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-247",
+      "page": "/video-to-gif",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-248",
+      "page": "/video-trim",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-249",
+      "page": "/video-trim",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-250",
+      "page": "/voice-changer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-251",
+      "page": "/voice-changer",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-252",
+      "page": "/watermark",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-253",
+      "page": "/watermark",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-254",
+      "page": "/wav-mp3-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-255",
+      "page": "/wav-mp3-converter",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-256",
+      "page": "/webm-to-mp4",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-257",
+      "page": "/webm-to-mp4",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-258",
+      "page": "/xlsx-to-csv",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-259",
+      "page": "/xlsx-to-csv",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-260",
+      "page": "/zip-creator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-261",
+      "page": "/zip-creator",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-262",
+      "page": "/zip-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "landmark-one-main: Ensures the document has a main landmark",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-263",
+      "page": "/zip-extractor",
+      "type": "accessibility",
+      "severity": "medium",
+      "description": "page-has-heading-one: Ensure that the page, or at least one of its frames contains a level-one heading",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-264",
+      "page": "/",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-265",
+      "page": "/about",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-266",
+      "page": "/advanced-ocr",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-267",
+      "page": "/aes-encrypt",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-268",
+      "page": "/aes-encrypt",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-269",
+      "page": "/audio-compressor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-270",
+      "page": "/audio-speed-changer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-271",
+      "page": "/avi-mkv-to-mp4",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-272",
+      "page": "/barcode-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-273",
+      "page": "/barcode-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-274",
+      "page": "/base64-encoder",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-275",
+      "page": "/bmp-tiff-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-276",
+      "page": "/categories/advanced-pdf-tools",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/categories/advanced-pdf-tools\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-277",
+      "page": "/categories/ai-analysis",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-278",
+      "page": "/categories/ai-analysis",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-279",
+      "page": "/categories/business-tools",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-280",
+      "page": "/categories/business-tools",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Description too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-281",
+      "page": "/categories/business-tools",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-282",
+      "page": "/categories/convert-create",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-283",
+      "page": "/categories/convert-create",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Description too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-284",
+      "page": "/categories/convert-create",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-285",
+      "page": "/categories/forms-documents",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-286",
+      "page": "/categories/forms-documents",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Description too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-287",
+      "page": "/categories/forms-documents",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-288",
+      "page": "/categories/organize-edit",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-289",
+      "page": "/categories/organize-edit",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Description too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-290",
+      "page": "/categories/organize-edit",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-291",
+      "page": "/categories/security-privacy",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-292",
+      "page": "/categories/security-privacy",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Description too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-293",
+      "page": "/categories/security-privacy",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-294",
+      "page": "/certificate-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-295",
+      "page": "/color-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-296",
+      "page": "/color-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-297",
+      "page": "/compress-images",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-298",
+      "page": "/css-minifier",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-299",
+      "page": "/css-minifier",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-300",
+      "page": "/csv-json-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-301",
+      "page": "/csv-to-xlsx",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-302",
+      "page": "/currency-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-303",
+      "page": "/currency-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-304",
+      "page": "/delete-pages",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-305",
+      "page": "/delete-pages",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-306",
+      "page": "/docx-to-pdf",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-307",
+      "page": "/docx-to-text",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-308",
+      "page": "/extract-audio",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-309",
+      "page": "/extract-audio",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-310",
+      "page": "/face-blur",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too short",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-311",
+      "page": "/face-blur",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-312",
+      "page": "/file-checksum",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-313",
+      "page": "/form-filler",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-314",
+      "page": "/hash-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-315",
+      "page": "/hash-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-316",
+      "page": "/heic-to-jpg",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-317",
+      "page": "/html-markdown-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-318",
+      "page": "/html-markdown-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-319",
+      "page": "/html-minifier",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-320",
+      "page": "/html-to-pdf",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-321",
+      "page": "/image-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-322",
+      "page": "/image-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-323",
+      "page": "/image-crop",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-324",
+      "page": "/image-cropper",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-325",
+      "page": "/image-drawing",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-326",
+      "page": "/image-filters",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-327",
+      "page": "/image-rotator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-328",
+      "page": "/image-text-overlay",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-329",
+      "page": "/image-watermark",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-330",
+      "page": "/invoice-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-331",
+      "page": "/invoice-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-332",
+      "page": "/jpg-to-pdf",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-333",
+      "page": "/jpg-to-pdf",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-334",
+      "page": "/js-minifier",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-335",
+      "page": "/js-minifier",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-336",
+      "page": "/json-xml-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-337",
+      "page": "/json-xml-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-338",
+      "page": "/jwt-decoder",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-339",
+      "page": "/legal-analyzer",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/legal-analyzer\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-340",
+      "page": "/m4a-mp3-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-341",
+      "page": "/m4a-mp3-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-342",
+      "page": "/markdown-previewer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-343",
+      "page": "/markdown-previewer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-344",
+      "page": "/markdown-to-html",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-345",
+      "page": "/markdown-to-html",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-346",
+      "page": "/medical-analyzer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-347",
+      "page": "/medical-analyzer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-348",
+      "page": "/merge",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: Status 404",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-349",
+      "page": "/metadata-extractor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-350",
+      "page": "/metadata-extractor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-351",
+      "page": "/mp4-to-mp3",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-352",
+      "page": "/mp4-to-mp3",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-353",
+      "page": "/number-base-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-354",
+      "page": "/number-base-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-355",
+      "page": "/ocr",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-356",
+      "page": "/ocr",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-357",
+      "page": "/organize",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-358",
+      "page": "/page-numbers",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-359",
+      "page": "/page-numbers",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-360",
+      "page": "/password-strength",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-361",
+      "page": "/password-strength",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-362",
+      "page": "/pdf-accessibility-checker",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-363",
+      "page": "/pdf-accessibility-checker",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-364",
+      "page": "/pdf-annotation-collaboration",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-365",
+      "page": "/pdf-annotation-collaboration",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-366",
+      "page": "/pdf-batch-processor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-367",
+      "page": "/pdf-batch-processor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-368",
+      "page": "/pdf-bookmark-manager",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-369",
+      "page": "/pdf-bookmark-manager",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-370",
+      "page": "/pdf-digital-signature",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-371",
+      "page": "/pdf-digital-signature",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-372",
+      "page": "/pdf-form-creator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-373",
+      "page": "/pdf-form-creator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-374",
+      "page": "/pdf-metadata-editor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-375",
+      "page": "/pdf-redaction",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-376",
+      "page": "/pdf-table-extractor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-377",
+      "page": "/pdf-table-extractor",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-378",
+      "page": "/pdf-to-docx",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-379",
+      "page": "/pdf-to-docx",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-380",
+      "page": "/pdf-to-html",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-381",
+      "page": "/pdf-to-html",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-382",
+      "page": "/pdf-to-jpg",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-383",
+      "page": "/pdf-to-jpg",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-384",
+      "page": "/pdf-to-ppt",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-385",
+      "page": "/pdf-to-ppt",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-386",
+      "page": "/pdf-to-text",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-387",
+      "page": "/pdf-to-text",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-388",
+      "page": "/pdf-to-xlsx",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-389",
+      "page": "/pdf-to-xlsx",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-390",
+      "page": "/pdf-version-comparison",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-391",
+      "page": "/pdf-version-comparison",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-392",
+      "page": "/pdf/compress",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-393",
+      "page": "/pdf/compress",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-394",
+      "page": "/pdf/merge",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-395",
+      "page": "/pdf/split",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-396",
+      "page": "/pdf/split",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-397",
+      "page": "/portfolio-creator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-398",
+      "page": "/portfolio-creator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-399",
+      "page": "/ppt-to-pdf",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-400",
+      "page": "/privacy",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-401",
+      "page": "/protect",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-402",
+      "page": "/protect",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-403",
+      "page": "/qr-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-404",
+      "page": "/qr-generator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-405",
+      "page": "/qr-scanner",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-406",
+      "page": "/regex-tester",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-407",
+      "page": "/regex-tester",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-408",
+      "page": "/remove-audio",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-409",
+      "page": "/remove-audio",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-410",
+      "page": "/remove-background",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-411",
+      "page": "/remove-background",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-412",
+      "page": "/remove-silence",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-413",
+      "page": "/remove-silence",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-414",
+      "page": "/reorder",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-415",
+      "page": "/reorder",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-416",
+      "page": "/report-generator",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/report-generator\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-417",
+      "page": "/resize-images",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/resize-images\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-418",
+      "page": "/rotate",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rotate\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-419",
+      "page": "/rsa-generator",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/rsa-generator\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-420",
+      "page": "/security",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/security\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-421",
+      "page": "/sign",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/sign\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-422",
+      "page": "/split",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/split\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-423",
+      "page": "/sponsor-dashboard",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/sponsor-dashboard\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-424",
+      "page": "/sponsors",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/sponsors\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-425",
+      "page": "/steganography",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/steganography\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-426",
+      "page": "/svg-to-png",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/svg-to-png\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-427",
+      "page": "/tar-extractor",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/tar-extractor\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-428",
+      "page": "/text-case-converter",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/text-case-converter\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-429",
+      "page": "/text-diff-checker",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/text-diff-checker\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-430",
+      "page": "/timezone-converter",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/timezone-converter\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-431",
+      "page": "/tools",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/tools\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-432",
+      "page": "/txt-to-pdf",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/txt-to-pdf\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-433",
+      "page": "/unit-converter",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/unit-converter\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-434",
+      "page": "/unlock",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/unlock\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-435",
+      "page": "/url-encoder",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/url-encoder\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-436",
+      "page": "/url-shortener",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/url-shortener\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-437",
+      "page": "/uuid-generator",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/uuid-generator\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-438",
+      "page": "/video-compress",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/video-compress\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-439",
+      "page": "/video-to-gif",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/video-to-gif\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-440",
+      "page": "/video-trim",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/video-trim\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-441",
+      "page": "/voice-changer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-442",
+      "page": "/voice-changer",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-443",
+      "page": "/watermark",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-444",
+      "page": "/watermark",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-445",
+      "page": "/wav-mp3-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-446",
+      "page": "/wav-mp3-converter",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-447",
+      "page": "/webm-to-mp4",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-448",
+      "page": "/xlsx-to-csv",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Title too long",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-449",
+      "page": "/xlsx-to-csv",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-450",
+      "page": "/zip-creator",
+      "type": "seo",
+      "severity": "medium",
+      "description": "Missing H1",
+      "evidence": null
+    },
+    {
+      "id": "ISSUE-451",
+      "page": "/zip-extractor",
+      "type": "seo",
+      "severity": "low",
+      "description": "Audit failed: page.goto: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"http://localhost:3000/zip-extractor\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "evidence": null
+    }
+  ]
+}

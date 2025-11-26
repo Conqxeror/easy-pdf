@@ -294,33 +294,6 @@ export default function PdfToJpgPage() {
     "Click the 'Convert to JPG' button to start the conversion process.",
     "Download your JPG images. If you converted multiple pages, they will be provided in a convenient ZIP archive.",
   ];
-  const faqs = [
-    {
-      question: "Is it free to convert PDF to JPG?",
-      answer:
-        "Yes, our PDF to JPG converter is completely free to use. You can convert as many PDF files as you need without any hidden costs or limitations.",
-    },
-    {
-      question: "Are my files secure when converting PDF to JPG?",
-      answer:
-        "Absolutely. Your privacy is our top priority. All PDF to JPG conversion happens directly in your web browser. Your files are never uploaded to our servers, ensuring your documents remain confidential.",
-    },
-    {
-      question: "Can I extract text from specific pages of a multi-page PDF?",
-      answer:
-        "Yes, you can choose to convert all pages, a single page, or a specific range of pages. This is useful for large documents where you only need images from certain sections.",
-    },
-    {
-      question: "What file types does the PDF to JPG tool support?",
-      answer:
-        "Our tool supports PDF documents and various image formats including JPG, PNG, GIF, and BMP. For best results, ensure your documents have clear, high-quality text and good contrast.",
-    },
-    {
-      question: "Is there a file size limit for PDF to JPG conversion?",
-      answer:
-        "Yes, the maximum file size for a PDF to be converted to JPG is 50MB. For larger files, processing might be slower due to client-side operations.",
-    },
-  ];
 
   return (
     <ToolPageLayout
@@ -329,7 +302,6 @@ export default function PdfToJpgPage() {
       toolName={toolName}
       toolDescription={toolDescription}
       steps={steps}
-      faqs={faqs}
       currentTool="pdf-to-jpg"
       breadcrumbs={[
         { label: 'Home', href: '/' },
@@ -563,6 +535,6 @@ export default function PdfToJpgPage() {
           </div>
         )}
       </div>
-    </ToolPageLayout>
+    </ToolPageLayout >
   );
 }

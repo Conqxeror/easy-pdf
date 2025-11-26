@@ -14,7 +14,32 @@ export const toolsData = [
     seoDescription: "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
     features: ["Drag & drop multiple files", "Reorder before merging", "No file size limits", "100% secure processing"],
     relatedTools: ["/pdf/split", "/organize", "/pdf/compress"],
-    category: "Organize & Edit"
+    category: "Organize & Edit",
+    guide: {
+      introduction: "Merging PDF files is one of the most common document management tasks. Whether you're combining invoices for your accountant, merging chapters of a thesis, or consolidating reports for a meeting, our **Merge PDF** tool makes it simple, fast, and secure.",
+      steps: [
+        { title: "Upload Files", description: "Drag and drop your PDF files into the blue box above, or click to select them from your device." },
+        { title: "Reorder Pages", description: "Once uploaded, you can drag and drop the file thumbnails to arrange them in the exact order you want them to appear in the final document." },
+        { title: "Merge & Download", description: "Click the 'Merge PDF' button. Your files will be processed instantly in your browser, and a single combined PDF will be ready for download." }
+      ],
+      features: [
+        { title: "100% Secure & Private", description: "Unlike other online tools, Easy PDF operates entirely in your browser. Your files are **never uploaded** to a server. This means your sensitive data stays on your device, ensuring complete privacy." },
+        { title: "No File Size Limits", description: "Because we process files locally, you aren't restricted by server upload limits. Merge large documents with ease." },
+        { title: "Works Offline", description: "Once the page is loaded, you can use the tool even without an internet connection. Perfect for working on the go." }
+      ]
+    },
+    useCases: [
+      { title: "Combine Reports", description: "Merge monthly reports from different departments into a single annual review document." },
+      { title: "Student Assignments", description: "Combine multiple homework files, cover sheets, and references into one submission." },
+      { title: "Legal Documents", description: "Merge contracts, exhibits, and addendums into a single, organized legal packet." },
+      { title: "E-books & Manuscripts", description: "Join separate chapters or sections into a complete book ready for publishing." }
+    ],
+    faqs: [
+      { question: "Is it safe to merge PDFs online?", answer: "Yes, absolutely. We use client-side processing, meaning your files are merged directly in your browser and never uploaded to our servers." },
+      { question: "Can I rearrange pages after merging?", answer: "Yes, you can reorder the files before merging. To reorder individual pages, use our Organize PDF tool." },
+      { question: "Is there a limit to how many files I can merge?", answer: "No, there is no strict limit on the number of files. However, very large numbers of files may depend on your device's memory." },
+      { question: "Does merging reduce PDF quality?", answer: "No, our tool maintains the original quality of your documents during the merge process." }
+    ]
   },
   {
     href: "/pdf/split",
@@ -27,7 +52,32 @@ export const toolsData = [
     seoDescription: "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing.",
     features: ["Extract specific pages", "Split by page ranges", "Preview before splitting", "Download as ZIP"],
     relatedTools: ["/pdf/merge", "/delete-pages", "/organize"],
-    category: "Organize & Edit"
+    category: "Organize & Edit",
+    guide: {
+      introduction: "Large PDF files can be difficult to manage. Our **Split PDF** tool allows you to extract specific pages or split a large document into smaller, more manageable files. Whether you need just one page from a contract or want to break a book into chapters, this tool does it all.",
+      steps: [
+        { title: "Upload Your PDF", description: "Drag and drop your PDF file into the upload area to get started." },
+        { title: "Select Pages", description: "Click on the pages you want to extract, or enter a page range (e.g., 1-5)." },
+        { title: "Split & Download", description: "Click 'Split PDF'. Your new document containing only the selected pages will be ready for download instantly." }
+      ],
+      features: [
+        { title: "Precision Splitting", description: "Select exactly the pages you need with our visual page picker." },
+        { title: "Instant Processing", description: "No waiting for uploads or server processing. Splitting happens immediately in your browser." },
+        { title: "Secure & Private", description: "Your documents never leave your computer. We prioritize your data privacy." }
+      ]
+    },
+    useCases: [
+      { title: "Extract Chapters", description: "Pull out specific chapters from a large textbook or manual for focused reading." },
+      { title: "Remove Unwanted Pages", description: "Split a document to isolate and save only the relevant pages you need." },
+      { title: "Share Specific Sections", description: "Send only the relevant part of a contract or report to a client or colleague." },
+      { title: "Break Down Large Files", description: "Split a massive PDF into smaller, more manageable chunks for emailing." }
+    ],
+    faqs: [
+      { question: "Can I split a PDF into individual pages?", answer: "Yes, you can choose to extract every single page as a separate PDF file." },
+      { question: "How do I select specific pages?", answer: "You can click on the page thumbnails or type the page numbers (e.g., 1, 3-5) to select them." },
+      { question: "Will the split files retain the original formatting?", answer: "Yes, the extracted pages will look exactly like they did in the original document." },
+      { question: "Is it free to split PDFs?", answer: "Yes, our Split PDF tool is completely free to use with no hidden costs." }
+    ]
   },
   {
     href: "/pdf/compress",
@@ -40,7 +90,32 @@ export const toolsData = [
     seoDescription: "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels.",
     features: ["Multiple compression levels", "Quality preservation", "Batch processing", "Size preview"],
     relatedTools: ["/pdf/merge", "/pdf/split", "/watermark", "/protect"],
-    category: "Security & Privacy"
+    category: "Security & Privacy",
+    guide: {
+      introduction: "Is your PDF file too large to email? Our **Compress PDF** tool reduces the file size of your documents while maintaining excellent quality. It's the perfect solution for optimizing PDFs for web uploads, email attachments, or saving storage space.",
+      steps: [
+        { title: "Upload PDF", description: "Select the PDF file you want to compress from your device." },
+        { title: "Choose Compression Level", description: "Select from Low, Medium, or High compression depending on your needs for quality vs. file size." },
+        { title: "Compress & Download", description: "Click 'Compress PDF'. The tool will optimize your file and show you the size reduction before you download." }
+      ],
+      features: [
+        { title: "Smart Optimization", description: "We use advanced algorithms to remove unnecessary data without compromising readability." },
+        { title: "Visual Quality Control", description: "Choose the balance between file size and image quality that works for you." },
+        { title: "Fast & Free", description: "Compress as many files as you like, completely free and without limits." }
+      ]
+    },
+    useCases: [
+      { title: "Email Attachments", description: "Shrink large reports or presentations to fit within email attachment size limits." },
+      { title: "Web Uploads", description: "Optimize PDFs for faster loading times when uploading to websites or portals." },
+      { title: "Save Storage Space", description: "Reduce the footprint of your document archives on your hard drive or cloud storage." },
+      { title: "Mobile Viewing", description: "Create smaller, lighter files that open faster on mobile devices with limited data." }
+    ],
+    faqs: [
+      { question: "How much will my file size be reduced?", answer: "It depends on the content. Text-heavy PDFs shrink less, while image-heavy PDFs can often be reduced by 50% or more." },
+      { question: "Does compression affect quality?", answer: "We offer different levels. 'High' compression may slightly reduce image quality, while 'Low' compression keeps quality near-original." },
+      { question: "Can I compress multiple files at once?", answer: "Currently, we support processing one file at a time to ensure maximum privacy and browser performance." },
+      { question: "Is my data secure?", answer: "Yes, compression happens locally in your browser. Your file is never sent to a remote server." }
+    ]
   },
   {
     href: "/jpg-to-pdf",
@@ -67,7 +142,32 @@ export const toolsData = [
     seoDescription: "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
     features: ["High-quality output", "Custom resolution", "Batch processing", "Multiple formats"],
     relatedTools: ["/jpg-to-pdf", "/pdf/split", "/pdf/compress", "/ocr"],
-    category: "Convert & Create"
+    category: "Convert & Create",
+    guide: {
+      introduction: "Need to turn a PDF document into an image? Our **PDF to JPG** converter allows you to extract pages from a PDF and save them as high-quality JPG images. This is perfect for sharing on social media, inserting into presentations, or just viewing documents as images.",
+      steps: [
+        { title: "Select Your PDF", description: "Upload the PDF file you want to convert. You can drag and drop it or select it from your file explorer." },
+        { title: "Choose Pages", description: "You can convert the entire document or select specific pages to extract." },
+        { title: "Convert & Save", description: "Click 'Convert to JPG'. Your pages will be rendered as images instantly. You can download them individually or as a ZIP file." }
+      ],
+      features: [
+        { title: "High-Quality Rendering", description: "We use advanced rendering engines to ensure your text and images look crisp and clear in the converted JPGs." },
+        { title: "Batch Processing", description: "Convert multi-page PDFs in seconds. Our tool handles the heavy lifting efficiently." },
+        { title: "Privacy First", description: "Just like all our tools, the conversion happens on your device. No one else sees your documents." }
+      ]
+    },
+    useCases: [
+      { title: "Social Media Sharing", description: "Convert PDF pages into images to share easily on Instagram, Facebook, or LinkedIn." },
+      { title: "Presentations", description: "Extract slides or diagrams from a PDF to insert into PowerPoint or Keynote." },
+      { title: "Image Editing", description: "Convert pages to JPG to edit them in Photoshop or other image editing software." },
+      { title: "Quick Viewing", description: "Turn documents into images for easy viewing on devices that don't have a PDF reader." }
+    ],
+    faqs: [
+      { question: "Is it free to convert PDF to JPG?", answer: "Yes, our PDF to JPG converter is completely free to use without limitations." },
+      { question: "Are my files secure?", answer: "Absolutely. Conversion happens in your browser, so your files never leave your device." },
+      { question: "Can I convert specific pages?", answer: "Yes, you can choose to convert all pages or select specific ones to extract." },
+      { question: "What is the image quality?", answer: "We produce high-quality JPGs. You can rely on them for professional presentations and sharing." }
+    ]
   },
   {
     href: "/mp4-to-mp3",
@@ -118,7 +218,7 @@ export const toolsData = [
     icon: <Text className="w-8 h-8 text-fuchsia-500" />,
     comingSoon: false,
     keywords: ["text case", "uppercase converter", "snake_case", "camelCase", "slug generator"],
-    seoTitle: "Text Case Converter - Uppercase, camelCase, snake_case in your browser",
+    seoTitle: "Text Case Converter - Uppercase, camelCase, snake_case",
     seoDescription: "Convert text between uppercase, lowercase, camelCase, PascalCase, snake_case, kebab-case, and CONSTANT_CASE locally with instant previews.",
     features: [
       "Uppercase, lowercase, sentence, and title case",
@@ -181,7 +281,7 @@ export const toolsData = [
       "docs tooling",
       "cms prep"
     ],
-    seoTitle: "HTML ↔ Markdown Converter - Instant bidirectional markup conversion",
+    seoTitle: "HTML ↔ Markdown Converter - Instant Conversion Online",
     seoDescription: "Flip Markdown to clean HTML (and back) entirely in your browser with sanitization, previews, and copy shortcuts.",
     features: [
       "Bidirectional Markdown ↔ HTML conversion",
@@ -231,7 +331,7 @@ export const toolsData = [
       "markdown diff",
       "copy review"
     ],
-    seoTitle: "Text Diff Checker - Highlight additions and deletions instantly",
+    seoTitle: "Text Diff Checker - Compare Text Differences Online",
     seoDescription: "Paste two snippets and get a visual diff with inline highlights, delta stats, and downloadable reports. Runs 100% in your browser.",
     features: [
       "Words, lines, and character diff modes",
@@ -256,7 +356,7 @@ export const toolsData = [
       "regex tool",
       "regex highlighter"
     ],
-    seoTitle: "Regex Tester - Highlight matches and capture groups in your browser",
+    seoTitle: "Regex Tester - Test Regular Expressions Online",
     seoDescription: "Paste a regex and sample text to see matches, capture groups, and flag behavior instantly with zero uploads.",
     features: [
       "Words, URLs, emails presets",
@@ -437,7 +537,7 @@ export const toolsData = [
     icon: <LucideImage className="w-8 h-8 text-blue-500" />,
     comingSoon: false,
     keywords: ["resize images", "image resize", "change image size", "image dimensions", "image scaler"],
-    seoTitle: "Image Resize Tool - Resize Images to Custom Dimensions Online",
+    seoTitle: "Image Resize Tool - Resize Images Online Free",
     seoDescription: "Resize your images to custom dimensions or predefined presets. All processing happens directly in your browser for privacy and security.",
     features: ["Resize by percentage", "Custom dimensions", "Preset sizes", "Maintain aspect ratio", "Batch processing"],
     relatedTools: ["/image-converter", "/compress-images", "/bmp-tiff-converter"],
@@ -563,7 +663,7 @@ export const toolsData = [
     icon: <LucideImage className="w-8 h-8 text-purple-500" />,
     comingSoon: false,
     keywords: ["extract audio", "audio from video", "video to audio", "audio converter", "ffmpeg"],
-    seoTitle: "Extract Audio from Video - Convert Audio Formats Online with FFmpeg",
+    seoTitle: "Extract Audio from Video - Free Online Converter",
     seoDescription: "Extract audio tracks from video files or convert audio formats using FFmpeg.wasm. Extract audio directly in your browser without uploading files to a server.",
     features: ["Video to audio", "Audio format conversion", "Multiple output formats", "Client-side processing"],
     relatedTools: ["/mp4-to-mp3", "/video-to-gif", "/remove-audio"],
@@ -860,7 +960,7 @@ export const toolsData = [
     icon: <Shield className="w-8 h-8 text-red-500" />,
     comingSoon: false,
     keywords: ["password strength", "password checker", "security check", "password analyzer", "strong password"],
-    seoTitle: "Free Password Strength Checker - Test Password Security Online",
+    seoTitle: "Password Strength Checker - Test Security Online",
     seoDescription: "Check how strong your password is and learn how to make it more secure. Client-side analysis ensures your password never leaves your browser.",
     features: ["Instant analysis", "Crack time estimation", "Security tips", "100% client-side privacy"],
     relatedTools: ["/hash-generator", "/protect", "/unlock"],
@@ -1036,7 +1136,7 @@ export const toolsData = [
     icon: <Search className="w-8 h-8 text-red-500" />,
     href: "/advanced-ocr",
     keywords: ["advanced ocr", "ai ocr", "ocr with ai", "text extraction ai", "intelligent character recognition"],
-    seoTitle: "Advanced OCR with AI - Extract Text with Artificial Intelligence",
+    seoTitle: "Advanced OCR with AI - Extract Text from Images",
     seoDescription: "Extract text from PDFs and images with AI-powered OCR enhancement. Multiple language support with intelligent formatting preservation.",
     features: ["AI-enhanced text extraction", "Multiple language support", "Format preservation", "Confidence scoring"],
     relatedTools: ["/ocr", "/legal-analyzer", "/medical-analyzer"],

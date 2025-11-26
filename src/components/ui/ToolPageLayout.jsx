@@ -88,6 +88,14 @@ export default function ToolPageLayout({
 }) {
   const { isDark } = useTheme();
 
+  // Logic to get guide data
+  const activeToolData = currentTool ? toolsData.find(t => t.href === `/${currentTool}` || t.href === currentTool || (t.href.startsWith('/') && t.href.substring(1) === currentTool)) : null;
+  const guide = activeToolData?.guide;
+  
+  // Fallback to toolData if props are missing
+  const finalUseCases = useCases.length > 0 ? useCases : (activeToolData?.useCases || []);
+  const finalFaqs = faqs.length > 0 ? faqs : (activeToolData?.faqs || []);
+
   // Function to get icon based on feature text
   const getFeatureIcon = (featureText) => {
     const lowerFeature = featureText.toLowerCase();
@@ -126,9 +134,15 @@ export default function ToolPageLayout({
     return featureIcons.default;
   };
 
+  // ✅ SEO FIX: Primary H1 for server-side rendering
+  const h1Content = title || toolName || 'Easy PDF Tool';
+
   return (
     <>
-      <main id="main-content">
+      {/* ✅ SSR H1 - Hidden visually but visible to crawlers and screen readers */}
+      <h1 className="sr-only" id="page-title">{h1Content}</h1>
+      
+      <main id="main-content" role="main" aria-labelledby="page-title">
         <PageContainer>
           {/* Hero Section with Glass Effect */}
           <div className="relative overflow-hidden py-6 px-6 mb-4">
@@ -184,6 +198,60 @@ export default function ToolPageLayout({
             </div>
           </Section>
 
+          {/* Guide Section - SEO Content */}
+          {guide && (
+            <Section>
+              <div className="container-standard max-w-4xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-100">
+                <Card variant="default" className="p-6 md:p-8 bg-card/50 backdrop-blur-sm border-border">
+                  <div className="prose dark:prose-invert max-w-none">
+                    <AccessibleHeading level={2} className="text-2xl md:text-3xl font-bold mb-6 text-foreground">
+                      {`How to use ${toolName}`}
+                    </AccessibleHeading>
+                    
+                    {guide.introduction && (
+                      <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                        {guide.introduction}
+                      </p>
+                    )}
+
+                    {guide.steps && guide.steps.length > 0 && (
+                      <div className="mb-10">
+                        <h3 className="text-xl md:text-2xl font-semibold mb-4 text-foreground">Step-by-Step Guide</h3>
+                        <div className="space-y-6">
+                          {guide.steps.map((step, idx) => (
+                            <div key={idx} className="flex gap-4">
+                              <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                                {idx + 1}
+                              </div>
+                              <div>
+                                <h4 className="font-semibold text-lg mb-1 text-foreground">{step.title}</h4>
+                                <p className="text-muted-foreground">{step.description}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {guide.features && guide.features.length > 0 && (
+                      <div>
+                        <h3 className="text-xl md:text-2xl font-semibold mb-4 text-foreground">Why use this tool?</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {guide.features.map((feature, idx) => (
+                            <div key={idx} className="bg-muted/30 p-4 rounded-lg border border-border/50">
+                              <h4 className="font-semibold text-lg mb-2 text-foreground">{feature.title}</h4>
+                              <p className="text-sm text-muted-foreground">{feature.description}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              </div>
+            </Section>
+          )}
+
           {/* Features Section with Icons */}
           {features.length > 0 && (
             <Section>
@@ -219,7 +287,7 @@ export default function ToolPageLayout({
           )}
 
           {/* Use Cases Section */}
-          {useCases.length > 0 && (
+          {finalUseCases.length > 0 && (
             <Section>
               <div className="container-standard max-w-7xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-175">
                 <AccessibleHeading 
@@ -229,7 +297,7 @@ export default function ToolPageLayout({
                   Common Use Cases
                 </AccessibleHeading>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                  {useCases.map((useCase, index) => (
+                  {finalUseCases.map((useCase, index) => (
                     <Card 
                       key={index}
                       variant="default"
@@ -289,7 +357,7 @@ export default function ToolPageLayout({
           )}
 
           {/* FAQs - Enhanced Accordion */}
-          {((faqs && faqs.length > 0) || currentTool) && (
+          {((finalFaqs && finalFaqs.length > 0) || currentTool) && (
             <Section>
               <div className="container-standard max-w-4xl mx-auto animate-in fade-in-0 slide-in-from-bottom-5 duration-700 delay-300">
                 <AccessibleHeading 
@@ -300,7 +368,7 @@ export default function ToolPageLayout({
                 </AccessibleHeading>
                 {(() => {
                   // Merge provided page FAQs with common/tool-specific FAQs for richer content
-                  const provided = Array.isArray(faqs) ? faqs : []
+                  const provided = Array.isArray(finalFaqs) ? finalFaqs : []
                   let merged = [...provided]
                   if (currentTool) {
                     const extra = getFAQsForTool(currentTool)
