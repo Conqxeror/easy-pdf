@@ -20,8 +20,8 @@ export default function MergeClient() {
   const [error, setError] = useState("");
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState(""); // For screen reader announcements
-  const dragItem = useRef(null);
-  const dragOverItem = useRef(null);
+  const [dragItemIndex, setDragItemIndex] = useState(null);
+  const [dragOverItemIndex, setDragOverItemIndex] = useState(null);
   const mergedPdfPreviewCanvasRef = useRef(null);
   const [mergedPdfDocProxy, setMergedPdfDocProxy] = useState(null);
   const renderTaskRef = useRef(null);
@@ -50,50 +50,44 @@ export default function MergeClient() {
     };
   }, [mergedPdfUrl, mergedPdfDocProxy]);
 
-  const renderMergedPdfPreview = useCallback(async () => {
-    const canvas = mergedPdfPreviewCanvasRef.current;
-    if (!canvas || !mergedPdfDocProxy || !pdfjs) {
-      if (canvas) {
+    useEffect(() => {
+    const renderMergedPdfPreview = async () => {
+      if (!mergedPdfDocProxy || !mergedPdfPreviewCanvasRef.current || !pdfjs) return;
+
+      try {
+        const page = await mergedPdfDocProxy.getPage(1);
+        const canvas = mergedPdfPreviewCanvasRef.current;
         const context = canvas.getContext("2d");
+        const viewport = page.getViewport({ scale: 1 });
+        const scale = canvas.width / viewport.width;
+        const scaledViewport = page.getViewport({ scale });
+
+        canvas.height = scaledViewport.height;
+
+        if (renderTaskRef.current) {
+          renderTaskRef.current.cancel();
+        }
+
+        const renderContext = {
+          canvasContext: context,
+          viewport: scaledViewport,
+        };
         context.clearRect(0, 0, canvas.width, canvas.height);
-        canvas.height = 0;
+        renderTaskRef.current = page.render(renderContext);
+        await renderTaskRef.current.promise;
+        renderTaskRef.current = null;
+      } catch (e) {
+        if (e.name !== "RenderingCancelledException") {
+          console.error("Error rendering PDF preview:", e);
+          setError("Failed to render PDF preview.");
+        }
       }
-      return;
-    }
+    };
 
-    if (renderTaskRef.current) {
-      renderTaskRef.current.cancel();
-      renderTaskRef.current = null;
-    }
-
-    const context = canvas.getContext("2d");
-    try {
-      const page = await mergedPdfDocProxy.getPage(1);
-      const viewport = page.getViewport({ scale: 1 });
-      const desiredWidth = 800;
-      const scale = desiredWidth / viewport.width;
-      const scaledViewport = page.getViewport({ scale: scale });
-      canvas.width = scaledViewport.width;
-      canvas.height = scaledViewport.height;
-      const renderContext = {
-        canvasContext: context,
-        viewport: scaledViewport,
-      };
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      renderTaskRef.current = page.render(renderContext);
-      await renderTaskRef.current.promise;
-      renderTaskRef.current = null;
-    } catch (e) {
-      if (e.name !== "RenderingCancelledException") {
-        console.error("Error rendering PDF preview:", e);
-        setError("Failed to render PDF preview.");
-      }
-    }
+    renderMergedPdfPreview();
   }, [mergedPdfDocProxy, pdfjs]);
 
-  useEffect(() => {
-    renderMergedPdfPreview();
-  }, [renderMergedPdfPreview]);
+
 
   const handleFiles = (newFiles) => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
@@ -128,13 +122,13 @@ export default function MergeClient() {
   );
 
   const handleDragStart = (e, index) => {
-    dragItem.current = index;
+    setDragItemIndex(index);
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", e.target.outerHTML);
   };
 
   const handleDragEnter = (e, index) => {
-    dragOverItem.current = index;
+    setDragOverItemIndex(index);
   };
 
   const handleDragOver = (e) => {
@@ -143,8 +137,6 @@ export default function MergeClient() {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    const dragItemIndex = dragItem.current;
-    const dragOverItemIndex = dragOverItem.current;
     if (dragItemIndex !== null && dragOverItemIndex !== null) {
       setFiles((prevFiles) => {
         const draggedItem = prevFiles[dragItemIndex];
@@ -154,13 +146,13 @@ export default function MergeClient() {
         return newFiles;
       });
     }
-    dragItem.current = null;
-    dragOverItem.current = null;
+    setDragItemIndex(null);
+    setDragOverItemIndex(null);
   };
 
   const handleDragEnd = () => {
-    dragItem.current = null;
-    dragOverItem.current = null;
+    setDragItemIndex(null);
+    setDragOverItemIndex(null);
   };
 
   const handleDragLeave = () => { };
@@ -280,13 +272,13 @@ export default function MergeClient() {
                 onDrop={handleDrop}
                 onDragEnd={handleDragEnd}
                 onDragLeave={handleDragLeave}
-                className={`file-item flex items-center justify-between p-4 border border-border bg-muted/30 cursor-grab transition-all duration-200 rounded-none ${dragItem.current === index ? "opacity-75 shadow-lg ring-2 ring-primary" : ""
-                  } ${dragOverItem.current === index &&
-                    dragItem.current !== index
+                className={`file-item flex items-center justify-between p-4 border border-border bg-muted/30 cursor-grab transition-all duration-200 rounded-none ${dragItemIndex === index ? "opacity-75 shadow-lg ring-2 ring-primary" : ""
+                  } ${dragOverItemIndex === index &&
+                    dragItemIndex !== index
                     ? "scale-[1.02] border-primary/50 bg-muted"
                     : ""
                   }`}
-                aria-grabbed={dragItem.current === index ? "true" : "false"}
+                aria-grabbed={dragItemIndex === index ? "true" : "false"}
                 aria-roledescription="Draggable file item"
               >
                 <div className="flex items-center">

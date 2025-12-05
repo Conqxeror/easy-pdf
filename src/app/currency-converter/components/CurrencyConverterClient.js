@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,28 +29,16 @@ export default function CurrencyConverterClient() {
   const [amount, setAmount] = useState("1");
   const [from, setFrom] = useState("USD");
   const [to, setTo] = useState("EUR");
-  const [result, setResult] = useState("");
 
-  const convert = useCallback(() => {
-    if (!amount || isNaN(amount)) {
-      setResult("");
-      return;
-    }
-
+  const result = (() => {
+    if (!amount || isNaN(amount)) return "";
     const val = parseFloat(amount);
     const fromRate = rates[from].rate;
     const toRate = rates[to].rate;
-
-    // Convert to USD first, then to target
     const inUsd = val / fromRate;
     const converted = inUsd * toRate;
-
-    setResult(converted.toFixed(2));
-  }, [amount, from, to]);
-
-  useEffect(() => {
-    convert();
-  }, [convert]);
+    return converted.toFixed(2);
+  })();
 
   const swap = () => {
     setFrom(to);

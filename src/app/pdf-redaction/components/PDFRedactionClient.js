@@ -133,7 +133,7 @@ export default function PDFRedactionClient() {
       }
       setRedactedPdf(null);
     }, 1000);
-  }, [file, setRedactedPdf]);
+  }, [file, redactedPdf, setRedactedPdf]);
 
   // Cleanup on unmount: revoke any outstanding object URL
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -18,13 +18,21 @@ const SAMPLE_HTML = `<section class="prose">\n  <h2>Instant conversions</h2>\n  
 const turndown = new TurndownService({ headingStyle: "atx" });
 turndown.keep(["span", "br", "sub", "sup"]);
 
-const sanitizeHtml = (value) => DOMPurify.sanitize(value, { ADD_TAGS: ["style"], ADD_ATTR: ["target", "rel", "class"] });
+const sanitizeHtml = (value) => {
+  if (typeof window === 'undefined') return "";
+  return DOMPurify.sanitize(value, { ADD_TAGS: ["style"], ADD_ATTR: ["target", "rel", "class"] });
+};
 
 export default function HtmlMarkdownConverterClient() {
 	const [markdownValue, setMarkdownValue] = useState(SAMPLE_MARKDOWN);
-	const [htmlValue, setHtmlValue] = useState(() => sanitizeHtml(marked.parse(SAMPLE_MARKDOWN)));
+	const [htmlValue, setHtmlValue] = useState("");
 	const [activeTab, setActiveTab] = useState("preview");
 	const [error, setError] = useState("");
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setHtmlValue(sanitizeHtml(marked.parse(SAMPLE_MARKDOWN)));
+    }, []);
 
 	const convertMarkdownToHtml = () => {
 		try {

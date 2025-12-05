@@ -215,6 +215,21 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/merge',
+        destination: '/pdf/merge',
+        permanent: true,
+      },
+      {
+        source: '/split',
+        destination: '/pdf/split',
+        permanent: true,
+      },
+      {
+        source: '/compress',
+        destination: '/pdf/compress',
+        permanent: true,
+      },
+      {
         source: '/:path+/',
         destination: '/:path+',
         permanent: true,

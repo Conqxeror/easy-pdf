@@ -8,7 +8,7 @@ import { Tooltip } from './tooltip'
 import { cn } from '@/lib/utils'
 
 export function ThemeToggle({ className, variant = "ghost", size = "default", showTooltip = true }) {
-  const { theme, toggleTheme, isDark } = useTheme()
+  const { toggleTheme, isDark } = useTheme()
 
   const button = (
     <Button

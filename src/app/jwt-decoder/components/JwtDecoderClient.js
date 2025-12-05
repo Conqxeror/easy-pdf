@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -11,31 +11,19 @@ import { Code2, Clock, ShieldCheck } from "lucide-react";
 
 export default function JwtDecoderClient() {
   const [token, setToken] = useState("");
-  const [header, setHeader] = useState(null);
-  const [payload, setPayload] = useState(null);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (!token.trim()) {
-      setHeader(null);
-      setPayload(null);
-      setError("");
-      return;
-    }
+  let header = null;
+  let payload = null;
+  let error = "";
 
+  if (token.trim()) {
     try {
-      const decodedHeader = jwtDecode(token, { header: true });
-      const decodedPayload = jwtDecode(token);
-
-      setHeader(decodedHeader);
-      setPayload(decodedPayload);
-      setError("");
+      header = jwtDecode(token, { header: true });
+      payload = jwtDecode(token);
     } catch {
-      setError("Invalid JWT format.");
-      setHeader(null);
-      setPayload(null);
+      error = "Invalid JWT format.";
     }
-  }, [token]);
+  }
 
   const formatJson = (obj) => JSON.stringify(obj, null, 2);
 

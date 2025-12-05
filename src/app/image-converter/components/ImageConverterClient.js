@@ -43,8 +43,10 @@ export default function ImageConverterClient() {
     setIsProcessing(true);
     setError("");
 
-    for (let i = 0; i < files.length; i++) {
-      const item = files[i];
+    const updatedFiles = files.map(f => ({ ...f }));
+
+    for (let i = 0; i < updatedFiles.length; i++) {
+      const item = updatedFiles[i];
       try {
         const img = new Image();
         img.src = item.preview || safeCreateObjectURL(item.file);
@@ -72,7 +74,7 @@ export default function ImageConverterClient() {
       }
     }
 
-    setFiles([...files]);
+    setFiles(updatedFiles);
     setIsProcessing(false);
   };
 

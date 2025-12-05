@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { toolCategories } from "@/lib/toolCategories";
 
@@ -11,13 +11,15 @@ const slugifyCategory = (name) =>
 
 export default function MobileNav({ isOpen, closeAllMenus }) {
   const [mobileSubmenuOpen, setMobileSubmenuOpen] = useState(null);
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
   const pathname = usePathname();
 
-  useEffect(() => {
+  if (isOpen !== prevIsOpen) {
+    setPrevIsOpen(isOpen);
     if (!isOpen) {
       setMobileSubmenuOpen(null);
     }
-  }, [isOpen]);
+  }
 
   if (!isOpen) return null;
 

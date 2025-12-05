@@ -1,5 +1,5 @@
 // Accessibility and Performance Enhancement Component
-import React from 'react';
+import React, { useId } from 'react';
 
 // Accessible heading component with proper hierarchy
 export const AccessibleHeading = ({ level = 1, children, className = '', id, ...props }) => {
@@ -88,7 +88,8 @@ export const AccessibleInput = ({
   className = "",
   ...props 
 }) => {
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const generatedId = useId();
+  const inputId = id || `input-${generatedId}`;
   const errorId = error ? `${inputId}-error` : undefined;
 
   return (
@@ -262,7 +263,7 @@ export const usePerformanceMonitoring = () => {
       
       try {
         observer.observe({ entryTypes: ['largest-contentful-paint'] });
-      } catch (e) {
+      } catch {
         // Fallback for older browsers
       }
       
@@ -352,7 +353,7 @@ export const SkipLink = ({ href = '#main-content', children = 'Skip to main cont
   );
 };
 
-export default {
+const AccessibilityEnhancements = {
   AccessibleHeading,
   AccessibleLoader,
   AccessibleButton,
@@ -366,3 +367,5 @@ export default {
   VisuallyHidden,
   SkipLink
 };
+
+export default AccessibilityEnhancements;

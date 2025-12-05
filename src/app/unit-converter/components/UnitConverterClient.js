@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -103,45 +103,44 @@ export default function UnitConverterClient() {
   const [fromUnit, setFromUnit] = useState("m");
   const [toUnit, setToUnit] = useState("ft");
   const [fromValue, setFromValue] = useState("1");
-  const [toValue, setToValue] = useState("");
 
-  useEffect(() => {
-    // Reset units when category changes
-    const units = Object.keys(categories[category].units);
-    if (!units.includes(fromUnit)) setFromUnit(units[0]);
-    if (!units.includes(toUnit)) setToUnit(units[1] || units[0]);
-  }, [category, fromUnit, toUnit]);
-
-  useEffect(() => {
-    convert(fromValue, fromUnit, toUnit, category);
-  }, [fromValue, fromUnit, toUnit, category]);
-
-  const convert = (value, from, to, cat) => {
-    if (value === "" || isNaN(value)) {
-      setToValue("");
-      return;
-    }
-
-    const val = parseFloat(value);
-    let result;
-
-    if (cat === "temperature") {
-      if (from === to) result = val;
-      else if (from === "c" && to === "f") result = (val * 9 / 5) + 32;
-      else if (from === "c" && to === "k") result = val + 273.15;
-      else if (from === "f" && to === "c") result = (val - 32) * 5 / 9;
-      else if (from === "f" && to === "k") result = (val - 32) * 5 / 9 + 273.15;
-      else if (from === "k" && to === "c") result = val - 273.15;
-      else if (from === "k" && to === "f") result = (val - 273.15) * 9 / 5 + 32;
-    } else {
-      const fromFactor = categories[cat].units[from].factor;
-      const toFactor = categories[cat].units[to].factor;
-      result = (val * fromFactor) / toFactor;
-    }
-
-    // Format result to avoid floating point errors but keep precision
-    setToValue(parseFloat(result.toPrecision(10)).toString());
+  const handleCategoryChange = (newCategory) => {
+    setCategory(newCategory);
+    const units = Object.keys(categories[newCategory].units);
+    setFromUnit(units[0]);
+    setToUnit(units[1] || units[0]);
   };
+
+  // Calculate toValue (derived state)
+  let toValue = "";
+  if (fromValue !== "" && !isNaN(fromValue)) {
+    const val = parseFloat(fromValue);
+    let result;
+    const cat = category;
+    const from = fromUnit;
+    const to = toUnit;
+
+    // Ensure units belong to category (fallback if state update hasn't propagated yet, though handleCategoryChange handles it)
+    // But during render after category change, fromUnit might still be old if we didn't batch updates?
+    // React batches updates, so it should be fine.
+    // But let's be safe.
+    if (categories[cat].units[from] && categories[cat].units[to]) {
+        if (cat === "temperature") {
+          if (from === to) result = val;
+          else if (from === "c" && to === "f") result = (val * 9 / 5) + 32;
+          else if (from === "c" && to === "k") result = val + 273.15;
+          else if (from === "f" && to === "c") result = (val - 32) * 5 / 9;
+          else if (from === "f" && to === "k") result = (val - 32) * 5 / 9 + 273.15;
+          else if (from === "k" && to === "c") result = val - 273.15;
+          else if (from === "k" && to === "f") result = (val - 273.15) * 9 / 5 + 32;
+        } else {
+          const fromFactor = categories[cat].units[from].factor;
+          const toFactor = categories[cat].units[to].factor;
+          result = (val * fromFactor) / toFactor;
+        }
+        toValue = parseFloat(result.toPrecision(10)).toString();
+    }
+  }
 
   return (
     <ToolPageLayout
@@ -167,7 +166,7 @@ export default function UnitConverterClient() {
       ]}
     >
       <div className="max-w-3xl mx-auto space-y-8">
-        <Tabs value={category} onValueChange={setCategory} className="w-full">
+        <Tabs value={category} onValueChange={handleCategoryChange} className="w-full">
           <TabsList className="flex flex-wrap h-auto gap-2 bg-transparent justify-center mb-6">
             {Object.entries(categories).map(([key, { label }]) => (
               <TabsTrigger

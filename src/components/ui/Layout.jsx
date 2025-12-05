@@ -271,7 +271,7 @@ export const CTASection = ({
 // Removed duplicate ToolPageLayout component to avoid confusion
 // The ToolPageLayout component is now in its own file at @/components/ui/ToolPageLayout.jsx
 
-export default {
+const Layout = {
   PageContainer,
   PageHeader,
   PageContent,
@@ -280,5 +280,7 @@ export default {
   Grid,
   Hero,
   FeatureGrid,
-  CTASection,
+  CTASection
 };
+
+export default Layout;

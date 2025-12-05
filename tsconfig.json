@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "ES6"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "ES6"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -20,12 +24,17 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types"
+    ],
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
     // removed invalid TypeScript option "noUncheckedSideEffectImports" — not a supported compiler option
   },
   "include": [
@@ -35,7 +44,11 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "scripts"]
+  "exclude": [
+    "node_modules",
+    "scripts"
+  ]
 }

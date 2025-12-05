@@ -14,28 +14,22 @@ import { Download, HelpCircle } from "lucide-react";
  * - isProcessing: boolean
  */
 export default function ToolActions({ primary = {}, secondary = {}, download = null, isProcessing = false }) {
-  const PrimaryContent = () => {
-    if (primary.href) {
-      return (
-        <a href={primary.href} className="w-full">
-          <Button size="lg" className="w-full" disabled={primary.disabled || isProcessing}>
-            {primary.label}
-          </Button>
-        </a>
-      );
-    }
-
-    return (
-      <Button size="lg" className="w-full" onClick={primary.onClick} disabled={primary.disabled || isProcessing}>
-        {primary.label}
-      </Button>
-    );
-  };
-
   return (
     <div className="w-full flex flex-col sm:flex-row items-center gap-3">
       <div className="flex-1">
-        {primary && <PrimaryContent />}
+        {primary && (
+          primary.href ? (
+            <a href={primary.href} className="w-full">
+              <Button size="lg" className="w-full" disabled={primary.disabled || isProcessing}>
+                {primary.label}
+              </Button>
+            </a>
+          ) : (
+            <Button size="lg" className="w-full" onClick={primary.onClick} disabled={primary.disabled || isProcessing}>
+              {primary.label}
+            </Button>
+          )
+        )}
       </div>
 
       <div className="flex items-center gap-3">

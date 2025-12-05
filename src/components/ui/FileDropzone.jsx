@@ -7,7 +7,6 @@ import { FileText, UploadCloud, X, CheckCircle, AlertCircle } from "lucide-react
 import Loader from "./Loader";
 import { Button } from "./button";
 import { Card } from "./card";
-import { Progress } from "./progress";
 import { Badge } from "./badge";
 
 const FileDropzone = ({

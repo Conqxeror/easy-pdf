@@ -76,8 +76,6 @@ export default function DesktopNav({ closeAllMenus }) {
   return (
     <nav className="hidden lg:flex lg:flex-wrap lg:gap-x-4 lg:gap-y-2 items-center gap-1 h-auto justify-center">
       {toolCategories.map((category) => {
-        const isOpen = desktopSubmenuOpen === category.name;
-
         const panelContent = (
           <>
             <div style={{ transform: `translateX(${dropdownShift}px)` }} className="relative">

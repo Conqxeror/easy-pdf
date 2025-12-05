@@ -3,29 +3,19 @@
 
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SponsorDashboard from '@/components/ui/SponsorDashboard';
 import { trackEvent } from '@/lib/analytics';
 
 const SponsorDashboardPage = () => {
   const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [password, setPassword] = useState('');
-  const [showLogin, setShowLogin] = useState(true);
-
-  useEffect(() => {
-    // Check if already authorized (guard storage access for SSR or restricted environments)
+  const [isAuthorized, setIsAuthorized] = useState(() => {
     try {
-      const authorized = typeof window !== 'undefined' ? sessionStorage.getItem('sponsor_dashboard_auth') : null;
-      if (authorized === 'true') {
-        setIsAuthorized(true);
-        setShowLogin(false);
-      }
-    } catch {
-      // ignore storage access errors
-    }
-  }, []);
+      return typeof window !== 'undefined' && sessionStorage.getItem('sponsor_dashboard_auth') === 'true';
+    } catch { return false; }
+  });
+  const [password, setPassword] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -33,7 +23,6 @@ const SponsorDashboardPage = () => {
     // Simple password protection (in production, use proper auth)
     if (password === 'sponsor2024' || password === 'demo') {
       setIsAuthorized(true);
-      setShowLogin(false);
       try { sessionStorage.setItem('sponsor_dashboard_auth', 'true'); } catch { /* ignore */ }
       trackEvent('sponsor_dashboard_login', { success: true });
     } else {
@@ -42,7 +31,7 @@ const SponsorDashboardPage = () => {
     }
   };
 
-  if (showLogin) {
+  if (!isAuthorized) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="bg-background border border-border p-8 max-w-md w-full">

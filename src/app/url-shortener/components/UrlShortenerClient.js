@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,15 +9,14 @@ import { Trash2, Copy, Check } from "lucide-react";
 
 export default function UrlShortenerClient() {
   const [url, setUrl] = useState("");
-  const [links, setLinks] = useState([]);
-  const [copied, setCopied] = useState(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem("shortened_links");
-    if (saved) {
-      setLinks(JSON.parse(saved));
+  const [links, setLinks] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem("shortened_links");
+      return saved ? JSON.parse(saved) : [];
     }
-  }, []);
+    return [];
+  });
+  const [copied, setCopied] = useState(null);
 
   const shorten = () => {
     if (!url) return;

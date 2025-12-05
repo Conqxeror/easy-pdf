@@ -27,7 +27,8 @@ export default function RelatedTools({ currentTool, tools }) {
       !relatedTools.some(rt => rt.href === t.href)
     );
     // Shuffle and take needed amount
-    const shuffled = otherTools.sort(() => 0.5 - Math.random());
+    // Use deterministic selection to avoid hydration mismatch and impure render
+    const shuffled = otherTools;
     relatedTools = [...relatedTools, ...shuffled.slice(0, 4 - relatedTools.length)];
   }
 

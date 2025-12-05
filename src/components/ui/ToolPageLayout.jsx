@@ -5,8 +5,7 @@ import { Button } from "@/components/ui/button";
 import { 
   PageContainer, 
   Hero, 
-  Section, 
-  CTASection 
+  Section 
 } from "@/components/ui/Layout";
 import { AccessibleHeading } from "@/components/ui/AccessibilityEnhancements";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -17,7 +16,6 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Supporters from "@/components/ui/Supporters";
 import { toolsData } from '@/lib/toolData';
 import { getFAQsForTool } from '@/lib/faqData';
-import { useTheme } from "@/contexts/ThemeContext";
 import { CheckCircle, Sparkles, FileText, Split, Minimize2, RotateCw, Stamp, Lock, Unlock, Text, ListOrdered, Eraser, PlusCircle, Signature, FileBadge2, Image as LucideImage, Search, FileHeart, Settings, Bookmark, Table, Layers, Shield, EyeOff, GitCompare, MessageSquare, Calculator, QrCode, Award, Briefcase, Files } from "lucide-react";
 
 // Lazy load heavy components with error boundaries
@@ -86,7 +84,6 @@ export default function ToolPageLayout({
   features = [],
   useCases = []
 }) {
-  const { isDark } = useTheme();
   const headingText = toolName || title || "easy-pdf tool";
 
   // Function to get icon based on feature text
@@ -129,9 +126,6 @@ export default function ToolPageLayout({
 
   return (
     <>
-      <AccessibleHeading level={1} className="sr-only">
-        {headingText}
-      </AccessibleHeading>
       <main id="main-content" role="main" aria-label={`${headingText} main content`}>
         <PageContainer>
           {/* Hero Section with Glass Effect */}
@@ -140,7 +134,7 @@ export default function ToolPageLayout({
             <div className="absolute inset-0 bg-background -z-10" />
             <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] -z-10" />
             
-            <Hero title={title} subtitle={subtitle} headingLevel={2} />
+            <Hero title={title} subtitle={subtitle} headingLevel={1} />
           </div>
 
           {/* Breadcrumb - Enhanced Styling */}

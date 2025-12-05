@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Github, Linkedin, Mail, PenTool } from "lucide-react";
+import { Linkedin, Mail, PenTool } from "lucide-react";
 import { Orbitron } from "next/font/google";
 import { cn } from "@/lib/utils";
 import FooterClient from './FooterClient';

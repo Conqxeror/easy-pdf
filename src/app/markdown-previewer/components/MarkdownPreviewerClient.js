@@ -9,13 +9,18 @@ import DOMPurify from "dompurify";
 
 export default function MarkdownPreviewerClient() {
   const [input, setInput] = useState("# Hello World\n\nStart typing markdown here...");
-  const [html, setHtml] = useState("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  const html = React.useMemo(() => {
+    if (!mounted) return "";
     const rawHtml = marked.parse(input);
-    const cleanHtml = DOMPurify.sanitize(rawHtml);
-    setHtml(cleanHtml);
-  }, [input]);
+    return DOMPurify.sanitize(rawHtml);
+  }, [input, mounted]);
 
   return (
     <ToolPageLayout

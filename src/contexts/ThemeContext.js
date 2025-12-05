@@ -20,8 +20,8 @@ export const ThemeProvider = ({ children }) => {
 
   // Initialize theme from localStorage or system preference
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    
     // Check localStorage first
     const storedTheme = localStorage.getItem('theme');
     
@@ -87,11 +87,6 @@ export const ThemeProvider = ({ children }) => {
 
   const setLightTheme = () => setTheme('light');
   const setDarkTheme = () => setTheme('dark');
-
-  // Prevent flash of incorrect theme
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <ThemeContext.Provider value={{

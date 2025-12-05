@@ -17,7 +17,7 @@ import {
   BarChart3,
   Target
 } from 'lucide-react';
-import { trackSponsorView, trackSponsorClick, getAllSponsorReports } from '@/lib/sponsorAnalytics';
+import { trackSponsorView, trackSponsorClick } from '@/lib/sponsorAnalytics';
 import { getAllSponsors } from '@/lib/sponsorData';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
@@ -25,18 +25,9 @@ import Image from 'next/image';
 import SponsorCard from '@/components/ui/SponsorCard';
 
 const SponsorsPage = () => {
-  const [analytics, setAnalytics] = useState(null);
-  const [, setSponsorReports] = useState([]);
+  const [analytics] = useState(() => getAppUsageAnalytics());
 
   useEffect(() => {
-    // Load analytics data
-    const appAnalytics = getAppUsageAnalytics();
-    setAnalytics(appAnalytics);
-
-    // Load sponsor reports
-    const reports = getAllSponsorReports();
-    setSponsorReports(reports);
-
     // Track page view
     trackEvent('sponsors_page_viewed');
     trackSponsorView('sponsors_page', 'full_page');

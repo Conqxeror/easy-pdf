@@ -2,7 +2,6 @@
 /* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect, useCallback } from "react";
-import heic2any from "heic2any";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -78,6 +77,7 @@ export default function HeicToJpgClient() {
     setError("");
 
     const updated = [...files];
+    const heic2any = (await import("heic2any")).default;
 
     for (let i = 0; i < updated.length; i++) {
       const item = updated[i];

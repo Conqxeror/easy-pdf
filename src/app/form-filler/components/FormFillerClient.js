@@ -325,7 +325,7 @@ export default function FormFillerClient() {
     >
       <div className="space-y-6">
         <FileDropzone
-          accept={{ "application/pdf": [".pdf"] }}
+          accept=".pdf"
           onFiles={handleFiles}
           maxFiles={1}
           label="Upload PDF to Fill"

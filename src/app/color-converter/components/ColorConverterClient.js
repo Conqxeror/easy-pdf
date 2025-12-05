@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,25 +10,7 @@ import tinycolor from "tinycolor2";
 
 export default function ColorConverterClient() {
   const [input, setInput] = useState("#3b82f6");
-  const [color, setColor] = useState(null);
   const [copied, setCopied] = useState(null);
-
-  useEffect(() => {
-    const c = tinycolor(input);
-    if (c.isValid()) {
-      setColor({
-        hex: c.toHexString(),
-        rgb: c.toRgbString(),
-        hsl: c.toHslString(),
-        hsv: c.toHsvString(),
-        cmyk: toCmykString(c),
-        isDark: c.isDark(),
-        obj: c
-      });
-    } else {
-      setColor(null);
-    }
-  }, [input]);
 
   const toCmykString = (c) => {
     const rgb = c.toRgb();
@@ -43,6 +25,17 @@ export default function ColorConverterClient() {
 
     return `cmyk(${Math.round(cyan * 100)}%, ${Math.round(magenta * 100)}%, ${Math.round(yellow * 100)}%, ${Math.round(k * 100)}%)`;
   };
+
+  const c = tinycolor(input);
+  const color = c.isValid() ? {
+    hex: c.toHexString(),
+    rgb: c.toRgbString(),
+    hsl: c.toHslString(),
+    hsv: c.toHsvString(),
+    cmyk: toCmykString(c),
+    isDark: c.isDark(),
+    obj: c
+  } : null;
 
   const copyToClipboard = (text, type) => {
     navigator.clipboard.writeText(text);

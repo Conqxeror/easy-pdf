@@ -11,13 +11,9 @@ import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
 // until real sponsors join. This prevents showing placeholder/mock companies.
 
 export default function SponsorsClient() {
-  const [analytics, setAnalytics] = useState(null);
+  const [analytics] = useState(() => getAppUsageAnalytics());
 
   useEffect(() => {
-    // Load analytics data
-    const appAnalytics = getAppUsageAnalytics();
-    setAnalytics(appAnalytics);
-
     // Track page view
     trackEvent('sponsors_page_viewed');
     trackSponsorView('sponsors_page', 'full_page');

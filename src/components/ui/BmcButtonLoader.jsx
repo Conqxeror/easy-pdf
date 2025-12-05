@@ -27,7 +27,7 @@ export default function BmcButtonLoader({ slug = 'kadriwalimt', text = 'Sponsor 
     script.onload = () => {
       try {
         window.__bmc_loaded = true;
-      } catch (e) {}
+      } catch {}
     };
 
     document.body.appendChild(script);

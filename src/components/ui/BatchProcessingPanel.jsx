@@ -19,12 +19,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { advancedPdfProcessor } from '@/lib/advancedPdfProcessing';
-import { useUserPreferences } from '@/lib/userPreferences';
 import { sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 // Premium functionality removed - all features now free
+
+const capabilities = { maxBatchSize: 200, maxFileSize: 500 }; // Unlimited for all users
 
 const BatchProcessingPanel = ({ className = '' }) => {
   const [files, setFiles] = useState([]);
@@ -33,10 +34,8 @@ const BatchProcessingPanel = ({ className = '' }) => {
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState([]);
   const [options, setOptions] = useState({});
-  const { preferences } = useUserPreferences();
 
   // Premium checks removed - all features are now free
-  const capabilities = { maxBatchSize: 200, maxFileSize: 500 }; // Unlimited for all users
 
   const operations = [
     { value: 'compress', label: 'Compress PDFs', premium: false },
@@ -65,7 +64,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
       status: 'pending',
       result: null
     }))]);
-  }, [files.length, capabilities]);
+  }, [files.length]);
 
   const removeFile = (id) => {
     setFiles(prev => prev.filter(f => f.id !== id));
@@ -137,7 +136,7 @@ const BatchProcessingPanel = ({ className = '' }) => {
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
-            } catch (err) { /* ignore */ }
+            } catch { /* ignore */ }
           };
           reader.readAsDataURL(blob);
         }
@@ -155,7 +154,6 @@ const BatchProcessingPanel = ({ className = '' }) => {
     }
   };
 
-  const selectedOperation = operations.find(op => op.value === operation);
   const canProcess = files.length > 0 && !processing;
 
   // Controlled tab state to allow button-style triggers
