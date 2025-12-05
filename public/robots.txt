@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /.well-known/
+Disallow: /scripts/
+Disallow: /node_modules/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Crawl-delay: 0.5
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://easy-pdf-murex.vercel.app/sitemap.xml
+Host: easy-pdf-murex.vercel.app

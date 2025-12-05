@@ -1,11 +1,26 @@
 import React from 'react';
 import PdfMetadataEditorClient from "./components/PdfMetadataEditorClient";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: 'PDF Metadata Editor | Easy PDF',
-  description: 'Clean up authorship, keywords, and document dates without uploading your file.',
-};
+const toolHref = '/pdf-metadata-editor';
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function PdfMetadataEditorPage() {
-  return <PdfMetadataEditorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfMetadataEditorClient />
+    </>
+  );
 }

@@ -1,10 +1,8 @@
 [
   {
-    "href": "/merge",
+    "href": "/pdf/merge",
     "title": "Merge PDF",
     "description": "Combine multiple PDF files into one seamless document.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "merge pdf",
       "combine pdf",
@@ -14,9 +12,6 @@
     ],
     "seoTitle": "Free PDF Merger - Combine Multiple PDFs Online",
     "seoDescription": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required.",
-    "ogTitle": "Merge PDF — Combine Files Fast & Secure",
-    "ogSubtitle": "Privacy-first, client-side processing. No uploads." ,
-    "ogImageVersion": "2025-11-16",
     "features": [
       "Drag & drop multiple files",
       "Reorder before merging",
@@ -24,18 +19,16 @@
       "100% secure processing"
     ],
     "relatedTools": [
-      "/split",
+      "/pdf/split",
       "/organize",
-      "/compress"
+      "/pdf/compress"
     ],
     "category": "Organize & Edit"
   },
   {
-    "href": "/split",
+    "href": "/pdf/split",
     "title": "Split PDF",
     "description": "Extract specific pages or split a PDF into multiple files.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "split pdf",
       "extract pdf pages",
@@ -43,11 +36,8 @@
       "divide pdf",
       "pdf splitter"
     ],
-    "seoTitle": "Free PDF Splitter - Instant Page Extraction Online",
-    "seoDescription": "Split PDF files into separate documents or extract specific pages instantly. Free online tool with secure browser-based processing. No upload limits or registration.",
-    "ogTitle": "Split PDF — Extract Pages Instantly",
-    "ogSubtitle": "Quick, secure and private — split pages in seconds.",
-    "ogImageVersion": "2025-11-16",
+    "seoTitle": "Free PDF Splitter - Extract Pages from PDF Online",
+    "seoDescription": "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing.",
     "features": [
       "Extract specific pages",
       "Split by page ranges",
@@ -55,18 +45,16 @@
       "Download as ZIP"
     ],
     "relatedTools": [
-      "/merge",
+      "/pdf/merge",
       "/delete-pages",
       "/organize"
     ],
     "category": "Organize & Edit"
   },
   {
-    "href": "/compress",
+    "href": "/pdf/compress",
     "title": "Compress PDF",
     "description": "Reduce PDF file size for easier sharing and storage.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "compress pdf",
       "reduce pdf size",
@@ -74,11 +62,8 @@
       "shrink pdf",
       "pdf compressor"
     ],
-    "seoTitle": "Free PDF Compressor - Reduce File Size Instantly",
-    "seoDescription": "Compress PDF files to reduce size while maintaining quality. Free online compression tool with secure browser processing and no data retention.",
-    "ogTitle": "Compress PDF — Reduce File Size Quickly",
-    "ogSubtitle": "Optimize for web and email with privacy-first compression.",
-    "ogImageVersion": "2025-11-16",
+    "seoTitle": "Free PDF Compressor - Reduce PDF File Size Online",
+    "seoDescription": "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels.",
     "features": [
       "Multiple compression levels",
       "Quality preservation",
@@ -86,8 +71,8 @@
       "Size preview"
     ],
     "relatedTools": [
-      "/merge",
-      "/split",
+      "/pdf/merge",
+      "/pdf/split",
       "/watermark",
       "/protect"
     ],
@@ -97,8 +82,6 @@
     "href": "/jpg-to-pdf",
     "title": "JPG to PDF",
     "description": "Convert your JPG, PNG, or other images into a PDF document.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "jpg to pdf",
       "png to pdf",
@@ -106,11 +89,8 @@
       "convert images",
       "photo to pdf"
     ],
-    "seoTitle": "Free JPG to PDF - Convert Images Instantly Online",
-    "seoDescription": "Convert JPG, PNG, and other images to PDF format instantly. Free online converter with batch processing, secure browser-based conversion. No uploads required.",
-    "ogTitle": "JPG to PDF — Convert Images to PDF",
-    "ogSubtitle": "Batch convert images to PDF in your browser.",
-    "ogImageVersion": "2025-11-16",
+    "seoTitle": "Free JPG to PDF Converter - Convert Images to PDF Online",
+    "seoDescription": "Convert JPG, PNG, and other images to PDF format. Free online converter with batch processing and custom page sizing.",
     "features": [
       "Multiple image formats",
       "Batch conversion",
@@ -119,8 +99,8 @@
     ],
     "relatedTools": [
       "/pdf-to-jpg",
-      "/merge",
-      "/compress"
+      "/pdf/merge",
+      "/pdf/compress"
     ],
     "category": "Convert & Create"
   },
@@ -128,8 +108,6 @@
     "href": "/pdf-to-jpg",
     "title": "PDF to JPG",
     "description": "Convert PDF pages into high-quality JPG image files.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "pdf to jpg",
       "pdf to png",
@@ -137,11 +115,8 @@
       "pdf to photo",
       "extract images"
     ],
-    "seoTitle": "Free PDF to JPG - Export Images Securely Online",
-    "seoDescription": "Convert PDF pages to high-quality JPG images instantly. Free online tool with customizable quality, secure browser-based processing. Batch convert with no file limits.",
-    "ogTitle": "PDF to JPG — Export Pages as Images",
-    "ogSubtitle": "High-quality conversion with privacy-first processing.",
-    "ogImageVersion": "2025-11-16",
+    "seoTitle": "Free PDF to JPG Converter - Convert PDF to Images Online",
+    "seoDescription": "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
     "features": [
       "High-quality output",
       "Custom resolution",
@@ -150,9 +125,1079 @@
     ],
     "relatedTools": [
       "/jpg-to-pdf",
-      "/split",
-      "/compress",
+      "/pdf/split",
+      "/pdf/compress",
       "/ocr"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/mp4-to-mp3",
+    "title": "MP4 to MP3",
+    "description": "Extract MP3 audio from MP4, WebM, MOV, or MKV videos entirely in your browser.",
+    "keywords": [
+      "mp4 to mp3",
+      "video to mp3",
+      "ffmpeg wasm",
+      "extract audio",
+      "convert video audio"
+    ],
+    "seoTitle": "Free MP4 to MP3 Converter - Browser-based Audio Extraction",
+    "seoDescription": "Convert MP4 and other videos to MP3 locally with ffmpeg.wasm. No uploads, fast 192 kbps output, and full privacy.",
+    "features": [
+      "Runs 100% client-side",
+      "Supports MP4/WebM/MOV/MKV",
+      "High-quality 192 kbps audio",
+      "Reusable FFmpeg cache"
+    ],
+    "relatedTools": [
+      "/html-to-pdf",
+      "/jpg-to-pdf",
+      "/qr-generator"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/zip-extractor",
+    "title": "ZIP Extractor",
+    "description": "Unpack ZIP archives locally, preview contents, and download individual files without uploading anything.",
+    "keywords": [
+      "zip extractor",
+      "unzip files",
+      "zip viewer",
+      "zip to files",
+      "extract zip in browser"
+    ],
+    "seoTitle": "ZIP Extractor - Unzip Archives in Your Browser",
+    "seoDescription": "Upload a ZIP, inspect its folders, and download the files you need instantly. Powered by JSZip and 100% client-side.",
+    "features": [
+      "Runs entirely offline",
+      "Folder-aware preview",
+      "Individual file downloads",
+      "Batch export option"
+    ],
+    "relatedTools": [
+      "/pdf/compress",
+      "/mp4-to-mp3",
+      "/jpg-to-pdf"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/csv-json-converter",
+    "title": "CSV ↔ JSON",
+    "description": "Quickly convert comma-separated values to structured JSON (and back) entirely in the browser.",
+    "keywords": [
+      "csv to json",
+      "json to csv",
+      "csv converter",
+      "json converter",
+      "data transform"
+    ],
+    "seoTitle": "CSV to JSON Converter - Offline Data Transformer",
+    "seoDescription": "Paste, edit, or upload CSV/JSON files and convert between formats instantly with zero uploads.",
+    "features": [
+      "Bidirectional conversion",
+      "Inline editing",
+      "File upload and download",
+      "Clipboard shortcuts"
+    ],
+    "relatedTools": [
+      "/zip-extractor",
+      "/mp4-to-mp3",
+      "/html-to-pdf"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/text-case-converter",
+    "title": "Text Case Converter",
+    "description": "Flip any snippet between uppercase, lowercase, camelCase, snake_case, and more in seconds.",
+    "keywords": [
+      "text case",
+      "uppercase converter",
+      "snake_case",
+      "camelCase",
+      "slug generator"
+    ],
+    "seoTitle": "Text Case Converter - Uppercase, camelCase, snake_case in your browser",
+    "seoDescription": "Convert text between uppercase, lowercase, camelCase, PascalCase, snake_case, kebab-case, and CONSTANT_CASE locally with instant previews.",
+    "features": [
+      "Uppercase, lowercase, sentence, and title case",
+      "camelCase, PascalCase, snake_case, kebab-case, CONSTANT_CASE",
+      "One-click copy or apply back to the editor",
+      "Unicode-aware word detection"
+    ],
+    "relatedTools": [
+      "/csv-json-converter",
+      "/markdown-to-html",
+      "/url-encoder"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/url-encoder",
+    "title": "URL Encoder / Decoder",
+    "description": "Encode query strings or decode percent-encoded URLs without leaking data to a server.",
+    "keywords": [
+      "url encoder",
+      "url decoder",
+      "percent encode",
+      "query params"
+    ],
+    "seoTitle": "URL Encoder / Decoder - Safe browser-based conversion",
+    "seoDescription": "Encode or decode URLs, query parameters, and payloads entirely in your browser with automatic + and %20 handling.",
+    "features": [
+      "Instant encode/decode with clipboard shortcuts",
+      "Handles plus (+) to space normalization",
+      "Works offline once loaded",
+      "No character length limits"
+    ],
+    "relatedTools": [
+      "/text-case-converter",
+      "/csv-json-converter",
+      "/markdown-to-html"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/base64-encoder",
+    "title": "Base64 Encoder",
+    "description": "Convert text or files to Base64 (and back) entirely in your browser.",
+    "keywords": [
+      "base64",
+      "base64 decoder",
+      "data url",
+      "encode file",
+      "decode base64"
+    ],
+    "seoTitle": "Base64 Encoder / Decoder - Offline and private",
+    "seoDescription": "Encode or decode Base64 strings, query payloads, or small files instantly without uploads. Works offline once loaded.",
+    "features": [
+      "Text ↔ Base64 conversion",
+      "File drop encoding with size guard",
+      "One-click copy actions",
+      "Client-side processing only"
+    ],
+    "relatedTools": [
+      "/text-case-converter",
+      "/url-encoder",
+      "/csv-json-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/html-markdown-converter",
+    "title": "HTML ↔ Markdown Converter",
+    "description": "Convert documentation, release notes, and CMS snippets between Markdown and HTML with live previews.",
+    "keywords": [
+      "html to markdown",
+      "markdown to html",
+      "markup converter",
+      "docs tooling",
+      "cms prep"
+    ],
+    "seoTitle": "HTML ↔ Markdown Converter - Instant bidirectional markup conversion",
+    "seoDescription": "Flip Markdown to clean HTML (and back) entirely in your browser with sanitization, previews, and copy shortcuts.",
+    "features": [
+      "Bidirectional Markdown ↔ HTML conversion",
+      "Live sanitized preview pane",
+      "Sample templates for changelogs",
+      "One-click copy for both outputs"
+    ],
+    "relatedTools": [
+      "/text-case-converter",
+      "/url-encoder",
+      "/base64-encoder"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/json-xml-converter",
+    "title": "JSON ↔ XML Converter",
+    "description": "Transform structured data between JSON and XML with fast-xml-parser, previews, and downloads.",
+    "keywords": [
+      "json xml converter",
+      "xml parser",
+      "json payload",
+      "api data",
+      "sitemap converter"
+    ],
+    "seoTitle": "JSON ↔ XML Converter - Fast browser-based transformations",
+    "seoDescription": "Convert JSON payloads to XML (and back) with validation, formatting, and instant copy/download actions. 100% private in-browser processing.",
+    "features": [
+      "Bidirectional JSON ↔ XML conversion",
+      "fast-xml-parser attribute preservation",
+      "Size guard with helpful errors",
+      "One-click copy or download"
+    ],
+    "relatedTools": [
+      "/csv-json-converter",
+      "/html-markdown-converter",
+      "/text-case-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/text-diff-checker",
+    "title": "Text Diff Checker",
+    "description": "Compare drafts, configs, or release notes with inline diff highlights and stats.",
+    "keywords": [
+      "text diff",
+      "compare text online",
+      "diff checker",
+      "markdown diff",
+      "copy review"
+    ],
+    "seoTitle": "Text Diff Checker - Highlight additions and deletions instantly",
+    "seoDescription": "Paste two snippets and get a visual diff with inline highlights, delta stats, and downloadable reports. Runs 100% in your browser.",
+    "features": [
+      "Words, lines, and character diff modes",
+      "Ignore case or collapse whitespace",
+      "Copy or download diff summaries",
+      "Privacy-first client-side processing"
+    ],
+    "relatedTools": [
+      "/text-case-converter",
+      "/html-markdown-converter",
+      "/json-xml-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/regex-tester",
+    "title": "Regex Tester",
+    "description": "Evaluate regex patterns with instant highlights, capture group tables, and helpful presets.",
+    "keywords": [
+      "regex tester",
+      "test regex",
+      "regular expression",
+      "regex tool",
+      "regex highlighter"
+    ],
+    "seoTitle": "Regex Tester - Highlight matches and capture groups in your browser",
+    "seoDescription": "Paste a regex and sample text to see matches, capture groups, and flag behavior instantly with zero uploads.",
+    "features": [
+      "Words, URLs, emails presets",
+      "Flag toggles (g, i, m, s, u)",
+      "Match highlight + capture group table",
+      "Client-side processing only"
+    ],
+    "relatedTools": [
+      "/text-diff-checker",
+      "/html-markdown-converter",
+      "/json-xml-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/uuid-generator",
+    "title": "UUID Generator",
+    "description": "Create UUID v1, v4, or v7 identifiers with batch copy/download actions.",
+    "keywords": [
+      "uuid generator",
+      "uuid v4",
+      "uuid v7",
+      "generate ids",
+      "random guid"
+    ],
+    "seoTitle": "UUID Generator - v1, v4, v7 batch creation",
+    "seoDescription": "Generate RFC-compliant UUIDs entirely in your browser with optional history, copy, and download actions.",
+    "features": [
+      "Supports v1, v4, and v7 versions",
+      "Generate up to 50 per batch",
+      "Copy or download .txt instantly",
+      "Local-only Web Crypto randomness"
+    ],
+    "relatedTools": [
+      "/regex-tester",
+      "/text-diff-checker",
+      "/base64-encoder"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/hash-generator",
+    "title": "Hash Generator",
+    "description": "Compute MD5, SHA-1, SHA-256, or SHA-512 digests for text and files with instant copy/download actions.",
+    "keywords": [
+      "hash generator",
+      "md5 online",
+      "sha256",
+      "checksum",
+      "file hash"
+    ],
+    "seoTitle": "Hash Generator - MD5 / SHA digests in your browser",
+    "seoDescription": "Paste strings or drop files to calculate MD5, SHA-1, SHA-256, or SHA-512 hashes instantly without uploads.",
+    "features": [
+      "Toggle MD5, SHA-1, SHA-256, SHA-512",
+      "Text area with optional salt",
+      "File drop hashing with size guard",
+      "Copy or download checksum manifests"
+    ],
+    "relatedTools": [
+      "/uuid-generator",
+      "/regex-tester",
+      "/base64-encoder"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/txt-to-pdf",
+    "title": "Text to PDF",
+    "description": "Convert plain text to PDF documents with customizable formatting.",
+    "keywords": [
+      "text to pdf",
+      "txt to pdf",
+      "convert text to pdf",
+      "text converter",
+      "pdf creator"
+    ],
+    "seoTitle": "Text to PDF Converter - Convert Plain Text to PDF Online",
+    "seoDescription": "Convert plain text to PDF documents with customizable formatting. Create structured PDFs from text content directly in your browser.",
+    "features": [
+      "Text to PDF conversion",
+      "Customizable formatting",
+      "Page options",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/docx-to-pdf",
+      "/html-to-pdf",
+      "/markdown-to-pdf"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/heic-to-jpg",
+    "title": "HEIC to JPG",
+    "description": "Convert HEIC/HEIF photos to standard JPG images without uploading them to a server.",
+    "keywords": [
+      "heic to jpg",
+      "heic converter",
+      "heif to jpg",
+      "apple photo converter",
+      "image converter"
+    ],
+    "seoTitle": "HEIC to JPG Converter - Private Browser Tool",
+    "seoDescription": "Turn HEIC photos into JPGs instantly using heic2any. Runs entirely in your browser for maximum privacy.",
+    "features": [
+      "Batch uploads",
+      "Preview before downloading",
+      "Progress tracking",
+      "Runs offline"
+    ],
+    "relatedTools": [
+      "/jpg-to-pdf",
+      "/pdf-to-jpg",
+      "/csv-json-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/docx-to-pdf",
+    "title": "DOCX to PDF",
+    "description": "Transform Microsoft Word documents into PDF files without uploading them to a server.",
+    "keywords": [
+      "docx to pdf",
+      "word to pdf",
+      "doc converter",
+      "mammoth",
+      "docx",
+      "pdf"
+    ],
+    "seoTitle": "DOCX to PDF Converter - Private Browser Tool",
+    "seoDescription": "Convert DOCX files to PDF instantly using a browser-only workflow powered by mammoth and docx.",
+    "features": [
+      "Batch uploads",
+      "Progress tracking",
+      "Offline processing",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/jpg-to-pdf",
+      "/html-to-pdf",
+      "/csv-json-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/docx-to-text",
+    "title": "DOCX to Text",
+    "description": "Extract raw text from DOCX documents using mammoth.js, directly in your browser.",
+    "keywords": [
+      "docx to text",
+      "extract text docx",
+      "mammoth",
+      "word to text"
+    ],
+    "seoTitle": "DOCX to Text - Extract raw text from Word documents",
+    "seoDescription": "Extract plain text from DOCX files using an in-browser pipeline. No uploads or server-side workload.",
+    "features": [
+      "Raw text extraction",
+      "Download as .txt",
+      "Copy to clipboard"
+    ],
+    "relatedTools": [
+      "/docx-to-pdf",
+      "/csv-json-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/pdf-to-docx",
+    "title": "PDF to DOCX",
+    "description": "Convert PDF files to editable Microsoft Word documents (DOCX) entirely in your browser.",
+    "keywords": [
+      "pdf to docx",
+      "pdf to word",
+      "convert pdf",
+      "docx converter",
+      "pdf to doc"
+    ],
+    "seoTitle": "PDF to DOCX Converter - Convert PDF to Word Online",
+    "seoDescription": "Convert PDF files to editable Word documents. Extract text and preserve structure with our free online PDF to DOCX converter.",
+    "features": [
+      "Text extraction",
+      "Preserve structure",
+      "Batch processing",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/pdf-to-jpg",
+      "/docx-to-pdf",
+      "/ocr"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/pdf-to-html",
+    "title": "PDF to HTML",
+    "description": "Convert PDF files to HTML markup by extracting content.",
+    "keywords": [
+      "pdf to html",
+      "convert pdf to html",
+      "extract content",
+      "pdf html converter",
+      "markup extraction"
+    ],
+    "seoTitle": "PDF to HTML Converter - Convert PDF to HTML Online",
+    "seoDescription": "Convert PDF files to HTML markup by extracting content. Transform PDF documents to structured HTML for web use.",
+    "features": [
+      "Content extraction",
+      "HTML formatting",
+      "Batch processing",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/pdf-to-jpg",
+      "/html-to-pdf",
+      "/ocr"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/pdf-to-ppt",
+    "title": "PDF to PowerPoint",
+    "description": "Convert PDF files to presentation slides by extracting and structuring content.",
+    "keywords": [
+      "pdf to ppt",
+      "pdf to powerpoint",
+      "convert pdf to ppt",
+      "presentation",
+      "pdf slides"
+    ],
+    "seoTitle": "PDF to PowerPoint Converter - Convert PDF to PPT Online",
+    "seoDescription": "Convert PDF files to presentation slides. Extract and structure content from PDFs for use in PowerPoint presentations.",
+    "features": [
+      "Slide structure",
+      "Content extraction",
+      "Presentation format",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/pdf-to-jpg",
+      "/pdf-to-html",
+      "/pdf-table-extractor"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/pdf-to-xlsx",
+    "title": "PDF to Excel",
+    "description": "Convert PDF files to Excel spreadsheets by extracting table data.",
+    "keywords": [
+      "pdf to excel",
+      "pdf to xlsx",
+      "convert pdf to excel",
+      "extract tables",
+      "pdf table converter"
+    ],
+    "seoTitle": "PDF to Excel Converter - Convert PDF Tables to XLSX Online",
+    "seoDescription": "Convert PDF files to Excel spreadsheets by extracting table data. Extract and convert tables from PDFs to structured Excel files.",
+    "features": [
+      "Table extraction",
+      "Structured data",
+      "Batch processing",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/pdf-to-jpg",
+      "/csv-json-converter",
+      "/pdf-table-extractor"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/resize-images",
+    "title": "Resize Images",
+    "description": "Resize your images to custom dimensions or predefined presets.",
+    "keywords": [
+      "resize images",
+      "image resize",
+      "change image size",
+      "image dimensions",
+      "image scaler"
+    ],
+    "seoTitle": "Image Resize Tool - Resize Images to Custom Dimensions Online",
+    "seoDescription": "Resize your images to custom dimensions or predefined presets. All processing happens directly in your browser for privacy and security.",
+    "features": [
+      "Resize by percentage",
+      "Custom dimensions",
+      "Preset sizes",
+      "Maintain aspect ratio",
+      "Batch processing"
+    ],
+    "relatedTools": [
+      "/image-converter",
+      "/compress-images",
+      "/bmp-tiff-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/compress-images",
+    "title": "Compress Images",
+    "description": "Reduce image file sizes while maintaining visual quality.",
+    "keywords": [
+      "compress images",
+      "image compression",
+      "reduce image size",
+      "optimize images",
+      "image optimizer"
+    ],
+    "seoTitle": "Image Compressor - Reduce Image File Sizes Online",
+    "seoDescription": "Reduce image file sizes while maintaining visual quality. Perfect for web optimization and faster loading times.",
+    "features": [
+      "Quality control",
+      "Format selection",
+      "Batch processing",
+      "Size reduction metrics"
+    ],
+    "relatedTools": [
+      "/image-converter",
+      "/resize-images",
+      "/bmp-tiff-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/voice-changer",
+    "title": "Voice Changer",
+    "description": "Change pitch and speed of audio files to create voice effects.",
+    "keywords": [
+      "voice changer",
+      "change pitch",
+      "change audio speed",
+      "voice effects",
+      "audio transformation"
+    ],
+    "seoTitle": "Voice Changer - Change Pitch and Speed of Audio Online",
+    "seoDescription": "Change pitch and speed of audio files to create different voice effects. Modify voice characteristics while maintaining audio quality.",
+    "features": [
+      "Pitch adjustment",
+      "Speed control",
+      "Voice effects",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/audio-speed-changer",
+      "/remove-silence",
+      "/audio-compressor"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/audio-speed-changer",
+    "title": "Audio Speed Changer",
+    "description": "Change the playback speed of audio files while maintaining pitch.",
+    "keywords": [
+      "audio speed changer",
+      "speed up audio",
+      "slow down audio",
+      "change audio speed",
+      "audio tempo"
+    ],
+    "seoTitle": "Audio Speed Changer - Change Playback Speed Online",
+    "seoDescription": "Change the playback speed of audio files while maintaining pitch. Make podcasts, audiobooks, or lectures faster or slower to suit your listening preferences.",
+    "features": [
+      "Speed adjustment",
+      "Pitch preservation",
+      "Multiple output formats",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/extract-audio",
+      "/audio-compressor",
+      "/remove-silence"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/remove-silence",
+    "title": "Remove Silence",
+    "description": "Remove silence from audio files to create more compact recordings.",
+    "keywords": [
+      "remove silence",
+      "trim audio",
+      "reduce audio file size",
+      "remove dead air",
+      "audio editing"
+    ],
+    "seoTitle": "Remove Silence from Audio - Trim Quiet Sections Online",
+    "seoDescription": "Remove silence from audio files to create more compact recordings. Remove dead air and pauses while preserving spoken content.",
+    "features": [
+      "Silence detection",
+      "Adjustable thresholds",
+      "Multiple output formats",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/extract-audio",
+      "/remove-audio",
+      "/audio-compressor"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/audio-compressor",
+    "title": "Audio Compressor",
+    "description": "Compress audio files with adjustable compression levels.",
+    "keywords": [
+      "audio compressor",
+      "compress audio",
+      "reduce audio file size",
+      "mp3 compressor",
+      "audio optimization"
+    ],
+    "seoTitle": "Audio Compressor - Reduce Audio File Size Online",
+    "seoDescription": "Compress audio files with adjustable compression levels. Reduce file size while maintaining acceptable quality for various use cases.",
+    "features": [
+      "Adjustable compression",
+      "Multiple output formats",
+      "Quality control",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/extract-audio",
+      "/remove-audio",
+      "/wav-mp3-converter",
+      "/m4a-mp3-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/m4a-mp3-converter",
+    "title": "M4A/MP3 Converter",
+    "description": "Convert between M4A and MP3 audio formats using FFmpeg.wasm.",
+    "keywords": [
+      "m4a to mp3",
+      "mp3 to m4a",
+      "audio converter",
+      "audio format converter",
+      "ffmpeg"
+    ],
+    "seoTitle": "M4A/MP3 Converter - Convert Audio Formats Online with FFmpeg",
+    "seoDescription": "Convert between M4A and MP3 audio formats using FFmpeg.wasm. Convert audio directly in your browser without uploading files to a server.",
+    "features": [
+      "M4A to MP3",
+      "MP3 to M4A",
+      "Bitrate control",
+      "Client-side conversion"
+    ],
+    "relatedTools": [
+      "/extract-audio",
+      "/remove-audio",
+      "/wav-mp3-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/wav-mp3-converter",
+    "title": "WAV/MP3 Converter",
+    "description": "Convert between WAV and MP3 audio formats using FFmpeg.wasm.",
+    "keywords": [
+      "wav to mp3",
+      "mp3 to wav",
+      "audio converter",
+      "audio format converter",
+      "ffmpeg"
+    ],
+    "seoTitle": "WAV/MP3 Converter - Convert Audio Formats Online with FFmpeg",
+    "seoDescription": "Convert between WAV and MP3 audio formats using FFmpeg.wasm. Convert audio directly in your browser without uploading files to a server.",
+    "features": [
+      "WAV to MP3",
+      "MP3 to WAV",
+      "Bitrate control",
+      "Client-side conversion"
+    ],
+    "relatedTools": [
+      "/extract-audio",
+      "/remove-audio",
+      "/mp4-to-mp3"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/remove-audio",
+    "title": "Remove Audio",
+    "description": "Remove the audio track from video files using FFmpeg.wasm.",
+    "keywords": [
+      "remove audio",
+      "mute video",
+      "audio removal",
+      "video editor",
+      "ffmpeg"
+    ],
+    "seoTitle": "Remove Audio from Video - Mute Videos Online with FFmpeg",
+    "seoDescription": "Remove the audio track from video files using FFmpeg.wasm. Create silent video files directly in your browser without uploading to a server.",
+    "features": [
+      "Audio removal",
+      "Preserve video quality",
+      "Client-side processing",
+      "No uploads"
+    ],
+    "relatedTools": [
+      "/extract-audio",
+      "/video-to-gif",
+      "/mp4-to-mp3"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/extract-audio",
+    "title": "Extract Audio",
+    "description": "Extract audio tracks from video files or convert audio formats using FFmpeg.wasm.",
+    "keywords": [
+      "extract audio",
+      "audio from video",
+      "video to audio",
+      "audio converter",
+      "ffmpeg"
+    ],
+    "seoTitle": "Extract Audio from Video - Convert Audio Formats Online with FFmpeg",
+    "seoDescription": "Extract audio tracks from video files or convert audio formats using FFmpeg.wasm. Extract audio directly in your browser without uploading files to a server.",
+    "features": [
+      "Video to audio",
+      "Audio format conversion",
+      "Multiple output formats",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/mp4-to-mp3",
+      "/video-to-gif",
+      "/remove-audio"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/avi-mkv-to-mp4",
+    "title": "AVI/MKV to MP4",
+    "description": "Convert AVI and MKV videos to MP4 format in the browser using FFmpeg.wasm.",
+    "keywords": [
+      "avi to mp4",
+      "mkv to mp4",
+      "convert video",
+      "video converter",
+      "ffmpeg"
+    ],
+    "seoTitle": "AVI/MKV to MP4 Converter - Convert Videos Online with FFmpeg",
+    "seoDescription": "Convert AVI and MKV videos to MP4 format in the browser using FFmpeg.wasm. Your video never leaves your device during conversion.",
+    "features": [
+      "AVI to MP4",
+      "MKV to MP4",
+      "Client-side conversion",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/mp4-to-mp3",
+      "/video-to-gif",
+      "/webm-to-mp4"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/svg-to-png",
+    "title": "SVG to PNG",
+    "description": "Convert SVG images to PNG format maintaining quality and transparency.",
+    "keywords": [
+      "svg to png",
+      "convert svg",
+      "svg converter",
+      "vector to raster",
+      "image converter"
+    ],
+    "seoTitle": "SVG to PNG Converter - Convert Vector Graphics to PNG Online",
+    "seoDescription": "Convert SVG images to PNG format directly in your browser. Maintain quality and transparency when converting vector graphics to raster images.",
+    "features": [
+      "SVG to PNG conversion",
+      "Transparency preservation",
+      "Batch processing",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/image-converter",
+      "/bmp-tiff-converter",
+      "/jpg-to-pdf"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/bmp-tiff-converter",
+    "title": "BMP/TIFF Converter",
+    "description": "Convert BMP and TIFF images to PNG or JPG formats.",
+    "keywords": [
+      "bmp to png",
+      "tiff to jpg",
+      "bmp converter",
+      "tiff converter",
+      "image format converter"
+    ],
+    "seoTitle": "BMP/TIFF to PNG/JPG Converter - Convert Images Online",
+    "seoDescription": "Convert BMP and TIFF images to PNG or JPG formats directly in your browser. Secure, private, and no file uploads required.",
+    "features": [
+      "BMP to PNG/JPG",
+      "TIFF to PNG/JPG",
+      "Batch processing",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/image-converter",
+      "/jpg-to-pdf",
+      "/heic-to-jpg"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/image-converter",
+    "title": "Image Converter",
+    "description": "Convert between JPG, PNG, and WebP in the browser. Adjust quality and download results.",
+    "keywords": [
+      "jpg to png",
+      "png to jpg",
+      "image converter",
+      "webp to jpg",
+      "image quality"
+    ],
+    "seoTitle": "Image Converter - JPG/PNG/WEBP conversions in browser",
+    "seoDescription": "Convert images between common formats, change quality, and download without uploading your files.",
+    "features": [
+      "Batch conversion",
+      "Quality control",
+      "Client-side only",
+      "Preview before download"
+    ],
+    "relatedTools": [
+      "/jpg-to-pdf",
+      "/heic-to-jpg",
+      "/jpg-to-pdf"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/zip-creator",
+    "title": "ZIP Creator",
+    "description": "Create ZIP archives from selected files in the browser with JSZip.",
+    "keywords": [
+      "zip creator",
+      "create zip",
+      "zip files online",
+      "jszip"
+    ],
+    "seoTitle": "ZIP Creator - Create ZIP Files Client-side",
+    "seoDescription": "Bundle multiple files into a single ZIP archive using JSZip. Downloads stay local to your browser.",
+    "features": [
+      "Client-side compression",
+      "Preview file list",
+      "No uploads"
+    ],
+    "relatedTools": [
+      "/zip-extractor",
+      "/archive"
+    ],
+    "category": "Compression & Archive"
+  },
+  {
+    "href": "/tar-extractor",
+    "title": "TAR / GZIP Extractor",
+    "description": "Extract TAR and GZIP (.tar.gz/.tgz) archives in your browser. Preview and download individual files.",
+    "keywords": [
+      "tar extractor",
+      "tar.gz extract",
+      "untar",
+      "extract gzip"
+    ],
+    "seoTitle": "TAR and GZIP Extractor - Browser-based tar extraction",
+    "seoDescription": "Open .tar and .tar.gz archives in your browser without uploads. Extract files and download them individually.",
+    "features": [
+      "tar/tar.gz support",
+      "Individual file download",
+      "No upload required"
+    ],
+    "relatedTools": [
+      "/zip-extractor",
+      "/zip-creator"
+    ],
+    "category": "Compression & Archive"
+  },
+  {
+    "href": "/video-to-gif",
+    "title": "Video to GIF",
+    "description": "Convert short video clips to animated GIFs using FFmpeg.wasm in the browser.",
+    "keywords": [
+      "video to gif",
+      "gif maker",
+      "ffmpeg wasm"
+    ],
+    "seoTitle": "Video to GIF - Convert Videos to Animated GIFs in Browser",
+    "seoDescription": "Use ffmpeg.wasm to convert MP4/WebM to animated GIFs locally in your browser. Adjust FPS and size before converting.",
+    "features": [
+      "FFmpeg.wasm powered",
+      "FPS and width controls",
+      "Runs locally in browser"
+    ],
+    "relatedTools": [
+      "/mp4-to-mp3",
+      "/zip-creator"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/webm-to-mp4",
+    "title": "WebM ↔ MP4",
+    "description": "Convert between WebM and MP4 formats using FFmpeg.wasm in your browser.",
+    "keywords": [
+      "webm to mp4",
+      "mp4 to webm",
+      "video format converter"
+    ],
+    "seoTitle": "Convert WebM to MP4 or MP4 to WebM in Browser",
+    "seoDescription": "Use ffmpeg.wasm to convert videos between WebM and MP4 directly in your browser without uploads.",
+    "features": [
+      "WebM ↔ MP4",
+      "Runs client-side",
+      "H.264 & VP8/VP9 support"
+    ],
+    "relatedTools": [
+      "/mp4-to-mp3",
+      "/video-compress"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/video-compress",
+    "title": "Video Compressor",
+    "description": "Re-encode and compress videos locally using ffmpeg.wasm with a CRF and preset control.",
+    "keywords": [
+      "compress video",
+      "ffmpeg wasm",
+      "reduce video size",
+      "video crf"
+    ],
+    "seoTitle": "Video Compressor - Reduce MP4/WebM Size in Browser",
+    "seoDescription": "Use ffmpeg.wasm to re-encode videos with CRF and encoding presets all in your browser — no uploads.",
+    "features": [
+      "CRF control",
+      "Preset options (ultrafast/fast/slow)",
+      "Local-only processing"
+    ],
+    "relatedTools": [
+      "/video-to-gif",
+      "/mp4-to-mp3"
+    ],
+    "category": "Media Tools"
+  },
+  {
+    "href": "/video-trim",
+    "title": "Video Trim & Merge",
+    "description": "Trim or merge multiple videos locally using FFmpeg.wasm.",
+    "keywords": [
+      "trim video",
+      "merge videos",
+      "ffmpeg wasm"
+    ],
+    "seoTitle": "Video Trim & Merge - Edit clips in your browser",
+    "seoDescription": "Trim and merge videos locally for privacy. Use ffmpeg.wasm for quick, browser-based edits.",
+    "features": [
+      "Trim by timestamps",
+      "Merge multiple files",
+      "Runs locally in browser"
+    ],
+    "relatedTools": [
+      "/video-compress",
+      "/video-to-gif"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/html-to-pdf",
+    "title": "HTML to PDF Converter",
+    "description": "Paste markup, adjust page settings, and render a share-ready PDF entirely in your browser.",
+    "keywords": [
+      "html to pdf",
+      "convert html",
+      "code to pdf",
+      "email html pdf",
+      "webpage to pdf"
+    ],
+    "seoTitle": "HTML to PDF Converter - Generate PDFs from Markup Offline",
+    "seoDescription": "Turn HTML snippets into polished PDFs without uploading your code. Adjust sizing, preview output, and download instantly.",
+    "features": [
+      "Live HTML preview with syntax highlighting",
+      "Supports A4, Letter, and Legal layouts",
+      "Sanitized rendering that strips scripts",
+      "Client-side export powered by html2canvas + jsPDF"
+    ],
+    "relatedTools": [
+      "/jpg-to-pdf",
+      "/pdf/merge",
+      "/pdf-version-comparison"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/markdown-to-html",
+    "title": "Markdown to HTML",
+    "description": "Convert Markdown text to HTML markup directly in your browser.",
+    "keywords": [
+      "markdown to html",
+      "convert markdown",
+      "md to html",
+      "html converter",
+      "markdown processor"
+    ],
+    "seoTitle": "Markdown to HTML Converter - Convert MD to HTML Online",
+    "seoDescription": "Convert Markdown text to HTML markup directly in your browser. Create web-ready content from Markdown documents without uploading files to a server.",
+    "features": [
+      "Real-time conversion",
+      "GitHub Flavored Markdown",
+      "HTML output",
+      "Client-side processing"
+    ],
+    "relatedTools": [
+      "/html-to-pdf",
+      "/txt-to-pdf",
+      "/csv-json-converter"
     ],
     "category": "Convert & Create"
   },
@@ -160,8 +1205,6 @@
     "href": "/rotate",
     "title": "Rotate PDF",
     "description": "Rotate PDF pages to the correct orientation (90, 180, 270 degrees).",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "rotate pdf",
       "fix pdf orientation",
@@ -169,8 +1212,8 @@
       "pdf rotation",
       "flip pdf"
     ],
-    "seoTitle": "Free PDF Rotator - Fix Page Orientation Instantly",
-    "seoDescription": "Rotate PDF pages by 90, 180, or 270 degrees instantly. Fix document orientation with secure browser-based processing. No file uploads stored. Free online rotation tool.",
+    "seoTitle": "Free PDF Rotator - Rotate PDF Pages Online",
+    "seoDescription": "Rotate PDF pages by 90, 180, or 270 degrees. Fix document orientation with our free online PDF rotation tool.",
     "features": [
       "Multiple rotation angles",
       "Page-specific rotation",
@@ -181,7 +1224,7 @@
       "/organize",
       "/reorder",
       "/delete-pages",
-      "/split"
+      "/pdf/split"
     ],
     "category": "Organize & Edit"
   },
@@ -189,8 +1232,6 @@
     "href": "/watermark",
     "title": "Watermark PDF",
     "description": "Add custom text or image watermarks to your PDF documents.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "watermark pdf",
       "add watermark",
@@ -198,8 +1239,8 @@
       "document protection",
       "pdf stamp"
     ],
-    "seoTitle": "Free PDF Watermark Tool - Protect PDFs Instantly",
-    "seoDescription": "Add text or image watermarks to PDF documents instantly. Customize position, opacity, and rotation securely. Free online watermarking tool with browser-based processing.",
+    "seoTitle": "Free PDF Watermark Tool - Add Watermarks to PDF Online",
+    "seoDescription": "Add text or image watermarks to PDF documents. Customize position, opacity, and rotation with our free online watermarking tool.",
     "features": [
       "Text & image watermarks",
       "Custom positioning",
@@ -210,7 +1251,7 @@
       "/protect",
       "/sign",
       "/page-numbers",
-      "/compress"
+      "/pdf/compress"
     ],
     "category": "Security & Privacy"
   },
@@ -218,8 +1259,6 @@
     "href": "/protect",
     "title": "Protect PDF",
     "description": "Encrypt your PDFs with a password for enhanced security.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "protect pdf",
       "password pdf",
@@ -227,8 +1266,8 @@
       "secure pdf",
       "pdf security"
     ],
-    "seoTitle": "Free PDF Password Protection - Encrypt Files Secure",
-    "seoDescription": "Encrypt PDF files with strong password protection instantly. Secure sensitive documents with browser-based encryption. Free online PDF protection tool. No data stored.",
+    "seoTitle": "Free PDF Password Protection - Secure PDF Files Online",
+    "seoDescription": "Protect PDF files with password encryption. Add security to sensitive documents with our free online PDF protection tool.",
     "features": [
       "Password encryption",
       "User permissions",
@@ -239,7 +1278,7 @@
       "/unlock",
       "/watermark",
       "/sign",
-      "/compress"
+      "/pdf/compress"
     ],
     "category": "Security & Privacy"
   },
@@ -247,8 +1286,6 @@
     "href": "/unlock",
     "title": "Unlock PDF",
     "description": "Remove password protection from your PDF files.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "unlock pdf",
       "remove pdf password",
@@ -256,8 +1293,8 @@
       "pdf password remover",
       "open protected pdf"
     ],
-    "seoTitle": "Free PDF Unlocker - Unlock Files Instantly Secure",
-    "seoDescription": "Remove password protection from PDF files instantly and securely. Unlock encrypted PDFs with browser-based processing. Free online password removal tool. No data retained.",
+    "seoTitle": "Free PDF Unlocker - Remove PDF Password Online",
+    "seoDescription": "Remove password protection from PDF files. Unlock encrypted PDFs with our free online PDF password removal tool.",
     "features": [
       "Password removal",
       "Quick processing",
@@ -266,9 +1303,9 @@
     ],
     "relatedTools": [
       "/protect",
-      "/merge",
-      "/split",
-      "/compress"
+      "/pdf/merge",
+      "/pdf/split",
+      "/pdf/compress"
     ],
     "category": "Security & Privacy"
   },
@@ -276,8 +1313,6 @@
     "href": "/delete-pages",
     "title": "Delete PDF Pages",
     "description": "Remove unwanted pages from your PDF document easily.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "delete pdf pages",
       "remove pdf pages",
@@ -285,8 +1320,8 @@
       "pdf page removal",
       "trim pdf"
     ],
-    "seoTitle": "Free PDF Page Deleter - Remove Pages Instantly",
-    "seoDescription": "Delete unwanted pages from PDF documents instantly and securely. Remove specific pages or page ranges with browser-based processing. Free online deletion tool. No uploads kept.",
+    "seoTitle": "Free PDF Page Deleter - Remove Pages from PDF Online",
+    "seoDescription": "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool.",
     "features": [
       "Select specific pages",
       "Page range deletion",
@@ -294,10 +1329,10 @@
       "Instant processing"
     ],
     "relatedTools": [
-      "/split",
+      "/pdf/split",
       "/organize",
       "/reorder",
-      "/merge"
+      "/pdf/merge"
     ],
     "category": "Organize & Edit"
   },
@@ -305,8 +1340,6 @@
     "href": "/reorder",
     "title": "Reorder PDF Pages",
     "description": "Rearrange the order of pages within your PDF document.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "reorder pdf pages",
       "rearrange pdf",
@@ -314,8 +1347,8 @@
       "pdf page order",
       "sort pdf pages"
     ],
-    "seoTitle": "Free PDF Reorder Tool - Rearrange Pages Instantly",
-    "seoDescription": "Reorder and rearrange PDF pages instantly with drag-and-drop interface. Organize documents securely with browser-based processing. Free online tool. No data retention.",
+    "seoTitle": "Free PDF Page Reorder Tool - Rearrange PDF Pages Online",
+    "seoDescription": "Reorder and rearrange PDF pages with drag-and-drop interface. Organize your PDF documents with our free online tool.",
     "features": [
       "Drag & drop interface",
       "Visual page preview",
@@ -325,8 +1358,8 @@
     "relatedTools": [
       "/organize",
       "/delete-pages",
-      "/split",
-      "/merge"
+      "/pdf/split",
+      "/pdf/merge"
     ],
     "category": "Organize & Edit"
   },
@@ -334,8 +1367,6 @@
     "href": "/organize",
     "title": "Organize PDF",
     "description": "Combine reordering and deletion to organize your PDF pages.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "organize pdf",
       "pdf organizer",
@@ -343,8 +1374,8 @@
       "pdf page management",
       "restructure pdf"
     ],
-    "seoTitle": "Free PDF Organizer - Manage Pages Instantly India",
-    "seoDescription": "Organize PDF pages by reordering and deleting instantly. Complete PDF management with secure browser-based processing. No registration. Free tool. India supported.",
+    "seoTitle": "Free PDF Organizer - Manage PDF Pages Online",
+    "seoDescription": "Organize PDF pages by reordering, deleting, and managing content. Complete PDF organization tool with visual interface.",
     "features": [
       "Page reordering",
       "Page deletion",
@@ -354,8 +1385,8 @@
     "relatedTools": [
       "/reorder",
       "/delete-pages",
-      "/merge",
-      "/split"
+      "/pdf/merge",
+      "/pdf/split"
     ],
     "category": "Organize & Edit"
   },
@@ -363,8 +1394,6 @@
     "href": "/page-numbers",
     "title": "Add Page Numbers",
     "description": "Insert customizable page numbers, headers, or footers into your PDF.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "add page numbers",
       "pdf page numbers",
@@ -372,8 +1401,8 @@
       "pdf headers footers",
       "paginate pdf"
     ],
-    "seoTitle": "Free PDF Page Numbers Tool - Instant Numbering",
-    "seoDescription": "Add page numbers, headers, and footers to PDF documents instantly. Customize format and position securely with browser processing. Free online tool. No data stored.",
+    "seoTitle": "Free PDF Page Number Tool - Add Page Numbers Online",
+    "seoDescription": "Add page numbers, headers, and footers to PDF documents. Customize format, position, and styling with our free online tool.",
     "features": [
       "Custom numbering formats",
       "Header & footer options",
@@ -383,8 +1412,34 @@
     "relatedTools": [
       "/watermark",
       "/organize",
-      "/merge",
+      "/pdf/merge",
       "/sign"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/password-strength",
+    "title": "Password Strength Checker",
+    "description": "Analyze the strength of your passwords and get tips to improve them.",
+    "keywords": [
+      "password strength",
+      "password checker",
+      "security check",
+      "password analyzer",
+      "strong password"
+    ],
+    "seoTitle": "Free Password Strength Checker - Test Password Security Online",
+    "seoDescription": "Check how strong your password is and learn how to make it more secure. Client-side analysis ensures your password never leaves your browser.",
+    "features": [
+      "Instant analysis",
+      "Crack time estimation",
+      "Security tips",
+      "100% client-side privacy"
+    ],
+    "relatedTools": [
+      "/hash-generator",
+      "/protect",
+      "/unlock"
     ],
     "category": "Security & Privacy"
   },
@@ -392,8 +1447,6 @@
     "href": "/ocr",
     "title": "OCR (Text Recognition)",
     "description": "Extract editable text from scanned PDFs and images.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "ocr pdf",
       "extract text",
@@ -401,8 +1454,8 @@
       "scan to text",
       "pdf ocr online"
     ],
-    "seoTitle": "Free PDF OCR Tool - Extract Text from Scans",
-    "seoDescription": "Extract editable text from scanned PDFs and images using OCR technology instantly. Free online optical character recognition with secure browser processing. No uploads retained.",
+    "seoTitle": "Free PDF OCR Tool - Extract Text from Scanned PDFs",
+    "seoDescription": "Extract editable text from scanned PDFs and images using OCR technology. Free online optical character recognition tool.",
     "features": [
       "Text extraction",
       "Multiple languages",
@@ -417,11 +1470,35 @@
     "category": "AI & Analysis"
   },
   {
+    "href": "/pdf-to-text",
+    "title": "PDF to Text",
+    "description": "Extract native text content from PDF files without using OCR.",
+    "keywords": [
+      "pdf to text",
+      "extract text from pdf",
+      "native text extraction",
+      "pdf text converter",
+      "text extraction"
+    ],
+    "seoTitle": "PDF to Text Converter - Extract Native Text from PDFs",
+    "seoDescription": "Extract native text content from PDF files directly in your browser. Fast text extraction for text-based PDFs without using OCR.",
+    "features": [
+      "Native text extraction",
+      "Fast processing",
+      "Preserve structure",
+      "No file uploads"
+    ],
+    "relatedTools": [
+      "/ocr",
+      "/pdf-to-jpg",
+      "/docx-to-text"
+    ],
+    "category": "Convert & Create"
+  },
+  {
     "href": "/sign",
     "title": "Sign / Annotate PDF",
     "description": "Draw, type, or upload your signature and place it on your PDF.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "sign pdf",
       "pdf signature",
@@ -429,8 +1506,8 @@
       "digital signature",
       "pdf signing tool"
     ],
-    "seoTitle": "Free PDF Signature Tool - Sign Documents Secure",
-    "seoDescription": "Sign PDF documents instantly with digital signatures and annotations. Secure signing with browser-based processing. Free online tool with drawing and typing options. No data kept.",
+    "seoTitle": "Free PDF Signature Tool - Sign PDF Documents Online",
+    "seoDescription": "Sign PDF documents with digital signatures and annotations. Free online PDF signing tool with drawing and typing options.",
     "features": [
       "Digital signatures",
       "Drawing tools",
@@ -449,8 +1526,6 @@
     "href": "/form-filler",
     "title": "PDF Form Filler",
     "description": "Add text, checkmarks, or other inputs to any PDF form.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "fill pdf form",
       "pdf form filler",
@@ -458,8 +1533,8 @@
       "pdf input",
       "form completion"
     ],
-    "seoTitle": "Free PDF Form Filler - Fill Forms Instantly India",
-    "seoDescription": "Fill out PDF forms online instantly with text, checkboxes, and signatures. Secure form completion with browser processing. Free tool with save functionality. India users welcome.",
+    "seoTitle": "Free PDF Form Filler - Complete PDF Forms Online",
+    "seoDescription": "Fill out PDF forms online with text, checkboxes, and signatures. Free PDF form completion tool with save functionality.",
     "features": [
       "Form field detection",
       "Text input",
@@ -478,8 +1553,6 @@
     "href": "/legal-analyzer",
     "title": "Legal Document Analyzer",
     "description": "AI-powered tool for legal document review and clause extraction.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "legal document analyzer",
       "contract review",
@@ -487,8 +1560,8 @@
       "document analysis",
       "clause extraction"
     ],
-    "seoTitle": "Free AI Legal Analyzer - Review Contracts Online",
-    "seoDescription": "Analyze legal documents with AI-powered contract review instantly and securely. Extract clauses, identify risks with browser processing. Free online legal analysis tool.",
+    "seoTitle": "AI Legal Document Analyzer - Review Contracts Online",
+    "seoDescription": "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts.",
     "features": [
       "AI-powered analysis",
       "Clause extraction",
@@ -506,8 +1579,6 @@
     "href": "/medical-analyzer",
     "title": "Medical Document Analyzer",
     "description": "AI-powered tool for medical document review and key information extraction.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "medical document analyzer",
       "medical ai",
@@ -515,8 +1586,8 @@
       "medical analysis",
       "patient document"
     ],
-    "seoTitle": "Free AI Medical Analyzer - Review Records Instant",
-    "seoDescription": "Analyze medical documents with AI-powered review instantly and securely. Extract patient data and diagnoses with browser processing. Free online medical analysis tool. Privacy protected.",
+    "seoTitle": "AI Medical Document Analyzer - Review Medical Records",
+    "seoDescription": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records.",
     "features": [
       "Medical AI analysis",
       "Patient data extraction",
@@ -531,25 +1602,23 @@
     "category": "AI & Analysis"
   },
   {
-    "id": 23,
-    "title": "PDF Metadata Editor",
-    "description": "Edit PDF metadata including title, author, subject, keywords, and creation date",
-    "icon": null,
     "href": "/pdf-metadata-editor",
+    "title": "PDF Metadata Editor",
+    "description": "Clean up authorship, keywords, and dates without uploading your file.",
     "keywords": [
       "pdf metadata editor",
-      "edit pdf metadata",
-      "pdf title editor",
-      "document properties",
-      "metadata editor"
+      "edit pdf properties",
+      "scrub pdf metadata",
+      "document title editor",
+      "pdf keywords"
     ],
-    "seoTitle": "Free PDF Metadata Editor - Edit Properties Instant",
-    "seoDescription": "Edit PDF metadata including title, author, subject, and keywords instantly. Modify properties securely with browser-based processing. Free online metadata editor. No data stored.",
+    "seoTitle": "PDF Metadata Editor - Clean Document Properties Locally",
+    "seoDescription": "Upload a PDF, inspect the metadata snapshot, scrub sensitive fields, and download updated properties without leaving your browser.",
     "features": [
-      "Edit title, author, subject",
-      "Modify keywords and creation date",
-      "Preserve document structure",
-      "Client-side processing"
+      "Runs 100% locally with pdf-lib",
+      "One-click scrub for author and keywords",
+      "Snapshot + reset flow for safe editing",
+      "Audit summary of key metadata fields"
     ],
     "relatedTools": [
       "/protect",
@@ -557,15 +1626,12 @@
       "/sign",
       "/watermark"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 24,
+    "href": "/pdf-bookmark-manager",
     "title": "PDF Bookmark Manager",
     "description": "Add, edit, and organize PDF bookmarks and navigation structure",
-    "icon": null,
-    "href": "/pdf-bookmark-manager",
     "keywords": [
       "pdf bookmark manager",
       "add pdf bookmarks",
@@ -573,8 +1639,8 @@
       "pdf navigation",
       "organize bookmarks"
     ],
-    "seoTitle": "Free PDF Bookmark Manager - Organize Navigation",
-    "seoDescription": "Add, edit, and organize PDF bookmarks and navigation structure instantly. Manage document navigation securely with browser processing. Free online bookmark manager. No uploads kept.",
+    "seoTitle": "PDF Bookmark Manager - Add & Organize PDF Bookmarks",
+    "seoDescription": "Add, edit, and organize PDF bookmarks and navigation structure. Manage document navigation with our free online PDF bookmark manager.",
     "features": [
       "Add custom bookmarks",
       "Edit existing bookmarks",
@@ -585,17 +1651,14 @@
       "/organize",
       "/reorder",
       "/page-numbers",
-      "/split"
+      "/pdf/split"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 25,
+    "href": "/pdf-table-extractor",
     "title": "PDF Table Extractor",
     "description": "Extract and export tables from PDF documents to CSV, Excel, or JSON format",
-    "icon": null,
-    "href": "/pdf-table-extractor",
     "keywords": [
       "pdf table extractor",
       "extract tables from pdf",
@@ -603,8 +1666,8 @@
       "pdf to excel",
       "table extraction"
     ],
-    "seoTitle": "Free PDF Table Extractor - Convert to Excel India",
-    "seoDescription": "Extract tables from PDF documents and export to CSV, Excel, or JSON instantly. Free online table extraction with secure browser processing. No data retention. India supported.",
+    "seoTitle": "PDF Table Extractor - Convert PDF Tables to CSV/Excel",
+    "seoDescription": "Extract tables from PDF documents and export to CSV, Excel, or JSON format. Free online PDF table extraction tool with automatic detection.",
     "features": [
       "Extract tables automatically",
       "Export to CSV/Excel/JSON",
@@ -614,15 +1677,12 @@
     "relatedTools": [
       "/ocr"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 26,
+    "href": "/pdf-batch-processor",
     "title": "PDF Batch Processor",
     "description": "Process multiple PDF files at once with various operations like merge, split, compress",
-    "icon": null,
-    "href": "/pdf-batch-processor",
     "keywords": [
       "pdf batch processor",
       "batch pdf processing",
@@ -630,8 +1690,8 @@
       "batch compress pdf",
       "mass pdf operations"
     ],
-    "seoTitle": "Free PDF Batch Processor - Process Multiple PDFs",
-    "seoDescription": "Process multiple PDF files instantly with batch merge, split, compress, and watermarking. Automate operations securely with browser processing. Free online batch processor. No uploads retained.",
+    "seoTitle": "PDF Batch Processor - Process Multiple PDFs at Once",
+    "seoDescription": "Process multiple PDF files at once with batch merge, split, compress, and watermarking. Automate PDF operations with our free online batch processor.",
     "features": [
       "Batch merge multiple PDFs",
       "Bulk compression",
@@ -639,20 +1699,17 @@
       "Batch operations"
     ],
     "relatedTools": [
-      "/merge",
-      "/compress",
-      "/split",
+      "/pdf/merge",
+      "/pdf/compress",
+      "/pdf/split",
       "/watermark"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 27,
+    "href": "/pdf-form-creator",
     "title": "PDF Form Creator",
     "description": "Create interactive PDF forms with various field types including text, checkboxes, and signatures",
-    "icon": null,
-    "href": "/pdf-form-creator",
     "keywords": [
       "pdf form creator",
       "create pdf forms",
@@ -660,8 +1717,8 @@
       "pdf form builder",
       "form field creation"
     ],
-    "seoTitle": "Free PDF Form Creator - Build Forms Instantly India",
-    "seoDescription": "Create interactive PDF forms with text fields, checkboxes, signatures instantly. Free online form creator with secure browser building. No coding required. India supported.",
+    "seoTitle": "PDF Form Creator - Create Interactive PDF Forms Online",
+    "seoDescription": "Create interactive PDF forms with text fields, checkboxes, signatures, and more. Free online PDF form creator with no coding required.",
     "features": [
       "Text input fields",
       "Checkboxes and radio buttons",
@@ -674,15 +1731,12 @@
       "/pdf-digital-signature",
       "/invoice-generator"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 28,
+    "href": "/advanced-ocr",
     "title": "Advanced OCR with AI",
     "description": "Extract text from PDFs and images with AI-powered enhancement and formatting",
-    "icon": null,
-    "href": "/advanced-ocr",
     "keywords": [
       "advanced ocr",
       "ai ocr",
@@ -690,8 +1744,8 @@
       "text extraction ai",
       "intelligent character recognition"
     ],
-    "seoTitle": "Free Advanced OCR with AI - Extract Text Secure",
-    "seoDescription": "Extract text from PDFs and images with AI-powered OCR enhancement instantly. Multiple language support with secure browser processing. Free advanced OCR. No data retention.",
+    "seoTitle": "Advanced OCR with AI - Extract Text with Artificial Intelligence",
+    "seoDescription": "Extract text from PDFs and images with AI-powered OCR enhancement. Multiple language support with intelligent formatting preservation.",
     "features": [
       "AI-enhanced text extraction",
       "Multiple language support",
@@ -703,15 +1757,12 @@
       "/legal-analyzer",
       "/medical-analyzer"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 29,
+    "href": "/pdf-accessibility-checker",
     "title": "PDF Accessibility Checker",
     "description": "Check PDF documents for accessibility compliance and WCAG standards",
-    "icon": null,
-    "href": "/pdf-accessibility-checker",
     "keywords": [
       "pdf accessibility checker",
       "wcag compliance",
@@ -719,8 +1770,8 @@
       "accessibility audit",
       "compliance checker"
     ],
-    "seoTitle": "Free PDF Accessibility Checker - WCAG Audit Tool",
-    "seoDescription": "Check PDF accessibility compliance with WCAG standards instantly and securely. Validate alt text and color contrast with browser processing. Free online audit tool. No uploads kept.",
+    "seoTitle": "PDF Accessibility Checker - WCAG Compliance Audit Tool",
+    "seoDescription": "Check PDF accessibility compliance with WCAG standards. Validate alt text, reading order, and color contrast with our free online audit tool.",
     "features": [
       "WCAG compliance check",
       "Alt text validation",
@@ -733,15 +1784,12 @@
       "/pdf-digital-signature",
       "/sign"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 30,
+    "href": "/pdf-digital-signature",
     "title": "PDF Digital Signature",
     "description": "Add legally binding digital signatures with certificate management and validation",
-    "icon": null,
-    "href": "/pdf-digital-signature",
     "keywords": [
       "pdf digital signature",
       "digital signature",
@@ -749,8 +1797,8 @@
       "certificate management",
       "signature validation"
     ],
-    "seoTitle": "Free PDF Digital Signature - Legally Binding India",
-    "seoDescription": "Add legally binding digital signatures to PDF documents securely with certificate management. Ensure legal compliance with browser-based signing. Free online tool. India supported.",
+    "seoTitle": "PDF Digital Signature - Legally Binding Digital Signatures",
+    "seoDescription": "Add legally binding digital signatures to PDF documents with certificate management and validation. Ensure legal compliance with digital signatures.",
     "features": [
       "Digital certificates",
       "Signature validation",
@@ -763,15 +1811,12 @@
       "/unlock",
       "/form-filler"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 31,
+    "href": "/pdf-redaction",
     "title": "PDF Redaction Tool",
     "description": "Permanently remove sensitive information from PDF documents with verification",
-    "icon": null,
-    "href": "/pdf-redaction",
     "keywords": [
       "pdf redaction",
       "redact pdf",
@@ -779,8 +1824,8 @@
       "metadata cleaning",
       "secure deletion"
     ],
-    "seoTitle": "Free PDF Redaction - Secure Information Removal",
-    "seoDescription": "Permanently remove sensitive information from PDFs securely and instantly. Clean metadata with browser-based processing. Free online redaction tool. No data retained.",
+    "seoTitle": "PDF Redaction Tool - Securely Remove Sensitive Information",
+    "seoDescription": "Permanently remove sensitive information from PDFs with secure redaction. Clean metadata and verify document with our free online redaction tool.",
     "features": [
       "Content removal",
       "Metadata cleaning",
@@ -793,15 +1838,12 @@
       "/pdf-accessibility-checker",
       "/sign"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 32,
-    "title": "PDF Version Comparison",
-    "description": "Compare different versions of PDF documents with visual diff highlighting",
-    "icon": null,
     "href": "/pdf-version-comparison",
+    "title": "PDF Version Comparison",
+    "description": "Spot every edit between two PDF revisions with severity-tagged diffs and exportable reports",
     "keywords": [
       "pdf comparison",
       "compare pdf versions",
@@ -809,13 +1851,13 @@
       "visual comparison",
       "version tracking"
     ],
-    "seoTitle": "Free PDF Version Comparison - Track Changes India",
-    "seoDescription": "Compare PDF document versions with visual diff highlighting instantly and securely. Track changes with browser-based comparison. Free online comparison tool. India users welcome.",
+    "seoTitle": "PDF Version Comparison - Privacy-First Diff Viewer",
+    "seoDescription": "Upload two PDF versions, highlight text/layout changes entirely offline, and export a structured comparison report for audits.",
     "features": [
-      "Visual diff",
-      "Text comparison",
-      "Layout changes",
-      "Version tracking"
+      "Side-by-side diff workflow with severity tags",
+      "Support for text, formatting, and image heuristics",
+      "Tabbed interface for uploads, diffs, and statistics",
+      "JSON report export for compliance and QA"
     ],
     "relatedTools": [
       "/pdf-accessibility-checker",
@@ -823,15 +1865,12 @@
       "/legal-analyzer",
       "/medical-analyzer"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
-    "id": 33,
+    "href": "/pdf-annotation-collaboration",
     "title": "PDF Annotation Collaboration",
     "description": "Collaborate on PDF annotations with team members and export shared comments",
-    "icon": null,
-    "href": "/pdf-annotation-collaboration",
     "keywords": [
       "pdf annotation collaboration",
       "collaborative annotations",
@@ -839,8 +1878,8 @@
       "shared comments",
       "review workflows"
     ],
-    "seoTitle": "Free PDF Annotation Collaboration - Team Review",
-    "seoDescription": "Collaborate on PDF annotations with team members and export shared comments securely. Streamline document review with browser-based collaboration. Free online team tool.",
+    "seoTitle": "PDF Annotation Collaboration - Team PDF Review Tool",
+    "seoDescription": "Collaborate on PDF annotations with team members and export shared comments. Streamline document review and team collaboration workflows.",
     "features": [
       "Team annotations",
       "Comment threads",
@@ -853,15 +1892,12 @@
       "/pdf-digital-signature",
       "/pdf-batch-processor"
     ],
-    "category": "Advanced PDF Tools",
-    "isNew": true
+    "category": "Advanced PDF Tools"
   },
   {
     "href": "/invoice-generator",
     "title": "PDF Invoice Generator",
     "description": "Create professional invoices with GST support, multiple currencies, and customizable templates.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "pdf invoice generator",
       "create invoice",
@@ -870,8 +1906,8 @@
       "gst invoice",
       "professional invoice"
     ],
-    "seoTitle": "Free PDF Invoice Generator - GST India Online",
-    "seoDescription": "Generate professional PDF invoices with GST support, multiple currencies, and templates instantly. Free online tool perfect for businesses. Secure browser-based processing. India focused.",
+    "seoTitle": "PDF Invoice Generator - Create Professional Invoices Online",
+    "seoDescription": "Generate professional PDF invoices with GST support, multiple currencies, and customizable templates. Perfect for businesses and freelancers.",
     "features": [
       "Professional invoice templates",
       "GST and tax calculations",
@@ -883,15 +1919,12 @@
       "/sign",
       "/watermark"
     ],
-    "category": "Business Tools",
-    "isNew": true
+    "category": "Business Tools"
   },
   {
     "href": "/qr-generator",
     "title": "QR Code Generator",
     "description": "Generate QR codes for URLs, text, WiFi, contact cards, and more. Export as PNG or PDF.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "qr code generator",
       "qr code maker",
@@ -900,8 +1933,8 @@
       "url qr code",
       "qr code pdf"
     ],
-    "seoTitle": "Free QR Code Generator - Create QR Codes Instant",
-    "seoDescription": "Generate QR codes for URLs, WiFi, contact cards instantly. Export as PNG or PDF securely with browser-based creation. Free online generator. No data stored or retained.",
+    "seoTitle": "QR Code Generator - Create QR Codes for PDF Online",
+    "seoDescription": "Generate QR codes for URLs, WiFi, contact cards, and more. Export as PNG or PDF with customizable size and quality.",
     "features": [
       "Multiple QR code types",
       "Customizable size and quality",
@@ -910,18 +1943,66 @@
     ],
     "relatedTools": [
       "/watermark",
-      "/merge",
+      "/pdf/merge",
       "/form-filler"
     ],
-    "category": "Convert & Create",
-    "isNew": true
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/qr-scanner",
+    "title": "QR Code Scanner",
+    "description": "Scan QR codes directly from your camera or upload an image.",
+    "keywords": [
+      "qr scanner",
+      "qr code reader",
+      "scan qr code",
+      "barcode scanner",
+      "read qr code"
+    ],
+    "seoTitle": "Free QR Code Scanner - Scan QR Codes Online",
+    "seoDescription": "Scan QR codes instantly using your camera or by uploading an image. Works offline and keeps your data private.",
+    "features": [
+      "Camera scanning",
+      "Image file scanning",
+      "Works offline",
+      "100% client-side privacy"
+    ],
+    "relatedTools": [
+      "/qr-generator",
+      "/jpg-to-pdf",
+      "/pdf-to-jpg"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/barcode-generator",
+    "title": "Barcode Generator",
+    "description": "Create custom barcodes (UPC, EAN, CODE128) for products or inventory.",
+    "keywords": [
+      "barcode generator",
+      "barcode maker",
+      "upc generator",
+      "ean generator",
+      "code128"
+    ],
+    "seoTitle": "Free Barcode Generator - Create UPC, EAN, Code128 Online",
+    "seoDescription": "Generate custom barcodes for free. Supports UPC, EAN, Code128, and more. Download as PNG or SVG.",
+    "features": [
+      "Supports multiple formats",
+      "Customizable size and color",
+      "SVG and PNG export",
+      "Instant preview"
+    ],
+    "relatedTools": [
+      "/qr-generator",
+      "/qr-scanner"
+    ],
+    "category": "Convert & Create"
   },
   {
     "href": "/certificate-generator",
     "title": "Certificate Generator",
     "description": "Create professional certificates for courses, training, achievements, and more with customizable templates.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "certificate generator",
       "certificate maker",
@@ -929,8 +2010,8 @@
       "training certificate",
       "achievement certificate"
     ],
-    "seoTitle": "Free Certificate Generator - Create Certificates",
-    "seoDescription": "Generate professional certificates for courses, training, and achievements instantly with customizable templates. Free online generator with secure browser processing. No data retention.",
+    "seoTitle": "Certificate Generator - Create Professional Certificates PDF",
+    "seoDescription": "Generate professional certificates for courses, training, achievements with customizable templates and styling options.",
     "features": [
       "Multiple certificate templates",
       "Customizable colors and styles",
@@ -942,15 +2023,12 @@
       "/watermark",
       "/form-filler"
     ],
-    "category": "Business Tools",
-    "isNew": true
+    "category": "Business Tools"
   },
   {
     "href": "/portfolio-creator",
     "title": "Portfolio Creator",
     "description": "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "portfolio creator",
       "pdf portfolio",
@@ -958,8 +2036,8 @@
       "resume builder",
       "cv maker"
     ],
-    "seoTitle": "Free Portfolio Creator - Build Portfolios Instant",
-    "seoDescription": "Create professional PDF portfolios instantly with customizable sections for experience, education, skills. Secure browser-based builder. Free online tool. No data stored.",
+    "seoTitle": "Portfolio Creator - Create Professional PDF Portfolios",
+    "seoDescription": "Create professional PDF portfolios with customizable sections for experience, education, skills, and projects.",
     "features": [
       "Professional portfolio templates",
       "Multiple customizable sections",
@@ -971,15 +2049,12 @@
       "/invoice-generator",
       "/form-filler"
     ],
-    "category": "Business Tools",
-    "isNew": true
+    "category": "Business Tools"
   },
   {
     "href": "/report-generator",
     "title": "Report Generator",
     "description": "Create professional business reports with sections, metrics, charts, and recommendations.",
-    "icon": null,
-    "comingSoon": false,
     "keywords": [
       "report generator",
       "business report",
@@ -987,8 +2062,8 @@
       "professional report",
       "report maker"
     ],
-    "seoTitle": "Free Report Generator - Business Reports India",
-    "seoDescription": "Create professional business reports instantly with sections, metrics, and charts. Secure browser-based report creation. Free online tool. India supported. No uploads kept.",
+    "seoTitle": "Report Generator - Create Professional Business Reports PDF",
+    "seoDescription": "Create professional business reports with sections, metrics, charts, and recommendations. Perfect for business analysis and reporting.",
     "features": [
       "Multiple report templates",
       "Key metrics dashboard",
@@ -1000,7 +2075,688 @@
       "/invoice-generator",
       "/certificate-generator"
     ],
-    "category": "Business Tools",
-    "isNew": true
+    "category": "Business Tools"
+  },
+  {
+    "href": "/xlsx-to-csv",
+    "title": "XLSX to CSV",
+    "description": "Convert Excel spreadsheets (XLSX) to CSV format instantly in your browser.",
+    "keywords": [
+      "xlsx to csv",
+      "excel to csv",
+      "convert excel",
+      "spreadsheet converter",
+      "xlsx converter"
+    ],
+    "seoTitle": "XLSX to CSV Converter - Convert Excel to CSV Online",
+    "seoDescription": "Convert Excel files (XLSX) to CSV format directly in your browser. Fast, secure, and private conversion without file uploads.",
+    "features": [
+      "Convert XLSX to CSV",
+      "Client-side processing",
+      "No file uploads",
+      "Fast conversion"
+    ],
+    "relatedTools": [
+      "/csv-to-xlsx",
+      "/pdf-to-xlsx",
+      "/csv-json-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/csv-to-xlsx",
+    "title": "CSV to XLSX",
+    "description": "Convert CSV files to Excel (XLSX) spreadsheets instantly in your browser.",
+    "keywords": [
+      "csv to xlsx",
+      "csv to excel",
+      "convert csv",
+      "spreadsheet converter",
+      "csv converter"
+    ],
+    "seoTitle": "CSV to XLSX Converter - Convert CSV to Excel Online",
+    "seoDescription": "Convert CSV files to Excel (XLSX) format directly in your browser. Fast, secure, and private conversion without file uploads.",
+    "features": [
+      "Convert CSV to XLSX",
+      "Client-side processing",
+      "No file uploads",
+      "Fast conversion"
+    ],
+    "relatedTools": [
+      "/xlsx-to-csv",
+      "/pdf-to-xlsx",
+      "/csv-json-converter"
+    ],
+    "category": "Convert & Create"
+  },
+  {
+    "href": "/metadata-extractor",
+    "title": "Metadata Extractor",
+    "description": "View hidden metadata (EXIF, XMP) from images and PDF documents.",
+    "keywords": [
+      "metadata extractor",
+      "exif viewer",
+      "pdf metadata",
+      "image metadata",
+      "read exif"
+    ],
+    "seoTitle": "Free Metadata Extractor - View Image & PDF Metadata Online",
+    "seoDescription": "Extract and view hidden metadata from images and PDF files. See EXIF data, camera settings, author info, and more.",
+    "features": [
+      "View Image EXIF data",
+      "View PDF properties",
+      "100% client-side",
+      "Supports JPG, PNG, PDF"
+    ],
+    "relatedTools": [
+      "/pdf-metadata-editor",
+      "/pdf-to-jpg"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/html-minifier",
+    "title": "HTML Minifier",
+    "description": "Compress HTML code by removing whitespace and comments.",
+    "keywords": [
+      "html minifier",
+      "minify html",
+      "compress html",
+      "html optimizer",
+      "clean html"
+    ],
+    "seoTitle": "Free HTML Minifier - Compress HTML Code Online",
+    "seoDescription": "Minify HTML code to reduce file size and improve website performance. Removes whitespace and comments instantly.",
+    "features": [
+      "Removes comments",
+      "Collapses whitespace",
+      "Instant results",
+      "Copy to clipboard"
+    ],
+    "relatedTools": [
+      "/html-to-pdf",
+      "/markdown-to-html"
+    ],
+    "category": "Web Tools"
+  },
+  {
+    "href": "/css-minifier",
+    "title": "CSS Minifier",
+    "description": "Compress CSS code to reduce file size.",
+    "keywords": [
+      "css minifier",
+      "minify css",
+      "compress css",
+      "css optimizer",
+      "clean css"
+    ],
+    "seoTitle": "Free CSS Minifier - Compress CSS Code Online",
+    "seoDescription": "Minify CSS code to reduce file size and improve website performance. Removes whitespace and comments instantly.",
+    "features": [
+      "Removes comments",
+      "Collapses whitespace",
+      "Instant results",
+      "Copy to clipboard"
+    ],
+    "relatedTools": [
+      "/html-minifier",
+      "/js-minifier"
+    ],
+    "category": "Web Tools"
+  },
+  {
+    "href": "/js-minifier",
+    "title": "JS Minifier",
+    "description": "Compress JavaScript code to reduce file size.",
+    "keywords": [
+      "js minifier",
+      "minify js",
+      "compress javascript",
+      "js optimizer",
+      "clean js"
+    ],
+    "seoTitle": "Free JS Minifier - Compress JavaScript Code Online",
+    "seoDescription": "Minify JavaScript code to reduce file size and improve website performance. Removes whitespace and comments instantly.",
+    "features": [
+      "Removes comments",
+      "Collapses whitespace",
+      "Instant results",
+      "Copy to clipboard"
+    ],
+    "relatedTools": [
+      "/css-minifier",
+      "/html-minifier"
+    ],
+    "category": "Web Tools"
+  },
+  {
+    "href": "/aes-encrypt",
+    "title": "AES Encryption",
+    "description": "Encrypt and decrypt text using AES-256.",
+    "keywords": [
+      "aes encryption",
+      "encrypt text",
+      "decrypt text",
+      "aes-256",
+      "secure message"
+    ],
+    "seoTitle": "Free AES Encryption Tool - Encrypt Text Online",
+    "seoDescription": "Securely encrypt and decrypt text using AES-256 algorithm. Client-side processing ensures your data remains private.",
+    "features": [
+      "AES-256 encryption",
+      "Instant decryption",
+      "Client-side security",
+      "No data storage"
+    ],
+    "relatedTools": [
+      "/password-strength",
+      "/hash-generator"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/rsa-generator",
+    "title": "RSA Key Generator",
+    "description": "Generate secure RSA public and private key pairs.",
+    "keywords": [
+      "rsa generator",
+      "rsa keys",
+      "public private key",
+      "generate rsa",
+      "web crypto"
+    ],
+    "seoTitle": "Free RSA Key Generator - Create Public & Private Keys",
+    "seoDescription": "Generate secure RSA key pairs (2048/4096 bit) in your browser. Download PEM formatted keys for use in OpenSSL and other tools.",
+    "features": [
+      "2048/4096 bit keys",
+      "PEM format export",
+      "Client-side generation",
+      "No server storage"
+    ],
+    "relatedTools": [
+      "/aes-encrypt",
+      "/hash-generator"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/jwt-decoder",
+    "title": "JWT Decoder",
+    "description": "Decode and inspect JSON Web Tokens (JWT).",
+    "keywords": [
+      "jwt decoder",
+      "decode jwt",
+      "json web token",
+      "jwt debugger",
+      "read jwt"
+    ],
+    "seoTitle": "Free JWT Decoder - Decode JSON Web Tokens Online",
+    "seoDescription": "Decode and inspect JSON Web Tokens (JWT) instantly. View header and payload claims securely in your browser.",
+    "features": [
+      "Decode Header & Payload",
+      "View expiration times",
+      "Format JSON output",
+      "Client-side only"
+    ],
+    "relatedTools": [
+      "/base64-encoder",
+      "/json-xml-converter"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/markdown-previewer",
+    "title": "Markdown Previewer",
+    "description": "Real-time Markdown to HTML preview.",
+    "keywords": [
+      "markdown preview",
+      "md viewer",
+      "markdown editor",
+      "readme editor",
+      "live markdown"
+    ],
+    "seoTitle": "Free Markdown Previewer - Edit & Preview Markdown Online",
+    "seoDescription": "Write and preview Markdown content in real-time. Supports GitHub Flavored Markdown (GFM) and instant HTML rendering.",
+    "features": [
+      "Real-time preview",
+      "GFM support",
+      "HTML export",
+      "Split view"
+    ],
+    "relatedTools": [
+      "/markdown-to-html",
+      "/html-to-markdown"
+    ],
+    "category": "Web Tools"
+  },
+  {
+    "href": "/number-base-converter",
+    "title": "Number Base Converter",
+    "description": "Convert numbers between Binary, Octal, Decimal, and Hexadecimal.",
+    "keywords": [
+      "base converter",
+      "binary converter",
+      "hex converter",
+      "decimal to binary",
+      "hex to decimal"
+    ],
+    "seoTitle": "Free Number Base Converter - Binary, Hex, Decimal Online",
+    "seoDescription": "Convert numbers between Binary, Octal, Decimal, and Hexadecimal formats instantly. Free online base conversion tool.",
+    "features": [
+      "Binary, Octal, Decimal, Hex",
+      "Instant conversion",
+      "Copy to clipboard",
+      "Bidirectional"
+    ],
+    "relatedTools": [
+      "/calculator",
+      "/unit-converter"
+    ],
+    "category": "Utility Converters"
+  },
+  {
+    "href": "/unit-converter",
+    "title": "Unit Converter",
+    "description": "Convert between different units of measurement (Length, Weight, Volume, etc).",
+    "keywords": [
+      "unit converter",
+      "measurement converter",
+      "length converter",
+      "weight converter"
+    ],
+    "seoTitle": "Free Unit Converter - Convert Length, Weight, Volume & More",
+    "seoDescription": "Convert between different units of measurement including length, weight, volume, temperature, area, speed, time, and digital storage.",
+    "features": [
+      "Multiple categories",
+      "Real-time conversion",
+      "Standard units",
+      "Easy to use"
+    ],
+    "relatedTools": [
+      "/currency-converter",
+      "/number-base-converter"
+    ],
+    "category": "Utility Converters"
+  },
+  {
+    "href": "/currency-converter",
+    "title": "Currency Converter",
+    "description": "Convert between major world currencies with approximate rates.",
+    "keywords": [
+      "currency converter",
+      "exchange rates",
+      "money converter",
+      "usd to eur"
+    ],
+    "seoTitle": "Free Currency Converter - Convert World Currencies",
+    "seoDescription": "Convert between major world currencies using approximate exchange rates. Simple and fast currency conversion tool.",
+    "features": [
+      "Major currencies supported",
+      "Approximate rates",
+      "Offline capable",
+      "Instant calculation"
+    ],
+    "relatedTools": [
+      "/unit-converter",
+      "/number-base-converter"
+    ],
+    "category": "Utility Converters"
+  },
+  {
+    "href": "/timezone-converter",
+    "title": "Timezone Converter",
+    "description": "Convert time between different global timezones.",
+    "keywords": [
+      "timezone converter",
+      "world clock",
+      "time difference",
+      "utc converter"
+    ],
+    "seoTitle": "Free Timezone Converter - World Clock & Time Difference",
+    "seoDescription": "Convert time between different global timezones. Plan meetings and travel with accurate time difference calculations.",
+    "features": [
+      "Global timezones",
+      "Date and time selection",
+      "DST aware",
+      "Simple interface"
+    ],
+    "relatedTools": [
+      "/unit-converter",
+      "/currency-converter"
+    ],
+    "category": "Utility Converters"
+  },
+  {
+    "href": "/color-converter",
+    "title": "Color Converter",
+    "description": "Convert colors between HEX, RGB, HSL, and CMYK formats.",
+    "keywords": [
+      "color converter",
+      "hex to rgb",
+      "rgb to hex",
+      "hsl converter",
+      "cmyk converter"
+    ],
+    "seoTitle": "Free Color Converter - HEX, RGB, HSL, CMYK",
+    "seoDescription": "Convert colors between HEX, RGB, HSL, and CMYK formats. Generate color palettes and copy codes easily.",
+    "features": [
+      "HEX, RGB, HSL, CMYK",
+      "Color preview",
+      "Copy to clipboard",
+      "Dark/Light mode detection"
+    ],
+    "relatedTools": [
+      "/image-converter",
+      "/css-minifier"
+    ],
+    "category": "Utility Converters"
+  },
+  {
+    "href": "/url-shortener",
+    "title": "URL Shortener",
+    "description": "Create short links for your long URLs (Local Demo).",
+    "keywords": [
+      "url shortener",
+      "link shortener",
+      "short link",
+      "tiny url"
+    ],
+    "seoTitle": "Free URL Shortener - Create Short Links Locally",
+    "seoDescription": "Create short links for your long URLs. This is a local demo tool that runs entirely in your browser.",
+    "features": [
+      "Local storage",
+      "Privacy focused",
+      "Instant generation",
+      "Link management"
+    ],
+    "relatedTools": [
+      "/qr-generator",
+      "/url-encoder"
+    ],
+    "category": "Web Tools"
+  },
+  {
+    "href": "/steganography",
+    "title": "Steganography",
+    "description": "Hide secret text messages inside PNG images.",
+    "keywords": [
+      "steganography",
+      "hide text in image",
+      "secret message",
+      "image encryption"
+    ],
+    "seoTitle": "Free Steganography Tool - Hide Text in Images",
+    "seoDescription": "Hide secret text messages inside PNG images using LSB steganography. Encode and decode hidden messages securely.",
+    "features": [
+      "Hide text in images",
+      "LSB algorithm",
+      "Secure & private",
+      "No server upload"
+    ],
+    "relatedTools": [
+      "/aes-encrypt",
+      "/file-checksum"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/image-filters",
+    "title": "Image Filters",
+    "description": "Apply artistic filters and adjustments to your photos.",
+    "keywords": [
+      "image filters",
+      "photo effects",
+      "instagram filters",
+      "image brightness",
+      "grayscale"
+    ],
+    "seoTitle": "Free Image Filters - Apply Effects Online",
+    "seoDescription": "Enhance your images with brightness, contrast, saturation, and artistic filters like sepia and grayscale. Free online photo editor.",
+    "features": [
+      "Brightness/Contrast",
+      "Artistic filters",
+      "Real-time preview",
+      "High quality export"
+    ],
+    "relatedTools": [
+      "/image-crop",
+      "/image-rotator"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/image-text-overlay",
+    "title": "Add Text to Image",
+    "description": "Overlay text on your images with custom fonts and colors.",
+    "keywords": [
+      "add text to image",
+      "image caption",
+      "photo text",
+      "write on image"
+    ],
+    "seoTitle": "Add Text to Image - Free Online Photo Editor",
+    "seoDescription": "Easily add text captions, quotes, or watermarks to your photos. Customize font, size, color, and position.",
+    "features": [
+      "Custom fonts",
+      "Color selection",
+      "Opacity control",
+      "Drag positioning"
+    ],
+    "relatedTools": [
+      "/image-watermark",
+      "/image-drawing"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/image-drawing",
+    "title": "Draw on Image",
+    "description": "Annotate your images with freehand drawing.",
+    "keywords": [
+      "draw on image",
+      "annotate image",
+      "photo drawing",
+      "highlight image"
+    ],
+    "seoTitle": "Draw on Image - Free Online Annotation Tool",
+    "seoDescription": "Draw, highlight, or annotate your images directly in the browser. Choose your color and brush size.",
+    "features": [
+      "Freehand drawing",
+      "Custom colors",
+      "Brush size control",
+      "Instant download"
+    ],
+    "relatedTools": [
+      "/image-text-overlay",
+      "/image-crop"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/image-watermark",
+    "title": "Image Watermark",
+    "description": "Protect your images with a custom logo or watermark.",
+    "keywords": [
+      "image watermark",
+      "add logo to photo",
+      "copyright image",
+      "watermark tool"
+    ],
+    "seoTitle": "Free Image Watermark Tool - Add Logo to Photos",
+    "seoDescription": "Overlay a logo or image watermark onto your photos. Adjust transparency, size, and position to protect your work.",
+    "features": [
+      "Image overlay",
+      "Transparency control",
+      "Resize & Position",
+      "Batch processing (coming soon)"
+    ],
+    "relatedTools": [
+      "/image-text-overlay",
+      "/protect"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/remove-background",
+    "title": "Remove Background",
+    "description": "Automatically remove background from images using AI.",
+    "keywords": [
+      "remove background",
+      "transparent background",
+      "background eraser",
+      "ai background remover",
+      "png maker"
+    ],
+    "seoTitle": "Free Background Remover - Remove Image Backgrounds Online",
+    "seoDescription": "Remove image backgrounds instantly with AI. Create transparent PNGs for free directly in your browser. No signup required.",
+    "features": [
+      "AI-powered removal",
+      "Instant processing",
+      "Transparent PNG output",
+      "100% private"
+    ],
+    "relatedTools": [
+      "/image-crop",
+      "/image-filters"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/face-blur",
+    "title": "Face Blur",
+    "description": "Automatically detect and blur faces in photos.",
+    "keywords": [
+      "face blur",
+      "blur faces",
+      "hide faces",
+      "privacy blur",
+      "anonymize photo"
+    ],
+    "seoTitle": "Free Face Blur Tool - Anonymize Photos Online",
+    "seoDescription": "Protect privacy by automatically blurring faces in your images using AI. Processing happens entirely in your browser.",
+    "features": [
+      "AI face detection",
+      "Automatic blurring",
+      "Privacy protection",
+      "100% local processing"
+    ],
+    "relatedTools": [
+      "/remove-background",
+      "/image-filters"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/image-crop",
+    "title": "Crop Image",
+    "description": "Crop your images to exact dimensions or aspect ratios.",
+    "keywords": [
+      "crop image",
+      "image cropper",
+      "photo crop",
+      "trim image"
+    ],
+    "seoTitle": "Free Image Cropper - Crop Photos Online",
+    "seoDescription": "Crop images to custom dimensions or fixed aspect ratios. Free online photo cropping tool.",
+    "features": [
+      "Custom aspect ratios",
+      "Freeform cropping",
+      "Grid overlay",
+      "High quality export"
+    ],
+    "relatedTools": [
+      "/resize-images",
+      "/image-rotator"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/image-cropper",
+    "title": "Image Cropper",
+    "description": "Crop and resize images online.",
+    "keywords": [
+      "image cropper",
+      "crop picture",
+      "photo cropper"
+    ],
+    "seoTitle": "Image Cropper - Crop Pictures Online",
+    "seoDescription": "Crop and resize images online. Simple and fast image cropping tool.",
+    "features": [
+      "Crop images",
+      "Resize",
+      "Rotate"
+    ],
+    "relatedTools": [
+      "/image-crop",
+      "/resize-images"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/image-rotator",
+    "title": "Rotate Image",
+    "description": "Rotate images 90, 180, or 270 degrees.",
+    "keywords": [
+      "rotate image",
+      "flip image",
+      "turn photo"
+    ],
+    "seoTitle": "Free Image Rotator - Rotate Photos Online",
+    "seoDescription": "Rotate images 90, 180, or 270 degrees. Fix photo orientation online.",
+    "features": [
+      "90/180/270 degree rotation",
+      "Flip horizontal/vertical",
+      "Batch processing"
+    ],
+    "relatedTools": [
+      "/image-crop",
+      "/resize-images"
+    ],
+    "category": "Image Editing"
+  },
+  {
+    "href": "/file-checksum",
+    "title": "File Checksum",
+    "description": "Verify file integrity with MD5, SHA-1, and SHA-256 hashes.",
+    "keywords": [
+      "file checksum",
+      "verify file",
+      "md5 check",
+      "sha256 check"
+    ],
+    "seoTitle": "File Checksum Validator - Verify File Integrity",
+    "seoDescription": "Calculate and verify file checksums (MD5, SHA-1, SHA-256) online. Ensure file integrity.",
+    "features": [
+      "MD5, SHA-1, SHA-256",
+      "Verify file integrity",
+      "Client-side calculation"
+    ],
+    "relatedTools": [
+      "/hash-generator",
+      "/aes-encrypt"
+    ],
+    "category": "Security & Privacy"
+  },
+  {
+    "href": "/ppt-to-pdf",
+    "title": "PPT to PDF",
+    "description": "Convert PowerPoint presentations to PDF documents.",
+    "keywords": [
+      "ppt to pdf",
+      "powerpoint to pdf",
+      "convert ppt"
+    ],
+    "seoTitle": "PPT to PDF Converter - Convert PowerPoint to PDF",
+    "seoDescription": "Convert PowerPoint presentations (PPT/PPTX) to PDF documents online. Preserve formatting and layout.",
+    "features": [
+      "PPT/PPTX support",
+      "Preserve layout",
+      "Batch conversion"
+    ],
+    "relatedTools": [
+      "/pdf-to-ppt",
+      "/docx-to-pdf"
+    ],
+    "category": "Convert & Create"
   }
 ]

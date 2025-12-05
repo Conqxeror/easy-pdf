@@ -49,7 +49,8 @@ export function getToolMetadata(href) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL;
   const resolvedBase = baseUrl ? (baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`) : 'https://easy-pdf-murex.vercel.app';
   const canonicalUrl = `${resolvedBase}${href}`;
-  const slug = href.replace(/^\//, '');
+  // Replace slashes with dashes to match generated filenames (e.g. /pdf/merge -> pdf-merge)
+  const slug = href.replace(/^\//, '').replace(/\//g, '-');
   // Prefer pre-generated static OG images in public/og-static for top pages if available.
   const staticPath = path.join(process.cwd(), 'public', 'og-static', `${slug}.png`);
   let ogImageUrl;
@@ -57,7 +58,9 @@ export function getToolMetadata(href) {
     ogImageUrl = `${resolvedBase}/og-static/${slug}.png`;
   } else {
     const ogVersion = tool.ogImageVersion ? `?v=${tool.ogImageVersion}` : '';
-    ogImageUrl = `${resolvedBase}/og/tool/${slug}${ogVersion}`;
+    const dynamicOgUrl = `${resolvedBase}/og/tool/${slug}${ogVersion}`;
+    const preferStaticFallback = process.env.NEXT_PUBLIC_PREFER_STATIC_OG === 'true';
+    ogImageUrl = preferStaticFallback ? `${resolvedBase}/og-static/tool.png` : dynamicOgUrl;
   }
 
   // Generate metadata

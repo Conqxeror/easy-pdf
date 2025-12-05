@@ -1,11 +1,26 @@
 import React from 'react';
 import AudioSpeedChangerClient from './components/AudioSpeedChangerClient';
+import { getToolMetadata } from '@/lib/toolSeoHelper';
 
-export const metadata = {
-  title: 'Audio Speed Changer | Easy PDF',
-  description: 'Change the playback speed of audio files (MP3, WAV, M4A, FLAC) online. Speed up or slow down audio without changing pitch.',
-};
+const toolHref = '/audio-speed-changer';
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function AudioSpeedChangerPage() {
-  return <AudioSpeedChangerClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <AudioSpeedChangerClient />
+    </>
+  );
 }

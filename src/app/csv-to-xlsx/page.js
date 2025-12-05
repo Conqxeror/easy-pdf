@@ -1,10 +1,25 @@
 import CsvToXlsxClient from "./components/CsvToXlsxClient";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: "CSV to Excel Converter | Easy PDF",
-  description: "Convert CSV files to Excel (XLSX) format online. Free, fast, and secure conversion directly in your browser.",
-};
+const toolHref = "/csv-to-xlsx";
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function CsvToXlsxPage() {
-  return <CsvToXlsxClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <CsvToXlsxClient />
+    </>
+  );
 }

@@ -1,11 +1,26 @@
 import React from 'react';
 import AudioCompressorClient from './components/AudioCompressorClient';
+import { getToolMetadata } from '@/lib/toolSeoHelper';
 
-export const metadata = {
-  title: 'Audio Compressor | Easy PDF',
-  description: 'Compress audio files (MP3, WAV, M4A, FLAC) online. Reduce file size while maintaining quality with adjustable compression levels.',
-};
+const toolHref = '/audio-compressor';
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function AudioCompressorPage() {
-  return <AudioCompressorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <AudioCompressorClient />
+    </>
+  );
 }

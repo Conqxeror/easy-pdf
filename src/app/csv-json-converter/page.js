@@ -1,10 +1,25 @@
 import CsvJsonConverterClient from "./components/CsvJsonConverterClient";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: "CSV ↔ JSON Converter | Easy PDF",
-  description: "Convert CSV to JSON and JSON to CSV instantly. Free online tool for developers and data analysts.",
-};
+const toolHref = "/csv-json-converter";
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function CsvJsonConverterPage() {
-  return <CsvJsonConverterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <CsvJsonConverterClient />
+    </>
+  );
 }

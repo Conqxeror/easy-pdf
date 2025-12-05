@@ -89,10 +89,14 @@ export async function getSitemapEntries() {
 			const exists = require('fs').existsSync(
 				require('path').join(process.cwd(), 'public', 'og-static', `${tool.href.replace(/^\//, '')}.png`)
 			);
-			imageUrl = exists ? `${resolvedBase}${staticPath}` : `${resolvedBase}/og/tool/${tool.href.replace(/^\//, '')}`;
+			if (exists) {
+				imageUrl = `${resolvedBase}${staticPath}`;
+			} else {
+				imageUrl = `${resolvedBase}/og-static/tool.png`;
+			}
 		} catch {
-			// Fallback to dynamic OG generation if fs check fails
-			imageUrl = `${resolvedBase}/og/tool/${tool.href.replace(/^\//, '')}`;
+			// Fallback to static placeholder to avoid broken image entries
+			imageUrl = `${resolvedBase}/og-static/tool.png`;
 		}
 		
 		return {

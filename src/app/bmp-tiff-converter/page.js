@@ -1,11 +1,26 @@
 import React from "react";
 import BmpTiffConverterClient from "./components/BmpTiffConverterClient";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: "BMP/TIFF Converter | Easy PDF",
-  description: "Convert BMP and TIFF images to PNG or JPG formats directly in your browser. Free, secure, and easy to use.",
-};
+const toolHref = "/bmp-tiff-converter";
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function BmpTiffConverterPage() {
-  return <BmpTiffConverterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <BmpTiffConverterClient />
+    </>
+  );
 }

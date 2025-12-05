@@ -1,10 +1,25 @@
 import DocxToTextClient from "./components/DocxToTextClient";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: "DOCX to Text Converter | Easy PDF",
-  description: "Extract plain text from DOCX files instantly. Free online tool to convert Word documents to text format.",
-};
+const toolHref = "/docx-to-text";
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function DocxToTextPage() {
-  return <DocxToTextClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <DocxToTextClient />
+    </>
+  );
 }

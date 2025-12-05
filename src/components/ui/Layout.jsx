@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { AccessibleHeading } from "@/components/ui/AccessibilityEnhancements";
 
 /**
  * Standardized page layout component for consistent structure across all pages
@@ -169,6 +170,7 @@ export const Hero = ({
   className,
   backgroundImage,
   overlay = true,
+  headingLevel = 1,
   ...props 
 }) => {
   return (
@@ -200,9 +202,12 @@ export const Hero = ({
       )}
       <div className="relative container-standard z-10">
         {title && (
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-slide-up uppercase" aria-label={title}>
+          <AccessibleHeading
+            level={headingLevel}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-slide-up uppercase"
+          >
             {title}
-          </h1>
+          </AccessibleHeading>
         )}
         {subtitle && (
           <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-slide-up font-light" style={{ animationDelay: '0.1s' }}>

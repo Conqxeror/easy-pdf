@@ -3,14 +3,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  Shield,
-  Heart,
-  Zap,
-  Users,
-  Globe,
-  Code,
-  Lock,
+import { 
+  Shield, 
+  Heart, 
+  Zap, 
+  Users, 
+  Globe, 
+  Code, 
+  Lock, 
   Star,
   Award,
   TrendingUp,
@@ -27,18 +27,18 @@ export default function AboutPage() {
 
   const handleContactClick = () => {
     trackEvent('contact_link_clicked');
-    window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`;
+  window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`;
   };
 
   return (
-    <main className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Section */}
       <div className="text-center mb-12">
         <h1 className="text-4xl md:text-5xl font-bold text-foreground dark:text-foreground mb-6">
           About Easy-PDF
         </h1>
         <p className="text-xl text-foreground dark:text-foreground max-w-3xl mx-auto">
-          We&apos;re building the future of document processing with privacy-first,
+          We&apos;re building the future of document processing with privacy-first, 
           secure PDF tools that work entirely in your browser.
         </p>
       </div>
@@ -53,13 +53,13 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent>
           <p className="text-lg text-foreground dark:text-foreground mb-4">
-            To democratize document processing by providing powerful, privacy-first PDF tools
+            To democratize document processing by providing powerful, privacy-first PDF tools 
             that are completely free and accessible to everyone.
           </p>
           <p className="text-foreground dark:text-foreground">
-            We believe that powerful tools should be available to everyone, regardless of
-            their technical expertise or financial resources. That&apos;s why we&apos;ve built a
-            comprehensive suite of PDF tools that work entirely in your browser, ensuring
+            We believe that powerful tools should be available to everyone, regardless of 
+            their technical expertise or financial resources. That&apos;s why we&apos;ve built a 
+            comprehensive suite of PDF tools that work entirely in your browser, ensuring 
             your documents never leave your device.
           </p>
         </CardContent>
@@ -76,7 +76,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              All processing happens locally in your browser. Your files never touch our servers,
+              All processing happens locally in your browser. Your files never touch our servers, 
               ensuring complete privacy and security.
             </p>
           </CardContent>
@@ -91,7 +91,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Built with modern web technologies for optimal performance. Process your documents
+              Built with modern web technologies for optimal performance. Process your documents 
               quickly and efficiently.
             </p>
           </CardContent>
@@ -106,7 +106,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Community-focused. We welcome contributions and feedback from
+              Community-focused. We welcome contributions and feedback from 
               users worldwide.
             </p>
           </CardContent>
@@ -121,7 +121,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Works on any device with a modern browser. No downloads, no installations,
+              Works on any device with a modern browser. No downloads, no installations, 
               no platform restrictions.
             </p>
           </CardContent>
@@ -136,7 +136,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Built with security in mind from the ground up. Your data stays on your device
+              Built with security in mind from the ground up. Your data stays on your device 
               and is never transmitted to our servers.
             </p>
           </CardContent>
@@ -151,7 +151,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-foreground dark:text-foreground">
-              Completely free to use with no hidden costs, premium features, or usage limits.
+              Completely free to use with no hidden costs, premium features, or usage limits. 
               We&apos;re committed to keeping it that way.
             </p>
           </CardContent>
@@ -184,7 +184,7 @@ export default function AboutPage() {
               <div className="text-2xl font-bold text-yellow-600">TypeScript</div>
               <div className="text-sm text-foreground dark:text-foreground">Type Safety</div>
             </div>
-            .
+.
           </div>
         </CardContent>
       </Card>
@@ -255,7 +255,7 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button
+            <Button 
               onClick={handleSupportClick}
               className="flex items-center gap-2"
               variant="outline"
@@ -263,7 +263,7 @@ export default function AboutPage() {
               <Coffee className="h-5 w-5 text-yellow-500" />
               Support Us
             </Button>
-            <Button
+            <Button 
               onClick={handleContactClick}
               className="flex items-center gap-2"
             >
@@ -283,6 +283,6 @@ export default function AboutPage() {
           © 2024 Easy-PDF. All rights reserved.
         </p>
       </div>
-    </main>
+    </div>
   );
 }

@@ -35,7 +35,14 @@ async function generate() {
 	await sharp(Buffer.from(homepageSVG)).png().toFile(path.join(outDir, "homepage.png"));
 
 	for (const t of tools) {
-		const slug = t.slug || t.id || (t.name || "tool").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+		let slug = t.slug || t.id || t.name;
+		if (!slug && t.href) {
+			slug = t.href.replace(/^\//, '').replace(/\//g, '-');
+		}
+		if (!slug) {
+			slug = (t.title || "tool").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+		}
+		
 		const title = t.ogTitle || t.title || t.name || "Easy PDF Tool";
 		const subtitle = t.ogSubtitle || t.description || "";
 

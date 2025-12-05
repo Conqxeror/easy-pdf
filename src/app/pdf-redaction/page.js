@@ -1,11 +1,26 @@
 import React from 'react';
 import PDFRedactionClient from './components/PDFRedactionClient';
+import { getToolMetadata } from '@/lib/toolSeoHelper';
 
-export const metadata = {
-  title: 'PDF Redaction | Easy PDF',
-  description: 'Permanently remove or mask sensitive information from PDF documents right in your browser.',
-};
+const toolHref = '/pdf-redaction';
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function PDFRedaction() {
-  return <PDFRedactionClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PDFRedactionClient />
+    </>
+  );
 }

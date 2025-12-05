@@ -1,11 +1,26 @@
 import React from "react";
 import CertificateGeneratorClient from "./components/CertificateGeneratorClient";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: "Certificate Generator | Easy PDF",
-  description: "Create professional certificates instantly. Choose from multiple templates, customize colors, and download high-quality PDF certificates for free.",
-};
+const toolHref = "/certificate-generator";
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function CertificateGeneratorPage() {
-  return <CertificateGeneratorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <CertificateGeneratorClient />
+    </>
+  );
 }

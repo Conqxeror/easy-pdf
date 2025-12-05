@@ -6,6 +6,26 @@
  * and provides helpful warnings if using fallback values.
  */
 
+// Minimal env loader to read .env.local then .env without external deps
+const fs = require('fs');
+const path = require('path');
+const envPaths = ['.env.local', '.env'];
+envPaths.forEach((p) => {
+  const full = path.join(process.cwd(), p);
+  if (fs.existsSync(full)) {
+    const lines = fs.readFileSync(full, 'utf-8').split('\n');
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) return;
+      const idx = trimmed.indexOf('=');
+      if (idx === -1) return;
+      const key = trimmed.slice(0, idx).trim();
+      const value = trimmed.slice(idx + 1).trim();
+      if (!process.env[key]) process.env[key] = value;
+    });
+  }
+});
+
 const requiredEnvVars = [
   'NEXT_PUBLIC_SITE_URL',
   'NEXT_PUBLIC_BASE_URL',

@@ -18,10 +18,11 @@ const path = require('path');
 const { glob } = require('glob');
 
 const SEO_PATTERNS = {
-  generateEnhancedMetadata: /generateEnhancedMetadata\s*\(/g,
-  generateComprehensiveJsonLd: /generateComprehensiveJsonLd\s*\(/g,
-  metadataExport: /export\s+const\s+metadata\s*=/g,
-  jsonLdScript: /<script\s+type=["']application\/ld\+json["']/g,
+  generateEnhancedMetadata: /generateEnhancedMetadata\s*\(/,
+  generateComprehensiveJsonLd: /generateComprehensiveJsonLd\s*\(/,
+  getToolMetadata: /getToolMetadata\s*\(/,
+  metadataExport: /export\s+const\s+metadata\s*=/,
+  jsonLdScript: /<script\s+type=["']application\/ld\+json["']/,
 };
 
 class SEOValidator {
@@ -85,7 +86,7 @@ class SEOValidator {
     }
 
     // Check for generateEnhancedMetadata usage
-    if (SEO_PATTERNS.generateEnhancedMetadata.test(content)) {
+    if (SEO_PATTERNS.generateEnhancedMetadata.test(content) || SEO_PATTERNS.getToolMetadata.test(content)) {
       pageResult.checks.usesEnhancedMetadata = true;
     } else if (pageResult.checks.hasMetadataExport) {
       pageResult.warnings.push('Metadata export exists but not using generateEnhancedMetadata helper');
@@ -97,7 +98,7 @@ class SEOValidator {
     }
 
     // Check for generateComprehensiveJsonLd usage
-    if (SEO_PATTERNS.generateComprehensiveJsonLd.test(content)) {
+    if (SEO_PATTERNS.generateComprehensiveJsonLd.test(content) || SEO_PATTERNS.getToolMetadata.test(content)) {
       pageResult.checks.usesJsonLdHelper = true;
     } else if (pageResult.checks.hasJsonLd) {
       pageResult.warnings.push('JSON-LD script exists but not using generateComprehensiveJsonLd helper');
@@ -105,8 +106,11 @@ class SEOValidator {
 
     // Check for missing SEO enhancements import
     if (pageResult.checks.usesEnhancedMetadata || pageResult.checks.usesJsonLdHelper) {
-      if (!content.includes('@/lib/seoEnhancements')) {
-        pageResult.issues.push('Uses SEO helpers but missing import from @/lib/seoEnhancements');
+      const hasSeoImport = content.includes('@/lib/seoEnhancements');
+      const hasToolHelperImport = content.includes('@/lib/toolSeoHelper');
+      
+      if (!hasSeoImport && !hasToolHelperImport) {
+        pageResult.issues.push('Uses SEO helpers but missing import from @/lib/seoEnhancements or @/lib/toolSeoHelper');
       }
     }
 

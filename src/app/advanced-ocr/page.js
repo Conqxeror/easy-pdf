@@ -1,11 +1,26 @@
 import React from "react";
-import AdvancedOCRClient from "./components/AdvancedOcrClient";
+import AdvancedOCRClient from "./components/AdvancedOcrClient.optimized";
+import { getToolMetadata } from "@/lib/toolSeoHelper";
 
-export const metadata = {
-  title: "Advanced OCR with AI | Easy PDF",
-  description: "Extract text from PDFs and images with enhanced accuracy using our advanced OCR technology. Supports multiple languages and offers different processing modes.",
-};
+const toolHref = "/advanced-ocr";
+const toolSeo = getToolMetadata(toolHref);
+
+export const metadata = toolSeo.metadata;
 
 export default function AdvancedOCRPage() {
-  return <AdvancedOCRClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <AdvancedOCRClient />
+    </>
+  );
 }
