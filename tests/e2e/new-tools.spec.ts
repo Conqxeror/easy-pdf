@@ -34,12 +34,19 @@ test.describe('New tool flows', () => {
 		await page.goto('/docx-to-pdf', { waitUntil: 'networkidle' });
 
 		await expect(page.getByRole('heading', { name: /DOCX to PDF/i })).toBeVisible();
-		await expect(page.getByRole('button', { name: /Convert to PDF/i })).toBeVisible();
+		
 		const input = page.locator('input[type="file"]').first();
 		await expect(input).toBeVisible();
 
-		// Upload the generated docx fixture and wait for conversion to finish
+		// Upload the generated docx fixture
 		await input.setInputFiles(fixturePath('sample.docx'));
+
+		// Button should be visible after upload
+		await expect(page.getByRole('button', { name: /Convert to PDF/i })).toBeVisible();
+		
+		// Click convert
+		await page.getByRole('button', { name: /Convert to PDF/i }).click();
+
 		// Longer timeout as docx->pdf can take time
 		await expect(page.getByText(/Conversion complete/i)).toBeVisible({ timeout: 60_000 });
 	});

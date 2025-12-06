@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Linkedin, Mail, PenTool } from "lucide-react";
 import { Orbitron } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,14 @@ export default function Footer() {
             </div>
             <div className="pt-2">
               <FooterClient />
+            </div>
+            <div className="flex flex-col gap-3 pt-2">
+              <a href="https://wired.business" target="_blank" rel="noopener noreferrer">
+                <Image src="https://wired.business/badge1-light.svg" alt="Featured on Wired Business" width={200} height={54} unoptimized style={{ width: '200px', height: 'auto' }} />
+              </a>
+              <a href="https://twelve.tools" target="_blank" rel="noopener noreferrer">
+                <Image src="https://twelve.tools/badge1-light.svg" alt="Featured on Twelve Tools" width={200} height={54} unoptimized style={{ width: '200px', height: 'auto' }} />
+              </a>
             </div>
           </div>
 

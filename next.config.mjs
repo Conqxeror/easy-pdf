@@ -38,6 +38,16 @@ const nextConfig = {
         hostname: 'cdn.buymeacoffee.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'wired.business',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'twelve.tools',
+        pathname: '/**',
+      },
     ],
   },
 
@@ -141,7 +151,7 @@ const nextConfig = {
             //   4. Buy Me a Coffee widget
             // TODO: Consider using CSP nonces or hashes to remove 'unsafe-inline'
             // TODO: Isolate third-party widgets in iframes with separate CSP
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://vercel.live https://cdnjs.buymeacoffee.com; worker-src 'self' blob: https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https://cdn.buymeacoffee.com https://www.buymeacoffee.com data: blob:; media-src 'self'; font-src 'self'; connect-src 'self' https://infragrid.v.network https://cdn.jsdelivr.net https://vitals.vercel-insights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests; block-all-mixed-content;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://cdn.jsdelivr.net https://vercel.live https://cdnjs.buymeacoffee.com; worker-src 'self' blob: https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' https://cdn.buymeacoffee.com https://www.buymeacoffee.com https://wired.business https://twelve.tools data: blob:; media-src 'self'; font-src 'self'; connect-src 'self' https://infragrid.v.network https://cdn.jsdelivr.net https://vitals.vercel-insights.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests;",
           },
           {
             key: 'X-Frame-Options',
