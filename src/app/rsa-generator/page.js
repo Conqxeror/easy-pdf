@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import RsaGeneratorClient from "./components/RsaGeneratorClient";
 
-export const metadata = getToolMetadata("/rsa-generator").metadata;
+const toolSeo = getToolMetadata("/rsa-generator");
+export const metadata = toolSeo.metadata;
 
 export default function RsaGeneratorPage() {
-  return <RsaGeneratorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <RsaGeneratorClient />
+    </>
+  );
 }

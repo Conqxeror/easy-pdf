@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ImageFiltersClient from "./components/ImageFiltersClient";
 
-export const metadata = getToolMetadata("/image-filters").metadata;
+const toolSeo = getToolMetadata("/image-filters");
+export const metadata = toolSeo.metadata;
 
 export default function ImageFiltersPage() {
-  return <ImageFiltersClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ImageFiltersClient />
+    </>
+  );
 }

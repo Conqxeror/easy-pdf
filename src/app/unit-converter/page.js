@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import UnitConverterClient from "./components/UnitConverterClient";
 
-export const metadata = getToolMetadata("/unit-converter").metadata;
+const toolSeo = getToolMetadata("/unit-converter");
+export const metadata = toolSeo.metadata;
 
 export default function UnitConverterPage() {
-  return <UnitConverterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <UnitConverterClient />
+    </>
+  );
 }

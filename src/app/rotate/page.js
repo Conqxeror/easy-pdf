@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import RotateClient from "./components/RotateClient";
 
-export const metadata = getToolMetadata("/rotate").metadata;
+const toolSeo = getToolMetadata("/rotate");
+export const metadata = toolSeo.metadata;
 
 export default function RotatePage() {
-  return <RotateClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <RotateClient />
+    </>
+  );
 }

@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ImageRotatorClient from "./components/ImageRotatorClient";
 
-export const metadata = getToolMetadata("/image-rotator").metadata;
+const toolSeo = getToolMetadata("/image-rotator");
+export const metadata = toolSeo.metadata;
 
 export default function ImageRotatorPage() {
-  return <ImageRotatorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ImageRotatorClient />
+    </>
+  );
 }

@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import VideoTrimClient from "./components/VideoTrimClient";
 
-export const metadata = getToolMetadata("/video-trim").metadata;
+const toolSeo = getToolMetadata("/video-trim");
+export const metadata = toolSeo.metadata;
 
 export default function VideoTrimPage() {
-  return <VideoTrimClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <VideoTrimClient />
+    </>
+  );
 }

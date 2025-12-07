@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ColorConverterClient from "./components/ColorConverterClient";
 
-export const metadata = getToolMetadata("/color-converter").metadata;
+const toolSeo = getToolMetadata("/color-converter");
+export const metadata = toolSeo.metadata;
 
 export default function ColorConverterPage() {
-  return <ColorConverterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ColorConverterClient />
+    </>
+  );
 }

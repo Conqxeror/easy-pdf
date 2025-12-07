@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import MetadataExtractorClient from "./components/MetadataExtractorClient";
 
-export const metadata = getToolMetadata("/metadata-extractor").metadata;
+const toolSeo = getToolMetadata("/metadata-extractor");
+export const metadata = toolSeo.metadata;
 
 export default function MetadataExtractorPage() {
-  return <MetadataExtractorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <MetadataExtractorClient />
+    </>
+  );
 }

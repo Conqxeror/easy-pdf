@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import QRCodeGeneratorClient from "./components/QRCodeGeneratorClient";
 
-export const metadata = getToolMetadata("/qr-generator").metadata;
+const toolSeo = getToolMetadata("/qr-generator");
+export const metadata = toolSeo.metadata;
 
 export default function QRCodeGeneratorPage() {
-  return <QRCodeGeneratorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <QRCodeGeneratorClient />
+    </>
+  );
 }

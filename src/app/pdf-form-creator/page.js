@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfFormCreatorClient from "./components/PdfFormCreatorClient";
 
-export const metadata = getToolMetadata("/pdf-form-creator").metadata;
+const toolSeo = getToolMetadata("/pdf-form-creator");
+export const metadata = toolSeo.metadata;
 
 export default function PDFFormCreatorPage() {
-  return <PdfFormCreatorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfFormCreatorClient />
+    </>
+  );
 }

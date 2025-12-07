@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import CssMinifierClient from "./components/CssMinifierClient";
 
-export const metadata = getToolMetadata("/css-minifier").metadata;
+const toolSeo = getToolMetadata("/css-minifier");
+export const metadata = toolSeo.metadata;
 
 export default function CssMinifierPage() {
-  return <CssMinifierClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <CssMinifierClient />
+    </>
+  );
 }

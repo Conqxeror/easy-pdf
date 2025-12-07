@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfTableExtractorClient from "./components/PdfTableExtractorClient";
 
-export const metadata = getToolMetadata("/pdf-table-extractor").metadata;
+const toolSeo = getToolMetadata("/pdf-table-extractor");
+export const metadata = toolSeo.metadata;
 
 export default function PDFTableExtractorPage() {
-  return <PdfTableExtractorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfTableExtractorClient />
+    </>
+  );
 }

@@ -11,22 +11,22 @@ export function buildSitemapXml(final) {
 	const urlEntries = final.map((entry) => {
 		const parts = [];
 		parts.push('<url>');
-		
+
 		// Ensure URL is a valid string
 		const url = entry.url ? String(entry.url).trim() : '';
 		if (!url) return ''; // Skip entries without URL
 		parts.push(`<loc>${escapeXml(url)}</loc>`);
-		
+
 		// Format lastModified as ISO string
 		if (entry.lastModified) {
-			const dateStr = entry.lastModified instanceof Date 
+			const dateStr = entry.lastModified instanceof Date
 				? entry.lastModified.toISOString()
 				: new Date(entry.lastModified).toISOString();
 			parts.push(`<lastmod>${escapeXml(dateStr)}</lastmod>`);
 		}
-		
+
 		if (entry.changeFrequency) parts.push(`<changefreq>${escapeXml(entry.changeFrequency)}</changefreq>`);
-		
+
 		if (typeof entry.priority !== 'undefined' && entry.priority !== null) {
 			// Explicitly convert priority to string to avoid any object serialization
 			const priorityStr = String(Number(entry.priority));
@@ -46,13 +46,13 @@ export function buildSitemapXml(final) {
 						imgUrl = imgUrl.trim();
 					}
 				}
-				
+
 				// Validate URL has proper scheme
 				if (!imgUrl || !/^https?:\/\//.test(imgUrl)) return;
-				
+
 				parts.push('<image:image>');
 				parts.push(`<image:loc>${escapeXml(imgUrl)}</image:loc>`);
-				
+
 				// Extract title safely
 				const title = (img && typeof img === 'object' && (img.title || img.caption))
 					? String(img.title || img.caption).trim()
@@ -74,17 +74,21 @@ export function buildSitemapXml(final) {
 	return xml;
 }
 
+const resolveBaseUrl = () => {
+	const base = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app';
+	const normalized = base.startsWith('http') ? base : `https://${base}`;
+	return normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
+};
+
 export async function getSitemapEntries() {
-	// Use environment variable for base URL or fallback
-	const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app';
-	const resolvedBase = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
+	const resolvedBase = resolveBaseUrl();
 
 	// Tool pages with higher priority for popular tools
 	const tools = toolsData.map((tool) => {
 		// Generate image URL for this tool
 		const staticPath = `/og-static/${tool.href.replace(/^\//, '')}.png`;
 		let imageUrl = '';
-		
+
 		try {
 			const exists = require('fs').existsSync(
 				require('path').join(process.cwd(), 'public', 'og-static', `${tool.href.replace(/^\//, '')}.png`)
@@ -98,7 +102,7 @@ export async function getSitemapEntries() {
 			// Fallback to static placeholder to avoid broken image entries
 			imageUrl = `${resolvedBase}/og-static/tool.png`;
 		}
-		
+
 		return {
 			url: `${resolvedBase}${tool.href}`,
 			lastModified: new Date(),
@@ -128,6 +132,8 @@ export async function getSitemapEntries() {
 		{ route: '/tools', priority: 0.9, changeFrequency: 'daily', image: undefined },
 		{ route: '/about', priority: 0.6, changeFrequency: 'monthly', image: undefined },
 		{ route: '/security', priority: 0.7, changeFrequency: 'monthly', image: undefined },
+		{ route: '/privacy', priority: 0.7, changeFrequency: 'yearly', image: undefined },
+		{ route: '/terms', priority: 0.5, changeFrequency: 'yearly', image: undefined },
 		{ route: '/sponsors', priority: 0.5, changeFrequency: 'weekly', image: undefined },
 	].map((item) => ({
 		url: `${resolvedBase}${item.route}`,

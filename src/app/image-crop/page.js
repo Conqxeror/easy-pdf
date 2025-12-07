@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ImageCropClient from "./components/ImageCropClient";
 
-export const metadata = getToolMetadata("/image-crop").metadata;
+const toolSeo = getToolMetadata("/image-crop");
+export const metadata = toolSeo.metadata;
 
 export default function ImageCropPage() {
-  return <ImageCropClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ImageCropClient />
+    </>
+  );
 }

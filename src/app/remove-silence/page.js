@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import RemoveSilenceClient from "./components/RemoveSilenceClient";
 
-export const metadata = getToolMetadata("/remove-silence").metadata;
+const toolSeo = getToolMetadata("/remove-silence");
+export const metadata = toolSeo.metadata;
 
 export default function RemoveSilencePage() {
-  return <RemoveSilenceClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <RemoveSilenceClient />
+    </>
+  );
 }

@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import FileChecksumClient from "./components/FileChecksumClient";
 
-export const metadata = getToolMetadata("/file-checksum").metadata;
+const toolSeo = getToolMetadata("/file-checksum");
+export const metadata = toolSeo.metadata;
 
 export default function FileChecksumPage() {
-  return <FileChecksumClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <FileChecksumClient />
+    </>
+  );
 }

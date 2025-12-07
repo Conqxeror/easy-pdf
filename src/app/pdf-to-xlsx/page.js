@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfToXlsxClient from "./components/PdfToXlsxClient";
 
-export const metadata = getToolMetadata("/pdf-to-xlsx").metadata;
+const toolSeo = getToolMetadata("/pdf-to-xlsx");
+export const metadata = toolSeo.metadata;
 
 export default function PdfToXlsxPage() {
-  return <PdfToXlsxClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfToXlsxClient />
+    </>
+  );
 }

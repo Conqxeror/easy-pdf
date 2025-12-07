@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfAnnotationCollaborationClient from "./components/PdfAnnotationCollaborationClient";
 
-export const metadata = getToolMetadata("/pdf-annotation-collaboration").metadata;
+const toolSeo = getToolMetadata("/pdf-annotation-collaboration");
+export const metadata = toolSeo.metadata;
 
 export default function PDFAnnotationCollaborationPage() {
-  return <PdfAnnotationCollaborationClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfAnnotationCollaborationClient />
+    </>
+  );
 }

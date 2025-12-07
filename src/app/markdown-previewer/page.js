@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import MarkdownPreviewerClient from "./components/MarkdownPreviewerClient";
 
-export const metadata = getToolMetadata("/markdown-previewer").metadata;
+const toolSeo = getToolMetadata("/markdown-previewer");
+export const metadata = toolSeo.metadata;
 
 export default function MarkdownPreviewerPage() {
-  return <MarkdownPreviewerClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <MarkdownPreviewerClient />
+    </>
+  );
 }

@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import WavMp3ConverterClient from "./components/WavMp3ConverterClient";
 
-export const metadata = getToolMetadata("/wav-mp3-converter").metadata;
+const toolSeo = getToolMetadata("/wav-mp3-converter");
+export const metadata = toolSeo.metadata;
 
 export default function WavMp3ConverterPage() {
-  return <WavMp3ConverterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <WavMp3ConverterClient />
+    </>
+  );
 }

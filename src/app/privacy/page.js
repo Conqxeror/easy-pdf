@@ -1,5 +1,5 @@
 import PrivacyClient from './PrivacyClient';
-import { generateEnhancedMetadata } from '@/lib/seoEnhancements';
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from '@/lib/seoEnhancements';
 
 export const metadata = generateEnhancedMetadata({
   title: "Privacy Policy - easy-pdf | Privacy-First PDF Tools",
@@ -19,6 +19,19 @@ export const metadata = generateEnhancedMetadata({
   pageType: "article"
 });
 
+const structuredData = generateComprehensiveJsonLd('article', {
+  title: "Privacy Policy",
+  description: "Learn how easy-pdf protects your privacy with 100% client-side processing."
+});
+
 export default function PrivacyPage() {
-  return <PrivacyClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <PrivacyClient />
+    </>
+  );
 }

@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import RemoveBackgroundClient from "./components/RemoveBackgroundClient";
 
-export const metadata = getToolMetadata("/remove-background").metadata;
+const toolSeo = getToolMetadata("/remove-background");
+export const metadata = toolSeo.metadata;
 
 export default function RemoveBackgroundPage() {
-  return <RemoveBackgroundClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <RemoveBackgroundClient />
+    </>
+  );
 }

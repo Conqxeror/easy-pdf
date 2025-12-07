@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import JpgToPdfClient from "./components/JpgToPdfClient";
 
-export const metadata = getToolMetadata("/jpg-to-pdf").metadata;
+const toolSeo = getToolMetadata("/jpg-to-pdf");
+export const metadata = toolSeo.metadata;
 
 export default function JpgToPdfPage() {
-  return <JpgToPdfClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <JpgToPdfClient />
+    </>
+  );
 }

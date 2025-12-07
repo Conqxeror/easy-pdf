@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import NumberBaseConverterClient from "./components/NumberBaseConverterClient";
 
-export const metadata = getToolMetadata("/number-base-converter").metadata;
+const toolSeo = getToolMetadata("/number-base-converter");
+export const metadata = toolSeo.metadata;
 
 export default function NumberBaseConverterPage() {
-  return <NumberBaseConverterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <NumberBaseConverterClient />
+    </>
+  );
 }

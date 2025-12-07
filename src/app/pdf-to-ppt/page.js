@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfToPptClient from "./components/PdfToPptClient";
 
-export const metadata = getToolMetadata("/pdf-to-ppt").metadata;
+const toolSeo = getToolMetadata("/pdf-to-ppt");
+export const metadata = toolSeo.metadata;
 
 export default function PdfToPptPage() {
-  return <PdfToPptClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfToPptClient />
+    </>
+  );
 }

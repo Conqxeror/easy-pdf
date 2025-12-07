@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfBatchProcessorClient from "./components/PdfBatchProcessorClient";
 
-export const metadata = getToolMetadata("/pdf-batch-processor").metadata;
+const toolSeo = getToolMetadata("/pdf-batch-processor");
+export const metadata = toolSeo.metadata;
 
 export default function PDFBatchProcessorPage() {
-  return <PdfBatchProcessorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfBatchProcessorClient />
+    </>
+  );
 }

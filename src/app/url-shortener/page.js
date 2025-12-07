@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import UrlShortenerClient from "./components/UrlShortenerClient";
 
-export const metadata = getToolMetadata("/url-shortener").metadata;
+const toolSeo = getToolMetadata("/url-shortener");
+export const metadata = toolSeo.metadata;
 
 export default function UrlShortenerPage() {
-  return <UrlShortenerClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <UrlShortenerClient />
+    </>
+  );
 }

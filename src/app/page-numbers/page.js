@@ -1,9 +1,23 @@
-import React from 'react';
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PageNumbersClient from "./components/PageNumbersClient";
 
-export const metadata = getToolMetadata("/page-numbers").metadata;
+const toolSeo = getToolMetadata("/page-numbers");
+export const metadata = toolSeo.metadata;
 
 export default function PageNumbersPage() {
-  return <PageNumbersClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PageNumbersClient />
+    </>
+  );
 }

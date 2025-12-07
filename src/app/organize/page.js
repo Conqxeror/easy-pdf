@@ -1,9 +1,23 @@
-import React from 'react';
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import OrganizeClient from "./components/OrganizeClient";
 
-export const metadata = getToolMetadata("/organize").metadata;
+const toolSeo = getToolMetadata("/organize");
+export const metadata = toolSeo.metadata;
 
 export default function OrganizePage() {
-  return <OrganizeClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <OrganizeClient />
+    </>
+  );
 }

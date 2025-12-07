@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfBookmarkManagerClient from "./components/PdfBookmarkManagerClient";
 
-export const metadata = getToolMetadata("/pdf-bookmark-manager").metadata;
+const toolSeo = getToolMetadata("/pdf-bookmark-manager");
+export const metadata = toolSeo.metadata;
 
 export default function PDFBookmarkManagerPage() {
-  return <PdfBookmarkManagerClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfBookmarkManagerClient />
+    </>
+  );
 }

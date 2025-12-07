@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import LegalAnalyzerClient from "./components/LegalAnalyzerClient";
 
-export const metadata = getToolMetadata("/legal-analyzer").metadata;
+const toolSeo = getToolMetadata("/legal-analyzer");
+export const metadata = toolSeo.metadata;
 
 export default function LegalAnalyzerPage() {
-  return <LegalAnalyzerClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <LegalAnalyzerClient />
+    </>
+  );
 }

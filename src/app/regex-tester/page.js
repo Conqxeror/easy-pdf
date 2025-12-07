@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import RegexTesterClient from "./components/RegexTesterClient";
 
-export const metadata = getToolMetadata("/regex-tester").metadata;
+const toolSeo = getToolMetadata("/regex-tester");
+export const metadata = toolSeo.metadata;
 
 export default function RegexTesterPage() {
-  return <RegexTesterClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <RegexTesterClient />
+    </>
+  );
 }

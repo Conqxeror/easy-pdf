@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import VideoCompressClient from "./components/VideoCompressClient";
 
-export const metadata = getToolMetadata("/video-compress").metadata;
+const toolSeo = getToolMetadata("/video-compress");
+export const metadata = toolSeo.metadata;
 
 export default function VideoCompressPage() {
-  return <VideoCompressClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <VideoCompressClient />
+    </>
+  );
 }

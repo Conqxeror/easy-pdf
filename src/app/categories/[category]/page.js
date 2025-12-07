@@ -2,13 +2,14 @@ import React from 'react';
 import { toolsData } from '@/lib/toolData';
 import { slugify } from '@/lib/slugify';
 import ToolCard from '@/components/ui/ToolCard';
-import { 
-  PageContainer, 
-  PageHeader, 
+import {
+  PageContainer,
+  PageHeader,
   PageContent,
   Section,
   Grid
 } from '@/components/ui/Layout';
+import { generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export async function generateMetadata({ params }) {
   const category = params.category;
@@ -21,8 +22,8 @@ export async function generateMetadata({ params }) {
     title: `${formattedCategory} PDF Tools - easy-pdf | Free Online ${formattedCategory} PDF Tools`,
     description: `All ${formattedCategory.toLowerCase()} PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online ${formattedCategory.toLowerCase()} PDF tools for secure document processing.`,
     keywords: [
-      `${formattedCategory} PDF tools`, 
-      `PDF ${category.replace('-', ' ')}`, 
+      `${formattedCategory} PDF tools`,
+      `PDF ${category.replace('-', ' ')}`,
       `Free ${formattedCategory} PDF tools`,
       `Online ${formattedCategory} PDF tools`,
       `Privacy-first ${formattedCategory} PDF`,
@@ -46,17 +47,24 @@ const CategoryPage = ({ params }) => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
+  const structuredData = generateComprehensiveJsonLd('website', {
+    title: `${formattedCategory} PDF Tools`,
+    description: `All ${formattedCategory.toLowerCase()} PDF tools in one place.`,
+    url: `https://easy-pdf-murex.vercel.app/categories/${category}`
+  });
+
+
   // Filter tools by category
-  const categoryTools = toolsData.filter(tool => 
-    tool.category && 
+  const categoryTools = toolsData.filter(tool =>
+    tool.category &&
     slugify(tool.category) === normalizedCategory
   );
 
   if (categoryTools.length === 0) {
     return (
       <PageContainer>
-        <PageHeader 
-          title="Category Not Found" 
+        <PageHeader
+          title="Category Not Found"
           subtitle="The requested category does not exist or has no tools."
         />
         <PageContent>
@@ -70,11 +78,17 @@ const CategoryPage = ({ params }) => {
 
   return (
     <PageContainer>
-      <PageHeader 
-        title={`${formattedCategory} PDF Tools`} 
+      <PageHeader
+        title={`${formattedCategory} PDF Tools`}
         subtitle={`All PDF tools in the ${formattedCategory.toLowerCase()} category`}
-      />
-      
+      >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </PageHeader>
+
+
       <PageContent>
         <Section>
           <Grid cols={4} gap="6">

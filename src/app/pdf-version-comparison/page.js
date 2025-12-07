@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfVersionComparisonClient from "./components/PdfVersionComparisonClient";
 
-export const metadata = getToolMetadata("/pdf-version-comparison").metadata;
+const toolSeo = getToolMetadata("/pdf-version-comparison");
+export const metadata = toolSeo.metadata;
 
 export default function PdfVersionComparisonPage() {
-  return <PdfVersionComparisonClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfVersionComparisonClient />
+    </>
+  );
 }

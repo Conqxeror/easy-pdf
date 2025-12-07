@@ -20,20 +20,15 @@ import { trackEvent } from '@/lib/analytics';
 
 export default function AboutClient() {
 
-  const handleContactClick = () => {
-    trackEvent('contact_link_clicked');
-  window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`;
+  const handleSupportClick = () => {
+    trackEvent('support_link_clicked');
+    window.open('https://buymeacoffee.com/walimohammad', '_blank');
   };
 
-  const teamMembers = [
-    {
-      name: 'Wali Mohammad Kadri',
-      role: 'Full-stack developer passionate about building privacy-first tools that make a difference.',
-      location: 'Mumbai, India',
-      quote: 'Building the future, one line of code at a time',
-      avatar: 'W'
-    }
-  ];
+  const handleContactClick = () => {
+    trackEvent('contact_link_clicked');
+    window.location.href = `mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || 'kadriwalimohammad@gmail.com'}`;
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -52,7 +47,7 @@ export default function AboutClient() {
       <Card className="mb-8 bg-background dark:bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-            <Heart className="h-6 w-6 text-red-500 preserve-color" />
+            <Heart className="h-6 w-6 text-red-500" />
             Our Mission
           </CardTitle>
         </CardHeader>
@@ -90,7 +85,7 @@ export default function AboutClient() {
         <Card className="bg-background dark:bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <Zap className="h-5 w-5 text-yellow-500 preserve-color" />
+              <Zap className="h-5 w-5 text-yellow-500" />
               Lightning Fast
             </CardTitle>
           </CardHeader>
@@ -105,7 +100,7 @@ export default function AboutClient() {
         <Card className="bg-background dark:bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <Users className="h-5 w-5 text-green-500 preserve-color" />
+              <Users className="h-5 w-5 text-green-500" />
               Community Driven
             </CardTitle>
           </CardHeader>
@@ -135,7 +130,7 @@ export default function AboutClient() {
         <Card className="bg-background dark:bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <Lock className="h-5 w-5 text-red-500 preserve-color" />
+              <Lock className="h-5 w-5 text-red-500" />
               Secure by Design
             </CardTitle>
           </CardHeader>
@@ -150,7 +145,7 @@ export default function AboutClient() {
         <Card className="bg-background dark:bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <Star className="h-5 w-5 text-yellow-500 preserve-color" />
+              <Star className="h-5 w-5 text-yellow-500" />
               Always Free
             </CardTitle>
           </CardHeader>
@@ -189,6 +184,7 @@ export default function AboutClient() {
               <div className="text-2xl font-bold text-yellow-600">TypeScript</div>
               <div className="text-sm text-foreground dark:text-foreground">Type Safety</div>
             </div>
+            .
           </div>
         </CardContent>
       </Card>
@@ -197,7 +193,7 @@ export default function AboutClient() {
       <Card className="mb-8 bg-background dark:bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <TrendingUp className="h-6 w-6 text-green-500 preserve-color" />
+            <TrendingUp className="h-6 w-6 text-green-500" />
             Our Impact
           </CardTitle>
         </CardHeader>
@@ -232,22 +228,20 @@ export default function AboutClient() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {teamMembers.map((member, index) => (
-            <div key={index} className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 overflow-hidden flex items-center justify-center">
-                <div className="w-full h-full bg-gradient-to-r from-gray-600 to-gray-800 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-foreground">{member.avatar}</span>
-                </div>
+          <div className="text-center">
+            <div className="w-24 h-24 mx-auto mb-4 overflow-hidden flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-r from-gray-600 to-gray-800 flex items-center justify-center">
+                <span className="text-2xl font-bold text-foreground">W</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-foreground dark:text-foreground">{member.name}</h3>
-              <p className="text-foreground dark:text-foreground mb-4">
-                {member.role}
-              </p>
-              <p className="text-sm text-foreground dark:text-foreground">
-                Based in {member.location} • {member.quote}
-              </p>
             </div>
-          ))}
+            <h3 className="text-xl font-semibold mb-2 text-foreground dark:text-foreground">Wali Mohammad Kadri</h3>
+            <p className="text-foreground dark:text-foreground mb-4">
+              Full-stack developer passionate about building privacy-first tools that make a difference.
+            </p>
+            <p className="text-sm text-foreground dark:text-foreground">
+              Based in Mumbai, India • Building the future, one line of code at a time
+            </p>
+          </div>
         </CardContent>
       </Card>
 
@@ -261,6 +255,14 @@ export default function AboutClient() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Button
+              onClick={handleSupportClick}
+              className="flex items-center gap-2"
+              variant="outline"
+            >
+              <Coffee className="h-5 w-5 text-yellow-500" />
+              Support Us
+            </Button>
             <Button
               onClick={handleContactClick}
               className="flex items-center gap-2"
@@ -278,7 +280,7 @@ export default function AboutClient() {
           Made with ❤️ for the community
         </p>
         <p className="text-sm mt-2">
-          © {new Date().getFullYear()} Easy-PDF. All rights reserved.
+          © 2024 Easy-PDF. All rights reserved.
         </p>
       </div>
     </div>

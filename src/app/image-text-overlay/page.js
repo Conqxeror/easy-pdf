@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ImageTextOverlayClient from "./components/ImageTextOverlayClient";
 
-export const metadata = getToolMetadata("/image-text-overlay").metadata;
+const toolSeo = getToolMetadata("/image-text-overlay");
+export const metadata = toolSeo.metadata;
 
 export default function ImageTextOverlayPage() {
-  return <ImageTextOverlayClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ImageTextOverlayClient />
+    </>
+  );
 }

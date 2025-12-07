@@ -1,16 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Heart, TrendingUp, Users, Globe, Shield, Zap, Coffee, BarChart3, Target } from 'lucide-react';
-import Image from 'next/image';
-import { trackSponsorView } from '@/lib/sponsorAnalytics';
+import {
+  Heart,
+  TrendingUp,
+  Users,
+  Globe,
+  Shield,
+  Zap,
+  Coffee,
+  BarChart3,
+  Target
+} from 'lucide-react';
+import { trackSponsorView, trackSponsorClick } from '@/lib/sponsorAnalytics';
+import { getAllSponsors } from '@/lib/sponsorData';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
-// Note: `sponsors` list intentionally not imported — we prefer an honest empty state
-// until real sponsors join. This prevents showing placeholder/mock companies.
+import Image from 'next/image';
+import SponsorCard from '@/components/ui/SponsorCard';
 
-export default function SponsorsClient() {
+const SponsorsClient = () => {
   const [analytics] = useState(() => getAppUsageAnalytics());
 
   useEffect(() => {
@@ -19,7 +28,18 @@ export default function SponsorsClient() {
     trackSponsorView('sponsors_page', 'full_page');
   }, []);
 
-  // No sponsor click handler needed for the empty-state client. Reintroduce when sponsors exist.
+  const handleSponsorClick = (sponsorId, url, placement = 'main_page') => {
+    try { trackSponsorClick && trackSponsorClick(sponsorId, placement); } catch { }
+    if (typeof window === 'undefined') return;
+    try {
+      const newWin = window.open(url, '_blank', 'noopener,noreferrer');
+      try { if (newWin) newWin.opener = null; } catch { }
+    } catch {
+      try { window.location.href = url; } catch { }
+    }
+  };
+
+  const sponsors = getAllSponsors();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -59,7 +79,7 @@ export default function SponsorsClient() {
       </div>
 
       {/* Sponsors Grid */}
-      <div className="max-w-6xl mx-auto px-4 py-16">
+      <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Meet Our Sponsors</h2>
           <p className="text-foreground max-w-2xl mx-auto">
@@ -68,57 +88,84 @@ export default function SponsorsClient() {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 shadow-lg ring-1 ring-white/5">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">We don’t have sponsors yet — join us ✨</h3>
-            <p className="text-foreground mb-6">
-              easy-pdf will remain free for students, teachers, researchers, doctors, institutions, and community projects.
-              If your organization values privacy and education, consider partnering with us to keep these tools accessible.
-            </p>
+        <div className="max-w-6xl mx-auto text-center">
+          {sponsors.length === 0 ? (
+            <div className="bg-gradient-to-r from-gray-800 to-gray-900 p-8 shadow-lg ring-1 ring-white/5">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">We don’t have sponsors yet — you can be the first ✨</h3>
+              <p className="text-foreground mb-6">
+                easy-pdf will always provide free access to students, teachers, researchers, doctors, institutions, and community projects.
+                We’re building a sustainable model and would love to partner with organizations that share our values: privacy, accessibility and education.
+              </p>
 
-            <ul className="text-left mx-auto mb-6 max-w-xl space-y-3">
-              <li className="flex items-start">
-                <span className="text-green-400 mr-3">•</span>
-                <span><strong>Support education</strong> — sponsorships keep tools open for learners.</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-400 mr-3">•</span>
-                <span><strong>Professional plans</strong> — special options for researchers and institutions.</span>
-              </li>
-              <li className="flex items-start">
-                <span className="text-green-400 mr-3">•</span>
-                <span><strong>Privacy-first partnerships</strong> — we only work with trusted organizations.</span>
-              </li>
-            </ul>
+              <ul className="text-left mx-auto mb-6 max-w-xl space-y-3">
+                <li className="flex items-start">
+                  <span className="text-green-400 mr-3">•</span>
+                  <span><strong>Free for education & research</strong> — lifelong access for students, teachers, and researchers.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-400 mr-3">•</span>
+                  <span><strong>Trusted by professionals</strong> — special arrangements for doctors and institutions.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-green-400 mr-3">•</span>
+                  <span><strong>Transparent partnership</strong> — sponsors are carefully chosen to protect user privacy.</span>
+                </li>
+              </ul>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              {/* Buy Me A Coffee anchor + image */}
-              <div className="inline-flex items-center px-6 py-3 bg-transparent">
-                <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center preserve-color">
-                  <Image className="preserve-color" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
-                </a>
-              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <div className="inline-flex items-center px-6 py-3 bg-transparent">
+                  <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
+                    <Image className="preserve-color" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
+                  </a>
+                </div>
 
-              <a
-                href="#partnership-tiers"
-                onClick={(e) => {
-                  e.preventDefault();
-                  try {
-                    const el = document.getElementById('partnership-tiers');
-                    if (el) {
-                      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch {}
-                    }
+                <a
+                  href="#partnership-tiers"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    try {
+                      const el = document.getElementById('partnership-tiers');
+                      if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        try { trackEvent && trackEvent('scroll_to_partnership_tiers'); } catch { }
+                      }
                     } catch {
                       window.location.href = '/#partnership-tiers';
                     }
-                }}
-                className="inline-flex items-center px-6 py-3 border border-white/10 text-foreground hover:bg-background/5 transition-colors"
-              >
-                Learn about partnership tiers
-              </a>
+                  }}
+                  className="inline-flex items-center px-6 py-3 border border-white/10 text-foreground hover:bg-background/5 transition-colors"
+                >
+                  Learn about partnership tiers
+                </a>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="flex justify-center">
+              {sponsors.length === 1 ? (
+                <div className="w-full flex justify-center">
+                  <SponsorCard
+                    key={sponsors[0].id}
+                    sponsor={sponsors[0]}
+                    size="medium"
+                    showDescription={true}
+                    onVisit={(id, url) => handleSponsorClick(id, url)}
+                  />
+                </div>
+              ) : (
+                <div className="inline-grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center place-items-center justify-center mx-auto">
+                  {sponsors.map((sponsor) => (
+                    <SponsorCard
+                      key={sponsor.id}
+                      sponsor={sponsor}
+                      size="medium"
+                      showDescription={true}
+                      onVisit={(id, url) => handleSponsorClick(id, url)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -207,7 +254,7 @@ export default function SponsorsClient() {
       </div>
 
       {/* Become a Sponsor CTA */}
-      <div className="bg-gradient-to-r from-gray-700 to-gray-800 py-16">
+      <div id="partnership-tiers" className="bg-gradient-to-r from-gray-700 to-gray-800 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Become a Sponsor</h2>
           <p className="text-xl text-foreground mb-8">
@@ -232,15 +279,12 @@ export default function SponsorsClient() {
             </div>
           </div>
 
-          <Button
-            onClick={() => {
-              trackEvent('sponsor_inquiry_clicked');
-              window.location.href = `mailto:${process.env.NEXT_PUBLIC_SPONSOR_EMAIL || 'kadriwalimohammad@gmail.com'}?subject=Sponsorship Inquiry`;
-            }}
-            className="bg-background text-foreground font-semibold px-8 py-3 hover:bg-background transition-colors"
-          >
-            Get Sponsorship Info
-          </Button>
+          {/* Buy Me A Coffee anchor + image */}
+          <div className="flex items-center justify-center">
+            <div className="preserve-color">
+              <div dangerouslySetInnerHTML={{ __html: `<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kadriwalimt" data-color="#FFDD00" data-emoji=""  data-font="Cookie" data-text="Sponsor this project." data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script>` }} />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -256,4 +300,6 @@ export default function SponsorsClient() {
       </div>
     </div>
   );
-}
+};
+
+export default SponsorsClient;

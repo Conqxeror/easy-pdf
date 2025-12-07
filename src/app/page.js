@@ -1,4 +1,4 @@
-import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 import HomeClient from './components/HomeClient';
 
 export const metadata = generateEnhancedMetadata({
@@ -36,9 +36,16 @@ export const metadata = generateEnhancedMetadata({
   lastModified: new Date().toISOString()
 });
 
+
+const structuredData = generateComprehensiveJsonLd('homepage');
+
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       {/* ✅ SSR H1 for SEO - Hidden visually but visible to crawlers */}
       <h1 className="sr-only">
         Easy PDF - Free Online PDF Tools | Privacy-First Document Processing

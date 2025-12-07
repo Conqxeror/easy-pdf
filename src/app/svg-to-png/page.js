@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import SvgToPngClient from "./components/SvgToPngClient";
 
-export const metadata = getToolMetadata("/svg-to-png").metadata;
+const toolSeo = getToolMetadata("/svg-to-png");
+export const metadata = toolSeo.metadata;
 
 export default function SvgToPngPage() {
-  return <SvgToPngClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <SvgToPngClient />
+    </>
+  );
 }

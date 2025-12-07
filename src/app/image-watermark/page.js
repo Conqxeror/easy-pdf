@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ImageWatermarkClient from "./components/ImageWatermarkClient";
 
-export const metadata = getToolMetadata("/image-watermark").metadata;
+const toolSeo = getToolMetadata("/image-watermark");
+export const metadata = toolSeo.metadata;
 
 export default function ImageWatermarkPage() {
-  return <ImageWatermarkClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ImageWatermarkClient />
+    </>
+  );
 }

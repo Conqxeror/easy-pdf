@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import PdfToHtmlClient from "./components/PdfToHtmlClient";
 
-export const metadata = getToolMetadata("/pdf-to-html").metadata;
+const toolSeo = getToolMetadata("/pdf-to-html");
+export const metadata = toolSeo.metadata;
 
 export default function PdfToHtmlPage() {
-  return <PdfToHtmlClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <PdfToHtmlClient />
+    </>
+  );
 }

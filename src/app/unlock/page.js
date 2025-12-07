@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import UnlockClient from "./components/UnlockClient";
 
-export const metadata = getToolMetadata("/unlock").metadata;
+const toolSeo = getToolMetadata("/unlock");
+export const metadata = toolSeo.metadata;
 
 export default function UnlockPage() {
-  return <UnlockClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <UnlockClient />
+    </>
+  );
 }

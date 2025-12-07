@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import ReorderClient from "./components/ReorderClient";
 
-export const metadata = getToolMetadata("/reorder").metadata;
+const toolSeo = getToolMetadata("/reorder");
+export const metadata = toolSeo.metadata;
 
 export default function ReorderPage() {
-  return <ReorderClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <ReorderClient />
+    </>
+  );
 }

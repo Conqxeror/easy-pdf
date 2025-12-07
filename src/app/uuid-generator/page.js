@@ -1,8 +1,23 @@
 import { getToolMetadata } from "@/lib/toolSeoHelper";
 import UuidGeneratorClient from "./components/UuidGeneratorClient";
 
-export const metadata = getToolMetadata("/uuid-generator").metadata;
+const toolSeo = getToolMetadata("/uuid-generator");
+export const metadata = toolSeo.metadata;
 
 export default function UuidGeneratorPage() {
-  return <UuidGeneratorClient />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.structuredData) }}
+      />
+      {toolSeo.howToSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSeo.howToSchema) }}
+        />
+      )}
+      <UuidGeneratorClient />
+    </>
+  );
 }
