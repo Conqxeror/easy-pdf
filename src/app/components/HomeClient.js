@@ -11,7 +11,7 @@ import StatsSection from "@/components/ui/StatsSection";
 import Supporters from "@/components/ui/Supporters";
 import BentoGrid from "@/components/ui/BentoGrid";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, Split, Minimize2, Lock, Unlock, RotateCw, Eraser, Search, Signature, Stamp } from "lucide-react";
+import { ArrowRight, FileText, Split, Minimize2, Lock, Unlock, RotateCw, Eraser, Search, Signature, Stamp, Image as ImageIcon, ArrowUpDown } from "lucide-react";
 
 export default function HomeClient() {
   const [installPrompt, setInstallPrompt] = useState(null);
@@ -113,11 +113,13 @@ export default function HomeClient() {
           <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-8 text-center">
             Most Popular PDF Tools
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             {[
               { href: "/pdf/merge", title: "Merge PDF", icon: <FileText className="w-6 h-6" />, desc: "Combine PDFs" },
               { href: "/pdf/split", title: "Split PDF", icon: <Split className="w-6 h-6" />, desc: "Extract pages" },
               { href: "/pdf/compress", title: "Compress PDF", icon: <Minimize2 className="w-6 h-6" />, desc: "Reduce size" },
+              { href: "/jpg-to-pdf", title: "JPG to PDF", icon: <ImageIcon className="w-6 h-6" />, desc: "Images to PDF" },
+              { href: "/reorder", title: "Reorder Pages", icon: <ArrowUpDown className="w-6 h-6" />, desc: "Rearrange PDF" },
               { href: "/unlock", title: "Unlock PDF", icon: <Unlock className="w-6 h-6" />, desc: "Remove password" },
               { href: "/protect", title: "Protect PDF", icon: <Lock className="w-6 h-6" />, desc: "Add password" },
               { href: "/rotate", title: "Rotate PDF", icon: <RotateCw className="w-6 h-6" />, desc: "Fix orientation" },
