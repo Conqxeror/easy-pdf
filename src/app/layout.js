@@ -1,7 +1,7 @@
 import React from "react";
 import { Inter } from "next/font/google";
 import ClientLayout from "./ClientLayout";
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 // Note: Analytics and SpeedInsights are client-side and are included in ClientLayout
 // Note: Font is loaded server-side via next/font for optimal LCP
 
@@ -22,17 +22,13 @@ export const metadata = generateEnhancedMetadata({
   metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
 });
 
-const structuredData = generateComprehensiveJsonLd('homepage');
+// Note: Structured data is handled by individual pages to prevent duplicates
+// Homepage structured data is in src/app/page.js
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${inter.className} scroll-smooth bg-background`}>
       <body className="antialiased bg-background text-foreground">
-        {/* Structured data for SEO */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
