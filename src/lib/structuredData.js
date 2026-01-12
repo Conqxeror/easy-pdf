@@ -68,13 +68,8 @@ export const generateJsonLd = (pageType, pageData = {}) => {
       "url": `${baseUrl}/og/homepage`,
       "width": 1200,
       "height": 630
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1250",
-      "bestRating": "5"
     }
+    // aggregateRating removed - centralized in seoEnhancements.js to prevent duplicates
   }
 
   switch (pageType) {

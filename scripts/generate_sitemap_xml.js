@@ -15,8 +15,8 @@ function getAppRoutes(dir, baseUrl = '') {
 
 	for (const item of items) {
 		if (item.isDirectory()) {
-			// Skip special directories
-			if (item.name.startsWith('(') || item.name.startsWith('_') || item.name === 'api' || item.name === 'components') {
+			// Skip special directories and dynamic routes
+			if (item.name.startsWith('(') || item.name.startsWith('_') || item.name.startsWith('[') || item.name === 'api' || item.name === 'components') {
 				continue;
 			}
 

@@ -351,13 +351,8 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         "featureList": pageData.features || [],
         "browserRequirements": "Modern web browser with JavaScript enabled",
         "screenshot": `${baseUrl}/og/homepage`,
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "ratingCount": "1250",
-          "bestRating": "5",
-          "worstRating": "1"
-        },
+        // aggregateRating removed - only the main SoftwareApplication should have rating
+        // to prevent Google's "Review has multiple aggregate ratings" error
         "mainEntity": {
           "@type": "SoftwareApplication",
           "@id": `${baseUrl}#software`

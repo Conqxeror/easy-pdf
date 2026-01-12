@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { toolsData } from "@/lib/toolData";
 import { trackEvent } from "@/lib/analytics";
 import { usePerformanceMonitoring } from "@/components/ui/AccessibilityEnhancements";
@@ -10,7 +11,7 @@ import StatsSection from "@/components/ui/StatsSection";
 import Supporters from "@/components/ui/Supporters";
 import BentoGrid from "@/components/ui/BentoGrid";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, FileText, Split, Minimize2, Lock, Unlock, RotateCw, Eraser, Search, Signature, Stamp } from "lucide-react";
 
 export default function HomeClient() {
   const [installPrompt, setInstallPrompt] = useState(null);
@@ -105,6 +106,41 @@ export default function HomeClient() {
 
       {/* Stats Section */}
       <StatsSection />
+
+      {/* Popular Tools Quick Links - Strong internal linking for SEO */}
+      <section className="py-16 border-b border-border">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-8 text-center">
+            Most Popular PDF Tools
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {[
+              { href: "/pdf/merge", title: "Merge PDF", icon: <FileText className="w-6 h-6" />, desc: "Combine PDFs" },
+              { href: "/pdf/split", title: "Split PDF", icon: <Split className="w-6 h-6" />, desc: "Extract pages" },
+              { href: "/pdf/compress", title: "Compress PDF", icon: <Minimize2 className="w-6 h-6" />, desc: "Reduce size" },
+              { href: "/unlock", title: "Unlock PDF", icon: <Unlock className="w-6 h-6" />, desc: "Remove password" },
+              { href: "/protect", title: "Protect PDF", icon: <Lock className="w-6 h-6" />, desc: "Add password" },
+              { href: "/rotate", title: "Rotate PDF", icon: <RotateCw className="w-6 h-6" />, desc: "Fix orientation" },
+              { href: "/delete-pages", title: "Delete Pages", icon: <Eraser className="w-6 h-6" />, desc: "Remove pages" },
+              { href: "/sign", title: "Sign PDF", icon: <Signature className="w-6 h-6" />, desc: "Add signature" },
+              { href: "/ocr", title: "OCR", icon: <Search className="w-6 h-6" />, desc: "Extract text" },
+              { href: "/watermark", title: "Watermark", icon: <Stamp className="w-6 h-6" />, desc: "Add branding" },
+            ].map((tool) => (
+              <Link
+                key={tool.href}
+                href={tool.href}
+                className="group flex flex-col items-center p-4 border border-border hover:bg-foreground hover:text-background transition-all duration-200"
+              >
+                <div className="mb-2 text-foreground group-hover:text-background transition-colors">
+                  {tool.icon}
+                </div>
+                <span className="font-semibold text-sm text-center">{tool.title}</span>
+                <span className="text-xs text-muted-foreground group-hover:text-background/70 text-center">{tool.desc}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Tools Section (Bento Grid) */}
       <section id="tools" className="py-24 border-b border-border">

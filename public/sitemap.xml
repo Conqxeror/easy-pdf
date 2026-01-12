@@ -51,11 +51,6 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://easy-pdf-murex.vercel.app/categories/[category]</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://easy-pdf-murex.vercel.app/categories/advanced-pdf-tools</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -524,6 +519,11 @@
     <loc>https://easy-pdf-murex.vercel.app/tar-extractor</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://easy-pdf-murex.vercel.app/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
   <url>
     <loc>https://easy-pdf-murex.vercel.app/text-case-converter</loc>
