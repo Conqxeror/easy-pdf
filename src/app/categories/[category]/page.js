@@ -12,15 +12,15 @@ import {
 import { generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
 
 export async function generateMetadata({ params }) {
-  const category = params.category;
+  const { category } = await params;
   const formattedCategory = category
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
   return {
-    title: `${formattedCategory} PDF Tools - easy-pdf | Free Online ${formattedCategory} PDF Tools`,
-    description: `All ${formattedCategory.toLowerCase()} PDF tools in one place. Privacy-first, client-side processing with no file uploads. 100% free online ${formattedCategory.toLowerCase()} PDF tools for secure document processing.`,
+    title: `${formattedCategory} PDF Tools | easy-pdf`,
+    description: `All ${formattedCategory.toLowerCase()} PDF tools in one place. Privacy-first, client-side processing. Free ${formattedCategory.toLowerCase()} PDF tools.`,
     keywords: [
       `${formattedCategory} PDF tools`,
       `PDF ${category.replace('-', ' ')}`,
@@ -39,8 +39,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-const CategoryPage = ({ params }) => {
-  const category = params.category;
+const CategoryPage = async ({ params }) => {
+  const { category } = await params;
   const normalizedCategory = slugify(category);
   const formattedCategory = category
     .split('-')

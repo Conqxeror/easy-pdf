@@ -15,7 +15,17 @@ export const generateEnhancedMetadata = ({
   // Prefer runtime environment value for base URL when available
   const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
   const resolvedBase = metadataBaseUrl || (envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app')
-  const baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
+
+  // Fix: Don't add | easy-pdf if already present, and ensure title is under 60 chars
+  let baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
+  // Truncate if too long (keeping the | easy-pdf suffix)
+  if (baseTitle.length > 60) {
+    const suffix = ' | easy-pdf'
+    const titleWithoutSuffix = baseTitle.replace(/\s*\|\s*easy-pdf.*$/i, '')
+    const maxLength = 60 - suffix.length
+    baseTitle = titleWithoutSuffix.substring(0, maxLength).trim() + suffix
+  }
+
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
   const keywordArray = Array.isArray(keywords) ? keywords : (keywords ? [keywords] : [])
 
@@ -35,7 +45,8 @@ export const generateEnhancedMetadata = ({
 
   return {
     metadataBase: new URL(resolvedBase),
-    title: {
+    // If title already has the suffix, use absolute title without template
+    title: title.toLowerCase().includes('easy-pdf') ? baseTitle : {
       default: baseTitle,
       template: '%s | easy-pdf'
     },

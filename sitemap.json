@@ -105,6 +105,7 @@
     "/steganography",
     "/svg-to-png",
     "/tar-extractor",
+    "/terms",
     "/text-case-converter",
     "/text-diff-checker",
     "/timezone-converter",
@@ -126,5 +127,5 @@
     "/zip-creator",
     "/zip-extractor"
   ],
-  "count": 125
+  "count": 126
 }

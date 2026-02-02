@@ -1,0 +1,58 @@
+[
+  {
+    "url": "/",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"sr-only\">Easy PDF - Free Online PDF Tools | Privacy-First Document Processing</h1>",
+    "h1Text": "Easy PDF - Free Online PDF Tools | Privacy-First Document Processing",
+    "isSSR": true
+  },
+  {
+    "url": "/about",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"text-4xl md:text-5xl font-bold text-foreground dark:text-foreground mb-6\">About Easy-PDF</h1>",
+    "h1Text": "About Easy-PDF",
+    "isSSR": true
+  },
+  {
+    "url": "/pdf/merge",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"font-bold text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-s...",
+    "h1Text": "Merge PDF Files",
+    "isSSR": true
+  },
+  {
+    "url": "/pdf/split",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"font-bold text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-s...",
+    "h1Text": "Split PDF",
+    "isSSR": true
+  },
+  {
+    "url": "/pdf/compress",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"font-bold text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-s...",
+    "h1Text": "Compress PDF",
+    "isSSR": true
+  },
+  {
+    "url": "/advanced-ocr",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"font-bold text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-s...",
+    "h1Text": "Advanced OCR with AI",
+    "isSSR": true
+  },
+  {
+    "url": "/aes-encrypt",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"font-bold text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-s...",
+    "h1Text": "AES Encryption Tool",
+    "isSSR": true
+  },
+  {
+    "url": "/barcode-generator",
+    "hasH1": true,
+    "h1Tag": "<h1 class=\"font-bold text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-none tracking-tighter mb-6 text-foreground dark:text-foreground animate-s...",
+    "h1Text": "Barcode Generator",
+    "isSSR": true
+  }
+]
