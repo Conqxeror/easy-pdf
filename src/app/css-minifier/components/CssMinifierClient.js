@@ -88,7 +88,7 @@ export default function CssMinifierClient() {
           <div className="flex justify-between items-center">
             <Label>Minified Output</Label>
             {stats && (
-              <span className="text-xs text-green-600 font-medium">
+              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
                 Saved {stats.savings} ({stats.original} → {stats.minified})
               </span>
             )}

@@ -54,7 +54,7 @@ export const PageHeader = ({
 };
 export const PageContent = ({ children, className, narrow = false, ...props }) => {
   return (
-    <main 
+    <div 
       className={cn(
         "section-spacing",
         narrow ? "container-narrow" : "container-standard",
@@ -63,7 +63,7 @@ export const PageContent = ({ children, className, narrow = false, ...props }) =
       {...props}
     >
       {children}
-    </main>
+    </div>
   );
 };
 

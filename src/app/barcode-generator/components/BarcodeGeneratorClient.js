@@ -11,6 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { Download } from "lucide-react";
 import JsBarcode from "jsbarcode";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function BarcodeGeneratorClient() {
   const [text, setText] = useState("1234567890");
@@ -43,9 +44,8 @@ export default function BarcodeGeneratorClient() {
       const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
       const url = safeCreateObjectURL(blob);
       setDownloadUrl(url);
-    } catch (e) {
-      // Handle invalid input for specific formats
-      console.warn("Invalid barcode input", e);
+    } catch {
+      toast.error("Invalid barcode input for the selected format.");
     }
   }, [text, format, width, height, displayValue, background, lineColor]);
 
@@ -68,13 +68,14 @@ export default function BarcodeGeneratorClient() {
 
     const svgData = new XMLSerializer().serializeToString(svgRef.current);
     const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
+    const url = safeCreateObjectURL(blob);
+    if (!url) return;
 
     img.onload = () => {
       canvas.width = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
-      URL.revokeObjectURL(url);
+      safeRevokeObjectURL(url);
 
       const pngUrl = canvas.toDataURL("image/png");
       const a = document.createElement("a");

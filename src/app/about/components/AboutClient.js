@@ -47,7 +47,7 @@ export default function AboutClient() {
       <Card className="mb-8 bg-background dark:bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-            <Heart className="h-6 w-6 text-red-500" />
+            <Heart className="h-6 w-6 text-red-500 dark:text-red-400" />
             Our Mission
           </CardTitle>
         </CardHeader>
@@ -100,7 +100,7 @@ export default function AboutClient() {
         <Card className="bg-background dark:bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <Users className="h-5 w-5 text-green-500" />
+              <Users className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
               Community Driven
             </CardTitle>
           </CardHeader>
@@ -130,7 +130,7 @@ export default function AboutClient() {
         <Card className="bg-background dark:bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-              <Lock className="h-5 w-5 text-red-500" />
+              <Lock className="h-5 w-5 text-destructive" />
               Secure by Design
             </CardTitle>
           </CardHeader>
@@ -173,7 +173,7 @@ export default function AboutClient() {
               <div className="text-sm text-foreground dark:text-foreground">React Framework</div>
             </div>
             <div className="text-center p-4 bg-background dark:bg-background">
-              <div className="text-2xl font-bold text-green-600">PDF-lib</div>
+              <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">PDF-lib</div>
               <div className="text-sm text-foreground dark:text-foreground">PDF Processing</div>
             </div>
             <div className="text-center p-4 bg-background dark:bg-background">
@@ -184,7 +184,6 @@ export default function AboutClient() {
               <div className="text-2xl font-bold text-yellow-600">TypeScript</div>
               <div className="text-sm text-foreground dark:text-foreground">Type Safety</div>
             </div>
-            .
           </div>
         </CardContent>
       </Card>
@@ -193,7 +192,7 @@ export default function AboutClient() {
       <Card className="mb-8 bg-background dark:bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-foreground dark:text-foreground">
-            <TrendingUp className="h-6 w-6 text-green-500" />
+            <TrendingUp className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
             Our Impact
           </CardTitle>
         </CardHeader>
@@ -204,7 +203,7 @@ export default function AboutClient() {
               <div className="text-sm text-foreground dark:text-foreground">Files Processed</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-green-600">5,000+</div>
+              <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">5,000+</div>
               <div className="text-sm text-foreground dark:text-foreground">Happy Users</div>
             </div>
             <div className="text-center">

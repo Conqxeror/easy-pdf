@@ -163,8 +163,7 @@ export default function TxtToPdfClient() {
       setDownloadUrl(url);
 
       setError("");
-    } catch (err) {
-      console.error("TXT to PDF conversion failed", err);
+    } catch {
       setError("Failed to convert text to PDF. Please try again with different settings.");
     } finally {
       setIsProcessing(false);

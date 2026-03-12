@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const ACCEPT = ".tar,.tar.gz,.tgz,.gz";
 const MAX_SIZE = 250 * 1024 * 1024; // 250MB
@@ -95,7 +96,7 @@ export default function TarExtractorClient() {
       setProgress(100);
       setTimeout(() => setProgress(0), 1200);
     } catch (err) {
-      console.error("TAR extraction failed", err);
+      toast.error(err?.message || "TAR extraction failed");
       setError("Failed to unpack archive. Make sure the file is a valid tar or tar.gz archive.");
       setEntries([]);
       setProgress(0);

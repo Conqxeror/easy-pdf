@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { loadFfmpegClient } from "@/lib/ffmpegClient";
 import { Button } from "@/components/ui/button";
@@ -100,7 +101,7 @@ export default function VoiceChangerClient() {
 
       setProgress(100);
     } catch (err) {
-      console.error("Voice change failed", err);
+      toast.error(err?.message || "Voice change failed");
       setError(err?.message || "Failed to change voice. Please try another file with different settings. Note that some audio files may not support all effects.");
     } finally {
       setIsProcessing(false);
@@ -257,10 +258,10 @@ export default function VoiceChangerClient() {
         )}
 
         {downloadUrl && file && (
-          <div className="p-4 bg-green-50 rounded-none border border-green-200">
-            <p className="font-semibold text-green-800">Voice change complete!</p>
+          <div className="p-4 bg-muted rounded-none border border-border">
+            <p className="font-semibold text-foreground">Voice change complete!</p>
             <a
-              className="text-blue-600 underline inline-block mt-2 px-4 py-2 bg-blue-100 rounded-none hover:bg-blue-200 transition-colors"
+              className="text-primary-foreground underline inline-block mt-2 px-4 py-2 bg-primary rounded-none hover:bg-primary/90 transition-colors"
               href={downloadUrl}
               download={`${file.name.replace(/\.[^/.]+$/, "")}_voice_changed.${outputFormat}`}
             >

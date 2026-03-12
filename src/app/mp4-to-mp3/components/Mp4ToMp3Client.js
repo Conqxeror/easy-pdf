@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -142,7 +143,7 @@ export default function Mp4ToMp3Client() {
       try { ffmpeg.FS("unlink", inputName); } catch { /* ignore */ }
       try { ffmpeg.FS("unlink", outputName); } catch { /* ignore */ }
     } catch (conversionError) {
-      console.error("MP4 → MP3 conversion failed", conversionError);
+      toast.error(conversionError?.message || "MP4 to MP3 conversion failed");
       setError(conversionError?.message || "Failed to convert video. Please try a different file.");
       setProcessingMessage("Conversion failed.");
     } finally {
@@ -171,7 +172,7 @@ export default function Mp4ToMp3Client() {
     },
     {
       question: "What audio bitrate do you use?",
-      answer: "We export at 192 kbps using the LAME encoder, which balances quality and file size. Future updates will offer more presets.",
+      answer: "We export at 192 kbps using the LAME encoder, which balances quality and file size for most voice and music tracks in the current browser-based workflow.",
     },
   ];
 
@@ -246,9 +247,9 @@ export default function Mp4ToMp3Client() {
         </div>
 
         {downloadUrl && (
-          <div className="p-6 bg-green-50 border border-green-200 rounded-none space-y-4 dark:bg-green-900/20 dark:border-green-800">
+          <div className="p-6 bg-muted border border-border rounded-none space-y-4">
             <h3 className="text-xl font-semibold text-green-700 dark:text-green-200">Conversion complete!</h3>
-            <p className="text-sm text-green-800 dark:text-green-100">
+            <p className="text-sm text-foreground">
               Your MP3 is ready. Click the button below to save it. We automatically clean up temporary files for you.
             </p>
             <div className="flex flex-wrap items-center gap-3">

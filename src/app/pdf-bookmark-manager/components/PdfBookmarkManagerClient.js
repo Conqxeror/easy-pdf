@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Upload, Download, Bookmark, FileText, Plus, Edit, Trash2, Loader2 } from 'lucide-react';
 import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 
 export default function PDFBookmarkManagerClient() {
   const [file, setFile] = useState(null);
@@ -16,11 +18,14 @@ export default function PDFBookmarkManagerClient() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [editingBookmark, setEditingBookmark] = useState(null);
   const [newBookmark, setNewBookmark] = useState({ title: '', page: 1, level: 0 });
+  const [error, setError] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
 
   const onDrop = useCallback(async (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file && file.type === 'application/pdf') {
       setFile(file);
+      setError('');
       await extractBookmarks(file);
     }
   }, []);
@@ -36,16 +41,15 @@ export default function PDFBookmarkManagerClient() {
   const extractBookmarks = async (file) => {
     try {
       setIsProcessing(true);
+      setError('');
       const { PDFDocument } = await getPdfLib();
       const arrayBuffer = await file.arrayBuffer();
       await PDFDocument.load(arrayBuffer);
 
-      // For now, we'll start with an empty bookmark list since pdf-lib doesn't have direct bookmark reading
-      // In a production app, you'd use a more comprehensive PDF library for reading existing bookmarks
       setBookmarks([]);
+      setStatusMessage('PDF loaded. Create a bookmark outline from scratch and export it as JSON alongside an unchanged PDF copy.');
     } catch (error) {
-      console.error('Error extracting bookmarks:', error);
-      alert('Error extracting bookmarks from PDF');
+      setError(error?.message || 'Error opening the PDF.');
     } finally {
       setIsProcessing(false);
     }
@@ -64,6 +68,7 @@ export default function PDFBookmarkManagerClient() {
 
     setBookmarks([...bookmarks, bookmark]);
     setNewBookmark({ title: '', page: 1, level: 0 });
+    setStatusMessage(`Bookmark “${bookmark.title}” added to the outline.`);
   };
 
   const editBookmark = (id, updatedBookmark) => {
@@ -75,6 +80,7 @@ export default function PDFBookmarkManagerClient() {
 
   const deleteBookmark = (id) => {
     setBookmarks(bookmarks.filter(bookmark => bookmark.id !== id));
+    setStatusMessage('Bookmark removed from the outline.');
   };
 
   const moveBookmark = (id, direction) => {
@@ -96,43 +102,37 @@ export default function PDFBookmarkManagerClient() {
 
     try {
       setIsProcessing(true);
+      setError('');
       const { PDFDocument } = await getPdfLib();
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
 
-      // Note: pdf-lib has limited bookmark support
-      // In a production app, you'd use a more comprehensive library like PDF-lib with additional plugins
-      // For now, we'll save the PDF as-is and show the bookmark structure
-
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      let url;
+      let url = null;
       try {
-        try { url = typeof URL !== 'undefined' ? URL.createObjectURL(blob) : null; } catch (err) { console.error('Error creating bookmarks export URL:', err); url = null; }
+        url = safeCreateObjectURL(blob);
         const safeBase = file && file.name ? file.name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
-        const filename = `${safeBase}_with_bookmarks.pdf`;
+        const filename = `${safeBase}_bookmark-outline-source.pdf`;
 
         const link = document.createElement('a');
-        link.href = url;
+        link.href = url || '';
         link.download = filename;
         document.body.appendChild(link);
         link.click();
         link.remove();
-      } catch (err) {
-        console.error('Error creating download for PDF with bookmarks:', err);
-        alert('Unable to start PDF download');
+      } catch {
+        setError('Unable to export the PDF copy.');
       } finally {
-        // Delay revoke so browser can start download
         setTimeout(() => {
-          try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
+          safeRevokeObjectURL(url);
         }, 500);
       }
 
-      // Also export bookmark list as JSON
       exportBookmarkList();
+      setStatusMessage('Exported the bookmark outline JSON and an unchanged copy of the source PDF.');
     } catch (error) {
-      console.error('Error saving bookmarks:', error);
-      alert('Error saving PDF with bookmarks');
+      setError(error?.message || 'Error exporting the bookmark package.');
     } finally {
       setIsProcessing(false);
     }
@@ -148,7 +148,7 @@ export default function PDFBookmarkManagerClient() {
     const blob = new Blob([JSON.stringify(bookmarkData, null, 2)], { type: 'application/json' });
     let url = null;
     try {
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating bookmarks export URL:', err); url = null; }
+      url = safeCreateObjectURL(blob);
       const safeBase = file && file.name ? file.name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
       const filename = `${safeBase}_bookmarks.json`;
 
@@ -159,7 +159,7 @@ export default function PDFBookmarkManagerClient() {
       link.click();
       document.body.removeChild(link);
     } finally {
-      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
+      setTimeout(() => { safeRevokeObjectURL(url); }, 500);
     }
   };
 
@@ -233,15 +233,15 @@ export default function PDFBookmarkManagerClient() {
   return (
     <ToolPageLayout
       title="PDF Bookmark Manager"
-      subtitle="Add, edit, and organize PDF bookmarks to improve document navigation"
+      subtitle="Plan and export a bookmark outline for long PDFs entirely in your browser"
       toolName="PDF Bookmark Manager"
-      toolDescription="Add, edit, and organize PDF bookmarks to improve document navigation. Create hierarchical bookmark structures, edit bookmark titles and page numbers, and export bookmark lists. All processing happens locally in your browser for complete privacy and security."
+      toolDescription="Create a bookmark outline with titles, levels, and page numbers, then export it as JSON together with an unchanged source PDF copy for downstream workflows."
       currentTool="pdf-bookmark-manager"
       steps={[
         "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
         "Add new bookmarks by entering a title, page number, and hierarchy level (0 for main bookmarks, higher numbers for sub-bookmarks).",
         "Edit existing bookmarks by clicking the edit button, or reorganize them using the up/down arrows.",
-        "Export your bookmark list as JSON or save the PDF with the bookmark structure applied."
+        "Export the bookmark outline as JSON, and optionally download an unchanged copy of the source PDF for handoff or archival."
       ]}
       faqs={[
         {
@@ -258,7 +258,7 @@ export default function PDFBookmarkManagerClient() {
         },
         {
           question: "Can I import existing bookmarks?",
-          answer: "You can import bookmarks by loading a PDF that already contains bookmarks. The tool will automatically populate the bookmark list, which you can then edit, add to, or reorganize."
+          answer: "Not in this browser-side version. The current PDF library can create and export outline plans, but it does not parse existing embedded bookmark trees from uploaded PDFs."
         },
         {
           question: "Are my PDF files secure when using this tool?",
@@ -267,6 +267,18 @@ export default function PDFBookmarkManagerClient() {
       ]}
     >
       <div className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {statusMessage && !error && (
+          <Alert>
+            <AlertDescription>{statusMessage}</AlertDescription>
+          </Alert>
+        )}
+
         {!file ? (
           <Card>
             <CardHeader>
@@ -401,7 +413,7 @@ export default function PDFBookmarkManagerClient() {
                   {isProcessing ? (
                     <span className="flex items-center"><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Processing...</span>
                   ) : (
-                    <><Download className="h-4 w-4 mr-2" aria-hidden="true" />Save PDF with Bookmarks</>
+                    <><Download className="h-4 w-4 mr-2" aria-hidden="true" />Export Outline + PDF Copy</>
                   )}
                 </Button>
               </div>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
@@ -16,6 +17,7 @@ import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/li
 
 export default function QRCodeGeneratorClient() {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState('');
   const [qrCodeData, setQRCodeData] = useState({
     type: 'text',
     content: '',
@@ -72,6 +74,7 @@ export default function QRCodeGeneratorClient() {
 
   const generateQRCode = async () => {
     setIsGenerating(true);
+    setError('');
     trackEvent('qr_code_generation_started', { type: qrCodeData.type });
 
     try {
@@ -113,7 +116,7 @@ END:VCARD`;
       }
 
       if (!qrContent.trim()) {
-        alert('Please enter content for the QR code');
+        setError('Please enter content for the selected QR code type.');
         setIsGenerating(false);
         return;
       }
@@ -143,8 +146,7 @@ END:VCARD`;
       });
 
     } catch (error) {
-      console.error('Error generating QR code:', error);
-      alert('Error generating QR code. Please try again.');
+      setError(error?.message || 'Error generating the QR code. Please try again.');
       trackEvent('qr_code_generation_failed', { error: error.message });
     } finally {
       setIsGenerating(false);
@@ -217,14 +219,21 @@ END:VCARD`;
 
       trackEvent('qr_code_downloaded', { type: qrCodeData.type, format: 'PDF' });
     } catch (error) {
-      console.error('Error creating PDF:', error);
-      alert('Error creating PDF. Please try again.');
+      setError(error?.message || 'Error creating the QR code PDF. Please try again.');
     } finally {
       setTimeout(() => { try { safeRevokeObjectURL(url); } catch { } }, 500);
     }
   };
 
   const updateQRData = (field, value) => {
+        {error && (
+          <div className="lg:col-span-2">
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </div>
+        )}
+
     setQRCodeData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -479,7 +488,7 @@ END:VCARD`;
     { question: "Is the QR code generator free?", answer: "Yes, you can create and download unlimited QR codes for free." },
     { question: "Can I create QR codes for WiFi, email, or contacts?", answer: "Yes, our tool supports many QR code types including WiFi, email, vCard, phone, and more." },
     { question: "Are my QR code contents stored?", answer: "No, all generation is done in your browser. Your content is never uploaded or saved." },
-    { question: "Can I customize the QR code's appearance?", answer: "You can adjust size, margin, and error correction level. Advanced styling coming soon." },
+    { question: "Can I customize the QR code's appearance?", answer: "Yes. You can adjust the QR code size, quiet-zone margin, and error-correction level to match print or screen use cases." },
     { question: "Is there a limit to the number of QR codes I can generate?", answer: "No limits—generate as many as you need!" }
   ];
 

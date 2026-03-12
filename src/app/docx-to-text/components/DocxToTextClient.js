@@ -7,7 +7,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import mammoth from "mammoth";
-import { copyToClipboard, sanitizeFileName } from "@/lib/enhancedUX";
+import { copyToClipboard, sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB guard for inline extraction
 
@@ -36,8 +37,8 @@ export default function DocxToTextClient() {
       const arrayBuffer = await file.arrayBuffer();
       const { value: rawText } = await mammoth.extractRawText({ arrayBuffer });
       setText(rawText || "");
-    } catch (err) {
-      console.error("DOCX => Text failed", err);
+    } catch {
+      toast.error("Failed to extract text from DOCX.");
       setError("Failed to extract text from DOCX. Please ensure the file is not corrupted.");
     }
   }, []);
@@ -54,13 +55,15 @@ export default function DocxToTextClient() {
     const safeName = sanitizeFileName("extracted_text") + ".txt";
     const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
+    const url = safeCreateObjectURL(blob);
+    if (!url) return;
+    link.href = url;
     link.download = safeName;
     link.style.display = "none";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setTimeout(() => { try { URL.revokeObjectURL(link.href); } catch { } }, 500);
+    setTimeout(() => { safeRevokeObjectURL(url); }, 500);
   };
 
   const toolName = "DOCX to Text";

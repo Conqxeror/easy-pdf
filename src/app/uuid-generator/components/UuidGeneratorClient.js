@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { copyToClipboard, sanitizeFileName } from "@/lib/enhancedUX";
+import { copyToClipboard, sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 import { v1 as uuidv1, v4 as uuidv4, v7 as uuidv7 } from "uuid";
 
 const VERSION_OPTIONS = [
@@ -60,8 +60,8 @@ export default function UuidGeneratorClient() {
 				setLastGenerated(Date.now());
 				setCount(qty);
 				toast.success(`Generated ${qty} ${version.toUpperCase()} IDs`);
-			} catch (generationError) {
-				console.error("UUID generation failed", generationError);
+			} catch {
+				toast.error("Unable to generate UUIDs. Please retry or refresh.");
 				setError("Unable to generate UUIDs. Please retry or refresh.");
 			}
 		},
@@ -97,12 +97,13 @@ export default function UuidGeneratorClient() {
 		if (!uuids.length) return;
 		const blob = new Blob([uuids.join("\n")], { type: "text/plain" });
 		const link = document.createElement("a");
-		link.href = URL.createObjectURL(blob);
+		const url = safeCreateObjectURL(blob);
+		link.href = url;
 		link.download = `${sanitizeFileName(`uuid-${version}`)}.txt`;
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
-		setTimeout(() => URL.revokeObjectURL(link.href), 300);
+		setTimeout(() => safeRevokeObjectURL(url), 300);
 	};
 
 	const toolName = "UUID Generator";

@@ -3,11 +3,13 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { loadPdfJs, ensurePdfWorkerEntry } from '@/lib/pdfjsWorker';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Upload, Download, FileText, Table, Loader2, AlertCircle } from 'lucide-react';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 
 // PDF.js will be loaded lazily when a PDF file is processed. The helper
 // `loadPdfJs` configures the workerSrc via the centralized helper `getPdfWorkerUrl()` which
@@ -110,6 +112,7 @@ export default function PDFTableExtractorClient() {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     let url = null;
     try {
+      setError(null);
       url = safeCreateObjectURL(blob);
       const link = document.createElement('a');
       const safeName = `${sanitizeFileName(table.page ? `table_page_${table.page}` : 'table')}.csv`;
@@ -120,8 +123,8 @@ export default function PDFTableExtractorClient() {
       link.click();
       document.body.removeChild(link);
     } catch (err) {
-      console.error('Failed to export CSV:', err);
-      alert('Failed to export CSV. Please try again.');
+      toast.error(err?.message || 'Failed to export CSV');
+      setError('Failed to export the CSV file. Please try again.');
     } finally {
       setTimeout(() => { try { safeRevokeObjectURL(url); } catch { } }, 500);
     }
@@ -134,9 +137,9 @@ export default function PDFTableExtractorClient() {
   return (
     <ToolPageLayout
       title="PDF Table Extractor"
-      subtitle="Extract and export tables from PDF documents to CSV, Excel, or JSON format"
+      subtitle="Extract table-like PDF content and export the results as CSV"
       toolName="PDF Table Extractor"
-      toolDescription="Extract and export tables from PDF documents to CSV, Excel, or JSON format. Automatically detect table structures and convert them to editable formats. All processing happens locally in your browser for complete privacy and security."
+      toolDescription="Extract table-like text structures from PDF documents and export the results as CSV files for Excel, Google Sheets, or other spreadsheet tools. All processing happens locally in your browser for complete privacy and security."
       currentTool="pdf-table-extractor"
       steps={[
         "Upload your PDF file by dragging it into the dropzone or clicking to select it.",
@@ -155,7 +158,7 @@ export default function PDFTableExtractorClient() {
         },
         {
           question: "Can I export the extracted tables?",
-          answer: "Yes, you can export individual tables or all tables at once to CSV format. The CSV files can be opened in Excel, Google Sheets, or any spreadsheet application for further analysis."
+          answer: "Yes, you can export individual tables or all detected tables at once to CSV format. The CSV files can be opened in Excel, Google Sheets, or any spreadsheet application for further cleanup and analysis."
         },
         {
           question: "What if no tables are found in my PDF?",
@@ -168,6 +171,12 @@ export default function PDFTableExtractorClient() {
       ]}
     >
       <div className="max-w-6xl mx-auto p-6 space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <Table className="h-8 w-8" aria-hidden="true" />
@@ -233,7 +242,7 @@ export default function PDFTableExtractorClient() {
         {error && (
           <Card className="border-red-200 bg-red-50">
             <CardContent className="text-center py-8">
-              <div className="flex items-center justify-center gap-2 text-red-600">
+              <div className="flex items-center justify-center gap-2 text-destructive">
                 <AlertCircle className="h-5 w-5" />
                 <p>Error: {error}</p>
               </div>

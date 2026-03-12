@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB guard per image
 
@@ -107,7 +108,7 @@ export default function HeicToJpgClient() {
         item.status = "done";
         item.error = "";
       } catch (conversionError) {
-        console.error("Failed to convert HEIC", conversionError);
+        toast.error(`Failed to convert ${item.file?.name || 'file'}`);
         item.status = "error";
         item.error = conversionError?.message || "Conversion failed";
       }
@@ -246,12 +247,12 @@ export default function HeicToJpgClient() {
                   )}
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending conversion</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Converting...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Converting...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (

@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'; // Unused
 import { Textarea } from '@/components/ui/textarea';
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'; // Unused
 import { Upload, Download, FileBadge2, Type, CheckSquare, Circle, ChevronDown, PenTool, Trash2, Plus, Eye, Loader2 } from 'lucide-react';
 import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 
 export default function PDFFormCreatorClient() {
   const [templateFile, setTemplateFile] = useState(null);
@@ -20,6 +22,8 @@ export default function PDFFormCreatorClient() {
   const [isCreating, setIsCreating] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const [formTitle, setFormTitle] = useState('New Form');
+  const [error, setError] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
 
   const fieldTypes = [
     { id: 'text', name: 'Text Field', icon: Type },
@@ -36,6 +40,8 @@ export default function PDFFormCreatorClient() {
       // Reset form fields when new template is loaded
       setFormFields([]);
       setSelectedField(null);
+      setError('');
+      setStatusMessage(`Template loaded: ${file.name}. New fields will be added to the first page using the X/Y coordinates you set.`);
     }
   }, []);
 
@@ -49,7 +55,7 @@ export default function PDFFormCreatorClient() {
 
   const addField = (type) => {
     const newField = {
-      id: Date.now(),
+      id: globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID() : `${Date.now()}-${Math.random()}`,
       type,
       name: `field_${formFields.length + 1}`,
       label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
@@ -65,6 +71,7 @@ export default function PDFFormCreatorClient() {
     };
     setFormFields([...formFields, newField]);
     setSelectedField(newField);
+    setStatusMessage(`${newField.label} added. Adjust its X/Y coordinates in Field Properties.`);
   };
 
   const updateField = (id, updates) => {
@@ -87,6 +94,8 @@ export default function PDFFormCreatorClient() {
 
   const createFormPDF = async () => {
     setIsCreating(true);
+    setError('');
+    setStatusMessage('');
     try {
       let pdfDoc;
 
@@ -203,7 +212,7 @@ export default function PDFFormCreatorClient() {
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       let url = null;
       try {
-        try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for form PDF:', err); url = null; }
+        url = safeCreateObjectURL(blob);
         const link = document.createElement('a');
         link.href = url || '';
         const safeTitle = (formTitle || 'form').replace(/\s+/g, '_').replace(/[^a-zA-Z0-9\-_.]/g, '');
@@ -211,16 +220,16 @@ export default function PDFFormCreatorClient() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      } catch (err) {
-        console.error('Error creating form PDF download:', err);
-        alert('Failed to download form PDF. Please try again.');
+        setStatusMessage('Interactive PDF form created successfully.');
+      } catch {
+        setError('Failed to download the form PDF. Please try again.');
       } finally {
         setTimeout(() => {
-          try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+          safeRevokeObjectURL(url);
         }, 500);
       }
     } catch (error) {
-      console.error('Error creating form PDF:', error);
+      setError(error?.message || 'Error creating the form PDF.');
     } finally {
       setIsCreating(false);
     }
@@ -230,6 +239,8 @@ export default function PDFFormCreatorClient() {
     setTemplateFile(null);
     setFormFields([]);
     setSelectedField(null);
+    setError('');
+    setStatusMessage('Blank form canvas ready. Add fields from the left panel, then position them with the X/Y controls.');
   };
 
   return (
@@ -252,7 +263,7 @@ export default function PDFFormCreatorClient() {
         },
         {
           question: "Can I use an existing PDF as a template?",
-          answer: "Yes, you can upload an existing PDF document and add form fields to it. This is useful for converting static documents into interactive forms."
+          answer: "Yes. When you upload a PDF template, new form fields are added to the first page of that PDF using the X/Y coordinates you set in the properties panel."
         },
         {
           question: "Are the created forms fillable?",
@@ -269,6 +280,18 @@ export default function PDFFormCreatorClient() {
       ]}
     >
       <div className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {statusMessage && !error && (
+          <Alert>
+            <AlertDescription>{statusMessage}</AlertDescription>
+          </Alert>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Panel - Tools */}
           <div className="lg:col-span-1 space-y-4">
@@ -364,6 +387,24 @@ export default function PDFFormCreatorClient() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label>X Position</Label>
+                      <Input
+                        type="number"
+                        value={selectedField.x}
+                        onChange={(e) => updateField(selectedField.id, { x: parseInt(e.target.value || '0', 10) || 0 })}
+                        className="bg-background border-border text-foreground"
+                      />
+                    </div>
+                    <div>
+                      <Label>Y Position</Label>
+                      <Input
+                        type="number"
+                        value={selectedField.y}
+                        onChange={(e) => updateField(selectedField.id, { y: parseInt(e.target.value || '0', 10) || 0 })}
+                        className="bg-background border-border text-foreground"
+                      />
+                    </div>
                     <div>
                       <Label>Width</Label>
                       <Input
@@ -478,16 +519,15 @@ Option 3`}
                 <div className="relative w-full h-full border-2 border-dashed border-border overflow-auto">
                   {templateFile ? (
                     <div className="p-4">
-                      <p className="text-center text-foreground">
+                      <p className="text-center text-foreground font-medium">
                         PDF Template: {templateFile.name}
                       </p>
                       <p className="text-center text-sm text-foreground mt-2">
-                        Click &quot;Add Field&quot; buttons to add form elements
+                        Add fields from the left panel, then use the X/Y controls in Field Properties to place them on page 1 of the template.
                       </p>
                     </div>
                   ) : (
                     <div className="relative w-full h-full bg-background">
-                      {/* Simulated PDF page */}
                       <div className="absolute inset-4 bg-background shadow-lg border border-border">
                         <div className="p-6">
                           <h2 className="text-xl font-bold mb-4 text-foreground">{formTitle}</h2>

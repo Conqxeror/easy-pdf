@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const MAX_TOTAL_SIZE = 200 * 1024 * 1024; // 200MB cap for zip creation
 
@@ -69,7 +70,7 @@ export default function ZipCreatorClient() {
         try { safeRevokeObjectURL(url); } catch { };
       }, 5000);
     } catch (err) {
-      console.error("Zip creation failed", err);
+      toast.error(err?.message || "Zip creation failed");
       setError("Failed to create ZIP archive. Please try again.");
       setIsProcessing(false);
     } finally {
@@ -105,9 +106,9 @@ export default function ZipCreatorClient() {
         </div>
 
         {downloadUrl && (
-          <div className="bg-green-50 border border-green-200 p-4 rounded-none">
+          <div className="bg-muted border border-border p-4 rounded-none">
             <p className="font-semibold">Archive ready</p>
-            <a href={downloadUrl} className="text-blue-600 underline" download>Download ZIP</a>
+            <a href={downloadUrl} className="text-primary-foreground bg-primary px-3 py-1 rounded-none underline" download>Download ZIP</a>
           </div>
         )}
       </div>

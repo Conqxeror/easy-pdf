@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function PdfToXlsxClient() {
   const [files, setFiles] = useState([]);
@@ -120,7 +121,7 @@ export default function PdfToXlsxClient() {
 
       return csvContent;
     } catch (error) {
-      console.error("PDF to XLSX conversion failed:", error);
+      toast.error(error?.message || "PDF to XLSX conversion failed");
       throw error;
     }
   };
@@ -162,7 +163,7 @@ export default function PdfToXlsxClient() {
         item.status = "done";
         item.error = "";
       } catch (conversionError) {
-        console.error("Failed to convert PDF", conversionError);
+        toast.error(conversionError?.message || "Failed to convert PDF");
         item.status = "error";
         item.error = conversionError?.message || "Conversion failed - unable to extract table data from PDF";
       }
@@ -186,16 +187,16 @@ export default function PdfToXlsxClient() {
   };
 
   const toolName = "PDF to Excel Converter";
-  const toolDescription = "Convert PDF files to Excel spreadsheets by extracting table data. Our tool identifies tables in PDFs and converts them to structured Excel files.";
+  const toolDescription = "Extract table-like text from PDF files and export the recovered data as CSV for Excel, Google Sheets, or Numbers. This version prioritizes lightweight browser-side extraction over native XLSX generation.";
   const steps = [
     "Upload PDF files containing tables via drag & drop or the file picker.",
-    "Click 'Convert to Excel' to extract table data from the PDFs.",
-    "Download the generated Excel files with the extracted data.",
+    "Click 'Extract table data' to scan the PDF text layer for spreadsheet-friendly content.",
+    "Download the generated CSV files and open them in Excel or another spreadsheet app for cleanup.",
   ];
   const faqs = [
     {
       question: "How does PDF to Excel conversion work?",
-      answer: "Our tool analyzes the PDF structure to identify table-like elements and converts them to Excel format. Text-based tables are typically converted accurately, while complex layouts may require manual adjustments.",
+      answer: "The tool reads the PDF text layer and creates a CSV-style export that spreadsheet apps can open. Text-based tables work best, while scanned PDFs and visually complex layouts may need manual cleanup after export.",
     },
     {
       question: "Is there a file size limit?",
@@ -204,6 +205,10 @@ export default function PdfToXlsxClient() {
     {
       question: "Are my PDFs uploaded to a server?",
       answer: "No. All conversion happens securely in your browser. Your PDF files never leave your device.",
+    },
+    {
+      question: "Do I get a native XLSX workbook?",
+      answer: "No. This version exports CSV so the output remains reliable and fully client-side. You can open the CSV in Excel and save it as XLSX if needed.",
     },
   ];
 
@@ -222,6 +227,13 @@ export default function PdfToXlsxClient() {
       currentTool="pdf-to-xlsx"
     >
       <div className="space-y-6">
+        <Alert>
+          <AlertTitle>CSV export workflow</AlertTitle>
+          <AlertDescription>
+            The current browser workflow exports CSV rather than native XLSX. It is best for recovering text-based tables that you can refine in Excel afterward.
+          </AlertDescription>
+        </Alert>
+
         <FileDropzone
           accept=".pdf"
           multiple
@@ -257,7 +269,7 @@ export default function PdfToXlsxClient() {
               <p className="text-sm text-foreground dark:text-foreground">{files.length} file(s) queued.</p>
               <div className="flex gap-2">
                 <Button onClick={convertAll} disabled={isProcessing}>
-                  {isProcessing ? "Converting..." : "Convert to Excel"}
+                  {isProcessing ? "Extracting..." : "Extract table data"}
                 </Button>
                 <Button variant="ghost" onClick={() => setFiles([])} disabled={isProcessing}>
                   Clear list
@@ -278,18 +290,18 @@ export default function PdfToXlsxClient() {
                   </div>
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending conversion</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Converting...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Converting...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (
                     <Button asChild variant="success" size="sm">
                       <a href={item.resultUrl} download={item.resultName}>
-                        Download Excel (CSV)
+                        Download CSV for Excel
                       </a>
                     </Button>
                   )}

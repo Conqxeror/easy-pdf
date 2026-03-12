@@ -11,6 +11,10 @@
     "title": "Free PDF Compressor - Reduce PDF File Size Online",
     "description": "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels."
   },
+  "/pdf/compress": {
+    "title": "Free PDF Compressor - Reduce PDF File Size Online",
+    "description": "Compress PDF files to reduce size while maintaining quality. Free online PDF compression tool with multiple optimization levels."
+  },
   "/delete-pages": {
     "title": "Free PDF Page Deleter - Remove Pages from PDF Online",
     "description": "Delete unwanted pages from PDF documents. Remove specific pages or page ranges with our free online PDF page deletion tool."
@@ -35,17 +39,21 @@
   
   "/legal-analyzer": {
     "title": "AI Legal Document Analyzer - Review Contracts Online",
-    "description": "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts."
+    "description": "Analyze legal documents with AI-powered contract review. Extract key clauses, identify risks, and get insights from legal texts with clear disclosure that files are uploaded for AI analysis and not stored by easy-pdf."
   },
   "/medical-analyzer": {
     "title": "AI Medical Document Analyzer - Review Medical Records",
-    "description": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records."
+    "description": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, medications, and lab findings with clear disclosure that files are uploaded for AI analysis and not stored by easy-pdf."
   },
   "/merge-pdf": {
     "title": "Free PDF Merger - Combine Multiple PDFs Online",
     "description": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required."
   },
   "/merge": {
+    "title": "Free PDF Merger - Combine Multiple PDFs Online",
+    "description": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required."
+  },
+  "/pdf/merge": {
     "title": "Free PDF Merger - Combine Multiple PDFs Online",
     "description": "Merge multiple PDF files into one document for free. Fast, secure, and works entirely in your browser. No file size limits or registration required."
   },
@@ -63,7 +71,7 @@
   },
   "/pdf-to-jpg": {
     "title": "Free PDF to JPG Converter - Convert PDF to Images Online",
-    "description": "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing."
+    "description": "Convert PDF pages to JPG images in your browser with page selection, individual downloads, and ZIP export for multi-page jobs when available."
   },
   "/portfolio-creator": {
     "title": "Portfolio Creator - Create Professional PDF Portfolios",
@@ -97,17 +105,21 @@
     "title": "Free PDF Splitter - Extract Pages from PDF Online",
     "description": "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing."
   },
+  "/pdf/split": {
+    "title": "Free PDF Splitter - Extract Pages from PDF Online",
+    "description": "Split PDF files into separate documents or extract specific pages. Free online tool with secure browser-based processing."
+  },
   "/advanced-ocr": {
     "title": "Advanced OCR with AI",
-    "description": "Extract text from PDFs and images with AI-powered enhancement and formatting"
+    "description": "Extract text from PDFs and images with AI-assisted OCR, language selection, and confidence reporting"
   },
   "/pdf-accessibility-checker": {
     "title": "PDF Accessibility Checker",
-    "description": "Check PDF documents for accessibility compliance and WCAG standards"
+    "description": "Run a local heuristic audit for common PDF accessibility issues and follow-up recommendations"
   },
   "/pdf-annotation-collaboration": {
     "title": "PDF Annotation Collaboration",
-    "description": "Collaborate on PDF annotations with team members and export shared comments"
+    "description": "Build a local PDF review workspace with annotations, replies, reviewer roles, and exportable review data"
   },
   "/pdf-batch-processor": {
     "title": "PDF Batch Processor",
@@ -119,7 +131,7 @@
   },
   "/pdf-digital-signature": {
     "title": "PDF Digital Signature",
-    "description": "Add legally binding digital signatures with certificate management and validation"
+    "description": "Add a visible signature stamp with embedded signer metadata and local validation"
   },
   "/pdf-form-creator": {
     "title": "PDF Form Creator",
@@ -135,7 +147,7 @@
   },
   "/pdf-table-extractor": {
     "title": "PDF Table Extractor",
-    "description": "Extract and export tables from PDF documents to CSV, Excel, or JSON format"
+    "description": "Extract table-like PDF content and export the recovered data as CSV for spreadsheet tools"
   },
   "/pdf-version-comparison": {
     "title": "PDF Version Comparison",

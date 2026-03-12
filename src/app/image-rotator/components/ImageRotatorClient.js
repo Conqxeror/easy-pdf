@@ -139,8 +139,7 @@ export default function ImageRotatorClient() {
       setDownloadUrl(newDownloadUrl);
 
       setError("");
-    } catch (err) {
-      console.error("Image rotation failed", err);
+    } catch {
       setError("Failed to rotate the image. Please try again with a different file.");
     } finally {
       setIsProcessing(false);
@@ -313,10 +312,10 @@ export default function ImageRotatorClient() {
             </div>
 
             {downloadUrl && file && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-none">
-                <p className="font-semibold text-green-800">Image rotation complete!</p>
+              <div className="p-4 bg-muted border border-border rounded-none">
+                <p className="font-semibold text-foreground">Image rotation complete!</p>
                 <a
-                  className="text-blue-600 underline inline-block mt-2 px-4 py-2 bg-blue-100 rounded-none hover:bg-blue-200 transition-colors"
+                  className="text-primary-foreground underline inline-block mt-2 px-4 py-2 bg-primary rounded-none hover:bg-primary/90 transition-colors"
                   href={downloadUrl}
                   download={`${sanitizeFileName(file.name.replace(/\.[^.]+$/, "")) || "rotated-image"}.${outputFormat}`}
                 >

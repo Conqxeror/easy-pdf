@@ -86,7 +86,7 @@ export default function NumberBaseConverterClient() {
               placeholder="e.g. 255"
             />
             <Button variant="outline" size="icon" onClick={() => copyToClipboard(values.decimal, "dec")}>
-              {copied === "dec" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copied === "dec" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function NumberBaseConverterClient() {
               placeholder="e.g. 11111111"
             />
             <Button variant="outline" size="icon" onClick={() => copyToClipboard(values.binary, "bin")}>
-              {copied === "bin" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copied === "bin" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function NumberBaseConverterClient() {
               placeholder="e.g. FF"
             />
             <Button variant="outline" size="icon" onClick={() => copyToClipboard(values.hex, "hex")}>
-              {copied === "hex" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copied === "hex" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
         </div>
@@ -128,7 +128,7 @@ export default function NumberBaseConverterClient() {
               placeholder="e.g. 377"
             />
             <Button variant="outline" size="icon" onClick={() => copyToClipboard(values.octal, "oct")}>
-              {copied === "oct" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copied === "oct" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
             </Button>
           </div>
         </div>

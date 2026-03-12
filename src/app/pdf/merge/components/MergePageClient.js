@@ -27,11 +27,11 @@ export default function MergePDFs() {
       toolDescription={toolDescription}
       steps={steps}
       faqs={faqs}
-      currentTool="merge"
-      primaryActionHref="/split"
+      currentTool="pdf/merge"
+      primaryActionHref="/pdf/split"
       breadcrumbs={[
         { label: 'Home', href: '/' },
-        { label: 'Merge PDF', href: '/merge' }
+        { label: 'Merge PDF', href: '/pdf/merge' }
       ]}
     >
       <MergeClient />

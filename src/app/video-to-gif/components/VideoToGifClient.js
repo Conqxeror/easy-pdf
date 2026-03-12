@@ -96,7 +96,6 @@ export default function VideoToGifClient() {
 
       setProgress(100);
     } catch (err) {
-      console.error("GIF conversion failed", err);
       setError(err?.message || "Conversion failed. Try a shorter clip or lower FPS/scale.");
     } finally {
       setIsProcessing(false);
@@ -145,9 +144,9 @@ export default function VideoToGifClient() {
         )}
 
         {downloadUrl && (
-          <div className="p-4 bg-green-50 rounded-none">
+          <div className="p-4 bg-muted rounded-none">
             <p className="font-semibold">GIF ready</p>
-            <a className="text-blue-600 underline" href={downloadUrl} download>Download GIF</a>
+            <a className="text-primary-foreground bg-primary px-3 py-1 rounded-none underline" href={downloadUrl} download>Download GIF</a>
           </div>
         )}
 

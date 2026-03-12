@@ -8,6 +8,8 @@ import { Alert } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function DeletePagesClient() {
   const [files, setFiles] = useState([]);
@@ -25,8 +27,8 @@ export default function DeletePagesClient() {
   useEffect(() => {
     return () => {
       try {
-        if (deletedPdfUrl && typeof URL !== 'undefined' && !String(deletedPdfUrl).startsWith('data:')) {
-          try { if (deletedPdfUrl && typeof URL !== 'undefined' && !String(deletedPdfUrl).startsWith('data:')) URL.revokeObjectURL(deletedPdfUrl); } catch { }
+        if (deletedPdfUrl) {
+          safeRevokeObjectURL(deletedPdfUrl);
         }
       } catch { /* ignore */ }
     };
@@ -53,10 +55,10 @@ export default function DeletePagesClient() {
       const arrayBuffer = await file.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       setNumPages(pdfDoc.getPageCount());
-    } catch (err) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
       setFiles([]);
-      console.error("PDF load error:", err);
+      toast.error("Failed to load PDF. Please ensure it's a valid PDF file.");
     }
   };
 
@@ -146,19 +148,18 @@ export default function DeletePagesClient() {
       // Save the new PDF
       const newPdfBytes = await newPdfDoc.save();
       const blob = new Blob([newPdfBytes], { type: "application/pdf" });
-      let url = null;
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for deleted PDF:', err); }
+      const url = safeCreateObjectURL(blob);
 
       setDeletedPdfUrl((prev) => {
-        try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+        if (prev) safeRevokeObjectURL(prev);
         return url;
       });
       const safeBase = file?.name ? file.name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
       setDownloadFileName(url ? `modified_${safeBase}.pdf` : `modified_document.pdf`);
 
       setError("");
-    } catch (err) {
-      console.error("Delete pages error:", err);
+    } catch {
+      toast.error("Failed to delete pages. Please try again.");
       setError("Failed to delete pages. Please try again.");
     } finally {
       setIsProcessing(false);
@@ -252,7 +253,7 @@ export default function DeletePagesClient() {
                 </Button>
               </div>
               {pageRangeError && (
-                <p className="text-red-600 text-sm mt-2">
+                <p className="text-destructive text-sm mt-2">
                   {pageRangeError}
                 </p>
               )}
@@ -311,7 +312,7 @@ export default function DeletePagesClient() {
         {deletedPdfUrl && !isProcessing && (
           <div className="flex flex-col gap-6 p-6 bg-background shadow-lg border border-border mt-6">
             <div className="w-full text-center space-y-4 text-foreground">
-              <h3 className="text-2xl font-semibold flex items-center justify-center text-green-400">
+              <h3 className="text-2xl font-semibold flex items-center justify-center text-emerald-600 dark:text-emerald-400">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
@@ -336,7 +337,7 @@ export default function DeletePagesClient() {
                   onClick={() => {
                     const urlToRevoke = deletedPdfUrl;
                     setTimeout(() => {
-                      try { if (urlToRevoke && typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { }
+                      safeRevokeObjectURL(urlToRevoke);
                     }, 500);
                   }}
                 >

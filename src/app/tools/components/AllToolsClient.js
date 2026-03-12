@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/Layout';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const AllToolsClient = () => {
 	const [searchQuery, setSearchQuery] = useState('');
@@ -61,10 +62,13 @@ const AllToolsClient = () => {
 			>
 				<div className="max-w-2xl mx-auto mt-8">
 					<div className="relative">
+						<Label htmlFor="tool-search" className="sr-only">Search tools</Label>
 						<Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground w-5 h-5" />
 						<Input
+							id="tool-search"
 							type="text"
 							placeholder="Search for tools..."
+							aria-label="Search tools"
 							className="pl-10 py-6 text-lg bg-gradient-to-r from-gray-800 to-gray-900 border border-border focus:border-border"
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}

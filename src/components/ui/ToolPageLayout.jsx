@@ -85,6 +85,28 @@ export default function ToolPageLayout({
   useCases = []
 }) {
   const headingText = toolName || title || "easy-pdf tool";
+  const heroTitle = title || toolName || headingText;
+  const normalizedBreadcrumbs = (Array.isArray(breadcrumbs) ? breadcrumbs : [])
+    .map((item) => ({
+      name: item?.name || item?.label,
+      url: item?.url || item?.href,
+    }))
+    .filter((item) => item.name && item.url)
+    .filter((item, index, array) => {
+      const normalizedName = item.name.trim().toLowerCase();
+      const normalizedUrl = item.url.trim().toLowerCase();
+      const isHome = normalizedName === "home" && (normalizedUrl === "/" || normalizedUrl.endsWith("/"));
+
+      if (isHome) {
+        return false;
+      }
+
+      return array.findIndex(
+        (candidate) =>
+          (candidate?.name || candidate?.label || "").trim().toLowerCase() === normalizedName &&
+          (candidate?.url || candidate?.href || "").trim().toLowerCase() === normalizedUrl
+      ) === index;
+    });
 
   // Function to get icon based on feature text
   const getFeatureIcon = (featureText) => {
@@ -126,7 +148,7 @@ export default function ToolPageLayout({
 
   return (
     <>
-      <main id="main-content" role="main" aria-label={`${headingText} main content`}>
+      <div aria-label={`${headingText} page content`}>
         <PageContainer>
           {/* Hero Section with Glass Effect */}
           <div className="relative overflow-hidden py-6 px-6 mb-4">
@@ -134,14 +156,14 @@ export default function ToolPageLayout({
             <div className="absolute inset-0 bg-background -z-10" />
             <div className="absolute inset-0 bg-grid-pattern opacity-[0.02] -z-10" />
             
-            <Hero title={title} subtitle={subtitle} headingLevel={1} />
+            <Hero title={heroTitle} subtitle={subtitle} headingLevel={1} />
           </div>
 
           {/* Breadcrumb - Enhanced Styling */}
-          {breadcrumbs.length > 0 && (
+          {normalizedBreadcrumbs.length > 0 && (
             <div className="container-standard px-6 mb-8">
               <div className="animate-in fade-in-0 slide-in-from-bottom-3 duration-500">
-                <Breadcrumb items={breadcrumbs} />
+                <Breadcrumb items={normalizedBreadcrumbs} />
               </div>
             </div>
           )}
@@ -297,15 +319,12 @@ export default function ToolPageLayout({
                   Frequently Asked Questions
                 </AccessibleHeading>
                 {(() => {
-                  // Merge provided page FAQs with common/tool-specific FAQs for richer content
+                  // Use page-authored FAQs as the source of truth. Only fall back to
+                  // shared tool/common FAQs when a page doesn't provide any.
                   const provided = Array.isArray(faqs) ? faqs : []
-                  let merged = [...provided]
-                  if (currentTool) {
-                    const extra = getFAQsForTool(currentTool)
-                    extra.forEach(e => {
-                      if (!merged.some(m => m.question?.toLowerCase() === e.question?.toLowerCase())) merged.push(e)
-                    })
-                  }
+                  const merged = provided.length > 0
+                    ? provided
+                    : (currentTool ? getFAQsForTool(currentTool) : [])
 
                   return (
                     <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto space-y-4">
@@ -362,7 +381,7 @@ export default function ToolPageLayout({
                       size="lg"
                       className="px-8 shadow-xl hover:shadow-2xl w-full sm:w-auto"
                     >
-                      <a href={primaryActionHref || "/merge"}>
+                      <a href={primaryActionHref || "/pdf/merge"}>
                         Get Started Now
                       </a>
                     </Button>
@@ -401,7 +420,7 @@ export default function ToolPageLayout({
           {/* Supporters Section */}
           <Supporters />
         </PageContainer>
-      </main>
+      </div>
     </>
   );
 }

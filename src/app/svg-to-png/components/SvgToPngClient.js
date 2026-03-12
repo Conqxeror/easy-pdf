@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function SvgToPngClient() {
   const [files, setFiles] = useState([]);
@@ -137,7 +138,7 @@ export default function SvgToPngClient() {
           // Convert SVG to data URL
           const svgData = new XMLSerializer().serializeToString(svgElement);
           const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-          const svgUrl = URL.createObjectURL(svgBlob);
+          const svgUrl = safeCreateObjectURL(svgBlob);
 
           // Set image source to the SVG URL
           img.src = svgUrl;
@@ -145,7 +146,7 @@ export default function SvgToPngClient() {
           // Clean up the object URL after image loads
           setTimeout(() => {
             try {
-              URL.revokeObjectURL(svgUrl);
+              safeRevokeObjectURL(svgUrl);
             } catch { }
           }, 1000);
         } catch (err) {
@@ -197,7 +198,7 @@ export default function SvgToPngClient() {
         item.status = "done";
         item.error = "";
       } catch (conversionError) {
-        console.error("Failed to convert SVG", conversionError);
+        toast.error(conversionError?.message || "SVG conversion failed - may contain unsupported elements");
         item.status = "error";
         item.error = conversionError?.message || "SVG conversion failed - may contain unsupported elements";
       }
@@ -318,12 +319,12 @@ export default function SvgToPngClient() {
                   </div>
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending conversion</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Converting...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Converting...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (

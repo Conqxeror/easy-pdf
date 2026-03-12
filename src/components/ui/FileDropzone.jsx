@@ -291,7 +291,7 @@ const FileDropzone = ({
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Badge variant="outline" className="gap-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
+              <CheckCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
               {files.length} {files.length === 1 ? 'file' : 'files'} selected
             </Badge>
             {files.length > 1 && (

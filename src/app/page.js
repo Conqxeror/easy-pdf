@@ -2,7 +2,7 @@ import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seo
 import HomeClient from './components/HomeClient';
 
 export const metadata = generateEnhancedMetadata({
-  title: "easy-pdf - Free Online PDF Tools | Merge, Split, Compress PDF",
+  title: "Free Online PDF Tools | Merge, Split, Compress PDFs",
   description: "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser. Privacy-first, secure, and completely free with no file uploads.",
   keywords: [
     // Core PDF Operations

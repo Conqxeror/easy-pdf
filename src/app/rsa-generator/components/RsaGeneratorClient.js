@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Copy, Check, Key, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 
 export default function RsaGeneratorClient() {
   const [keySize, setKeySize] = useState("2048");
@@ -39,8 +40,8 @@ export default function RsaGeneratorClient() {
         public: formatPem(publicKey, "PUBLIC KEY"),
         private: formatPem(privateKey, "PRIVATE KEY"),
       });
-    } catch (err) {
-      console.error(err);
+    } catch {
+      toast.error("Failed to generate key pair");
     } finally {
       setIsGenerating(false);
     }
@@ -124,31 +125,31 @@ export default function RsaGeneratorClient() {
           <div className="grid gap-8 md:grid-cols-2 animate-in fade-in slide-in-from-bottom-4">
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label className="text-green-600 font-bold">Public Key</Label>
+                <Label className="text-emerald-600 dark:text-emerald-400 font-bold">Public Key</Label>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => copyToClipboard(keys.public, true)}
                 >
-                  {copiedPublic ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                  {copiedPublic ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>
               <Textarea
                 readOnly
                 value={keys.public}
-                className="font-mono text-xs h-[300px] bg-green-50/50"
+                className="font-mono text-xs h-[300px] bg-muted"
               />
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <Label className="text-red-600 font-bold">Private Key</Label>
+                <Label className="text-destructive font-bold">Private Key</Label>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => copyToClipboard(keys.private, false)}
                 >
-                  {copiedPrivate ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                  {copiedPrivate ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                 </Button>
               </div>
               <Textarea
@@ -156,7 +157,7 @@ export default function RsaGeneratorClient() {
                 value={keys.private}
                 className="font-mono text-xs h-[300px] bg-red-50/50"
               />
-              <p className="text-xs text-red-500 font-medium mt-2">
+              <p className="text-xs text-destructive font-medium mt-2">
                 Warning: Never share your private key with anyone!
               </p>
             </div>

@@ -9,6 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Download, ArrowRightLeft, Trash2, Copy } from "lucide-react";
 import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 export default function JsonXmlConverterClient() {
   const [input, setInput] = useState("");
@@ -75,14 +76,14 @@ export default function JsonXmlConverterClient() {
     const blob = new Blob([output], {
       type: mode === "json-to-xml" ? "application/xml" : "application/json",
     });
-    const url = URL.createObjectURL(blob);
+    const url = safeCreateObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `converted.${mode === "json-to-xml" ? "xml" : "json"}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    safeRevokeObjectURL(url);
   };
 
   const handleClear = () => {

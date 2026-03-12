@@ -1,30 +1,38 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import SponsorDashboard from '@/components/ui/SponsorDashboard';
 import { trackEvent } from '@/lib/analytics';
 
 const SponsorDashboardClient = () => {
 	const router = useRouter();
+	const accessCode = useMemo(() => process.env.NEXT_PUBLIC_SPONSOR_DASHBOARD_ACCESS_CODE || '', []);
 	const [isAuthorized, setIsAuthorized] = useState(() => {
 		try {
 			return typeof window !== 'undefined' && sessionStorage.getItem('sponsor_dashboard_auth') === 'true';
 		} catch { return false; }
 	});
 	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
 
 	const handleLogin = (e) => {
 		e.preventDefault();
 
-		// Simple password protection (in production, use proper auth)
-		if (password === 'sponsor2024' || password === 'demo') {
+		if (!accessCode) {
+			setError('Dashboard access is disabled in this environment. Configure a dedicated access code before using this route.');
+			trackEvent('sponsor_dashboard_login', { success: false, reason: 'missing_access_code' });
+			return;
+		}
+
+		if (password === accessCode) {
 			setIsAuthorized(true);
 			try { sessionStorage.setItem('sponsor_dashboard_auth', 'true'); } catch { /* ignore */ }
+			setError('');
 			trackEvent('sponsor_dashboard_login', { success: true });
 		} else {
-			alert('Invalid password');
-			trackEvent('sponsor_dashboard_login', { success: false });
+			setError('Invalid access code.');
+			trackEvent('sponsor_dashboard_login', { success: false, reason: 'invalid_access_code' });
 		}
 	};
 
@@ -37,16 +45,21 @@ const SponsorDashboardClient = () => {
 					</h1>
 
 					<form onSubmit={handleLogin}>
+						{error && (
+							<p className="mb-4 border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+								{error}
+							</p>
+						)}
 						<div className="mb-4">
 							<label className="block text-foreground text-sm font-medium mb-2">
-								Access Password
+								Access Code
 							</label>
 							<input
 								type="password"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								className="w-full bg-background border border-border px-3 py-2 text-foreground focus:outline-none focus:border-border"
-								placeholder="Enter dashboard password"
+								placeholder="Enter sponsor dashboard access code"
 								required
 							/>
 						</div>
@@ -61,7 +74,7 @@ const SponsorDashboardClient = () => {
 
 					<div className="mt-6 text-center">
 						<p className="text-foreground text-sm">
-							Demo password: <code className="bg-background px-2 py-1">demo</code>
+							This route is a preview gate only. For real sponsor access, move authentication to a server-backed flow.
 						</p>
 						<button
 							onClick={() => router.push('/sponsors')}

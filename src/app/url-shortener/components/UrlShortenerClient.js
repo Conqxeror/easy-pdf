@@ -4,11 +4,13 @@ import React, { useState } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Trash2, Copy, Check } from "lucide-react";
+import { Trash2, Copy, Check, ExternalLink } from "lucide-react";
 
 export default function UrlShortenerClient() {
   const [url, setUrl] = useState("");
+  const [error, setError] = useState("");
   const [links, setLinks] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem("shortened_links");
@@ -21,21 +23,26 @@ export default function UrlShortenerClient() {
   const shorten = () => {
     if (!url) return;
 
-    // Simple hash for ID
-    const id = Math.random().toString(36).substring(2, 8);
-    const shortUrl = `${window.location.origin}/s/${id}`;
+    try {
+      const normalizedUrl = new URL(url.startsWith('http') ? url : `https://${url}`);
+      const id = globalThis.crypto?.randomUUID ? globalThis.crypto.randomUUID().slice(0, 8) : Math.random().toString(36).substring(2, 10);
+      const shortUrl = `${window.location.origin}/s/${id}`;
 
-    const newLink = {
-      id,
-      original: url,
-      short: shortUrl,
-      created: new Date().toISOString()
-    };
+      const newLink = {
+        id,
+        original: normalizedUrl.toString(),
+        short: shortUrl,
+        created: new Date().toISOString()
+      };
 
-    const newLinks = [newLink, ...links];
-    setLinks(newLinks);
-    localStorage.setItem("shortened_links", JSON.stringify(newLinks));
-    setUrl("");
+      const newLinks = [newLink, ...links];
+      setLinks(newLinks);
+      localStorage.setItem("shortened_links", JSON.stringify(newLinks));
+      setUrl("");
+      setError("");
+    } catch {
+      setError('Enter a valid URL, including a domain name.');
+    }
   };
 
   const remove = (id) => {
@@ -50,22 +57,27 @@ export default function UrlShortenerClient() {
     setTimeout(() => setCopied(null), 2000);
   };
 
+  const openShortLink = (shortUrl) => {
+    window.open(shortUrl, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <ToolPageLayout
       title="URL Shortener"
-      subtitle="Create short links for your long URLs (Local Only)."
+      subtitle="Create browser-local short links that resolve on this device without any server."
       toolName="URL Shortener"
-      toolDescription="A privacy-focused URL shortener that runs entirely in your browser. Links are stored locally and work only on this device."
+      toolDescription="Create compact links that resolve through your browser's local storage. These links work on the same browser profile and device, with no backend required."
       currentTool="url-shortener"
       steps={[
         "Paste your long URL.",
         "Click 'Shorten'.",
-        "Copy and use your new short link."
+        "Open or copy the generated short link.",
+        "Use it again later from the same browser profile and device."
       ]}
       faqs={[
         {
           question: "Do these links work everywhere?",
-          answer: "No, this is a local demo tool. The links are generated locally and stored in your browser's LocalStorage. They won't work if shared with others unless we implement a backend database."
+          answer: "No. The redirect data is stored in this browser only, so the short links work on the same browser profile and device where they were created."
         }
       ]}
       breadcrumbs={[
@@ -74,6 +86,12 @@ export default function UrlShortenerClient() {
       ]}
     >
       <div className="max-w-3xl mx-auto space-y-8">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <div className="flex gap-4">
           <div className="flex-1">
             <Input
@@ -110,6 +128,15 @@ export default function UrlShortenerClient() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs text-primary-foreground">{link.short}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6"
+                          onClick={() => openShortLink(link.short)}
+                          aria-label="Open local short link"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                        </Button>
                         <Button
                           variant="ghost"
                           size="icon"

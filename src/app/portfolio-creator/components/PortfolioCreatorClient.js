@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,9 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2, Download, User, Briefcase, GraduationCap, Star } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function PortfolioCreatorClient() {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState("");
   const [portfolioData, setPortfolioData] = useState({
     // Personal Information
     fullName: '',
@@ -133,10 +137,11 @@ export default function PortfolioCreatorClient() {
 
   const generatePortfolioPDF = async () => {
     if (!portfolioData.fullName || !portfolioData.title) {
-      alert('Please fill in your full name and professional title');
+      setError('Please fill in your full name and professional title.');
       return;
     }
 
+    setError("");
     setIsGenerating(true);
     trackEvent('portfolio_generation_started', { template: portfolioData.template });
 
@@ -554,7 +559,7 @@ export default function PortfolioCreatorClient() {
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       let url;
       try {
-        try { url = typeof URL !== 'undefined' ? URL.createObjectURL(blob) : null; } catch (err) { console.error('Error creating portfolio object URL:', err); url = null; }
+        try { url = safeCreateObjectURL(blob); } catch { toast.error('Failed to create download link'); url = null; }
 
         const link = document.createElement('a');
         link.href = url;
@@ -569,10 +574,10 @@ export default function PortfolioCreatorClient() {
         link.remove();
 
         setTimeout(() => {
-          try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+          try { safeRevokeObjectURL(url); } catch { }
         }, 500);
       } catch (err) {
-        try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { }
+        try { safeRevokeObjectURL(url); } catch { }
         throw err;
       }
 
@@ -587,8 +592,7 @@ export default function PortfolioCreatorClient() {
       });
 
     } catch (error) {
-      console.error('Error generating portfolio:', error);
-      alert('Error generating portfolio. Please try again.');
+      setError('Error generating the portfolio PDF. Please try again.');
       trackEvent('portfolio_generation_failed', { error: error.message });
     } finally {
       setIsGenerating(false);
@@ -642,6 +646,12 @@ export default function PortfolioCreatorClient() {
       ]}
     >
       <div className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         {/* Header */}
         <div className="text-center">
           <h1 className="text-3xl font-bold text-foreground dark:text-foreground mb-2">
@@ -754,7 +764,7 @@ export default function PortfolioCreatorClient() {
                     onClick={() => removeExperience(index)}
                     size="sm"
                     variant="outline"
-                    className="text-red-600 hover:text-red-700"
+                    className="text-destructive hover:text-destructive/80"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -828,7 +838,7 @@ export default function PortfolioCreatorClient() {
                     onClick={() => removeEducation(index)}
                     size="sm"
                     variant="outline"
-                    className="text-red-600 hover:text-red-700"
+                    className="text-destructive hover:text-destructive/80"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -899,7 +909,7 @@ export default function PortfolioCreatorClient() {
                     onClick={() => removeSkill(index)}
                     size="sm"
                     variant="outline"
-                    className="text-red-600 hover:text-red-700"
+                    className="text-destructive hover:text-destructive/80"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -954,7 +964,7 @@ export default function PortfolioCreatorClient() {
                     onClick={() => removeProject(index)}
                     size="sm"
                     variant="outline"
-                    className="text-red-600 hover:text-red-700"
+                    className="text-destructive hover:text-destructive/80"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

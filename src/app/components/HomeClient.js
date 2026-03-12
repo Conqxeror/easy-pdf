@@ -91,11 +91,16 @@ export default function HomeClient() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
           >
-            <Button size="lg" className="text-base px-8 h-12 rounded-none" onClick={() => document.getElementById('tools').scrollIntoView({ behavior: 'smooth' })}>
-              Start Encrypting <ArrowRight className="ml-2" />
+            <Button
+              size="lg"
+              className="text-base px-8 h-12 rounded-none"
+              onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}
+              aria-label="Explore available tools"
+            >
+              Explore Tools <ArrowRight className="ml-2" />
             </Button>
-            <Button variant="outline" size="lg" className="text-base px-8 h-12 rounded-none">
-              Learn More
+            <Button asChild variant="outline" size="lg" className="text-base px-8 h-12 rounded-none">
+              <Link href="/about">Learn More</Link>
             </Button>
           </motion.div>
         </div>

@@ -29,8 +29,7 @@ export default function UrlEncoderClient() {
 			syncEncode(decoded);
 			setError("");
 			toast.success("Decoded string moved to the plain editor");
-		} catch (err) {
-			console.error("Failed to decode URL", err);
+		} catch {
 			setError("The encoded string is invalid. Make sure percent sequences are complete (e.g., %20).");
 		}
 	};

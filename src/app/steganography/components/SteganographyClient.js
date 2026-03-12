@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,6 +16,7 @@ export default function SteganographyClient() {
   const [message, setMessage] = useState("");
   const [resultImage, setResultImage] = useState(null);
   const [decodedMessage, setDecodedMessage] = useState("");
+  const [error, setError] = useState("");
   const canvasRef = useRef(null);
 
   const handleImageUpload = (e) => {
@@ -30,11 +32,13 @@ export default function SteganographyClient() {
       reader.readAsDataURL(file);
       setResultImage(null);
       setDecodedMessage("");
+      setError("");
     }
   };
 
   const encode = () => {
     if (!image || !message) return;
+    setError("");
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -55,7 +59,7 @@ export default function SteganographyClient() {
     binaryMessage += "00000000";
 
     if (binaryMessage.length > data.length / 4) {
-      alert("Message is too long for this image.");
+      setError("Message is too long for this image. Use a larger PNG or shorten the message.");
       return;
     }
 
@@ -78,6 +82,7 @@ export default function SteganographyClient() {
 
   const decode = () => {
     if (!image) return;
+    setError("");
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -134,6 +139,12 @@ export default function SteganographyClient() {
       ]}
     >
       <div className="max-w-4xl mx-auto">
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <Tabs value={mode} onValueChange={setMode} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8">
             <TabsTrigger value="encode">Hide Message (Encode)</TabsTrigger>

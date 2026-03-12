@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { loadFfmpegClient } from "@/lib/ffmpegClient";
 import { Button } from "@/components/ui/button";
@@ -119,7 +120,7 @@ export default function M4aMp3ConverterClient() {
 
       setProgress(100);
     } catch (err) {
-      console.error("Audio conversion failed", err);
+      toast.error(err?.message || "Audio conversion failed");
       setError(err?.message || "Audio conversion failed. Please try another file.");
     } finally {
       setIsProcessing(false);
@@ -218,10 +219,10 @@ export default function M4aMp3ConverterClient() {
         )}
 
         {downloadUrl && file && (
-          <div className="p-4 bg-green-50 rounded-none border border-green-200">
-            <p className="font-semibold text-green-800">Audio conversion complete!</p>
+          <div className="p-4 bg-muted rounded-none border border-border">
+            <p className="font-semibold text-foreground">Audio conversion complete!</p>
             <a
-              className="text-blue-600 underline inline-block mt-2 px-4 py-2 bg-blue-100 rounded-none hover:bg-blue-200 transition-colors"
+              className="text-primary-foreground underline inline-block mt-2 px-4 py-2 bg-primary rounded-none hover:bg-primary/90 transition-colors"
               href={downloadUrl}
               download={`${file.name.replace(/\.[^/.]+$/, "")}.${conversionDirection === "m4a-to-mp3" ? "mp3" : "m4a"}`}
             >

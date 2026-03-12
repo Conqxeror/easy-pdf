@@ -12,6 +12,7 @@ import { LiveRegion } from "@/components/ui/AccessibilityEnhancements";
 // Dynamically import heavy PDF libraries only when needed
 import { usePDFLib, usePDFJS } from "@/lib/pdfUtils";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 
 export default function MergeClient() {
   const [files, setFiles] = useState([]);
@@ -78,7 +79,6 @@ export default function MergeClient() {
         renderTaskRef.current = null;
       } catch (e) {
         if (e.name !== "RenderingCancelledException") {
-          console.error("Error rendering PDF preview:", e);
           setError("Failed to render PDF preview.");
         }
       }
@@ -209,8 +209,8 @@ export default function MergeClient() {
         const docProxy = await pdfjs.getDocument({ data: mergedPdfBytes }).promise;
         setMergedPdfDocProxy(docProxy);
       }
-    } catch (err) {
-      console.error("Error merging PDFs:", err);
+    } catch {
+      toast.error("Error merging PDFs. Please try again.");
       setError("Failed to merge PDFs. Please try again with different files.");
       setStatusMessage("Error: Failed to merge PDFs. Please try again.");
     }
@@ -342,7 +342,7 @@ export default function MergeClient() {
         <div className="flex flex-col gap-6 p-6 bg-card shadow-lg border border-border rounded-none">
           <div className="w-full text-center space-y-4">
             <h3 className="text-2xl font-semibold flex items-center justify-center text-foreground">
-              <Download className="w-6 h-6 mr-2 text-green-600" />
+              <Download className="w-6 h-6 mr-2 text-emerald-600 dark:text-emerald-400" />
               Merged PDF Ready
             </h3>
 

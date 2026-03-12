@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Upload, Download, Loader2, Image as ImageIcon, AlertCircle } from "lucide-react";
 import { removeBackground } from "@imgly/background-removal";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 export default function RemoveBackgroundClient() {
   const [image, setImage] = useState(null);
@@ -16,7 +18,8 @@ export default function RemoveBackgroundClient() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file));
+      if (image) safeRevokeObjectURL(image);
+      setImage(safeCreateObjectURL(file));
       setProcessedImage(null);
       setError(null);
       processImage(file);
@@ -29,10 +32,10 @@ export default function RemoveBackgroundClient() {
     try {
       // Using default configuration which fetches models from CDN
       const blob = await removeBackground(file);
-      const url = URL.createObjectURL(blob);
+      const url = safeCreateObjectURL(blob);
       setProcessedImage(url);
-    } catch (err) {
-      console.error("Background removal failed:", err);
+    } catch {
+      toast.error("Failed to remove background. Please try another image.");
       setError("Failed to remove background. Please try another image.");
     } finally {
       setIsProcessing(false);

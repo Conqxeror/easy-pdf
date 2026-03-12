@@ -195,8 +195,7 @@ export default function JpgToPdfPage() {
       setProgress(100);
       setProcessingMessage("Conversion complete!");
 
-    } catch (e) {
-      console.error("Error converting to PDF:", e);
+    } catch {
       setError("Failed to create PDF. Please try again.");
     } finally {
       setIsProcessing(false);

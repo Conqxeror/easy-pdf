@@ -5,6 +5,8 @@ import { loadPdfLib, loadPdfJs } from "@/lib/pdfjsWorker";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
+import { safeCreateObjectURL } from "@/lib/enhancedUX";
 import { RotateCw, RotateCcw, RefreshCw } from "lucide-react";
 
 export default function RotateClient() {
@@ -77,7 +79,7 @@ export default function RotateClient() {
         renderTaskRefs.current[pageIndex] = null;
       } catch (e) {
         if (e.name !== "RenderingCancelledException") {
-          console.error(`Error rendering page ${pageIndex + 1}:`, e);
+          toast.error(`Error rendering page ${pageIndex + 1}`);
         }
       }
     },
@@ -123,9 +125,8 @@ export default function RotateClient() {
         initialRotations[i] = 0;
       }
       setRotations(initialRotations);
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF.");
-      console.error(e);
     }
   };
 
@@ -171,14 +172,13 @@ export default function RotateClient() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       let url = null;
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for rotated PDF:', err); url = null; }
+      try { url = safeCreateObjectURL(blob); } catch { url = null; }
       setRotatedPdfUrl(url);
 
       const safeName = files[0].name.replace(/\.pdf$/i, "");
       setDownloadFileName(`${safeName}_rotated.pdf`);
-    } catch (e) {
-      setError("Failed to rotate PDF.");
-      console.error(e);
+    } catch {
+      toast.error("Failed to rotate PDF.");
     } finally {
       setIsProcessing(false);
     }
@@ -265,8 +265,8 @@ export default function RotateClient() {
         )}
 
         {rotatedPdfUrl && (
-          <div className="mt-8 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-none text-center">
-            <h3 className="text-xl font-semibold text-green-800 dark:text-green-300 mb-4">Success!</h3>
+          <div className="mt-8 p-6 bg-muted border border-border rounded-none text-center">
+            <h3 className="text-xl font-semibold text-foreground mb-4">Success!</h3>
             <Button asChild size="lg" variant="success">
               <a href={rotatedPdfUrl} download={downloadFileName}>
                 Download Rotated PDF

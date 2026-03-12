@@ -14,6 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import JSZip from "jszip";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 
 export default function SplitPdfPage() {
   const [file, setFile] = useState(null);
@@ -71,9 +72,9 @@ export default function SplitPdfPage() {
       // Set default range to all pages if a file is loaded
       setStartPage("1");
       setEndPage(String(pdfDoc.getPageCount()));
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF load error:", e);
+      toast.error("Failed to load PDF.");
       setTotalPages(0);
       setFile(null); // Clear file on error
       setFileName("");
@@ -258,8 +259,8 @@ export default function SplitPdfPage() {
         setCurrentProgress(100);
         setProcessingMessage("Split complete!");
       }
-    } catch (e) {
-      console.error("Split PDF error:", e);
+    } catch {
+      toast.error("Failed to split PDF.");
       setError("Failed to split PDF. Please try again.");
     } finally {
       setIsProcessing(false);
@@ -315,10 +316,10 @@ export default function SplitPdfPage() {
       toolDescription={toolDescription}
       steps={steps}
       faqs={faqs}
-      currentTool="split"
+      currentTool="pdf/split"
       breadcrumbs={[
         { label: 'Home', href: '/' },
-        { label: 'Split PDF', href: '/split' }
+        { label: 'Split PDF', href: '/pdf/split' }
       ]}
     >
       <div className="space-y-6">

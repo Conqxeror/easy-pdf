@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { copyToClipboard, sanitizeFileName } from "@/lib/enhancedUX";
+import { copyToClipboard, sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 const DEFAULT_CSV_SAMPLE = `name,email,role\nAlice,alice@example.com,Admin\nBob,bob@example.com,Editor`;
 const DEFAULT_JSON_SAMPLE = `[
@@ -81,7 +81,6 @@ export default function CsvJsonConverterClient() {
       const blob = new Blob([jsonStr], { type: "application/json" });
       setDownloadBlob({ blob, filename: `${sanitizeFileName("converted")}.json` });
     } catch (conversionError) {
-      console.error("CSV to JSON conversion failed", conversionError);
       setError(conversionError.message || "Failed to convert CSV to JSON");
     }
   }, [csvInput]);
@@ -103,7 +102,6 @@ export default function CsvJsonConverterClient() {
       const blob = new Blob([csv], { type: "text/csv" });
       setDownloadBlob({ blob, filename: `${sanitizeFileName("converted")}.csv` });
     } catch (conversionError) {
-      console.error("JSON to CSV conversion failed", conversionError);
       setError(conversionError.message || "Failed to convert JSON to CSV");
     }
   }, [jsonInput]);
@@ -138,13 +136,15 @@ export default function CsvJsonConverterClient() {
   const downloadResult = () => {
     if (!downloadBlob) return;
     const link = document.createElement("a");
-    link.href = URL.createObjectURL(downloadBlob.blob);
+    const url = safeCreateObjectURL(downloadBlob.blob);
+    if (!url) return;
+    link.href = url;
     link.download = downloadBlob.filename;
     link.style.display = "none";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    setTimeout(() => URL.revokeObjectURL(link.href), 500);
+    setTimeout(() => safeRevokeObjectURL(url), 500);
   };
 
   const toolName = "CSV ↔ JSON Converter";

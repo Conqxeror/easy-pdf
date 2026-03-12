@@ -6,6 +6,8 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 import {
   Card,
   CardHeader,
@@ -181,7 +183,7 @@ export default function PageNumbersClient() {
       if (e.name === "RenderingCancelledException") {
         console.log("PDF rendering cancelled during preview:", e);
       } else {
-        console.error("Error rendering PDF preview:", e);
+        toast.error("Error rendering PDF preview.");
         setError("Failed to render PDF preview.");
       }
     }
@@ -265,9 +267,9 @@ export default function PageNumbersClient() {
       setPdfDocProxy(pdf); // This will trigger preview render via useEffect
       setNumPages(pdf.numPages);
       setPageRangeEnd(pdf.numPages); // Set default end range to total pages
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF loading error:", e);
+      toast.error("Failed to load PDF.");
       setFiles([]);
     }
   };
@@ -428,17 +430,16 @@ export default function PageNumbersClient() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       // Revoke previous numbered URL if present
-      try { if (numberedPdfUrl && typeof URL !== 'undefined' && !String(numberedPdfUrl).startsWith('data:')) URL.revokeObjectURL(numberedPdfUrl); } catch { /* ignore */ }
+      try { if (numberedPdfUrl) safeRevokeObjectURL(numberedPdfUrl); } catch { /* ignore */ }
       let url = null;
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for numbered PDF:', err); url = null; }
+      try { url = safeCreateObjectURL(blob); } catch { url = null; }
       setNumberedPdfUrl(url);
       const baseName = files && files[0] && files[0].name ? files[0].name.replace(/\.[^/.]+$/, "") : "document";
       setDownloadFileName(`numbered_${baseName}.pdf`);
 
       setError("");
-    } catch (e) {
-      setError("Failed to add page numbers/header/footer.");
-      console.error("Page numbering error:", e);
+    } catch {
+      toast.error("Failed to add page numbers/header/footer.");
     } finally {
       setIsProcessing(false);
     }

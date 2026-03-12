@@ -82,7 +82,6 @@ export default function XlsxToCsvClient() {
       setProgress(100);
 
     } catch (err) {
-      console.error("Conversion error:", err);
       if (err.message && err.message.includes("Cannot find module")) {
         setError("The xlsx library is required for this tool. Please install it using npm install xlsx.");
       } else {

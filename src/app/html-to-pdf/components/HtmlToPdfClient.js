@@ -188,7 +188,7 @@ export default function HtmlToPdfClient() {
 			]}
 			breadcrumbs={[
 				{ label: "Home", href: "/" },
-				{ label: "Convert to PDF", href: "/categories?filter=convert-to-pdf" },
+				{ label: "Convert & Create", href: "/categories/convert-create" },
 				{ label: "HTML to PDF", href: "/html-to-pdf" }
 			]}
 		>

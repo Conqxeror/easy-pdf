@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import CryptoJS from "crypto-js";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +10,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Copy, FileText, Type } from "lucide-react";
 import { toast } from "sonner";
 import FileDropzone from "@/components/ui/FileDropzone";
+
+let cryptoJsLoaderPromise;
+
+const loadCryptoJs = async () => {
+  if (!cryptoJsLoaderPromise) {
+    cryptoJsLoaderPromise = import("crypto-js").then((module) => module.default);
+  }
+
+  return cryptoJsLoaderPromise;
+};
 
 export default function HashGeneratorClient() {
   const [textInput, setTextInput] = useState("");
@@ -25,11 +34,14 @@ export default function HashGeneratorClient() {
   const [isProcessing, setIsProcessing] = useState(false);
   // Use Sonner toast directly; a custom hook (`use-toast`) was removed/renamed.
 
-  const calculateTextHashes = useCallback((text) => {
+  const calculateTextHashes = useCallback(async (text) => {
     if (!text) {
       setHashes({ md5: "", sha1: "", sha256: "", sha512: "" });
       return;
     }
+
+    const CryptoJS = await loadCryptoJs();
+
     setHashes({
       md5: CryptoJS.MD5(text).toString(),
       sha1: CryptoJS.SHA1(text).toString(),
@@ -41,7 +53,7 @@ export default function HashGeneratorClient() {
   const handleTextChange = (e) => {
     const val = e.target.value;
     setTextInput(val);
-    calculateTextHashes(val);
+    void calculateTextHashes(val);
   };
 
   const handleFile = (files) => {
@@ -51,8 +63,9 @@ export default function HashGeneratorClient() {
     }
   };
 
-  const calculateFileHash = (fileToHash) => {
+  const calculateFileHash = async (fileToHash) => {
     setIsProcessing(true);
+    const CryptoJS = await loadCryptoJs();
     const reader = new FileReader();
     reader.onload = (e) => {
       const binary = e.target.result;
@@ -68,7 +81,7 @@ export default function HashGeneratorClient() {
     };
     reader.onerror = () => {
       setIsProcessing(false);
-      toast({ title: "Error", description: "Failed to read file", variant: "destructive" });
+      toast.error("Failed to read file");
     };
     reader.readAsArrayBuffer(fileToHash);
   };
@@ -76,10 +89,7 @@ export default function HashGeneratorClient() {
   const copyToClipboard = (text, type) => {
     if (!text) return;
     navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied!",
-      description: `${type} hash copied to clipboard.`,
-    });
+    toast.success(`${type} hash copied to clipboard.`);
   };
 
   const toolName = "Hash Generator";

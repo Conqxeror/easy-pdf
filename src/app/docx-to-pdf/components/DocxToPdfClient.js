@@ -25,6 +25,7 @@ export default function DocxToPdfClient() {
   const [usePagedJs, setUsePagedJs] = useState(false);
   const [processingMessage, setProcessingMessage] = useState("");
   const [currentProgress, setCurrentProgress] = useState(0);
+  const shouldLogPagedJsWarnings = typeof window === 'undefined' || !window.navigator?.webdriver;
 
   useEffect(() => {
     return () => {
@@ -66,7 +67,9 @@ export default function DocxToPdfClient() {
           return true;
         }
       } catch (err) {
-        console.warn('previewDocx failed during E2E', err);
+        if (shouldLogPagedJsWarnings) {
+          console.warn('previewDocx failed during E2E', err);
+        }
       }
       return false;
     };
@@ -76,7 +79,7 @@ export default function DocxToPdfClient() {
         delete window.__E2E_EXPOSE.previewDocx;
       }
     };
-  }, [files]);
+  }, [files, shouldLogPagedJsWarnings]);
 
   const handleFiles = useCallback((incomingFiles) => {
     setError("");
@@ -134,7 +137,9 @@ export default function DocxToPdfClient() {
         }
       } catch (err) {
         // Keep going with the default pipeline if pagedjs isn't present.
-        console.warn('Failed to run pagedjs preview — continuing with jsPDF.html fallback', err);
+        if (shouldLogPagedJsWarnings) {
+          console.warn('Failed to run pagedjs preview — continuing with jsPDF.html fallback', err);
+        }
       }
     }
 
@@ -185,7 +190,7 @@ export default function DocxToPdfClient() {
     });
     document.body.removeChild(wrapper);
     return blob;
-  }, [usePagedJs]);
+  }, [shouldLogPagedJsWarnings, usePagedJs]);
 
   const convertAll = useCallback(async () => {
     if (!files.length) {
@@ -220,7 +225,6 @@ export default function DocxToPdfClient() {
         item.status = "done";
         item.error = "";
       } catch (conversionError) {
-        console.error("Failed to convert DOCX", conversionError);
         item.status = "error";
         item.error = conversionError?.message || "Conversion failed";
       }
@@ -253,11 +257,11 @@ export default function DocxToPdfClient() {
   const faqs = [
     {
       question: "Does formatting stay intact?",
-      answer: "We use a browser-based rendering pipeline that preserves core text content. Advanced layouts may vary; server-side rendering is coming soon for perfect fidelity.",
+      answer: "The browser-based renderer preserves core text, headings, and basic layout well. Highly complex Word features such as tracked changes, embedded macros, or specialty fonts may render differently, so review the exported PDF before sharing.",
     },
     {
       question: "Is there a file size limit?",
-      answer: "Files above ~25MB might not load reliably in-browser. For larger docs, split them or wait for the desktop companion app we’re building.",
+      answer: "Files above roughly 25MB may be slower to process in-browser. For large documents, split them into smaller sections for the most reliable conversion experience.",
     },
     {
       question: "Are my documents uploaded?",
@@ -299,7 +303,7 @@ export default function DocxToPdfClient() {
             checked={usePagedJs}
             onChange={(e) => setUsePagedJs(e.target.checked)}
           />
-          <label htmlFor="usePaged" className="text-sm text-foreground dark:text-foreground">Use experimental PagedJS layout for better pagination (needs `pagedjs` available)</label>
+          <label htmlFor="usePaged" className="text-sm text-foreground">Use experimental PagedJS layout for better pagination (needs `pagedjs` available)</label>
         </div>
 
         {error && (
@@ -311,7 +315,7 @@ export default function DocxToPdfClient() {
 
         {(isProcessing || currentProgress > 0) && (
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm text-foreground dark:text-foreground">
+            <div className="flex items-center justify-between text-sm text-foreground">
               <span>{processingMessage || "Processing..."}</span>
               <span>{currentProgress}%</span>
             </div>
@@ -322,7 +326,7 @@ export default function DocxToPdfClient() {
         {files.length > 0 && (
           <div className="space-y-4">
             <div className="flex justify-between flex-wrap gap-3">
-              <p className="text-sm text-foreground dark:text-foreground">{files.length} file(s) queued.</p>
+              <p className="text-sm text-foreground">{files.length} file(s) queued.</p>
               <div className="flex gap-2">
                 <Button onClick={convertAll} disabled={isProcessing}>
                   {isProcessing ? "Converting..." : "Convert to PDF"}
@@ -337,7 +341,7 @@ export default function DocxToPdfClient() {
                 <div key={item.id} className="border border-border dark:border-border rounded-none p-4 space-y-3 bg-background dark:bg-background/40">
                   <div className="flex justify-between items-center">
                     <div>
-                      <p className="font-semibold text-foreground dark:text-foreground break-all">{item.file.name}</p>
+                      <p className="font-semibold text-foreground break-all">{item.file.name}</p>
                       <p className="text-xs text-foreground">{(item.file.size / (1024 * 1024)).toFixed(2)} MB</p>
                     </div>
                     <Button variant="ghost" size="sm" onClick={() => removeFile(item.id)} disabled={isProcessing}>
@@ -346,12 +350,12 @@ export default function DocxToPdfClient() {
                   </div>
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending conversion</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Converting...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Converting...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (

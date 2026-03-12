@@ -85,9 +85,8 @@ export default function ReportGeneratorClient() {
     try {
       // ...existing PDF logic...
       setBanner({ type: 'success', message: 'PDF generated and download started.' });
-    } catch (error) {
+    } catch {
       setBanner({ type: 'error', message: 'Failed to generate PDF.' });
-      console.error('PDF generation error:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -134,7 +133,6 @@ export default function ReportGeneratorClient() {
       setImportError("Failed to import report: " + error.message);
       setBanner({ type: 'error', message: 'Failed to import report.' });
       setImportLoading(false);
-      console.error('Import error:', error);
     }
   };
 
@@ -152,8 +150,7 @@ export default function ReportGeneratorClient() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (err) {
-      console.error('Export failed:', err);
+    } catch {
       setBanner({ type: 'error', message: 'Failed to export report.' });
     } finally {
       setTimeout(() => { try { safeRevokeObjectURL(url); } catch { } }, 500);
@@ -368,13 +365,13 @@ export default function ReportGeneratorClient() {
                       <SelectContent>
                         <SelectItem value="up">
                           <div className="flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4 text-green-500" />
+                            <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                             Up
                           </div>
                         </SelectItem>
                         <SelectItem value="down">
                           <div className="flex items-center gap-2">
-                            <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />
+                            <TrendingUp className="w-4 h-4 text-destructive rotate-180" />
                             Down
                           </div>
                         </SelectItem>
@@ -387,7 +384,7 @@ export default function ReportGeneratorClient() {
                         onClick={() => removeMetric(index)}
                         size="sm"
                         variant="outline"
-                        className="text-red-600"
+                        className="text-destructive"
                         aria-label={`Remove Metric ${index + 1}`}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -431,7 +428,7 @@ export default function ReportGeneratorClient() {
                             onClick={() => removeSection(index)}
                             size="sm"
                             variant="outline"
-                            className="text-red-600 mt-6"
+                            className="text-destructive mt-6"
                             aria-label={`Remove Section ${index + 1}`}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -486,7 +483,7 @@ export default function ReportGeneratorClient() {
                         onClick={() => removeRecommendation(index)}
                         size="sm"
                         variant="outline"
-                        className="text-red-600 mt-6"
+                        className="text-destructive mt-6"
                         aria-label={`Remove Recommendation ${index + 1}`}
                       >
                         <Trash2 className="w-4 h-4" />

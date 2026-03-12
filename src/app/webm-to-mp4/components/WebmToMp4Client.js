@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
@@ -94,7 +95,7 @@ export default function WebmToMp4Client() {
       try { ffmpeg.FS("unlink", inName); } catch { }
       try { ffmpeg.FS("unlink", outName); } catch { }
     } catch (err) {
-      console.error("Video format conversion failed", err);
+      toast.error(err?.message || "Video format conversion failed");
       setError(err?.message || "Conversion failed. Try a different input or smaller file.");
     } finally {
       setIsProcessing(false);
@@ -140,9 +141,9 @@ export default function WebmToMp4Client() {
         )}
 
         {downloadUrl && (
-          <div className="p-3 bg-green-50 rounded-none">
+          <div className="p-3 bg-muted rounded-none">
             <p className="font-semibold">Converted file ready</p>
-            <a href={downloadUrl} download={downloadName || true} className="text-blue-600 underline">Download</a>
+            <a href={downloadUrl} download={downloadName || true} className="text-primary-foreground bg-primary px-3 py-1 rounded-none underline">Download</a>
           </div>
         )}
 

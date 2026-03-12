@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
@@ -11,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, FileText, Image as ImageIcon, Brain, Copy, Zap, Globe, CheckCircle } from 'lucide-react';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 
 // ✅ OPTIMIZATION: Lazy load heavy dependencies
 // These are loaded only when user starts processing
@@ -31,6 +34,7 @@ export default function AdvancedOCRClient() {
 	const [selectedLanguage, setSelectedLanguage] = useState('eng');
 	const [ocrMode, setOcrMode] = useState('standard');
 	const [dependencies, setDependencies] = useState(null);
+	const [error, setError] = useState('');
 
 	const languages = [
 		{ code: 'eng', name: 'English' },
@@ -88,8 +92,7 @@ export default function AdvancedOCRClient() {
 			const arrayBuffer = await file.arrayBuffer();
 			const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
 			pdf = await loadingTask.promise;
-		} catch (err) {
-			console.error('Failed to load PDF in AdvancedOCR:', err);
+	} catch {
 			throw new Error("Failed to load the PDF file. It might be corrupt or protected.");
 		}
 
@@ -119,8 +122,8 @@ export default function AdvancedOCRClient() {
 
 				pdfText += text + '\n\n';
 				pageResults.push({ page: pageNum, text, confidence: confidence.toFixed(2) });
-			} catch (pageError) {
-				console.error(`Error processing page ${pageNum} of ${file.name}:`, pageError);
+		} catch {
+				toast.error(`Error processing page ${pageNum} of ${file.name}`);
 			}
 		}
 
@@ -140,6 +143,7 @@ export default function AdvancedOCRClient() {
 
 	const processFiles = async () => {
 		if (files.filter(f => f.status === 'ready').length === 0) return;
+		setError('');
 
 		// ✅ OPTIMIZATION: Load dependencies on first use
 		setIsLoadingDependencies(true);
@@ -149,9 +153,9 @@ export default function AdvancedOCRClient() {
 			try {
 				deps = await loadOCRDependencies();
 				setDependencies(deps);
-			} catch (error) {
-				console.error('Failed to load OCR dependencies:', error);
-				alert('Failed to load OCR engine. Please refresh and try again.');
+			} catch {
+
+				setError('Failed to load the OCR engine. Please refresh the page and try again.');
 				setIsLoadingDependencies(false);
 				return;
 			}
@@ -188,7 +192,7 @@ export default function AdvancedOCRClient() {
 					newResults.push(result);
 				}
 			} catch (error) {
-				console.error("OCR Error for file:", fileData.file.name, error);
+
 				const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
 				setFileState(fileData.id, { status: 'error', progress: 0, errorMessage });
 			}
@@ -202,20 +206,20 @@ export default function AdvancedOCRClient() {
 	const _downloadBlob = (blob, fileName) => {
 		let url = null;
 		try {
-			url = URL.createObjectURL(blob);
+			setError('');
+			url = safeCreateObjectURL(blob);
 			const a = document.createElement('a');
 			a.href = url;
 			a.download = fileName;
 			document.body.appendChild(a);
 			a.click();
 			document.body.removeChild(a);
-		} catch (err) {
-			console.error('Error creating or triggering download:', err);
-			alert('Unable to download file.');
+	} catch {
+			setError('Unable to download the OCR result. Please try again.');
 		} finally {
 			if (url) {
 				setTimeout(() => {
-					try { URL.revokeObjectURL(url); } catch { }
+					try { safeRevokeObjectURL(url); } catch { }
 				}, 500);
 			}
 		}
@@ -239,9 +243,9 @@ export default function AdvancedOCRClient() {
 	};
 
 	const getConfidenceColor = (confidence) => {
-		if (confidence > 90) return 'bg-green-500';
-		if (confidence > 80) return 'bg-yellow-500';
-		return 'bg-red-500';
+		if (confidence > 90) return 'bg-emerald-500 dark:bg-emerald-600';
+		if (confidence > 80) return 'bg-yellow-500 dark:bg-yellow-600';
+		return 'bg-destructive';
 	};
 
 	const toolName = "Advanced OCR with AI";
@@ -291,6 +295,12 @@ export default function AdvancedOCRClient() {
 			]}
 		>
 			<div className="space-y-6">
+				{error && (
+					<Alert variant="destructive">
+						<AlertDescription>{error}</AlertDescription>
+					</Alert>
+				)}
+
 				<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 					<Card className="lg:col-span-2">
 						<CardHeader>
@@ -420,7 +430,7 @@ export default function AdvancedOCRClient() {
 										<Progress value={fileData.progress} className="mt-2" />
 									)}
 									{fileData.status === 'error' && fileData.errorMessage && (
-										<p className="text-red-500 text-xs mt-1">{fileData.errorMessage}</p>
+										<p className="text-destructive text-xs mt-1">{fileData.errorMessage}</p>
 									)}
 								</div>
 							))}

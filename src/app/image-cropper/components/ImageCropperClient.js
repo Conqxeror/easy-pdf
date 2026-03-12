@@ -119,8 +119,7 @@ export default function ImageCropperClient() {
       setDownloadUrl(newDownloadUrl);
 
       setError("");
-    } catch (err) {
-      console.error("Image cropping failed", err);
+    } catch {
       setError("Failed to crop the image. Please try again with a different file.");
     }
   };
@@ -347,9 +346,9 @@ export default function ImageCropperClient() {
             </div>
 
             {downloadUrl && (
-              <div className="flex justify-center p-4 bg-green-50 dark:bg-green-900/20 rounded-none border border-green-200 dark:border-green-800">
+              <div className="flex justify-center p-4 bg-muted rounded-none border border-border">
                 <div className="text-center space-y-3">
-                  <p className="text-green-700 dark:text-green-300 font-medium">Image cropped successfully!</p>
+                  <p className="text-foreground font-medium">Image cropped successfully!</p>
                   <Button asChild variant="success" size="lg">
                     <a href={downloadUrl} download={`cropped-${file.name}`}>
                       Download Cropped Image

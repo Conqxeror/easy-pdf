@@ -28,6 +28,7 @@ export const generateEnhancedMetadata = ({
 
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
   const keywordArray = Array.isArray(keywords) ? keywords : (keywords ? [keywords] : [])
+  const openGraphType = pageType === 'article' ? 'article' : 'website'
 
   // Enhanced keywords with semantic variations
   const enhancedKeywords = [
@@ -113,7 +114,7 @@ export const generateEnhancedMetadata = ({
       description: enhancedDescription,
       url: canonicalUrl || resolvedBase,
       siteName: "easy-pdf - Privacy-First PDF Tools",
-      type: pageType === 'homepage' ? 'website' : 'article',
+      type: openGraphType,
       locale: "en-IN",
       alternateLocale: ["en-US", "en"],
       countryName: "India",
@@ -265,11 +266,6 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       },
       "query-input": "required name=search_term_string"
     },
-    "mainEntity": {
-      "@type": "SoftwareApplication",
-      "@id": `${baseUrl}#software`
-    }
-    ,
     "image": {
       "@type": "ImageObject",
       "url": `${baseUrl}/og/homepage`,
@@ -374,41 +370,10 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         }
       }
 
-      const schemas = [organizationSchema, toolSchema]
-
-      // Add breadcrumb if available
-      if (pageData.breadcrumbs && pageData.breadcrumbs.length > 0) {
-        const breadcrumbSchema = {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": pageData.breadcrumbs.map((crumb, index) => ({
-            "@type": "ListItem",
-            "position": index + 1,
-            "name": crumb.name,
-            "item": crumb.url
-          }))
-        }
-        schemas.push(breadcrumbSchema)
-      }
-
-      // Add FAQ if available
-      if (pageData.faqs && pageData.faqs.length > 0) {
-        const faqSchema = {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          "mainEntity": pageData.faqs.map(faq => ({
-            "@type": "Question",
-            "name": faq.question,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": faq.answer
-            }
-          }))
-        }
-        schemas.push(faqSchema)
-      }
-
-      return schemas
+      // Breadcrumb and FAQ schemas are injected by the <Breadcrumb> and <FAQ>
+      // components respectively. Omitting them here prevents duplicate schemas
+      // which cause Google Search Console validation errors.
+      return [organizationSchema, toolSchema]
 
     case 'faq':
       const faqSchema = {
@@ -452,9 +417,9 @@ export const generatePerformanceHints = () => {
       // Icon will be loaded naturally when needed
     ],
     prefetch: [
-      { href: "/merge", as: "document" },
-      { href: "/split", as: "document" },
-      { href: "/compress", as: "document" }
+      { href: "/pdf/merge", as: "document" },
+      { href: "/pdf/split", as: "document" },
+      { href: "/pdf/compress", as: "document" }
     ],
     preconnect: [
       { href: "https://fonts.googleapis.com" },

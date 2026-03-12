@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 export default function CompressImagesClient() {
   const [files, setFiles] = useState([]);
@@ -72,7 +73,11 @@ export default function CompressImagesClient() {
   const compressImage = useCallback((file) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
+      const objectUrl = safeCreateObjectURL(file);
+      if (!objectUrl) {
+        reject(new Error('Failed to create object URL'));
+        return;
+      }
 
       img.onload = () => {
         try {
@@ -92,7 +97,7 @@ export default function CompressImagesClient() {
           // Convert to blob with compression
           canvas.toBlob(
             (blob) => {
-              URL.revokeObjectURL(objectUrl);
+              safeRevokeObjectURL(objectUrl);
               if (blob) {
                 resolve(blob);
               } else {
@@ -103,13 +108,13 @@ export default function CompressImagesClient() {
             qualityValue
           );
         } catch (err) {
-          URL.revokeObjectURL(objectUrl);
+          safeRevokeObjectURL(objectUrl);
           reject(err);
         }
       };
 
       img.onerror = (err) => {
-        URL.revokeObjectURL(objectUrl);
+        safeRevokeObjectURL(objectUrl);
         reject(err);
       };
 
@@ -157,7 +162,7 @@ export default function CompressImagesClient() {
         item.compressedSize = compressedBlob.size;
         item.originalSize = item.file.size;
       } catch (compressError) {
-        console.error("Failed to compress image", compressError);
+        toast.error(`Failed to compress ${item.file.name}`);
         item.status = "error";
         item.error = compressError?.message || "Compression failed";
       }
@@ -281,7 +286,7 @@ export default function CompressImagesClient() {
 
         {(isProcessing || currentProgress > 0) && (
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm text-foreground dark:text-foreground">
+            <div className="flex items-center justify-between text-sm text-foreground">
               <span>{processingMessage || "Processing..."}</span>
               <span>{currentProgress}%</span>
             </div>
@@ -292,7 +297,7 @@ export default function CompressImagesClient() {
         {files.length > 0 && (
           <div className="space-y-4">
             <div className="flex justify-between flex-wrap gap-3">
-              <p className="text-sm text-foreground dark:text-foreground">{files.length} file(s) queued.</p>
+              <p className="text-sm text-foreground">{files.length} file(s) queued.</p>
               <div className="flex gap-2">
                 <Button onClick={compressAll} disabled={isProcessing}>
                   {isProcessing ? "Compressing..." : "Compress All"}
@@ -310,7 +315,7 @@ export default function CompressImagesClient() {
                     <div className="truncate font-medium text-sm" title={item.name}>{item.name}</div>
                     <button
                       onClick={() => removeFile(item.id)}
-                      className="text-foreground hover:text-red-500"
+                      className="text-foreground hover:text-destructive"
                       disabled={isProcessing}
                     >
                       ×
@@ -334,18 +339,18 @@ export default function CompressImagesClient() {
 
                     {item.status === "done" && (
                       <>
-                        <div className="flex justify-between font-medium text-green-600">
+                        <div className="flex justify-between font-medium text-emerald-600 dark:text-emerald-400">
                           <span>Compressed:</span>
                           <span>{(item.compressedSize / 1024).toFixed(1)} KB</span>
                         </div>
-                        <div className="flex justify-between text-green-600">
+                        <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
                           <span>Saved:</span>
                           <span>{Math.round((1 - item.compressedSize / item.originalSize) * 100)}%</span>
                         </div>
                         <a
                           href={item.resultUrl}
                           download={item.resultName}
-                          className="block w-full text-center mt-2 py-1 bg-blue-50 text-blue-600 rounded-none hover:bg-blue-100 transition-colors"
+                          className="block w-full text-center mt-2 py-1 bg-primary/10 text-primary rounded-none hover:bg-primary/20 transition-colors"
                         >
                           Download
                         </a>
@@ -353,11 +358,11 @@ export default function CompressImagesClient() {
                     )}
 
                     {item.status === "error" && (
-                      <div className="text-red-500 text-xs mt-1">{item.error}</div>
+                      <div className="text-destructive text-xs mt-1">{item.error}</div>
                     )}
 
                     {item.status === "processing" && (
-                      <div className="text-blue-500 text-xs mt-1">Compressing...</div>
+                      <div className="text-muted-foreground text-xs mt-1">Compressing...</div>
                     )}
                   </div>
                 </div>

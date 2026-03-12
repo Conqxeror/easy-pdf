@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 export default function WatermarkClient() {
   const [files, setFiles] = useState([]);
@@ -68,9 +70,8 @@ export default function WatermarkClient() {
       const pdfjs = await loadPdfJs();
       const pdf = await pdfjs.getDocument({ data: arrayBuffer }).promise;
       setPdfDocProxy(pdf);
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF.");
-      console.error(e);
     }
   };
 
@@ -126,8 +127,10 @@ export default function WatermarkClient() {
         context.fillText(text, 0, 0);
       } else if (watermarkType === "image" && imageFile) {
         const img = new Image();
-        img.src = URL.createObjectURL(imageFile);
+        const imgUrl = safeCreateObjectURL(imageFile);
+        img.src = imgUrl;
         await new Promise((resolve) => { img.onload = resolve; });
+        safeRevokeObjectURL(imgUrl);
 
         const imgWidth = img.width * imageScale * scale;
         const imgHeight = img.height * imageScale * scale;
@@ -141,7 +144,7 @@ export default function WatermarkClient() {
 
     } catch (e) {
       if (e.name !== "RenderingCancelledException") {
-        console.error("Preview render error:", e);
+        toast.error("Preview render failed");
       }
     }
   }, [pdfDocProxy, watermarkType, text, fontSize, opacity, rotation, color, imageFile, imageScale]);
@@ -210,15 +213,14 @@ export default function WatermarkClient() {
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       let url = null;
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for watermarked PDF:', err); url = null; }
+      try { url = safeCreateObjectURL(blob); } catch { url = null; }
       setWatermarkedPdfUrl(url);
 
       const safeName = files[0].name.replace(/\.pdf$/i, "");
       setDownloadFileName(`${safeName}_watermarked.pdf`);
 
-    } catch (e) {
-      setError("Failed to apply watermark.");
-      console.error(e);
+    } catch {
+      toast.error("Failed to apply watermark.");
     } finally {
       setIsProcessing(false);
     }
@@ -376,8 +378,8 @@ export default function WatermarkClient() {
         )}
 
         {watermarkedPdfUrl && (
-          <div className="mt-8 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-center">
-            <h3 className="text-xl font-semibold text-green-800 dark:text-green-300 mb-4">Success!</h3>
+          <div className="mt-8 p-6 bg-muted border border-border text-center">
+            <h3 className="text-xl font-semibold text-foreground mb-4">Success!</h3>
             <Button asChild size="lg" variant="success">
               <a href={watermarkedPdfUrl} download={downloadFileName}>
                 Download Watermarked PDF

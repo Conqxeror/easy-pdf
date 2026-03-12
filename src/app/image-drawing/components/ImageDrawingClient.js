@@ -152,7 +152,7 @@ export default function ImageDrawingClient() {
       faqs={[
         {
           question: "Can I undo my strokes?",
-          answer: "Currently, you can reset the entire image to start over. An undo feature is coming soon."
+          answer: "This version supports freehand drawing and full-canvas reset. If you need to remove edits, use Reset to return to the original image and redraw only the annotations you want to keep."
         }
       ]}
       breadcrumbs={[

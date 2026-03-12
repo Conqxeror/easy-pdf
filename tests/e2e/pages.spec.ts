@@ -1,55 +1,56 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { test, expect } from '@playwright/test';
 
-const routes = Array.from(new Set([
-	'/',
-	'/about',
-	'/compress',
-	'/merge',
-	'/ocr',
-	'/pdf-table-extractor',
-	'/merge',
-	'/watermark',
-	'/sign',
-	'/pdf-to-jpg',
-	'/html-to-pdf',
-	'/pdf-metadata-editor',
-	'/pdf-accessibility-checker',
-	'/pdf-batch-processor',
-	'/reorder',
-	'/pdf-version-comparison',
-	'/pdf-to-jpg'
-]))
+function collectStaticRoutes(dir: string, currentRoute = ''): string[] {
+	const entries = fs.readdirSync(dir, { withFileTypes: true });
+	const routes: string[] = [];
+
+	for (const entry of entries) {
+		if (!entry.isDirectory()) {
+			continue;
+		}
+
+		if (entry.name === 'api' || entry.name.startsWith('(') || entry.name.startsWith('[')) {
+			continue;
+		}
+
+		const nextDir = path.join(dir, entry.name);
+		const nextRoute = `${currentRoute}/${entry.name}`;
+		const pageFile = path.join(nextDir, 'page.js');
+
+		if (fs.existsSync(pageFile)) {
+			routes.push(nextRoute);
+		}
+
+		routes.push(...collectStaticRoutes(nextDir, nextRoute));
+	}
+
+	return routes;
+}
+
+const appDir = path.resolve(process.cwd(), 'src/app');
+const routes = ['/', ...collectStaticRoutes(appDir)]
+	.filter((route, index, allRoutes) => allRoutes.indexOf(route) === index)
+	.sort((left, right) => left.localeCompare(right));
 
 test.describe('Site routes smoke', () => {
+	test.describe.configure({ mode: 'parallel' });
+
 	for (const route of routes) {
 		test(`visits ${route}`, async ({ page }) => {
-			const consoleErrors: Array<{ type: string; message: string }> = [];
-			page.on('pageerror', (err) => consoleErrors.push({ type: 'pageerror', message: err.message }));
-			page.on('console', (msg) => {
-				if (msg.type() === 'error') consoleErrors.push({ type: 'console', message: msg.text() });
-			});
+			const pageErrors: string[] = [];
+			page.on('pageerror', (error) => pageErrors.push(error.message));
 
-			const response = await page.goto(route, { waitUntil: 'networkidle' });
+			const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
 			expect(response).toBeTruthy();
-			expect(response?.status()).toBeLessThan(400);
-			// Report any console errors (don't fail here — we'll surface them for manual triage).
-			if (consoleErrors.length > 0) {
-				const fs = require('fs');
-				const path = `tests/e2e/results${route === '/' ? '/home' : route.replace(/\//g, '_')}.json`;
-				try {
-					fs.mkdirSync('tests/e2e/results', { recursive: true });
-					fs.writeFileSync(path, JSON.stringify(consoleErrors, null, 2));
-				} catch (e) {
-					console.error('Failed writing console results', e);
-				}
-			}
+			expect(response?.status(), `Unexpected status for ${route}`).toBeLessThan(400);
 
-			// Basic accessibility and title checks
+			await expect(page.locator('body')).toBeVisible();
+
 			const title = await page.title();
-			expect(title.length).toBeGreaterThan(0);
-
-			// Take a screenshot for visual debug on failure
-			await page.screenshot({ path: `tests/e2e/screenshots${route === '/' ? '/home' : route.replace(/\//g, '_')}.png` });
+			expect(title.length, `Missing document title for ${route}`).toBeGreaterThan(0);
+			expect(pageErrors, `Runtime errors for ${route}: ${pageErrors.join('\n')}`).toEqual([]);
 		});
 	}
 });

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { loadPdfLib } from "@/lib/pdfjsWorker";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,9 +11,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Award, Download, User, Building } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function CertificateGeneratorClient() {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState("");
   const [certificateData, setCertificateData] = useState({
     template: 'completion',
     recipientName: '',
@@ -72,10 +76,11 @@ export default function CertificateGeneratorClient() {
 
   const generateCertificatePDF = async () => {
     if (!certificateData.recipientName || !certificateData.courseName || !certificateData.organizationName) {
-      alert('Please fill in recipient name, course/program name, and organization name');
+      setError('Please fill in recipient name, course or program name, and organization name.');
       return;
     }
 
+    setError("");
     setIsGenerating(true);
     trackEvent('certificate_generation_started', { template: certificateData.template });
 
@@ -300,20 +305,26 @@ export default function CertificateGeneratorClient() {
 
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
+      let url = null;
+      try {
+        url = safeCreateObjectURL(blob);
 
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Certificate-${certificateData.recipientName.replace(/\s+/g, '-')}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+        const link = document.createElement('a');
+        link.href = url || '';
+        link.download = `Certificate-${certificateData.recipientName.replace(/\s+/g, '-')}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } finally {
+        setTimeout(() => {
+          try { safeRevokeObjectURL(url); } catch { }
+        }, 500);
+      }
 
       trackEvent('certificate_generated', { template: certificateData.template });
-    } catch (error) {
-      console.error('Error generating certificate:', error);
-      alert('Failed to generate certificate. Please try again.');
+    } catch {
+      toast.error('Failed to generate the certificate PDF. Please try again.');
+      setError('Failed to generate the certificate PDF. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -334,7 +345,7 @@ export default function CertificateGeneratorClient() {
     },
     {
       question: "Can I add my own logo?",
-      answer: "Currently, we support text-based customization. Logo upload support is coming in a future update."
+      answer: "This version focuses on text-based certificate layouts with color customization. If you need logo placement, you can add it after download in a PDF editor."
     },
     {
       question: "Are the certificates printable?",
@@ -357,6 +368,14 @@ export default function CertificateGeneratorClient() {
       currentTool="certificate-generator"
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {error && (
+          <div className="lg:col-span-3">
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          </div>
+        )}
+
         <div className="lg:col-span-1 space-y-6">
           <Card>
             <CardHeader>

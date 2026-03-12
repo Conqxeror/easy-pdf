@@ -74,7 +74,12 @@ export default function Navbar() {
         {/* Mobile Menu Toggle */}
         <div className="flex md:hidden items-center gap-4">
           <ThemeToggleSimple />
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation-menu"
+          >
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
@@ -82,7 +87,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-5 shadow-2xl">
+        <div id="mobile-navigation-menu" className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-5 shadow-2xl">
           <Link href="/#tools" className="text-lg font-medium py-2 border-b border-border/50">
             Tools
           </Link>

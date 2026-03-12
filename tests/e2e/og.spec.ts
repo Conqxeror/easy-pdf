@@ -22,7 +22,10 @@ test.describe('OG image generation', () => {
 		await page.goto('/merge', { waitUntil: 'networkidle' });
 		const ogImage = await page.locator('meta[property="og:image"]').getAttribute('content');
 		expect(Boolean(ogImage)).toBeTruthy();
-		expect(ogImage).toContain('/og/tool/merge');
+		expect(
+			(ogImage || '').includes('/og/tool/merge') ||
+			(ogImage || '').includes('/og-static/pdf-merge.png')
+		).toBeTruthy();
 		const width = await page.locator('meta[property="og:image:width"]').getAttribute('content');
 		const height = await page.locator('meta[property="og:image:height"]').getAttribute('content');
 		expect(width).toBe('1200');

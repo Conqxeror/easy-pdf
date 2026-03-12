@@ -15,6 +15,8 @@ import { MessageSquare, Download, CheckCircle, AlertTriangle, FileText, Users, S
 import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 
 export default function PDFAnnotationCollaborationClient() {
   const [file, setFile] = useState(null);
@@ -41,20 +43,18 @@ export default function PDFAnnotationCollaborationClient() {
   });
   // Arrow animation flags for transitions between steps
   const [arrowAnimating, setArrowAnimating] = useState([false, false, false, false]);
-  const [collaborators, setCollaborators] = useState([
-    { id: 1, name: "John Doe", email: "user@example.com", avatar: "", role: "Reviewer", active: true },
-    { id: 2, name: "Jane Smith", email: "user@example.com", avatar: "", role: "Editor", active: false },
-    { id: 3, name: "Mike Johnson", email: "user@example.com", avatar: "", role: "Approver", active: true }
-  ]);
+  const [collaborators, setCollaborators] = useState([]);
   const [newCollaborator, setNewCollaborator] = useState({ email: "", role: "Reviewer" });
   const [selectedAnnotation, setSelectedAnnotation] = useState(null);
   const [replyText, setReplyText] = useState("");
+  const [error, setError] = useState("");
   const handleFileUpload = (acceptedFiles) => {
     const uploadedFile = acceptedFiles[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       setFile(uploadedFile);
       setAnnotatedPdf(null);
       setAnnotations([]);
+      setError("");
     }
   };
 
@@ -150,6 +150,7 @@ export default function PDFAnnotationCollaborationClient() {
   const applyAnnotations = async () => {
     if (!file) return;
 
+    setError("");
     setIsProcessing(true);
     setProgress(0);
 
@@ -218,9 +219,8 @@ export default function PDFAnnotationCollaborationClient() {
       setAnnotatedPdf(blob);
 
       setProgress(100);
-    } catch (error) {
-      console.error('Error applying annotations:', error);
-      alert('Error applying annotations. Please try again.');
+    } catch {
+      setError('Error applying annotations. Please try again.');
     } finally {
       setIsProcessing(false);
       setTimeout(() => setProgress(0), 1000);
@@ -240,7 +240,8 @@ export default function PDFAnnotationCollaborationClient() {
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
     let url;
     try {
-      try { url = typeof URL !== 'undefined' ? URL.createObjectURL(blob) : null; } catch (err) { console.error('Error creating object URL for annotations export:', err); url = null; }
+      setError("");
+      try { url = safeCreateObjectURL(blob); } catch { toast.error('Failed to create download link'); url = null; }
       const filename = `annotations_${Date.now()}.json`;
       const a = document.createElement('a');
       a.href = url;
@@ -248,11 +249,10 @@ export default function PDFAnnotationCollaborationClient() {
       document.body.appendChild(a);
       a.click();
       a.remove();
-    } catch (err) {
-      console.error('Error exporting annotations:', err);
-      alert('Unable to export annotations');
+    } catch {
+      setError('Unable to export annotations. Please try again.');
     } finally {
-      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch { } }, 500);
     }
   };
 
@@ -260,7 +260,8 @@ export default function PDFAnnotationCollaborationClient() {
     if (!annotatedPdf) return;
     let url;
     try {
-      try { url = typeof URL !== 'undefined' ? URL.createObjectURL(annotatedPdf) : null; } catch (err) { console.error('Error creating object URL for annotated PDF:', err); url = null; }
+      setError("");
+      try { url = safeCreateObjectURL(annotatedPdf); } catch { toast.error('Failed to create download link'); url = null; }
       const safeBase = file && file.name ? String(file.name).replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
       const filename = `${safeBase}_annotated.pdf`;
       const a = document.createElement('a');
@@ -269,45 +270,44 @@ export default function PDFAnnotationCollaborationClient() {
       document.body.appendChild(a);
       a.click();
       a.remove();
-    } catch (err) {
-      console.error('Error downloading annotated PDF:', err);
-      alert('Unable to download annotated PDF');
+    } catch {
+      setError('Unable to download the annotated PDF. Please try again.');
     } finally {
-      setTimeout(() => { try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { } }, 500);
+      setTimeout(() => { try { safeRevokeObjectURL(url); } catch { } }, 500);
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'open': return 'bg-red-100 text-red-800';
-      case 'in_progress': return 'bg-yellow-100 text-yellow-800';
-      case 'resolved': return 'bg-green-100 text-green-800';
-      default: return 'bg-background dark:bg-background text-foreground dark:text-foreground';
+      case 'open': return 'bg-destructive/10 text-destructive';
+      case 'in_progress': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400';
+      case 'resolved': return 'bg-muted text-foreground';
+      default: return 'bg-background text-foreground';
     }
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'high': return 'bg-red-100 text-red-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-background dark:bg-background text-foreground dark:text-foreground';
+      case 'high': return 'bg-destructive/10 text-destructive';
+      case 'medium': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400';
+      case 'low': return 'bg-muted text-foreground';
+      default: return 'bg-background text-foreground';
     }
   };
 
   return (
     <ToolPageLayout
       title="PDF Annotation Collaboration"
-      subtitle="Collaborate on PDF annotations with team members in real-time"
+      subtitle="Build a local PDF review package with annotations, replies, and exportable reviewer notes"
       toolName="PDF Annotation Collaboration"
-      toolDescription="Collaborate on PDF annotations with team members in real-time. Add comments, highlights, and notes to documents, manage team permissions, and track review progress. All processing happens locally in your browser for complete privacy and security."
+      toolDescription="Create a local PDF review workspace with annotations, replies, reviewer roles, and exportable review data. This version stores everything in the current browser session and helps you prepare annotated PDFs plus JSON review records without sending files to a server."
       currentTool="pdf-annotation-collaboration"
       steps={[
-        "Upload your PDF document to start collaborative annotation and review.",
+        "Upload your PDF document to start a local review session.",
         "Add annotations including comments, highlights, and notes with specific positioning on pages.",
-        "Invite team members with different roles (Reviewer, Editor, Approver) and manage collaboration.",
+        "Add reviewer names or email labels with different roles (Reviewer, Editor, Approver) to organize the review package.",
         "Review annotation status, add replies to discussions, and track progress through the review process.",
-        "Export annotated PDFs or annotation data for record-keeping and further collaboration."
+        "Export the annotated PDF or review JSON so you can share the results outside this browser session."
       ]}
       faqs={[
         {
@@ -316,7 +316,7 @@ export default function PDFAnnotationCollaborationClient() {
         },
         {
           question: "How does team collaboration work?",
-          answer: "Team members can be assigned different roles (Reviewer, Editor, Approver) with appropriate permissions. Everyone can view annotations, add replies to discussions, and track the status of review items in real-time."
+          answer: "You can build a reviewer roster with roles such as Reviewer, Editor, and Approver, then include those labels in the exported review package. The roster helps organize comments and handoffs, but this version does not sync reviewers across browsers automatically."
         },
         {
           question: "Can I track the status of annotations?",
@@ -328,11 +328,23 @@ export default function PDFAnnotationCollaborationClient() {
         },
         {
           question: "Is real-time collaboration supported?",
-          answer: "The tool supports collaborative annotation where team members can see each other's comments and replies. While not fully real-time, it provides a comprehensive collaboration environment for document review."
+          answer: "No. This version is a local review workspace for one browser session. You can export the annotated PDF and JSON review data, then share those files with teammates through your own workflow."
         }
       ]}
     >
       <div className="space-y-6">
+        <Alert>
+          <AlertDescription>
+            This tool creates a local review workspace in your current browser session. Reviewer lists, replies, and status changes are exportable, but they are not live-synced across devices or teammates.
+          </AlertDescription>
+        </Alert>
+
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <Tabs value={currentStep} className="space-y-6" onValueChange={(v) => setCurrentStep(v)}>
           {/* Stepper: make steps look like buttons with arrows and auto-advance when completed */}
           <div className="flex items-center gap-3 w-full">
@@ -375,7 +387,7 @@ export default function PDFAnnotationCollaborationClient() {
                   Upload PDF Document
                 </CardTitle>
                 <CardDescription className="text-foreground">
-                  Select a PDF document to start collaborative annotation
+                  Select a PDF document to start a local annotation review session
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -522,10 +534,10 @@ export default function PDFAnnotationCollaborationClient() {
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <Badge className={getStatusColor(annotation.status).replace('bg-red-100 text-red-800', 'bg-red-900/30 text-red-400').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-900/30 text-yellow-400').replace('bg-green-100 text-green-800', 'bg-green-900/30 text-green-400').replace('bg-background text-foreground', 'bg-background text-foreground')}>
+                            <Badge className={getStatusColor(annotation.status)}>
                               {annotation.status}
                             </Badge>
-                            <Badge className={getPriorityColor(annotation.priority).replace('bg-red-100 text-red-800', 'bg-red-900/30 text-red-400').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-900/30 text-yellow-400').replace('bg-green-100 text-green-800', 'bg-green-900/30 text-green-400').replace('bg-background text-foreground', 'bg-background text-foreground')}>
+                            <Badge className={getPriorityColor(annotation.priority)}>
                               {annotation.priority}
                             </Badge>
                           </div>
@@ -609,10 +621,10 @@ export default function PDFAnnotationCollaborationClient() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" />
-                  Team Collaborators
+                  Reviewer Roster
                 </CardTitle>
                 <CardDescription>
-                  Manage team members and their access permissions
+                  Add local reviewer labels that will be included in the exported review package
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -638,6 +650,14 @@ export default function PDFAnnotationCollaborationClient() {
                 </div>
 
                 <div className="space-y-3">
+                  {collaborators.length === 0 && (
+                    <Alert>
+                      <AlertDescription>
+                        No reviewers added yet. Add names or email labels here to document who should review the PDF when you export the session.
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
                   {collaborators.map((collaborator) => (
                     <div key={collaborator.id} className="flex items-center justify-between p-3 border border-border bg-background">
                       <div className="flex items-center gap-3">
@@ -653,7 +673,7 @@ export default function PDFAnnotationCollaborationClient() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="border-border text-foreground">{collaborator.role}</Badge>
-                        <div className={`w-2 h-2 ${collaborator.active ? 'bg-green-500' : 'bg-background0'}`} />
+                        <div className={`w-2 h-2 ${collaborator.active ? 'bg-emerald-500' : 'bg-muted'}`} />
                       </div>
                     </div>
                   ))}
@@ -736,7 +756,7 @@ export default function PDFAnnotationCollaborationClient() {
                   Export Options
                 </CardTitle>
                 <CardDescription>
-                  Export annotations and collaboration data
+                  Export annotations and local review data
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -772,7 +792,7 @@ export default function PDFAnnotationCollaborationClient() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-foreground">
               <MessageSquare className="h-5 w-5" />
-              Collaboration Features
+              Review Workspace Features
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -789,8 +809,8 @@ export default function PDFAnnotationCollaborationClient() {
               <div>
                 <h4 className="font-semibold mb-2">Team Features</h4>
                 <ul className="space-y-1 text-sm text-foreground">
-                  <li>• Real-time collaboration</li>
-                  <li>• Role-based permissions</li>
+                  <li>• Local reviewer roster</li>
+                  <li>• Role labels for exports</li>
                   <li>• Reply threads</li>
                   <li>• Status tracking</li>
                 </ul>

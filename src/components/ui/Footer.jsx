@@ -18,8 +18,10 @@ const footerLinks = [
     section: "Company",
     links: [
       { name: "About easy-pdf", href: "/about" },
+      { name: "Privacy Policy", href: "/privacy" },
+      { name: "Security", href: "/security" },
+      { name: "Terms", href: "/terms" },
       { name: "Sitemap", href: "/sitemap.xml" },
-      { name: "Privacy Policy", href: "/security" },
       { name: "Buy me a coffee", href: "https://buymeacoffee.com/kadriwalimt", external: true },
     ],
   },
@@ -128,7 +130,8 @@ export default function Footer() {
             © {currentYear} easy-pdf. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link href="/security" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link href="/security" className="hover:text-foreground transition-colors">Security</Link>
             <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
             <Link href="/sitemap.xml" className="hover:text-foreground transition-colors">Sitemap</Link>
           </div>

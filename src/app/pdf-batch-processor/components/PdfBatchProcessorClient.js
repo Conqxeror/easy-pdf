@@ -9,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Upload, Download, Layers, FileText, Trash2, Play, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { toast } from 'sonner';
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
 
 export default function PDFBatchProcessorClient() {
@@ -74,8 +75,8 @@ export default function PDFBatchProcessorClient() {
           throw new Error('Unknown operation');
       }
       setProcessingStatus('completed');
-    } catch (error) {
-      console.error('Batch processing error:', error);
+    } catch {
+      toast.error('Batch processing failed');
       setProcessingStatus('error');
     } finally {
       setIsProcessing(false);
@@ -96,7 +97,7 @@ export default function PDFBatchProcessorClient() {
 
         setProgress(((i + 1) / files.length) * 100);
       } catch {
-        console.error(`Error processing ${file.file.name}:`);
+        toast.error(`Error processing ${file.file.name}`);
       }
     }
 
@@ -141,7 +142,7 @@ export default function PDFBatchProcessorClient() {
 
         setProgress(((i + 1) / files.length) * 100);
       } catch {
-        console.error(`Error compressing ${file.file.name}:`);
+        toast.error(`Error compressing ${file.file.name}`);
       }
     }
 
@@ -178,7 +179,7 @@ export default function PDFBatchProcessorClient() {
 
         setProgress(((i + 1) / files.length) * 100);
       } catch {
-        console.error(`Error splitting ${file.file.name}:`);
+        toast.error(`Error splitting ${file.file.name}`);
       }
     }
 
@@ -214,7 +215,7 @@ export default function PDFBatchProcessorClient() {
 
         setProgress(((i + 1) / files.length) * 100);
       } catch {
-        console.error(`Error rotating ${file.file.name}:`);
+        toast.error(`Error rotating ${file.file.name}`);
       }
     }
 
@@ -232,8 +233,8 @@ export default function PDFBatchProcessorClient() {
         document.body.appendChild(link);
         link.click();
         link.remove();
-      } catch (err) {
-        console.error('Error downloading result:', err);
+      } catch {
+        toast.error('Error downloading result');
       }
     });
     // Revoke result URLs shortly after download to free memory
@@ -418,7 +419,7 @@ export default function PDFBatchProcessorClient() {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
+                <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                 Processing Complete
               </CardTitle>
               <CardDescription>
@@ -436,7 +437,7 @@ export default function PDFBatchProcessorClient() {
                         {formatFileSize(result.size)}
                       </span>
                       {result.compressionRatio && (
-                        <span className="text-xs bg-green-100 text-green-800 px-2 py-1">
+                        <span className="text-xs bg-muted text-foreground px-2 py-1">
                           -{result.compressionRatio}%
                         </span>
                       )}
@@ -458,8 +459,8 @@ export default function PDFBatchProcessorClient() {
                           setTimeout(() => {
                             try { if (typeof URL !== 'undefined' && !String(urlToRevoke).startsWith('data:')) URL.revokeObjectURL(urlToRevoke); } catch { /* ignore */ }
                           }, 500);
-                        } catch (err) {
-                          console.error('Error during download click:', err);
+                        } catch {
+                          toast.error('Error during download');
                         }
                       }}
                     >
@@ -480,7 +481,7 @@ export default function PDFBatchProcessorClient() {
         {processingStatus === 'error' && (
           <Card className="mb-6">
             <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-red-600">
+              <div className="flex items-center gap-2 text-destructive">
                 <AlertCircle className="h-5 w-5" aria-hidden="true" />
                 <span>An error occurred during processing. Please try again.</span>
               </div>

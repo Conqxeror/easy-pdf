@@ -63,6 +63,7 @@
     "date-fns-tz": "^3.2.0",
     "diff": "^8.0.2",
     "dompurify": "^3.1.7",
+    "es5-ext": "^0.10.64",
     "exif-js": "^2.3.0",
     "fast-xml-parser": "^5.3.2",
     "fflate": "^0.8.2",

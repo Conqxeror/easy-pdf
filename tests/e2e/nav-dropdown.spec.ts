@@ -1,48 +1,39 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Navbar dropdowns', () => {
-	const categories = [
-		'Convert & Create',
-		'Organize & Edit',
-		'Security & Privacy',
-		'Forms & Documents',
-		'Business Tools',
-		'AI & Analysis',
-		'Advanced PDF Tools',
-	];
-
+test.describe('Navbar navigation', () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/');
-		// Use a standard desktop viewport
 		await page.setViewportSize({ width: 1366, height: 900 });
+		await page.goto('/');
 	});
 
-	for (const name of categories) {
-		test(`dropdown for ${name} should be inside viewport`, async ({ page }) => {
-			// find a menu button with the category name and hover
-			const button = page.getByRole('button', { name, exact: false }).first();
-			await button.hover();
+	test('desktop navbar shows primary links inside viewport', async ({ page }) => {
+		const toolsLink = page.getByRole('link', { name: 'Tools', exact: true });
+		const aboutLink = page.getByRole('link', { name: 'About', exact: true });
 
-			// wait for the popup to mount
-			// Tailwind uses a variation like bg-popover/95 — use substring selector
-			const popup = await page.waitForSelector(".pointer-events-auto[class*='bg-popover']", { timeout: 2000 });
+		await expect(toolsLink).toBeVisible();
+		await expect(aboutLink).toBeVisible();
 
-			const rect = await popup.evaluate((el) => {
-				const r = el.getBoundingClientRect();
-				return { left: r.left, right: r.right, width: r.width };
-			});
+		const viewportWidth = await page.evaluate(() => window.innerWidth);
+		for (const locator of [toolsLink, aboutLink]) {
+			const box = await locator.boundingBox();
+			expect(box).toBeTruthy();
+			if (!box) {
+				throw new Error('Expected visible navbar link to have a bounding box');
+			}
+			expect(box.x).toBeGreaterThanOrEqual(0);
+			expect(box.x + box.width).toBeLessThanOrEqual(viewportWidth);
+		}
+	});
 
-			const viewportWidth = await page.evaluate(() => window.innerWidth);
+	test('mobile menu opens and exposes navigation links', async ({ page }) => {
+		await page.setViewportSize({ width: 390, height: 844 });
+		await page.goto('/');
 
-			// Check - no overflow
-			expect(rect.left).toBeGreaterThanOrEqual(0);
-			expect(rect.right).toBeLessThanOrEqual(viewportWidth);
+		const menuToggle = page.getByRole('button', { name: 'Open navigation menu' });
+		await menuToggle.click();
 
-			// overlay must be present and have backdrop-filter set immediately
-			const overlay = page.locator("[data-testid=dropdown-overlay]");
-			await expect(overlay).toBeVisible({ timeout: 1000 });
-			const backdrop = await overlay.evaluate((el) => window.getComputedStyle(el).getPropertyValue('backdrop-filter'));
-			expect(backdrop).not.toBe('none');
-		});
-	}
+		await expect(page.getByRole('link', { name: 'Tools', exact: true })).toBeVisible();
+		await expect(page.getByRole('link', { name: 'About', exact: true })).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Get Started' })).toBeVisible();
+	});
 });

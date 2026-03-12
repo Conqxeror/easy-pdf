@@ -43,8 +43,8 @@ export default function PptToPdfClient() {
     setError("PowerPoint to PDF conversion requires specialized libraries not suitable for client-side processing. This conversion typically requires server-side processing with tools like LibreOffice or Microsoft Office libraries. For reliable conversion, please use desktop applications like Microsoft PowerPoint, LibreOffice Impress, or Google Slides export feature.");
   };
 
-  const toolName = "PowerPoint to PDF Converter";
-  const toolDescription = "Convert PowerPoint presentations to PDF documents. Note: This conversion requires specialized libraries not currently available for client-side processing.";
+  const toolName = "PowerPoint to PDF";
+  const toolDescription = "Review the browser-side limitations of PPT/PPTX to PDF conversion and get practical alternatives for producing a reliable PDF.";
 
   return (
     <ToolPageLayout
@@ -53,9 +53,9 @@ export default function PptToPdfClient() {
       toolName={toolName}
       toolDescription={toolDescription}
       steps={[
-        "Upload PPT or PPTX file",
-        "Attempt conversion to PDF format",
-        "Use alternative methods if needed"
+        "Upload a PPT or PPTX file so the tool can confirm the format and explain the limitation.",
+        "Review why reliable PowerPoint-to-PDF conversion is not currently available in this browser-only workflow.",
+        "Use one of the recommended desktop or cloud export options to create the PDF."
       ]}
       faqs={[
         {
@@ -95,14 +95,14 @@ export default function PptToPdfClient() {
 
         <div className="flex gap-3">
           <Button onClick={convertPptToPdf} disabled={!file}>
-            Convert to PDF (Not Available)
+            Show Recommended Alternatives
           </Button>
           <Button variant="ghost" onClick={() => { setFile(null); setError(""); }}>
             Clear
           </Button>
         </div>
 
-        <Card className="bg-blue-50 border-blue-200">
+        <Card className="bg-muted border-border">
           <CardHeader>
             <CardTitle className="text-blue-800">Technical Limitations</CardTitle>
             <CardDescription className="text-blue-700">
@@ -125,8 +125,7 @@ export default function PptToPdfClient() {
               <li>Generating a properly structured PDF document</li>
             </ul>
             <p>
-              For reliable results, we recommend using server-side services or desktop applications
-              like Microsoft PowerPoint or LibreOffice.
+              For reliable results, use Microsoft PowerPoint, LibreOffice Impress, or Google Slides to export the presentation as PDF after reviewing the file there.
             </p>
           </CardContent>
         </Card>

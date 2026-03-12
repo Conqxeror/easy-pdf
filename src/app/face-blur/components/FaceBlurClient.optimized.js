@@ -6,6 +6,7 @@ import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { Button } from "@/components/ui/button";
 import { Upload, Download, Loader2, AlertCircle, EyeOff } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { toast } from "sonner";
 
 // ✅ OPTIMIZATION: Lazy load MediaPipe library
 // Only loaded when user starts processing
@@ -61,7 +62,6 @@ export default function FaceBlurClient() {
 			setIsLoadingModel(false);
 			return detector;
 		} catch (err) {
-			console.error("Failed to load face detector:", err);
 			setError("Failed to load AI model. Please refresh the page and try again.");
 			setIsLoadingModel(false);
 			throw err;
@@ -87,8 +87,8 @@ export default function FaceBlurClient() {
 			if (detector) {
 				await processImage(url, detector);
 			}
-		} catch (err) {
-			console.error("Failed to process image:", err);
+		} catch {
+			toast.error("Failed to process image");
 		}
 	};
 
@@ -164,7 +164,6 @@ export default function FaceBlurClient() {
 
 			setProcessedImage(canvas.toDataURL("image/png"));
 		} catch (err) {
-			console.error("Face blur failed:", err);
 			setError(`Failed to process image: ${err.message}`);
 		} finally {
 			setIsProcessing(false);
@@ -207,7 +206,7 @@ export default function FaceBlurClient() {
 				},
 				{
 					question: "Can I adjust the blur intensity?",
-					answer: "Currently, the blur intensity is automatic and proportional to face size. Future updates may add manual blur intensity controls."
+					answer: "In this version, blur intensity is set automatically based on the detected face size so the result stays fast and consistent across the image."
 				}
 			]}
 			breadcrumbs={[

@@ -181,12 +181,12 @@ export const toolCategories = [
     submenu: [
       {
         name: "Merge PDF",
-        href: "/merge",
+        href: "/pdf/merge",
         icon: <Combine className="w-4 h-4" />,
       },
       {
         name: "Split PDF",
-        href: "/split",
+        href: "/pdf/split",
         icon: <Spline className="w-4 h-4" />,
       },
       {

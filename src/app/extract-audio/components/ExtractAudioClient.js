@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Download, Music, Video } from "lucide-react";
 import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function ExtractAudioClient() {
   const [ffmpeg, setFfmpeg] = useState(null);
@@ -31,8 +32,8 @@ export default function ExtractAudioClient() {
         });
         setFfmpeg(ffmpeg);
         setIsReady(true);
-      } catch (err) {
-        console.error("FFmpeg load error:", err);
+      } catch {
+        toast.error("Failed to load audio processing engine.");
         setError("Failed to load audio processing engine. Please try a different browser (Chrome/Edge recommended).");
       }
     };
@@ -103,8 +104,8 @@ export default function ExtractAudioClient() {
       ffmpeg.FS("unlink", inputName);
       ffmpeg.FS("unlink", outputName);
 
-    } catch (err) {
-      console.error("Extraction error:", err);
+    } catch {
+      toast.error("Failed to extract audio.");
       setError("Failed to extract audio. The file might be corrupt or the format unsupported.");
     } finally {
       setIsProcessing(false);
@@ -173,8 +174,8 @@ export default function ExtractAudioClient() {
             {file && (
               <div className="bg-background dark:bg-background border border-border dark:border-border rounded-none p-6 space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-none">
-                    <Video className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                  <div className="p-3 bg-muted rounded-none">
+                    <Video className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{file.name}</p>
@@ -222,14 +223,14 @@ export default function ExtractAudioClient() {
                 )}
 
                 {resultUrl && (
-                  <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900/30 rounded-none">
+                  <div className="flex items-center justify-between p-4 bg-muted border border-border rounded-none">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-none">
-                        <Music className="w-5 h-5 text-green-600 dark:text-green-400" />
+                      <div className="p-2 bg-primary/10 rounded-none">
+                        <Music className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <p className="font-medium text-green-900 dark:text-green-100">Extraction Complete!</p>
-                        <p className="text-sm text-green-700 dark:text-green-300">Ready to download</p>
+                        <p className="font-medium text-foreground">Extraction Complete!</p>
+                        <p className="text-sm text-muted-foreground">Ready to download</p>
                       </div>
                     </div>
                     <Button asChild variant="success">

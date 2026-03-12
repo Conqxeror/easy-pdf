@@ -13,6 +13,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { EyeOff, Download, CheckCircle, AlertTriangle, Search, Trash2, Shield, FileText, Loader2 } from "lucide-react";
 import FileDropzone from '@/components/ui/FileDropzone';
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { getPdfLib } from "@/lib/pdfLibLoader";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
+import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+
+const RENDER_SCALE = 2;
+
+const normalizeSearchTerms = (value) => value
+  .split(',')
+  .map((term) => term.trim())
+  .filter(Boolean);
+
+const hexToRgbCss = (value) => value || '#000000';
 
 export default function PDFRedactionClient() {
   const [file, setFile] = useState(null);
@@ -29,19 +41,14 @@ export default function PDFRedactionClient() {
 
   const handleFile = useCallback((files) => {
     if (!files || files.length === 0) return;
-    // Revoke any prior generated object URLs before replacing the file
     if (redactedPdf) {
-      try {
-        if (typeof URL !== 'undefined' && !String(redactedPdf).startsWith('data:')) {
-          URL.revokeObjectURL(redactedPdf);
-        }
-      } catch {
-        // best-effort
-      }
+      safeRevokeObjectURL(redactedPdf);
     }
     setFile(files[0]);
     setError("");
     setRedactedPdf(null);
+    setFoundTerms([]);
+    setSelectedTerms(new Set());
   }, [redactedPdf]);
 
   const searchForTerms = useCallback(async () => {
@@ -49,19 +56,79 @@ export default function PDFRedactionClient() {
       setError("Please upload a PDF first.");
       return;
     }
+
+    const terms = normalizeSearchTerms(searchTerms);
+    if (!terms.length) {
+      setError('Enter one or more comma-separated search terms first.');
+      return;
+    }
+
     setIsProcessing(true);
-    setProgress(20);
-    // Lightweight fake search: split terms and create placeholder results
-    await new Promise((r) => setTimeout(r, 350));
-    const terms = searchTerms
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-    const results = terms.map((t, i) => ({ id: `${i}-${t}`, text: t, page: 1, x: 10 + i * 5, y: 20 + i * 5 }));
-    setFoundTerms(results);
-    setSelectedTerms(new Set(results.map((r) => r.id)));
-    setIsProcessing(false);
-    setProgress(100);
+    setProgress(10);
+    setError('');
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdfjs = await loadPdfJs();
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const matches = [];
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+        const textContent = await page.getTextContent();
+
+        textContent.items.forEach((item, index) => {
+          const rawText = String(item.str || '');
+          const normalizedText = rawText.toLowerCase();
+
+          if (!normalizedText.trim()) return;
+
+          terms.forEach((term) => {
+            if (!normalizedText.includes(term.toLowerCase())) return;
+
+            const itemWidth = Math.max(24, item.width || (rawText.length * 6));
+            const itemHeight = Math.max(12, Math.abs(item.height || item.transform?.[3] || 12));
+
+            matches.push({
+              id: `${pageNumber}-${index}-${term}`,
+              text: term,
+              preview: rawText.trim(),
+              page: pageNumber,
+              x: Math.max(0, item.transform?.[4] || 0),
+              y: Math.max(0, viewport.height - (item.transform?.[5] || 0) - itemHeight),
+              width: itemWidth,
+              height: itemHeight,
+            });
+          });
+        });
+
+        if (typeof page.cleanup === 'function') {
+          page.cleanup();
+        }
+
+        setProgress(Math.round((pageNumber / pdf.numPages) * 100));
+      }
+
+      try {
+        await loadingTask.destroy();
+      } catch {
+        // ignore
+      }
+
+      setFoundTerms(matches);
+      setSelectedTerms(new Set(matches.map((match) => match.id)));
+
+      if (!matches.length) {
+        setError('No matching text was found in the extracted PDF text layer. For scanned PDFs, add manual areas instead.');
+      }
+    } catch (searchError) {
+      setError(searchError?.message || 'Unable to search this PDF.');
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => setProgress(0), 500);
+    }
   }, [file, searchTerms]);
 
   const toggleTermSelection = useCallback((id) => {
@@ -76,7 +143,7 @@ export default function PDFRedactionClient() {
   const addManualRedactionArea = useCallback(() => {
     setRedactionAreas((prev) => {
       const id = prev.length + 1;
-      return [...prev, { id, x: 10, y: 10, width: 100, height: 20 }];
+      return [...prev, { id, page: 1, x: 10, y: 10, width: 100, height: 20 }];
     });
   }, []);
 
@@ -93,57 +160,137 @@ export default function PDFRedactionClient() {
       setError("Please upload a PDF first.");
       return;
     }
+
+    if (selectedTerms.size === 0 && redactionAreas.length === 0) {
+      setError('Select at least one search result or manual area before redacting.');
+      return;
+    }
+
     setIsProcessing(true);
     setProgress(10);
-    // Minimal stub: simulate processing then create an object URL from the original file so user can download
-    await new Promise((r) => setTimeout(r, 700));
-    setProgress(60);
-    await new Promise((r) => setTimeout(r, 500));
-    // Revoke any previous result URL before creating a new one
-    if (redactedPdf) {
+    setError('');
+
+    try {
+      const [arrayBuffer, pdfjs, { PDFDocument } ] = await Promise.all([
+        file.arrayBuffer(),
+        loadPdfJs(),
+        getPdfLib(),
+      ]);
+      const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+      const outputPdf = await PDFDocument.create();
+
+      const selectedSearchAreas = foundTerms.filter((term) => selectedTerms.has(term.id));
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+        const renderViewport = page.getViewport({ scale: RENDER_SCALE });
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        if (!context) {
+          throw new Error('Canvas rendering is unavailable in this browser.');
+        }
+
+        canvas.width = Math.ceil(renderViewport.width);
+        canvas.height = Math.ceil(renderViewport.height);
+
+        await page.render({
+          canvasContext: context,
+          viewport: renderViewport,
+        }).promise;
+
+        context.fillStyle = hexToRgbCss(redactionColor);
+
+        const areasForPage = [
+          ...selectedSearchAreas.filter((term) => term.page === pageNumber),
+          ...redactionAreas.filter((area) => area.page === pageNumber),
+        ];
+
+        areasForPage.forEach((area) => {
+          context.fillRect(
+            area.x * RENDER_SCALE,
+            area.y * RENDER_SCALE,
+            area.width * RENDER_SCALE,
+            area.height * RENDER_SCALE,
+          );
+        });
+
+        const pngBytes = await fetch(canvas.toDataURL('image/png')).then((response) => response.arrayBuffer());
+        const embeddedImage = await outputPdf.embedPng(pngBytes);
+        const outputPage = outputPdf.addPage([viewport.width, viewport.height]);
+
+        outputPage.drawImage(embeddedImage, {
+          x: 0,
+          y: 0,
+          width: viewport.width,
+          height: viewport.height,
+        });
+
+        if (typeof page.cleanup === 'function') {
+          page.cleanup();
+        }
+
+        setProgress(Math.round((pageNumber / pdf.numPages) * 85));
+      }
+
+      if (cleanMetadata) {
+        outputPdf.setTitle(`${sanitizeFileName(file.name.replace(/\.[^/.]+$/, '')) || 'document'} - redacted`);
+        outputPdf.setAuthor('');
+        outputPdf.setSubject('Redacted document');
+        outputPdf.setKeywords(['redacted', 'easy-pdf']);
+        outputPdf.setCreator('easy-pdf redaction tool');
+        outputPdf.setProducer('easy-pdf redaction tool');
+      }
+
+      const pdfBytes = await outputPdf.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+      if (redactedPdf) {
+        safeRevokeObjectURL(redactedPdf);
+      }
+
+      const url = safeCreateObjectURL(blob);
+      if (!url) {
+        throw new Error('Unable to create a download URL for the redacted PDF.');
+      }
+
+      setRedactedPdf(url);
+      setProgress(100);
+
       try {
-        try { if (redactedPdf && typeof URL !== 'undefined' && !String(redactedPdf).startsWith('data:')) URL.revokeObjectURL(redactedPdf); } catch { }
+        await loadingTask.destroy();
       } catch {
         // ignore
       }
+    } catch (redactionError) {
+      setError(redactionError?.message || 'Unable to redact this PDF.');
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => setProgress(0), 800);
     }
-    let url = null;
-    try { if (typeof URL !== 'undefined') url = URL.createObjectURL(file); } catch (err) { console.error('Error creating object URL for redaction file:', err); url = null; }
-    setRedactedPdf(url);
-    setProgress(100);
-    setIsProcessing(false);
   }, [file, redactedPdf]);
 
   const downloadRedactedPdf = useCallback(() => {
     if (!redactedPdf) return;
     const a = document.createElement('a');
     a.href = redactedPdf;
-    // normalize file name by stripping extension and prefixing
-    const base = file?.name ? file.name.replace(/\.[^/.]+$/, '') : 'redacted';
+    const base = file?.name ? sanitizeFileName(file.name.replace(/\.[^/.]+$/, '')) : 'redacted';
     a.download = `${base}-redacted.pdf`;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    // Revoke the object URL after a short delay to allow the download to start
     setTimeout(() => {
-      try {
-        try { if (redactedPdf && typeof URL !== 'undefined' && !String(redactedPdf).startsWith('data:')) URL.revokeObjectURL(redactedPdf); } catch { }
-      } catch {
-        // ignore
-      }
+      safeRevokeObjectURL(redactedPdf);
       setRedactedPdf(null);
     }, 1000);
   }, [file, redactedPdf, setRedactedPdf]);
 
-  // Cleanup on unmount: revoke any outstanding object URL
   useEffect(() => {
     return () => {
       if (redactedPdf) {
-        try {
-          try { if (redactedPdf && typeof URL !== 'undefined' && !String(redactedPdf).startsWith('data:')) URL.revokeObjectURL(redactedPdf); } catch { }
-        } catch {
-          // ignore
-        }
+        safeRevokeObjectURL(redactedPdf);
       }
     };
   }, [redactedPdf]);
@@ -151,9 +298,9 @@ export default function PDFRedactionClient() {
   return (
     <ToolPageLayout
       title="PDF Redaction"
-      subtitle="Permanently remove or mask sensitive information from PDF documents right in your browser."
+      subtitle="Flatten and redact sensitive PDF content entirely in your browser."
       toolName="PDF Redaction"
-      toolDescription="Permanently remove or mask sensitive information from PDF documents right in your browser."
+      toolDescription="Search for text, define manual areas, and generate a flattened redacted PDF so masked content is no longer exposed in the output text layer."
       currentTool="pdf-redaction"
       steps={[
         "Upload or drop your PDF using the file selector or drag & drop area.",
@@ -171,7 +318,7 @@ export default function PDFRedactionClient() {
       ]}
       breadcrumbs={[
         { label: "Home", href: "/" },
-        { label: "Security & Sign", href: "/categories?filter=security" },
+        { label: "Advanced PDF Tools", href: "/categories/advanced-pdf-tools" },
         { label: "PDF Redaction", href: "/pdf-redaction" }
       ]}
     >
@@ -269,7 +416,7 @@ export default function PDFRedactionClient() {
                             <Checkbox checked={selectedTerms.has(term.id)} onCheckedChange={() => toggleTermSelection(term.id)} />
                             <div className="flex-1">
                               <span className="font-mono text-sm bg-background px-2 py-1">{term.text}</span>
-                              <span className="text-sm text-foreground ml-2">Page {term.page} at ({term.x}, {term.y})</span>
+                              <span className="text-sm text-foreground ml-2">Page {term.page} • “{term.preview}”</span>
                             </div>
                           </div>
                         ))}
@@ -303,6 +450,10 @@ export default function PDFRedactionClient() {
                             <Button variant="destructive" size="sm" onClick={() => removeRedactionArea(area.id)}>Remove</Button>
                           </div>
                           <div className="grid grid-cols-2 gap-2">
+                            <div>
+                              <Label>Page</Label>
+                              <Input type="number" min="1" value={area.page} onChange={(e) => updateRedactionArea(area.id, { page: parseInt(e.target.value || '1', 10) || 1 })} />
+                            </div>
                             <div>
                               <Label>X</Label>
                               <Input type="number" value={area.x} onChange={(e) => updateRedactionArea(area.id, { x: parseInt(e.target.value) })} />
@@ -356,6 +507,7 @@ export default function PDFRedactionClient() {
                     <li>• Selected search terms: {selectedTerms.size}</li>
                     <li>• Manual redaction areas: {redactionAreas.length}</li>
                     <li>• Metadata cleaning: {cleanMetadata ? 'Enabled' : 'Disabled'}</li>
+                    <li>• Output mode: Flattened image-based PDF for safer text removal</li>
                   </ul>
                 </div>
 
@@ -379,7 +531,7 @@ export default function PDFRedactionClient() {
                 )}
 
                 {redactedPdf && (
-                  <Alert className="border-green-500/50 bg-green-500/10">
+                  <Alert className="border-emerald-500/50 bg-emerald-500/10">
                     <CheckCircle className="h-4 w-4 text-green-400" aria-hidden="true" />
                     <AlertDescription className="flex items-center justify-between">
                       <span className="text-green-400">Redaction completed successfully!</span>

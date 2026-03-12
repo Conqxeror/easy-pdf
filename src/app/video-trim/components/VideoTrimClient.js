@@ -8,6 +8,7 @@ import { Alert } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { loadFfmpegClient } from "@/lib/ffmpegClient";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const MAX_VIDEO_SIZE = 500 * 1024 * 1024; // 500 MB
 
@@ -173,8 +174,8 @@ export default function VideoTrimClient() {
       const duration = audioBuffer.duration || (channelData.length / sampleRate);
       setWaveform({ bins, sampleRate, duration });
       audioCtx.close();
-    } catch (err) {
-      console.error("Waveform generation failed", err);
+    } catch {
+      toast.error("Waveform generation failed");
       setWaveform(null);
     }
   };
@@ -274,8 +275,8 @@ export default function VideoTrimClient() {
             setMarkerEnd(videoEl?.duration || 0);
           }
         }
-      } catch (error) {
-        console.error("Thumbnail generation failed", error);
+      } catch {
+        toast.error("Thumbnail generation failed");
         setThumbnails([]);
       } finally {
         setIsGeneratingThumbs(false);
@@ -538,7 +539,6 @@ export default function VideoTrimClient() {
       try { ffmpeg.FS("unlink", inName); } catch { }
       try { ffmpeg.FS("unlink", outName); } catch { }
     } catch (err) {
-      console.error("Trim failed", err);
       setError(err?.message || "Trim failed.");
     } finally {
       setIsProcessing(false);
@@ -598,7 +598,6 @@ export default function VideoTrimClient() {
       try { ffmpeg.FS("unlink", outName); } catch { }
       for (let i = 0; i < inputNames.length; i++) try { ffmpeg.FS("unlink", inputNames[i]); } catch { }
     } catch (err) {
-      console.error("Merge failed", err);
       setError(err?.message || "Merge failed. Try ensuring inputs are similar codecs.");
     } finally {
       setIsProcessing(false);
@@ -680,7 +679,7 @@ export default function VideoTrimClient() {
                     />
                     <div className="text-xs w-10">{snapThreshold.toFixed(2)}s</div>
                     {snapMessage && (
-                      <div className="text-sm text-green-600 ml-2">{snapMessage}</div>
+                      <div className="text-sm text-emerald-600 dark:text-emerald-400 ml-2">{snapMessage}</div>
                     )}
                   </div>
                   <Button onClick={() => setZoomFactor((z) => Math.max(1, Math.min(8, z - 1)))}>- Zoom</Button>
@@ -802,9 +801,9 @@ export default function VideoTrimClient() {
         )}
 
         {downloadUrl && (
-          <div className="p-3 rounded-none bg-green-50">
+          <div className="p-3 rounded-none bg-muted">
             <p className="font-semibold">Result ready</p>
-            <a href={downloadUrl} download={downloadName || true} className="text-blue-600 underline">Download</a>
+            <a href={downloadUrl} download={downloadName || true} className="text-primary-foreground bg-primary px-3 py-1 rounded-none underline">Download</a>
           </div>
         )}
       </div>

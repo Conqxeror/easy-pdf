@@ -30,8 +30,7 @@ export default function MetadataExtractorClient() {
         setError("Unsupported file type. Please upload an image or PDF.");
         setIsProcessing(false);
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Failed to extract metadata.");
       setIsProcessing(false);
     }
@@ -90,8 +89,7 @@ export default function MetadataExtractorClient() {
       };
 
       setMetadata(info);
-    } catch (err) {
-      console.error(err);
+    } catch {
       throw new Error("Could not read PDF metadata");
     } finally {
       setIsProcessing(false);

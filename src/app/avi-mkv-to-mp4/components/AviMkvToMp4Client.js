@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const MAX_VIDEO_SIZE = 500 * 1024 * 1024; // 500MB guard
 
@@ -86,8 +87,9 @@ export default function AviMkvToMp4Client() {
 
       setProgress(100);
     } catch (err) {
-      console.error("AVI/MKV to MP4 conversion failed", err);
-      setError(err?.message || "Conversion failed. Try a shorter clip or different video format.");
+      const msg = err?.message || "Conversion failed. Try a shorter clip or different video format.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
       setTimeout(() => setProgress(0), 800);
@@ -154,10 +156,10 @@ export default function AviMkvToMp4Client() {
         )}
 
         {downloadUrl && (
-          <div className="p-4 bg-green-50 rounded-none border border-green-200">
-            <p className="font-semibold text-green-800">MP4 conversion complete!</p>
+          <div className="p-4 bg-muted rounded-none border border-border">
+            <p className="font-semibold text-foreground">MP4 conversion complete!</p>
             <a
-              className="text-blue-600 underline inline-block mt-2 px-4 py-2 bg-blue-100 rounded-none hover:bg-blue-200 transition-colors"
+              className="inline-block mt-2 px-4 py-2 bg-primary text-primary-foreground rounded-none hover:bg-primary/90 transition-colors"
               href={downloadUrl}
               download={`${file?.name.replace(/\.[^/.]+$/, "") || "converted"}.mp4`}
             >

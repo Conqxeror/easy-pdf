@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -80,7 +81,7 @@ export default function ResizeImagesClient() {
           ));
         };
         img.onerror = () => {
-          console.error(`Failed to load image dimensions for ${item.name}`);
+          toast.error(`Failed to load dimensions for ${item.name}`);
         };
         img.src = item.previewUrl;
       }
@@ -104,7 +105,7 @@ export default function ResizeImagesClient() {
   const resizeImage = (file, targetWidth, targetHeight) => {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      const objectUrl = URL.createObjectURL(file);
+      const objectUrl = safeCreateObjectURL(file);
 
       img.onload = () => {
         try {
@@ -120,7 +121,7 @@ export default function ResizeImagesClient() {
           // Convert to blob
           canvas.toBlob(
             (blob) => {
-              URL.revokeObjectURL(objectUrl);
+              safeRevokeObjectURL(objectUrl);
               if (blob) {
                 resolve(blob);
               } else {
@@ -131,13 +132,13 @@ export default function ResizeImagesClient() {
             0.85 // Default quality
           );
         } catch (err) {
-          URL.revokeObjectURL(objectUrl);
+          safeRevokeObjectURL(objectUrl);
           reject(err);
         }
       };
 
       img.onerror = (err) => {
-        URL.revokeObjectURL(objectUrl);
+        safeRevokeObjectURL(objectUrl);
         reject(err);
       };
 
@@ -250,7 +251,7 @@ export default function ResizeImagesClient() {
         item.targetWidth = targetWidth;
         item.targetHeight = targetHeight;
       } catch (resizeError) {
-        console.error("Failed to resize image", resizeError);
+        toast.error(`Failed to resize ${item.file?.name || 'image'}`);
         item.status = "error";
         item.error = resizeError?.message || "Resize failed";
       }
@@ -462,7 +463,7 @@ export default function ResizeImagesClient() {
                         </p>
                       )}
                       {item.targetWidth && item.targetHeight && (
-                        <p className="text-xs text-blue-500">
+                        <p className="text-xs text-muted-foreground">
                           Resized: {item.targetWidth}×{item.targetHeight}px
                         </p>
                       )}
@@ -473,12 +474,12 @@ export default function ResizeImagesClient() {
                   </div>
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending resize</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Resizing...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Resizing...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (

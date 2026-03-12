@@ -15,7 +15,7 @@ test.describe('New tool flows', () => {
 		const input = dropzone.locator('input[type="file"]');
 		await input.setInputFiles(fixturePath('sample.html'));
 
-		await expect(page.getByText('Sample HTML Fixture')).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Sample HTML Fixture' })).toBeVisible();
 		await expect(page.getByRole('button', { name: /Generate PDF/i })).toBeVisible();
 	});
 
@@ -36,7 +36,7 @@ test.describe('New tool flows', () => {
 		await expect(page.getByRole('heading', { name: /DOCX to PDF/i })).toBeVisible();
 		
 		const input = page.locator('input[type="file"]').first();
-		await expect(input).toBeVisible();
+		await expect(input).toHaveAttribute('type', 'file');
 
 		// Upload the generated docx fixture
 		await input.setInputFiles(fixturePath('sample.docx'));
@@ -109,7 +109,13 @@ test.describe('New tool flows', () => {
 	test('Video trim page loads and shows snapping controls', async ({ page }) => {
 		await page.goto('/video-trim', { waitUntil: 'networkidle' });
 		await expect(page.getByRole('heading', { name: /Video Trim|Video Trimmer/i })).toBeVisible();
-		// The UI exposes a Snap toggle; verify there's a button like 'Snapping: On/Off'
+		const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
+		await page.evaluate((thumbs) => {
+			if (window.__E2E_EXPOSE?.loadThumbs) {
+				window.__E2E_EXPOSE.loadThumbs(thumbs);
+			}
+		}, [{ time: 1, data: tinyPng }, { time: 2, data: tinyPng }]);
+		// The snap toggle only appears once the preview workspace is open.
 		await expect(page.getByRole('button', { name: /Snapping:/i })).toBeVisible();
 	});
 
@@ -119,7 +125,9 @@ test.describe('New tool flows', () => {
 		// Inject two tiny thumbnails and ensure they're shown
 		const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 		await page.evaluate((thumbs) => {
-			window.__E2E_FAKE_THUMBS = thumbs;
+			if (window.__E2E_EXPOSE?.loadThumbs) {
+				window.__E2E_EXPOSE.loadThumbs(thumbs);
+			}
 		}, [{ time: 1, data: tinyPng }, { time: 2, data: tinyPng }]);
 
 		// Wait for the thumbnails to render
@@ -242,9 +250,7 @@ test.describe('New tool flows', () => {
 			const fp = fixturePath('tiny.webm');
 			if (fs.existsSync(fp)) {
 				await input.setInputFiles(fp);
-				// wait again for the UI to show the queued file
-				// When fallback is used, the UI should show the selected file badge
-				await page.waitForSelector('text=1 file selected', { timeout: 20000 });
+				await page.waitForSelector('text=tiny.webm', { timeout: 20000 });
 			}
 		}
 

@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { copyToClipboard, sanitizeFileName } from "@/lib/enhancedUX";
+import { copyToClipboard, sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 import { diffChars, diffLines, diffWords } from "diff";
 
 const SAMPLE_ORIGINAL = `Yesterday we announced the PDF collaboration beta with live cursors, inline chat, and audit trails.
@@ -80,7 +80,7 @@ export default function TextDiffCheckerClient() {
 
 			return { segments, stats, report, error: "" };
 		} catch (err) {
-			console.error("Diff calculation failed", err);
+			toast.error(err.message || "Diff calculation failed");
 			return { segments: [], stats: { insertions: 0, deletions: 0, unchanged: 0, delta: 0 }, report: "", error: err.message };
 		}
 	}, [originalText, revisedText, diffMode, ignoreCase, collapseWhitespace]);
@@ -97,12 +97,13 @@ export default function TextDiffCheckerClient() {
 		if (!diffAnalysis.report) return;
 		const blob = new Blob([diffAnalysis.report], { type: "text/plain" });
 		const link = document.createElement("a");
-		link.href = URL.createObjectURL(blob);
+		const url = safeCreateObjectURL(blob);
+		link.href = url;
 		link.download = `${sanitizeFileName("text-diff")}.txt`;
 		document.body.appendChild(link);
 		link.click();
 		document.body.removeChild(link);
-		setTimeout(() => URL.revokeObjectURL(link.href), 300);
+		setTimeout(() => safeRevokeObjectURL(url), 300);
 	};
 
 	const swapTexts = () => {

@@ -68,8 +68,7 @@ export default function ImageConverterClient() {
         downloadUrlsRef.current.set(item.name, url);
         item.url = url;
         item.outBlob = blob;
-      } catch (err) {
-        console.error('Image conversion failed', err);
+      } catch {
         setError('Failed to convert one or more images.');
       }
     }

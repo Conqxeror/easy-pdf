@@ -125,8 +125,7 @@ export default function ImageCropClient() {
       setDownloadUrl(newDownloadUrl);
 
       setError("");
-    } catch (err) {
-      console.error("Image cropping failed", err);
+    } catch {
       setError("Failed to crop the image. Please try again with a different file.");
     }
   };

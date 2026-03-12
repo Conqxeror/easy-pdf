@@ -164,10 +164,10 @@ export default function PdfMetadataEditorClient() {
       ]}
       badge="New"
       icon={null}
-      primaryActionHref="/merge"
+      primaryActionHref="/pdf/merge"
       breadcrumbs={[
         { label: "Home", href: "/" },
-        { label: "Organize & Edit", href: "/categories?filter=organize" },
+        { label: "Advanced PDF Tools", href: "/categories/advanced-pdf-tools" },
         { label: "PDF Metadata Editor", href: "/pdf-metadata-editor" }
       ]}
     >

@@ -23,6 +23,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { advancedPdfProcessor } from '@/lib/advancedPdfProcessing';
 import { sanitizeFileName, safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 // Premium functionality removed - all features now free
 
 const capabilities = { maxBatchSize: 200, maxFileSize: 500 }; // Unlimited for all users
@@ -101,8 +102,8 @@ const BatchProcessingPanel = ({ className = '' }) => {
         result: batchResults[index]
       })));
 
-    } catch (error) {
-      console.error('Batch processing failed:', error);
+    } catch {
+      toast.error('Batch processing failed');
     } finally {
       setProcessing(false);
     }

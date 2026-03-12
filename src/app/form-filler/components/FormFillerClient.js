@@ -17,6 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function FormFillerClient() {
   const [files, setFiles] = useState([]);
@@ -59,7 +61,7 @@ export default function FormFillerClient() {
         renderTaskRef.current.cancel();
       }
       // Revoke object URL to prevent memory leaks
-      try { if (filledPdfUrl && typeof URL !== 'undefined' && !String(filledPdfUrl).startsWith('data:')) URL.revokeObjectURL(filledPdfUrl); } catch { /* ignore */ }
+      try { if (filledPdfUrl) safeRevokeObjectURL(filledPdfUrl); } catch { /* ignore */ }
     };
   }, [pdfDocProxy, filledPdfUrl]);
 
@@ -103,7 +105,6 @@ export default function FormFillerClient() {
       if (e.name === "RenderingCancelledException") {
         console.log("PDF rendering cancelled during background render:", e);
       } else {
-        console.error("Error rendering PDF background:", e);
         setError("Failed to render PDF background.");
       }
       return null;
@@ -172,9 +173,8 @@ export default function FormFillerClient() {
       const pdf = await loadingTask.promise; // Load PDF with pdfjs-dist
       setPdfDocProxy(pdf); // Store the PDFDocumentProxy
       setNumPages(pdf.numPages);
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF loading error:", e);
       setFiles([]); // Clear files on error
     }
   };
@@ -257,26 +257,19 @@ export default function FormFillerClient() {
 
       const pdfBytes = await srcDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
-      let url = null;
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for filled PDF:', err); }
+      const url = safeCreateObjectURL(blob);
 
       setFilledPdfUrl((prev) => {
-        try {
-          if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) {
-            try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch { }
-          }
-        } catch {
-          /* ignore */
-        }
+        if (prev) safeRevokeObjectURL(prev);
         return url;
       });
       const safeBase = files[0]?.name ? files[0].name.replace(/\.pdf$/i, '').replace(/\s+/g, '-').replace(/[^a-zA-Z0-9\-_.]/g, '') : 'document';
       setDownloadFileName(url ? `filled_form_${safeBase}.pdf` : `filled_form_document.pdf`);
 
       setError("");
-    } catch (err) {
+    } catch {
       setError("Failed to fill form. Please try again.");
-      console.error("Form fill error:", err);
+      toast.error("Failed to fill form. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -334,7 +327,7 @@ export default function FormFillerClient() {
 
         {error && (
           <Alert variant="destructive">
-            <div className="text-red-600">{error}</div>
+            <div className="text-destructive">{error}</div>
           </Alert>
         )}
 
@@ -437,15 +430,15 @@ export default function FormFillerClient() {
               </div>
 
               {filledPdfUrl && (
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-none border border-green-200 dark:border-green-800">
-                  <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2">Success!</h4>
-                  <p className="text-sm text-green-700 dark:text-green-400 mb-3">
+                <div className="bg-muted p-4 rounded-none border border-border">
+                  <h4 className="font-semibold text-foreground mb-2">Success!</h4>
+                  <p className="text-sm text-muted-foreground mb-3">
                     Your PDF has been updated with the text.
                   </p>
                   <a
                     href={filledPdfUrl}
                     download={downloadFileName}
-                    className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-foreground bg-green-600 rounded-none hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-primary-foreground bg-primary rounded-none hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                   >
                     Download PDF
                   </a>

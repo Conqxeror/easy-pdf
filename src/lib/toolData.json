@@ -67,7 +67,7 @@
     "features": [
       "Multiple compression levels",
       "Quality preservation",
-      "Batch processing",
+      "Single-file workflow",
       "Size preview"
     ],
     "relatedTools": [
@@ -116,12 +116,12 @@
       "extract images"
     ],
     "seoTitle": "Free PDF to JPG Converter - Convert PDF to Images Online",
-    "seoDescription": "Convert PDF pages to high-quality JPG images. Free online tool with customizable quality settings and batch processing.",
+    "seoDescription": "Convert PDF pages to JPG images in your browser with page selection, individual downloads, and ZIP export for multi-page jobs when available.",
     "features": [
-      "High-quality output",
-      "Custom resolution",
-      "Batch processing",
-      "Multiple formats"
+      "JPG export",
+      "Page selection",
+      "Multi-page ZIP export",
+      "Browser-only processing"
     ],
     "relatedTools": [
       "/jpg-to-pdf",
@@ -547,7 +547,7 @@
   {
     "href": "/pdf-to-docx",
     "title": "PDF to DOCX",
-    "description": "Convert PDF files to editable Microsoft Word documents (DOCX) entirely in your browser.",
+    "description": "Extract text from PDF files into a browser-generated Word-compatible export, with plain-text fallback when DOCX packaging is unavailable.",
     "keywords": [
       "pdf to docx",
       "pdf to word",
@@ -555,12 +555,12 @@
       "docx converter",
       "pdf to doc"
     ],
-    "seoTitle": "PDF to DOCX Converter - Convert PDF to Word Online",
-    "seoDescription": "Convert PDF files to editable Word documents. Extract text and preserve structure with our free online PDF to DOCX converter.",
+    "seoTitle": "Extract PDF Text to Word Free - Browser DOCX or TXT Export",
+    "seoDescription": "Extract readable text from PDFs into a Word-compatible export entirely in your browser, with a plain-text fallback when needed.",
     "features": [
       "Text extraction",
-      "Preserve structure",
-      "Batch processing",
+      "Word-compatible export",
+      "Plain-text fallback",
       "No file uploads"
     ],
     "relatedTools": [
@@ -599,7 +599,7 @@
   {
     "href": "/pdf-to-ppt",
     "title": "PDF to PowerPoint",
-    "description": "Convert PDF files to presentation slides by extracting and structuring content.",
+    "description": "Extract PDF text into a presentation-style HTML slide draft for browser review or manual import into slide software.",
     "keywords": [
       "pdf to ppt",
       "pdf to powerpoint",
@@ -607,12 +607,12 @@
       "presentation",
       "pdf slides"
     ],
-    "seoTitle": "PDF to PowerPoint Converter - Convert PDF to PPT Online",
-    "seoDescription": "Convert PDF files to presentation slides. Extract and structure content from PDFs for use in PowerPoint presentations.",
+    "seoTitle": "Extract PDF to Slide Draft Free - HTML Deck for PowerPoint",
+    "seoDescription": "Turn PDF page text into an HTML slide draft in your browser. Review locally or import the content into PowerPoint, Google Slides, or Keynote.",
     "features": [
-      "Slide structure",
+      "HTML slide draft",
       "Content extraction",
-      "Presentation format",
+      "Per-page structure",
       "No file uploads"
     ],
     "relatedTools": [
@@ -625,7 +625,7 @@
   {
     "href": "/pdf-to-xlsx",
     "title": "PDF to Excel",
-    "description": "Convert PDF files to Excel spreadsheets by extracting table data.",
+    "description": "Extract table-like PDF text into CSV files that open cleanly in Excel, Google Sheets, or Numbers.",
     "keywords": [
       "pdf to excel",
       "pdf to xlsx",
@@ -633,12 +633,12 @@
       "extract tables",
       "pdf table converter"
     ],
-    "seoTitle": "PDF to Excel Converter - Convert PDF Tables to XLSX Online",
-    "seoDescription": "Convert PDF files to Excel spreadsheets by extracting table data. Extract and convert tables from PDFs to structured Excel files.",
+    "seoTitle": "Extract PDF Tables to CSV Free - Spreadsheet Ready Export",
+    "seoDescription": "Extract table-like text from PDFs into CSV files in your browser, then open the results in Excel or any spreadsheet tool.",
     "features": [
-      "Table extraction",
-      "Structured data",
-      "Batch processing",
+      "CSV export",
+      "Table-like text extraction",
+      "Spreadsheet-ready output",
       "No file uploads"
     ],
     "relatedTools": [
@@ -1587,7 +1587,7 @@
       "patient document"
     ],
     "seoTitle": "AI Medical Document Analyzer - Review Medical Records",
-    "seoDescription": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, and medical insights from health records.",
+    "seoDescription": "Analyze medical documents with AI-powered review. Extract patient information, diagnoses, medications, and lab findings with clear disclosure that files are uploaded for AI analysis and not stored by easy-pdf.",
     "features": [
       "Medical AI analysis",
       "Patient data extraction",
@@ -1658,7 +1658,7 @@
   {
     "href": "/pdf-table-extractor",
     "title": "PDF Table Extractor",
-    "description": "Extract and export tables from PDF documents to CSV, Excel, or JSON format",
+    "description": "Extract table-like PDF content and export the recovered data as CSV for spreadsheet tools.",
     "keywords": [
       "pdf table extractor",
       "extract tables from pdf",
@@ -1666,13 +1666,13 @@
       "pdf to excel",
       "table extraction"
     ],
-    "seoTitle": "PDF Table Extractor - Convert PDF Tables to CSV/Excel",
-    "seoDescription": "Extract tables from PDF documents and export to CSV, Excel, or JSON format. Free online PDF table extraction tool with automatic detection.",
+    "seoTitle": "Extract Tables from PDF Free - CSV Export for Excel",
+    "seoDescription": "Pull table-like text from PDF files and export the results as CSV in your browser. Review the extracted rows before opening them in Excel or Google Sheets.",
     "features": [
       "Extract tables automatically",
-      "Export to CSV/Excel/JSON",
+      "CSV export",
       "Preview extracted data",
-      "Handle complex table structures"
+      "Spreadsheet-friendly output"
     ],
     "relatedTools": [
       "/ocr"
@@ -1736,7 +1736,7 @@
   {
     "href": "/advanced-ocr",
     "title": "Advanced OCR with AI",
-    "description": "Extract text from PDFs and images with AI-powered enhancement and formatting",
+    "description": "Extract text from PDFs and images with AI-assisted OCR, language selection, and confidence reporting.",
     "keywords": [
       "advanced ocr",
       "ai ocr",
@@ -1745,11 +1745,11 @@
       "intelligent character recognition"
     ],
     "seoTitle": "Advanced OCR with AI - Extract Text with Artificial Intelligence",
-    "seoDescription": "Extract text from PDFs and images with AI-powered OCR enhancement. Multiple language support with intelligent formatting preservation.",
+    "seoDescription": "Advanced AI OCR for scanned documents. Multiple language support, confidence scores, and browser-only processing. Files never leave your device.",
     "features": [
       "AI-enhanced text extraction",
       "Multiple language support",
-      "Format preservation",
+      "Page-by-page OCR output",
       "Confidence scoring"
     ],
     "relatedTools": [
@@ -1762,7 +1762,7 @@
   {
     "href": "/pdf-accessibility-checker",
     "title": "PDF Accessibility Checker",
-    "description": "Check PDF documents for accessibility compliance and WCAG standards",
+    "description": "Run a local heuristic audit for common PDF accessibility issues and follow-up recommendations.",
     "keywords": [
       "pdf accessibility checker",
       "wcag compliance",
@@ -1770,13 +1770,13 @@
       "accessibility audit",
       "compliance checker"
     ],
-    "seoTitle": "PDF Accessibility Checker - WCAG Compliance Audit Tool",
-    "seoDescription": "Check PDF accessibility compliance with WCAG standards. Validate alt text, reading order, and color contrast with our free online audit tool.",
+    "seoTitle": "Check PDF Accessibility Free - Heuristic WCAG Audit",
+    "seoDescription": "Run a browser-based PDF accessibility audit that flags common WCAG-related issues such as missing tags, weak reading order signals, alt-text gaps, and pages needing manual contrast review.",
     "features": [
-      "WCAG compliance check",
-      "Alt text validation",
-      "Reading order analysis",
-      "Color contrast testing"
+      "Tag and title checks",
+      "Alt-text validation",
+      "Reading-order heuristics",
+      "Manual contrast review flags"
     ],
     "relatedTools": [
       "/pdf-redaction",
@@ -1789,21 +1789,21 @@
   {
     "href": "/pdf-digital-signature",
     "title": "PDF Digital Signature",
-    "description": "Add legally binding digital signatures with certificate management and validation",
+    "description": "Add a visible signature stamp with embedded signer metadata and local validation",
     "keywords": [
       "pdf digital signature",
-      "digital signature",
-      "legally binding signature",
-      "certificate management",
+      "visible signature pdf",
+      "signature metadata",
+      "certificate information",
       "signature validation"
     ],
-    "seoTitle": "PDF Digital Signature - Legally Binding Digital Signatures",
-    "seoDescription": "Add legally binding digital signatures to PDF documents with certificate management and validation. Ensure legal compliance with digital signatures.",
+    "seoTitle": "Add Signature Stamp to PDF Free - Visible Signer Metadata",
+    "seoDescription": "Create a visible PDF signature block with signer metadata and local validation. 100% private - runs in your browser.",
     "features": [
-      "Digital certificates",
+      "Visible signer stamp",
+      "Embedded signer metadata",
       "Signature validation",
-      "Timestamp authority",
-      "Legal compliance"
+      "Browser-only processing"
     ],
     "relatedTools": [
       "/sign",
@@ -1870,7 +1870,7 @@
   {
     "href": "/pdf-annotation-collaboration",
     "title": "PDF Annotation Collaboration",
-    "description": "Collaborate on PDF annotations with team members and export shared comments",
+    "description": "Build a local PDF review workspace with annotations, replies, reviewer roles, and exportable review data",
     "keywords": [
       "pdf annotation collaboration",
       "collaborative annotations",
@@ -1878,10 +1878,10 @@
       "shared comments",
       "review workflows"
     ],
-    "seoTitle": "PDF Annotation Collaboration - Team PDF Review Tool",
-    "seoDescription": "Collaborate on PDF annotations with team members and export shared comments. Streamline document review and team collaboration workflows.",
+    "seoTitle": "PDF Review Workspace Free - Annotate, Track, and Export",
+    "seoDescription": "Create a local PDF review workspace with comments, replies, reviewer roles, annotated PDF export, and JSON review records.",
     "features": [
-      "Team annotations",
+      "Local review workspace",
       "Comment threads",
       "Export annotations",
       "Review workflows"
@@ -2588,7 +2588,7 @@
       "Image overlay",
       "Transparency control",
       "Resize & Position",
-      "Batch processing (coming soon)"
+      "Single-image workflow"
     ],
     "relatedTools": [
       "/image-text-overlay",
@@ -2740,18 +2740,18 @@
   {
     "href": "/ppt-to-pdf",
     "title": "PPT to PDF",
-    "description": "Convert PowerPoint presentations to PDF documents.",
+    "description": "Understand the browser-side limitations of PPT/PPTX to PDF conversion and use recommended alternative export workflows.",
     "keywords": [
       "ppt to pdf",
       "powerpoint to pdf",
       "convert ppt"
     ],
-    "seoTitle": "PPT to PDF Converter - Convert PowerPoint to PDF",
-    "seoDescription": "Convert PowerPoint presentations (PPT/PPTX) to PDF documents online. Preserve formatting and layout.",
+    "seoTitle": "PPT to PDF Limitations - Practical Export Alternatives",
+    "seoDescription": "Review why reliable PowerPoint-to-PDF conversion is not available in this browser-only workflow and follow recommended export options instead.",
     "features": [
-      "PPT/PPTX support",
-      "Preserve layout",
-      "Batch conversion"
+      "PPT/PPTX file validation",
+      "Browser limitation guidance",
+      "Alternative export steps"
     ],
     "relatedTools": [
       "/pdf-to-ppt",

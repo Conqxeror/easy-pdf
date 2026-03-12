@@ -1,4 +1,4 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 
 export const metadata = generateEnhancedMetadata({
   title: "Our Sponsors - easy-pdf",
@@ -17,20 +17,6 @@ export const metadata = generateEnhancedMetadata({
   ]
 });
 
-const structuredData = generateComprehensiveJsonLd('about', {
-  title: "Our Sponsors",
-  description: "Community sponsors who support free PDF tools",
-  url: "/sponsors"
-});
-
 export default function SponsorsLayout({ children }) {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      {children}
-    </>
-  );
+  return children;
 }

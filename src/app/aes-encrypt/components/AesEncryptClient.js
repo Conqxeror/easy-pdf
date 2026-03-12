@@ -8,7 +8,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Copy, Check, Lock, Unlock } from "lucide-react";
-import CryptoJS from "crypto-js";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { toast } from "sonner";
+
+let cryptoJsLoaderPromise;
+
+const loadCryptoJs = async () => {
+  if (!cryptoJsLoaderPromise) {
+    cryptoJsLoaderPromise = import("crypto-js").then((module) => module.default);
+  }
+
+  return cryptoJsLoaderPromise;
+};
 
 export default function AesEncryptClient() {
   const [mode, setMode] = useState("encrypt");
@@ -18,7 +29,7 @@ export default function AesEncryptClient() {
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState("");
 
-  const process = () => {
+  const process = async () => {
     setError("");
     if (!input || !password) {
       setError("Please enter both text and a password.");
@@ -26,6 +37,8 @@ export default function AesEncryptClient() {
     }
 
     try {
+      const CryptoJS = await loadCryptoJs();
+
       if (mode === "encrypt") {
         const encrypted = CryptoJS.AES.encrypt(input, password).toString();
         setOutput(encrypted);
@@ -39,9 +52,9 @@ export default function AesEncryptClient() {
           setOutput(decrypted);
         }
       }
-    } catch (err) {
+    } catch {
       setError("Processing failed. Please check your input.");
-      console.error(err);
+      toast.error("Processing failed. Please check your input.");
     }
   };
 
@@ -107,15 +120,15 @@ export default function AesEncryptClient() {
               />
             </div>
 
-            <Button onClick={process} className="w-full" size="lg">
+            <Button onClick={() => void process()} className="w-full" size="lg">
               {mode === "encrypt" ? <Lock className="w-4 h-4 mr-2" /> : <Unlock className="w-4 h-4 mr-2" />}
               {mode === "encrypt" ? "Encrypt Text" : "Decrypt Text"}
             </Button>
 
             {error && (
-              <div className="text-red-500 text-sm font-medium text-center">
-                {error}
-              </div>
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
             )}
 
             {output && (
@@ -133,7 +146,7 @@ export default function AesEncryptClient() {
                     className="absolute top-2 right-2"
                     onClick={copyToClipboard}
                   >
-                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                    {copied ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                   </Button>
                 </div>
               </div>

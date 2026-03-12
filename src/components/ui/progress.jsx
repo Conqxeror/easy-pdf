@@ -34,9 +34,9 @@ const progressIndicatorVariants = cva(
       color: {
         // Use a light neutral progress indicator so it reads clearly on dark backgrounds.
         default: "bg-background dark:bg-background",
-        success: "bg-green-500",
+        success: "bg-emerald-500",
         warning: "bg-yellow-500",
-        error: "bg-red-500",
+        error: "bg-destructive",
         gradient: "bg-gradient-to-r from-white/60 via-white/70 to-white/60",
         animated: "bg-gradient-to-r from-white/50 via-white/70 to-white/50 animate-gradient",
       },

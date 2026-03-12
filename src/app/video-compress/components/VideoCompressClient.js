@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { loadFfmpegClient } from "@/lib/ffmpegClient";
 import { Button } from "@/components/ui/button";
@@ -79,7 +80,7 @@ export default function VideoCompressClient() {
       setDownloadUrl(url);
       setProgress(100);
     } catch (err) {
-      console.error("Video compression failed", err);
+      toast.error(err?.message || "Video compression failed");
       setError(err?.message || "Compression failed. Try a different preset or smaller input.");
     } finally {
       setIsProcessing(false);
@@ -138,9 +139,9 @@ export default function VideoCompressClient() {
         )}
 
         {downloadUrl && (
-          <div className="p-4 bg-green-50 rounded-none">
+          <div className="p-4 bg-muted rounded-none">
             <p className="font-semibold">Compressed file ready</p>
-            <a className="text-blue-600 underline" href={downloadUrl} download>Download</a>
+            <a className="text-primary-foreground bg-primary px-3 py-1 rounded-none underline" href={downloadUrl} download>Download</a>
           </div>
         )}
 

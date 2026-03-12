@@ -69,10 +69,10 @@ export default function PasswordStrengthClient() {
   const { score, feedback, crackTime } = calculateStrength(password);
 
   const getStrengthLabel = (s) => {
-    if (s < 40) return { label: "Weak", color: "text-red-500", progressColor: "bg-red-500" };
+    if (s < 40) return { label: "Weak", color: "text-destructive", progressColor: "bg-destructive" };
     if (s < 70) return { label: "Fair", color: "text-yellow-500", progressColor: "bg-yellow-500" };
-    if (s < 90) return { label: "Good", color: "text-blue-500", progressColor: "bg-blue-500" };
-    return { label: "Strong", color: "text-green-500", progressColor: "bg-green-500" };
+    if (s < 90) return { label: "Good", color: "text-primary", progressColor: "bg-primary" };
+    return { label: "Strong", color: "text-emerald-600 dark:text-emerald-400", progressColor: "bg-emerald-500" };
   };
 
   const strength = getStrengthLabel(score);
@@ -155,19 +155,19 @@ export default function PasswordStrengthClient() {
                       Good Practices
                     </h4>
                     <ul className="space-y-1 text-sm">
-                      <li className={password.length >= 12 ? "text-green-600 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
+                      <li className={password.length >= 12 ? "text-emerald-600 dark:text-emerald-400 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
                         {password.length >= 12 ? <CheckCircle className="w-3 h-3" /> : <div className="w-3 h-3 rounded-none border border-current" />}
                         12+ Characters
                       </li>
-                      <li className={/[A-Z]/.test(password) ? "text-green-600 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
+                      <li className={/[A-Z]/.test(password) ? "text-emerald-600 dark:text-emerald-400 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
                         {/[A-Z]/.test(password) ? <CheckCircle className="w-3 h-3" /> : <div className="w-3 h-3 rounded-none border border-current" />}
                         Uppercase Letters
                       </li>
-                      <li className={/[0-9]/.test(password) ? "text-green-600 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
+                      <li className={/[0-9]/.test(password) ? "text-emerald-600 dark:text-emerald-400 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
                         {/[0-9]/.test(password) ? <CheckCircle className="w-3 h-3" /> : <div className="w-3 h-3 rounded-none border border-current" />}
                         Numbers
                       </li>
-                      <li className={/[^a-zA-Z0-9]/.test(password) ? "text-green-600 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
+                      <li className={/[^a-zA-Z0-9]/.test(password) ? "text-emerald-600 dark:text-emerald-400 flex items-center gap-1" : "text-muted-foreground flex items-center gap-1"}>
                         {/[^a-zA-Z0-9]/.test(password) ? <CheckCircle className="w-3 h-3" /> : <div className="w-3 h-3 rounded-none border border-current" />}
                         Special Characters
                       </li>
@@ -182,14 +182,14 @@ export default function PasswordStrengthClient() {
                     {feedback.length > 0 ? (
                       <ul className="space-y-1 text-sm">
                         {feedback.map((item, i) => (
-                          <li key={i} className={`${item.type === 'error' ? 'text-red-500' : 'text-yellow-600'} flex items-center gap-1`}>
+                          <li key={i} className={`${item.type === 'error' ? 'text-destructive' : 'text-yellow-600'} flex items-center gap-1`}>
                             {item.type === 'error' ? <XCircle className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
                             {item.text}
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-sm text-green-600 flex items-center gap-1">
+                      <p className="text-sm text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                         <CheckCircle className="w-3 h-3" />
                         Looking good!
                       </p>

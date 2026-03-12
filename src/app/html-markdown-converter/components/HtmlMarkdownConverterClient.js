@@ -7,16 +7,33 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DOMPurify from "dompurify";
-import { marked } from "marked";
-import TurndownService from "turndown";
 import { copyToClipboard } from "@/lib/enhancedUX";
 import { toast } from "sonner";
 
 const SAMPLE_MARKDOWN = `# Release Notes\n\n- ✅ Client-side PDF processing\n- ⚡️ Video tools powered by ffmpeg.wasm\n- 🔒 Zero uploads by design\n\n[Explore tools →](https://easy-pdf.dev/tools)`;
 const SAMPLE_HTML = `<section class="prose">\n  <h2>Instant conversions</h2>\n  <p>Drop your PDF and get a polished output without waiting on a server.</p>\n  <ul>\n    <li>Merge, split, and compress</li>\n    <li>Convert to DOCX, PPT, or XLSX</li>\n    <li>Keep everything 100% private</li>\n  </ul>\n</section>`;
 
-const turndown = new TurndownService({ headingStyle: "atx" });
-turndown.keep(["span", "br", "sub", "sup"]);
+let markdownLibrariesPromise;
+
+const loadMarkdownLibraries = async () => {
+	if (!markdownLibrariesPromise) {
+		markdownLibrariesPromise = Promise.all([
+			import("marked"),
+			import("turndown"),
+		]).then(([markedModule, turndownModule]) => {
+			const TurndownService = turndownModule.default;
+			const turndown = new TurndownService({ headingStyle: "atx" });
+			turndown.keep(["span", "br", "sub", "sup"]);
+
+			return {
+				marked: markedModule.marked,
+				turndown,
+			};
+		});
+	}
+
+	return markdownLibrariesPromise;
+};
 
 const sanitizeHtml = (value) => {
   if (typeof window === 'undefined') return "";
@@ -30,30 +47,43 @@ export default function HtmlMarkdownConverterClient() {
 	const [error, setError] = useState("");
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setHtmlValue(sanitizeHtml(marked.parse(SAMPLE_MARKDOWN)));
+				let isMounted = true;
+
+				const initializePreview = async () => {
+					const { marked } = await loadMarkdownLibraries();
+
+					if (isMounted) {
+						setHtmlValue(sanitizeHtml(marked.parse(SAMPLE_MARKDOWN)));
+					}
+				};
+
+				void initializePreview();
+
+				return () => {
+					isMounted = false;
+				};
     }, []);
 
-	const convertMarkdownToHtml = () => {
+	const convertMarkdownToHtml = async () => {
 		try {
+			const { marked } = await loadMarkdownLibraries();
 			const rendered = sanitizeHtml(marked.parse(markdownValue || ""));
 			setHtmlValue(rendered);
 			setError("");
 			toast.success("Converted Markdown to HTML");
-		} catch (err) {
-			console.error("Markdown → HTML failed", err);
+		} catch {
 			setError("Unable to parse Markdown. Please double-check your syntax.");
 		}
 	};
 
-	const convertHtmlToMarkdown = () => {
+	const convertHtmlToMarkdown = async () => {
 		try {
+			const { turndown } = await loadMarkdownLibraries();
 			const markdown = turndown.turndown(htmlValue || "");
 			setMarkdownValue(markdown);
 			setError("");
 			toast.success("Converted HTML to Markdown");
-		} catch (err) {
-			console.error("HTML → Markdown failed", err);
+		} catch {
 			setError("Unable to convert HTML. Ensure tags are properly closed.");
 		}
 	};
@@ -107,10 +137,18 @@ export default function HtmlMarkdownConverterClient() {
 		>
 			<div className="space-y-6">
 				<div className="flex flex-wrap gap-3 text-xs text-foreground dark:text-foreground">
-					<Button size="sm" variant="secondary" onClick={() => { setMarkdownValue(SAMPLE_MARKDOWN); setHtmlValue(sanitizeHtml(marked.parse(SAMPLE_MARKDOWN))); }}>
+					<Button size="sm" variant="secondary" onClick={async () => {
+						const { marked } = await loadMarkdownLibraries();
+						setMarkdownValue(SAMPLE_MARKDOWN);
+						setHtmlValue(sanitizeHtml(marked.parse(SAMPLE_MARKDOWN)));
+					}}>
 						Load Markdown sample
 					</Button>
-					<Button size="sm" variant="secondary" onClick={() => { setHtmlValue(SAMPLE_HTML); setMarkdownValue(turndown.turndown(SAMPLE_HTML)); }}>
+					<Button size="sm" variant="secondary" onClick={async () => {
+						const { turndown } = await loadMarkdownLibraries();
+						setHtmlValue(SAMPLE_HTML);
+						setMarkdownValue(turndown.turndown(SAMPLE_HTML));
+					}}>
 						Load HTML sample
 					</Button>
 					<Button size="sm" variant="outline" onClick={clearAll}>Clear editors</Button>
@@ -123,7 +161,7 @@ export default function HtmlMarkdownConverterClient() {
 						<div className="flex items-center justify-between">
 							<h3 className="font-semibold">Markdown</h3>
 							<div className="flex gap-2">
-								<Button size="sm" onClick={convertMarkdownToHtml}>Convert to HTML</Button>
+								<Button size="sm" onClick={() => void convertMarkdownToHtml()}>Convert to HTML</Button>
 								<Button size="sm" variant="outline" onClick={() => copy(markdownValue, "Markdown")}>Copy</Button>
 							</div>
 						</div>
@@ -139,7 +177,7 @@ export default function HtmlMarkdownConverterClient() {
 						<div className="flex items-center justify-between">
 							<h3 className="font-semibold">HTML</h3>
 							<div className="flex gap-2">
-								<Button size="sm" onClick={convertHtmlToMarkdown}>Convert to Markdown</Button>
+								<Button size="sm" onClick={() => void convertHtmlToMarkdown()}>Convert to Markdown</Button>
 								<Button size="sm" variant="outline" onClick={() => copy(htmlValue, "HTML")}>Copy</Button>
 							</div>
 						</div>

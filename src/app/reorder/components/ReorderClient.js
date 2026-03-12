@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
+import { toast } from 'sonner';
 
 export default function ReorderClient() {
   const [files, setFiles] = useState([]);
@@ -86,7 +87,7 @@ export default function ReorderClient() {
           // This is normal when dragging quickly, can ignore
           // console.log(`Rendering cancelled for page ${pageIndexInPdf + 1}`);
         } else {
-          console.error(`Error rendering page ${pageIndexInPdf + 1}:`, e);
+          toast.error(`Error rendering page ${pageIndexInPdf + 1}`);
           // Optionally draw an error message or blank on the canvas
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.fillStyle = "#ff0000"; // Red color
@@ -144,9 +145,9 @@ export default function ReorderClient() {
       setNumPages(count);
       // Initialize pageOrder with 0-based indices
       setPageOrder(Array.from({ length: count }, (_, i) => i));
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF loading error:", e);
+      toast.error("Failed to load PDF.");
       setFiles([]); // Clear files on error
     }
   };
@@ -247,9 +248,9 @@ export default function ReorderClient() {
       setDownloadFileName(`reordered_${baseName}.pdf`);
 
       setError(""); // Clear error on success
-    } catch (e) {
+    } catch {
       setError("Failed to reorder PDF. Please try again.");
-      console.error("Reorder PDF error:", e);
+      toast.error("Failed to reorder PDF.");
     } finally {
       setIsProcessing(false);
     }

@@ -53,8 +53,8 @@ export const AccessibleButton = ({
   const variantClasses = {
     primary: "bg-background hover:bg-background text-foreground focus:ring-gray-600",
     secondary: "bg-background hover:bg-background text-foreground focus:ring-gray-500",
-    success: "bg-green-600 hover:bg-green-700 text-foreground focus:ring-green-500",
-    danger: "bg-red-600 hover:bg-red-700 text-foreground focus:ring-red-500"
+    success: "bg-emerald-600 hover:bg-emerald-700 text-white focus:ring-emerald-500 dark:bg-emerald-700 dark:hover:bg-emerald-600",
+    danger: "bg-destructive hover:bg-destructive/90 text-destructive-foreground focus:ring-destructive"
   };
   
   const sizeClasses = {
@@ -99,7 +99,7 @@ export const AccessibleInput = ({
         className="block text-sm font-medium text-foreground dark:text-foreground"
       >
         {label}
-        {required && <span className="text-red-500 ml-1" aria-label="required">*</span>}
+        {required && <span className="text-destructive ml-1" aria-label="required">*</span>}
       </label>
       <input
         id={inputId}
@@ -107,11 +107,11 @@ export const AccessibleInput = ({
         required={required}
         aria-invalid={error ? 'true' : 'false'}
         aria-describedby={errorId}
-        className={`block w-full px-3 py-2 border border-border shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-border bg-background text-foreground ${error ? 'border-red-500' : ''} ${className}`}
+        className={`block w-full px-3 py-2 border border-border shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-border bg-background text-foreground ${error ? 'border-destructive' : ''} ${className}`}
         {...props}
       />
       {error && (
-        <p id={errorId} className="text-sm text-red-600" role="alert">
+        <p id={errorId} className="text-sm text-destructive" role="alert">
           {error}
         </p>
       )}

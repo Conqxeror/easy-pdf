@@ -12,12 +12,25 @@ import { Shield, Download, CheckCircle, Key, FileText, Lock, Loader2 } from "luc
 import { getPdfLib } from '@/lib/pdfLibLoader';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
 import FileDropzone from '@/components/ui/FileDropzone';
+import { toast } from 'sonner';
+import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
+
+const SIGNATURE_MARKER = 'easy-pdf-visible-signature';
+
+const formatDateForField = (value) => {
+  if (!value) return '';
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? '' : parsed.toISOString().split('T')[0];
+};
 
 export default function PDFDigitalSignatureClient() {
   const [file, setFile] = useState(null);
   const [signedPdf, setSignedPdf] = useState(null);
+  const [error, setError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [validationFile, setValidationFile] = useState(null);
+  const [validationResult, setValidationResult] = useState(null);
   const [certificateInfo, setCertificateInfo] = useState({
     name: "",
     email: "",
@@ -33,15 +46,17 @@ export default function PDFDigitalSignatureClient() {
     height: 50
   });
   const [signatureText, setSignatureText] = useState("");
+
   const handleFileUpload = (acceptedFiles) => {
     const uploadedFile = acceptedFiles[0];
     if (uploadedFile && uploadedFile.type === "application/pdf") {
       setFile(uploadedFile);
       setSignedPdf(null);
+      setError('');
     }
   };
 
-  const generateMockCertificate = () => {
+  const populateSampleCertificate = () => {
     const now = new Date();
     const validTo = new Date(now.getTime() + 365 * 24 * 60 * 60 * 1000); // 1 year from now
 
@@ -55,11 +70,36 @@ export default function PDFDigitalSignatureClient() {
     });
   };
 
+  const handleValidationFileUpload = (acceptedFiles) => {
+    const uploadedFile = acceptedFiles?.[0];
+    if (uploadedFile && uploadedFile.type === 'application/pdf') {
+      setValidationFile(uploadedFile);
+      setValidationResult(null);
+      setError('');
+    }
+  };
+
+  const hasCertificateDetails = Boolean(
+    certificateInfo.name.trim() &&
+    certificateInfo.email.trim() &&
+    certificateInfo.organization.trim() &&
+    certificateInfo.country.trim()
+  );
+
   const addDigitalSignature = async () => {
-    if (!file) return;
+    if (!file) {
+      setError('Please upload a PDF first.');
+      return;
+    }
+
+    if (!hasCertificateDetails) {
+      setError('Complete the certificate details before adding a signature stamp.');
+      return;
+    }
 
     setIsProcessing(true);
     setProgress(0);
+    setError('');
 
     try {
       // Read the PDF file
@@ -73,19 +113,16 @@ export default function PDFDigitalSignatureClient() {
       // Get the first page (or specified page)
       const pages = pdfDoc.getPages();
       const firstPage = pages[0];
-      const { height } = firstPage.getSize();
+      const { width, height } = firstPage.getSize();
 
       setProgress(60);
 
-      // Add signature field
-      // const signatureFieldName = `signature_${Date.now()}`;
-
       // Create signature appearance
       const signatureAppearance = {
-        x: signaturePosition.x,
-        y: height - signaturePosition.y - signaturePosition.height,
-        width: signaturePosition.width,
-        height: signaturePosition.height
+        x: Math.max(16, Math.min(signaturePosition.x, Math.max(16, width - signaturePosition.width - 16))),
+        y: Math.max(16, height - signaturePosition.y - signaturePosition.height),
+        width: Math.max(160, Math.min(signaturePosition.width, width - 32)),
+        height: Math.max(50, Math.min(signaturePosition.height, height - 32))
       };
 
       // Add visual signature
@@ -100,7 +137,7 @@ export default function PDFDigitalSignatureClient() {
       });
 
       // Add signature text
-      const signatureDisplayText = signatureText || `Digitally signed by: ${certificateInfo.name}`;
+      const signatureDisplayText = signatureText || `Signed by ${certificateInfo.name}`;
       firstPage.drawText(signatureDisplayText, {
         x: signatureAppearance.x + 5,
         y: signatureAppearance.y + signatureAppearance.height - 15,
@@ -109,42 +146,56 @@ export default function PDFDigitalSignatureClient() {
       });
 
       // Add certificate info
-      firstPage.drawText(`Date: ${new Date().toLocaleString()}`, {
+      const signedAt = new Date();
+      firstPage.drawText(`Date: ${signedAt.toLocaleString()}`, {
         x: signatureAppearance.x + 5,
         y: signatureAppearance.y + signatureAppearance.height - 30,
         size: 6,
         color: rgb(0.3, 0.3, 0.3)
       });
 
-      firstPage.drawText(`Cert: ${certificateInfo.organization}`, {
+      firstPage.drawText(`Org: ${certificateInfo.organization} • ${certificateInfo.country}`, {
         x: signatureAppearance.x + 5,
         y: signatureAppearance.y + signatureAppearance.height - 42,
         size: 6,
         color: rgb(0.3, 0.3, 0.3)
       });
 
+      firstPage.drawText(`Contact: ${certificateInfo.email}`, {
+        x: signatureAppearance.x + 5,
+        y: signatureAppearance.y + 6,
+        size: 6,
+        color: rgb(0.3, 0.3, 0.3)
+      });
+
       setProgress(80);
 
-      // Add metadata for signature validation
-      pdfDoc.setTitle(`${pdfDoc.getTitle() || 'Document'} - Digitally Signed`);
-      pdfDoc.setSubject('Digitally signed document');
-      pdfDoc.setKeywords(['digital signature', 'signed', certificateInfo.organization]);
-      pdfDoc.setProducer('PDF Tools - Digital Signature');
-      pdfDoc.setCreationDate(new Date());
-      pdfDoc.setModificationDate(new Date());
+      // Add metadata for easy-pdf validation. This is a visible signature stamp, not a CA-backed cryptographic signature.
+      pdfDoc.setTitle(`${pdfDoc.getTitle() || 'Document'} - Signed Copy`);
+      pdfDoc.setAuthor(certificateInfo.name);
+      pdfDoc.setSubject(`Visible signature stamp by ${certificateInfo.name}`);
+      pdfDoc.setKeywords([
+        SIGNATURE_MARKER,
+        'visible signature',
+        certificateInfo.organization,
+        certificateInfo.country,
+        formatDateForField(certificateInfo.validTo) || 'no-expiry'
+      ].filter(Boolean));
+      pdfDoc.setProducer('easy-pdf visible signature tool');
+      pdfDoc.setCreator(`easy-pdf signer • ${certificateInfo.email}`);
+      pdfDoc.setModificationDate(signedAt);
 
       setProgress(90);
 
       // Save the signed PDF
       const pdfBytes = await pdfDoc.save();
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      // Revoke previous signedPdf URL if we had one (we store blob instead, so just set)
       setSignedPdf(blob);
 
       setProgress(100);
     } catch (error) {
-      console.error('Error adding digital signature:', error);
-      alert('Error adding digital signature. Please try again.');
+      toast.error(error?.message || 'Error adding signature stamp. Please try again.');
+      setError(error?.message || 'Error adding signature stamp. Please try again.');
     } finally {
       setIsProcessing(false);
       setTimeout(() => setProgress(0), 1000);
@@ -154,7 +205,7 @@ export default function PDFDigitalSignatureClient() {
   const downloadSignedPdf = () => {
     if (!signedPdf) return;
     let url = null;
-    try { if (typeof URL !== 'undefined') url = URL.createObjectURL(signedPdf); } catch (err) { console.error('Error creating object URL for signed PDF:', err); url = null; }
+    try { url = safeCreateObjectURL(signedPdf); } catch { url = null; }
     try {
       const a = document.createElement('a');
       a.href = url;
@@ -163,12 +214,12 @@ export default function PDFDigitalSignatureClient() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    } catch (err) {
-      console.error('Error initiating signed PDF download:', err);
+    } catch {
+      toast.error('Error initiating signed PDF download.');
     } finally {
       // Revoke after a short delay to ensure the browser started the download, skip data: URLs
       setTimeout(() => {
-        try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
+        try { if (url) safeRevokeObjectURL(url); } catch { /* ignore */ }
       }, 500);
     }
   };
@@ -180,48 +231,93 @@ export default function PDFDigitalSignatureClient() {
     };
   }, []);
 
-  const validateSignature = () => {
-    // Mock signature validation
-    alert('Signature validation: ✓ Valid\n✓ Certificate trusted\n✓ Document integrity verified\n✓ Timestamp valid');
+  const validateSignature = async () => {
+    if (!validationFile) {
+      setError('Upload a PDF to validate first.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setProgress(15);
+    setValidationResult(null);
+    setError('');
+
+    try {
+      const { PDFDocument } = await getPdfLib();
+      const arrayBuffer = await validationFile.arrayBuffer();
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+
+      setProgress(70);
+
+      const producer = pdfDoc.getProducer() || '';
+      const keywords = pdfDoc.getKeywords() || [];
+      const normalizedKeywords = Array.isArray(keywords) ? keywords : [keywords];
+      const hasEasyPdfMarker = normalizedKeywords.some((keyword) => String(keyword).toLowerCase().includes(SIGNATURE_MARKER));
+      const isEasyPdfSigned = hasEasyPdfMarker || producer.toLowerCase().includes('easy-pdf visible signature tool');
+
+      setValidationResult({
+        fileName: validationFile.name,
+        isEasyPdfSigned,
+        signer: pdfDoc.getAuthor() || 'Unknown',
+        subject: pdfDoc.getSubject() || 'No signature subject found',
+        producer: producer || 'Unknown producer',
+        keywords: normalizedKeywords.filter(Boolean),
+        modifiedAt: pdfDoc.getModificationDate()?.toLocaleString?.() || 'Not available',
+      });
+
+      setProgress(100);
+    } catch (validationError) {
+      toast.error(validationError?.message || 'Error validating signature.');
+      setError(validationError?.message || 'Could not inspect this PDF.');
+    } finally {
+      setIsProcessing(false);
+      setTimeout(() => setProgress(0), 900);
+    }
   };
 
   return (
     <ToolPageLayout
       title="PDF Digital Signature"
-      subtitle="Add legally binding digital signatures to your PDF documents"
+      subtitle="Add a visible signer stamp and embedded audit metadata to your PDF documents"
       toolName="PDF Digital Signature"
-      toolDescription="Add legally binding digital signatures to your PDF documents with certificate management and validation. Create tamper-evident documents with timestamp authority integration. All processing happens locally in your browser for complete privacy and security."
+      toolDescription="Create a visible signature block with signer metadata directly in your browser. This produces an auditable signed copy for workflows that need an on-page signer stamp, but it does not replace CA-backed cryptographic PDF signatures."
       currentTool="pdf-digital-signature"
       steps={[
-        "Upload your PDF document that you want to digitally sign.",
-        "Configure your digital certificate information including name, email, organization, and country.",
-        "Set the signature position and appearance on the document, including custom signature text if desired.",
-        "Add the digital signature to create a legally binding, tamper-evident document and download the signed PDF."
+        "Upload the PDF document you want to stamp.",
+        "Fill in the signer details that should be embedded in the PDF metadata.",
+        "Adjust the signature box position and optional visible text.",
+        "Generate the signed copy and download it, or inspect an easy-pdf signed file in the validation tab."
       ]}
       faqs={[
         {
-          question: "What is a digital signature and how is it different from a regular signature?",
-          answer: "A digital signature is a cryptographic technique that provides authentication, integrity, and non-repudiation. Unlike a regular signature, it's mathematically linked to the document content, making it impossible to alter the document without invalidating the signature. It also provides proof of who signed the document and when."
+          question: "Does this create a cryptographic PKI signature?",
+          answer: "No. This tool creates a visible signature stamp plus embedded signer metadata for local workflows. It is useful for internal review trails, but it is not a certificate-authority-backed cryptographic signature."
         },
         {
-          question: "Are digital signatures legally binding?",
-          answer: "Yes, digital signatures are legally binding in most countries. They comply with regulations like the ESIGN Act in the US and eIDAS in the EU. Digital signatures provide the same legal validity as handwritten signatures when properly implemented with certificate authority validation."
+          question: "When should I use this tool?",
+          answer: "Use it when you need a clear on-document signer block, a timestamp, and signer metadata embedded locally in the PDF. For regulated e-signature workflows, use a dedicated CA-backed signing platform."
         },
         {
-          question: "What information is included in a digital signature?",
-          answer: "A digital signature includes the signer's identity, timestamp, certificate information, and a cryptographic hash of the document content. This ensures the document hasn't been altered since signing and provides proof of the signer's identity."
+          question: "What information is included in the signed copy?",
+          answer: "The tool writes the signer name, email, organization, country, and signing timestamp into the visible signature block and the PDF metadata so it can be audited later."
         },
         {
-          question: "Can I validate a digitally signed PDF?",
-          answer: "Yes, you can validate digital signatures to verify their authenticity. The validation process checks the certificate validity, document integrity, and timestamp. Our tool includes signature validation features to help you verify signed documents."
+          question: "What does validation check?",
+          answer: "The validation tab checks whether the PDF contains the metadata markers written by this tool and shows the embedded signer details. It does not perform CA trust or revocation checks."
         },
         {
-          question: "Do I need special software to view digitally signed PDFs?",
-          answer: "Most modern PDF readers can display digital signatures, including Adobe Reader, browsers, and mobile PDF apps. The signature information is embedded in the PDF and can be viewed in the signature panel of compatible PDF readers."
+          question: "Do I need special software to view the result?",
+          answer: "No. The signed copy is a normal PDF with a visible signature block, so it opens in standard PDF readers and browsers."
         }
       ]}
     >
       <div className="space-y-6">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
         <Tabs defaultValue="sign" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="sign">Sign Document</TabsTrigger>
@@ -328,7 +424,7 @@ export default function PDFDigitalSignatureClient() {
                   </div>
 
                   <Button
-                    onClick={addDigitalSignature}
+                    onClick={() => void addDigitalSignature()}
                     disabled={isProcessing}
                     className="w-full"
                   >
@@ -424,9 +520,9 @@ export default function PDFDigitalSignatureClient() {
                   </div>
                 </div>
 
-                <Button onClick={generateMockCertificate} className="w-full">
+                  <Button onClick={populateSampleCertificate} className="w-full">
                   <Key className="mr-2 h-4 w-4" />
-                  Generate Demo Certificate
+                    Fill Sample Certificate
                 </Button>
 
                 {certificateInfo.validFrom && (
@@ -458,34 +554,51 @@ export default function PDFDigitalSignatureClient() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="validate-file">PDF File to Validate</Label>
-                  <Input
-                    id="validate-file"
-                    type="file"
-                    accept=".pdf"
-                    className="bg-background border-border text-foreground file:bg-background file:text-foreground file:border-0"
-                  />
-                </div>
+                <FileDropzone
+                  accept="application/pdf"
+                  onFiles={handleValidationFileUpload}
+                  label="Choose PDF to inspect"
+                  description="Upload an easy-pdf signed copy to inspect embedded signer metadata"
+                  maxSize={50 * 1024 * 1024}
+                  isLoading={isProcessing && !validationFile}
+                />
 
-                <Button onClick={validateSignature} className="w-full">
-                  <CheckCircle className="mr-2 h-4 w-4" />
-                  Validate Signatures
-                </Button>
-
-                <div className="space-y-2">
+                {validationFile && (
                   <Alert>
                     <AlertDescription>
-                      <strong>Note:</strong> This is a demonstration tool. In production, signature validation requires:
-                      <ul className="list-disc list-inside mt-2 space-y-1">
-                        <li>Certificate Authority (CA) validation</li>
-                        <li>Certificate Revocation List (CRL) checking</li>
-                        <li>Timestamp verification</li>
-                        <li>Document integrity verification</li>
-                      </ul>
+                      Ready to inspect: {validationFile.name}
                     </AlertDescription>
                   </Alert>
-                </div>
+                )}
+
+                <Button onClick={() => void validateSignature()} className="w-full" disabled={isProcessing || !validationFile}>
+                  <CheckCircle className="mr-2 h-4 w-4" />
+                  Inspect Signature Metadata
+                </Button>
+
+                {validationResult && (
+                  <div className="space-y-3 border border-border p-4 bg-background">
+                    <div className="flex items-center justify-between gap-4">
+                      <h4 className="font-semibold text-foreground">Validation Result</h4>
+                      <span className={`text-sm font-medium ${validationResult.isEasyPdfSigned ? 'text-emerald-600 dark:text-emerald-400' : 'text-yellow-600 dark:text-yellow-400'}`}>
+                        {validationResult.isEasyPdfSigned ? 'easy-pdf signature marker found' : 'No easy-pdf signature marker found'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm text-foreground">
+                      <div><strong>Signer:</strong> {validationResult.signer}</div>
+                      <div><strong>Modified:</strong> {validationResult.modifiedAt}</div>
+                      <div className="md:col-span-2"><strong>Subject:</strong> {validationResult.subject}</div>
+                      <div className="md:col-span-2"><strong>Producer:</strong> {validationResult.producer}</div>
+                      <div className="md:col-span-2"><strong>Keywords:</strong> {validationResult.keywords.length ? validationResult.keywords.join(', ') : 'None'}</div>
+                    </div>
+                  </div>
+                )}
+
+                <Alert>
+                  <AlertDescription>
+                    <strong>Note:</strong> This validation checks for the metadata markers written by this tool. It does not verify certificate trust, revocation status, or cryptographic integrity.
+                  </AlertDescription>
+                </Alert>
               </CardContent>
             </Card>
           </TabsContent>
@@ -503,19 +616,19 @@ export default function PDFDigitalSignatureClient() {
               <div>
                 <h4 className="font-semibold mb-2 text-foreground">Security Features</h4>
                 <ul className="space-y-1 text-sm text-foreground">
-                  <li>• PKI-based digital certificates</li>
-                  <li>• Document integrity protection</li>
-                  <li>• Non-repudiation assurance</li>
-                  <li>• Timestamp authority support</li>
+                  <li>• Visible signer stamp</li>
+                  <li>• Embedded signer metadata</li>
+                  <li>• Local-only PDF processing</li>
+                  <li>• Metadata inspection workflow</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-2">Legal Compliance</h4>
+                <h4 className="font-semibold mb-2">Workflow Guidance</h4>
                 <ul className="space-y-1 text-sm text-foreground">
-                  <li>• eIDAS regulation compliant</li>
-                  <li>• ESIGN Act compatible</li>
-                  <li>• Adobe Approved Trust List</li>
-                  <li>• Long-term validation (LTV)</li>
+                  <li>• Best for internal sign-off copies</li>
+                  <li>• Useful for document routing trails</li>
+                  <li>• Not a CA-backed e-sign platform</li>
+                  <li>• Review compliance requirements separately</li>
                 </ul>
               </div>
             </div>

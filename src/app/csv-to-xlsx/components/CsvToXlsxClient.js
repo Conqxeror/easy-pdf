@@ -6,6 +6,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const ACCEPT = ".csv,text/csv";
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB guard
@@ -110,9 +111,10 @@ export default function CsvToXlsxClient() {
       setDownloadUrl(newDownloadUrl);
 
       setError("");
-    } catch (err) {
-      console.error("CSV to XLSX conversion failed", err);
-      setError("Failed to convert CSV to XLSX. Make sure the xlsx library is installed: npm install xlsx");
+    } catch {
+      const msg = "Failed to convert CSV to XLSX. Please check the file format.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
     }
@@ -179,9 +181,9 @@ export default function CsvToXlsxClient() {
             {previewData && (
               <div className="p-4 bg-background dark:bg-background rounded-none border overflow-x-auto">
                 <h3 className="font-semibold mb-2">CSV Preview</h3>
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                <table className="min-w-full divide-y divide-border text-sm">
                   <thead>
-                    <tr className="bg-background dark:bg-background">
+                    <tr className="bg-muted">
                       {previewData.headers.map((header, idx) => (
                         <th key={idx} className="px-2 py-1 text-left font-medium">
                           {header}
@@ -189,7 +191,7 @@ export default function CsvToXlsxClient() {
                       ))}
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  <tbody className="divide-y divide-border">
                     {previewData.rows.map((row, rowIndex) => (
                       <tr key={rowIndex}>
                         {row.map((cell, cellIndex) => (
@@ -222,10 +224,10 @@ export default function CsvToXlsxClient() {
             </div>
 
             {downloadUrl && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-none">
-                <p className="font-semibold text-green-800">Conversion complete!</p>
+              <div className="p-4 bg-muted border border-border rounded-none">
+                <p className="font-semibold text-foreground">Conversion complete!</p>
                 <a
-                  className="text-blue-600 underline inline-block mt-2 px-4 py-2 bg-blue-100 rounded-none hover:bg-blue-200 transition-colors"
+                  className="inline-block mt-2 px-4 py-2 bg-primary text-primary-foreground rounded-none hover:bg-primary/90 transition-colors"
                   href={downloadUrl}
                   download={`${sanitizeFileName(file.name.replace(/\.[^.]+$/, "")) || "converted"}.xlsx`}
                 >

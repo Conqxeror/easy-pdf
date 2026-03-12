@@ -20,7 +20,7 @@ export default function SponsorSection({ variant = "homepage" }) {
         <section className="w-full max-w-6xl mt-16 mb-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
-              <Heart className="inline-block w-6 h-6 mr-2 text-red-500" />
+              <Heart className="inline-block w-6 h-6 mr-2 text-red-500 dark:text-red-400" />
               Support Our Mission
             </h2>
             <p className="text-foreground dark:text-foreground max-w-2xl mx-auto">
@@ -97,7 +97,7 @@ export default function SponsorSection({ variant = "homepage" }) {
       <section className="w-full max-w-6xl mt-16 mb-8">
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
-            <Heart className="inline-block w-6 h-6 mr-2 text-red-500" />
+            <Heart className="inline-block w-6 h-6 mr-2 text-red-500 dark:text-red-400" />
             Proudly Supported By
           </h2>
           <p className="text-foreground dark:text-foreground max-w-2xl mx-auto">

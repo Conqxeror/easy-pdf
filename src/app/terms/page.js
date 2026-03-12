@@ -43,7 +43,7 @@ export default function TermsPage() {
 					<p>easy-pdf provides free online PDF tools that run entirely in your web browser. We do not upload your files to any server.</p>
 
 					<h3>2. Privacy</h3>
-					<p>Since processing is client-side, your files remain on your device. We do not have access to your documents. Please review our Privacy Policy at <a href="/security">/security</a> for more details.</p>
+					<p>Since processing is client-side, your files remain on your device. We do not have access to your documents. Please review our Privacy Policy at <a href="/privacy">/privacy</a> for more details.</p>
 
 					<h3>3. Disclaimer of Warranties</h3>
 					<p>The service is provided &quot;as is&quot; without any warranties. We are not liable for any data loss or corruption resulting from the use of these tools.</p>

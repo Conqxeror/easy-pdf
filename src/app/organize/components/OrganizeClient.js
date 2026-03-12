@@ -7,6 +7,8 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Button } from "@/components/ui/button"; // Use named import
 import { Alert } from "@/components/ui/alert";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 export default function OrganizeClient() {
   const [files, setFiles] = useState([]);
@@ -90,7 +92,7 @@ export default function OrganizeClient() {
         if (e.name === "RenderingCancelledException") {
           // console.log(`Rendering cancelled for page ${pageIndexInPdf + 1}`);
         } else {
-          console.error(`Error rendering page ${pageIndexInPdf + 1}:`, e);
+          toast.error(`Error rendering page ${pageIndexInPdf + 1}`);
           // Optionally draw an error message or blank on the canvas
           context.clearRect(0, 0, canvas.width, canvas.height);
           context.fillStyle = "#ff0000"; // Red color
@@ -150,9 +152,9 @@ export default function OrganizeClient() {
       // Initialize pageOrder with 0-based indices
       setPageOrder(Array.from({ length: count }, (_, i) => i));
       setSelected([]); // Ensure selection is reset for new file
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF loading error:", e);
+      toast.error("Failed to load PDF. Please try again.");
       setFiles([]); // Clear files on error
     }
   };
@@ -254,15 +256,11 @@ export default function OrganizeClient() {
       const pdfBytes = await newDoc.save();
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       let url = null;
-      try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for organized PDF:', err); url = null; }
+      try { url = safeCreateObjectURL(blob); } catch { url = null; }
 
       // Revoke previous URL if any and set the new one
       setOrganizedPdfUrl((prev) => {
-        try {
-          if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) {
-            try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch { }
-          }
-        } catch { /* ignore */ }
+        try { if (prev) safeRevokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
 
@@ -270,9 +268,8 @@ export default function OrganizeClient() {
       setDownloadFileName(url ? `organized_${safeBase}.pdf` : `organized_document.pdf`);
 
       setError(""); // Clear error on success
-    } catch (e) {
-      setError("Failed to organize PDF. Please try again.");
-      console.error("Organize PDF error:", e);
+    } catch {
+      toast.error("Failed to organize PDF. Please try again.");
     } finally {
       setIsProcessing(false);
     }

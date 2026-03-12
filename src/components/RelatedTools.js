@@ -7,10 +7,18 @@ import { Card } from '@/components/ui/Layout';
 const RelatedTools = ({ currentTool, tools }) => {
   // Get related tools based on relatedTools field in toolData, with fallback to category
   const getRelatedTools = () => {
+    const normalizedCurrentTool = String(currentTool || '').trim().replace(/^\/+/, '');
+    const lastSegment = normalizedCurrentTool.split('/').filter(Boolean).pop() || normalizedCurrentTool;
+    const currentToolVariants = Array.from(new Set([
+      currentTool,
+      normalizedCurrentTool,
+      `/${normalizedCurrentTool}`,
+      lastSegment,
+      `/${lastSegment}`,
+    ].filter(Boolean)));
+
     // Find current tool in tools array
-    const currentToolData = tools.find(tool =>
-      tool.href === `/${currentTool}` || tool.href === currentTool
-    );
+    const currentToolData = tools.find((tool) => currentToolVariants.includes(tool.href));
 
     // If current tool has relatedTools field, use that for best internal linking
     if (currentToolData && currentToolData.relatedTools && currentToolData.relatedTools.length > 0) {
@@ -23,19 +31,9 @@ const RelatedTools = ({ currentTool, tools }) => {
     let currentToolCategory = null;
     // Find the category of the current tool from toolCategories
     for (const category of toolCategories) {
-      if (category.submenu.some(item => item.href === `/${currentTool}`)) {
+      if (category.submenu.some((item) => currentToolVariants.includes(item.href))) {
         currentToolCategory = category.name;
         break;
-      }
-    }
-
-    // If not found, try without the slash prefix
-    if (!currentToolCategory) {
-      for (const category of toolCategories) {
-        if (category.submenu.some(item => item.href === currentTool)) {
-          currentToolCategory = category.name;
-          break;
-        }
       }
     }
 
@@ -51,7 +49,7 @@ const RelatedTools = ({ currentTool, tools }) => {
             break;
           }
         }
-        return toolCategory === currentToolCategory && tool.href !== `/${currentTool}` && tool.href !== currentTool;
+        return toolCategory === currentToolCategory && !currentToolVariants.includes(tool.href);
       })
       .slice(0, 4);
   }

@@ -16,7 +16,6 @@ import { trackSponsorView, trackSponsorClick } from '@/lib/sponsorAnalytics';
 import { getAllSponsors } from '@/lib/sponsorData';
 import { trackEvent } from '@/lib/analytics';
 import { getAppUsageAnalytics } from '@/lib/freeAppFeatures';
-import Image from 'next/image';
 import SponsorCard from '@/components/ui/SponsorCard';
 
 const SponsorsClient = () => {
@@ -115,7 +114,8 @@ const SponsorsClient = () => {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 <div className="inline-flex items-center px-6 py-3 bg-transparent">
                   <a href="https://www.buymeacoffee.com/kadriwalimt" target="_blank" rel="noopener noreferrer" className="inline-flex items-center">
-                    <Image className="preserve-color" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height={43} width={157} priority={false} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img className="preserve-color" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="43" width="157" loading="lazy" decoding="async" style={{ width: '157px', height: 'auto' }} />
                   </a>
                 </div>
 
@@ -193,7 +193,7 @@ const SponsorsClient = () => {
             </div>
 
             <div className="text-center">
-              <div className="bg-green-600 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <div className="bg-primary w-16 h-16 flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-8 h-8" />
               </div>
               <h3 className="text-xl font-semibold mb-3">Community Driven</h3>

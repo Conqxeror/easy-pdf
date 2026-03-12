@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 
 export default function BmpTiffConverterClient() {
   const [files, setFiles] = useState([]);
@@ -69,7 +70,11 @@ export default function BmpTiffConverterClient() {
       const img = new Image();
 
       // Create object URL for the image
-      const objectUrl = URL.createObjectURL(file);
+      const objectUrl = safeCreateObjectURL(file);
+      if (!objectUrl) {
+        reject(new Error('Failed to create object URL'));
+        return;
+      }
 
       img.onload = () => {
         try {
@@ -79,7 +84,7 @@ export default function BmpTiffConverterClient() {
 
           canvas.toBlob(
             (blob) => {
-              URL.revokeObjectURL(objectUrl);
+              safeRevokeObjectURL(objectUrl);
               if (blob) {
                 resolve(blob);
               } else {
@@ -90,13 +95,13 @@ export default function BmpTiffConverterClient() {
             0.92 // quality for JPEG
           );
         } catch (err) {
-          URL.revokeObjectURL(objectUrl);
+          safeRevokeObjectURL(objectUrl);
           reject(err);
         }
       };
 
       img.onerror = (err) => {
-        URL.revokeObjectURL(objectUrl);
+        safeRevokeObjectURL(objectUrl);
         reject(err);
       };
 
@@ -180,7 +185,7 @@ export default function BmpTiffConverterClient() {
           item.error = "";
         }
       } catch (conversionError) {
-        console.error("Failed to convert image", conversionError);
+        toast.error(`Failed to convert ${item.file.name}`);
         item.status = "error";
         item.error = conversionError?.message || "Conversion failed";
       }
@@ -311,7 +316,7 @@ export default function BmpTiffConverterClient() {
                     <div className="truncate font-medium text-sm" title={item.name}>{item.name}</div>
                     <button
                       onClick={() => removeFile(item.id)}
-                      className="text-foreground hover:text-red-500"
+                      className="text-foreground hover:text-destructive"
                       disabled={isProcessing}
                     >
                       ×
@@ -326,11 +331,11 @@ export default function BmpTiffConverterClient() {
 
                     {item.status === "done" && (
                       <>
-                        <div className="text-green-600 font-medium">Converted</div>
+                        <div className="text-emerald-600 dark:text-emerald-400 font-medium">Converted</div>
                         <a
                           href={item.resultUrl}
                           download={item.resultName}
-                          className="block w-full text-center mt-2 py-1 bg-blue-50 text-blue-600 rounded-none hover:bg-blue-100 transition-colors"
+                          className="block w-full text-center mt-2 py-1 bg-primary/10 text-primary rounded-none hover:bg-primary/20 transition-colors"
                         >
                           Download
                         </a>
@@ -338,11 +343,11 @@ export default function BmpTiffConverterClient() {
                     )}
 
                     {item.status === "error" && (
-                      <div className="text-red-500 text-xs mt-1">{item.error}</div>
+                      <div className="text-destructive text-xs mt-1">{item.error}</div>
                     )}
 
                     {item.status === "processing" && (
-                      <div className="text-blue-500 text-xs mt-1">Converting...</div>
+                      <div className="text-muted-foreground text-xs mt-1">Converting...</div>
                     )}
                   </div>
                 </div>

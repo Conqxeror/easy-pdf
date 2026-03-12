@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 // Dynamically import docx library to reduce initial bundle size
 const importDocx = async () => {
@@ -51,6 +52,7 @@ export default function PdfToDocxClient() {
       status: "pending",
       resultUrl: null,
       resultName: "",
+      resultLabel: "",
       error: "",
     }));
 
@@ -112,15 +114,21 @@ export default function PdfToDocxClient() {
 
         // Generate the Word document
         const blob = await Packer.toBlob(doc);
-        return blob;
+        return {
+          blob,
+          extension: "docx",
+          formatLabel: "DOCX",
+        };
       } else {
-        // Fallback: create a plain text file with .docx extension if docx library is not available
-        // This is a workaround for when docx library isn't available in client-side environment
-        const textBlob = new Blob([fullText], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-        return textBlob;
+        const textBlob = new Blob([fullText], { type: 'text/plain;charset=utf-8' });
+        return {
+          blob: textBlob,
+          extension: "txt",
+          formatLabel: "plain text",
+        };
       }
     } catch (error) {
-      console.error("PDF to DOCX conversion failed:", error);
+      toast.error(error?.message || "PDF to DOCX conversion failed");
       throw error;
     }
   };
@@ -147,18 +155,19 @@ export default function PdfToDocxClient() {
 
       try {
         item.status = "processing";
-        const docxBlob = await convertPdfToDocx(item.file);
+        const conversionResult = await convertPdfToDocx(item.file);
         if (item.resultUrl) {
           try { safeRevokeObjectURL(item.resultUrl); } catch { /* ignore */ }
         }
-        const resultUrl = safeCreateObjectURL(docxBlob);
-        const safeName = `${sanitizeFileName(item.file.name.replace(/\.[^.]+$/, "")) || "converted"}.docx`;
+        const resultUrl = safeCreateObjectURL(conversionResult.blob);
+        const safeName = `${sanitizeFileName(item.file.name.replace(/\.[^.]+$/, "")) || "converted"}.${conversionResult.extension}`;
         item.resultUrl = resultUrl;
         item.resultName = safeName;
+        item.resultLabel = conversionResult.formatLabel;
         item.status = "done";
         item.error = "";
       } catch (conversionError) {
-        console.error("Failed to convert PDF", conversionError);
+        toast.error(conversionError?.message || "Failed to convert PDF");
         item.status = "error";
         item.error = conversionError?.message || "Conversion failed";
       }
@@ -182,16 +191,16 @@ export default function PdfToDocxClient() {
   };
 
   const toolName = "PDF to DOCX Converter";
-  const toolDescription = "Convert your PDF files to editable Microsoft Word documents (DOCX) entirely in your browser. Extract text content from PDFs and create Word files without uploading to a server.";
+  const toolDescription = "Extract text from PDF files and package it into a browser-generated Word-compatible document when available. If the Word generator is unavailable in your browser session, the tool falls back to a plain-text export so you still keep the extracted content locally.";
   const steps = [
     "Upload PDF files via drag & drop or the file picker.",
-    "Click 'Convert to DOCX' to extract text and create Word documents locally.",
-    "Download the generated DOCX files and continue editing if needed.",
+    "Click 'Extract to Word' to pull text from each PDF and build a browser-side export.",
+    "Download the generated DOCX file, or a plain-text fallback if your browser cannot package DOCX output in the current session.",
   ];
   const faqs = [
     {
       question: "How accurate is the conversion?",
-      answer: "Text extraction from PDFs is generally accurate. However, complex layouts, images, and formatting may not be perfectly preserved. The converter focuses on extracting and preserving the text content.",
+      answer: "Text extraction from PDFs is generally accurate. However, complex layouts, images, tables, and positioning are not preserved like a desktop publishing workflow. This tool focuses on recovering readable text for editing.",
     },
     {
       question: "Is there a file size limit?",
@@ -201,12 +210,16 @@ export default function PdfToDocxClient() {
       question: "Are my PDFs uploaded to a server?",
       answer: "No. All conversion happens securely in your browser. Your PDF files never leave your device.",
     },
+    {
+      question: "Why might I receive a TXT file instead of DOCX?",
+      answer: "Some browsers or sessions may not expose the client-side Word packaging dependency. When that happens, the tool falls back to a plain-text export instead of pretending to generate a full DOCX file.",
+    },
   ];
 
   return (
     <ToolPageLayout
       title={toolName}
-      subtitle="Convert PDF files to editable Word documents without uploading anything."
+      subtitle="Extract readable PDF text into a Word-compatible export without uploading anything."
       toolName={toolName}
       toolDescription={toolDescription}
       steps={steps}
@@ -218,6 +231,13 @@ export default function PdfToDocxClient() {
       currentTool="pdf-to-docx"
     >
       <div className="space-y-6">
+        <Alert>
+          <AlertTitle>Text-focused export</AlertTitle>
+          <AlertDescription>
+            This browser workflow extracts readable text from each PDF. Complex visual layouts, embedded images, and precise spacing may need manual cleanup after download.
+          </AlertDescription>
+        </Alert>
+
         <FileDropzone
           accept=".pdf"
           multiple
@@ -253,7 +273,7 @@ export default function PdfToDocxClient() {
               <p className="text-sm text-foreground dark:text-foreground">{files.length} file(s) queued.</p>
               <div className="flex gap-2">
                 <Button onClick={convertAll} disabled={isProcessing}>
-                  {isProcessing ? "Converting..." : "Convert to DOCX"}
+                  {isProcessing ? "Extracting..." : "Extract to Word"}
                 </Button>
                 <Button variant="ghost" onClick={() => setFiles([])} disabled={isProcessing}>
                   Clear list
@@ -274,18 +294,18 @@ export default function PdfToDocxClient() {
                   </div>
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending conversion</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Converting...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Converting...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (
                     <Button asChild variant="success" size="sm">
                       <a href={item.resultUrl} download={item.resultName}>
-                        Download DOCX
+                        Download {item.resultLabel || "export"}
                       </a>
                     </Button>
                   )}

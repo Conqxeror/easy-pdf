@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Upload, Download, Loader2, AlertCircle, EyeOff } from "lucide-react";
 import { FaceDetector, FilesetResolver } from "@mediapipe/tasks-vision";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 export default function FaceBlurClient() {
   const [image, setImage] = useState(null);
@@ -29,8 +31,8 @@ export default function FaceBlurClient() {
           runningMode: "IMAGE"
         });
         setFaceDetector(detector);
-      } catch (err) {
-        console.error("Failed to load face detector:", err);
+      } catch {
+        toast.error("Failed to load AI model. Please refresh the page.");
         setError("Failed to load AI model. Please refresh the page.");
       }
     };
@@ -40,11 +42,11 @@ export default function FaceBlurClient() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const url = URL.createObjectURL(file);
+      if (image) safeRevokeObjectURL(image);
+      const url = safeCreateObjectURL(file);
       setImage(url);
       setProcessedImage(null);
       setError(null);
-      // Process immediately if detector is ready
       if (faceDetector) {
         processImage(url, faceDetector);
       }
@@ -111,8 +113,8 @@ export default function FaceBlurClient() {
         setError("No faces detected in the image.");
       }
 
-    } catch (err) {
-      console.error("Face blur failed:", err);
+    } catch {
+      toast.error("Failed to process image.");
       setError("Failed to process image.");
     } finally {
       setIsProcessing(false);

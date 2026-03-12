@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
 import DOMPurify from "dompurify";
+import { toast } from "sonner";
 
 export default function PdfToPptClient() {
   const [files, setFiles] = useState([]);
@@ -135,7 +136,7 @@ export default function PdfToPptClient() {
 
       return htmlContent;
     } catch (error) {
-      console.error("PDF to PPT conversion failed:", error);
+      toast.error(error?.message || "PDF to PPT conversion failed");
       throw error;
     }
   };
@@ -177,7 +178,7 @@ export default function PdfToPptClient() {
         item.status = "done";
         item.error = "";
       } catch (conversionError) {
-        console.error("Failed to convert PDF", conversionError);
+        toast.error(conversionError?.message || "Failed to convert PDF");
         item.status = "error";
         item.error = conversionError?.message || "Conversion failed - unable to extract content from PDF";
       }
@@ -201,16 +202,16 @@ export default function PdfToPptClient() {
   };
 
   const toolName = "PDF to PowerPoint Converter";
-  const toolDescription = "Convert PDF files to presentation slides. Extract content from PDFs and structure them as presentation slides.";
+  const toolDescription = "Extract text from PDF files and turn each page into a presentation-style HTML slide draft. The output is designed for browser review or manual import into presentation software rather than native PPTX generation.";
   const steps = [
     "Upload PDF files via drag & drop or the file picker.",
-    "Click 'Convert to PPT' to extract content and structure it as slides.",
-    "Download the generated HTML file which can be imported into PowerPoint.",
+    "Click 'Create slide draft' to extract page text and organize it into slide-style sections.",
+    "Download the generated HTML deck and import or copy the content into PowerPoint, Google Slides, or Keynote.",
   ];
   const faqs = [
     {
       question: "How does PDF to PPT conversion work?",
-      answer: "Our tool analyzes the PDF structure to extract content and organize it in a slide-based format. The result is an HTML file with presentation styling that can be imported into PowerPoint.",
+      answer: "The tool extracts text from each PDF page and builds an HTML slide draft with one section per page. It is best for recovering headings and body text, not for preserving exact native PowerPoint layouts.",
     },
     {
       question: "Is there a file size limit?",
@@ -219,6 +220,10 @@ export default function PdfToPptClient() {
     {
       question: "Are my PDFs uploaded to a server?",
       answer: "No. All conversion happens securely in your browser. Your PDF files never leave your device.",
+    },
+    {
+      question: "Do I get a native PPTX file?",
+      answer: "No. This version exports an HTML slide draft so the result stays fully client-side and lightweight. You can open it directly in a browser or import the content into presentation software.",
     },
   ];
 
@@ -237,6 +242,13 @@ export default function PdfToPptClient() {
       currentTool="pdf-to-ppt"
     >
       <div className="space-y-6">
+        <Alert>
+          <AlertTitle>HTML slide draft output</AlertTitle>
+          <AlertDescription>
+            This tool creates a presentation-style HTML file, not a native PPTX. Use it when you want a fast local draft you can refine in slide software afterward.
+          </AlertDescription>
+        </Alert>
+
         <FileDropzone
           accept=".pdf"
           multiple
@@ -272,7 +284,7 @@ export default function PdfToPptClient() {
               <p className="text-sm text-foreground dark:text-foreground">{files.length} file(s) queued.</p>
               <div className="flex gap-2">
                 <Button onClick={convertAll} disabled={isProcessing}>
-                  {isProcessing ? "Converting..." : "Convert to PPT"}
+                  {isProcessing ? "Converting..." : "Create slide draft"}
                 </Button>
                 <Button variant="ghost" onClick={() => setFiles([])} disabled={isProcessing}>
                   Clear list
@@ -293,18 +305,18 @@ export default function PdfToPptClient() {
                   </div>
                   <div className="text-sm">
                     {item.status === "pending" && <span className="text-foreground">Pending conversion</span>}
-                    {item.status === "processing" && <span className="text-blue-500">Converting...</span>}
+                    {item.status === "processing" && <span className="text-muted-foreground">Converting...</span>}
                     {item.status === "done" && (
-                      <span className="text-green-600">Ready</span>
+                      <span className="text-emerald-600 dark:text-emerald-400">Ready</span>
                     )}
                     {item.status === "error" && (
-                      <span className="text-red-600">{item.error}</span>
+                      <span className="text-destructive">{item.error}</span>
                     )}
                   </div>
                   {item.resultUrl && (
                     <Button asChild variant="success" size="sm">
                       <a href={item.resultUrl} download={item.resultName}>
-                        Download HTML (PPT)
+                        Download HTML slide deck
                       </a>
                     </Button>
                   )}

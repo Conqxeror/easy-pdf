@@ -63,8 +63,7 @@ export default function Base64EncoderClient() {
 			setEncodedValue(result);
 			setError("");
 			toast.success("Plain text encoded to Base64");
-		} catch (err) {
-			console.error("Base64 encode failed", err);
+		} catch {
 			setError("Unable to encode. Make sure the text is valid UTF-8.");
 		}
 	};
@@ -75,8 +74,7 @@ export default function Base64EncoderClient() {
 			setPlainValue(result);
 			setError("");
 			toast.success("Base64 decoded to plain text");
-		} catch (err) {
-			console.error("Base64 decode failed", err);
+		} catch {
 			setError("That string is not valid Base64. Remove whitespace or ensure padding (\"=\") is intact.");
 		}
 	};

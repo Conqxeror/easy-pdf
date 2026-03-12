@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Copy, Check, FileCheck } from "lucide-react";
 import CryptoJS from "crypto-js";
+import { toast } from "sonner";
 
 export default function FileChecksumClient() {
   const [hashes, setKeys] = useState(null);
@@ -39,8 +40,8 @@ export default function FileChecksumClient() {
         setIsProcessing(false);
       }, 100); // Small delay to allow UI update
 
-    } catch (err) {
-      console.error(err);
+    } catch {
+      toast.error("Failed to compute checksums.");
       setIsProcessing(false);
     }
   };
@@ -103,7 +104,7 @@ export default function FileChecksumClient() {
                   <div className="flex gap-2">
                     <Input readOnly value={hashes.md5} className="font-mono text-sm" />
                     <Button variant="outline" size="icon" onClick={() => copyToClipboard(hashes.md5, "md5")}>
-                      {copied === "md5" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                      {copied === "md5" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     </Button>
                   </div>
                 </div>
@@ -113,7 +114,7 @@ export default function FileChecksumClient() {
                   <div className="flex gap-2">
                     <Input readOnly value={hashes.sha1} className="font-mono text-sm" />
                     <Button variant="outline" size="icon" onClick={() => copyToClipboard(hashes.sha1, "sha1")}>
-                      {copied === "sha1" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                      {copied === "sha1" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     </Button>
                   </div>
                 </div>
@@ -123,7 +124,7 @@ export default function FileChecksumClient() {
                   <div className="flex gap-2">
                     <Input readOnly value={hashes.sha256} className="font-mono text-sm" />
                     <Button variant="outline" size="icon" onClick={() => copyToClipboard(hashes.sha256, "sha256")}>
-                      {copied === "sha256" ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+                      {copied === "sha256" ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     </Button>
                   </div>
                 </div>

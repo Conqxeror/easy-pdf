@@ -167,7 +167,7 @@ export default function SponsorCard({ sponsor, size = "medium", showDescription 
 
       {/* Featured Badge */}
       {sponsor.featured && (
-        <div className="absolute top-3 left-3 bg-red-500 text-foreground px-2 py-1 text-xs font-semibold">
+        <div className="absolute top-3 left-3 bg-destructive text-destructive-foreground px-2 py-1 text-xs font-semibold">
           Featured
         </div>
       )}

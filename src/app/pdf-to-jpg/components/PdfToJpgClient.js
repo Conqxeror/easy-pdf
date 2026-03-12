@@ -139,8 +139,7 @@ export default function PdfToJpgPage() {
         const pdf = await loadingTask.promise;
         setTotalPages(pdf.numPages);
 
-      } catch (e) {
-        console.error("PDF loading error:", e);
+      } catch {
         setError("Failed to load PDF. Please ensure it's a valid PDF file.");
         setFile(null);
       }
@@ -262,7 +261,6 @@ export default function PdfToJpgPage() {
       setProcessingMessage("Conversion complete!");
 
     } catch (e) {
-      console.error("Conversion error:", e);
       setError(
         `Failed to convert PDF to JPG. Error: ${e.message}`
       );
@@ -287,12 +285,12 @@ export default function PdfToJpgPage() {
   }, []);
 
   const toolName = "PDF to JPG Converter";
-  const toolDescription = "Convert your PDF files to high-quality JPG images with our free online tool. Extract specific pages or convert the entire document. Our converter processes your files directly in your browser, ensuring privacy and providing instant results. Combine multiple PDF pages into JPG images quickly and securely.";
+  const toolDescription = "Convert PDF pages into JPG images directly in your browser. Choose a single page or the full document, then download each JPG individually or use the ZIP archive when the browser can create it.";
   const steps = [
     "Upload your PDF file by dragging it into the dropzone or clicking to select a file.",
     "Choose which pages to convert: all pages, or a specific page number.",
     "Click the 'Convert to JPG' button to start the conversion process.",
-    "Download your JPG images. If you converted multiple pages, they will be provided in a convenient ZIP archive.",
+    "Download your JPG images. If you converted multiple pages, the tool will also provide a ZIP archive when the browser can create the combined download link.",
   ];
 
   return (
@@ -519,14 +517,9 @@ export default function PdfToJpgPage() {
                         </a>
                       </Button>
                     ) : (
-                      <Button
-                        variant="success"
-                        size="lg"
-                        disabled
-                        className="px-8 py-3 text-center"
-                      >
-                        ZIP not available for download
-                      </Button>
+                      <Alert className="max-w-xl text-left">
+                        ZIP packaging finished, but this browser session could not create a download link for the archive. You can still download each JPG individually from the cards above.
+                      </Alert>
                     )}
                   </div>
                 );

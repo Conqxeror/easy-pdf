@@ -9,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 export default function PdfToTextClient() {
   const [file, setFile] = useState(null);
@@ -87,7 +88,7 @@ export default function PdfToTextClient() {
 
       return allText.trim();
     } catch (error) {
-      console.error("PDF to Text extraction failed:", error);
+      toast.error(error?.message || "PDF text extraction failed");
       throw error;
     }
   };
@@ -119,7 +120,7 @@ export default function PdfToTextClient() {
       setProcessingMessage("Text extraction complete!");
       setCurrentProgress(100);
     } catch (conversionError) {
-      console.error("Failed to extract text from PDF", conversionError);
+      toast.error(conversionError?.message || "Failed to extract text from PDF");
       setError(`Text extraction failed: ${conversionError?.message || "Unable to extract text from this PDF"}`);
     } finally {
       setIsProcessing(false);

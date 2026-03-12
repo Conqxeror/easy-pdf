@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
 
 const ACCEPT = ".mp3,audio/mpeg,.wav,audio/wav,.m4a,audio/mp4,.flac,audio/flac"; // Accept common audio formats
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB guard
@@ -128,8 +129,9 @@ export default function AudioSpeedChangerClient() {
 
       setProgress(100);
     } catch (err) {
-      console.error("Change audio speed failed", err);
-      setError(err?.message || "Failed to change audio speed. Please try another file with different settings.");
+      const msg = err?.message || "Failed to change audio speed. Please try another file with different settings.";
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsProcessing(false);
       setTimeout(() => setProgress(0), 800);
@@ -250,10 +252,10 @@ export default function AudioSpeedChangerClient() {
         )}
 
         {downloadUrl && file && (
-          <div className="p-4 bg-green-50 rounded-none border border-green-200">
-            <p className="font-semibold text-green-800">Audio speed change complete!</p>
+          <div className="p-4 bg-muted rounded-none border border-border">
+            <p className="font-semibold text-foreground">Audio speed change complete!</p>
             <a
-              className="text-blue-600 underline inline-block mt-2 px-4 py-2 bg-blue-100 rounded-none hover:bg-blue-200 transition-colors"
+              className="inline-block mt-2 px-4 py-2 bg-primary text-primary-foreground rounded-none hover:bg-primary/90 transition-colors"
               href={downloadUrl}
               download={`${file.name.replace(/\.[^/.]+$/, "")}_speed_${speed.toFixed(2)}x.${outputFormat}`}
             >

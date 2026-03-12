@@ -195,7 +195,6 @@ export default function SignClient() {
       if (e.name === "RenderingCancelledException") {
         console.log("PDF rendering cancelled during preview:", e);
       } else {
-        console.error("Error rendering PDF preview:", e);
         setError("Failed to render PDF preview.");
       }
     }
@@ -280,9 +279,8 @@ export default function SignClient() {
       activePdfDocProxyRef.current = pdf; // Set the ref directly
       setPdfDocProxy(pdf); // Update state, which will trigger preview render due to the dedicated useEffect
       setNumPages(pdf.numPages);
-    } catch (e) {
+    } catch {
       setError("Failed to load PDF. Please ensure it's a valid PDF file.");
-      console.error("PDF loading error:", e);
       setFiles([]);
       setPdfDocProxy(null); // Ensure state is null on error
       activePdfDocProxyRef.current = null; // Ensure ref is null on error
@@ -464,9 +462,8 @@ export default function SignClient() {
 
       setProcessingMessage("PDF signed successfully!");
       setError("");
-    } catch (e) {
+    } catch {
       setError("Failed to sign PDF. Please try again.");
-      console.error("Sign PDF error:", e);
     } finally {
       setIsProcessing(false);
       setTimeout(() => setProcessingMessage(""), 2000);

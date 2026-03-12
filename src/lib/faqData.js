@@ -138,7 +138,7 @@ export const toolSpecificFAQs = {
     },
     {
       question: "What audio quality do you export?",
-      answer: "We default to 192 kbps MP3 using LAME for a good balance of size and fidelity. Future updates will expose more presets."
+      answer: "We default to 192 kbps MP3 using LAME for a good balance of size and fidelity in the current browser workflow."
     }
   ],
 
@@ -410,7 +410,7 @@ export const toolSpecificFAQs = {
   "pdf-version-comparison": [
     {
       question: "What differences can the tool detect?",
-      answer: "The diff highlights text edits, additions, deletions, formatting tweaks, image swaps, and metadata deltas so you can review every change."
+      answer: "The comparison surfaces text edits, metadata changes, page-count differences, and page size or layout shifts. If the binary PDFs differ without extractable text changes, the report also flags that as a document-level revision."
     },
     {
       question: "Can I export the results?",
@@ -418,16 +418,22 @@ export const toolSpecificFAQs = {
     },
     {
       question: "Do my PDFs leave the browser?",
-      answer: "No. Both versions are parsed locally via pdf-lib and canvas diffing, so nothing is uploaded to a server."
+      answer: "No. Both versions are parsed locally with browser-side PDF libraries, so nothing is uploaded to a server."
     }
   ]
 }
 
 // Get FAQs for a specific tool
 export const getFAQsForTool = (toolName) => {
-  const toolFAQs = toolSpecificFAQs[toolName] || []
+  const normalizedToolName = String(toolName || '').trim().replace(/^\/+/, '')
+  const lastSegment = normalizedToolName.split('/').filter(Boolean).pop() || normalizedToolName
+  const toolFAQs = toolSpecificFAQs[normalizedToolName] || toolSpecificFAQs[lastSegment] || []
   const securityFAQs = commonFAQs.security
   const generalFAQs = commonFAQs.general.slice(0, 2) // First 2 general FAQs
 
-  return [...toolFAQs, ...securityFAQs, ...generalFAQs]
+  if (toolFAQs.length > 0) {
+    return toolFAQs
+  }
+
+  return [...securityFAQs, ...generalFAQs]
 }

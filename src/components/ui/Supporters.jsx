@@ -12,12 +12,14 @@ export default function Supporters() {
         <h2 className="text-xl md:text-2xl font-bold mb-8 text-foreground uppercase tracking-tight">Supported By</h2>
         <div className="flex flex-wrap justify-center gap-8 items-start">
           {sponsors.map((sponsor, index) => (
-            <div key={index} className="flex flex-col items-center gap-2">
+            <div key={sponsor.name} className="flex flex-col items-center gap-2">
               <a href={sponsor.url} target="_blank" rel="noopener noreferrer" className="group relative block w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-border hover:border-foreground transition-colors">
                  <Image 
                    src={sponsor.image} 
                    alt={sponsor.name} 
                    fill 
+                   priority={index === 0}
+                   sizes="(max-width: 768px) 80px, 96px"
                    className="object-cover transition-all duration-300"
                  />
               </a>

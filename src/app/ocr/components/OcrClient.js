@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/select";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import ToolActions from "@/components/ui/ToolActions";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 // ✅ OPTIMIZATION: Lazy load heavy dependencies
 const loadOCRDependencies = async () => {
@@ -39,10 +41,9 @@ export default function OcrClient() {
       try {
         if (
           previewImageUrl &&
-          typeof URL !== 'undefined' &&
           !String(previewImageUrl).startsWith('data:')
         ) {
-          URL.revokeObjectURL(previewImageUrl);
+          safeRevokeObjectURL(previewImageUrl);
         }
       } catch { /* ignore */ }
     };
@@ -115,29 +116,28 @@ export default function OcrClient() {
             context.drawImage(img, 0, 0, canvas.width, canvas.height);
 
             try {
-              tmpUrl = URL.createObjectURL(file);
+              tmpUrl = safeCreateObjectURL(file);
             } catch {
               tmpUrl = null;
             }
 
             setPreviewImageUrl((prev) => {
               if (prev && !String(prev).startsWith('data:')) {
-                try { URL.revokeObjectURL(prev); } catch { /* ignore */ }
+                try { safeRevokeObjectURL(prev); } catch { /* ignore */ }
               }
               return tmpUrl || canvas.toDataURL('image/png');
             });
-          } catch (err) {
-            console.error('Error during image onload processing:', err);
-            setError('Failed to load image for preview.');
+          } catch {
+            toast.error('Failed to load image for preview.');
           }
         };
         img.onerror = () => {
           setError("Failed to load image for preview.");
-          if (tmpUrl) try { URL.revokeObjectURL(tmpUrl); } catch { /* ignore */ }
+          if (tmpUrl) try { safeRevokeObjectURL(tmpUrl); } catch { /* ignore */ }
         };
         
         try {
-          tmpUrl = URL.createObjectURL(file);
+          tmpUrl = safeCreateObjectURL(file);
           img.src = tmpUrl;
         } catch {
           setError('Failed to load image for preview.');
@@ -145,7 +145,6 @@ export default function OcrClient() {
       }
     } catch (e) {
       if (e.name !== "RenderingCancelledException") {
-        console.error("Error rendering file to canvas:", e);
         setError("Failed to prepare file for preview.");
       }
     }
@@ -208,8 +207,8 @@ export default function OcrClient() {
         setNumPages(pdf.numPages);
         setPageRangeEnd(pdf.numPages);
 
-      } catch (e) {
-        console.error("PDF loading error:", e);
+      } catch {
+        toast.error("Failed to load PDF. Please ensure it's a valid PDF file.");
         setError("Failed to load PDF. Please ensure it's a valid PDF file.");
         setFiles([]);
         setIsLoadingDeps(false);
@@ -316,7 +315,7 @@ ${data.text.trim()}`);
       setProcessingMessage("Text extraction complete!");
 
     } catch (e) {
-      console.error("OCR error:", e);
+      toast.error(`Failed to extract text: ${e.message}`);
       setError(`Failed to extract text: ${e.message}`);
     } finally {
       if (worker && deps) {

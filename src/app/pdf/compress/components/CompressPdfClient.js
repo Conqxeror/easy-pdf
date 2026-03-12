@@ -11,6 +11,8 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 export default function CompressPdfClient() {
   const [file, setFile] = useState(null);
@@ -121,10 +123,10 @@ export default function CompressPdfClient() {
       const compressedPdfBytes = await newPdfDoc.save();
       const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
   let url = null;
-  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating compressed PDF object URL:', err); url = null; }
+  try { url = safeCreateObjectURL(blob); } catch { url = null; }
       // Revoke previous URL if present to avoid memory leaks
       setCompressedPdfUrl((prev) => {
-  try { if (prev && typeof URL !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch {}
+  try { if (prev) safeRevokeObjectURL(prev); } catch {}
         return url;
       });
 
@@ -135,8 +137,8 @@ export default function CompressPdfClient() {
 
       setProgress(100);
       setProcessingMessage("Compression complete!");
-    } catch (error) {
-      console.error("Error compressing PDF:", error);
+    } catch {
+      toast.error("Failed to compress PDF. Please try again with a different file.");
       setError(
         "Failed to compress PDF. Please try again with a different file."
       );

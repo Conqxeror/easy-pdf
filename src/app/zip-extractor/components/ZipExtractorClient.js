@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
+import { toast } from "sonner";
 
 const ACCEPTED_ZIP_TYPES = [
   "application/zip",
@@ -129,7 +130,7 @@ export default function ZipExtractorClient() {
       setCurrentProgress(100);
       setTimeout(() => setCurrentProgress(0), 1200);
     } catch (extractionError) {
-      console.error("ZIP extraction failed", extractionError);
+      toast.error(extractionError?.message || "ZIP extraction failed");
       setError("Failed to extract ZIP. Please make sure the archive is valid.");
       setProcessingMessage("Extraction failed");
       setEntries([]);
@@ -183,7 +184,7 @@ export default function ZipExtractorClient() {
       const safeName = sanitizeFileName(entry.name) || "file";
       triggerDownload(url, safeName);
     } catch (downloadError) {
-      console.error("Failed to download entry", downloadError);
+      toast.error(downloadError?.message || "Failed to download entry");
       setError("Failed to download file. Please try again.");
     } finally {
       setActiveDownload(null);
@@ -208,7 +209,7 @@ export default function ZipExtractorClient() {
         triggerDownload(url, safeName);
         await new Promise((resolve) => setTimeout(resolve, 150));
       } catch (err) {
-        console.error("Batch download failed", err);
+        toast.error(err?.message || "Batch download failed");
         setError("A file failed to download. Please try individually.");
         break;
       }

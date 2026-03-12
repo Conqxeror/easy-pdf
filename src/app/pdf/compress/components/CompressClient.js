@@ -12,6 +12,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import ToolActions from "@/components/ui/ToolActions";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 export default function CompressPDFs() {
   const [file, setFile] = useState(null);
@@ -128,19 +130,13 @@ export default function CompressPDFs() {
       const blob = new Blob([compressedPdfBytes], { type: "application/pdf" });
       let url = null;
       try {
-        if (typeof URL !== "undefined" && typeof window !== 'undefined') {
-          try { url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for compressed PDF:', err); url = null; }
-        }
+        url = safeCreateObjectURL(blob);
       } catch {
         url = null;
       }
       // Revoke previous URL if present to avoid memory leaks
       setCompressedPdfUrl((prev) => {
-        try {
-          if (prev && typeof URL !== "undefined" && typeof window !== 'undefined' && !String(prev).startsWith('data:')) {
-            try { URL.revokeObjectURL(prev); } catch { /* ignore */ }
-          }
-        } catch { /* ignore */ }
+        try { if (prev) safeRevokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
 
@@ -156,8 +152,8 @@ export default function CompressPDFs() {
 
       setProgress(100);
       setProcessingMessage("Compression complete!");
-    } catch (error) {
-      console.error("Error compressing PDF:", error);
+    } catch {
+      toast.error("Failed to compress PDF. Please try again with a different file.");
       setError(
         "Failed to compress PDF. Please try again with a different file."
       );
@@ -211,10 +207,10 @@ export default function CompressPDFs() {
       toolDescription={toolDescription}
       steps={steps}
       faqs={faqs}
-      currentTool="compress"
+      currentTool="pdf/compress"
       breadcrumbs={[
         { label: 'Home', href: '/' },
-        { label: 'Compress PDF', href: '/compress' }
+        { label: 'Compress PDF', href: '/pdf/compress' }
       ]}
     >
       <div className="space-y-6">

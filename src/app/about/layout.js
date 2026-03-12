@@ -1,4 +1,4 @@
-import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app'
@@ -17,19 +17,9 @@ export const metadata = generateEnhancedMetadata({
   metadataBaseUrl: siteUrl
 });
 
-const structuredData = generateComprehensiveJsonLd('about', {
-  title: "About Us",
-  description: "Learn more about our mission and our commitment to privacy.",
-  url: "/about"
-});
-
 export default function AboutLayout({ children }) {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
       <div className="mt-16 sm:mt-20">
         <div className="flex flex-col gap-8">
           <div className="container-standard mb-6">

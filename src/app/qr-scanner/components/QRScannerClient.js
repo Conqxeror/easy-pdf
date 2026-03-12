@@ -19,7 +19,7 @@ export default function QRScannerClient() {
   useEffect(() => {
     return () => {
       if (readerRef.current && isScanning) {
-        readerRef.current.stop().catch(console.error);
+        readerRef.current.stop().catch(() => {});
       }
     };
   }, [isScanning]);
@@ -55,9 +55,8 @@ export default function QRScannerClient() {
         }
       );
       setIsScanning(true);
-    } catch (err) {
+    } catch {
       setError("Failed to start camera. Please ensure you have granted permission.");
-      console.error(err);
       setIsScanning(false);
     }
   };
@@ -68,8 +67,8 @@ export default function QRScannerClient() {
         await readerRef.current.stop();
         setIsScanning(false);
         readerRef.current = null;
-      } catch (err) {
-        console.error("Failed to stop camera", err);
+      } catch {
+        // camera stop may fail silently
       }
     }
   };
@@ -91,9 +90,8 @@ export default function QRScannerClient() {
       const result = await html5QrCode.scanFile(file, true);
       setScanResult(result);
       html5QrCode.clear();
-    } catch (err) {
+    } catch {
       setError("Could not find a QR code in this image.");
-      console.error(err);
     }
   };
 
@@ -134,9 +132,9 @@ export default function QRScannerClient() {
     >
       <div className="max-w-2xl mx-auto space-y-8">
         <div className="grid gap-6 md:grid-cols-2">
-          <Card className={`cursor-pointer transition-colors ${isScanning ? 'border-red-500 bg-red-50' : 'hover:border-primary'}`} onClick={startCamera}>
+          <Card className={`cursor-pointer transition-colors ${isScanning ? 'border-destructive bg-destructive/10' : 'hover:border-primary'}`} onClick={startCamera}>
             <CardContent className="flex flex-col items-center justify-center p-6 gap-4 h-full">
-              {isScanning ? <StopCircle className="w-12 h-12 text-red-500" /> : <Camera className="w-12 h-12 text-primary-foreground" />}
+              {isScanning ? <StopCircle className="w-12 h-12 text-destructive" /> : <Camera className="w-12 h-12 text-primary-foreground" />}
               <span className="font-semibold">{isScanning ? "Stop Camera" : "Scan with Camera"}</span>
             </CardContent>
           </Card>

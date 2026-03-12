@@ -8,6 +8,8 @@ import { Alert } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 import { Lock } from "lucide-react";
 
 const toolName = "Protect PDF";
@@ -53,7 +55,7 @@ export default function ProtectClient() {
   useEffect(() => {
     return () => {
       if (protectedUrl) {
-        try { if (protectedUrl && typeof URL !== 'undefined' && !String(protectedUrl).startsWith('data:')) URL.revokeObjectURL(protectedUrl); } catch { /* ignore */ }
+        try { if (protectedUrl) safeRevokeObjectURL(protectedUrl); } catch { /* ignore */ }
       }
     };
   }, [protectedUrl]);
@@ -105,21 +107,19 @@ export default function ProtectClient() {
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       let url = null;
       try {
-        if (typeof URL !== 'undefined' && typeof window !== 'undefined') {
-          try { url = URL.createObjectURL(blob); } catch { console.error('Error creating protected PDF object URL'); url = null; }
-        }
+        url = safeCreateObjectURL(blob);
       } catch {
         url = null;
       }
 
       setProtectedUrl((prev) => {
-        try { if (prev && typeof URL !== 'undefined' && typeof window !== 'undefined' && !String(prev).startsWith('data:')) URL.revokeObjectURL(prev); } catch { /* ignore */ }
+        try { if (prev) safeRevokeObjectURL(prev); } catch { /* ignore */ }
         return url;
       });
 
       setError("");
-    } catch (e) {
-      console.error("Protect PDF error:", e);
+    } catch {
+      toast.error("Failed to protect PDF. The file might be corrupted or already encrypted.");
       setError("Failed to protect PDF. The file might be corrupted or already encrypted.");
     } finally {
       setIsProcessing(false);

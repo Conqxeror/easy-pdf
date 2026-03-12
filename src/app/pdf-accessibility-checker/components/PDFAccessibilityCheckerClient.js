@@ -10,6 +10,125 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Upload, Download, CheckCircle, AlertTriangle, XCircle, FileText, Eye, Palette, Type, Image as ImageIcon, List, Shield, Loader2 } from 'lucide-react';
 import ToolPageLayout from '@/components/ui/ToolPageLayout';
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
+
+const flattenStructTree = (node, collected = []) => {
+  if (!node) return collected;
+
+  collected.push(node);
+
+  if (Array.isArray(node.children)) {
+    node.children.forEach((child) => flattenStructTree(child, collected));
+  }
+
+  return collected;
+};
+
+const getImageOperationCount = (operatorList, pdfjsLib) => {
+  if (!operatorList?.fnArray || !pdfjsLib?.OPS) return 0;
+
+  const imageOps = new Set([
+    pdfjsLib.OPS.paintImageXObject,
+    pdfjsLib.OPS.paintInlineImageXObject,
+    pdfjsLib.OPS.paintInlineImageXObjectGroup,
+    pdfjsLib.OPS.paintImageMaskXObject,
+    pdfjsLib.OPS.paintJpegXObject,
+  ].filter((value) => typeof value === 'number'));
+
+  return operatorList.fnArray.filter((operation) => imageOps.has(operation)).length;
+};
+
+const collectAccessibilityContext = async ({ pdf, pdfjsLib, setProgress }) => {
+  const metadata = await pdf.getMetadata().catch(() => ({ info: {}, metadata: null }));
+  const fieldObjects = typeof pdf.getFieldObjects === 'function'
+    ? await pdf.getFieldObjects().catch(() => null)
+    : null;
+
+  const context = {
+    totalPages: pdf.numPages,
+    info: metadata?.info || {},
+    xmpMetadata: metadata?.metadata || null,
+    taggedPages: 0,
+    headingSignals: 0,
+    imagePages: 0,
+    imagePagesMissingAltText: 0,
+    readingOrderPasses: 0,
+    lowTextPages: 0,
+    formFieldCount: fieldObjects ? Object.keys(fieldObjects).length : 0,
+  };
+
+  for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+    const page = await pdf.getPage(pageNumber);
+    const textContent = await page.getTextContent();
+    const textItems = textContent.items
+      .map((item) => ({
+        text: String(item.str || '').trim(),
+        height: Math.abs(item.height || item.transform?.[3] || 0),
+        y: item.transform?.[5] || 0,
+      }))
+      .filter((item) => item.text.length > 0);
+
+    if (!textItems.length) {
+      context.lowTextPages += 1;
+    }
+
+    const averageHeight = textItems.length
+      ? textItems.reduce((sum, item) => sum + item.height, 0) / textItems.length
+      : 0;
+
+    const headingLikeItems = textItems.filter((item) => item.text.length <= 120 && item.height >= averageHeight * 1.3);
+    context.headingSignals += headingLikeItems.length;
+
+    let readingOrderViolations = 0;
+    for (let index = 1; index < textItems.length; index += 1) {
+      if (textItems[index].y > textItems[index - 1].y + 24) {
+        readingOrderViolations += 1;
+      }
+    }
+
+    if (textItems.length === 0 || readingOrderViolations <= Math.max(2, Math.ceil(textItems.length * 0.05))) {
+      context.readingOrderPasses += 1;
+    }
+
+    const structTree = typeof page.getStructTree === 'function'
+      ? await page.getStructTree().catch(() => null)
+      : null;
+    const structNodes = flattenStructTree(structTree, []);
+    const hasTaggedContent = structNodes.length > 0;
+    const hasHeadingTags = structNodes.some((node) => /^H\d$/i.test(node.role || node.type || ''));
+    const hasFigureAltText = structNodes.some((node) => {
+      const role = String(node.role || node.type || '').toLowerCase();
+      return role === 'figure' && Boolean(node.alt || node.altText || node.actualText);
+    });
+
+    if (hasTaggedContent) {
+      context.taggedPages += 1;
+    }
+
+    if (hasHeadingTags) {
+      context.headingSignals += 2;
+    }
+
+    const operatorList = await page.getOperatorList().catch(() => null);
+    const imageOperationCount = getImageOperationCount(operatorList, pdfjsLib);
+
+    if (imageOperationCount > 0) {
+      context.imagePages += 1;
+      if (!hasFigureAltText) {
+        context.imagePagesMissingAltText += 1;
+      }
+    }
+
+    if (typeof page.cleanup === 'function') {
+      page.cleanup();
+    }
+
+    setProgress((pageNumber / pdf.numPages) * 80);
+  }
+
+  return context;
+};
 
 export default function PDFAccessibilityCheckerClient() {
   const [file, setFile] = useState(null);
@@ -109,6 +228,7 @@ export default function PDFAccessibilityCheckerClient() {
       const pdfjsLib = await loadPdfJs();
 
       pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const context = await collectAccessibilityContext({ pdf, pdfjsLib, setProgress });
 
       const analysisResults = {
         fileName: file.name,
@@ -119,15 +239,11 @@ export default function PDFAccessibilityCheckerClient() {
         recommendations: []
       };
 
-      // Simulate comprehensive accessibility analysis
       let completedChecks = 0;
       const totalChecks = accessibilityChecks.length;
 
       for (const check of accessibilityChecks) {
-        // Simulate analysis for each check
-        await new Promise(resolve => setTimeout(resolve, 200));
-
-        const checkResult = await performAccessibilityCheck(check, pdf);
+        const checkResult = await performAccessibilityCheck(check, context);
         analysisResults.checks.push(checkResult);
 
         if (!checkResult.passed) {
@@ -140,7 +256,7 @@ export default function PDFAccessibilityCheckerClient() {
         }
 
         completedChecks++;
-        setProgress((completedChecks / totalChecks) * 100);
+        setProgress(80 + ((completedChecks / totalChecks) * 20));
       }
 
       // Calculate overall score
@@ -156,103 +272,108 @@ export default function PDFAccessibilityCheckerClient() {
       // Destroy pdf.js document proxy to free memory (best-effort)
       try { if (pdf && typeof pdf.destroy === 'function') pdf.destroy(); } catch { /* ignore */ }
     } catch (error) {
-      console.error('Analysis error:', error);
+      toast.error(error?.message || 'Analysis failed. Please try another file.');
       setAnalysisStatus('error');
     } finally {
       setIsAnalyzing(false);
     }
   };
 
-  const performAccessibilityCheck = async (check, _pdf) => {
-    // Simulate different accessibility checks
+  const performAccessibilityCheck = async (check, context) => {
+    const documentLanguage = context.info.Language || context.info.lang || context.xmpMetadata?.get?.('dc:language') || '';
+    const documentTitle = context.info.Title || context.xmpMetadata?.get?.('dc:title') || '';
+    const hasTaggedPages = context.taggedPages > 0;
+    const hasHeadingSignals = context.headingSignals > 0;
+    const hasImageAccessibilityIssues = context.imagePages > 0 && context.imagePagesMissingAltText > 0;
+    const hasForms = context.formFieldCount > 0;
+
     switch (check.id) {
       case 'title':
-        // Check if PDF has a title
-        const hasTitle = Math.random() > 0.3; // Simulate 70% have titles
         return {
           id: check.id,
           name: check.name,
-          passed: hasTitle,
-          severity: hasTitle ? 'none' : 'high',
-          message: hasTitle ? 'Document has a proper title' : 'Document is missing a title',
-          recommendation: hasTitle ? null : 'Add a meaningful title to the PDF document properties'
+          passed: Boolean(String(documentTitle).trim()),
+          severity: String(documentTitle).trim() ? 'none' : 'high',
+          message: String(documentTitle).trim() ? 'Document has a title in its PDF metadata' : 'Document is missing a title in its PDF metadata',
+          recommendation: String(documentTitle).trim() ? null : 'Add a meaningful title to the PDF document properties before publishing.'
         };
 
       case 'language':
-        const hasLanguage = Math.random() > 0.4;
         return {
           id: check.id,
           name: check.name,
-          passed: hasLanguage,
-          severity: hasLanguage ? 'none' : 'medium',
-          message: hasLanguage ? 'Document language is declared' : 'Document language is not specified',
-          recommendation: hasLanguage ? null : 'Set the document language in PDF properties'
+          passed: Boolean(String(documentLanguage).trim()),
+          severity: String(documentLanguage).trim() ? 'none' : 'medium',
+          message: String(documentLanguage).trim() ? `Document language is declared as ${documentLanguage}` : 'Document language is not specified in the PDF metadata',
+          recommendation: String(documentLanguage).trim() ? null : 'Set the document language in the PDF metadata so assistive technologies choose the right pronunciation rules.'
         };
 
       case 'tags':
-        const isTagged = Math.random() > 0.6;
         return {
           id: check.id,
           name: check.name,
-          passed: isTagged,
-          severity: isTagged ? 'none' : 'high',
-          message: isTagged ? 'PDF is properly tagged' : 'PDF is not tagged for accessibility',
-          recommendation: isTagged ? null : 'Add structural tags to make the PDF accessible to screen readers'
+          passed: hasTaggedPages,
+          severity: hasTaggedPages ? 'none' : 'high',
+          message: hasTaggedPages ? `Detected structure information on ${context.taggedPages} page(s)` : 'No tagged structure information was detected',
+          recommendation: hasTaggedPages ? null : 'Export the PDF as a tagged document so screen readers can understand the reading structure.'
         };
 
       case 'headings':
-        const hasProperHeadings = Math.random() > 0.5;
         return {
           id: check.id,
           name: check.name,
-          passed: hasProperHeadings,
-          severity: hasProperHeadings ? 'none' : 'medium',
-          message: hasProperHeadings ? 'Heading structure is logical' : 'Heading structure needs improvement',
-          recommendation: hasProperHeadings ? null : 'Use proper heading hierarchy (H1, H2, H3, etc.) throughout the document'
+          passed: hasHeadingSignals,
+          severity: hasHeadingSignals ? 'none' : 'medium',
+          message: hasHeadingSignals ? 'Found heading-like structure signals in the document' : 'No clear heading structure was detected automatically',
+          recommendation: hasHeadingSignals ? null : 'Use tagged headings or stronger heading hierarchy so assistive technologies can navigate the document outline.'
         };
 
       case 'altText':
-        const hasAltText = Math.random() > 0.4;
         return {
           id: check.id,
           name: check.name,
-          passed: hasAltText,
-          severity: hasAltText ? 'none' : 'high',
-          message: hasAltText ? 'Images have alternative text' : 'Some images are missing alternative text',
-          recommendation: hasAltText ? null : 'Add descriptive alternative text to all images'
+          passed: context.imagePages === 0 || !hasImageAccessibilityIssues,
+          severity: context.imagePages === 0 || !hasImageAccessibilityIssues ? 'none' : 'high',
+          message: context.imagePages === 0
+            ? 'No raster image operations were detected that require alt text review'
+            : hasImageAccessibilityIssues
+              ? `${context.imagePagesMissingAltText} image-heavy page(s) appear to be missing figure alt text`
+              : 'Detected image content appears to include accessible figure descriptions',
+          recommendation: context.imagePages === 0 || !hasImageAccessibilityIssues ? null : 'Add descriptive alternative text for every meaningful figure or image in the tagged PDF structure.'
         };
 
       case 'contrast':
-        const hasGoodContrast = Math.random() > 0.3;
         return {
           id: check.id,
           name: check.name,
-          passed: hasGoodContrast,
-          severity: hasGoodContrast ? 'none' : 'medium',
-          message: hasGoodContrast ? 'Text has sufficient color contrast' : 'Some text may have insufficient color contrast',
-          recommendation: hasGoodContrast ? null : 'Ensure text has a contrast ratio of at least 4.5:1 with the background'
+          passed: context.lowTextPages === 0,
+          severity: context.lowTextPages === 0 ? 'none' : 'medium',
+          message: context.lowTextPages === 0
+            ? 'Text was extracted from every page, so there are no obvious raster-only pages requiring manual contrast review'
+            : `${context.lowTextPages} page(s) contain little or no extractable text and need manual contrast verification`,
+          recommendation: context.lowTextPages === 0 ? null : 'Review scanned or image-based pages manually to confirm that text contrast meets WCAG requirements.'
         };
 
       case 'readingOrder':
-        const hasLogicalOrder = Math.random() > 0.6;
         return {
           id: check.id,
           name: check.name,
-          passed: hasLogicalOrder,
-          severity: hasLogicalOrder ? 'none' : 'medium',
-          message: hasLogicalOrder ? 'Content has logical reading order' : 'Reading order may be unclear',
-          recommendation: hasLogicalOrder ? null : 'Ensure content flows in a logical reading order'
+          passed: context.readingOrderPasses >= Math.ceil(context.totalPages * 0.7),
+          severity: context.readingOrderPasses >= Math.ceil(context.totalPages * 0.7) ? 'none' : 'medium',
+          message: context.readingOrderPasses >= Math.ceil(context.totalPages * 0.7)
+            ? 'Most pages follow a stable top-to-bottom reading sequence'
+            : 'The extracted reading order looks inconsistent on several pages',
+          recommendation: context.readingOrderPasses >= Math.ceil(context.totalPages * 0.7) ? null : 'Review the source document order or tagged structure to make sure content is announced in the intended sequence.'
         };
 
       case 'forms':
-        const hasAccessibleForms = Math.random() > 0.7;
         return {
           id: check.id,
           name: check.name,
-          passed: hasAccessibleForms,
-          severity: hasAccessibleForms ? 'none' : 'high',
-          message: hasAccessibleForms ? 'Form fields are properly labeled' : 'Form fields may be missing labels',
-          recommendation: hasAccessibleForms ? null : 'Add descriptive labels to all form fields'
+          passed: !hasForms,
+          severity: !hasForms ? 'none' : 'medium',
+          message: !hasForms ? 'No interactive form fields were detected' : `${context.formFieldCount} form field(s) detected and should be checked for accessible labels`,
+          recommendation: !hasForms ? null : 'Verify that every form field has a programmatic label, tooltip, and logical tab order in the source PDF.'
         };
 
       default:
@@ -317,14 +438,14 @@ export default function PDFAccessibilityCheckerClient() {
     const reportContent = generateAccessibilityReport(results);
     const blob = new Blob([reportContent], { type: 'text/plain' });
     let url = null;
-    try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.error('Error creating object URL for accessibility report:', err); url = null; }
+    try { url = safeCreateObjectURL(blob); } catch { url = null; }
     const link = document.createElement('a');
     link.href = url;
     link.download = `${results.fileName}_accessibility_report.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    try { if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url); } catch { /* ignore */ }
+    try { if (url) safeRevokeObjectURL(url); } catch { /* ignore */ }
   };
 
   const generateAccessibilityReport = (results) => {
@@ -365,9 +486,9 @@ export default function PDFAccessibilityCheckerClient() {
   };
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-green-600';
+    if (score >= 80) return 'text-emerald-600 dark:text-emerald-400';
     if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    return 'text-destructive';
   };
 
   const getSeverityBadge = (severity) => {
@@ -386,20 +507,20 @@ export default function PDFAccessibilityCheckerClient() {
   return (
     <ToolPageLayout
       title="PDF Accessibility Checker"
-      subtitle="Check your PDF documents for accessibility compliance and WCAG standards"
+      subtitle="Run a local heuristic accessibility audit for common PDF issues"
       toolName="PDF Accessibility Checker"
-      toolDescription="Check your PDF documents for accessibility compliance and WCAG standards. Ensure your content is accessible to all users with comprehensive accessibility analysis."
+      toolDescription="Run a browser-based heuristic audit for common PDF accessibility issues such as missing titles, absent tags, likely reading-order problems, image alt-text gaps, and pages that need manual contrast review."
       currentTool="pdf-accessibility-checker"
       steps={[
         "Upload your PDF document by dragging it into the dropzone or clicking to select it.",
-        "Click 'Start Analysis' to begin the comprehensive accessibility check.",
-        "Review the detailed analysis results including accessibility score, passed checks, and identified issues.",
-        "Download the accessibility report for documentation or share with your team."
+        "Click 'Start Analysis' to run the local heuristic audit.",
+        "Review the score, passed checks, flagged issues, and manual follow-up recommendations.",
+        "Download the accessibility report for documentation or to guide remediation work."
       ]}
       faqs={[
         {
           question: "What accessibility standards does this tool check?",
-          answer: "The tool checks for WCAG 2.1 compliance, including document structure, image alt text, color contrast, reading order, form accessibility, and proper tagging for screen readers."
+          answer: "The tool reviews several WCAG-related signals such as document titles, tagging, likely heading structure, image alt-text markers, reading-order hints, and form fields. It is a heuristic browser-side audit, not a substitute for a full manual accessibility review."
         },
         {
           question: "What does the accessibility score mean?",
@@ -425,7 +546,7 @@ export default function PDFAccessibilityCheckerClient() {
             <CardHeader>
               <CardTitle>Upload PDF Document</CardTitle>
               <CardDescription>
-                Upload a PDF file to analyze its accessibility compliance
+                Upload a PDF file to scan for common accessibility issues
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -475,10 +596,10 @@ export default function PDFAccessibilityCheckerClient() {
                 <div className="text-xs text-muted-foreground space-y-1">
                   <div>• Document structure and tags</div>
                   <div>• Image alternative text</div>
-                  <div>• Color contrast ratios</div>
-                  <div>• Reading order validation</div>
+                  <div>• Manual contrast review flags</div>
+                  <div>• Reading order heuristics</div>
                   <div>• Form accessibility</div>
-                  <div>• WCAG 2.1 compliance</div>
+                  <div>• WCAG-related issue spotting</div>
                 </div>
               </div>
 
@@ -534,7 +655,7 @@ export default function PDFAccessibilityCheckerClient() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-500" aria-hidden="true" />
+                    <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                     Analysis Complete
                   </CardTitle>
                   <Button onClick={downloadReport} variant="outline" size="sm">
@@ -552,13 +673,13 @@ export default function PDFAccessibilityCheckerClient() {
                     <div className="text-sm text-muted-foreground">Accessibility Score</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">
+                    <div className="text-3xl font-bold text-emerald-600 dark:text-emerald-400">
                       {results.checks.filter(c => c.passed).length}
                     </div>
                     <div className="text-sm text-muted-foreground">Checks Passed</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-red-600">
+                    <div className="text-3xl font-bold text-destructive">
                       {results.issues.length}
                     </div>
                     <div className="text-sm text-muted-foreground">Issues Found</div>
@@ -594,17 +715,17 @@ export default function PDFAccessibilityCheckerClient() {
                         <h4 className="font-medium mb-2">Compliance Status</h4>
                         <div className="space-y-2">
                           {results.score >= 80 && (
-                            <Badge className="bg-green-100 text-green-800">
+                            <Badge className="bg-muted text-foreground">
                               Good Accessibility
                             </Badge>
                           )}
                           {results.score >= 60 && results.score < 80 && (
-                            <Badge className="bg-yellow-100 text-yellow-800">
+                            <Badge className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400">
                               Needs Improvement
                             </Badge>
                           )}
                           {results.score < 60 && (
-                            <Badge className="bg-red-100 text-red-800">
+                            <Badge className="bg-destructive/10 text-destructive">
                               Poor Accessibility
                             </Badge>
                           )}
@@ -625,12 +746,12 @@ export default function PDFAccessibilityCheckerClient() {
                       <Card key={index}>
                         <CardContent className="pt-4">
                           <div className="flex items-start gap-3">
-                            <div className={`p-2 ${check.passed ? 'bg-green-100' : 'bg-red-100'
+                            <div className={`p-2 ${check.passed ? 'bg-emerald-100 dark:bg-emerald-900/20' : 'bg-destructive/10'
                               }`}>
                               {check.passed ? (
-                                <CheckCircle className="h-4 w-4 text-green-600" aria-hidden="true" />
+                                <CheckCircle className="h-4 w-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" />
                               ) : (
-                                <XCircle className="h-4 w-4 text-red-600" aria-hidden="true" />
+                                <XCircle className="h-4 w-4 text-destructive" aria-hidden="true" />
                               )}
                             </div>
                             <div className="flex-1">
@@ -684,7 +805,7 @@ export default function PDFAccessibilityCheckerClient() {
                 ) : (
                   <Card>
                     <CardContent className="pt-6 text-center">
-                      <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" aria-hidden="true" />
+                      <CheckCircle className="h-12 w-12 text-emerald-600 dark:text-emerald-400 mx-auto mb-4" aria-hidden="true" />
                       <h3 className="font-medium mb-2">No Issues Found</h3>
                       <p className="text-sm text-muted-foreground">
                         Your PDF passed all accessibility checks!
@@ -700,11 +821,11 @@ export default function PDFAccessibilityCheckerClient() {
                     <Card key={index}>
                       <CardContent className="pt-4">
                         <div className="flex items-start gap-3">
-                          <div className={`p-2 ${rec.priority === 'high' ? 'bg-red-100' :
-                              rec.priority === 'medium' ? 'bg-yellow-100' : 'bg-green-100'
+                          <div className={`p-2 ${rec.priority === 'high' ? 'bg-destructive/10' :
+                              rec.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/20' : 'bg-muted'
                             }`}>
-                            <CheckCircle className={`h-4 w-4 ${rec.priority === 'high' ? 'text-red-600' :
-                                rec.priority === 'medium' ? 'text-yellow-600' : 'text-green-600'
+                            <CheckCircle className={`h-4 w-4 ${rec.priority === 'high' ? 'text-destructive' :
+                                rec.priority === 'medium' ? 'text-yellow-600' : 'text-emerald-600 dark:text-emerald-400'
                               }`} aria-hidden="true" />
                           </div>
                           <div className="flex-1">
@@ -734,7 +855,7 @@ export default function PDFAccessibilityCheckerClient() {
         {analysisStatus === 'error' && (
           <Card className="mb-6">
             <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-red-600">
+              <div className="flex items-center gap-2 text-destructive">
                 <XCircle className="h-5 w-5" />
                 <span>An error occurred during analysis. Please try again.</span>
               </div>

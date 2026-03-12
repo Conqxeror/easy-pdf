@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { safeCreateObjectURL, safeRevokeObjectURL } from '@/lib/enhancedUX';
 import { Unlock } from "lucide-react";
+import { toast } from "sonner";
 
 const toolName = "Unlock PDF";
 const toolDescription = "Remove password protection from your PDF documents quickly and securely. Our online Unlock PDF tool allows you to decrypt password-protected PDFs directly in your browser, ensuring your files remain private. Simply upload your file, enter the correct password, and download the unlocked version instantly.";
@@ -92,7 +93,7 @@ export default function UnlockClient() {
         return url;
       });
     } catch (e) {
-      console.error("Unlock PDF error:", e);
+      toast.error("Failed to unlock PDF. Check the password and try again.");
       // More specific error messages for better UX
       if (e.message && e.message.includes("Incorrect password")) {
         setError("Failed to unlock PDF. The password provided is incorrect.");

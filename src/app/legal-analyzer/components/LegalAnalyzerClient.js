@@ -19,6 +19,8 @@ import {
   Lightbulb,
 } from "lucide-react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
+import { toast } from "sonner";
+import { safeCreateObjectURL, safeRevokeObjectURL } from "@/lib/enhancedUX";
 
 const LEGAL_CLAUSES = [
   "Indemnity",
@@ -148,8 +150,7 @@ export default function LegalAnalyzerClient() {
               : [],
           });
         } catch (err) {
-          console.error("Analysis processing error:", err);
-          let userMessage = "Failed to analyze document. Please try again.";
+          let userMessage = "Analysis failed. Please try again.";
 
           if (
             err instanceof TypeError &&
@@ -171,12 +172,10 @@ export default function LegalAnalyzerClient() {
         setLoading(false);
         setLoadingMessage("");
         setError("Failed to read file. Please ensure it's a valid document.");
-        console.error("FileReader error:", reader.error);
       };
 
       reader.readAsDataURL(file);
     } catch (err) {
-      console.error("Analysis initiation error:", err);
       setLoading(false);
       setLoadingMessage("");
       setError(
@@ -190,7 +189,7 @@ export default function LegalAnalyzerClient() {
       title="AI Legal Document Analyzer"
       subtitle="Leverage the power of AI to quickly analyze your legal documents. Our tool provides a concise summary, identifies key entities and clauses, assesses potential risks, and offers actionable suggestions."
       toolName="AI Legal Document Analyzer"
-      toolDescription="Leverage the power of AI to quickly analyze your legal documents. Our tool provides a concise summary, identifies key entities and clauses, assesses potential risks, and offers actionable suggestions. Ideal for contracts, agreements, and other legal texts, this tool helps you understand complex documents faster and more efficiently. Your privacy is paramount: all analysis is performed securely, and your documents are never stored."
+      toolDescription="Leverage the power of AI to quickly analyze your legal documents. Our tool provides a concise summary, identifies key entities and clauses, assesses potential risks, and offers actionable suggestions. Ideal for contracts, agreements, and other legal texts, this tool helps you understand complex documents faster and more efficiently. Your document is uploaded to the easy-pdf analysis route and the extracted text is sent to an external AI provider for analysis; easy-pdf does not store the uploaded file after processing."
       steps={[
         "Upload your legal document (PDF, Word, or image format) using the drag-and-drop zone or by clicking to select a file.",
         "Click the 'Analyze Document' button. Our AI will process the content to extract relevant information.",
@@ -206,7 +205,7 @@ export default function LegalAnalyzerClient() {
         {
           question: "How secure are my documents during analysis?",
           answer:
-            "Your privacy and data security are our top priorities. All document processing and AI analysis are performed securely, and your documents are never stored on our servers. They are processed in a temporary, isolated environment.",
+            "Your document is uploaded to the easy-pdf analysis route and the extracted text is sent to an external AI provider for analysis. easy-pdf does not store the uploaded file after processing, but this tool is not a fully local in-browser workflow.",
         },
         {
           question: "What types of legal documents can I analyze?",
@@ -257,7 +256,7 @@ export default function LegalAnalyzerClient() {
               size="sm"
               onClick={() => setFile(null)}
               variant="outline"
-              className="bg-red-600 hover:bg-red-700 text-foreground border-red-700"
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground border-destructive"
             >
               Remove
             </Button>
@@ -384,7 +383,7 @@ export default function LegalAnalyzerClient() {
                 );
                 let url = null;
                 try {
-                  try { if (typeof URL !== 'undefined') url = URL.createObjectURL(blob); } catch (err) { console.warn('Failed to create report object URL', err); url = null; }
+                  url = safeCreateObjectURL(blob);
                   const a = document.createElement("a");
                   a.href = url || '';
                   const safeBase = String(file?.name || 'analysis').replace(/\s+/g, '-')
@@ -394,17 +393,12 @@ export default function LegalAnalyzerClient() {
                   document.body.appendChild(a);
                   a.click();
                   a.remove();
-                } catch (err) {
-                  console.error('Failed to start download:', err);
-                  alert('Failed to download report. Please try again.');
+                } catch {
+                  toast.error('Failed to download the report. Please try again.');
                 } finally {
-                  // Revoke object URL after a short delay (only revoke non-data URLs)
+                  // Revoke object URL after a short delay
                   setTimeout(() => {
-                    try {
-                      if (url && typeof URL !== 'undefined' && !String(url).startsWith('data:')) URL.revokeObjectURL(url);
-                    } catch {
-                      // ignore
-                    }
+                    try { if (url) safeRevokeObjectURL(url); } catch { /* ignore */ }
                   }, 500);
                 }
               }}
