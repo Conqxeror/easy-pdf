@@ -227,17 +227,17 @@ const nextConfig = {
       {
         source: '/merge',
         destination: '/pdf/merge',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/split',
         destination: '/pdf/split',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/compress',
         destination: '/pdf/compress',
-        permanent: true,
+        statusCode: 301,
       },
       {
         source: '/:path+/',

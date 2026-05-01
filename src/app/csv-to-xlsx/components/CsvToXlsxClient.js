@@ -11,6 +11,77 @@ import { toast } from "sonner";
 const ACCEPT = ".csv,text/csv";
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB guard
 
+const detectCsvDelimiter = (text) => {
+  const sample = text.split(/\r?\n/).slice(0, 10).join("\n");
+  const candidates = [",", ";", "\t", "|"];
+
+  return candidates.reduce((best, delimiter) => {
+    let count = 0;
+    let inQuotes = false;
+
+    for (let index = 0; index < sample.length; index += 1) {
+      const char = sample[index];
+      const nextChar = sample[index + 1];
+
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          index += 1;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === delimiter && !inQuotes) {
+        count += 1;
+      }
+    }
+
+    return count > best.count ? { delimiter, count } : best;
+  }, { delimiter: ",", count: -1 }).delimiter;
+};
+
+const parseCsvRows = (text, delimiter = detectCsvDelimiter(text)) => {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let inQuotes = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const nextChar = text[index + 1];
+
+    if (char === '"') {
+      if (inQuotes && nextChar === '"') {
+        cell += '"';
+        index += 1;
+      } else {
+        inQuotes = !inQuotes;
+      }
+      continue;
+    }
+
+    if (char === delimiter && !inQuotes) {
+      row.push(cell);
+      cell = "";
+      continue;
+    }
+
+    if ((char === '\n' || char === '\r') && !inQuotes) {
+      if (char === '\r' && nextChar === '\n') index += 1;
+      row.push(cell);
+      if (row.some(value => value !== "")) rows.push(row);
+      row = [];
+      cell = "";
+      continue;
+    }
+
+    cell += char;
+  }
+
+  row.push(cell);
+  if (row.some(value => value !== "")) rows.push(row);
+
+  return rows;
+};
+
 export default function CsvToXlsxClient() {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
@@ -55,17 +126,14 @@ export default function CsvToXlsxClient() {
     reader.onload = (e) => {
       const csvText = e.target.result;
       try {
-        // Parse CSV to show preview (simple approach)
-        const lines = csvText.split(/\r?\n/);
-        const headers = lines[0]?.split(',').map(h => h.trim().replace(/^"|"$/g, '')) || [];
-        const rows = lines.slice(1, 6).map(line =>
-          line.split(',').map(cell => cell.trim().replace(/^"|"$/g, ''))
-        ).filter(row => row.length > 1 || row[0]); // Filter out empty lines
+        const parsedRows = parseCsvRows(csvText);
+        const headers = parsedRows[0] || [];
+        const rows = parsedRows.slice(1, 6);
 
         setPreviewData({
           headers,
           rows,
-          totalRows: lines.length - 1  // Subtract header row
+          totalRows: Math.max(parsedRows.length - 1, 0)
         });
       } catch {
         setError("Failed to parse CSV file. Please ensure it's a valid CSV format.");
@@ -87,27 +155,40 @@ export default function CsvToXlsxClient() {
     setError("");
 
     try {
-      // Load the xlsx library
-      const xlsxModule = await import("xlsx");
-      const XLSX = xlsxModule.default || xlsxModule;
+      const xlsxModule = await import("xlsx-populate/browser/xlsx-populate.js");
+      const XlsxPopulate = xlsxModule.default || xlsxModule;
 
-      // Read the CSV file content
       const csvText = await file.text();
+      const rows = parseCsvRows(csvText);
 
-      // Parse the CSV using XLSX
-      const workbook = XLSX.read(csvText, { type: "string", delimiter: "," });
+      if (rows.length === 0) {
+        throw new Error("The CSV file is empty.");
+      }
 
-      // Convert to XLSX format
-      const xlsxBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+      const workbook = await XlsxPopulate.fromBlankAsync();
+      const sheet = workbook.sheet(0).name("Sheet1");
+      const columnWidths = [];
+      rows.forEach((row, rowIndex) => {
+        row.forEach((value, columnIndex) => {
+          sheet.cell(rowIndex + 1, columnIndex + 1).value(value);
+          columnWidths[columnIndex] = Math.max(columnWidths[columnIndex] || 10, String(value ?? "").length + 2);
+        });
+      });
+      columnWidths.forEach((width, columnIndex) => {
+        sheet.column(columnIndex + 1).width(Math.min(width, 60));
+      });
 
-      // Create a blob
-      const xlsxBlob = new Blob([xlsxBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      const xlsxBlob = await workbook.outputAsync({ type: "blob" });
+
+      const normalizedBlob = xlsxBlob instanceof Blob
+        ? xlsxBlob
+        : new Blob([xlsxBlob], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
 
       // Create download URL
       if (downloadUrl) {
         try { safeRevokeObjectURL(downloadUrl); } catch { };
       }
-      const newDownloadUrl = safeCreateObjectURL(xlsxBlob);
+      const newDownloadUrl = safeCreateObjectURL(normalizedBlob);
       setDownloadUrl(newDownloadUrl);
 
       setError("");
@@ -138,7 +219,7 @@ export default function CsvToXlsxClient() {
       faqs={[
         {
           question: "Does this tool require server processing?",
-          answer: "No. This tool processes CSV files directly in your browser using the xlsx library. Your data never leaves your device."
+          answer: "No. This tool processes CSV files directly in your browser using a client-side spreadsheet writer. Your data never leaves your device."
         },
         {
           question: "What CSV formats are supported?",

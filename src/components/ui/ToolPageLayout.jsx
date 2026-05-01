@@ -319,12 +319,15 @@ export default function ToolPageLayout({
                   Frequently Asked Questions
                 </AccessibleHeading>
                 {(() => {
-                  // Use page-authored FAQs as the source of truth. Only fall back to
-                  // shared tool/common FAQs when a page doesn't provide any.
                   const provided = Array.isArray(faqs) ? faqs : []
-                  const merged = provided.length > 0
-                    ? provided
-                    : (currentTool ? getFAQsForTool(currentTool) : [])
+                  const fallback = currentTool ? getFAQsForTool(currentTool) : []
+                  const seenQuestions = new Set()
+                  const merged = [...provided, ...fallback].filter((faq) => {
+                    const question = String(faq?.question || '').trim().toLowerCase()
+                    if (!question || seenQuestions.has(question)) return false
+                    seenQuestions.add(question)
+                    return true
+                  })
 
                   return (
                     <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto space-y-4">

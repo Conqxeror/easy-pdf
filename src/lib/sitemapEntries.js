@@ -1,5 +1,6 @@
 import { toolsData } from '@/lib/toolData';
 import { slugify } from '@/lib/slugify';
+import { resolveSiteUrl } from '@/lib/siteUrl';
 
 export function buildSitemapXml(final) {
 	const escapeXml = (str) => {
@@ -74,14 +75,8 @@ export function buildSitemapXml(final) {
 	return xml;
 }
 
-const resolveBaseUrl = () => {
-	const base = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app';
-	const normalized = base.startsWith('http') ? base : `https://${base}`;
-	return normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
-};
-
 export async function getSitemapEntries() {
-	const resolvedBase = resolveBaseUrl();
+	const resolvedBase = resolveSiteUrl();
 
 	// Tool pages with higher priority for popular tools
 	const tools = toolsData.map((tool) => {

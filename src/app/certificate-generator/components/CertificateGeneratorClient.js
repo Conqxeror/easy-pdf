@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { loadPdfLib } from "@/lib/pdfjsWorker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -22,8 +22,8 @@ export default function CertificateGeneratorClient() {
     recipientName: '',
     courseName: '',
     organizationName: '',
-    issueDate: new Date().toISOString().split('T')[0],
-    certificateId: `CERT-${Date.now()}`,
+    issueDate: '',
+    certificateId: 'CERT-PREVIEW',
     signatoryName: '',
     signatoryTitle: '',
     description: '',
@@ -36,6 +36,15 @@ export default function CertificateGeneratorClient() {
     fontStyle: 'formal',
     borderStyle: 'classic'
   });
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0];
+    setCertificateData(prev => ({
+      ...prev,
+      issueDate: prev.issueDate || today,
+      certificateId: prev.certificateId === 'CERT-PREVIEW' ? `CERT-${Date.now()}` : prev.certificateId,
+    }));
+  }, []);
 
   const templates = {
     completion: {
@@ -236,9 +245,14 @@ export default function CertificateGeneratorClient() {
         });
       }
 
+      const issueDateText = certificateData.issueDate
+        ? new Date(certificateData.issueDate).toLocaleDateString()
+        : new Date().toLocaleDateString();
+      const certificateId = certificateData.certificateId || `CERT-${Date.now()}`;
+
       // Date and organization
       yPosition = 120;
-      page.drawText(`Date: ${new Date(certificateData.issueDate).toLocaleDateString()}`, {
+      page.drawText(`Date: ${issueDateText}`, {
         x: 80,
         y: yPosition,
         size: 12,
@@ -246,7 +260,7 @@ export default function CertificateGeneratorClient() {
         color: rgb(0.4, 0.4, 0.4)
       });
 
-      page.drawText(`Certificate ID: ${certificateData.certificateId}`, {
+      page.drawText(`Certificate ID: ${certificateId}`, {
         x: 80,
         y: yPosition - 20,
         size: 10,
@@ -533,7 +547,7 @@ export default function CertificateGeneratorClient() {
               <CardTitle>Live Preview</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="border-8 border-double p-8 h-[600px] relative bg-background text-center flex flex-col justify-between"
+              <div className="border-8 border-double p-4 sm:p-8 min-h-[600px] relative bg-background text-center flex flex-col justify-between overflow-hidden"
                 style={{ borderColor: certificateData.primaryColor }}
               >
                 {/* Decorative corners */}
@@ -543,9 +557,9 @@ export default function CertificateGeneratorClient() {
                 <div className="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4" style={{ borderColor: certificateData.secondaryColor }}></div>
 
                 <div className="mt-8">
-                  <h1 className="text-4xl font-bold mb-4" style={{ color: certificateData.primaryColor }}>
+                  <div className="text-3xl sm:text-4xl font-bold mb-4" style={{ color: certificateData.primaryColor }}>
                     {templates[certificateData.template].title}
-                  </h1>
+                  </div>
                   <p className="text-xl italic text-foreground mb-8">
                     {templates[certificateData.template].subtitle}
                   </p>
@@ -565,13 +579,13 @@ export default function CertificateGeneratorClient() {
                   )}
                 </div>
 
-                <div className="flex justify-between items-end mt-12 px-12">
+                <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-8 mt-12 px-0 sm:px-12">
                   <div className="text-left">
-                    <p className="text-foreground mb-1">Date: {new Date(certificateData.issueDate).toLocaleDateString()}</p>
+                    <p className="text-foreground mb-1">Date: {certificateData.issueDate ? new Date(certificateData.issueDate).toLocaleDateString() : "Select a date"}</p>
                     <p className="text-xs text-foreground">ID: {certificateData.certificateId}</p>
                   </div>
                   <div className="text-center">
-                    <div className="w-48 border-b border-border mb-2"></div>
+                    <div className="w-40 sm:w-48 border-b border-border mb-2"></div>
                     <p className="font-bold">{certificateData.signatoryName || "[Signatory Name]"}</p>
                     <p className="text-sm text-foreground">{certificateData.signatoryTitle || "[Title]"}</p>
                     <p className="text-sm font-semibold mt-1" style={{ color: certificateData.primaryColor }}>

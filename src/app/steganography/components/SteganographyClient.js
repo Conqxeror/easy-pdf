@@ -159,6 +159,7 @@ export default function SteganographyClient() {
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Upload image for steganography"
                 />
                 {preview ? (
                   // eslint-disable-next-line @next/next/no-img-element

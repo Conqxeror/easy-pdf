@@ -2,14 +2,14 @@
 
 "use client";
 
-import React, { useState } from 'react';
-import { 
-  History, 
-  Heart, 
-  Trash2, 
-  Download, 
-  Upload, 
-  // Clock, // Unused 
+import React, { useRef, useState } from 'react';
+import {
+  History,
+  Heart,
+  Trash2,
+  Download,
+  Upload,
+  // Clock, // Unused
   FileText,
   Star,
   // MoreVertical, // Unused
@@ -36,6 +36,7 @@ const FileHistoryPanel = ({ className = '' }) => {
   } = useFileHistory();
 
   const [filter, setFilter] = useState('all');
+  const importInputRef = useRef(null);
   // const [showActions, setShowActions] = useState({}); // Feature incomplete
   const stats = getStats();
 
@@ -54,8 +55,8 @@ const FileHistoryPanel = ({ className = '' }) => {
     return date.toLocaleDateString();
   };
 
-  const filteredHistory = filter === 'all' 
-    ? history 
+  const filteredHistory = filter === 'all'
+    ? history
     : history.filter(item => item.tool === filter);
 
   const uniqueTools = [...new Set(history.map(item => item.tool))];
@@ -74,12 +75,13 @@ const FileHistoryPanel = ({ className = '' }) => {
   };
 
   const handleImportHistory = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files?.[0];
     if (file) {
       importHistory(file).catch(error => {
         console.error('Import failed:', error);
       });
     }
+    event.target.value = '';
   };
 
   const [currentTab, setCurrentTab] = useState('history');
@@ -116,7 +118,8 @@ const FileHistoryPanel = ({ className = '' }) => {
             variant="ghost"
             size="sm"
             onClick={() => onAddToFavorites(item)}
-            className="text-foreground hover:text-yellow-400"
+            className="text-foreground hover:text-yellow-600 dark:hover:text-yellow-400"
+            aria-label={`Add ${item.fileName} to favorites`}
           >
             <Heart className="w-4 h-4" />
           </Button>
@@ -125,7 +128,8 @@ const FileHistoryPanel = ({ className = '' }) => {
           variant="ghost"
           size="sm"
           onClick={() => onRemove(item.id)}
-          className="text-foreground hover:text-red-400"
+          className="text-foreground hover:text-red-600 dark:hover:text-red-400"
+          aria-label={`Remove ${item.fileName}`}
         >
           <Trash2 className="w-4 h-4" />
         </Button>
@@ -147,25 +151,28 @@ const FileHistoryPanel = ({ className = '' }) => {
               size="sm"
               onClick={exportHistory}
               className="text-foreground hover:text-foreground"
+              aria-label="Export file history"
             >
               <Download className="w-4 h-4" />
             </Button>
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                accept=".json"
-                onChange={handleImportHistory}
-                className="hidden"
-              />
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-foreground hover:text-foreground"
-                as="span"
-              >
-                <Upload className="w-4 h-4" />
-              </Button>
-            </label>
+            <input
+              ref={importInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleImportHistory}
+              className="hidden"
+              aria-label="Import file history"
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => importInputRef.current?.click()}
+              className="text-foreground hover:text-foreground"
+              aria-label="Import file history"
+            >
+              <Upload className="w-4 h-4" />
+            </Button>
           </div>
         </div>
 
@@ -178,13 +185,13 @@ const FileHistoryPanel = ({ className = '' }) => {
             <div className="text-xs text-foreground">Total Files</div>
           </div>
           <div className="text-center p-3 bg-background/10">
-            <div className="text-lg font-semibold text-yellow-400">
+            <div className="text-lg font-semibold text-yellow-600 dark:text-yellow-400">
               {stats.favoritesCount}
             </div>
             <div className="text-xs text-foreground">Favorites</div>
           </div>
           <div className="text-center p-3 bg-background/10">
-            <div className="text-lg font-semibold text-green-400">
+            <div className="text-lg font-semibold text-green-600 dark:text-green-400">
               {Object.keys(stats.toolUsage).length}
             </div>
             <div className="text-xs text-foreground">Tools Used</div>
@@ -212,6 +219,7 @@ const FileHistoryPanel = ({ className = '' }) => {
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   className="bg-background border border-border px-2 py-1 text-sm text-foreground"
+                  aria-label="Filter file history by tool"
                 >
                   <option value="all">All Tools</option>
                   {uniqueTools.map(tool => (
@@ -226,7 +234,7 @@ const FileHistoryPanel = ({ className = '' }) => {
                   variant="ghost"
                   size="sm"
                   onClick={clearHistory}
-                  className="text-foreground hover:text-red-400"
+                  className="text-foreground hover:text-red-600 dark:hover:text-red-400"
                 >
                   Clear All
                 </Button>
@@ -263,7 +271,7 @@ const FileHistoryPanel = ({ className = '' }) => {
                   variant="ghost"
                   size="sm"
                   onClick={clearFavorites}
-                  className="text-foreground hover:text-red-400"
+                  className="text-foreground hover:text-red-600 dark:hover:text-red-400"
                 >
                   Clear All
                 </Button>

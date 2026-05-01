@@ -3,6 +3,7 @@ import { defineConfig } from '@playwright/test';
 export default defineConfig({
 	testDir: './tests/e2e',
 	timeout: 60_000,
+	workers: process.env.PLAYWRIGHT_USE_DEV ? 1 : undefined,
 	use: {
 		baseURL: process.env.PW_BASE_URL || 'http://localhost:3000',
 		headless: true,

@@ -2,7 +2,14 @@ import React from 'react'
 import { ChevronRight } from 'lucide-react'
 
 const Breadcrumb = ({ items }) => {
-  if (!items || items.length === 0) {
+  const normalizedItems = (Array.isArray(items) ? items : [])
+    .map((item) => ({
+      label: item?.label || item?.name,
+      href: item?.href || item?.url,
+    }))
+    .filter((item) => item.label && item.href)
+
+  if (normalizedItems.length === 0) {
     return null
   }
 
@@ -13,7 +20,7 @@ const Breadcrumb = ({ items }) => {
       itemScope
       itemType="https://schema.org/BreadcrumbList"
     >
-      {items.map((item, index) => (
+      {normalizedItems.map((item, index) => (
         <React.Fragment key={index}>
           {index > 0 && (
             <ChevronRight className="w-4 h-4 text-foreground" />
@@ -23,7 +30,7 @@ const Breadcrumb = ({ items }) => {
             itemType="https://schema.org/ListItem"
             itemProp="itemListElement"
           >
-            {index === items.length - 1 ? (
+            {index === normalizedItems.length - 1 ? (
               <span 
                 className="text-foreground font-medium"
                 itemProp="name"

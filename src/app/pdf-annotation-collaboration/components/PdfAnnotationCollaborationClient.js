@@ -347,7 +347,7 @@ export default function PDFAnnotationCollaborationClient() {
 
         <Tabs value={currentStep} className="space-y-6" onValueChange={(v) => setCurrentStep(v)}>
           {/* Stepper: make steps look like buttons with arrows and auto-advance when completed */}
-          <div className="flex items-center gap-3 w-full">
+          <div className="flex items-center gap-3 w-full overflow-x-auto pb-2">
             {[
               { id: 'upload', label: 'Upload' },
               { id: 'annotate', label: 'Annotate' },
@@ -355,7 +355,7 @@ export default function PDFAnnotationCollaborationClient() {
               { id: 'review', label: 'Review' },
               { id: 'export', label: 'Export' }
             ].map((step, idx, arr) => (
-              <div key={step.id} className="flex items-center">
+              <div key={step.id} className="flex items-center shrink-0">
                 <Button
                   variant={currentStep === step.id ? 'default' : stepComplete[step.id] ? 'success' : 'outline'}
                   size="sm"

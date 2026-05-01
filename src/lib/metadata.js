@@ -1,14 +1,18 @@
+import { resolveSiteUrl } from './siteUrl';
+
 export const generateMetadata = ({ title = 'easy-pdf', description = '', keywords, canonicalUrl, metadataBaseUrl, toolName, ogImage }) => {
+  const siteUrl = resolveSiteUrl(metadataBaseUrl);
+  const canonical = canonicalUrl || siteUrl;
   const baseTitle = (title && title.includes && title.includes('easy-pdf')) ? title : `${title} | easy-pdf`
   const safeDesc = description || '';
   const enhancedDescription = safeDesc.length > 160 ? safeDesc.substring(0, 157) + '...' : safeDesc
   
   return {
-    metadataBase: new URL(metadataBaseUrl),
+    metadataBase: new URL(siteUrl),
     title: baseTitle,
     description: enhancedDescription,
     keywords: Array.isArray(keywords) ? keywords.join(', ') : keywords,
-    authors: [{ name: "Wali Mohammad Kadri", url: "https://easy-pdf-murex.vercel.app" }],
+    authors: [{ name: "Wali Mohammad Kadri", url: siteUrl }],
     applicationName: "easy-pdf",
     generator: "Next.js",
     referrer: "origin-when-cross-origin",
@@ -29,7 +33,7 @@ export const generateMetadata = ({ title = 'easy-pdf', description = '', keyword
       },
     },
     alternates: {
-      canonical: canonicalUrl,
+      canonical,
     },
     icons: {
       icon: [ { url: "/icon.svg", sizes: "any", type: "image/svg+xml" } ],
@@ -39,7 +43,7 @@ export const generateMetadata = ({ title = 'easy-pdf', description = '', keyword
     openGraph: {
       title: baseTitle,
       description: enhancedDescription,
-      url: canonicalUrl,
+      url: canonical,
       siteName: "easy-pdf - Privacy-First PDF Tools",
       images: [
         {

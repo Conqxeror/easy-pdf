@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-// import { PDFDocument, rgb, StandardFonts } from "pdf-lib"; // Commented out unused imports
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, Download, FileText, BarChart3, TrendingUp, Save, UploadCloud } from "lucide-react";
-// import { trackEvent } from "@/lib/analytics"; // Commented out unused import
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import FileDropzone from "@/components/ui/FileDropzone";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from '@/lib/enhancedUX';
@@ -305,7 +303,7 @@ export default function ReportGeneratorClient() {
         {/* Key Metrics */}
         <Card className="border border-border">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-5 h-5" />
                 Key Metrics
@@ -399,7 +397,7 @@ export default function ReportGeneratorClient() {
         {/* Report Sections */}
         <Card className="border border-border">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               Report Sections
               <Button onClick={addSection} size="sm" variant="outline" aria-label="Add Section">
                 <Plus className="w-4 h-4 mr-2" />
@@ -455,7 +453,7 @@ export default function ReportGeneratorClient() {
         {/* Recommendations */}
         <Card className="border border-border">
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               Recommendations
               <Button onClick={addRecommendation} size="sm" variant="outline" aria-label="Add Recommendation">
                 <Plus className="w-4 h-4 mr-2" />

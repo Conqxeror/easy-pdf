@@ -8,6 +8,33 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Upload, Download, Pencil, RotateCcw } from "lucide-react";
 
+const getImageFileKey = (file) => file ? `${file.name}:${file.size}:${file.lastModified}` : "";
+
+const loadImageFile = (file, onLoad) => {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => onLoad(img);
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
+const initializeDrawingCanvas = (img, canvas, strokeColor, strokeWidth) => {
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = strokeWidth;
+  ctx.drawImage(img, 0, 0);
+
+  return ctx;
+};
+
 export default function ImageDrawingClient() {
   const [image, setImage] = useState(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -18,44 +45,56 @@ export default function ImageDrawingClient() {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const containerRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const loadedFileRef = useRef("");
+  const canvasOptionsRef = useRef({ color, brushSize });
 
   const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          setImage(img);
-          initCanvas(img);
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+    const file = e.target.files?.[0];
+    loadedFileRef.current = getImageFileKey(file);
+    loadImageFile(file, setImage);
   };
 
   const initCanvas = (img) => {
     const canvas = canvasRef.current;
-    // We need to fit the canvas into the container while maintaining aspect ratio
-    // But for drawing, we usually want the canvas to be the full resolution of the image
-    // and scale it down with CSS.
-
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    const ctx = canvas.getContext("2d");
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    ctx.strokeStyle = color;
-    ctx.lineWidth = brushSize;
-    ctx.drawImage(img, 0, 0);
-
-    contextRef.current = ctx;
+    if (!canvas) return;
+    contextRef.current = initializeDrawingCanvas(
+      img,
+      canvas,
+      canvasOptionsRef.current.color,
+      canvasOptionsRef.current.brushSize
+    );
   };
 
   useEffect(() => {
+    if (image && canvasRef.current) {
+      initCanvas(image);
+    }
+  }, [image]);
+
+  useEffect(() => {
+    const processPendingFile = () => {
+      const file = fileInputRef.current?.files?.[0];
+      const fileKey = getImageFileKey(file);
+      if (file && fileKey !== loadedFileRef.current) {
+        loadedFileRef.current = fileKey;
+        loadImageFile(file, setImage);
+      }
+    };
+
+    processPendingFile();
+    const intervalId = window.setInterval(processPendingFile, 100);
+    const timeoutId = window.setTimeout(() => window.clearInterval(intervalId), 3000);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  useEffect(() => {
     if (contextRef.current) {
+      canvasOptionsRef.current = { color, brushSize };
       contextRef.current.strokeStyle = tool === "eraser" ? "#ffffff" : color;
       contextRef.current.lineWidth = brushSize;
       // Eraser in simple canvas is just painting white (or background color)
@@ -83,6 +122,8 @@ export default function ImageDrawingClient() {
       } else {
         contextRef.current.globalCompositeOperation = "source-over";
       }
+    } else {
+      canvasOptionsRef.current = { color, brushSize };
     }
   }, [color, brushSize, tool]);
 
@@ -217,10 +258,13 @@ export default function ImageDrawingClient() {
             {!image ? (
               <>
                 <input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  onInput={handleImageUpload}
                   onChange={handleImageUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  aria-label="Upload image for drawing"
                 />
                 <div className="flex flex-col items-center gap-4 text-muted-foreground">
                   <div className="p-4 rounded-none bg-muted">

@@ -14,14 +14,7 @@ import { PreloadResources } from "@/components/PreloadResources";
 function registerServiceWorker() {
   if (typeof window !== 'undefined' && 'serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').then(
-        (registration) => {
-          console.log('ServiceWorker registration successful with scope: ', registration.scope);
-        },
-        (err) => {
-          console.log('ServiceWorker registration failed: ', err);
-        }
-      );
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
     });
   }
 }
@@ -81,7 +74,10 @@ export default function ClientLayout({ children }) {
               Skip to main content
             </a>
             <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              onClick={() => {
+                const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+              }}
               aria-label="Scroll to top"
               className={clsx(
                 "fixed bottom-6 right-6 bg-background dark:bg-background text-foreground w-14 h-14 flex items-center justify-center z-50 shadow-lg transition-opacity duration-300 hover:bg-background dark:hover:bg-background/60 hover:scale-105",

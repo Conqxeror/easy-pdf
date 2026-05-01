@@ -1,6 +1,32 @@
 import React from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = resolveSiteUrl();
+
+const securityFaqs = [
+  {
+    question: "How does easy-pdf ensure my files are secure?",
+    answer: "easy-pdf operates entirely client-side. This means all PDF processing—merging, splitting, compressing, converting, etc.—happens directly in your web browser. Your files are never uploaded to our servers, ensuring they remain on your device and under your control."
+  },
+  {
+    question: "Do you store my documents?",
+    answer: "No. We do not store, collect, or transmit your documents or any data from them. Once you close your browser tab or navigate away, your document data is gone."
+  },
+  {
+    question: "What about cookies and tracking?",
+    answer: "We use minimal, essential cookies for the proper functioning of the website (e.g., for dark mode preferences). We do not use tracking cookies or collect personal identifiable information. Our analytics are privacy-focused and anonymized."
+  },
+  {
+    question: "Is the code transparent?",
+    answer: "Yes, our codebase is available for review on GitHub to verify our privacy claims and understand exactly how the application works. This transparency ensures there are no hidden processes."
+  },
+  {
+    question: "What technologies are used to ensure client-side processing?",
+    answer: "We leverage powerful JavaScript libraries like pdf-lib and pdfjs-dist, which enable robust PDF manipulation directly within the browser environment, eliminating the need for server interaction for core PDF functionalities."
+  }
+];
 
 export const metadata = generateEnhancedMetadata({
   title: "Security & Privacy Policy - easy-pdf | 100% Client-Side PDF Tools",
@@ -11,38 +37,20 @@ export const metadata = generateEnhancedMetadata({
     "secure PDF processing", "privacy-first tools", "data encryption", "document confidentiality",
     "zero data collection", "PDF privacy protection", "browser-based PDF security", "secure document processing"
   ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/security",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  canonicalUrl: `${siteUrl}/security`,
+  metadataBaseUrl: siteUrl,
   pageType: "article",
   breadcrumbs: [
-    { name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-    { name: "Security", url: "https://easy-pdf-murex.vercel.app/security" }
+    { name: "Home", url: siteUrl },
+    { name: "Security", url: `${siteUrl}/security` }
   ]
 });
 
 const structuredData = generateComprehensiveJsonLd('faq', {
-  faqs: [
-    {
-      question: "How does easy-pdf ensure my files are secure?",
-      answer: "easy-pdf operates entirely client-side. This means all PDF processing—merging, splitting, compressing, converting, etc.—happens directly in your web browser. Your files are never uploaded to our servers, ensuring they remain on your device and under your control."
-    },
-    {
-      question: "Do you store my documents?",
-      answer: "No. We do not store, collect, or transmit your documents or any data from them. Once you close your browser tab or navigate away, your document data is gone."
-    },
-    {
-      question: "What about cookies and tracking?",
-      answer: "We use minimal, essential cookies for the proper functioning of the website (e.g., for dark mode preferences). We do not use tracking cookies or collect personal identifiable information. Our analytics are privacy-focused and anonymized."
-    },
-    {
-      question: "Is the code transparent?",
-      answer: "Yes, our codebase is available for review on GitHub to verify our privacy claims and understand exactly how the application works. This transparency ensures there are no hidden processes."
-    },
-    {
-      question: "What technologies are used to ensure client-side processing?",
-      answer: "We leverage powerful JavaScript libraries like pdf-lib and pdfjs-dist, which enable robust PDF manipulation directly within the browser environment, eliminating the need for server interaction for core PDF functionalities."
-    }
-  ]
+  title: "Security & Privacy Policy - easy-pdf",
+  description: "Learn about easy-pdf's commitment to your privacy and data security.",
+  url: `${siteUrl}/security`,
+  faqs: securityFaqs
 });
 
 export default function SecurityPage() {
@@ -70,6 +78,7 @@ export default function SecurityPage() {
         toolName={toolName}
         toolDescription={toolDescription}
         currentTool="security"
+        faqs={securityFaqs}
         breadcrumbs={[
           { label: 'Home', href: '/' },
           { label: 'Security', href: '/security' }

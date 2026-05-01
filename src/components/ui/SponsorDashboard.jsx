@@ -137,6 +137,7 @@ const SponsorDashboard = () => {
               value={selectedTimeframe}
               onChange={(e) => setSelectedTimeframe(e.target.value)}
               className="bg-background border border-border px-3 py-2 text-foreground"
+              aria-label="Select sponsor analytics timeframe"
             >
               <option value="7">Last 7 days</option>
               <option value="30">Last 30 days</option>

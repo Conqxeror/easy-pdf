@@ -197,6 +197,7 @@ export default function ImageTextOverlayClient() {
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  aria-label="Upload image for text overlay"
                 />
                 <div className="flex flex-col items-center gap-4 text-muted-foreground">
                   <div className="p-4 rounded-none bg-muted">

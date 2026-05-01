@@ -1,5 +1,8 @@
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
 import HomeClient from './components/HomeClient';
+
+const siteUrl = resolveSiteUrl();
 
 export const metadata = generateEnhancedMetadata({
   title: "Free Online PDF Tools | Merge, Split, Compress PDFs",
@@ -29,15 +32,19 @@ export const metadata = generateEnhancedMetadata({
     "Free PDF Tools", "India", "Browser PDF editor", "Online PDF editor",
     "PDF converter", "Document processing", "PDF editor online free"
   ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  canonicalUrl: siteUrl,
+  metadataBaseUrl: siteUrl,
   pageType: "homepage",
-  ogImage: "https://easy-pdf-murex.vercel.app/og/homepage",
+  ogImage: `${siteUrl}/og/homepage`,
   lastModified: new Date().toISOString()
 });
 
 
-const structuredData = generateComprehensiveJsonLd('homepage');
+const structuredData = generateComprehensiveJsonLd('homepage', {
+  title: "Free Online PDF Tools | Merge, Split, Compress PDFs",
+  description: "100% client-side PDF tools for India. Merge, split, compress, convert, protect, and edit PDFs directly in your browser.",
+  url: siteUrl,
+});
 
 export default function Home() {
   return (

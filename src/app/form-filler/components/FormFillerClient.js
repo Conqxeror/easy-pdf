@@ -102,9 +102,7 @@ export default function FormFillerClient() {
       // Convert canvas to image data URL
       return canvas.toDataURL("image/png");
     } catch (e) {
-      if (e.name === "RenderingCancelledException") {
-        console.log("PDF rendering cancelled during background render:", e);
-      } else {
+      if (e.name !== "RenderingCancelledException") {
         setError("Failed to render PDF background.");
       }
       return null;

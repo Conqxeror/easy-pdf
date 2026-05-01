@@ -39,7 +39,9 @@ export const initializePerformanceOptimizations = () => {
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
     } catch (e) {
-      console.log('LCP monitoring failed:', e);
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('LCP monitoring failed:', e);
+      }
     }
   }
 };

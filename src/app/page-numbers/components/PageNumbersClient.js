@@ -180,9 +180,7 @@ export default function PageNumbersClient() {
         }
       }
     } catch (e) {
-      if (e.name === "RenderingCancelledException") {
-        console.log("PDF rendering cancelled during preview:", e);
-      } else {
+      if (e.name !== "RenderingCancelledException") {
         toast.error("Error rendering PDF preview.");
         setError("Failed to render PDF preview.");
       }

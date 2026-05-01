@@ -125,10 +125,10 @@ export default function VideoToGifClient() {
         )}
 
         <div className="flex items-center gap-3">
-          <label className="text-sm font-medium">FPS</label>
-          <input type="number" min="1" max="30" value={fps} onChange={(e) => setFps(Number(e.target.value))} className="w-20 rounded-none border px-2" />
-          <label className="text-sm font-medium">Width</label>
-          <input type="number" min="64" max="1920" value={scale} onChange={(e) => setScale(Number(e.target.value))} className="w-24 rounded-none border px-2" />
+          <label htmlFor="gif-fps" className="text-sm font-medium">FPS</label>
+          <input id="gif-fps" type="number" min="1" max="30" value={fps} onChange={(e) => setFps(Number(e.target.value))} className="w-20 rounded-none border px-2" />
+          <label htmlFor="gif-width" className="text-sm font-medium">Width</label>
+          <input id="gif-width" type="number" min="64" max="1920" value={scale} onChange={(e) => setScale(Number(e.target.value))} className="w-24 rounded-none border px-2" />
         </div>
 
         <div className="flex gap-3">

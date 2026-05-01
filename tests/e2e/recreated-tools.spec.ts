@@ -13,7 +13,7 @@ test.describe('Recreated Tools Functionality', () => {
     const input = page.locator('input[type="file"]');
     await input.setInputFiles(fixturePath('sample1.pdf'));
 
-    await expect(page.getByText('sample1.pdf').first()).toBeVisible();
+    await expect(page.getByText('sample1.pdf').first()).toBeVisible({ timeout: 30000 });
 
     // Click Compress button
     const compressBtn = page.getByRole('button', { name: /Compress PDF/i });
@@ -57,7 +57,7 @@ test.describe('Recreated Tools Functionality', () => {
     const input = page.locator('input[type="file"]');
     await input.setInputFiles(fixturePath('sample1.pdf'));
 
-    await expect(page.getByText('sample1.pdf').first()).toBeVisible();
+    await expect(page.getByText('sample1.pdf').first()).toBeVisible({ timeout: 30000 });
 
     // Click Convert button
     const convertBtn = page.getByRole('button', { name: /Convert to JPG/i });

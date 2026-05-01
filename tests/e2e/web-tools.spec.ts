@@ -19,7 +19,7 @@ test.describe('Web Tools', () => {
   });
 
   test('Number Base Converter should convert values', async ({ page }) => {
-    await page.goto('/number-base-converter');
+    await page.goto('/number-base-converter', { waitUntil: 'networkidle' });
 
     // Check if the tool loaded
     await expect(page.getByRole('heading', { name: 'Number Base Converter' })).toBeVisible();

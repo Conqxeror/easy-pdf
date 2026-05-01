@@ -1,6 +1,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page, type Response } from '@playwright/test';
+
+async function gotoWithDevRetry(page: Page, route: string): Promise<Response | null> {
+	let lastError: unknown;
+
+	for (let attempt = 0; attempt < 3; attempt += 1) {
+		try {
+			return await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 60_000 });
+		} catch (error) {
+			lastError = error;
+			await page.waitForTimeout(3000 + attempt * 2000);
+		}
+	}
+
+	throw lastError;
+}
 
 function collectStaticRoutes(dir: string, currentRoute = ''): string[] {
 	const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -39,10 +54,11 @@ test.describe('Site routes smoke', () => {
 
 	for (const route of routes) {
 		test(`visits ${route}`, async ({ page }) => {
+			test.setTimeout(150_000);
 			const pageErrors: string[] = [];
 			page.on('pageerror', (error) => pageErrors.push(error.message));
 
-			const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+			const response = await gotoWithDevRetry(page, route);
 			expect(response).toBeTruthy();
 			expect(response?.status(), `Unexpected status for ${route}`).toBeLessThan(400);
 

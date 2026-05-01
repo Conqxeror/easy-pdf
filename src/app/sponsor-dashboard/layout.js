@@ -1,4 +1,7 @@
 import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = resolveSiteUrl();
 
 export const metadata = generateEnhancedMetadata({
   title: "Sponsor Dashboard - easy-pdf",
@@ -7,13 +10,13 @@ export const metadata = generateEnhancedMetadata({
     "sponsor dashboard", "sponsor analytics", "sponsorship metrics", "ROI tracking",
     "sponsor performance", "engagement analytics", "sponsorship data", "partner dashboard"
   ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/sponsor-dashboard",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  canonicalUrl: `${siteUrl}/sponsor-dashboard`,
+  metadataBaseUrl: siteUrl,
   pageType: "article",
   breadcrumbs: [
-    { name: "Home", url: "/" },
-    { name: "Sponsors", url: "/sponsors" },
-    { name: "Dashboard", url: "/sponsor-dashboard" }
+    { name: "Home", url: siteUrl },
+    { name: "Sponsors", url: `${siteUrl}/sponsors` },
+    { name: "Dashboard", url: `${siteUrl}/sponsor-dashboard` }
   ]
 });
 

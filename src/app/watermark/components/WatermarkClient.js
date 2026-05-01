@@ -318,6 +318,7 @@ export default function WatermarkClient() {
                         type="file"
                         accept="image/png, image/jpeg"
                         onChange={handleImageUpload}
+                        aria-label="Upload watermark image"
                       />
                     </div>
                     <div>

@@ -7,6 +7,19 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Upload, Download, Image as ImageIcon } from "lucide-react";
 
+const getImageFileKey = (file) => file ? `${file.name}:${file.size}:${file.lastModified}` : "";
+
+const loadImageFile = (file, onLoad) => {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    const img = new Image();
+    img.onload = () => onLoad(img);
+    img.src = event.target.result;
+  };
+  reader.readAsDataURL(file);
+};
+
 export default function ImageWatermarkClient() {
   const [baseImage, setBaseImage] = useState(null);
   const [watermarkImage, setWatermarkImage] = useState(null);
@@ -17,33 +30,58 @@ export default function ImageWatermarkClient() {
     y: 50,
   });
   const canvasRef = useRef(null);
+  const baseInputRef = useRef(null);
+  const watermarkInputRef = useRef(null);
+  const loadedBaseFileRef = useRef("");
+  const loadedWatermarkFileRef = useRef("");
   const [previewUrl, setPreviewUrl] = useState(null);
 
   const handleBaseImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => setBaseImage(img);
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+    const file = e.target.files?.[0];
+    loadedBaseFileRef.current = getImageFileKey(file);
+    loadImageFile(file, setBaseImage);
   };
 
   const handleWatermarkUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => setWatermarkImage(img);
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+    const file = e.target.files?.[0];
+    loadedWatermarkFileRef.current = getImageFileKey(file);
+    loadImageFile(file, setWatermarkImage);
   };
+
+  useEffect(() => {
+    const processPendingFiles = () => {
+      const baseFile = baseInputRef.current?.files?.[0];
+      const baseKey = getImageFileKey(baseFile);
+      if (baseFile && baseKey !== loadedBaseFileRef.current) {
+        loadedBaseFileRef.current = baseKey;
+        loadImageFile(baseFile, setBaseImage);
+      }
+
+      const watermarkFile = watermarkInputRef.current?.files?.[0];
+      const watermarkKey = getImageFileKey(watermarkFile);
+      if (watermarkFile && watermarkKey !== loadedWatermarkFileRef.current) {
+        loadedWatermarkFileRef.current = watermarkKey;
+        loadImageFile(watermarkFile, setWatermarkImage);
+      }
+    };
+
+    processPendingFiles();
+    const interval = window.setInterval(processPendingFiles, 250);
+    const timeout = window.setTimeout(() => window.clearInterval(interval), 3000);
+
+    return () => {
+      window.clearInterval(interval);
+      window.clearTimeout(timeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        try { URL.revokeObjectURL(previewUrl); } catch { }
+      }
+    }
+  }, [previewUrl]);
 
   const renderCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -111,17 +149,70 @@ export default function ImageWatermarkClient() {
         { label: "Image Watermark", href: "/image-watermark" }
       ]}
     >
-      <div className="grid gap-8 lg:grid-cols-[300px,1fr]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="space-y-6">
+          <div className="border-2 border-dashed rounded-none p-4 bg-muted/10 min-h-[400px] flex items-center justify-center relative overflow-hidden">
+            {!baseImage ? (
+              <>
+                <input
+                  ref={baseInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleBaseImageUpload}
+                  onInput={handleBaseImageUpload}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  aria-label="Upload main image for watermarking"
+                />
+                <div className="flex flex-col items-center gap-4 text-muted-foreground">
+                  <div className="p-4 rounded-none bg-muted">
+                    <Upload className="w-8 h-8" />
+                  </div>
+                  <p className="font-medium">Click to upload main image</p>
+                </div>
+              </>
+            ) : (
+              <div className="relative max-w-full max-h-[600px]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="max-w-full max-h-[600px] object-contain rounded-none shadow-lg"
+                />
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="absolute top-2 right-2"
+                  onClick={() => {
+                    setBaseImage(null);
+                    setPreviewUrl(null);
+                  }}
+                >
+                  Change Image
+                </Button>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end">
+            <Button size="lg" onClick={downloadImage} disabled={!baseImage}>
+              <Download className="w-4 h-4 mr-2" /> Download Image
+            </Button>
+          </div>
+        </div>
+
         <div className="space-y-6 h-fit">
           <div className="space-y-4">
             <div className="space-y-2">
               <Label>Watermark Image</Label>
               <div className="border-2 border-dashed rounded-none p-4 text-center hover:bg-muted/50 relative">
                 <input
+                  ref={watermarkInputRef}
                   type="file"
                   accept="image/*"
                   onChange={handleWatermarkUpload}
+                  onInput={handleWatermarkUpload}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  aria-label="Upload watermark image"
                 />
                 {watermarkImage ? (
                   <div className="flex items-center gap-2 justify-center">
@@ -179,52 +270,6 @@ export default function ImageWatermarkClient() {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="border-2 border-dashed rounded-none p-4 bg-muted/10 min-h-[400px] flex items-center justify-center relative overflow-hidden">
-            {!baseImage ? (
-              <>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleBaseImageUpload}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                />
-                <div className="flex flex-col items-center gap-4 text-muted-foreground">
-                  <div className="p-4 rounded-none bg-muted">
-                    <Upload className="w-8 h-8" />
-                  </div>
-                  <p className="font-medium">Click to upload main image</p>
-                </div>
-              </>
-            ) : (
-              <div className="relative max-w-full max-h-[600px]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={previewUrl}
-                  alt="Preview"
-                  className="max-w-full max-h-[600px] object-contain rounded-none shadow-lg"
-                />
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="absolute top-2 right-2"
-                  onClick={() => {
-                    setBaseImage(null);
-                    setPreviewUrl(null);
-                  }}
-                >
-                  Change Image
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-end">
-            <Button size="lg" onClick={downloadImage} disabled={!baseImage}>
-              <Download className="w-4 h-4 mr-2" /> Download Image
-            </Button>
-          </div>
-        </div>
       </div>
       <canvas ref={canvasRef} className="hidden" />
     </ToolPageLayout>

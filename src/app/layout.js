@@ -2,6 +2,7 @@ import React from "react";
 import { Inter } from "next/font/google";
 import ClientLayout from "./ClientLayout";
 import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
 // Note: Analytics and SpeedInsights are client-side and are included in ClientLayout
 // Note: Font is loaded server-side via next/font for optimal LCP
 
@@ -15,11 +16,13 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const siteUrl = resolveSiteUrl();
+
 // Base metadata for the entire site - page-specific metadata is in each page.js
 export const metadata = generateEnhancedMetadata({
   // Title template is defined in generateEnhancedMetadata, individual pages override
-  canonicalUrl: "https://easy-pdf-murex.vercel.app",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  canonicalUrl: siteUrl,
+  metadataBaseUrl: siteUrl,
 });
 
 // Note: Structured data is handled by individual pages to prevent duplicates

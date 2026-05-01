@@ -654,9 +654,9 @@ export default function PortfolioCreatorClient() {
 
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground dark:text-foreground mb-2">
+          <h2 className="text-3xl font-bold text-foreground dark:text-foreground mb-2">
             Portfolio Creator
-          </h1>
+          </h2>
           <p className="text-foreground dark:text-foreground">
             Create professional portfolios for your career, education, or personal projects
           </p>

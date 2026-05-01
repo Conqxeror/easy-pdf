@@ -1,21 +1,28 @@
 import React from "react";
 import ToolPageLayout from "@/components/ui/ToolPageLayout";
 import { generateEnhancedMetadata, generateComprehensiveJsonLd } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = resolveSiteUrl();
 
 export const metadata = generateEnhancedMetadata({
 	title: "Terms of Service - easy-pdf | Free PDF Tools",
 	description: "Terms of service for easy-pdf. Completely free, client-side PDF tools with no warranties.",
 	keywords: ["terms of service", "easy-pdf terms", "pdf tools usage policy"],
-	canonicalUrl: "https://easy-pdf-murex.vercel.app/terms",
-	metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+	canonicalUrl: `${siteUrl}/terms`,
+	metadataBaseUrl: siteUrl,
 	pageType: "article",
 	breadcrumbs: [
-		{ name: "Home", url: "https://easy-pdf-murex.vercel.app" },
-		{ name: "Terms", url: "https://easy-pdf-murex.vercel.app/terms" }
+		{ name: "Home", url: siteUrl },
+		{ name: "Terms", url: `${siteUrl}/terms` }
 	]
 });
 
-const structuredData = generateComprehensiveJsonLd('article');
+const structuredData = generateComprehensiveJsonLd('article', {
+	title: "Terms of Service",
+	description: "Terms of service for easy-pdf. Completely free, client-side PDF tools with no warranties.",
+	url: `${siteUrl}/terms`,
+});
 
 export default function TermsPage() {
 	const toolName = "Terms of Service";

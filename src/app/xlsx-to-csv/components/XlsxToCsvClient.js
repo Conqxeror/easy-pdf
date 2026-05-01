@@ -8,8 +8,25 @@ import { Alert } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { safeCreateObjectURL, safeRevokeObjectURL, sanitizeFileName } from "@/lib/enhancedUX";
 
-const ACCEPT = ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xls,application/vnd.ms-excel";
+const ACCEPT = ".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB guard
+
+const formatCellValue = (value) => {
+  if (value == null) return "";
+  if (value instanceof Date) return value.toISOString();
+  if (typeof value === "object") {
+    if (Array.isArray(value.richText)) return value.richText.map(part => part.text || "").join("");
+    if (value.text) return String(value.text);
+    if (value.result != null) return formatCellValue(value.result);
+    if (value.hyperlink) return String(value.hyperlink);
+  }
+  return String(value);
+};
+
+const escapeCsvCell = (value) => {
+  const text = formatCellValue(value);
+  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+};
 
 export default function XlsxToCsvClient() {
   const [file, setFile] = useState(null);
@@ -36,8 +53,8 @@ export default function XlsxToCsvClient() {
       return;
     }
 
-    if (!selected.name.toLowerCase().endsWith(".xlsx") && !selected.name.toLowerCase().endsWith(".xls")) {
-      setError("Please upload a valid Excel file (.xlsx or .xls)");
+    if (!selected.name.toLowerCase().endsWith(".xlsx")) {
+      setError("Please upload a valid Excel workbook (.xlsx).");
       return;
     }
 
@@ -55,25 +72,26 @@ export default function XlsxToCsvClient() {
     setProgress(10);
 
     try {
-      // Load the xlsx library
-      const xlsxModule = await import("xlsx");
-      const XLSX = xlsxModule.default || xlsxModule;
+      const xlsxModule = await import("xlsx-populate/browser/xlsx-populate.js");
+      const XlsxPopulate = xlsxModule.default || xlsxModule;
       setProgress(30);
 
-      // Read the file
       const arrayBuffer = await file.arrayBuffer();
       setProgress(50);
 
-      // Parse the workbook
-      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const workbook = await XlsxPopulate.fromDataAsync(arrayBuffer);
 
-      // Get the first sheet
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
+      const worksheet = workbook.sheet(0);
+      const usedRange = worksheet?.usedRange();
+      if (!usedRange) {
+        throw new Error("The workbook does not contain any sheets.");
+      }
       setProgress(70);
 
-      // Convert to CSV
-      const csvOutput = XLSX.utils.sheet_to_csv(worksheet);
+      const values = usedRange.value();
+      const rows = Array.isArray(values?.[0]) ? values : [values];
+      const csvRows = rows.map(row => row.map(escapeCsvCell).join(","));
+      const csvOutput = csvRows.join("\n");
 
       // Create download blob
       const blob = new Blob([csvOutput], { type: "text/csv;charset=utf-8;" });
@@ -81,12 +99,8 @@ export default function XlsxToCsvClient() {
       setDownloadUrl(url);
       setProgress(100);
 
-    } catch (err) {
-      if (err.message && err.message.includes("Cannot find module")) {
-        setError("The xlsx library is required for this tool. Please install it using npm install xlsx.");
-      } else {
-        setError("Failed to convert file. Please ensure it is a valid Excel file.");
-      }
+    } catch {
+      setError("Failed to convert file. Please ensure it is a valid XLSX workbook.");
     } finally {
       setIsProcessing(false);
       setTimeout(() => setProgress(0), 1000);
@@ -98,10 +112,10 @@ export default function XlsxToCsvClient() {
       title="XLSX to CSV Converter"
       subtitle="Convert Excel spreadsheets to CSV format instantly."
       toolName="XLSX to CSV"
-      toolDescription="Convert Excel files (XLSX/XLS) to Comma Separated Values (CSV) format directly in your browser. Fast, secure, and private conversion without uploading your files to any server."
+      toolDescription="Convert Excel XLSX files to Comma Separated Values (CSV) format directly in your browser. Fast, secure, and private conversion without uploading your files to any server."
       currentTool="xlsx-to-csv"
       steps={[
-        "Upload your Excel file (.xlsx or .xls) by dragging it into the dropzone.",
+        "Upload your Excel workbook (.xlsx) by dragging it into the dropzone.",
         "Click Convert to CSV to process the file locally.",
         "Download the resulting CSV file instantly."
       ]}
@@ -116,7 +130,7 @@ export default function XlsxToCsvClient() {
         },
         {
           question: "Do I need to install anything?",
-          answer: "No, the tool runs directly in your web browser. However, the underlying library must be present in the application build."
+          answer: "No, the tool runs directly in your web browser with a bundled client-side spreadsheet reader."
         }
       ]}
       breadcrumbs={[
@@ -132,7 +146,7 @@ export default function XlsxToCsvClient() {
           error={error}
           setError={setError}
           label="Upload Excel File"
-          description="Drag & drop or click to select an Excel file (max 50MB)"
+          description="Drag & drop or click to select an XLSX file (max 50MB)"
           maxSize={MAX_FILE_SIZE}
           isLoading={isProcessing}
         />

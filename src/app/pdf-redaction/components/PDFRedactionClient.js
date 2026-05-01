@@ -451,24 +451,24 @@ export default function PDFRedactionClient() {
                           </div>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <Label>Page</Label>
-                              <Input type="number" min="1" value={area.page} onChange={(e) => updateRedactionArea(area.id, { page: parseInt(e.target.value || '1', 10) || 1 })} />
+                              <Label htmlFor={`redaction-${area.id}-page`}>Page</Label>
+                              <Input id={`redaction-${area.id}-page`} type="number" min="1" value={area.page} onChange={(e) => updateRedactionArea(area.id, { page: parseInt(e.target.value || '1', 10) || 1 })} />
                             </div>
                             <div>
-                              <Label>X</Label>
-                              <Input type="number" value={area.x} onChange={(e) => updateRedactionArea(area.id, { x: parseInt(e.target.value) })} />
+                              <Label htmlFor={`redaction-${area.id}-x`}>X</Label>
+                              <Input id={`redaction-${area.id}-x`} type="number" value={area.x} onChange={(e) => updateRedactionArea(area.id, { x: parseInt(e.target.value) })} />
                             </div>
                             <div>
-                              <Label>Y</Label>
-                              <Input type="number" value={area.y} onChange={(e) => updateRedactionArea(area.id, { y: parseInt(e.target.value) })} />
+                              <Label htmlFor={`redaction-${area.id}-y`}>Y</Label>
+                              <Input id={`redaction-${area.id}-y`} type="number" value={area.y} onChange={(e) => updateRedactionArea(area.id, { y: parseInt(e.target.value) })} />
                             </div>
                             <div>
-                              <Label>Width</Label>
-                              <Input type="number" value={area.width} onChange={(e) => updateRedactionArea(area.id, { width: parseInt(e.target.value) })} />
+                              <Label htmlFor={`redaction-${area.id}-width`}>Width</Label>
+                              <Input id={`redaction-${area.id}-width`} type="number" value={area.width} onChange={(e) => updateRedactionArea(area.id, { width: parseInt(e.target.value) })} />
                             </div>
                             <div>
-                              <Label>Height</Label>
-                              <Input type="number" value={area.height} onChange={(e) => updateRedactionArea(area.id, { height: parseInt(e.target.value) })} />
+                              <Label htmlFor={`redaction-${area.id}-height`}>Height</Label>
+                              <Input id={`redaction-${area.id}-height`} type="number" value={area.height} onChange={(e) => updateRedactionArea(area.id, { height: parseInt(e.target.value) })} />
                             </div>
                           </div>
                         </div>

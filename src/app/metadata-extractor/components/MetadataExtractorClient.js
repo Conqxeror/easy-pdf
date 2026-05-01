@@ -6,6 +6,7 @@ import FileDropzone from "@/components/ui/FileDropzone";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Alert } from "@/components/ui/alert";
+import { loadPdfJs } from "@/lib/pdfjsWorker";
 import { Info } from "lucide-react";
 import EXIF from "exif-js";
 
@@ -66,8 +67,7 @@ export default function MetadataExtractorClient() {
   const extractPdfMetadata = async (file) => {
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdfjs = await import("pdfjs-dist");
-      pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      const pdfjs = await loadPdfJs();
 
       const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
       const pdf = await loadingTask.promise;

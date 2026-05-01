@@ -1,7 +1,7 @@
 import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app'
-const siteUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`
+const siteUrl = resolveSiteUrl()
 
 export const metadata = generateEnhancedMetadata({
   title: 'All PDF Tools - easy-pdf | Complete PDF Toolkit',

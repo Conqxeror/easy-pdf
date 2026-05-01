@@ -1,10 +1,8 @@
 import { getSitemapEntries, buildSitemapXml } from '@/lib/sitemapEntries';
+import { resolveSiteUrl } from '@/lib/siteUrl';
 
 const resolveBaseUrl = () => {
-	// Prefer explicit production domain, then base URL, then Vercel fallback.
-	const base = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app';
-	const normalized = base.startsWith('http') ? base : `https://${base}`;
-	return normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
+	return resolveSiteUrl();
 };
 
 export async function GET() {

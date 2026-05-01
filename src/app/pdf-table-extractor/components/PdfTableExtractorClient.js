@@ -178,10 +178,10 @@ export default function PDFTableExtractorClient() {
         )}
 
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <h2 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <Table className="h-8 w-8" aria-hidden="true" />
             PDF Table Extractor
-          </h1>
+          </h2>
           <p className="text-muted-foreground">
             Extract tables from PDF documents and export to CSV format for further analysis.
           </p>

@@ -1,7 +1,6 @@
 import React from "react";
 import { getToolMetadata } from "./toolSeoHelper";
-import { getFAQsForTool } from "./faqData";
-import { generateFAQPageSchema } from "./seoEnhancements";
+import { dedupeJsonLdSchemas } from "./seoEnhancements";
 
 /**
  * Helper to generate per-tool layout files with consistent metadata + structured data
@@ -13,19 +12,9 @@ export function createToolLayout(href, options = {}) {
 	const metadata = toolSeo?.metadata || {};
 	const schemas = [];
 
-	if (Array.isArray(toolSeo?.structuredData)) {
-		schemas.push(...toolSeo.structuredData);
-	} else if (toolSeo?.structuredData) {
-		schemas.push(toolSeo.structuredData);
-	}
-
 	const slug = href.replace(/^\//, "");
-	const faqs = Array.isArray(options.faqs) ? options.faqs : getFAQsForTool(slug);
-	if (faqs && faqs.length > 0) {
-		const faqSchema = generateFAQPageSchema(faqs);
-		if (faqSchema) {
-			schemas.push(faqSchema);
-		}
+	if (options.includeBaseStructuredData === true && toolSeo?.structuredData) {
+		schemas.push(toolSeo.structuredData);
 	}
 
 	const customData = options.customStructuredData;
@@ -34,9 +23,11 @@ export function createToolLayout(href, options = {}) {
 		toAdd.filter(Boolean).forEach((schema) => schemas.push(schema));
 	}
 
+	const uniqueSchemas = dedupeJsonLdSchemas(schemas);
+
 	const Layout = ({ children }) => (
 		<>
-			{schemas.map((schema, index) => (
+			{uniqueSchemas.map((schema, index) => (
 				<script
 					key={`tool-schema-${slug || "default"}-${index}`}
 					type="application/ld+json"

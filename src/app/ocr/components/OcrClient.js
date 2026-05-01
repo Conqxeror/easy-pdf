@@ -246,7 +246,6 @@ export default function OcrClient() {
       const allExtractedText = [];
       let pagesToOcr = [];
 
-      console.log("Creating Tesseract worker...");
       worker = await deps.createTesseractWorker("eng", 1, {
         logger: (m) => {
           if (m.status === "recognizing text") {

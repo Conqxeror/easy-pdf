@@ -328,7 +328,7 @@ export const toolsData = [
     seoTitle: "Convert Text to PDF Free - Create PDFs from TXT Instantly",
     seoDescription: "Transform plain text to formatted PDF in one click. Custom fonts, margins, page sizes. 100% private - works offline.",
     features: ["Text to PDF conversion", "Customizable formatting", "Page options", "Client-side processing"],
-    relatedTools: ["/docx-to-pdf", "/html-to-pdf", "/markdown-to-pdf"],
+    relatedTools: ["/docx-to-pdf", "/html-to-pdf", "/markdown-previewer"],
     category: "Convert & Create",
     isNew: true
   },
@@ -622,7 +622,7 @@ export const toolsData = [
     seoTitle: "Convert Images Free - JPG, PNG, WebP in One Click | No Upload",
     seoDescription: "Convert between JPG, PNG, and WebP instantly. Adjust quality, batch process multiple images. 100% private browser conversion.",
     features: ["Batch conversion", "Quality control", "Client-side only", "Preview before download"],
-    relatedTools: ["/jpg-to-pdf", "/heic-to-jpg", "/jpg-to-pdf"],
+    relatedTools: ["/jpg-to-pdf", "/heic-to-jpg", "/compress-images"],
     category: "Convert & Create",
     isNew: true
   },
@@ -636,7 +636,7 @@ export const toolsData = [
     seoTitle: "Create ZIP Files Free - Bundle Files Instantly | No Upload",
     seoDescription: "Create ZIP archives in your browser. Bundle multiple files into one download. 100% private - files never leave your device.",
     features: ["Client-side compression", "Preview file list", "No uploads"],
-    relatedTools: ["/zip-extractor", "/archive"],
+    relatedTools: ["/zip-extractor", "/tar-extractor"],
     category: "Compression & Archive",
     isNew: true
   },
@@ -1352,7 +1352,7 @@ export const toolsData = [
     seoTitle: "Preview Markdown Free - Real-Time Editor | GitHub Flavored",
     seoDescription: "Write and preview Markdown instantly. GitHub Flavored Markdown support, live HTML rendering. Perfect for README files.",
     features: ["Real-time preview", "GFM support", "HTML export", "Split view"],
-    relatedTools: ["/markdown-to-html", "/html-to-markdown"],
+    relatedTools: ["/markdown-to-html", "/html-markdown-converter"],
     category: "Web Tools",
     isNew: true
   },
@@ -1366,7 +1366,7 @@ export const toolsData = [
     seoTitle: "Convert Number Bases Free - Binary, Hex, Decimal Instantly",
     seoDescription: "Convert between Binary, Octal, Decimal, Hexadecimal in one click. Instant results, copy to clipboard. Perfect for developers.",
     features: ["Binary, Octal, Decimal, Hex", "Instant conversion", "Copy to clipboard", "Bidirectional"],
-    relatedTools: ["/calculator", "/unit-converter"],
+    relatedTools: ["/unit-converter", "/currency-converter"],
     category: "Utility Converters",
     isNew: true
   },

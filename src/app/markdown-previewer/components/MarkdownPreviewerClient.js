@@ -8,7 +8,7 @@ import { marked } from "marked";
 import DOMPurify from "dompurify";
 
 export default function MarkdownPreviewerClient() {
-  const [input, setInput] = useState("# Hello World\n\nStart typing markdown here...");
+  const [input, setInput] = useState("## Hello World\n\nStart typing markdown here...");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {

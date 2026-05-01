@@ -116,10 +116,10 @@ export default function BarcodeGeneratorClient() {
         { label: "Barcode Generator", href: "/barcode-generator" }
       ]}
     >
-      <div className="grid gap-8 md:grid-cols-2">
-        <div className="space-y-6">
-          <Card>
-            <CardContent className="p-6 space-y-4">
+      <div className="grid gap-8 md:grid-cols-2 min-w-0">
+        <div className="space-y-6 min-w-0">
+          <Card className="min-w-0">
+            <CardContent className="p-4 sm:p-6 space-y-4">
               <div className="space-y-2">
                 <Label>Content</Label>
                 <Input
@@ -184,14 +184,14 @@ export default function BarcodeGeneratorClient() {
           </Card>
         </div>
 
-        <div className="space-y-6">
-          <Card className="h-full flex flex-col">
-            <CardContent className="flex-1 flex flex-col items-center justify-center p-8 bg-background min-h-[300px]">
+        <div className="space-y-6 min-w-0">
+          <Card className="h-full flex flex-col min-w-0">
+            <CardContent className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 bg-background min-h-[300px] min-w-0">
               <div className="bg-background p-4 rounded-none shadow-sm overflow-auto max-w-full">
                 <svg ref={svgRef} />
               </div>
             </CardContent>
-            <div className="p-6 border-t flex gap-4 justify-center">
+            <div className="p-4 sm:p-6 border-t flex flex-col sm:flex-row gap-4 justify-center">
               {downloadUrl && (
                 <>
                   <Button asChild variant="outline">

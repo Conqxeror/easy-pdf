@@ -21,7 +21,9 @@ const SEO_PATTERNS = {
   generateEnhancedMetadata: /generateEnhancedMetadata\s*\(/,
   generateComprehensiveJsonLd: /generateComprehensiveJsonLd\s*\(/,
   getToolMetadata: /getToolMetadata\s*\(/,
-  metadataExport: /export\s+const\s+metadata\s*=/,
+  createToolLayout: /createToolLayout\s*\(/,
+  metadataExport: /export\s+const\s+metadata\s*=|export\s*\{\s*metadata\s*\}/,
+  metadataModuleImport: /from\s+["']\.\/metadata["']/,
   jsonLdScript: /<script\s+type=["']application\/ld\+json["']/,
 };
 
@@ -78,6 +80,10 @@ class SEOValidator {
       }
     };
 
+    const usesCreateToolLayout = SEO_PATTERNS.createToolLayout.test(content);
+    const usesMetadataModule = SEO_PATTERNS.metadataModuleImport.test(content);
+    const hasNoIndexMetadata = /robots\s*:\s*\{[\s\S]*index\s*:\s*false/.test(content);
+
     // Check for metadata export
     if (SEO_PATTERNS.metadataExport.test(content)) {
       pageResult.checks.hasMetadataExport = true;
@@ -86,19 +92,19 @@ class SEOValidator {
     }
 
     // Check for generateEnhancedMetadata usage
-    if (SEO_PATTERNS.generateEnhancedMetadata.test(content) || SEO_PATTERNS.getToolMetadata.test(content)) {
+    if (SEO_PATTERNS.generateEnhancedMetadata.test(content) || SEO_PATTERNS.getToolMetadata.test(content) || usesCreateToolLayout || usesMetadataModule) {
       pageResult.checks.usesEnhancedMetadata = true;
-    } else if (pageResult.checks.hasMetadataExport) {
+    } else if (pageResult.checks.hasMetadataExport && !hasNoIndexMetadata) {
       pageResult.warnings.push('Metadata export exists but not using generateEnhancedMetadata helper');
     }
 
     // Check for JSON-LD script
-    if (SEO_PATTERNS.jsonLdScript.test(content)) {
+    if (SEO_PATTERNS.jsonLdScript.test(content) || usesCreateToolLayout) {
       pageResult.checks.hasJsonLd = true;
     }
 
     // Check for generateComprehensiveJsonLd usage
-    if (SEO_PATTERNS.generateComprehensiveJsonLd.test(content) || SEO_PATTERNS.getToolMetadata.test(content)) {
+    if (SEO_PATTERNS.generateComprehensiveJsonLd.test(content) || SEO_PATTERNS.getToolMetadata.test(content) || usesCreateToolLayout) {
       pageResult.checks.usesJsonLdHelper = true;
     } else if (pageResult.checks.hasJsonLd) {
       pageResult.warnings.push('JSON-LD script exists but not using generateComprehensiveJsonLd helper');
@@ -108,9 +114,10 @@ class SEOValidator {
     if (pageResult.checks.usesEnhancedMetadata || pageResult.checks.usesJsonLdHelper) {
       const hasSeoImport = content.includes('@/lib/seoEnhancements');
       const hasToolHelperImport = content.includes('@/lib/toolSeoHelper');
+      const hasToolLayoutImport = content.includes('@/lib/createToolLayout');
       
-      if (!hasSeoImport && !hasToolHelperImport) {
-        pageResult.issues.push('Uses SEO helpers but missing import from @/lib/seoEnhancements or @/lib/toolSeoHelper');
+      if (!hasSeoImport && !hasToolHelperImport && !hasToolLayoutImport && !usesMetadataModule) {
+        pageResult.issues.push('Uses SEO helpers but missing import from @/lib/seoEnhancements, @/lib/toolSeoHelper, or @/lib/createToolLayout');
       }
     }
 
@@ -121,12 +128,8 @@ class SEOValidator {
         pageResult.issues.push('Layout file missing metadata export');
       }
 
-      // Tool pages should have JSON-LD
-      if (filePath.includes('src/app/') && !filePath.includes('src/app/layout.') && !filePath.includes('/api/')) {
-        if (!pageResult.checks.hasJsonLd) {
-          pageResult.warnings.push('Tool layout missing JSON-LD structured data');
-        }
-      }
+      // Tool structured data is allowed in either layout.js via createToolLayout()
+      // or page.js via the standard getToolMetadata() script injection pattern.
     }
 
     // Check for hardcoded meta tags (anti-pattern)

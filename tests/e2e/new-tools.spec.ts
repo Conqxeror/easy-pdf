@@ -1,7 +1,16 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import path from 'path';
 
 const fixturePath = (name: string) => path.join(process.cwd(), 'tests/fixtures', name);
+const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
+type VideoTrimThumbnail = { time: number; data: string };
+
+const injectVideoTrimThumbnails = async (page: Page, thumbs: VideoTrimThumbnail[] = [{ time: 1, data: tinyPng }, { time: 2, data: tinyPng }]) => {
+	await page.waitForFunction(() => Boolean(window.__E2E_EXPOSE?.loadThumbs), undefined, { timeout: 15000 });
+	await page.evaluate((injectedThumbs: VideoTrimThumbnail[]) => {
+		window.__E2E_EXPOSE?.loadThumbs?.(injectedThumbs);
+	}, thumbs);
+};
 
 // Lightweight smoke tests for the newly added client-side tools.
 test.describe('New tool flows', () => {
@@ -109,12 +118,7 @@ test.describe('New tool flows', () => {
 	test('Video trim page loads and shows snapping controls', async ({ page }) => {
 		await page.goto('/video-trim', { waitUntil: 'networkidle' });
 		await expect(page.getByRole('heading', { name: /Video Trim|Video Trimmer/i })).toBeVisible();
-		const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
-		await page.evaluate((thumbs) => {
-			if (window.__E2E_EXPOSE?.loadThumbs) {
-				window.__E2E_EXPOSE.loadThumbs(thumbs);
-			}
-		}, [{ time: 1, data: tinyPng }, { time: 2, data: tinyPng }]);
+		await injectVideoTrimThumbnails(page);
 		// The snap toggle only appears once the preview workspace is open.
 		await expect(page.getByRole('button', { name: /Snapping:/i })).toBeVisible();
 	});
@@ -123,12 +127,7 @@ test.describe('New tool flows', () => {
 		await page.goto('/video-trim', { waitUntil: 'networkidle' });
 
 		// Inject two tiny thumbnails and ensure they're shown
-		const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
-		await page.evaluate((thumbs) => {
-			if (window.__E2E_EXPOSE?.loadThumbs) {
-				window.__E2E_EXPOSE.loadThumbs(thumbs);
-			}
-		}, [{ time: 1, data: tinyPng }, { time: 2, data: tinyPng }]);
+		await injectVideoTrimThumbnails(page);
 
 		// Wait for the thumbnails to render
 		await page.waitForSelector('.thumbnail-strip img', { timeout: 5000 });
@@ -147,8 +146,7 @@ test.describe('New tool flows', () => {
 
 		// Use the test hook to mark the first thumbnail as the last snapped and assert visual ring.
 		await page.evaluate(() => window.__E2E_EXPOSE?.setLastSnappedTime?.(1));
-		const classAttr = await page.locator('.thumbnail-strip img').first().getAttribute('class');
-		expect(classAttr?.includes('ring-2')).toBe(true);
+		await expect(page.locator('.thumbnail-strip img').first()).toHaveClass(/ring-2/);
 	});
 
 	test('Video Trim: upload small generated webm and generate thumbnails', async ({ page }) => {
@@ -265,9 +263,8 @@ test.describe('New tool flows', () => {
 			await page.waitForSelector('.thumbnail-strip img', { timeout: 20000 });
 		} catch {
 			// thumbsFound = false;
-			const tinyPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
 			// Use exposed helper to load thumbnails after mount
-			await page.evaluate((thumbs) => { if (window.__E2E_EXPOSE && window.__E2E_EXPOSE.loadThumbs) window.__E2E_EXPOSE.loadThumbs(thumbs); }, [{ time: 1, data: tinyPng }, { time: 2, data: tinyPng }]);
+			await injectVideoTrimThumbnails(page);
 			// Wait for the thumbnails to appear
 			await page.waitForSelector('.thumbnail-strip img', { timeout: 5000 });
 		}

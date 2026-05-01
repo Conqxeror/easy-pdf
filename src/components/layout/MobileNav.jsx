@@ -5,6 +5,12 @@ import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import { toolCategories } from "@/lib/toolCategories";
 
+const primaryLinks = [
+  { name: "Tools", href: "/tools" },
+  { name: "About", href: "/about" },
+  { name: "Get Started", href: "/tools" },
+];
+
 const MOBILE_SUBMENU_MAX_HEIGHT = "calc(100vh - 160px)";
 const slugifyCategory = (name) =>
   `mobile-submenu-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
@@ -30,6 +36,26 @@ export default function MobileNav({ isOpen, closeAllMenus }) {
       className="lg:hidden h-full overflow-y-auto"
     >
       <div className="px-4 pt-4 pb-20 space-y-4">
+        <div className="grid gap-2">
+          {primaryLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              onClick={closeAllMenus}
+              role="menuitem"
+              aria-current={pathname === link.href ? "page" : undefined}
+              className={cn(
+                "flex items-center justify-between rounded-lg border border-border/50 bg-card/95 px-4 py-3 text-base font-medium transition-colors",
+                pathname === link.href
+                  ? "text-primary-foreground"
+                  : "text-foreground hover:bg-muted/40"
+              )}
+            >
+              <span>{link.name}</span>
+            </Link>
+          ))}
+        </div>
+
         {toolCategories.map((category) => {
           const categoryId = slugifyCategory(category.name);
           const isCategoryOpen = mobileSubmenuOpen === category.name;

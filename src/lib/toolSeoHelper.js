@@ -2,6 +2,8 @@ import { generateEnhancedMetadata, generateComprehensiveJsonLd, generateHowToSch
 import fs from 'fs';
 import path from 'path';
 import { toolsData } from './toolData';
+import { resolveSiteUrl } from './siteUrl';
+import { getFAQsForTool } from './faqData';
 
 /**
  * Get metadata for a tool page using toolsData
@@ -16,10 +18,12 @@ export function getToolMetadata(href) {
   const tool = toolsData.find(t => t.href === href);
 
   if (!tool) {
-    console.warn(`Tool not found for href: ${href}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`Tool not found for href: ${href}`);
+    }
     // Return a safe fallback metadata object so callers that do `toolSeo?.metadata || {}`
     // still receive useful defaults and avoid empty metadata exports.
-    const resolvedBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL || 'https://easy-pdf-murex.vercel.app';
+    const resolvedBase = resolveSiteUrl();
     const canonicalUrl = `${resolvedBase}${href}`;
     const fallbackMetadata = generateEnhancedMetadata({
       title: 'easy-pdf',
@@ -46,11 +50,17 @@ export function getToolMetadata(href) {
     };
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL;
-  const resolvedBase = baseUrl ? (baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`) : 'https://easy-pdf-murex.vercel.app';
+  const resolvedBase = resolveSiteUrl();
   const canonicalUrl = `${resolvedBase}${href}`;
   // Replace slashes with dashes to match generated filenames (e.g. /pdf/merge -> pdf-merge)
   const slug = href.replace(/^\//, '').replace(/\//g, '-');
+  const faqSlug = href.replace(/^\//, '');
+  const faqs = Array.isArray(tool.faqs) && tool.faqs.length > 0 ? tool.faqs : getFAQsForTool(faqSlug);
+  const breadcrumbs = [
+    { name: 'Home', url: resolvedBase },
+    { name: 'Tools', url: `${resolvedBase}/tools` },
+    { name: tool.title, url: canonicalUrl }
+  ];
   // Prefer pre-generated static OG images in public/og-static for top pages if available.
   const staticPath = path.join(process.cwd(), 'public', 'og-static', `${slug}.png`);
   let ogImageUrl;
@@ -73,11 +83,7 @@ export function getToolMetadata(href) {
     ogImage: ogImageUrl,
     toolName: tool.title,
     pageType: 'tool',
-    breadcrumbs: [
-      { name: 'Home', url: resolvedBase },
-      { name: 'Tools', url: `${resolvedBase}/tools` },
-      { name: tool.title, url: canonicalUrl }
-    ],
+    breadcrumbs,
     lastModified: new Date().toISOString()
   });
 
@@ -87,12 +93,13 @@ export function getToolMetadata(href) {
     description: tool.description,
     url: href,
     features: tool.features || [],
-    faqs: tool.faqs || [],
-    breadcrumbs: [
-      { name: 'Home', url: resolvedBase },
-      { name: 'Tools', url: `${resolvedBase}/tools` },
-      { name: tool.title, url: canonicalUrl }
-    ]
+    faqs,
+    breadcrumbs,
+    keywords: tool.keywords || [],
+    category: tool.category,
+    canonicalUrl,
+    image: ogImageUrl,
+    lastModified: new Date().toISOString()
   });
 
   // Generate HowTo schema if available for this tool (slug already defined above)

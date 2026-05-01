@@ -1,3 +1,118 @@
+import { resolveSiteUrl } from './siteUrl';
+
+const SITE_NAME = 'easy-pdf';
+const DEFAULT_LANGUAGE = 'en-IN';
+
+const normalizeUrl = (url, baseUrl = resolveSiteUrl()) => {
+  if (!url) return baseUrl;
+  const value = String(url).trim();
+  if (!value) return baseUrl;
+  if (value.startsWith('http://') || value.startsWith('https://')) {
+    return value.endsWith('/') && value !== baseUrl ? value.slice(0, -1) : value;
+  }
+  const path = value.startsWith('/') ? value : `/${value}`;
+  return `${baseUrl}${path}`;
+};
+
+const cleanText = (value) => String(value || '').replace(/\s+/g, ' ').trim();
+
+const uniqueBy = (items, getKey) => {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = getKey(item);
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+export const dedupeJsonLdSchemas = (schemas = []) => {
+  const flattened = schemas.flat().filter(Boolean);
+  return uniqueBy(flattened, (schema) => {
+    if (schema['@id']) return schema['@id'];
+    const type = Array.isArray(schema['@type']) ? schema['@type'].join('|') : schema['@type'];
+    const name = schema.name || schema.url || JSON.stringify(schema).slice(0, 160);
+    return `${type}:${name}`;
+  });
+};
+
+export const generateBreadcrumbListSchema = (breadcrumbs = [], pageUrl) => {
+  const baseUrl = resolveSiteUrl();
+  const normalizedItems = uniqueBy(
+    breadcrumbs
+      .map((crumb) => ({
+        name: cleanText(crumb?.name || crumb?.label),
+        url: normalizeUrl(crumb?.url || crumb?.href, baseUrl),
+      }))
+      .filter((crumb) => crumb.name && crumb.url),
+    (crumb) => `${crumb.name.toLowerCase()}:${crumb.url}`
+  );
+
+  if (normalizedItems.length < 2) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${normalizeUrl(pageUrl || normalizedItems.at(-1)?.url, baseUrl)}#breadcrumb`,
+    itemListElement: normalizedItems.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  };
+};
+
+const supportedReviewItemTypes = new Set([
+  'Book',
+  'Course',
+  'Event',
+  'Game',
+  'HowTo',
+  'MediaObject',
+  'Movie',
+  'MusicPlaylist',
+  'MusicRecording',
+  'Product',
+  'Recipe',
+  'SoftwareApplication',
+]);
+
+export const generateReviewSnippetSchema = ({
+  itemName,
+  itemType = 'SoftwareApplication',
+  itemUrl,
+  ratingValue,
+  ratingCount,
+  reviewCount,
+  bestRating = 5,
+  worstRating = 1,
+} = {}) => {
+  const numericRating = Number(ratingValue);
+  const numericRatingCount = Number(ratingCount || reviewCount || 0);
+  const normalizedType = supportedReviewItemTypes.has(itemType) ? itemType : 'SoftwareApplication';
+
+  if (!itemName || !Number.isFinite(numericRating) || numericRating <= 0 || numericRatingCount <= 0) {
+    return null;
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AggregateRating',
+    '@id': `${normalizeUrl(itemUrl || resolveSiteUrl())}#aggregate-rating`,
+    itemReviewed: {
+      '@type': normalizedType,
+      name: cleanText(itemName),
+      url: normalizeUrl(itemUrl || resolveSiteUrl()),
+    },
+    ratingValue: numericRating,
+    ratingCount: Number(ratingCount || numericRatingCount),
+    reviewCount: Number(reviewCount || numericRatingCount),
+    bestRating,
+    worstRating,
+  };
+};
+
 // Enhanced SEO utilities for comprehensive optimization
 export const generateEnhancedMetadata = ({
   title = 'easy-pdf',
@@ -10,11 +125,11 @@ export const generateEnhancedMetadata = ({
   pageType = 'tool',
   breadcrumbs = [],
   lastModified,
-  author = "Wali Mohammad Kadri"
+  author = "Wali Mohammad Kadri",
+  robots: robotsOverride
 }) => {
   // Prefer runtime environment value for base URL when available
-  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
-  const resolvedBase = metadataBaseUrl || (envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app')
+  const resolvedBase = resolveSiteUrl(metadataBaseUrl)
 
   // Fix: Don't add | easy-pdf if already present, and ensure title is under 60 chars
   let baseTitle = title.includes('easy-pdf') ? title : `${title} | easy-pdf`
@@ -28,7 +143,53 @@ export const generateEnhancedMetadata = ({
 
   const enhancedDescription = description.length > 160 ? description.substring(0, 157) + '...' : description
   const keywordArray = Array.isArray(keywords) ? keywords : (keywords ? [keywords] : [])
+  const canonical = normalizeUrl(canonicalUrl || resolvedBase, resolvedBase)
   const openGraphType = pageType === 'article' ? 'article' : 'website'
+  const defaultRobots = {
+    index: true,
+    follow: true,
+    noarchive: false,
+    nosnippet: false,
+    noimageindex: false,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      noimageindex: false,
+      noarchive: false,
+      nosnippet: false,
+      nocache: false,
+    },
+    bingBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  }
+
+  const robots = robotsOverride
+    ? {
+      ...defaultRobots,
+      ...robotsOverride,
+      googleBot: {
+        ...defaultRobots.googleBot,
+        ...(robotsOverride.googleBot || {}),
+        ...(typeof robotsOverride.index === 'boolean' && { index: robotsOverride.index }),
+        ...(typeof robotsOverride.follow === 'boolean' && { follow: robotsOverride.follow }),
+      },
+      bingBot: {
+        ...defaultRobots.bingBot,
+        ...(robotsOverride.bingBot || {}),
+        ...(typeof robotsOverride.index === 'boolean' && { index: robotsOverride.index }),
+        ...(typeof robotsOverride.follow === 'boolean' && { follow: robotsOverride.follow }),
+      }
+    }
+    : defaultRobots
 
   // Enhanced keywords with semantic variations
   const enhancedKeywords = [
@@ -55,46 +216,22 @@ export const generateEnhancedMetadata = ({
     keywords: enhancedKeywords,
     authors: [{ name: author, url: String(resolvedBase) }],
     creator: author,
-    publisher: "easy-pdf",
-    applicationName: "easy-pdf",
+    publisher: SITE_NAME,
+    applicationName: SITE_NAME,
     generator: "Next.js",
     referrer: "origin-when-cross-origin",
     category: "Business Tools",
     classification: "Document Processing",
 
-    robots: {
-      index: true,
-      follow: true,
-      noarchive: false,
-      nosnippet: false,
-      noimageindex: false,
-      nocache: false,
-      googleBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-        noimageindex: false,
-        noarchive: false,
-        nosnippet: false,
-        nocache: false,
-      },
-      bingBot: {
-        index: true,
-        follow: true,
-        'max-video-preview': -1,
-        'max-image-preview': 'large',
-        'max-snippet': -1,
-      }
-    },
+    robots,
 
     alternates: {
-      canonical: canonicalUrl || resolvedBase,
+      canonical,
       languages: {
-        'en-IN': canonicalUrl || resolvedBase,
-        'en-US': canonicalUrl || resolvedBase,
-        'en': canonicalUrl || resolvedBase
+        'en-IN': canonical,
+        'en-US': canonical,
+        'en': canonical,
+        'x-default': canonical
       }
     },
 
@@ -112,7 +249,7 @@ export const generateEnhancedMetadata = ({
     openGraph: {
       title: baseTitle,
       description: enhancedDescription,
-      url: canonicalUrl || resolvedBase,
+      url: canonical,
       siteName: "easy-pdf - Privacy-First PDF Tools",
       type: openGraphType,
       locale: "en-IN",
@@ -151,6 +288,12 @@ export const generateEnhancedMetadata = ({
       ],
     },
 
+    appleWebApp: {
+      capable: true,
+      title: 'easy-pdf',
+      statusBarStyle: 'black-translucent',
+    },
+
     manifest: "/site.webmanifest",
 
     verification: {
@@ -165,15 +308,11 @@ export const generateEnhancedMetadata = ({
 
     other: {
       'mobile-web-app-capable': 'yes',
-      'apple-mobile-web-app-capable': 'yes',
-      'apple-mobile-web-app-status-bar-style': 'black-translucent',
-      'apple-mobile-web-app-title': 'easy-pdf',
       'theme-color': '#1f2937',
       'color-scheme': 'dark light',
       'format-detection': 'telephone=no',
       'HandheldFriendly': 'true',
       'MobileOptimized': '320',
-      'apple-touch-fullscreen': 'yes',
       'application-name': 'easy-pdf',
       'msapplication-TileColor': '#1f2937',
       'msapplication-config': '/browserconfig.xml',
@@ -184,8 +323,7 @@ export const generateEnhancedMetadata = ({
     },
 
     // Additional metadata for better SEO
-    category: 'Technology',
-    bookmarks: canonicalUrl || resolvedBase,
+    bookmarks: canonical,
     ...(breadcrumbs.length > 0 && {
       breadcrumb: breadcrumbs.map(crumb => crumb.name).join(' > ')
     })
@@ -194,12 +332,15 @@ export const generateEnhancedMetadata = ({
 
 // Generate comprehensive structured data
 export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
-  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
-  const baseUrl = envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app'
+  const baseUrl = resolveSiteUrl()
+  const pageUrl = normalizeUrl(pageData.url || pageData.canonicalUrl || baseUrl, baseUrl)
+  const pageTitle = cleanText(pageData.title || 'easy-pdf')
+  const pageDescription = cleanText(pageData.description || 'Privacy-first PDF tools for secure document processing.')
 
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${baseUrl}#organization`,
     "name": "easy-pdf",
     "legalName": "easy-pdf - Privacy-First PDF Tools",
     "url": baseUrl,
@@ -248,6 +389,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": `${baseUrl}#website`,
     "name": "easy-pdf",
     "alternateName": "easy-pdf - Privacy-First PDF Tools",
     "url": baseUrl,
@@ -262,7 +404,7 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": `${baseUrl}/?q={search_term_string}`
+        "urlTemplate": `${baseUrl}/tools?search={search_term_string}`
       },
       "query-input": "required name=search_term_string"
     },
@@ -282,6 +424,16 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
     "name": "easy-pdf",
     "description": "Privacy-first PDF processing tools that work entirely in your browser. No uploads, no data collection, complete privacy.",
     "url": baseUrl,
+    "mainEntityOfPage": baseUrl,
+    "inLanguage": DEFAULT_LANGUAGE,
+    "datePublished": "2024-01-01",
+    "dateModified": pageData.lastModified || new Date().toISOString(),
+    "publisher": {
+      "@id": `${baseUrl}#organization`
+    },
+    "provider": {
+      "@id": `${baseUrl}#organization`
+    },
     "applicationCategory": "UtilitiesApplication",
     "applicationSubCategory": "Document Processing",
     "operatingSystem": "Any",
@@ -309,45 +461,57 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
       "Page Management - Organize pages"
     ],
     "screenshot": `${baseUrl}/og/homepage`,
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "ratingCount": "1250",
-      "bestRating": "5",
-      "worstRating": "1"
+  }
+
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": pageType === 'article' ? "Article" : pageType === 'website' ? "CollectionPage" : "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    "name": pageTitle,
+    "description": pageDescription,
+    "url": pageUrl,
+    "inLanguage": DEFAULT_LANGUAGE,
+    "isAccessibleForFree": true,
+    "isPartOf": {
+      "@id": `${baseUrl}#website`
     },
-    // Note: Reviews removed - add real user reviews when available
-    // "review": [
-    //   {
-    //     "@type": "Review",
-    //     "reviewRating": {
-    //       "@type": "Rating",
-    //       "ratingValue": "5",
-    //       "bestRating": "5"
-    //     },
-    //     "author": {
-    //       "@type": "Person",
-    //       "name": "Anonymous User"
-    //     },
-    //     "reviewBody": "Excellent privacy-focused PDF tools. Works completely offline and keeps my documents secure."
-    //   }
-    // ]
+    "about": {
+      "@id": `${baseUrl}#software`
+    },
+    "publisher": {
+      "@id": `${baseUrl}#organization`
+    },
+    ...(pageType === 'article' && {
+      "headline": pageTitle,
+      "datePublished": pageData.datePublished || "2024-01-01",
+      "dateModified": pageData.lastModified || new Date().toISOString(),
+      "author": {
+        "@type": "Person",
+        "name": pageData.author || "Wali Mohammad Kadri"
+      }
+    })
   }
 
   switch (pageType) {
     case 'homepage':
-      return [organizationSchema, websiteSchema, softwareApplicationSchema]
+      return dedupeJsonLdSchemas([organizationSchema, websiteSchema, softwareApplicationSchema])
+
+    case 'website':
+      return dedupeJsonLdSchemas([organizationSchema, websiteSchema, webPageSchema])
 
     case 'tool':
       const toolSchema = {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": pageData.title,
-        "description": pageData.description,
-        "url": `${baseUrl}${pageData.url}`,
-        "applicationCategory": "BusinessApplication",
+        "@type": ["WebApplication", "SoftwareApplication"],
+        "@id": `${pageUrl}#webapp`,
+        "name": pageTitle,
+        "description": pageDescription,
+        "url": pageUrl,
+        "mainEntityOfPage": pageUrl,
+        "applicationCategory": "UtilitiesApplication",
         "applicationSubCategory": "Document Processing",
         "operatingSystem": "Web Browser",
+        "inLanguage": DEFAULT_LANGUAGE,
         "isAccessibleForFree": true,
         "offers": {
           "@type": "Offer",
@@ -357,43 +521,60 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
         },
         "featureList": pageData.features || [],
         "browserRequirements": "Modern web browser with JavaScript enabled",
-        "screenshot": `${baseUrl}/og/homepage`,
-        // aggregateRating removed - only the main SoftwareApplication should have rating
-        // to prevent Google's "Review has multiple aggregate ratings" error
-        "mainEntity": {
-          "@type": "SoftwareApplication",
+        "screenshot": pageData.image || `${baseUrl}/og/homepage`,
+        "image": pageData.image || `${baseUrl}/og/homepage`,
+        "keywords": Array.isArray(pageData.keywords) ? pageData.keywords.join(', ') : pageData.keywords,
+        "isPartOf": {
           "@id": `${baseUrl}#software`
         },
         "provider": {
-          "@type": "Organization",
           "@id": `${baseUrl}#organization`
+        },
+        "publisher": {
+          "@id": `${baseUrl}#organization`
+        },
+        "potentialAction": {
+          "@type": "UseAction",
+          "target": pageUrl,
+          "name": `Use ${pageTitle}`
         }
       }
 
-      // Breadcrumb and FAQ schemas are injected by the <Breadcrumb> and <FAQ>
-      // components respectively. Omitting them here prevents duplicate schemas
-      // which cause Google Search Console validation errors.
-      return [organizationSchema, toolSchema]
+      const breadcrumbSchema = generateBreadcrumbListSchema(
+        pageData.breadcrumbs || [
+          { name: 'Home', url: baseUrl },
+          { name: 'Tools', url: `${baseUrl}/tools` },
+          { name: pageTitle, url: pageUrl },
+        ],
+        pageUrl
+      );
+
+      const toolFaqSchema = generateFAQPageSchema(pageData.faqs || [], pageUrl);
+
+      const reviewSnippetSchema = generateReviewSnippetSchema({
+        itemName: pageData.reviewSnippet?.itemName || pageTitle,
+        itemType: 'SoftwareApplication',
+        itemUrl: pageUrl,
+        ratingValue: pageData.reviewSnippet?.ratingValue,
+        ratingCount: pageData.reviewSnippet?.ratingCount,
+        reviewCount: pageData.reviewSnippet?.reviewCount,
+        bestRating: pageData.reviewSnippet?.bestRating,
+        worstRating: pageData.reviewSnippet?.worstRating,
+      });
+
+      return dedupeJsonLdSchemas([organizationSchema, toolSchema, breadcrumbSchema, toolFaqSchema, reviewSnippetSchema])
 
     case 'faq':
-      const faqSchema = {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": pageData.faqs?.map(faq => ({
-          "@type": "Question",
-          "name": faq.question,
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": faq.answer
-          }
-        })) || []
-      }
-      return [organizationSchema, faqSchema]
+      return dedupeJsonLdSchemas([organizationSchema, webPageSchema, generateFAQPageSchema(pageData.faqs || [], pageUrl)])
+
+    case 'article':
+      return dedupeJsonLdSchemas([organizationSchema, websiteSchema, webPageSchema])
 
     case 'about':
       const aboutSchema = {
         "@context": "https://schema.org",
         "@type": "AboutPage",
+        "@id": `${baseUrl}/about#about-page`,
         "name": "About easy-pdf",
         "description": "Learn about easy-pdf's mission to provide privacy-first PDF tools with 100% client-side processing.",
         "url": `${baseUrl}/about`,
@@ -402,10 +583,10 @@ export const generateComprehensiveJsonLd = (pageType, pageData = {}) => {
           "@id": `${baseUrl}#organization`
         }
       }
-      return [organizationSchema, aboutSchema]
+      return dedupeJsonLdSchemas([organizationSchema, aboutSchema])
 
     default:
-      return [organizationSchema]
+      return dedupeJsonLdSchemas([organizationSchema])
   }
 }
 
@@ -430,13 +611,29 @@ export const generatePerformanceHints = () => {
 }
 
 // Generate FAQPage schema from FAQ array
-export const generateFAQPageSchema = (faqs = []) => {
+export const generateFAQPageSchema = (faqs = [], pageUrl) => {
   if (!Array.isArray(faqs) || faqs.length === 0) return null
+
+  const normalizedFaqs = uniqueBy(
+    faqs
+      .map((faq) => ({
+        question: cleanText(faq?.question),
+        answer: cleanText(faq?.answer),
+      }))
+      .filter((faq) => faq.question && faq.answer),
+    (faq) => faq.question.toLowerCase()
+  );
+
+  if (normalizedFaqs.length === 0) return null
+
+  const url = normalizeUrl(pageUrl || resolveSiteUrl())
 
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
+    "@id": `${url}#faq`,
+    "mainEntityOfPage": url,
+    "mainEntity": normalizedFaqs.map(faq => ({
       "@type": "Question",
       "name": faq.question,
       "acceptedAnswer": {
@@ -473,8 +670,7 @@ export const generateHowToSchema = ({
     return null
   }
 
-  const envBase = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || process.env.VERCEL_URL
-  const baseUrl = envBase ? (envBase.startsWith('http') ? envBase : `https://${envBase}`) : 'https://easy-pdf-murex.vercel.app'
+  const baseUrl = resolveSiteUrl()
 
   const howToSchema = {
     "@context": "https://schema.org",

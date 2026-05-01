@@ -45,6 +45,7 @@ export default function VideoTrimClient() {
   const [lastSnappedTime, setLastSnappedTime] = useState(null);
   const [zoomFactor, setZoomFactor] = useState(1);
   const [zoomOffset, setZoomOffset] = useState(0); // fraction 0..1 of which part to show
+  const appliedFakeThumbsRef = React.useRef(false);
   // accessibility: which marker has keyboard focus (future use)
 
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function VideoTrimClient() {
       setFiles([]);
       return;
     }
-    const prepared = Array.from(incoming).map((f) => ({ id: `${f.name}-${f.size}-${f.lastModified}`, file: f, start: "0", end: "", status: "pending" }));
+    const prepared = Array.from(incoming).map((f, index) => ({ id: `${f.name}-${f.size}-${f.lastModified}-${index}`, file: f, start: "0", end: "", status: "pending" }));
     setFiles(prepared);
     setPreviewIndex(null);
     if (previewUrl) {
@@ -96,6 +97,42 @@ export default function VideoTrimClient() {
     setVideoEl(null);
     setWaveform(null);
   };
+
+  const loadTestThumbnails = React.useCallback((thumbs) => {
+    try {
+      setThumbnails(thumbs);
+      setPreviewIndex(0);
+      const blob = new Blob([], { type: "video/mp4" });
+      const url = URL.createObjectURL(blob);
+      setPreviewUrl((previousUrl) => {
+        if (previousUrl) {
+          try { safeRevokeObjectURL(previousUrl); } catch { }
+        }
+        return url;
+      });
+    } catch (err) {
+      console.warn("E2E loadThumbs failed", err);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (!window.__E2E_EXPOSE) window.__E2E_EXPOSE = {};
+    const setLastSnappedTimeHook = (time) => setLastSnappedTime(time);
+    window.__E2E_EXPOSE.setLastSnappedTime = setLastSnappedTimeHook;
+    window.__E2E_EXPOSE.loadThumbs = loadTestThumbnails;
+
+    return () => {
+      if (window.__E2E_EXPOSE?.setLastSnappedTime === setLastSnappedTimeHook) {
+        delete window.__E2E_EXPOSE.setLastSnappedTime;
+      }
+      if (window.__E2E_EXPOSE?.loadThumbs === loadTestThumbnails) {
+        delete window.__E2E_EXPOSE.loadThumbs;
+      }
+    };
+  }, [loadTestThumbnails]);
+
 
   const setStartFromCurrent = () => {
     if (previewIndex == null || !videoEl) return;
@@ -456,44 +493,19 @@ export default function VideoTrimClient() {
   // Testing hooks: allow Playwright to inject thumbnails and manipulate snap state during E2E.
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (appliedFakeThumbsRef.current) return;
 
     // If the test harness provides thumbnails, use them for the preview.
     if (window.__E2E_FAKE_THUMBS && Array.isArray(window.__E2E_FAKE_THUMBS)) {
       try {
-        setThumbnails(window.__E2E_FAKE_THUMBS);
-        setPreviewIndex(0);
-        // Create a minimal object URL to satisfy the preview UI; video can be empty.
-        const blob = new Blob([], { type: "video/mp4" });
-        const url = URL.createObjectURL(blob);
-        setPreviewUrl(url);
+        appliedFakeThumbsRef.current = true;
+        loadTestThumbnails(window.__E2E_FAKE_THUMBS);
+        delete window.__E2E_FAKE_THUMBS;
       } catch (err) {
         console.warn("E2E thumb injection failed", err);
       }
     }
-
-    // Expose helper to set the lastSnapped time for visual testing.
-    if (!window.__E2E_EXPOSE) window.__E2E_EXPOSE = {};
-    window.__E2E_EXPOSE.setLastSnappedTime = (t) => setLastSnappedTime(t);
-    // Expose helper to load fake thumbnails deterministically in tests.
-    window.__E2E_EXPOSE.loadThumbs = (thumbs) => {
-      try {
-        setThumbnails(thumbs);
-        setPreviewIndex(0);
-        const blob = new Blob([], { type: 'video/mp4' });
-        const url = URL.createObjectURL(blob);
-        setPreviewUrl(url);
-      } catch (err) {
-        console.warn('E2E loadThumbs failed', err);
-      }
-    };
-
-    return () => {
-      // Clean up any object URL created via E2E hook
-      if (previewUrl) {
-        try { safeRevokeObjectURL(previewUrl); } catch { }
-      }
-    };
-  }, [previewUrl]);
+  }, [loadTestThumbnails]);
   // thumbnails used in snapping logic
 
   const trim = async (entry) => {
@@ -628,8 +640,8 @@ export default function VideoTrimClient() {
                 <p className="text-xs">{(f.file.size / (1024 * 1024)).toFixed(2)} MB</p>
               </div>
               <div className="flex gap-3 items-center">
-                <input className="w-24 rounded-none border px-2" value={f.start} onChange={(e) => updateEntry(f.id, { start: e.target.value })} placeholder="start (s or 0:00)" />
-                <input className="w-24 rounded-none border px-2" value={f.end} onChange={(e) => updateEntry(f.id, { end: e.target.value })} placeholder="end (s or 0:10)" />
+                <input className="w-24 rounded-none border px-2" value={f.start} onChange={(e) => updateEntry(f.id, { start: e.target.value })} placeholder="start (s or 0:00)" aria-label={`Start time for ${f.file.name}`} />
+                <input className="w-24 rounded-none border px-2" value={f.end} onChange={(e) => updateEntry(f.id, { end: e.target.value })} placeholder="end (s or 0:10)" aria-label={`End time for ${f.file.name}`} />
                 <Button onClick={() => trim(f)} disabled={isProcessing}>Trim</Button>
                 <Button variant="ghost" size="sm" onClick={() => openPreview(i)}>Preview</Button>
               </div>
@@ -640,6 +652,29 @@ export default function VideoTrimClient() {
         <div className="flex gap-3">
           <Button onClick={mergeFiles} disabled={isProcessing || files.length < 2}>Merge files</Button>
           <Button variant="ghost" onClick={() => setFiles([])}>Clear list</Button>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <Button onClick={() => setSnapEnabled((s) => !s)} variant={snapEnabled ? "secondary" : "ghost"}>
+            {snapEnabled ? "Snapping: On" : "Snapping: Off"}
+          </Button>
+          <div className="flex items-center gap-2">
+            <label className="text-xs" htmlFor="video-trim-snap-threshold">Threshold</label>
+            <input
+              id="video-trim-snap-threshold"
+              type="range"
+              min={0.05}
+              max={3}
+              step={0.05}
+              value={snapThreshold}
+              onChange={(e) => setSnapThreshold(Number(e.target.value))}
+              className="w-32"
+            />
+            <div className="text-xs w-10">{snapThreshold.toFixed(2)}s</div>
+          </div>
+          {snapMessage && (
+            <div className="text-sm text-emerald-600 dark:text-emerald-400">{snapMessage}</div>
+          )}
         </div>
 
         {(isProcessing || progress > 0) && (
@@ -663,25 +698,6 @@ export default function VideoTrimClient() {
                   <Button onClick={setStartFromCurrent} disabled={isProcessing}>Set start</Button>
                   <Button onClick={setEndFromCurrent} disabled={isProcessing}>Set end</Button>
                   <Button onClick={() => generateWaveform(files[previewIndex])}>Show waveform</Button>
-                  <Button onClick={() => setSnapEnabled((s) => !s)} variant={snapEnabled ? "secondary" : "ghost"}>
-                    {snapEnabled ? "Snapping: On" : "Snapping: Off"}
-                  </Button>
-                  <div className="flex items-center gap-2">
-                    <label className="text-xs">Threshold</label>
-                    <input
-                      type="range"
-                      min={0.05}
-                      max={3}
-                      step={0.05}
-                      value={snapThreshold}
-                      onChange={(e) => setSnapThreshold(Number(e.target.value))}
-                      className="w-32"
-                    />
-                    <div className="text-xs w-10">{snapThreshold.toFixed(2)}s</div>
-                    {snapMessage && (
-                      <div className="text-sm text-emerald-600 dark:text-emerald-400 ml-2">{snapMessage}</div>
-                    )}
-                  </div>
                   <Button onClick={() => setZoomFactor((z) => Math.max(1, Math.min(8, z - 1)))}>- Zoom</Button>
                   <Button onClick={() => setZoomFactor((z) => Math.max(1, Math.min(8, z + 1)))}>+ Zoom</Button>
                   <Button onClick={() => { setZoomFactor(1); setZoomOffset(0); }}>Reset Zoom</Button>

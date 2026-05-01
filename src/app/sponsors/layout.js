@@ -1,4 +1,7 @@
 import { generateEnhancedMetadata } from "@/lib/seoEnhancements";
+import { resolveSiteUrl } from "@/lib/siteUrl";
+
+const siteUrl = resolveSiteUrl();
 
 export const metadata = generateEnhancedMetadata({
   title: "Our Sponsors - easy-pdf",
@@ -8,12 +11,12 @@ export const metadata = generateEnhancedMetadata({
     "free PDF tools sponsors", "privacy tools partners", "document processing sponsors",
     "business partners", "sponsor partnerships", "community funding"
   ],
-  canonicalUrl: "https://easy-pdf-murex.vercel.app/sponsors",
-  metadataBaseUrl: "https://easy-pdf-murex.vercel.app",
+  canonicalUrl: `${siteUrl}/sponsors`,
+  metadataBaseUrl: siteUrl,
   pageType: "article",
   breadcrumbs: [
-    { name: "Home", url: "/" },
-    { name: "Sponsors", url: "/sponsors" }
+    { name: "Home", url: siteUrl },
+    { name: "Sponsors", url: `${siteUrl}/sponsors` }
   ]
 });
 

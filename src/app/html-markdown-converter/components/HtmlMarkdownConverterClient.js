@@ -10,7 +10,7 @@ import DOMPurify from "dompurify";
 import { copyToClipboard } from "@/lib/enhancedUX";
 import { toast } from "sonner";
 
-const SAMPLE_MARKDOWN = `# Release Notes\n\n- ✅ Client-side PDF processing\n- ⚡️ Video tools powered by ffmpeg.wasm\n- 🔒 Zero uploads by design\n\n[Explore tools →](https://easy-pdf.dev/tools)`;
+const SAMPLE_MARKDOWN = `## Release Notes\n\n- ✅ Client-side PDF processing\n- ⚡️ Video tools powered by ffmpeg.wasm\n- 🔒 Zero uploads by design\n\n[Explore tools →](https://easy-pdf.dev/tools)`;
 const SAMPLE_HTML = `<section class="prose">\n  <h2>Instant conversions</h2>\n  <p>Drop your PDF and get a polished output without waiting on a server.</p>\n  <ul>\n    <li>Merge, split, and compress</li>\n    <li>Convert to DOCX, PPT, or XLSX</li>\n    <li>Keep everything 100% private</li>\n  </ul>\n</section>`;
 
 let markdownLibrariesPromise;

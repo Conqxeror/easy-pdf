@@ -33,6 +33,7 @@ const FAQ = ({ faqs }) => {
             onClick={() => toggleItem(index)}
             className="w-full px-5 py-4 text-left bg-background hover:bg-background transition-colors duration-200 flex items-center justify-between"
             aria-expanded={openItems.has(index)}
+            aria-label={`${openItems.has(index) ? 'Collapse' : 'Expand'} answer: ${faq.question}`}
           >
             <h4 
               className="text-lg font-semibold text-foreground pr-4"

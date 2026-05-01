@@ -164,6 +164,12 @@ export default function MergeClient() {
       return;
     }
 
+    if (!PDFLib) {
+      setError("PDF processing tools are still loading. Please try again in a moment.");
+      setStatusMessage("PDF processing tools are still loading.");
+      return;
+    }
+
     setError("");
     setProgress(0);
     setStatusMessage("Merging PDFs...");
@@ -224,23 +230,25 @@ export default function MergeClient() {
       {/* Screen reader announcements */}
       <LiveRegion message={statusMessage} priority="polite" />
 
-      {(pdfLibLoading || pdfjsLoading) ? (
-        <div className="flex flex-col items-center justify-center p-8 bg-muted border border-border rounded-none">
-          <div className="animate-spin h-12 w-12 border-b-2 border-primary mb-4" aria-hidden="true"></div>
-          <p className="text-muted-foreground" role="status">Loading PDF processing tools...</p>
+      {(pdfLibLoading || pdfjsLoading) && (
+        <div className="flex items-center gap-3 p-4 bg-muted border border-border rounded-none">
+          <div className="animate-spin h-5 w-5 border-b-2 border-primary" aria-hidden="true"></div>
+          <p className="text-sm text-muted-foreground" role="status">
+            {pdfLibLoading ? "Loading PDF processing tools..." : "Preparing PDF preview tools..."}
+          </p>
         </div>
-      ) : (
-        <FileDropzone
-          accept="application/pdf"
-          multiple
-          onFiles={handleFiles}
-          error={error}
-          setError={setError}
-          label="Choose PDF Files"
-          description="Drag & drop or click to select PDF files. You can select multiple."
-          maxSize={50 * 1024 * 1024}
-        />
       )}
+
+      <FileDropzone
+        accept="application/pdf"
+        multiple
+        onFiles={handleFiles}
+        error={error}
+        setError={setError}
+        label="Choose PDF Files"
+        description="Drag & drop or click to select PDF files. You can select multiple."
+        maxSize={50 * 1024 * 1024}
+      />
 
       {(pdfLibError || pdfjsError) && (
         <Alert variant="destructive" className="mt-4">
@@ -331,7 +339,7 @@ export default function MergeClient() {
           onClick={mergePDFs}
           variant="default"
           size="lg"
-          disabled={files.length === 0}
+          disabled={files.length === 0 || pdfLibLoading || !PDFLib}
           aria-label="Merge selected PDF files"
         >
           Merge PDFs

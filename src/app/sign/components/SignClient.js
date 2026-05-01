@@ -192,9 +192,7 @@ export default function SignClient() {
         signatureImg.src = signatureDataUrl;
       }
     } catch (e) {
-      if (e.name === "RenderingCancelledException") {
-        console.log("PDF rendering cancelled during preview:", e);
-      } else {
+      if (e.name !== "RenderingCancelledException") {
         setError("Failed to render PDF preview.");
       }
     }
@@ -222,7 +220,6 @@ export default function SignClient() {
     return () => {
       if (previousPdfDocProxy) {
         try { previousPdfDocProxy.destroy(); } catch { /* ignore */ }
-        console.log("Previous PDF document proxy destroyed.");
       }
       // renderTaskRef cleanup is already handled inside renderPdfPreview or when a new file is loaded.
       // Revoke object URL to prevent memory leaks

@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeToggleSimple } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -18,14 +17,14 @@ const orbitron = Orbitron({
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const mobileMenuRef = useRef(null);
 
-  const [prevPathname, setPrevPathname] = useState(pathname);
-
-  if (pathname !== prevPathname) {
-    setPrevPathname(pathname);
+  const closeMobileMenu = () => {
     setMobileMenuOpen(false);
-  }
+    if (mobileMenuRef.current) {
+      mobileMenuRef.current.open = false;
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,31 +73,34 @@ export default function Navbar() {
         {/* Mobile Menu Toggle */}
         <div className="flex md:hidden items-center gap-4">
           <ThemeToggleSimple />
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            aria-expanded={mobileMenuOpen}
-            aria-controls="mobile-navigation-menu"
+          <details
+            ref={mobileMenuRef}
+            className="contents"
+            onToggle={(event) => setMobileMenuOpen(event.currentTarget.open)}
           >
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
+            <summary
+              role="button"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation-menu"
+              className="list-none cursor-pointer [&::-webkit-details-marker]:hidden"
+            >
+              {mobileMenuOpen ? <X /> : <Menu />}
+            </summary>
+            <div id="mobile-navigation-menu" className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-5 shadow-2xl">
+              <Link href="/tools" onClick={closeMobileMenu} className="text-lg font-medium py-2 border-b border-border/50">
+                Tools
+              </Link>
+              <Link href="/about" onClick={closeMobileMenu} className="text-lg font-medium py-2 border-b border-border/50">
+                About
+              </Link>
+              <Button className="w-full rounded-none mt-4" asChild>
+                <Link href="/tools" onClick={closeMobileMenu}>Get Started</Link>
+              </Button>
+            </div>
+          </details>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div id="mobile-navigation-menu" className="md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-xl border-b border-border p-4 flex flex-col gap-4 animate-in slide-in-from-top-5 shadow-2xl">
-          <Link href="/#tools" className="text-lg font-medium py-2 border-b border-border/50">
-            Tools
-          </Link>
-          <Link href="/about" className="text-lg font-medium py-2 border-b border-border/50">
-            About
-          </Link>
-          <Button className="w-full rounded-none mt-4" asChild>
-            <Link href="/#tools">Get Started</Link>
-          </Button>
-        </div>
-      )}
     </header>
   );
 }

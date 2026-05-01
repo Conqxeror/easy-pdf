@@ -1,7 +1,7 @@
 // src/components/ui/FileDropzone.jsx
 "use client";
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { FileText, UploadCloud, X, CheckCircle, AlertCircle } from "lucide-react";
 import Loader from "./Loader";
@@ -21,6 +21,7 @@ const FileDropzone = ({
   isLoading = false,
 }) => {
   const inputRef = useRef();
+  const processedInputKeyRef = useRef("");
   const [isDragActive, setIsDragActive] = useState(false);
   const [files, setFiles] = useState([]);
   const [internalError, setInternalError] = useState("");
@@ -49,6 +50,12 @@ const FileDropzone = ({
   }, []);
 
   const acceptedMimeTypesSet = getMimeTypesFromExtensions(accept);
+
+  const getFileListKey = useCallback((fileList) => {
+    return Array.from(fileList || [])
+      .map((file) => `${file.name}:${file.size}:${file.lastModified}`)
+      .join("|");
+  }, []);
 
   const processFiles = useCallback(
     (newFiles) => {
@@ -167,12 +174,37 @@ const FileDropzone = ({
   const handleChange = useCallback(
     (e) => {
       if (e.target.files && e.target.files.length > 0) {
-        processFiles(Array.from(e.target.files));
+        const selectedFiles = Array.from(e.target.files);
+        processedInputKeyRef.current = getFileListKey(selectedFiles);
+        processFiles(selectedFiles);
         e.target.value = "";
       }
     },
-    [processFiles]
+    [getFileListKey, processFiles]
   );
+
+  useEffect(() => {
+    const processPendingInputFiles = () => {
+      const pendingFiles = inputRef.current?.files;
+      if (!pendingFiles?.length) return;
+
+      const pendingKey = getFileListKey(pendingFiles);
+      if (pendingKey && pendingKey !== processedInputKeyRef.current) {
+        processedInputKeyRef.current = pendingKey;
+        processFiles(Array.from(pendingFiles));
+        inputRef.current.value = "";
+      }
+    };
+
+    processPendingInputFiles();
+    const intervalId = window.setInterval(processPendingInputFiles, 100);
+    const timeoutId = window.setTimeout(() => window.clearInterval(intervalId), 3000);
+
+    return () => {
+      window.clearInterval(intervalId);
+      window.clearTimeout(timeoutId);
+    };
+  }, [getFileListKey, processFiles]);
 
   const removeFile = (index) => {
     const newFiles = [...files];

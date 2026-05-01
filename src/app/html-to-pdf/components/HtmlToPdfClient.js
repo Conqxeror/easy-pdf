@@ -23,7 +23,7 @@ const DEFAULT_TEMPLATE = `
 <section style="padding:48px;font-family:'Inter',Arial,sans-serif;background:#f8fafc;color:#0f172a;">
   <header style="border-bottom:2px solid #e2e8f0;margin-bottom:32px;padding-bottom:16px;">
     <p style="text-transform:uppercase;font-size:12px;letter-spacing:4px;color:#94a3b8;margin:0;">easy-pdf</p>
-    <h1 style="font-size:32px;margin:8px 0 0;">Launch recap</h1>
+	<h2 style="font-size:32px;margin:8px 0 0;">Launch recap</h2>
   </header>
   <article style="line-height:1.6;font-size:16px;margin-bottom:24px;">
     <p>Thanks for trying the new HTML to PDF converter. Paste your markup, tweak layout controls, and ship beautiful PDFs without uploads.</p>
@@ -235,16 +235,17 @@ export default function HtmlToPdfClient() {
 					</CardContent>
 				</Card>
 
-				<div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
-					<Card className="h-full">
+				<div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+					<Card className="h-full min-w-0">
 						<CardHeader>
 							<CardTitle>HTML Editor</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className="rounded-none border border-border overflow-hidden">
+							<div className="rounded-none border border-border overflow-hidden max-w-full">
 								<CodeMirror
 									value={htmlValue}
 									height="420px"
+									className="max-w-full"
 									theme="dark"
 									extensions={[htmlLang()]}
 									onChange={(value) => setHtmlValue(value)}
@@ -253,7 +254,7 @@ export default function HtmlToPdfClient() {
 						</CardContent>
 					</Card>
 
-					<Card className="h-full">
+					<Card className="h-full min-w-0">
 						<CardHeader className="flex flex-row items-center justify-between">
 							<CardTitle>Live Preview</CardTitle>
 							<Badge variant="outline">Sanitized</Badge>
@@ -261,7 +262,7 @@ export default function HtmlToPdfClient() {
 						<CardContent>
 							<div
 								ref={previewRef}
-								className="min-h-[420px] rounded-none border border-border bg-background text-foreground shadow-inner overflow-auto"
+								className="min-h-[420px] max-w-full rounded-none border border-border bg-background text-foreground shadow-inner overflow-auto [&_*]:max-w-full [&_*]:break-words"
 								dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
 							/>
 						</CardContent>
